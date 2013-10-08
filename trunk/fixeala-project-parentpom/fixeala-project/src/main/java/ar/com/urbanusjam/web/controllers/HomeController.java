@@ -1,13 +1,18 @@
 package ar.com.urbanusjam.web.controllers;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -72,6 +77,35 @@ public class HomeController {
 	}
 	
 	
+	@RequestMapping(value="/users/{userID}", method = RequestMethod.GET)
+	public String showUserProfilePage(Model model, @PathVariable("userID") String userID, 
+				HttpServletRequest request){
+		
+		UserDTO user = new UserDTO();
+		try{
+			user = userService.getUserByUsername(userID);  
+			model.addAttribute("usuario", user.getUsername());
+			model.addAttribute("email", user.getEmail());
+			model.addAttribute("barrio", user.getNeighborhood());
+		
+		}
+		catch(Exception e){
+			return "redirect:/" + "error.html";
+		}
+		
+	
+		
+		return "users";
+		
+	}
+	
+	@RequestMapping(value="/error")
+	public String showErrorPage(Map<String, Object> model) {
+		model.put("error-message-title", "Lo sentimos");
+		model.put("error-message", "La página solicitada no existe.");
+		
+		return "error";			
+	}	
 	
 	private <T> String toJson(DataTableResultSet<T> dt) throws IOException{
 		  ObjectMapper mapper = new ObjectMapper();

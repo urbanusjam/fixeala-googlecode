@@ -8,8 +8,7 @@ import ar.com.urbanusjam.dao.IssueDAO;
 import ar.com.urbanusjam.dao.impl.utils.GenericDAOImpl;
 import ar.com.urbanusjam.entity.annotations.Issue;
 
-public class IssueDAOImpl extends GenericDAOImpl<Issue, Serializable> implements IssueDAO {
-	
+public class IssueDAOImpl extends GenericDAOImpl<Issue, Serializable> implements IssueDAO {	
 
 	public IssueDAOImpl() {
 		super(Issue.class);
@@ -18,6 +17,11 @@ public class IssueDAOImpl extends GenericDAOImpl<Issue, Serializable> implements
 	@Override
 	public void saveIssue(Issue issue) {
 		this.save(issue);		
+	}
+	
+	@Override
+	public void updateIssue(Issue issue) {
+		this.update(issue);		
 	}
 
 	@Override
@@ -35,5 +39,14 @@ public class IssueDAOImpl extends GenericDAOImpl<Issue, Serializable> implements
 								"statusOptions", status);
 		return issues;
 	}
+
+	@Override
+	public Issue findIssueById(String issueID) {
+		List<Issue> issues = new ArrayList<Issue>();
+		issues = this.findWhere(" id = ? ", new Object[]{  Long.parseLong(issueID) });
+		return issues.get(0);
+	}
+
+	
 
 }

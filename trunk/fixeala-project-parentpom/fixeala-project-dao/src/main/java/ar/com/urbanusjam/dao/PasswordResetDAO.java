@@ -8,8 +8,6 @@ public interface PasswordResetDAO{
 	
 	public String findUsernameByPasswordToken(String token);
 	
-	public void deleteToken(String token);
-
-	
+	public void deleteToken(String token);		
 	
 }

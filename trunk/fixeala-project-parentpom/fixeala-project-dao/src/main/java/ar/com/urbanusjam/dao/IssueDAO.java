@@ -9,8 +9,12 @@ public interface IssueDAO {
 	
 	public void saveIssue(Issue issue);
 	
+	public void updateIssue(Issue issue);
+	
 	public List<Issue> getAllIssues();
 	
 	public List<Issue> getIssuesByStatus(String[] status);
+	
+	public Issue findIssueById(String id);
 
 }

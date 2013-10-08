@@ -35,4 +35,15 @@ public class ActivationDAOImpl extends GenericDAOImpl<ActivationToken, Serializa
 		}				
 	}
 
+	@Override
+	public void deleteTokenByUsername(String username) {
+		List<ActivationToken> activTokens = this.findWhere("username = ? ", 
+				new Object[]{username});	
+		if(activTokens.size() > 0){
+			ActivationToken passToken = activTokens.get(0);
+			this.delete(passToken);
+		}
+		
+	}
+
 }

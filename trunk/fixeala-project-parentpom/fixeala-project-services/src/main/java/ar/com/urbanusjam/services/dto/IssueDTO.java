@@ -1,7 +1,9 @@
 package ar.com.urbanusjam.services.dto;
 
 import java.io.Serializable;
-import java.util.GregorianCalendar;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class IssueDTO implements Serializable {
@@ -9,21 +11,22 @@ public class IssueDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private UserDTO user;
+	private String username;
 	private Long id;
 	private String address;
 	private String neighborhood;
 	private String city;
 	private String province;
-	private float latitude;
-	private float longitude;
+	private String latitude;
+	private String longitude;
 	private String title;
 	private String description;
 	private String file;	
-	private GregorianCalendar date;
-	private List<String> tags;
+	private Date date;
+	private List<String> tags = new ArrayList<String>();
 	private String status;
-	
-	
+
+
 	public Long getId() {
 		return id;
 	}
@@ -51,7 +54,7 @@ public class IssueDTO implements Serializable {
 		return neighborhood;
 	}
 	
-	public void setNeighbourhood(String neighborhood) {
+	public void setNeighborhood(String neighborhood) {
 		this.neighborhood = neighborhood;
 	}
 		
@@ -90,6 +93,7 @@ public class IssueDTO implements Serializable {
 	public String getFile() {
 		return file;
 	}
+	
 	public void setFile(String file) {
 		this.file = file;
 	}
@@ -102,27 +106,27 @@ public class IssueDTO implements Serializable {
 		this.tags = tags;
 	}
 
-	public GregorianCalendar getDate() {
+	public Date getDate() {
 		return date;
 	}
 
-	public void setDate(GregorianCalendar date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 
-	public float getLatitude() {
+	public String getLatitude() {
 		return latitude;
 	}
 
-	public void setLatitude(float latitude) {
+	public void setLatitude(String latitude) {
 		this.latitude = latitude;
 	}
 
-	public float getLongitude() {
+	public String getLongitude() {
 		return longitude;
 	}
 
-	public void setLongitude(float longitude) {
+	public void setLongitude(String longitude) {
 		this.longitude = longitude;
 	}
 
@@ -133,9 +137,25 @@ public class IssueDTO implements Serializable {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	
+	public String getUsername() {
+		return username;
+	}
 
-	public void setNeighborhood(String neighborhood) {
-		this.neighborhood = neighborhood;
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getFormattedDate(){		
+		
+		String formattedDate = "";
+		
+//		Date d = this.getDate().getTime();		
+		Date d = this.getDate();		
+        SimpleDateFormat df = new SimpleDateFormat();
+        df.applyPattern("dd/MM/yyyy");
+        formattedDate = df.format(d.getTime());
+        return formattedDate;	
 	}
 	
 		

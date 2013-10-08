@@ -1,6 +1,8 @@
 package ar.com.urbanusjam.services.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import ar.com.urbanusjam.dao.IssueDAO;
@@ -32,15 +34,21 @@ public class IssueServiceImpl implements IssueService{
 		issue = this.convertTo(issueDTO);
 		issueDAO.saveIssue(issue);		
 	}
+	
+	@Override
+	public void updateIssue(IssueDTO issueDTO) {
+		Issue issue = new Issue();
+		issue = this.convertTo(issueDTO);
+		issueDAO.updateIssue(issue);			
+	}
 
 	@Override
 	public List<IssueDTO> loadAllIssues() {
 		List<Issue> issues = new ArrayList<Issue>();
 		issues = issueDAO.getAllIssues();
 		List<IssueDTO> issuesDTO = new ArrayList<IssueDTO>();
-		for(Issue issue : issues){
-			IssueDTO iDTO = convertToDTO(issue);
-			issuesDTO.add(iDTO);
+		for(Issue issue : issues){		
+			issuesDTO.add(convertToDTO(issue));
 		}
 		return issuesDTO;	
 	}
@@ -50,14 +58,17 @@ public class IssueServiceImpl implements IssueService{
 		List<Issue> issues = new ArrayList<Issue>();
 		issues = issueDAO.getIssuesByStatus(status);
 		List<IssueDTO> issuesDTO = new ArrayList<IssueDTO>();
-		for(Issue issue : issues){
-			IssueDTO iDTO = convertToDTO(issue);
-			issuesDTO.add(iDTO);
+		for(Issue issue : issues){			
+			issuesDTO.add(convertToDTO(issue));
 		}
 		return issuesDTO;	
 	}
 	
-	
+	@Override
+	public IssueDTO getIssueById(String issueID){
+		Issue issue = issueDAO.findIssueById(issueID);
+		return convertToDTO(issue);		
+	}
 	
 	/********************************************************************************/
 	
@@ -66,9 +77,10 @@ public class IssueServiceImpl implements IssueService{
 	public Issue convertTo(IssueDTO issueDTO){
 				
 		User user = new User();
-		user.setUsername(issueDTO.getUser().getUsername());
+		user.setUsername(issueDTO.getUsername());
 		
 		Issue issue = new Issue();
+		issue.setId(issueDTO.getId());
 		issue.setReporter(user);
 		issue.setAddress(issueDTO.getAddress());
 		issue.setNeighborhood(issueDTO.getNeighborhood());
@@ -85,12 +97,34 @@ public class IssueServiceImpl implements IssueService{
 			newTag.setTagname(t);				
 			issue.addTag(newTag);	
 		}
-					
-		issue.setDate(issueDTO.getDate());		
-		issue.setLatitude(issueDTO.getLatitude());
-		issue.setLongitude(issueDTO.getLongitude());
+		
+		Calendar calendar = new GregorianCalendar();
+		calendar.setTime(issueDTO.getDate());
+		issue.setDate((GregorianCalendar) calendar);		
+//		issue.setDate(issueDTO.getDate());		
+		issue.setLatitude(Float.parseFloat(issueDTO.getLatitude()));
+		issue.setLongitude(Float.parseFloat(issueDTO.getLongitude()));
 		issue.setStatus(issueDTO.getStatus());
 		
+		return issue;
+	}
+	
+	public Issue convertForUpdate(IssueDTO issueDTO){
+		
+		Issue issue = new Issue();
+	
+		issue.setId(issueDTO.getId());	
+		issue.setTitle(issueDTO.getTitle());
+		issue.setDescription(issueDTO.getDescription());
+
+		List<String> tagList = issueDTO.getTags();
+	
+		for(String t : tagList){
+			Tag newTag = new Tag();
+			newTag.setTagname(t);				
+			issue.addTag(newTag);	
+		}						
+				
 		return issue;
 	}
 	
@@ -107,10 +141,11 @@ public class IssueServiceImpl implements IssueService{
 		issueDTO.setCity(issue.getCity());	
 		issueDTO.setProvince(issue.getProvince());	
 		issueDTO.setTitle(issue.getTitle());
-		issueDTO.setDescription(issue.getDescription());				
-		issueDTO.setDate(issue.getDate());		
-		issueDTO.setLatitude(issue.getLatitude());
-		issueDTO.setLongitude(issue.getLongitude());
+		issueDTO.setDescription(issue.getDescription());	
+//		issueDTO.setDate(issue.getDate());
+		issueDTO.setDate(issue.getDate().getTime());		
+		issueDTO.setLatitude(String.valueOf(issue.getLatitude()));
+		issueDTO.setLongitude(String.valueOf(issue.getLongitude()));
 		issueDTO.setStatus(issue.getStatus());
 		
 		return issueDTO;
@@ -131,6 +166,8 @@ public class IssueServiceImpl implements IssueService{
 		return list;
 				
 	}
+
+	
 
 	
 

@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.transaction.annotation.Transactional;
 
+import ar.com.urbanusjam.dao.ActivationDAO;
 import ar.com.urbanusjam.dao.AuthorityDAO;
 import ar.com.urbanusjam.dao.UserDAO;
 import ar.com.urbanusjam.dao.impl.utils.GenericDAOImpl;
@@ -24,8 +25,8 @@ import ar.com.urbanusjam.entity.annotations.User;
 
 public class UserDAOImpl extends GenericDAOImpl<User, Serializable>  implements UserDAO, UserDetailsManager  {
 
-	private AuthorityDAO authorityDAO;
-	
+	private AuthorityDAO authorityDAO;	
+	private ActivationDAO activationDAO;
 		
 	public UserDAOImpl() {
 		super(User.class);
@@ -33,14 +34,18 @@ public class UserDAOImpl extends GenericDAOImpl<User, Serializable>  implements 
 	
 	public void setAuthorityDAO(AuthorityDAO authorityDAO) {
 		this.authorityDAO = authorityDAO;
+	}	
+	
+	public void setActivationDAO(ActivationDAO activationDAO) {
+		this.activationDAO = activationDAO;
 	}
 
-	
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public User loadUserByUsername(String username) throws UsernameNotFoundException {
 		List<User> users = this.findWhere(" username = ? ",  new Object[]{username});		
 		return users.size() > 0 ? users.get(0) : null;						
 	}
+	
 	
 	@Override
 	public List<User> findAllActiveUsers() {
@@ -78,8 +83,10 @@ public class UserDAOImpl extends GenericDAOImpl<User, Serializable>  implements 
 
 	@Override
 	public void deleteUser(String username) {
-		// TODO Auto-generated method stub
-		
+		List<User> users = this.findWhere("username = ?", username);
+		if(users.size() == 1){
+			this.delete(users.get(0));
+		}		
 	}
 
 	@Override
@@ -100,7 +107,7 @@ public class UserDAOImpl extends GenericDAOImpl<User, Serializable>  implements 
 	}
 
 	@Override
-	public UserDetails loadUserByName(String name) {
+	public User loadUserByName(String name) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -158,14 +165,17 @@ public class UserDAOImpl extends GenericDAOImpl<User, Serializable>  implements 
 		this.update(user);
 	}
 
-	
+	@Override
+	public void deleteUnabledUserAndToken(String username) {
+		List<User> users = this.findWhere(" username = ? ", new Object[]{username});		
+		if(users.size() > 0){
+			User user = users.get(0);
+			delete(user);		
+			
+		}		
+		activationDAO.deleteTokenByUsername(username);	
+	}
 
-	
-
-	
-
-
-	
-	
+		
 
 }

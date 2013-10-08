@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
@@ -16,7 +17,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -59,8 +59,7 @@ public class AccountController {
 	@Autowired
 	@Qualifier(value = "customAuthenticationProvider")
 	protected CustomAuthenticationProvider customAuthenticationProvider;
-	
-	
+		
 	
 
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)	
@@ -94,8 +93,8 @@ public class AccountController {
     		return false;
     }
     
-    
-    @RequestMapping(value = "/signup/createAccount", method = RequestMethod.POST)
+        
+    @RequestMapping(value = "/signup", method = RequestMethod.POST)
 	public @ResponseBody AlertStatus doCreateAccount(@ModelAttribute(value="user") UserDTO user, 
 			HttpServletRequest request){
  					
@@ -131,17 +130,23 @@ public class AccountController {
 		
 			//send activation email
 			emailUtils.sendActivationEmail(user.getUsername(), token, user.getEmail());			
-			
+
 			return new AlertStatus(true, "¡Felicitaciones! Se ha enviado un link de activación de cuenta a su casilla de correo. ");
 					
 			
 		} catch (Exception e) {
-			
-			return new AlertStatus(false, "Ha ocurrido un error al crear su cuenta. Intente de nuevo. ");		
-		}
-       		
+			if(e instanceof MessagingException){
+				userService.deleteAccountAndToken(user.getUsername());
+				return new AlertStatus(false, "Ha ocurrido un error y no se ha podido mandar el link de activación. Intente de nuevo. ");		
+			}	
+			else{
+				return new AlertStatus(false, "Ha ocurrido un error al crear su cuenta. Intente de nuevo. ");		
+			}	
+
+		}       		
 		
 	}
+    
     
     @RequestMapping(value="/activation/{token}")
 	public String showAccountActivationPage(Model model, @PathVariable("token") String tokenID, 
@@ -184,11 +189,12 @@ public class AccountController {
 			model.addAttribute("messageTitle", "¡Atención!");
 			model.addAttribute("alertType", "error");
 			return "result";
-		}
-    	
+		}    	
 		    	
     }
     
+    
+	
     
     @RequestMapping(value="/changePassword", method = RequestMethod.GET)
 	public String showChangePasswordPage(ModelAndView model) { 		
@@ -199,6 +205,7 @@ public class AccountController {
 		}				
 		return "index";	
 	}
+    
 	
 	@RequestMapping(value = "/changePassword/doChange", method = RequestMethod.POST)
 	public @ResponseBody boolean doChangePassword(@ModelAttribute(value="user") UserDTO user, 
@@ -358,10 +365,6 @@ public class AccountController {
 		
 	}
 	
-	@RequestMapping(value = "/profile", method = RequestMethod.GET)	
-	public String showProfilePage(){
-		return "profile";
-	}
 	
 	@RequestMapping(value="/closeAccount", method = RequestMethod.POST)
 	public @ResponseBody String doCloseAccount(@ModelAttribute(value="user") UserDTO user, HttpServletRequest request) { 	

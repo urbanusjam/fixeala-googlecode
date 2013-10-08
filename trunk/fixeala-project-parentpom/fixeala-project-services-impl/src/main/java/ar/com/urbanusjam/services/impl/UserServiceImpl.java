@@ -72,6 +72,27 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	@Override
+	public UserDTO getUserByUsername(String username) throws UsernameNotFoundException, DisabledException{	
+		
+			try {
+				User user = (User) userDAO.loadUserByUsername(username);
+				
+			 	 if(user == null){
+			 		 throw new BadCredentialsException("Authentication failed.");
+			 	 }
+
+			 	 else{
+			    	 List<String> authorities = authorityDAO.getAuthoritiesByUserName(username);
+			    	 user.setAuthorities(authorities);
+			    	 return convertToDTO(user);	
+			     }			   
+	        } 
+			catch (UsernameNotFoundException e) {
+	            throw new UsernameNotFoundException("User not found.");
+	        }	
+	}
+	
+	@Override
 	public List<UserDTO> loadAllActiveUsers() {
 		List<User> users = userDAO.findAllActiveUsers();
 		List<UserDTO> usersDTO = new ArrayList<UserDTO>();
@@ -159,6 +180,11 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	@Override
+	public void deleteAccountAndToken(String username) {
+		userDAO.deleteUnabledUserAndToken(username);		
+	}
+	
+	@Override
 	public String findUsernameByActivationToken(String token) {
 		return activationDAO.findUsernameByActivationToken(token);
 	}
@@ -191,6 +217,7 @@ public class UserServiceImpl implements UserService{
 	public UserDTO convertToDTO(User user){
 		UserDTO userDTO = new UserDTO();
 		userDTO.setUsername(user.getUsername());		
+		userDTO.setEmail(user.getEmail());		
 		userDTO.setNeighborhood(user.getNeighborhood());
 		return userDTO;
 	}
@@ -223,6 +250,8 @@ public class UserServiceImpl implements UserService{
 		actv.setExpiration(activationDTO.getExpiration());		
 		return actv;
 	}
+
+	
 
 	
 
