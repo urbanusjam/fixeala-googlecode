@@ -11,4 +11,6 @@ public interface ActivationDAO{
 	
 	public void deleteToken(String token);
 	
+	public void deleteTokenByUsername(String username);	
+	
 }

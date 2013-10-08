@@ -15,6 +15,8 @@ import ar.com.urbanusjam.services.dto.UserDTO;
 public interface UserService extends UserDetailsService{
 	
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
+	public UserDTO getUserByUsername(String username) throws UsernameNotFoundException;
+	
 	public List<UserDTO> loadAllActiveUsers();
 	public String findUsernameByEmail(String email);
 	
@@ -31,6 +33,7 @@ public interface UserService extends UserDetailsService{
     public String findUsernameByActivationToken(String token);    
     public void saveActivationToken(ActivationDTO activationDTO);    
     public void deleteActivationToken(String token);
+    public void deleteAccountAndToken(String username);
 	
 	public void createAccount(UserDTO userDTO);
 	public void updateAccount(UserDTO userDTO);

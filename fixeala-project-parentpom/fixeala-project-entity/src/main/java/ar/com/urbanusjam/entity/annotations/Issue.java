@@ -3,6 +3,7 @@ package ar.com.urbanusjam.entity.annotations;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.persistence.CascadeType;
@@ -118,11 +119,12 @@ public class Issue implements Serializable {
 	public GregorianCalendar getDate() {
 		return date;
 	}
-	
+
 	public void setDate(GregorianCalendar date) {
 		this.date = date;
 	}
-	
+
+
 	public String getTitle() {
 		return title;
 	}

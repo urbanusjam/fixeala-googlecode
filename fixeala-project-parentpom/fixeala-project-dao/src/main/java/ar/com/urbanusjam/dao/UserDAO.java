@@ -5,6 +5,7 @@ package ar.com.urbanusjam.dao;
 import java.util.List;
 
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.UserDetailsManager;
 
 import ar.com.urbanusjam.entity.annotations.User;
@@ -15,6 +16,8 @@ public interface UserDAO extends UserDetailsManager {
 	
 	public UserDetails loadUserByName(String name);
 	
+	public User loadUserByUsername(String username) throws UsernameNotFoundException;
+
 	public List<User> findAllActiveUsers();
 	
 	public void createUser(User user);
@@ -34,5 +37,7 @@ public interface UserDAO extends UserDetailsManager {
 	public void activateAccount(String username);
 	
 	public void closeAccount(String username);
+	
+	public void deleteUnabledUserAndToken(String username);
 	
 }

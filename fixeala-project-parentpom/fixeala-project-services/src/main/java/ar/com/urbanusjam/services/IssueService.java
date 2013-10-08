@@ -8,8 +8,15 @@ import ar.com.urbanusjam.services.dto.TagDTO;
 public interface IssueService {
 	
 	public void reportIssue(IssueDTO issue);	
+	
+	public void updateIssue(IssueDTO issue);	
+	
 	public List<IssueDTO> loadAllIssues();
+	
 	public List<IssueDTO> loadIssuesByStatus(String[] status);
+	
 	public List<String> getTagList();
+	
+	public IssueDTO getIssueById(String issueID);
 
 }
