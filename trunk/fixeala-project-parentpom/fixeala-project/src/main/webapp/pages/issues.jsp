@@ -16,20 +16,24 @@
 //    		var longitud = '${longitud}';
 //    		var estado = '${estado}';
    		
-   	  
+   	
+   	  	
    	 
 </script>
 		
 		<script type="text/javascript">
 		
+		
+		
 	
 		$(function(){		
-									
+			
+			
 			var id = '${id}';
 			var newTitle;
 		
 			//toggle `popup` / `inline` mode
-			$.fn.editable.defaults.mode = 'inline';	
+// 			$.fn.editable.defaults.mode = 'inline';	
 			
 			
 			//modify buttons style
@@ -71,7 +75,7 @@
 					        return 'Este campo es requerido.';
 					    }
 					    if($.trim(value).length > 50) {
-					        return 'La longitud m·xima del campo es de 50 caracteres.';
+					        return 'La longitud m√°xima del campo es de 50 caracteres.';
 					    }
 				  },
 				  success: function(response, newValue) {		             
@@ -93,7 +97,7 @@
 					        return 'Este campo es requerido.';
 					    }
 					    if($.trim(value).length > 500) {
-					        return 'La longitud m·xima del campo es de 500 caracteres.';
+					        return 'La longitud m√°xima del campo es de 500 caracteres.';
 					    }
 				  }
 			  	
@@ -124,43 +128,144 @@
 					        return 'Este campo es requerido.';
 					    }
 					    if($.trim(value).length > 50) {
-					        return 'La longitud m·xima del campo es de 35caracteres.';
+					        return 'La longitud m√°xima del campo es de 35caracteres.';
 					    }
 					}
 			  });
 			  
 			  
 			  /*******************************************/
+			
 			  
-			  $("#lic-obra").editable({
-				  pk: 5,  
-				  name: 'lic-obra', 	
-				  type: 'text',
-				  url: '/post',   				  
-				  ajaxOptions: {
-				        type: 'json'
-				  }				 
+			  $("#obra").editable({				
+				  type: 'textarea',
+				  title: 'Ingrese una descripciÛn'						 
 			  });
 			  
-			  $("#lic-id").editable({
-				  pk: 6,  
-				  name: 'lic-id', 		
-				  type: 'text',
-				  url: '/post',   
-				  ajaxOptions: {
-				        type: 'json'
-				  }				 
+			  $("#idLicitacion").editable({		
+				  type: 'text'
+							 
 			  });
 			  
-			  $("#lic-expediente").editable({
-				  pk: 7,  
-				  name: 'lic-expediente', 	
-				  type: 'text',
-				  url: '/post',   
-				  ajaxOptions: {
-				        type: 'put'
-				  }				 
+			  $("#nroExpediente").editable({				
+				  type: 'text'							 
 			  });
+			  
+			  $("#valorPliego").editable({				
+				  url: '/post'			 
+			  });
+			  
+			  $("#unidadEjec").editable({				
+				  url: '/post'			 
+			  });
+			  
+			  $("#unidadFinanc").editable({				
+				  url: '/post'			 
+			  });
+			  
+			  $("#empresaNombre").editable({				
+				  url: '/post'			 
+			  });
+			  
+			  $("#empresaEmail").editable({				
+				  url: '/post'			 
+			  });
+			  
+			  $("#empresaCuit").editable({				
+				  url: '/post'			 
+			  });
+			  
+			  $("#representanteNombre").editable({				
+				  url: '/post'			 
+			  });
+			  
+			  $("#representanteTel").editable({				
+				  url: '/post'			 
+			  });
+			
+			  
+			  $("#empresaEmail").editable({				
+				  url: '/post'			 
+			  });
+			  
+			  
+			  $("#presupuestoInicio").editable({				
+				  url: '/post'			 
+			  });
+			  
+			  $("#presupuestoFin").editable({				
+				  url: '/post'			 
+			  });
+			  
+			 
+			  
+			  
+			  $('#tipo').editable({
+					value: 1,
+					url:"/post",
+			        source: [
+			            {value: 1, text: 'P˙blica'},
+			            {value: 2, text: 'Privada'},
+			            {value: 2, text: 'ContrataciÛn directa'}
+			        ]
+			    });    
+			  
+			  $('#estadoObra').editable({
+					value: 1,
+					url:"/post",
+			        source: [
+			            {value: 1, text: 'En curso'},
+			            {value: 2, text: 'Interrumpida'},
+			            {value: 2, text: 'Finalizada'}
+			        ]
+			    });  
+			  
+			  
+			  
+			  $('#fechaEstInicio').editable({
+				  	format: 'YYYY-MM-DD',    
+			        viewformat: 'DD/MM/YYYY',    
+			        template: 'D / MMMM / YYYY',    
+			        combodate: {
+			                minYear: 2000,
+			                maxYear: 2015,
+			                minuteStep: 1
+			           }
+			       
+			    });
+			  
+			  $('#fechaEstFin').editable({
+				 	format: 'YYYY-MM-DD',    
+			        viewformat: 'DD/MM/YYYY',    
+			        template: 'D / MMMM / YYYY',    
+			        combodate: {
+			                minYear: 2000,
+			                maxYear: 2015,
+			                minuteStep: 1
+			           }
+			    });
+			  
+			  $('#fechaRealInicio').editable({
+				  	format: 'YYYY-MM-DD',    
+			        viewformat: 'DD/MM/YYYY',    
+			        template: 'D / MMMM / YYYY',    
+			        combodate: {
+			                minYear: 2000,
+			                maxYear: 2015,
+			                minuteStep: 1
+			           }
+			    });
+			  
+			  $('#fechaRealFin').editable({
+				  	format: 'YYYY-MM-DD',    
+			        viewformat: 'DD/MM/YYYY',    
+			        template: 'D / MMMM / YYYY',    
+			        combodate: {
+			                minYear: 2000,
+			                maxYear: 2015,
+			                minuteStep: 1
+			           }
+			    });
 			  
 			  /*******************************************/
 			  
@@ -173,11 +278,64 @@
 			          console.log(settings);
 			      }
 			  }); 
+			  
+			
+			  $( "#btn-add-licitacion" ).click( function() {
+				  copyLicitacionDataToTable();
+	   			});
+			  
+			  function copyLicitacionDataToTable(){
+				  
+			  		var obra = $("#lic-obra").val();
+			  		var nroLicitacion = $("#lic-id").val();
+			  		var nroExpediente = $("#lic-expediente").val();
+			  		var tipo = $("#lic-tipo").val();
+			  		
+			  		var estadoObra = $("#lic-estado").val();
+			  		var unidadExe = $("#lic-uni-exe").val();
+			  		var unidadFin = $("#lic-uni-fin").val();
+			  		var valorPliego = "$ " + $("#lic-pliego").val();
+			  		
+			  		var empresa = $("#lic-empresa-nombre").val() + "<br>" + $("#lic-empresa-cuit").val() + "<br>" + $("#lic-empresa-email").val();
+			  		var represTecnico = $("#lic-repres-nombre").val() + "<br>" + $("#lic-repres-tel").val() + "<br>" + $("#lic-repres-email").val();
+			  		
+			  		var presupuestoInicial = "$ " + $("#lic-prespuesto-inicio").val();
+			  		var presupuestoFinal = "$ " + $("#lic-prespuesto-fin").val();
+			  		
+			  		var fechaTmpInicio = $("#lic-fechaTemp-inicio").val();
+			  		var fechaTmpFin = $("#lic-fechaTemp-fin").val();
+			  		var fechaRealInicio = $("#lic-fechaReal-inicio").val();
+			  		var fechaRealFin = $("#lic-fechaReal-fin").val();
+			  		
+			  		var data = [ obra, nroLicitacion, nroExpediente, tipo, unidadExe, unidadFin, valorPliego,
+			  					   empresa, represTecnico, presupuestoInicial, presupuestoFinal, 
+			  					   fechaTmpInicio, fechaTmpFin, fechaRealInicio, fechaRealFin, estadoObra ];
+			  		
+			  	
+			  		var index = 0;
+			  	
+			  		$('#tbl-licitacion td').each(function(){			  		
+			  			if( $(this).hasClass("dynamic-cell") ){
+			  				if( index < data.length){				  			
+					  		      $(this).append(data[index]);
+					  		}
+			  				index++;
+			  			}						  
+				  	});
+			  	 
+			  		setTimeout(function(){			  			
+			  			$('.btnToggle').css("display", "none");
+			  			$('#tbl-licitacion').css("display", "block");
+			  			$('#mdl-licitacion').modal('hide');
+			  			$('#tbl-licitacion-form').reset();
+			  			
+			  		}, 300);			  	
+			  }
 			
 			
 			  $('#btn-update').click(function() {
 				  
-				  bootbox.confirm("øDesea confirmar los cambios?", function(result){
+				  bootbox.confirm("¬øDesea confirmar los cambios?", function(result){
 					  
 					  if(result){
 						  
@@ -322,7 +480,7 @@
 	      				<img src="${pageContext.request.contextPath}/resources/images/nopic.png" alt="">	    
 	    			</a>
 	    				<br>
-	    			<div class="caption"><button class="btn btn-info"><i class="icon-camera"></i>&nbsp;&nbsp;&nbsp;m·s fotos y videos</button>	</div>
+	    			<div class="caption"><button class="btn btn-info"><i class="icon-camera"></i>&nbsp;&nbsp;&nbsp;m√°s fotos y videos</button>	</div>
 	  			</li>	
 		   </ul>
 	 	</div>
@@ -338,7 +496,7 @@
 						    <td><a href="#" id="issue-date">${fecha}</a></td>						   
 						 </tr>
 						 <tr>
-						    <th>DirecciÛn:</th>
+						    <th>Direcci√≥n:</th>
 						    <td><a href="#" id="issue-street">${calle}</a></td>						   
 						 </tr>
 						 <tr>
@@ -366,7 +524,7 @@
 						    <td><a href="#">minAyEBA</a></td>						   
 						 </tr>
 						  <tr>
-						    <th>DescripciÛn:</th>
+						    <th>Descripci√≥n:</th>
 						    <td><a href="#" id="issue-desc">${descripcion}</a></td>						   
 						 </tr>
 						 <tr>
@@ -434,77 +592,282 @@
 			  </div>
 			  
 			  
-			  <!-- 3 LICITACIOìN -->
+			  <!-- 3 LICITACIO¬ìN -->
 			  <div class="accordion-group">
 			    <div class="accordion-heading">
 			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
 			        <h4><i class="icon-wrench icon-large"></i>&nbsp;&nbsp;LICITACI”N (${cantidadLicitacion})</h4>
-			      </a>
+			      </a>			     
 			    </div>
 			    <div id="collapseTwo" class="accordion-body collapse">
 			      <div class="accordion-inner">
-			       <div class="span8">  
-				       <table id="tbl-licitacion" class="table table-hover table-bordered table-striped">
-				       		<tr>
-							    <td>Obra:</td>
-							    <td><a href="#" id="obra">${lic-obra}</a></td>						  
-						 	</tr>
-						 	<tr>
-							    <td>N∞ LicitaciÛn:</td>
-							    <td><a href="#" id="lic-id">${lic-id}</a></td>						  
-						 	</tr>
-						 	<tr>
-							    <td>N∞ Expediente:</td>
-							    <td><a href="#" id="lic-expediente">${lic-expediente}</a></td>						  
-						 	</tr>
-				        	<tr>
-							    <td>Valor del pliego:</td>
-							    <td>$3.400,00 (pesos argentinos)</td>						  
-						 	</tr>						 	
-						 	<tr>
-							    <td>Empresa constructora:</td>
-							    <td>Fulanito Construcciones SRL</td>						   
-						 	</tr>	
-						 	<tr>
-							    <td>Unidad ejecutora:</td>
-							    <td>Ministerio de Ambiente y Espacio P˙blico de la Ciudad AutÛnoma de Buenos Aires</td>						   
-						 	</tr>
-						 	<tr>
-							    <td>Representante tÈcnico:</td>							   
-							     <td>Ing. Fulanito Alguien <br> ministerioaye@buenosaires.gob.ar <br> 4435-8888</td>								   		  
-						 	</tr>
-						 	<tr>
-							    <td>Financiamiento:</td>
-							    <td>Ministerio de Ambiente y Espacio P˙blico de la Ciudad AutÛnoma de Buenos Aires</td>						   
-						 	</tr>	
-						 	
-						 	<tr>
-							    <td>Plazo de ejecuciÛn:</td>
-							    <td>15 dÌas</td>						  
-						 	</tr>	
-						 	<tr>
-							    <td>Presupuesto adjudicado:</td>
-							    <td><b>$23.344,00</b></td>						  
-						 	</tr>		
-						 	<tr>
-							    <td>Presupuesto final:</td>
-							    <td><b>-</b></td>						  
-						 	</tr>
-						 	<tr>
-							    <td>Fecha estimada de finalizaciÛn:</td>
-							    <td><b>23/08/2013</b></td>						  
-						 	</tr>
-						 	<tr>
-							    <td>Fecha real de finalizaciÛn:</td>
-							    <td><b>-</b></td>						  
-						 	</tr>
-						 	<tr>
-							    <td>Estado de la obra:</td>
-							    <td>EN CURSO</td>						  
-						 	</tr>						 	
-						</table>
+			       
+<%-- 			       		<c:if test="${cantidadLicitacion eq 0}">			 --%>
+<!-- 			       			<div class="btnToggle" style="margin:0 auto; padding:20px;height:60px;line-height:60px;text-align:center;"> -->
+								
+<!-- 								<a href="#mdl-licitacion" role="button" class="btn btn-large btn-primary" data-toggle="modal"> -->
+<!-- 									<i class="icon-plus icon-large"></i>&nbsp;&nbsp;&nbsp;AGREGAR INFORMACI”N -->
+<!-- 								</a>								 -->
+<!-- 							</div> -->
+<%-- 						</c:if> --%>
+
+ 
+					<!-- MODAL LICIACION -->
+					<div id="mdl-licitacion" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+					  <div class="modal-header">
+					    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+					    <h3 id="myModalLabel">LicitaciÛn de obra</h3>
+					  </div>
+					  <div class="modal-body">
+					  	<!-- LICITACION FORM -->
+		                <form id="licitacion-form">
+		                
+		                	<table id="tbl-licitacion-form" align="center">			  	
+	   	   		  	   		 	<tbody>
+	   	   		  	   		 		<tr>
+										<td colspan="2">
+											<label>Obra</label>
+											<textarea id="lic-obra" name="lic-obra" rows="3" ></textarea>				               				
+										</td>	
+										<td>
+											<label>Tipo</label>					  			
+					               			<select id="lic-tipo" name="lic-tipo">								
+												<option>P˙blica</option>
+												<option>Privada</option>	
+												<option>ContrataciÛn directa</option>		
+											</select>
+										</td>																
+								  	</tr>
+									<tr>
+										<td>
+											<label>N∞ de LicitaciÛn</label>
+				               				<input type="text" id="lic-id" name="lic-id">
+										</td>
+										<td>
+											<label>N∞ de Expediente</label>
+			               					<input type="text" id="lic-expediente" name="lic-expediente">
+										</td>	
+								  		<td>
+											<label>Estado de la obra</label>					  			
+					               			<select id="lic-estado" name="lic-estado">								
+												<option>En curso</option>
+												<option>Interrumpida</option>	
+												<option>Finalizada</option>		
+											</select>
+										</td>
+								  	</tr>								  
+								  	<tr>
+										<td>
+											<label>Unidad ejecutora</label>
+			               					<input type="text" id="lic-uni-exe" name="lic-uni-exe">			               			
+										</td>
+										<td>
+											<label>Unidad de financiaciÛn</label>
+				               				<input type="text" id="lic-uni-fin" name="lic-uni-fin">
+										</td>
+										<td>
+											<label>Valor del pliego (en pesos argentinos)</label>
+				               				<input type="text" id="lic-pliego" name="lic-pliego">
+										</td>
+									</tr>
+									<tr>									
+										<td>
+											<label>Empresa constructora</label>			               				
+			               					<input type="text" id="lic-empresa-nombre" name="lic-empresa-nombre" placeholder="RazÛn Social">	
+			               					<input type="text" id="lic-empresa-cuit" name="lic-empresa-cuit" placeholder="CUIT">	
+			               					<input type="text" id="lic-empresa-email" name="lic-empresa-email" placeholder="Email">	
+										</td>
+										<td>
+											<label>Representante tÈcnico</label>
+			               					<input type="text" id="lic-repres-nombre" name="lic-repres-nombre" placeholder="Nombre y Apellido">	
+			               					<input type="text" id="lic-repres-tel" name="lic-repres-tel" placeholder="TelÈfono">	
+			               					<input type="text" id="lic-repres-email" name="lic-repres-email" placeholder="Email">	
+										</td>
+										<td>																			
+											<label>Presupuesto (en pesos argentinos)</label>	
+					               			<input type="text" id="lic-prespuesto-inicio" name="lic-prespuesto-inicio" placeholder="Adjudicado">				               		
+					               			<input type="text" id="lic-prespuesto-fin" name="lic-prespuesto-fin" placeholder="Final">	
+			               				</td>											
+									</tr>																
+									<tr>
+										<td>		
+											<label>Fecha estimada</label>			
+							    	   		<input type="text" id="lic-fechaTemp-inicio" name="lic-fechaTemp-inicio" style="width:110px;" placeholder="Inicio"/>	
+							    	   		&nbsp;- &nbsp;		    	   		
+							    	   		<input type="text" id="lic-fechaTemp-fin" name="lic-fechaTemp-fin" style="width:110px;" placeholder="Fin"/>
+										</td>									
+										<td>
+											<label>Fecha real</label>			   	
+							    	   		<input type="text" id="lic-fechaReal-inicio" name="lic-fechaReal-inicio" style="width:110px;" placeholder="Inicio"/>	
+							    	   		&nbsp;- &nbsp;		    	   		
+							    	   		<input type="text" id="lic-fechaReal-fin" name="lic-fechaReal-fin" style="width:110px;" placeholder="Fin"/>
+										</td>
+									</tr>										
+							  	</tbody>
+					  		</table>
+		                </form>
+					  				
+					  </div>
+					  <div class="modal-footer">					   
+					     <button id="btn-add-licitacion" class="btn btn-primary"><i class="icon-ok"></i>&nbsp;&nbsp;&nbsp;Confirmar</button>
+					     <button class="btn" data-dismiss="modal"><i class="icon-remove"></i>&nbsp;&nbsp;&nbsp;Cancelar</button>
+					  </div>
+					</div>
+							
+					<table id="tbl-licitacion-form" align="center">			  	
+	   	   		  	   		 	<tbody>
+	   	   		  	   		 		<tr>
+										<td colspan="2">
+											<label>Obra</label>
+											<a href="#" id="obra" data-type="textarea">${obra}</a>			               				
+										</td>	
+										<td>
+											<label>Tipo</label>		
+											<a href="#" id="tipo" data-type="select">${tipo}</a>			  			
+										</td>																
+								  	</tr>
+									<tr>
+										<td>
+											<label>N∞ de LicitaciÛn</label>
+				               				<a href="#" id="idLicitacion" data-type="text">${idLicitacion}</a>
+										</td>
+										<td>
+											<label>N∞ de Expediente</label>
+			               					<a href="#" id="nroExpediente">${nroExpediente}</a>
+										</td>	
+								  		<td>
+											<label>Estado de la obra</label>					  			
+					               			<a href="#" id="estadoObra" data-type="select">${estadoObra}</a>		
+										</td>
+								  	</tr>								  
+								  	<tr>
+										<td>
+											<label>Unidad ejecutora</label>
+			               					<a href="#" id="unidadEjec" data-type="text">Ministerio de PlanifiaciÛn</a>					               			
+										</td>
+										<td>
+											<label>Unidad de financiaciÛn</label>
+				               				<a href="#" id="unidadFinanc" data-type="text">Ministerio de Obras P˙blicas</a>			
+										</td>
+										<td>
+											<label>Valor del pliego (en pesos argentinos)</label>
+				               				<a href="#" id="valorPliego" data-type="number">34535656</a>			
+										</td>
+									</tr>
+									<tr>									
+										<td>
+											<label>Empresa constructora</label>			               				
+			               					<a href="#" id="empresaNombre" data-type="text">Una empresa ficticia SRL</a>
+			               					<a href="#" id="empresaCuit" data-type="text">20-789-456-6</a>	
+			               					<a href="#" id="empresaEmail" data-type="email">info@empresa.com</a>
+										</td>
+										<td>
+											<label>Representante tÈcnico</label>
+			               					<a href="#" id="representanteNombre" data-type="text">Fulgencio PÈrez</a>
+			               					<a href="#" id="representanteTel" data-type="tel">011-4321-9900</a>	
+			               					<a href="#" id="representanteEmail" data-type="email">fulgenciop@gmail.com</a>	
+										</td>
+										<td>																			
+											<label>Presupuesto (en pesos argentinos)</label>	
+					               			<a href="#" id="presupuestoInicio" data-type="number">12450888</a>				               		
+					               			<a href="#" id="presupuestoFin" data-type="number">200123045</a>	
+			               				</td>											
+									</tr>																
+									<tr>
+										<td>		
+											<label>Fecha estimada</label>	
+											Inicio <a href="#" id="fechaEstInicio" data-type="combodate">10/05/2013</a>									    	 
+							    	   		
+							    	   		Fin <a href="#" id="fechaEstFin" data-type="combodate">21/09/2013</a>			
+										</td>									
+										<td>
+											<label>Fecha real</label>			   	
+							    	   		Inicio
+							    	   		<a href="#" id="fechaRealInicio" data-type="combodate">11/06/2013</a>			
+							    	   		fin    	   		
+							    	   		<a href="#" id="fechaRealFin" data-type="combodate">30/12/2013</a>		
+										</td>
+									</tr>										
+							  	</tbody>
+					  		</table>		
+							
+<!-- 					<table id="tbl-licitacion" class="table table-hover table-bordered table-striped" style="display:none;" align="center">						 -->
+<!-- 				       		<tr> -->
+<!-- 							    <th>Obra:</th> -->
+<%-- 							    <td class="dynamic-cell"><a href="#" id="obra">${obra}</a></td>						   --%>
+<!-- 						 	</tr> -->
+<!-- 						 	<tr> -->
+<!-- 							    <th>N∞ LicitaciÛn:</th> -->
+<%-- 							    <td class="dynamic-cell"><a href="#" id="idLic">${id}</a></td>								   --%>
+<!-- 						 	</tr> -->
+<!-- 						 	<tr> -->
+<!-- 							    <th>N∞ Expediente:</th> -->
+<%-- 							    <td class="dynamic-cell"><a href="#" id="nroExpediente">${nroExpediente}</a></td>								   --%>
+<!-- 						 	</tr> -->
+<!-- 						 	<tr> -->
+<!-- 							    <th>Tipo de licitaciÛn:</th> -->
+<!-- 							    <td class="dynamic-cell"></td>								   -->
+<!-- 						 	</tr> -->
+<!-- 				        	<tr> -->
+<!-- 							    <th>Valor del pliego:</th> -->
+<!-- 							    <td class="dynamic-cell"></td>								   -->
+<!-- 						 	</tr>						 	 -->
+<!-- 						 	<tr> -->
+<!-- 							    <th>Empresa constructora:</th> -->
+<!-- 							    <td class="dynamic-cell"></td>						    -->
+<!-- 						 	</tr>	 -->
+<!-- 						 	<tr> -->
+<!-- 							    <th>Unidad ejecutora:</th> -->
+<!-- 							    <td class="dynamic-cell"></td>						    -->
+<!-- 						 	</tr> -->
+<!-- 						 	<tr> -->
+<!-- 							    <th>Representante t√©cnico:</th>							    -->
+<!-- 							    <td class="dynamic-cell"></td>								   		   -->
+<!-- 						 	</tr> -->
+<!-- 						 	<tr> -->
+<!-- 							    <th>Financiamiento:</th> -->
+<!-- 							    <td class="dynamic-cell"></td>						    -->
+<!-- 						 	</tr>						 	 -->
+<!-- 						 	<tr> -->
+<!-- 							    <th>Presupuesto adjudicado:</th> -->
+<!-- 							    <td class="dynamic-cell"></td>						   -->
+<!-- 						 	</tr>		 -->
+<!-- 						 	<tr> -->
+<!-- 							    <th>Presupuesto final:</th> -->
+<!-- 							    <td class="dynamic-cell"></td>						   -->
+<!-- 						 	</tr> -->
+<!-- 						 	<tr> -->
+<!-- 							    <th>Fecha estimada de inicio:</th> -->
+<!-- 							    <td class="dynamic-cell"></td>						   -->
+<!-- 						 	</tr> -->
+<!-- 						 	<tr> -->
+<!-- 							    <th>Fecha estimada de finalizaciÛn:</th> -->
+<!-- 							    <td class="dynamic-cell"></td>						   -->
+<!-- 						 	</tr> -->
+<!-- 						 	<tr> -->
+<!-- 							    <th>Fecha real de inicio:</th> -->
+<!-- 							    <td class="dynamic-cell"></td>						   -->
+<!-- 						 	</tr> -->
+<!-- 						 	<tr> -->
+<!-- 							    <th>Fecha real de finalizaciÛn:</th> -->
+<!-- 							    <td class="dynamic-cell"></td>						   -->
+<!-- 						 	</tr> -->
+<!-- 						 	<tr> -->
+<!-- 							    <th>Estado de la obra:</th> -->
+<!-- 							    <td class="dynamic-cell"></td>						   -->
+<!-- 						 	</tr>	 -->
+							 	
+<!-- 					</table> -->
+							
+			       
+			       		
+<%-- 			       		<c:if test="${cantidadLicitacion gt 0}"> --%>
+			       		
+			       
+				      
+<%-- 						</c:if> --%>
 						</div>
-			      </div>
+
 			    </div>
 			  </div>			  
 			  
@@ -558,7 +921,7 @@
 			  <div class="accordion-group">
 			    <div class="accordion-heading">
 			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFive">
-			       <h4><i class="icon-camera icon-large"></i>&nbsp;&nbsp;IM¡GENES Y VIDEOS (${cantidadArchivos})</h4>			   
+			       <h4><i class="icon-camera icon-large"></i>&nbsp;&nbsp;IM√ÅGENES Y VIDEOS (${cantidadArchivos})</h4>			   
 			      </a>
 			    </div>
 			    <div id="collapseFive" class="accordion-body collapse">
@@ -577,60 +940,7 @@
 			    </div>
 			    <div id="collapseSix" class="accordion-body collapse">
 			      <div class="accordion-inner">
-			      
-			     <!-- EDITOR TOOLBAR --> 
-<!-- 			     <div class="btn-toolbar" data-role="editor-toolbar" data-target="#commentTextEditor"> -->
-<!-- 				      <div class="btn-group"> -->
-<!-- 				        <a class="btn dropdown-toggle" data-toggle="dropdown" title="" data-original-title="Font"><i class="icon-font"></i><b class="caret"></b></a> -->
-<!-- 				          <ul class="dropdown-menu"> -->
-<!-- 				          <li><a data-edit="fontName Serif" style="font-family:'Serif'">Serif</a></li><li><a data-edit="fontName Sans" style="font-family:'Sans'">Sans</a></li><li><a data-edit="fontName Arial" style="font-family:'Arial'">Arial</a></li><li><a data-edit="fontName Arial Black" style="font-family:'Arial Black'">Arial Black</a></li><li><a data-edit="fontName Courier" style="font-family:'Courier'">Courier</a></li><li><a data-edit="fontName Courier New" style="font-family:'Courier New'">Courier New</a></li><li><a data-edit="fontName Comic Sans MS" style="font-family:'Comic Sans MS'">Comic Sans MS</a></li><li><a data-edit="fontName Helvetica" style="font-family:'Helvetica'">Helvetica</a></li><li><a data-edit="fontName Impact" style="font-family:'Impact'">Impact</a></li><li><a data-edit="fontName Lucida Grande" style="font-family:'Lucida Grande'">Lucida Grande</a></li><li><a data-edit="fontName Lucida Sans" style="font-family:'Lucida Sans'">Lucida Sans</a></li><li><a data-edit="fontName Tahoma" style="font-family:'Tahoma'">Tahoma</a></li><li><a data-edit="fontName Times" style="font-family:'Times'">Times</a></li><li><a data-edit="fontName Times New Roman" style="font-family:'Times New Roman'">Times New Roman</a></li><li><a data-edit="fontName Verdana" style="font-family:'Verdana'">Verdana</a></li></ul> -->
-<!-- 				        </div> -->
-<!-- 				      <div class="btn-group"> -->
-<!-- 				        <a class="btn dropdown-toggle" data-toggle="dropdown" title="" data-original-title="Font Size"><i class="icon-text-height"></i>&nbsp;<b class="caret"></b></a> -->
-<!-- 				          <ul class="dropdown-menu"> -->
-<!-- 				          <li><a data-edit="fontSize 5"><font size="5">Huge</font></a></li> -->
-<!-- 				          <li><a data-edit="fontSize 3"><font size="3">Normal</font></a></li> -->
-<!-- 				          <li><a data-edit="fontSize 1"><font size="1">Small</font></a></li> -->
-<!-- 				          </ul> -->
-<!-- 				      </div> -->
-<!-- 				      <div class="btn-group"> -->
-<!-- 				        <a class="btn" data-edit="bold" title="" data-original-title="Bold (Ctrl/Cmd+B)"><i class="icon-bold"></i></a> -->
-<!-- 				        <a class="btn" data-edit="italic" title="" data-original-title="Italic (Ctrl/Cmd+I)"><i class="icon-italic"></i></a> -->
-<!-- 				        <a class="btn" data-edit="strikethrough" title="" data-original-title="Strikethrough"><i class="icon-strikethrough"></i></a> -->
-<!-- 				        <a class="btn" data-edit="underline" title="" data-original-title="Underline (Ctrl/Cmd+U)"><i class="icon-underline"></i></a> -->
-<!-- 				      </div> -->
-<!-- 				      <div class="btn-group"> -->
-<!-- 				        <a class="btn" data-edit="insertunorderedlist" title="" data-original-title="Bullet list"><i class="icon-list-ul"></i></a> -->
-<!-- 				        <a class="btn" data-edit="insertorderedlist" title="" data-original-title="Number list"><i class="icon-list-ol"></i></a> -->
-<!-- 				        <a class="btn" data-edit="outdent" title="" data-original-title="Reduce indent (Shift+Tab)"><i class="icon-indent-left"></i></a> -->
-<!-- 				        <a class="btn" data-edit="indent" title="" data-original-title="Indent (Tab)"><i class="icon-indent-right"></i></a> -->
-<!-- 				      </div> -->
-<!-- 				      <div class="btn-group"> -->
-<!-- 				        <a class="btn btn-info" data-edit="justifyleft" title="" data-original-title="Align Left (Ctrl/Cmd+L)"><i class="icon-align-left"></i></a> -->
-<!-- 				        <a class="btn" data-edit="justifycenter" title="" data-original-title="Center (Ctrl/Cmd+E)"><i class="icon-align-center"></i></a> -->
-<!-- 				        <a class="btn" data-edit="justifyright" title="" data-original-title="Align Right (Ctrl/Cmd+R)"><i class="icon-align-right"></i></a> -->
-<!-- 				        <a class="btn" data-edit="justifyfull" title="" data-original-title="Justify (Ctrl/Cmd+J)"><i class="icon-align-justify"></i></a> -->
-<!-- 				      </div> -->
-<!-- 				      <div class="btn-group"> -->
-<!-- 						  <a class="btn dropdown-toggle" data-toggle="dropdown" title="" data-original-title="Hyperlink"><i class="icon-link"></i></a> -->
-<!-- 						    <div class="dropdown-menu input-append"> -->
-<!-- 							    <input class="span2" placeholder="URL" type="text" data-edit="createLink"> -->
-<!-- 							    <button class="btn" type="button">Add</button> -->
-<!-- 				        </div> -->
-<!-- 				        <a class="btn" data-edit="unlink" title="" data-original-title="Remove Hyperlink"><i class="icon-cut"></i></a>	 -->
-<!-- 	      			 </div>	      		 -->
-	      
-<!-- 			      <div class="btn-group"> -->
-<!-- 			        <a class="btn" title="" id="pictureBtn" data-original-title="Insert picture (or just drag &amp; drop)"><i class="icon-picture"></i></a> -->
-<!-- 			        <input type="file" data-role="magic-overlay" data-target="#pictureBtn" data-edit="insertImage" style="opacity: 0; position: absolute; top: 0px; left: 0px; width: 37px; height: 30px;"> -->
-<!-- 			      </div> -->
-<!-- 			      <div class="btn-group"> -->
-<!-- 			        <a class="btn" data-edit="undo" title="" data-original-title="Undo (Ctrl/Cmd+Z)"><i class="icon-undo"></i></a> -->
-<!-- 			        <a class="btn" data-edit="redo" title="" data-original-title="Redo (Ctrl/Cmd+Y)"><i class="icon-repeat"></i></a> -->
-<!-- 			      </div>	  -->
-<!-- 			    </div> -->
-			    <!-- /EDITOR TOOLBAR -->
-			     
+			      			     
 			    <!-- EDITOR BOX-->   
 			    <div style=" width:660px;margin:20px 0;">
 			    	<div id="commentTextEditor" contenteditable="true"></div>
@@ -674,13 +984,13 @@
 				
 				<div class="pagination pagination-centered">
 				  <ul>
-				    <li><a href="#">´ Anterior</a></li>
+				    <li><a href="#">¬´ Anterior</a></li>
 				    <li><a href="#">1</a></li>
 				    <li><a href="#">2</a></li>
 				    <li><a href="#">3</a></li>
 				    <li><a href="#">4</a></li>
 				    <li><a href="#">5</a></li>
-				    <li><a href="#">Siguiente ª</a></li>
+				    <li><a href="#">Siguiente ¬ª</a></li>
 				  </ul>
 				</div>
 				
@@ -726,7 +1036,7 @@
 						    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
 						  </a>				
 						  <div class="media-body">
-						    <a href="#"><h5 class="media-heading">Sem·foro no anda</h5></a>				    
+						    <a href="#"><h5 class="media-heading">Sem√°foro no anda</h5></a>				    
 						    <p style="font-size:11px">Reportado por: <a href="#">juan2013</a></p>
 						     <span class="label label-warning">Abierto</span>
 						  </div>

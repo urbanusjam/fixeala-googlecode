@@ -22,7 +22,9 @@
   	 		
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap-editable.js"></script>
+<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap-datetimepicker.js"></script> --%>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/select2.js"></script>
+  	
   	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap-fileupload.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootbox.js"></script>
@@ -44,6 +46,7 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.tooltipster.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/recaptcha_ajax.js"></script>	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.shorten.1.0.js"></script>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/moment.min.js"></script>
 <%--<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/util.js"></script>   --%>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/script.js"></script>	
   	
@@ -58,6 +61,7 @@
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap-editable.css" rel="stylesheet"> 
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap-responsive.css" rel="stylesheet">
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap-fileupload.css" rel="stylesheet">
+<%-- 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/datetimepicker.css" rel="stylesheet"> --%>
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/select2.css" rel="stylesheet">   
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/select2-bootstrap.css" rel="stylesheet">   
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/font-awesome.css" rel="stylesheet">
