@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -24,12 +25,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import ar.com.urbanusjam.entity.annotations.IssueLicitacion;
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.UserService;
 import ar.com.urbanusjam.services.dto.IssueDTO;
+import ar.com.urbanusjam.services.dto.IssueHistorialRevisionDTO;
+import ar.com.urbanusjam.services.dto.IssueLicitacionDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
 import ar.com.urbanusjam.services.utils.IssueStatus;
+import ar.com.urbanusjam.services.utils.Messages;
+import ar.com.urbanusjam.services.utils.Operation;
 import ar.com.urbanusjam.web.domain.AlertStatus;
 
 
@@ -73,7 +79,38 @@ public class IssueController {
 				model.addAttribute("usuario", issue.getUser().getUsername());
 				model.addAttribute("descripcion", issue.getDescription());
 				model.addAttribute("latitud", issue.getLatitude());
-				model.addAttribute("longitud", issue.getLongitude());
+				model.addAttribute("longitud", issue.getLongitude());				
+				model.addAttribute("historial", issue.getHistorial());
+				
+				model.addAttribute("cantidadRevisiones", issue.getHistorial().size());
+				model.addAttribute("cantidadLicitacion", issue.getLicitacion().getNroReclamo() != null ? 1 : 0);
+				model.addAttribute("cantidadReclamosSimilares", 0);
+				model.addAttribute("cantidadArchivos", 0);
+				model.addAttribute("cantidadComentarios", issue.getComentarios().size());				
+				
+				IssueLicitacionDTO licitacion = new IssueLicitacionDTO();
+				licitacion = issue.getLicitacion();
+				
+				if(licitacion.getNroLicitacion() != null){
+					model.addAttribute("lic-obra", licitacion.getObra());
+					model.addAttribute("lic-id", licitacion.getNroLicitacion());
+					model.addAttribute("lic-expediente", licitacion.getNroExpediente());
+					model.addAttribute("lic-pliego", licitacion.getValorPliego());
+					model.addAttribute("lic-empresa", licitacion.getEmpresaConstructora());
+					model.addAttribute("lic-uni-exe", licitacion.getEmpresaConstructora());
+					model.addAttribute("lic-uni-fin", licitacion.getUnidadFinanciamiento());
+					model.addAttribute("lic-plazo", licitacion.getPlazoEjecucionEnDias());
+					model.addAttribute("lic-presup-ini", licitacion.getPresupuestoAdjudicado());
+					model.addAttribute("lic-presup-fin", licitacion.getPresupuestoFinal());
+					model.addAttribute("lic-fechaTemp-ini", licitacion.getFechaEstimadaInicio());
+					model.addAttribute("lic-fechaTemp-fin", licitacion.getFechaEstimadaFin());
+					model.addAttribute("lic-fechaReal-ini", licitacion.getFechaRealInicio());
+					model.addAttribute("lic-fechaReal-fin", licitacion.getFechaRealFin());
+					
+				}
+				
+			
+			
 			 
 		} catch(Exception e){
 			 
@@ -108,10 +145,25 @@ public class IssueController {
 //					issue.setDate((GregorianCalendar) calendar);
 					issue.setDate(new Date());
 					issue.setStatus(IssueStatus.OPEN);		
-					issue.setUser(userDTO);			
-					issueService.reportIssue(issue);			
+					issue.setUser(userDTO);					
 					
-					return new AlertStatus(true, "¡Felicitaciones! Su reclamo ha sido registrado.");			
+					Random generator = new Random(); 
+					int id = generator.nextInt(100000) + 1000;
+					
+					IssueHistorialRevisionDTO revision = new IssueHistorialRevisionDTO();
+					revision.setFecha(new Date());
+					revision.setUsername(userDTO.getUsername());	
+					revision.setOperacion(Operation.CREATE);			
+					revision.setMotivo("ALTA");
+					revision.setObservaciones(Messages.ISSUE_CREATE_OBS);
+					revision.setEstado(issue.getStatus());
+					
+					//random id
+					issue.setId(Long.valueOf(id));
+					revision.setNroReclamo(issue.getId());			
+					issueService.reportIssue(issue, revision);			
+					
+					return new AlertStatus(true, "Su reclamo ha sido registrado.");			
 			}
 		}			
 		catch(AccessDeniedException e){
@@ -121,18 +173,19 @@ public class IssueController {
 	}
 	
 	@RequestMapping(value="/issues/updateIssue", method = RequestMethod.POST)
-	public @ResponseBody AlertStatus doUpdatetIssue(@ModelAttribute("issue") IssueDTO issue, HttpServletRequest request){
+	public @ResponseBody AlertStatus doUpdatetIssue(@ModelAttribute("issue") IssueDTO issue, 
+			@ModelAttribute("licitacion") IssueLicitacionDTO licitacion, HttpServletRequest request){
 		
 		try {			
-//				User user =  getCurrentUser(SecurityContextHolder.getContext().getAuthentication());
-//				UserDetails userDB = userService.loadUserByUsername(user.getUsername());		
+				User user =  getCurrentUser(SecurityContextHolder.getContext().getAuthentication());
+				UserDetails userDB = userService.loadUserByUsername(user.getUsername());		
 				
-//				if(userDB = null){
-//					return new AlertStatus(false, "Debe estar logueado para ingresar un nuevo reclamo.");
-//				}						
+				if(userDB == null){
+					return new AlertStatus(false, "Debe estar logueado para ingresar un nuevo reclamo.");
+				}						
 			
 				//user is logged-in
-				//else{
+				else{
 									
 					//se actualizan los datos del reclamo
 					
@@ -140,19 +193,37 @@ public class IssueController {
 					
 					//se actualiza el historial de revisiones
 			
+					UserDTO userDTO = new UserDTO();
+					userDTO.setUsername(userDB.getUsername());					
+					List<String> authorities = new ArrayList<String>();
+					authorities.add("ROLE_USER");		
+					userDTO.setAuthorities(authorities);	
+					issue.setUser(userDTO);	
 					
-									
-					issueService.updateIssue(issue);	
+					IssueHistorialRevisionDTO revision = new IssueHistorialRevisionDTO();
+					revision.setFecha(new Date());
+					revision.setUsername(userDTO.getUsername());			
+					revision.setNroReclamo(issue.getId());			
+					revision.setOperacion(Operation.UPDATE);			
+					revision.setMotivo("MODIFICACION");			
+					revision.setEstado(issue.getStatus());
+					revision.setObservaciones(Messages.ISSUE_UPDATE_OBS);														
+				
+					issue.setLicitacion(licitacion);
+					
+					issueService.updateIssue(issue, revision);	
 					
 					
 					return new AlertStatus(true, "El reclamo ha sido actualizado.");			
-		//	}
+			}
 		}			
 		catch(AccessDeniedException e){
 			return new AlertStatus(false, "Debe estar logueado para ingresar un nuevo reclamo.");
 		}
 	
 	}
+	
+		
 		
 	@RequestMapping(value="/loadTags", method = RequestMethod.GET)
 	public @ResponseBody List<String> loadTagList(HttpServletRequest request){
