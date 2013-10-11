@@ -1,0 +1,29 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+
+	<bean id="hibernateParent" abstract="true">
+        <property name="sessionFactory" ref="sessionFactoryFixeala" />
+        <property name="hibernateTemplate" ref="hibernateTemplateFixeala" />    
+	</bean>
+
+    <bean id="userDAO" class="ar.com.urbanusjam.dao.impl.UserDAOImpl" parent="hibernateParent" >
+      	<property name="authorityDAO" ref="authorityDAO" />
+    </bean> 
+    
+    <bean id="authorityDAO" class="ar.com.urbanusjam.dao.impl.AuthorityDAOImpl" parent="hibernateParent" /> 
+    
+    <bean id="passwordResetDAO" class="ar.com.urbanusjam.dao.impl.PasswordResetDAOImpl" parent="hibernateParent" /> 
+    
+    <bean id="activationDAO" class="ar.com.urbanusjam.dao.impl.ActivationDAOImpl" parent="hibernateParent" /> 
+    
+    <bean id="issueDAO" class="ar.com.urbanusjam.dao.impl.IssueDAOImpl" parent="hibernateParent" /> 
+    
+    <bean id="historialDAO" class="ar.com.urbanusjam.dao.impl.IssueHistorialRevisionDAOImpl" parent="hibernateParent" /> 
+    
+    <bean id="tagDAO" class="ar.com.urbanusjam.dao.impl.TagDAOImpl" parent="hibernateParent" /> 
+    
+      
+    
+</beans>
