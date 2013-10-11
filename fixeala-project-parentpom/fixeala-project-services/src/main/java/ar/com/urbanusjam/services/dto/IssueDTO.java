@@ -22,8 +22,11 @@ public class IssueDTO implements Serializable {
 	private String title;
 	private String description;
 	private String file;	
-	private Date date;
+	private Date date;	
+	private IssueLicitacionDTO licitacion = new IssueLicitacionDTO();
 	private List<String> tags = new ArrayList<String>();
+	private List<IssueHistorialRevisionDTO> historial = new ArrayList<IssueHistorialRevisionDTO>();
+	private List<CommentDTO> comentarios = new ArrayList<CommentDTO>();
 	private String status;
 
 
@@ -97,6 +100,14 @@ public class IssueDTO implements Serializable {
 	public void setFile(String file) {
 		this.file = file;
 	}
+		
+	public IssueLicitacionDTO getLicitacion() {
+		return licitacion;
+	}
+
+	public void setLicitacion(IssueLicitacionDTO licitacion) {
+		this.licitacion = licitacion;
+	}
 	
 	public List<String> getTags() {
 		return tags;
@@ -104,6 +115,22 @@ public class IssueDTO implements Serializable {
 	
 	public void setTags(List<String> tags) {
 		this.tags = tags;
+	}
+
+	public List<IssueHistorialRevisionDTO> getHistorial() {
+		return historial;
+	}
+
+	public void setHistorial(List<IssueHistorialRevisionDTO> historial) {
+		this.historial = historial;
+	}
+	
+	public List<CommentDTO> getComentarios() {
+		return comentarios;
+	}
+
+	public void setComentarios(List<CommentDTO> comentarios) {
+		this.comentarios = comentarios;
 	}
 
 	public Date getDate() {

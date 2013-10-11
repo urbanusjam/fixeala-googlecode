@@ -3,31 +3,31 @@ package ar.com.urbanusjam.entity.annotations;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 
 
 @Entity
-@Table(name="ISSUES")
+@Table(name="ISSUE")
 public class Issue implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID_ISSUE")
 	private Long id;
 	
@@ -64,7 +64,7 @@ public class Issue implements Serializable {
 	
 	
 	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "ISSUES_TAGS",
+	@JoinTable(name = "ISSUE_TAG",
 	         joinColumns = @JoinColumn(name = "ID_ISSUE"),
 	         inverseJoinColumns = @JoinColumn(name = "ID_TAG")
 	)
@@ -72,13 +72,17 @@ public class Issue implements Serializable {
 	
 	@Column(name = "STATUS")
 	private String status;
-	
-//	private Integer views;
-//	private Integer votes;	
-//	private List<Content> content;
-//	private List<Revision> revisions;
-//	private List<Comment> comments;
-//	private List<PointRecord> pointRecord;
+		
+    @OneToMany(mappedBy="issue", fetch = FetchType.EAGER, cascade = CascadeType.ALL)  
+	private Collection<IssueHistorialRevision> revisiones;
+//	
+//	@OneToOne
+//	@JoinColumn(name = "ID_ISSUE_LICITACION", nullable = true)
+//	private IssueLicitacion licitacion;
+//	
+//	@OneToMany(mappedBy = "issue")  
+//	private Collection<Comment> comments;
+
 	
 	public Issue(){   tagsList = new ArrayList<Tag>(); }	
 		
@@ -204,16 +208,42 @@ public class Issue implements Serializable {
 	public void setTagsList(Collection<Tag> tagsList) {
 		this.tagsList = tagsList;
 	}
-	
+		
+	public Collection<IssueHistorialRevision> getRevisiones() {
+		return revisiones;
+	}
+
+	public void setRevisiones(Collection<IssueHistorialRevision> revisiones) {
+		this.revisiones = revisiones;
+	}
+//
+//	public IssueLicitacion getLicitacion() {
+//		return licitacion;
+//	}
+//
+//	public void setLicitacion(IssueLicitacion licitacion) {
+//		this.licitacion = licitacion;
+//	}
+//
+//	public Collection<Comment> getComments() {
+//		return comments;
+//	}
+//
+//	public void setComments(Collection<Comment> comments) {
+//		this.comments = comments;
+//	}
+//
+//	public void setComments(List<Comment> comments) {
+//		this.comments = comments;
+//	}
+
 	public void addTag(Tag tag) {	
 			if (!getTagsList().contains(tag)) {
 				getTagsList().add(tag);
 			}
 		    if (!tag.getIssueList().contains(this)) {
 		        tag.getIssueList().add(this);
-		    }		
-		
-	}
-		
+		    }			
+	}	
 	
 }

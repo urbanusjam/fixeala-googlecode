@@ -14,7 +14,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="TAGS")
+@Table(name="TAG")
 public class Tag implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -67,10 +67,29 @@ public class Tag implements Serializable {
 		}
 	    if (!issue.getTagsList().contains(this)) {
 	    	issue.getTagsList().add(this);
-	    }		
-	
-}
-	
-	
+	    }	
+	}
+	    
+	    
+	@Override
+    public int hashCode() {
+        int result;
+        result = getId().hashCode();
+        result = (int) (29 * result + getId());
+        return result;
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if ( !(obj instanceof Tag) ) return false;
+
+        final Tag t = (Tag) obj;
+
+        return t.getId().equals( this.getId() ) ;
+        
+    }
+
 
 }
