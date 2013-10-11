@@ -143,7 +143,6 @@ public class UserDAOImpl extends GenericDAOImpl<User, Serializable>  implements 
 	@Override
 	public void updateAccount(User user) {
 		User userDB = (User) this.loadUserByUsername(user.getUsername());
-		userDB.setProfilePic(user.getProfilePic());
 		userDB.setNeighborhood(user.getNeighborhood());
 		userDB.setEmail(userDB.getEmail());
 		this.update(userDB);		

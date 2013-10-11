@@ -6,40 +6,52 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import ar.com.urbanusjam.dao.IssueDAO;
+import ar.com.urbanusjam.dao.IssueHistorialRevisionDAO;
 import ar.com.urbanusjam.dao.TagDAO;
 import ar.com.urbanusjam.entity.annotations.Issue;
+import ar.com.urbanusjam.entity.annotations.IssueHistorialRevision;
 import ar.com.urbanusjam.entity.annotations.Tag;
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.dto.IssueDTO;
+import ar.com.urbanusjam.services.dto.IssueHistorialRevisionDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
+import ar.com.urbanusjam.services.utils.Operation;
 
 public class IssueServiceImpl implements IssueService{
 	
 	private IssueDAO issueDAO;
+	private IssueHistorialRevisionDAO historialDAO;
 	private TagDAO tagDAO;
 	
 	public void setIssueDAO(IssueDAO issueDAO) {
 		this.issueDAO = issueDAO;
 	}
-	
+		
+	public void setHistorialDAO(IssueHistorialRevisionDAO historialDAO) {
+		this.historialDAO = historialDAO;
+	}
+
 	public void setTagDAO(TagDAO tagDAO) {
 		this.tagDAO = tagDAO;
 	}
 
 
 	@Override
-	public void reportIssue(IssueDTO issueDTO) {		
+	public void reportIssue(IssueDTO issueDTO, IssueHistorialRevisionDTO historialDTO) {		
 		Issue issue = new Issue();
 		issue = this.convertTo(issueDTO);
 		issueDAO.saveIssue(issue);		
+		historialDAO.saveHistorial(convertTo(historialDTO));		
 	}
 	
 	@Override
-	public void updateIssue(IssueDTO issueDTO) {
+	public void updateIssue(IssueDTO issueDTO, IssueHistorialRevisionDTO historialDTO) {
 		Issue issue = new Issue();
 		issue = this.convertTo(issueDTO);
-		issueDAO.updateIssue(issue);			
+		issueDAO.updateIssue(issue);
+		historialDAO.saveHistorial(convertTo(historialDTO));
+		
 	}
 
 	@Override
@@ -73,11 +85,50 @@ public class IssueServiceImpl implements IssueService{
 	/********************************************************************************/
 	
 	
+	public IssueHistorialRevision convertTo(IssueHistorialRevisionDTO historialDTO){
+		
+		IssueHistorialRevision historial = new IssueHistorialRevision();
+		
+		Calendar calendar = new GregorianCalendar();
+		calendar.setTime(historialDTO.getFecha());		
+		User user = new User();
+		user.setUsername(historialDTO.getUsername());		
+		Issue issue = new Issue();
+		issue.setId(Long.valueOf(historialDTO.getNroReclamo()));
+		
+		historial.setFecha((GregorianCalendar) calendar);	
+		historial.setUsuario(user);
+		historial.setIssue(issue);
+		historial.setOperacion(Operation.UPDATE);
+		historial.setMotivo(historialDTO.getMotivo());
+		historial.setEstado(historialDTO.getEstado());		
+		historial.setObservaciones(historialDTO.getObservaciones());		
+		
+		return historial;
+		
+	}
+	
+	public IssueHistorialRevisionDTO convertTo(IssueHistorialRevision historial){
+		
+		IssueHistorialRevisionDTO historialDTO = new IssueHistorialRevisionDTO();
+		
+		historialDTO.setFecha(historial.getFecha().getTime());	
+		historialDTO.setUsername(historial.getUsuario().getUsername());
+		historialDTO.setNroReclamo(Long.valueOf(historial.getIssue().getId()));
+		historialDTO.setOperacion(Operation.UPDATE);
+		historialDTO.setMotivo(historial.getMotivo());
+		historialDTO.setEstado(historial.getEstado());		
+		historialDTO.setObservaciones(historial.getObservaciones());		
+		
+		return historialDTO;
+		
+	}
+	
 	
 	public Issue convertTo(IssueDTO issueDTO){
 				
 		User user = new User();
-		user.setUsername(issueDTO.getUsername());
+		user.setUsername(issueDTO.getUser().getUsername());
 		
 		Issue issue = new Issue();
 		issue.setId(issueDTO.getId());
@@ -147,6 +198,14 @@ public class IssueServiceImpl implements IssueService{
 		issueDTO.setLatitude(String.valueOf(issue.getLatitude()));
 		issueDTO.setLongitude(String.valueOf(issue.getLongitude()));
 		issueDTO.setStatus(issue.getStatus());
+		
+		List<IssueHistorialRevisionDTO> historialDTO = new ArrayList<IssueHistorialRevisionDTO>();
+		
+		for(IssueHistorialRevision revision : issue.getRevisiones()){
+			historialDTO.add(convertTo(revision));
+		}
+		
+		issueDTO.setHistorial(historialDTO);
 		
 		return issueDTO;
 	}

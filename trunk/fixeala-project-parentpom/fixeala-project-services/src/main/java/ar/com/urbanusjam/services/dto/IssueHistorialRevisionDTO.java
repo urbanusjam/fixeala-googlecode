@@ -1,30 +1,24 @@
 package ar.com.urbanusjam.services.dto;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class HistorialDTO implements Serializable {
+public class IssueHistorialRevisionDTO implements Serializable {
 	
 	private static final long serialVersionUID = 3825783987489912575L;
 	
-	private String reclamoID;
-	private Date fecha;
+	private Long nroReclamo;
 	private String username;
-	private String estado;
+	private Date fecha;	
+	private String fechaFormateada;	
 	private String motivo;
 	private String observaciones;
 	private String operacion;
+	private String estado;
 	private String[] camposModificados;
 	
-		
-	public String getReclamoID() {
-		return reclamoID;
-	}
-
-	public void setReclamoID(String reclamoID) {
-		this.reclamoID = reclamoID;
-	}
-
+	
 	public Date getFecha() {
 		return fecha;
 	}
@@ -39,8 +33,16 @@ public class HistorialDTO implements Serializable {
 	
 	public void setUsername(String username) {
 		this.username = username;
-	}
+	}		
 	
+	public Long getNroReclamo() {
+		return nroReclamo;
+	}
+
+	public void setNroReclamo(Long nroReclamo) {
+		this.nroReclamo = nroReclamo;
+	}
+
 	public String getEstado() {
 		return estado;
 	}
@@ -81,7 +83,15 @@ public class HistorialDTO implements Serializable {
 		this.camposModificados = camposModificados;
 	}
 	
-	
+	public String getFechaFormateada(){		
+		
+		String formattedDate = "";	
+		Date d = this.getFecha();		
+        SimpleDateFormat df = new SimpleDateFormat();
+        df.applyPattern("dd/MM/yyyy hh:mm a");
+        formattedDate = df.format(d.getTime());
+        return formattedDate;	
+	}
 	
 
 }

@@ -13,7 +13,7 @@ import org.springframework.security.core.GrantedAuthority;
  *
  */
 @Entity
-@Table(name="AUTHORITIES", uniqueConstraints = {@UniqueConstraint(columnNames={"USERNAME", "AUTHORITY"})})
+@Table(name="AUTHORITY", uniqueConstraints = {@UniqueConstraint(columnNames={"USERNAME", "AUTHORITY"})})
 public class Authority implements GrantedAuthority, Serializable {
     private static final long serialVersionUID = 1L;
     

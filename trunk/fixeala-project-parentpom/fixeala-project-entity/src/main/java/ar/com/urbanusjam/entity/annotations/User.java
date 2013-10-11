@@ -20,12 +20,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 
 @Entity
-@Table(name="USERS")
+@Table(name="USER")
 public class User implements UserDetails {
 	
     private static final long serialVersionUID = 1L;
     
-    //Original props
     @Id
     @Column(name="USERNAME")
     private String username;
@@ -35,9 +34,6 @@ public class User implements UserDetails {
     
     @Column(name="EMAIL")
     private String email;
-    
-    @Column(name="PROFILE_PIC")
-    private String profilePic;
     
     @Column(name="NEIGHBORHOOD")
     private String neighborhood;    
@@ -124,15 +120,7 @@ public class User implements UserDetails {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
-	public String getProfilePic() {
-		return profilePic;
-	}
-
-	public void setProfilePic(String profilePic) {
-		this.profilePic = profilePic;
-	}
-	
+		
 	public String getNeighborhood() {
 		return neighborhood;
 	}

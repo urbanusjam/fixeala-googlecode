@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="PASSWORD_CHANGE_REQUESTS")
+@Table(name="PASSWORD_CHANGE_REQUEST")
 public class PasswordResetToken implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

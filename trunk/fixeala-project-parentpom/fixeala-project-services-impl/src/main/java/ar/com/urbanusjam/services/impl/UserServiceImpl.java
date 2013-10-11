@@ -225,8 +225,7 @@ public class UserServiceImpl implements UserService{
 	public User convertToUpdate(UserDTO userDTO){
 		User user = new User();		
 		user.setUsername(userDTO.getUsername());
-		user.setEmail(userDTO.getEmail());
-		user.setProfilePic(userDTO.getProfilePic());
+		user.setEmail(userDTO.getEmail());	
 		user.setNeighborhood(userDTO.getNeighborhood());
 		return user;
 	}
