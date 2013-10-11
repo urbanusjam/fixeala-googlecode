@@ -46,7 +46,7 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/util.js"></script>  
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/script.js"></script>	
   	
-  	<script type="text/javascript" src="http://viralpatel.net/blogs/demo/jquery/jquery.shorten.1.0.js"></script>
+<!--   	<script type="text/javascript" src="http://viralpatel.net/blogs/demo/jquery/jquery.shorten.1.0.js"></script> -->
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/DT_bootstrap.css" rel="stylesheet">
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.tagit.css" rel="stylesheet">
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/tagit.ui-zendesk.css" rel="stylesheet">	 
@@ -92,11 +92,7 @@
 			
 		
 		
-			$(".issueDesc").shorten({
-			    "showChars" : 200,
-			    "moreText"  : "« mostrar más »",
-			    "lessText"  : "« mostrar menos »",
-			});
+			
 			
 			$(function(){
 				function initToolbarBootstrapBindings() {

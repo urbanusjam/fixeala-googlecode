@@ -1,0 +1,851 @@
+@import url(http://fonts.googleapis.com/css?family=Oswald);
+
+html {
+	overflow-y: scroll;
+	/* prevents scrollbar from repositioning web page */
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	font-family: 'Arial';
+	font-size: 12px;
+	height: 100%;
+}
+
+input,textarea,label,select,.btn {
+	font-size: 12px;
+}
+
+h3 {
+	display: inline;
+}
+
+ul li a {
+	font-size: 12px;
+}
+
+p {
+	text-align: justify;
+}
+
+a.link {
+	color: #000 !important;
+}
+
+a.link:hover {
+	background: none !important;
+	text-decoration: underline;
+	color: #000 !important;
+}
+
+h4 {
+	font-weight: normal;
+}
+
+h6 {
+	font-size: 10px;
+	padding: 0;
+	margin: 0;
+	text-align: right;
+}
+
+h7 {
+	font-size: 12px;
+	padding: 0;
+	margin: 0;
+	text-align: center;
+	text-transform: uppercase;
+	color: #B0B0B0;
+}
+
+.alert {
+	text-shadow: none;
+}
+
+.page-header {
+	border-bottom: 1px solid #CFCFCF;
+}
+
+.input-prepend .add-on {
+	line-height: 30px;
+	height: 30px;
+}
+
+.navbar-inner {
+	background: #5095BE url("../images/header_bg.jpg") repeat-x;
+	border: none;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	text-shadow: none;
+	height: 50px;
+	margin-bottom: 40px;
+}
+
+.navbar .container {
+	width: 1180px;
+}
+
+.navbar .brand {
+	font-size: 24px;
+	line-height: 30px;
+	display: block;
+	float: left;
+	color: #fff;
+	text-shadow: none;
+	font-family: 'MuseoSans100';
+}
+
+ul#loginNav {
+	padding: 0;
+	margin: 0;
+	width: 336px;
+	height: 50px;
+	float: right;
+}
+
+.navbar .nav>li {
+	line-height: 55px;
+	margin: 0 0 0 60px;
+}
+
+.navbar .nav>li>a {
+	color: #166898;
+	text-shadow: none;
+	padding: 0;
+}
+
+.navbar .nav>li>a:focus,.navbar .nav>li>a:hover {
+	color: #fff;
+	display: block;
+	outline: none;
+}
+
+.navbar .nav>li>a i {
+	margin-top: 10px;
+}
+
+ul#loginNav li.loginLink {
+	float: left;
+}
+
+ul#loginNav li.signupLink {
+	float: right;
+	margin-left: 5px;
+}
+
+ul#loginNav li.signupLink {
+	width: 130px;
+	line-height: 50px;
+	padding: 0;
+}
+
+ul#loginNav li.signupLink a {
+	color: #fff;
+	text-align: center;
+}
+
+ul#loginNav li.signupLink a:hover {
+	background-color: #166898;
+	line-height: 50px;
+}
+
+.navbar .nav li.dropdown a#loginLink {
+	margin: 0 auto;
+	color: #fff;
+	width: 130px;
+	text-align: center;
+	line-height: 50px;
+}
+
+.navbar .nav li.dropdown a:hover {
+	background-color: #166898;
+}
+
+.navbar .nav li.dropdown.open>.dropdown-toggle,.navbar .nav li.dropdown.active>.dropdown-toggle,.navbar .nav li.dropdown.open.active>.dropdown-toggle
+	{
+	color: #fff;
+	background-color: #166898;
+	outline: none;
+}
+
+.caret {
+	vertical-align: text-top;
+	color: #fff;
+	background-color: #fff;
+}
+
+#btnLoggedUser {
+	-webkit-box-shadow: 0 rgba(0, 0, 0, 0);
+	-moz-box-shadow: 0 rgba(0, 0, 0, 0);
+	box-shadow: 0 rgba(0, 0, 0, 0);
+	float: right;
+}
+
+#issueNav .navbar-inner {
+	background: #5095BE;
+	border: none;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	text-shadow: 0;
+	height: 50px;
+	margin-bottom: 40px;
+}
+
+.navbar .container {
+	width: 1180px;
+}
+
+.btn,.label,.badge {
+	text-shadow: none;
+}
+
+.btn-group a.btn {
+	line-height: 25px;
+}
+
+.btn-group {
+	margin-top: 5px;
+}
+
+.navbar .nav li a.tooltip-inner {
+	width: 70px;
+	padding-left: 5px;
+	padding-right: 5px;
+	line-height: 30px;
+	text-transform: uppercase;
+}
+
+.tooltip-inner {
+	width: 100px;
+	padding-left: 5px;
+	padding-right: 5px;
+	line-height: 30px;
+}
+
+.form-signin {
+	color: #000;
+	width: 220px;
+	padding: 20px 20px;
+	margin: 0 auto;
+	background-color: #fff;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
+	-moz-box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
+}
+
+.form-signin .form-signin-heading,.form-signin .checkbox {
+	margin-bottom: 10px;
+}
+
+.form-signin input[type="text"],.form-signin input[type="password"] {
+	height: 35px;
+	margin-bottom: 15px;
+	padding: 7px 9px;
+}
+
+.form-signin button,.form-signin label {
+	display: inline-block;
+}
+
+.form-signin button {
+	border-radius: 3px;
+	height: 30px;
+	padding: 0;
+	width: 100px;
+	color: #fff;
+	margin-bottom: 10px;
+}
+
+.form-signin .checkbox {
+	display: inline-block;
+	height: 25px;
+	vertical-align: bottom;
+	margin-left: 25px;
+}
+
+.form-signin.alert {
+	text-align: left;
+	margin: 0 auto;
+}
+
+.forgotPassLink {
+	height: 25px;
+	margin-bottom: 5px;
+}
+
+.input-append {
+	margin-bottom: 40px;
+}
+
+.input-append input {
+	height: 30px; /*width:744px;*/
+	width: 698px;
+}
+
+.input-append button.add-on {
+	height: inherit !important;
+	width: 50px;
+	line-height: 30px;
+}
+
+#btnIssue {
+	width: 273px;
+	height: 40px;
+	font-size: 14px !important;
+	letter-spacing: 1px;
+	text-shadow: 0;
+}
+
+ul.thumbnails {
+	text-align: center;
+}
+
+.alert {
+	padding: 3px;
+	text-align: center !important;
+}
+
+.alert-error {
+	border: 1px solid #A60000;
+}
+
+.close {
+	position: static !important;
+}
+
+.ajax_loading {
+	width: 105px;
+	float: left;
+	margin-top: 10px;
+}
+
+#forgotPasswordForm {
+	margin: 0 auto;
+	float: none;
+}
+
+#forgotPasswordForm .btn {
+	display: inline-block;
+	vertical-align: top;
+	width: 90px;
+	font: inherit;
+}
+
+#forgotPasswordForm .row {
+	margin: 40px;
+}
+
+#forgotPasswordForm .row .span4 {
+	margin-left: 0;
+	margin-top: 30px;
+}
+
+#signupForm,#changePasswordForm,#uploadForm,#resetCredentialsForm {
+	margin: 0 auto;
+	float: none;
+}
+
+#signupForm .input-prepend,#resetCredentialsForm .input-prepend {
+	margin: 0 0 20px 60px;
+}
+
+#signupForm .add-on {
+	width: 30px;
+}
+
+#signupForm input,#changePasswordForm input,#resetCredentialsForm input
+	{
+	width: 350px;
+	height: 30px;
+}
+
+#signupForm .span3,#resetCredentialsForm .span3 {
+	width: auto;
+	margin: 20px 0 20px 60px;
+}
+
+#signupForm  .btn,#resetCredentialsForm .btn {
+	font: inherit;
+	height: 30px;
+}
+
+#changePasswordForm  .btn {
+	font: inherit;
+	height: 30px;
+	width: 200px;
+	margin: 0 0 20px 60px;
+}
+
+#captchadiv {
+	width: 450px;
+	margin: 0 auto;
+	background-color: #fff;
+}
+
+#captchadiv input {
+	margin: 0;
+	border: 1px solid #CFCFCF !important;
+}
+
+#signupForm .row,#changePasswordForm .row,#resetCredentialsForm .row {
+	margin: 20px auto;
+	float: none;
+}
+
+#signupForm i {
+	vertical-align: top;
+}
+
+#accountBox {
+	margin: 0 auto;
+	float: none;
+}
+
+#accountBox  .row {
+	margin: 10px auto;
+}
+
+#accountBox  .span6 {
+	float: none;
+	margin: 0 auto;
+	margin-top: 10px;
+	margin-bottom: 30px;
+}
+
+#accountBox .thumbnail {
+	width: 120px;
+	height: 120px;
+	line-height: 120px;
+	vertical-align: middle;
+	display: inline-block;
+	*display: inline; /* ie7 fix */
+	float: none;
+	margin-right: 27px;
+	margin-left: 30px;
+	text-align: center;
+	background-color: #fff;
+}
+
+#accountBox a {
+	line-height: 100%;
+	text-align: center;
+}
+
+#accountBox input {
+	margin: 0 0 20px 0;
+	height: 30px;
+}
+
+#accountBox .input-prepend {
+	margin-left: 30px;
+}
+
+#accountBox  .add-on {
+	width: 30px;
+}
+
+#accountBox span.btn {
+	float: none;
+	line-height: 25px;
+	height: 25px;
+	width: 150px;
+}
+
+#accountBox fieldset {
+	padding: 30px 0 0 0;
+}
+
+#btnUpdateAccount,#btnCloseAccount {
+	margin-left: 30px;
+}
+
+legend {
+	font-size: 16px;
+	font-weight: bold;
+}
+
+#events_container {
+	font-size: 12px;
+}
+
+/*********************************************************************************************/
+#content {
+	width: 1180px;
+	min-height: 600px;
+	height: auto;
+	margin: 0 auto;
+	margin-top: 100px;
+	margin-bottom: 30px;
+	clear: both;
+	padding: 0;
+}
+
+#footer {
+	width: 100%;
+	height: 50px;
+	line-height: 50px;
+	font-size: 12px;
+	color: #666;
+	text-align: center;
+	background-color: #e5e5e5;
+	clear: both;
+}
+
+#map_canvas {
+	float: left;
+	overflow: hidden;
+	width: 1178px; /* border adds 2 pixels to width */
+	height: 430px;
+	/* 	background:#CFCFCF url("../images/mapa.png") no-repeat center; */
+	background-color: #CFCFCF;
+	border: 1px solid #CFCFCF;
+	margin-bottom: 0;
+	padding: 0;
+}
+
+#map_canvas img {
+	max-width: none; /* fixes boostrap bug for the map's zoom control */
+}
+
+#issueForm {
+	overflow: hidden;
+	position: relative;
+	float: right;
+	display: none;
+	margin-right: -316px;
+	width: 316px;
+	height: 420px;
+	background: #fff;
+	padding: 0 10px 10px 10px;
+	border: 1px solid #CFCFCF;
+	margin-bottom: 0;
+}
+
+#issueForm #fieldWrapper {
+	height: 280px;
+}
+
+#issueForm label {
+	font-weight: bold;
+}
+
+.form-issue input[type="text"], .form-issue select, .form-issue textarea {
+	color: #000;
+}
+
+.form-issue input {
+	width: 300px;
+	height: 30px;
+	margin-bottom: 20px;
+	display: block;
+}
+
+.form-issue select {
+	width: 170px;
+	height: 40px;
+	margin-bottom: 20px;
+	display: block;
+	clear: both;
+}
+
+.form-issue textarea {
+	width: 300px;
+	height: 200px;
+}
+
+.form-issue legend {
+	margin-bottom: 20px;
+}
+
+.form-issue .btn {
+	width: 90px;
+	display: inline;
+	height: 40px;
+}
+
+.form-issue #btnBackNext {
+	float: left;
+}
+
+.form-issue #btnIssueSubmit {
+	float: right;
+}
+
+.form-issue .btn-primary:hover,.form-issue .btn-primary:active,.form-issue .btn-primary.active,.form-issue .btn-primary.disabled,.form-issue .btn-primary[disabled]
+	{
+	background-color: none;
+}
+
+.form-issue .btn:hover {
+	background-position: 0;
+}
+
+#eventTags ul {
+	margin-top: 20px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	font-family: "Arial";
+	width: 300px;
+	height: auto;
+}
+
+#eventTags li,#eventTags li input {
+	font-family: "Arial";
+}
+
+#eventTags li {
+	line-height: 30px;
+}
+
+.popover {
+	font-size: 12px;
+}
+
+input.error,textarea.error,select.error {
+	color: #A60000;
+	border: 1px solid #A60000;
+}
+
+label.valid {
+	width: 24px;
+	height: 24px;
+	background: url(../images/tick.png) center center no-repeat;
+	display: inline-block;
+	text-indent: -9999px;
+}
+
+label.error { /* 	    font-weight: bold; */
+	/* 	    color: red;   */
+	/* 	    padding: 2px 8px; */
+	/* 	    margin-top: 2px;	   */
+	/* 	    border:1px solid red; */
+	display: none;
+}
+
+a.accordion-toggle:hover {
+	text-decoration: none;
+}
+
+.container-fluid {
+	padding: 0
+}
+
+.row {
+	margin: 0;
+}
+
+.row .btn {
+	height: 35px;
+}
+
+#btnGroupActions .btn {
+	width: 80px;
+}
+
+#btnGroupActions .btn i {
+	margin: 0 8px 0 8px;
+}
+
+#commentTextEditor {
+	width: 650px;
+	max-height: 150px;
+	height: 150px;
+	background-color: white;
+	border-collapse: separate;
+	border: 1px solid rgb(204, 204, 204);
+	padding: 4px;
+	box-sizing: content-box;
+	-webkit-box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px 0px inset;
+	box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px 0px inset;
+	border-top-right-radius: 3px;
+	border-bottom-right-radius: 3px;
+	border-bottom-left-radius: 3px;
+	border-top-left-radius: 3px;
+	overflow: scroll;
+	outline: none;
+}
+
+div[data-role="editor-toolbar"] {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.dropdown-menu a {
+	cursor: pointer;
+}
+
+#tblIssueInfo tbody tr td {
+	border: none;
+	text-align: justify;
+}
+
+#tblIssueInfo tbody th {
+	border: none;
+	width: 120px;
+}
+
+#tblNearbyIssues tbody  tr {
+	height: 100px;
+}
+
+#tblComments tbody  tr {
+	min-height: 120px;
+}
+
+.table tbody  td {
+	vertical-align: middle;
+}
+
+#tblCustomDataset thead th {
+	text-align: left;
+	border-bottom: 1px solid #cfcfcf;
+}
+
+#tblCustomDataset tbody td {
+	width: 300px;
+	padding: 15px;
+	vertical-align: top;
+}
+
+#tblDatasetDownload tbody td {
+	padding: 15px;
+}
+
+#tblWidget tbody td {
+	padding: 15px;
+	vertical-align: top;
+}
+
+/* Autocomplete
+----------------------------------*/
+
+/* Autocomplete
+----------------------------------*/
+.ui-autocomplete {
+	position: absolute;
+	cursor: default;
+}
+
+.ui-autocomplete-loading {
+	background: white url('images/ui-anim_basic_16x16.gif') right center
+		no-repeat;
+}
+
+/* workarounds */
+* html .ui-autocomplete {
+	width: 1px;
+} /* without this, the menu expands to 100% in IE6 */
+
+/* Menu
+----------------------------------*/
+.ui-menu {
+	list-style: none;
+	padding: 10px;
+	margin: 0;
+	display: block;
+	width: 227px;
+}
+
+.ui-menu .ui-menu {
+	margin-top: -3px;
+}
+
+.ui-menu .ui-menu-item {
+	margin: 0;
+	padding: 0;
+	width: 200px;
+}
+
+.ui-menu .ui-menu-item a {
+	text-decoration: none;
+	display: block;
+	padding: .2em .4em;
+	line-height: 1.5;
+	zoom: 1;
+}
+
+.ui-menu .ui-menu-item a.ui-state-hover,.ui-menu .ui-menu-item a.ui-state-active
+	{
+	margin: -1px;
+}
+
+.ui-state-hover,.ui-autocomplete li:hover {
+	color: White;
+	background: #96B202;
+	outline: none;
+}
+
+input[type="text"],input[type="password"],.ui-autocomplete-input,textarea,.uneditable-input
+	{
+	display: inline-block;
+	padding: 4px;
+	font-size: 13px;
+	line-height: 18px;
+	color: #808080;
+	border: 1px solid #ccc;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+
+.ui-autocomplete {
+	position: absolute;
+	top: 0;
+	left: 0;
+	cursor: default;
+}
+
+@font-face {
+	font-family: 'MuseoSans100';
+	src: url('../font/museosans-100-webfont.eot');
+	src: url('../font/museosans-100-webfont.eot?#iefix')
+		format('embedded-opentype'), url('../font/museosans-100-webfont.woff')
+		format('woff'), url('../font/museosans-100-webfont.ttf')
+		format('truetype'),
+		url('../font/museosans-100-webfont.svg#MuseoSans100') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'MuseoSlab300';
+	src: url('../font/museo_slab_300-webfont.eot');
+	src: url('../font/museo_slab_300-webfont.eot?#iefix')
+		format('embedded-opentype'),
+		url('../font/museo_slab_300-webfont.woff') format('woff'),
+		url('../font/museo_slab_300-webfont.ttf') format('truetype'),
+		url('../font/museo_slab_300-webfont.svg#MuseoSans100') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+/**********************************************************************************************/
+#cbxProvincias {
+	position: relative;
+	left: 0;
+	top: 40px;
+	z-index: 9;
+	float: right;
+	margin-right: 115px;
+	padding-top: 3px;
+	height: 24px;
+	border: 1px solid #717B87;
+	color: #000;
+	-webkit-box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px;
+	box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px;
+}
