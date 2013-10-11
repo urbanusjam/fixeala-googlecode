@@ -762,6 +762,40 @@ div[data-role="editor-toolbar"] {
 	vertical-align: top;
 }
 
+
+#mdl-licitacion {
+	width:1000px;
+	margin: -25px 0 0 -500px;
+}
+	
+	
+#mdl-licitacion	.modal-body {
+	max-height: 550px; 
+	overflow:hidden;
+}
+
+/* #mdl-licitacion .modal-footer{text-align:center;} */
+
+#tbl-licitacion {width:700px;  margin:0 auto; margin-top:20px; margin-bottom:20px;}
+#tbl-licitacion th{width:300px;}
+#tbl-licitacion td{width:400px;}
+
+#tbl-licitacion-form label{font-weight: bold;}
+#tbl-licitacion-form  tbody { margin:0 auto; }
+#tbl-licitacion-form  tbody td {border: 0px solid #000; }
+
+#tbl-licitacion-form tbody td {
+	width: 300px;
+	padding: 8px 0 8px 30px;
+	vertical-align: top;	
+	
+}
+
+#licitacion-form label{font-weight:bold;}
+#licitacion-form textarea{width:575px;}
+#licitacion-form input{width:250px; height:25px;}
+#licitacion-form select{width:260px; height:35px;}
+
 /* Autocomplete
 ----------------------------------*/
 
