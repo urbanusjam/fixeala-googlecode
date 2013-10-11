@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+						http://www.springframework.org/schema/context
+						http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+	<!--	PlaceHolder       -->
+	<import resource="classpath:ctx/placeholders/fixeala-general-beans.xml" />
+	
+	<!--	DataSource        -->
+	<import resource="classpath:ctx/datasource/fixeala-datasource.xml" />
+
+	<!--	Log4j             -->
+	<import resource="classpath:ctx/log4j/fixeala-log4j.xml" />
+
+	<!--	DAO               -->
+	<import resource="classpath:ctx/dao/fixeala-common-dao.xml" />
+
+	<!--	Hibernate         -->
+	<import resource="classpath:ctx/hibernate/fixeala-persistence.xml" />
+
+	<!--	Services          -->
+	<import resource="classpath:ctx/services/fixeala-services.xml" />
+	
+	<!--	Security          -->
+	<import resource="classpath:ctx/security/fixeala-security.xml" />
+
+
+</beans>
