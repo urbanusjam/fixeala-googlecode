@@ -7,14 +7,17 @@ import java.util.List;
 
 import ar.com.urbanusjam.dao.IssueDAO;
 import ar.com.urbanusjam.dao.IssueHistorialRevisionDAO;
+import ar.com.urbanusjam.dao.IssueLicitacionDAO;
 import ar.com.urbanusjam.dao.TagDAO;
 import ar.com.urbanusjam.entity.annotations.Issue;
 import ar.com.urbanusjam.entity.annotations.IssueHistorialRevision;
+import ar.com.urbanusjam.entity.annotations.IssueLicitacion;
 import ar.com.urbanusjam.entity.annotations.Tag;
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.IssueHistorialRevisionDTO;
+import ar.com.urbanusjam.services.dto.IssueLicitacionDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
 import ar.com.urbanusjam.services.utils.Operation;
 
@@ -22,6 +25,7 @@ public class IssueServiceImpl implements IssueService{
 	
 	private IssueDAO issueDAO;
 	private IssueHistorialRevisionDAO historialDAO;
+	private IssueLicitacionDAO licitacionDAO;
 	private TagDAO tagDAO;
 	
 	public void setIssueDAO(IssueDAO issueDAO) {
@@ -30,6 +34,10 @@ public class IssueServiceImpl implements IssueService{
 		
 	public void setHistorialDAO(IssueHistorialRevisionDAO historialDAO) {
 		this.historialDAO = historialDAO;
+	}
+
+	public void setLicitacionDAO(IssueLicitacionDAO licitacionDAO) {
+		this.licitacionDAO = licitacionDAO;
 	}
 
 	public void setTagDAO(TagDAO tagDAO) {
@@ -42,15 +50,21 @@ public class IssueServiceImpl implements IssueService{
 		Issue issue = new Issue();
 		issue = this.convertTo(issueDTO);
 		issueDAO.saveIssue(issue);		
-		historialDAO.saveHistorial(convertTo(historialDTO));		
+		historialDAO.saveHistorial(convertTo(historialDTO));
 	}
 	
 	@Override
-	public void updateIssue(IssueDTO issueDTO, IssueHistorialRevisionDTO historialDTO) {
+	public void updateIssue(IssueDTO issueDTO, IssueHistorialRevisionDTO historialDTO, 
+			IssueLicitacionDTO licitacionDTO) {
 		Issue issue = new Issue();
 		issue = this.convertTo(issueDTO);
+		issue.getRevisiones().add(convertTo(historialDTO));
+		issue.setLicitacion(convertTo(licitacionDTO));
+		//licitacionDAO.saveOrUpdateLicitacion(convertTo(licitacionDTO));
+		
 		issueDAO.updateIssue(issue);
-		historialDAO.saveHistorial(convertTo(historialDTO));
+		//historialDAO.saveHistorial(convertTo(historialDTO));
+		
 		
 	}
 
@@ -83,6 +97,16 @@ public class IssueServiceImpl implements IssueService{
 	}
 	
 	/********************************************************************************/
+	
+	public IssueLicitacion convertTo(IssueLicitacionDTO licitacionDTO){
+		
+		IssueLicitacion licitacion = new IssueLicitacion();
+		licitacion.setNroLicitacion(licitacionDTO.getNroLicitacion());
+		licitacion.setNroExpediente(licitacionDTO.getNroExpediente());
+		licitacion.setObjeto(licitacionDTO.getObra());
+		
+		return licitacion;
+	}
 	
 	
 	public IssueHistorialRevision convertTo(IssueHistorialRevisionDTO historialDTO){
