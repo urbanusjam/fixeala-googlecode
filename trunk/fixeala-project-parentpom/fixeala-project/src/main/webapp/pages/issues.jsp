@@ -135,14 +135,41 @@
 			  
 			  
 			  /*******************************************/
+			  
+			  
+			  
+				$('#reset-btn').click(function() {
+				     $('#obra').editable('setValue', ''); 
+				     $('#nroLicitacion').editable('setValue', ''); 
+				     $('#nroExpediente').editable('setValue', ''); 
+				     $('#valorPliego').editable('setValue', 0); 
+				     $('#unidadEjec').editable('setValue', ''); 
+				     $('#unidadFinanc').editable('setValue', ''); 
+				     $('#empresaNombre').editable('setValue', ''); 
+				     $('#empresaCuit').editable('setValue', ''); 
+				     $('#empresaEmail').editable('setValue', ''); 
+				     $('#representanteNombre').editable('setValue', ''); 
+				     $('#representanteTel').editable('setValue', ''); 
+				     $('#representanteEmail').editable('setValue', ''); 
+				     $('#presupuestoInicio').editable('setValue', 0); 
+				     $('#presupuestoFin').editable('setValue', 0); 
+				     $('#tipo').editable('setValue', 1); 
+				     $('#estadoObra').editable('setValue', 1); 
+				     $('#fechaEstInicio').editable('setValue', ''); 
+				     $('#fechaEstFin').editable('setValue', ''); 
+				     $('#fechaRealInicio').editable('setValue', ''); 
+				     $('#fechaRealFin').editable('setValue', ''); 
+				});
 			
+			  $('.tbl-licitacion').editable({ mode:'popup',
+				    placement: 'top',});
 			  
 			  $("#obra").editable({				
 				  type: 'textarea',
 				  title: 'Ingrese una descripción'						 
 			  });
 			  
-			  $("#idLicitacion").editable({		
+			  $("#nroLicitacion").editable({		
 				  type: 'text'
 							 
 			  });
@@ -167,11 +194,11 @@
 				  url: '/post'			 
 			  });
 			  
-			  $("#empresaEmail").editable({				
+			  $("#empresaCuit").editable({				
 				  url: '/post'			 
 			  });
 			  
-			  $("#empresaCuit").editable({				
+			  $("#empresaEmail").editable({				
 				  url: '/post'			 
 			  });
 			  
@@ -180,6 +207,10 @@
 			  });
 			  
 			  $("#representanteTel").editable({				
+				  url: '/post'			 
+			  });
+			  
+			  $("#representanteEmail").editable({				
 				  url: '/post'			 
 			  });
 			
@@ -198,15 +229,14 @@
 			  });
 			  
 			 
-			  
-			  
 			  $('#tipo').editable({
 					value: 1,
 					url:"/post",
 			        source: [
-			            {value: 1, text: 'Pública'},
-			            {value: 2, text: 'Privada'},
-			            {value: 2, text: 'Contratación directa'}
+						{value: 1, text: 'Indefinido'},
+			            {value: 2, text: 'Pública'},
+			            {value: 3, text: 'Privada'},
+			            {value: 4, text: 'Contratación directa'}
 			        ]
 			    });    
 			  
@@ -214,15 +244,17 @@
 					value: 1,
 					url:"/post",
 			        source: [
-			            {value: 1, text: 'En curso'},
-			            {value: 2, text: 'Interrumpida'},
-			            {value: 2, text: 'Finalizada'}
+					    {value: 1, text: 'Sin iniciar'},
+			            {value: 2, text: 'En curso'},
+			            {value: 3, text: 'Interrumpida'},
+			            {value: 4, text: 'Finalizada'}
 			        ]
 			    });  
 			  
 			  
 			  
 			  $('#fechaEstInicio').editable({
+				   
 				  	format: 'YYYY-MM-DD',    
 			        viewformat: 'DD/MM/YYYY',    
 			        template: 'D / MMMM / YYYY',    
@@ -231,10 +263,11 @@
 			                maxYear: 2015,
 			                minuteStep: 1
 			           }
-			       
 			    });
+			 
 			  
 			  $('#fechaEstFin').editable({
+				  
 				 	format: 'YYYY-MM-DD',    
 			        viewformat: 'DD/MM/YYYY',    
 			        template: 'D / MMMM / YYYY',    
@@ -246,6 +279,7 @@
 			    });
 			  
 			  $('#fechaRealInicio').editable({
+				
 				  	format: 'YYYY-MM-DD',    
 			        viewformat: 'DD/MM/YYYY',    
 			        template: 'D / MMMM / YYYY',    
@@ -257,6 +291,7 @@
 			    });
 			  
 			  $('#fechaRealFin').editable({
+				  	
 				  	format: 'YYYY-MM-DD',    
 			        viewformat: 'DD/MM/YYYY',    
 			        template: 'D / MMMM / YYYY',    
@@ -458,7 +493,7 @@
 				<button class="btn btn-success"><i class="icon-save icon-large"></i>&nbsp;&nbsp;&nbsp;Guardar</button>			
 			</div>
 			<div id="btn-edit" class="btn-group" style="float:right;">
-				<button class="btn btn-info"><i class="icon-edit icon-large"></i>&nbsp;&nbsp;&nbsp;Editar</button>			
+				<button class="btn btn-info"><i class="icon-pencil icon-large"></i>&nbsp;&nbsp;&nbsp;Editar</button>			
 			</div>			
 			
 			
@@ -601,193 +636,156 @@
 			    </div>
 			    <div id="collapseTwo" class="accordion-body collapse">
 			      <div class="accordion-inner">
-			       
-<%-- 			       		<c:if test="${cantidadLicitacion eq 0}">			 --%>
-<!-- 			       			<div class="btnToggle" style="margin:0 auto; padding:20px;height:60px;line-height:60px;text-align:center;"> -->
-								
-<!-- 								<a href="#mdl-licitacion" role="button" class="btn btn-large btn-primary" data-toggle="modal"> -->
-<!-- 									<i class="icon-plus icon-large"></i>&nbsp;&nbsp;&nbsp;AGREGAR INFORMACIÓN -->
-<!-- 								</a>								 -->
-<!-- 							</div> -->
-<%-- 						</c:if> --%>
-
- 
-					<!-- MODAL LICIACION -->
-					<div id="mdl-licitacion" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-					  <div class="modal-header">
-					    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-					    <h3 id="myModalLabel">Licitación de obra</h3>
-					  </div>
-					  <div class="modal-body">
-					  	<!-- LICITACION FORM -->
-		                <form id="licitacion-form">
-		                
-		                	<table id="tbl-licitacion-form" align="center">			  	
+			      
+			       <button id="reset-btn" class="btn btn-primary">RESET</button>
+							
+					<table class="tbl-licitacion-form"  >			  	
 	   	   		  	   		 	<tbody>
 	   	   		  	   		 		<tr>
 										<td colspan="2">
 											<label>Obra</label>
-											<textarea id="lic-obra" name="lic-obra" rows="3" ></textarea>				               				
 										</td>	
 										<td>
-											<label>Tipo</label>					  			
-					               			<select id="lic-tipo" name="lic-tipo">								
-												<option>Pública</option>
-												<option>Privada</option>	
-												<option>Contratación directa</option>		
-											</select>
+											<label>Tipo</label>				  			
 										</td>																
 								  	</tr>
-									<tr>
-										<td>
-											<label>N° de Licitación</label>
-				               				<input type="text" id="lic-id" name="lic-id">
-										</td>
-										<td>
-											<label>N° de Expediente</label>
-			               					<input type="text" id="lic-expediente" name="lic-expediente">
-										</td>	
-								  		<td>
-											<label>Estado de la obra</label>					  			
-					               			<select id="lic-estado" name="lic-estado">								
-												<option>En curso</option>
-												<option>Interrumpida</option>	
-												<option>Finalizada</option>		
-											</select>
-										</td>
-								  	</tr>								  
 								  	<tr>
-										<td>
-											<label>Unidad ejecutora</label>
-			               					<input type="text" id="lic-uni-exe" name="lic-uni-exe">			               			
-										</td>
-										<td>
-											<label>Unidad de financiación</label>
-				               				<input type="text" id="lic-uni-fin" name="lic-uni-fin">
-										</td>
-										<td>
-											<label>Valor del pliego (en pesos argentinos)</label>
-				               				<input type="text" id="lic-pliego" name="lic-pliego">
-										</td>
-									</tr>
-									<tr>									
-										<td>
-											<label>Empresa constructora</label>			               				
-			               					<input type="text" id="lic-empresa-nombre" name="lic-empresa-nombre" placeholder="Razón Social">	
-			               					<input type="text" id="lic-empresa-cuit" name="lic-empresa-cuit" placeholder="CUIT">	
-			               					<input type="text" id="lic-empresa-email" name="lic-empresa-email" placeholder="Email">	
-										</td>
-										<td>
-											<label>Representante técnico</label>
-			               					<input type="text" id="lic-repres-nombre" name="lic-repres-nombre" placeholder="Nombre y Apellido">	
-			               					<input type="text" id="lic-repres-tel" name="lic-repres-tel" placeholder="Teléfono">	
-			               					<input type="text" id="lic-repres-email" name="lic-repres-email" placeholder="Email">	
-										</td>
-										<td>																			
-											<label>Presupuesto (en pesos argentinos)</label>	
-					               			<input type="text" id="lic-prespuesto-inicio" name="lic-prespuesto-inicio" placeholder="Adjudicado">				               		
-					               			<input type="text" id="lic-prespuesto-fin" name="lic-prespuesto-fin" placeholder="Final">	
-			               				</td>											
-									</tr>																
-									<tr>
-										<td>		
-											<label>Fecha estimada</label>			
-							    	   		<input type="text" id="lic-fechaTemp-inicio" name="lic-fechaTemp-inicio" style="width:110px;" placeholder="Inicio"/>	
-							    	   		&nbsp;- &nbsp;		    	   		
-							    	   		<input type="text" id="lic-fechaTemp-fin" name="lic-fechaTemp-fin" style="width:110px;" placeholder="Fin"/>
-										</td>									
-										<td>
-											<label>Fecha real</label>			   	
-							    	   		<input type="text" id="lic-fechaReal-inicio" name="lic-fechaReal-inicio" style="width:110px;" placeholder="Inicio"/>	
-							    	   		&nbsp;- &nbsp;		    	   		
-							    	   		<input type="text" id="lic-fechaReal-fin" name="lic-fechaReal-fin" style="width:110px;" placeholder="Fin"/>
-										</td>
-									</tr>										
-							  	</tbody>
-					  		</table>
-		                </form>
-					  				
-					  </div>
-					  <div class="modal-footer">					   
-					     <button id="btn-add-licitacion" class="btn btn-primary"><i class="icon-ok"></i>&nbsp;&nbsp;&nbsp;Confirmar</button>
-					     <button class="btn" data-dismiss="modal"><i class="icon-remove"></i>&nbsp;&nbsp;&nbsp;Cancelar</button>
-					  </div>
-					</div>
-							
-					<table id="tbl-licitacion-form" align="center">			  	
-	   	   		  	   		 	<tbody>
-	   	   		  	   		 		<tr>
-										<td colspan="2">
-											<label>Obra</label>
+										<td colspan="2" class="dynamic"> 
 											<a href="#" id="obra" data-type="textarea">${obra}</a>			               				
 										</td>	
-										<td>
-											<label>Tipo</label>		
+										<td class="dynamic">											
 											<a href="#" id="tipo" data-type="select">${tipo}</a>			  			
 										</td>																
 								  	</tr>
+								  	
+								  	
 									<tr>
-										<td>
+										<td width="250">
 											<label>N° de Licitación</label>
-				               				<a href="#" id="idLicitacion" data-type="text">${idLicitacion}</a>
 										</td>
-										<td>
+										<td width="250">
 											<label>N° de Expediente</label>
-			               					<a href="#" id="nroExpediente">${nroExpediente}</a>
 										</td>	
-								  		<td>
-											<label>Estado de la obra</label>					  			
+								  		<td width="250">
+											<label>Estado de la obra</label>		
+										</td>
+								  	</tr>	
+								  	<tr>
+										<td class="dynamic">
+				               				<a href="#" id="nroLicitacion" data-type="text">3-33333/90</a>
+										</td>
+										<td class="dynamic">
+			               					<a href="#" id="nroExpediente" data-type="text">234345-45</a>
+										</td>	
+								  		<td class="dynamic">		
 					               			<a href="#" id="estadoObra" data-type="select">${estadoObra}</a>		
 										</td>
-								  	</tr>								  
+								  	</tr>
+								  			
+								  							  
 								  	<tr>
 										<td>
 											<label>Unidad ejecutora</label>
-			               					<a href="#" id="unidadEjec" data-type="text">Ministerio de Planifiación</a>					               			
 										</td>
 										<td>
 											<label>Unidad de financiación</label>
-				               				<a href="#" id="unidadFinanc" data-type="text">Ministerio de Obras Públicas</a>			
 										</td>
 										<td>
-											<label>Valor del pliego (en pesos argentinos)</label>
-				               				<a href="#" id="valorPliego" data-type="number">34535656</a>			
+											<label>Valor del pliego</label>
 										</td>
 									</tr>
-									<tr>									
-										<td>
-											<label>Empresa constructora</label>			               				
-			               					<a href="#" id="empresaNombre" data-type="text">Una empresa ficticia SRL</a>
-			               					<a href="#" id="empresaCuit" data-type="text">20-789-456-6</a>	
-			               					<a href="#" id="empresaEmail" data-type="email">info@empresa.com</a>
-										</td>
-										<td>
-											<label>Representante técnico</label>
-			               					<a href="#" id="representanteNombre" data-type="text">Fulgencio Pérez</a>
-			               					<a href="#" id="representanteTel" data-type="tel">011-4321-9900</a>	
-			               					<a href="#" id="representanteEmail" data-type="email">fulgenciop@gmail.com</a>	
-										</td>
-										<td>																			
-											<label>Presupuesto (en pesos argentinos)</label>	
-					               			<a href="#" id="presupuestoInicio" data-type="number">12450888</a>				               		
-					               			<a href="#" id="presupuestoFin" data-type="number">200123045</a>	
-			               				</td>											
-									</tr>																
 									<tr>
-										<td>		
-											<label>Fecha estimada</label>	
-											Inicio <a href="#" id="fechaEstInicio" data-type="combodate">10/05/2013</a>									    	 
-							    	   		
-							    	   		Fin <a href="#" id="fechaEstFin" data-type="combodate">21/09/2013</a>			
-										</td>									
-										<td>
-											<label>Fecha real</label>			   	
-							    	   		Inicio
-							    	   		<a href="#" id="fechaRealInicio" data-type="combodate">11/06/2013</a>			
-							    	   		fin    	   		
-							    	   		<a href="#" id="fechaRealFin" data-type="combodate">30/12/2013</a>		
+										<td class="dynamic">
+			               					<a href="#" id="unidadEjec" data-type="text">Ministerio de Planifiación</a>					               			
 										</td>
-									</tr>										
+										<td class="dynamic">
+				               				<a href="#" id="unidadFinanc" data-type="text">Ministerio de Obras Públicas</a>			
+										</td>
+										<td class="dynamic">
+				               				$ <a href="#" id="valorPliego" data-type="number">34535656</a>			
+										</td>
+									</tr>
+									
+									
+									<tr>									
+										<td width="200">
+											<label>Empresa constructora</label>	
+										</td>
+										<td width="200">
+											<label>Representante técnico</label>
+										</td>						
+									</tr>	
+									<tr>									
+										<td class="dynamic">
+											<a href="#" id="empresaNombre" data-type="text">Una empresa ficticia SRL</a>
+										</td>
+										<td class="dynamic">
+											<a href="#" id="representanteNombre" data-type="text">Fulgencio Pérez</a>
+										</td>	
+									</tr>
+									<tr>									
+										<td class="dynamic">
+											<a href="#" id="empresaCuit" data-type="text">20-789-456-6</a>	
+										</td>
+										<td class="dynamic">
+											<a href="#" id="representanteTel" data-type="tel">011-4321-9900</a>	
+										</td>	
+									</tr>
+									<tr>									
+										<td class="dynamic">
+											<a href="#" id="empresaEmail" data-type="email">info@empresa.com</a>
+										</td>
+										<td class="dynamic">
+											<a href="#" id="representanteEmail" data-type="email">fulgenciop@gmail.com</a>	
+										</td>	
+									</tr>
+								</table>
+								
+								<br>
+								
+								<table class="tbl-licitacion-form" >	
+									</tbody>
+										<tr>
+											<td colspan="2">																			
+												<label>Presupuesto</label>	
+				               				</td>				
+				               				<td colspan="2">				
+												<label>Fecha</label>	
+											</td>			
+										</tr>	
+										<tr>
+											<td width="100">																			
+												Adjudicado
+				               				</td>	
+				               				<td class="dynamic" width="250">																			
+												$ <a href="#" id="presupuestoInicio" data-type="number">12450888</a>
+				               				</td>	
+				               				<td width="100">																			
+												Estimada	
+				               				</td>	
+				               				<td class="dynamic" width="250">																		
+												<a href="#" id="fechaEstInicio" data-type="combodate">10/05/2013</a>
+												&mdash;
+												<a href="#" id="fechaEstFin" data-type="combodate">11/06/2013</a>
+				               				</td>	
+										</tr>
+										<tr>
+											<td width="100">		
+												Final
+											</td>			
+				               				<td class="dynamic" width="200">		
+												$ <a href="#" id="presupuestoFin" data-type="number">200123045</a>
+											</td>	
+											<td width="100">																			
+												Real
+				               				</td>	
+				               				<td class="dynamic" width="250">																		
+												<a href="#" id="fechaRealInicio" data-type="combodate">11/06/2013</a>	
+												&mdash;
+												<a href="#" id="fechaRealFin" data-type="combodate">30/12/2013</a>	
+				               				</td>			
+										</tr>	
+												
 							  	</tbody>
 					  		</table>		
 							
