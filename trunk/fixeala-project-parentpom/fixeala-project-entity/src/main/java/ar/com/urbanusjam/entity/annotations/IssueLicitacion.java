@@ -19,7 +19,6 @@ public class IssueLicitacion implements Serializable {
 	private static final long serialVersionUID = -3526522777509354350L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID_ISSUE_LICITACION")
 	private Long id;
 	

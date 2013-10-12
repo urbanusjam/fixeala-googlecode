@@ -73,12 +73,12 @@ public class Issue implements Serializable {
 	@Column(name = "STATUS")
 	private String status;
 		
-    @OneToMany(mappedBy="issue", fetch = FetchType.EAGER, cascade = CascadeType.ALL)  
+    @OneToMany(mappedBy="issue", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)  
 	private Collection<IssueHistorialRevision> revisiones;
 //	
-//	@OneToOne
-//	@JoinColumn(name = "ID_ISSUE_LICITACION", nullable = true)
-//	private IssueLicitacion licitacion;
+	@OneToOne
+	@JoinColumn(name = "ID_ISSUE_LICITACION", nullable = true)
+	private IssueLicitacion licitacion;
 //	
 //	@OneToMany(mappedBy = "issue")  
 //	private Collection<Comment> comments;
@@ -216,14 +216,14 @@ public class Issue implements Serializable {
 	public void setRevisiones(Collection<IssueHistorialRevision> revisiones) {
 		this.revisiones = revisiones;
 	}
-//
-//	public IssueLicitacion getLicitacion() {
-//		return licitacion;
-//	}
-//
-//	public void setLicitacion(IssueLicitacion licitacion) {
-//		this.licitacion = licitacion;
-//	}
+
+	public IssueLicitacion getLicitacion() {
+		return licitacion;
+	}
+
+	public void setLicitacion(IssueLicitacion licitacion) {
+		this.licitacion = licitacion;
+	}
 //
 //	public Collection<Comment> getComments() {
 //		return comments;
