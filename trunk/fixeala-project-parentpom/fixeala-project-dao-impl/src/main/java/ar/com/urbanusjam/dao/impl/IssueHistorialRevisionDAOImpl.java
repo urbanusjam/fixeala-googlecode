@@ -8,7 +8,8 @@ import ar.com.urbanusjam.dao.impl.utils.GenericDAOImpl;
 import ar.com.urbanusjam.entity.annotations.Issue;
 import ar.com.urbanusjam.entity.annotations.IssueHistorialRevision;
 
-public class IssueHistorialRevisionDAOImpl extends GenericDAOImpl<IssueHistorialRevision, Serializable> implements IssueHistorialRevisionDAO {
+public class IssueHistorialRevisionDAOImpl extends GenericDAOImpl<IssueHistorialRevision, Serializable> 
+implements IssueHistorialRevisionDAO {
 
 	public IssueHistorialRevisionDAOImpl() {
 		super(IssueHistorialRevision.class);
