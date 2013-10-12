@@ -96,16 +96,22 @@ public class IssueController {
 					model.addAttribute("lic-id", licitacion.getNroLicitacion());
 					model.addAttribute("lic-expediente", licitacion.getNroExpediente());
 					model.addAttribute("lic-pliego", licitacion.getValorPliego());
-					model.addAttribute("lic-empresa", licitacion.getEmpresaConstructora());
+					model.addAttribute("lic-empresa-nombre", licitacion.getEmpresaNombre());
+					model.addAttribute("lic-empresa-cuit", licitacion.getEmpresaCuit());
+					model.addAttribute("lic-empresa-email", licitacion.getEmpresaEmail());
+					model.addAttribute("lic-representante-nombre", licitacion.getRepresentanteNombre());
+					model.addAttribute("lic-representante-tel", licitacion.getRepresentanteTel());
+					model.addAttribute("lic-empresa-email", licitacion.getRepresentanteEmail());
 					model.addAttribute("lic-uni-exe", licitacion.getEmpresaConstructora());
 					model.addAttribute("lic-uni-fin", licitacion.getUnidadFinanciamiento());
-					model.addAttribute("lic-plazo", licitacion.getPlazoEjecucionEnDias());
+				
+//					model.addAttribute("lic-plazo", licitacion.getPlazoEjecucionEnDias());
 					model.addAttribute("lic-presup-ini", licitacion.getPresupuestoAdjudicado());
 					model.addAttribute("lic-presup-fin", licitacion.getPresupuestoFinal());
-					model.addAttribute("lic-fechaTemp-ini", licitacion.getFechaEstimadaInicio());
-					model.addAttribute("lic-fechaTemp-fin", licitacion.getFechaEstimadaFin());
-					model.addAttribute("lic-fechaReal-ini", licitacion.getFechaRealInicio());
-					model.addAttribute("lic-fechaReal-fin", licitacion.getFechaRealFin());
+//					model.addAttribute("lic-fechaTemp-ini", licitacion.getFechaEstimadaInicio());
+//					model.addAttribute("lic-fechaTemp-fin", licitacion.getFechaEstimadaFin());
+//					model.addAttribute("lic-fechaReal-ini", licitacion.getFechaRealInicio());
+//					model.addAttribute("lic-fechaReal-fin", licitacion.getFechaRealFin());
 					
 				}
 				
@@ -200,6 +206,17 @@ public class IssueController {
 					userDTO.setAuthorities(authorities);	
 					issue.setUser(userDTO);	
 					
+					if(licitacion.getNroLicitacion() == null)
+						licitacion = null;
+					
+					else{
+						licitacion.setNroReclamo(String.valueOf(issue.getId()));
+						licitacion.setEmpresaConstructora();
+						licitacion.setRepresentanteTecnico();
+					}
+					
+					issue.setLicitacion(licitacion);
+					
 					IssueHistorialRevisionDTO revision = new IssueHistorialRevisionDTO();
 					revision.setFecha(new Date());
 					revision.setUsername(userDTO.getUsername());			
@@ -207,13 +224,9 @@ public class IssueController {
 					revision.setOperacion(Operation.UPDATE);			
 					revision.setMotivo("MODIFICACION");			
 					revision.setEstado(issue.getStatus());
-					revision.setObservaciones(Messages.ISSUE_UPDATE_OBS);														
-				
-					issue.setLicitacion(licitacion);
+					revision.setObservaciones(Messages.ISSUE_UPDATE_OBS);		
 					
-					issueService.updateIssue(issue, revision);	
-					
-					
+					issueService.updateIssue(issue, revision, licitacion);	
 					return new AlertStatus(true, "El reclamo ha sido actualizado.");			
 			}
 		}			

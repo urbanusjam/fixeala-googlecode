@@ -1,4 +1,3 @@
-
 <div id="content">	
 		<!-- Issue -->
 		<script type="text/javascript">
@@ -16,25 +15,20 @@
 //    		var longitud = '${longitud}';
 //    		var estado = '${estado}';
    		
-   	
-   	  	
-   	 
 </script>
 		
 		<script type="text/javascript">
 		
-		
-		
 	
 		$(function(){		
 			
-			
 			var id = '${id}';
 			var newTitle;
-		
-			//toggle `popup` / `inline` mode
-// 			$.fn.editable.defaults.mode = 'inline';	
+
+			resetLicitacionValues();
 			
+			//toggle `popup` / `inline` mode
+			$.fn.editable.defaults.mode = 'popup';	
 			
 			//modify buttons style
 			$.fn.editableform.buttons = 
@@ -51,7 +45,6 @@
 			  $("#issue-id").editable({name: 'id',  disabled: true});			  
 			  $("#issue-date").editable({name: 'date', disabled: true});		
 			  $("#issue-street").editable({name: 'address', disabled: true});		
-// 			  $("#issue-barrio").editable({name: 'neighborhood', disabled: true});
 			  $("#issue-city").editable({name: 'city', disabled: true});			  
 			  $("#issue-province").editable({name: 'province', disabled: true});
 			  $("#issue-lat").editable({name: 'latitude', disabled: true});
@@ -87,6 +80,9 @@
 				  pk: 2, 
 				  name: 'description',
 				  type: 'textarea', 
+				  mode: 'popup',	
+				  placement: 'right',
+				  inputclass: 'issue-textarea',
 				  rows: 5,
 				  url: '/post', 			  
 				  ajaxOptions: {
@@ -96,8 +92,8 @@
 					    if($.trim(value) == '') {
 					        return 'Este campo es requerido.';
 					    }
-					    if($.trim(value).length > 500) {
-					        return 'La longitud mÃ¡xima del campo es de 500 caracteres.';
+					    if($.trim(value).length > 600) {
+					        return 'La longitud mÃ¡xima del campo es de 600 caracteres.';
 					    }
 				  }
 			  	
@@ -105,6 +101,8 @@
 			  
 			  $('#issue-tags').editable({
 				  	pk: 3,  
+				  	mode: 'popup',	
+					placement: 'right',
 			        inputclass: 'input-large',
 			        select2: {
 			        	tags: ['alumbrado', 'asfalto', 'bache', 'pozo'],
@@ -118,7 +116,9 @@
 			  
 			  $("#issue-barrio").editable({
 				  pk: 4,  
-				  name: 'neighborhood', 				
+				  name: 'neighborhood', 	
+				  mode: 'popup',	
+				  placement: 'right',
 				  url: '/post',   
 				  ajaxOptions: {
 				        type: 'put'
@@ -128,111 +128,116 @@
 					        return 'Este campo es requerido.';
 					    }
 					    if($.trim(value).length > 50) {
-					        return 'La longitud mÃ¡xima del campo es de 35caracteres.';
+					        return 'La longitud mÃ¡xima del campo es de 50 caracteres.';
 					    }
 					}
 			  });
 			  
 			  
-			  /*******************************************/
-			  
-			  
-			  
-				$('#reset-btn').click(function() {
-				     $('#obra').editable('setValue', ''); 
-				     $('#nroLicitacion').editable('setValue', ''); 
-				     $('#nroExpediente').editable('setValue', ''); 
-				     $('#valorPliego').editable('setValue', 0); 
-				     $('#unidadEjec').editable('setValue', ''); 
-				     $('#unidadFinanc').editable('setValue', ''); 
-				     $('#empresaNombre').editable('setValue', ''); 
-				     $('#empresaCuit').editable('setValue', ''); 
-				     $('#empresaEmail').editable('setValue', ''); 
-				     $('#representanteNombre').editable('setValue', ''); 
-				     $('#representanteTel').editable('setValue', ''); 
-				     $('#representanteEmail').editable('setValue', ''); 
-				     $('#presupuestoInicio').editable('setValue', 0); 
-				     $('#presupuestoFin').editable('setValue', 0); 
-				     $('#tipo').editable('setValue', 1); 
-				     $('#estadoObra').editable('setValue', 1); 
-				     $('#fechaEstInicio').editable('setValue', ''); 
-				     $('#fechaEstFin').editable('setValue', ''); 
-				     $('#fechaRealInicio').editable('setValue', ''); 
-				     $('#fechaRealFin').editable('setValue', ''); 
-				});
-			
-			  $('.tbl-licitacion').editable({ mode:'popup',
-				    placement: 'top',});
-			  
-			  $("#obra").editable({				
-				  type: 'textarea',
-				  title: 'Ingrese una descripción'						 
-			  });
-			  
-			  $("#nroLicitacion").editable({		
-				  type: 'text'
-							 
-			  });
-			  
-			  $("#nroExpediente").editable({				
-				  type: 'text'							 
-			  });
-			  
-			  $("#valorPliego").editable({				
-				  url: '/post'			 
-			  });
-			  
-			  $("#unidadEjec").editable({				
-				  url: '/post'			 
-			  });
-			  
-			  $("#unidadFinanc").editable({				
-				  url: '/post'			 
-			  });
-			  
-			  $("#empresaNombre").editable({				
-				  url: '/post'			 
-			  });
-			  
-			  $("#empresaCuit").editable({				
-				  url: '/post'			 
-			  });
-			  
-			  $("#empresaEmail").editable({				
-				  url: '/post'			 
-			  });
-			  
-			  $("#representanteNombre").editable({				
-				  url: '/post'			 
-			  });
-			  
-			  $("#representanteTel").editable({				
-				  url: '/post'			 
-			  });
-			  
-			  $("#representanteEmail").editable({				
-				  url: '/post'			 
-			  });
-			
-			  
-			  $("#empresaEmail").editable({				
-				  url: '/post'			 
-			  });
-			  
-			  
-			  $("#presupuestoInicio").editable({				
-				  url: '/post'			 
-			  });
-			  
-			  $("#presupuestoFin").editable({				
-				  url: '/post'			 
-			  });
-			  
+			//---- CAMPOS LICITACION
 			 
+			
+			  $("#obra").editable({	
+				  placement:'right',
+				  name: 'obra',
+				  inputclass: 'licitacion-textarea',
+				  validate: function(value) {
+					    if($.trim(value) == '') {
+					        return 'Este campo es requerido.';
+					    }
+					    if($.trim(value).length > 600) {
+					        return 'La longitud mÃ¡xima del campo es de 600 caracteres.';
+					    }
+				  }
+			  });
+			  
+			  $("#nroLicitacion").editable({
+				
+				  name: 'nroLicitacion',
+				  url: '/post',
+				  validate: function(value) {
+					    if($.trim(value) == '') {
+					        return 'Este campo es requerido.';
+					    }
+				  }
+			  });
+			  
+			  $("#nroExpediente").editable({	
+				 
+				  name: 'nroExpediente',
+				  url: '/post',
+				  validate: function(value) {
+					    if($.trim(value) == '') {
+					        return 'Este campo es requerido.';
+					    }
+				  }
+			  });
+			  
+			  $("#valorPliego").editable({	
+				  name: 'valorPliego',
+				  url: '/post',
+				  validate: function(value) {
+					    if($.trim(value) == '') {
+					        return 'Este campo es requerido.';
+					    }
+				  }
+			  });
+			  
+			  $("#unidadEjecutora").editable({
+				  name: 'unidadEjecutora',
+				  url: '/post'			 
+			  });
+			  
+			  $("#unidadFinanciamiento").editable({				
+				  name: 'unidadFinanciamiento',
+				  url: '/post'			 
+			  });
+			  
+			  $("#empresaNombre").editable({	
+				  name: 'empresaNombre',
+				  url: '/post'			 
+			  });
+			  
+			  $("#empresaCuit").editable({		
+				  name: 'empresaCuit',
+				  url: '/post'			 
+			  });
+			  
+			  $("#empresaEmail").editable({	
+				  name: 'empresaEmail',
+				  url: '/post'			 
+			  });
+			  
+			  $("#representanteNombre").editable({			
+				  name: 'representanteNombre',
+				  url: '/post'			 
+			  });
+			  
+			  $("#representanteTel").editable({			
+				  name: 'representanteTel',
+				  url: '/post'			 
+			  });
+			  
+			  $("#representanteEmail").editable({		
+				  name: 'representanteEmail',
+				  url: '/post'			 
+			  });
+			 
+			  
+			  $("#presupuestoAdjudicado").editable({	
+				  name: 'presupuestoAdjudicado',
+				  url: '/post'			 
+			  });
+			  
+			  $("#presupuestoFinal").editable({	
+				  name: 'presupuestoFinal',
+				  url: '/post'			 
+			  });
+			  
 			  $('#tipo').editable({
-					value: 1,
-					url:"/post",
-			        source: [
+				  name: 'tipo',
+				  value: 1,
+			      source: [
 						{value: 1, text: 'Indefinido'},
 			            {value: 2, text: 'Pública'},
 			            {value: 3, text: 'Privada'},
@@ -241,136 +246,112 @@
 			    });    
 			  
 			  $('#estadoObra').editable({
-					value: 1,
-					url:"/post",
-			        source: [
+				  name: 'estadoObra',
+				  value: 1,
+			      source: [
 					    {value: 1, text: 'Sin iniciar'},
 			            {value: 2, text: 'En curso'},
 			            {value: 3, text: 'Interrumpida'},
 			            {value: 4, text: 'Finalizada'}
 			        ]
-			    });  
+			  });  
 			  
-			  
-			  
-			  $('#fechaEstInicio').editable({
-				   
-				  	format: 'YYYY-MM-DD',    
-			        viewformat: 'DD/MM/YYYY',    
-			        template: 'D / MMMM / YYYY',    
-			        combodate: {
-			                minYear: 2000,
-			                maxYear: 2015,
-			                minuteStep: 1
-			           }
-			    });
+// 			  $('#fechaEstimadaInicio').editable({
+// 				  name:'fechaEstimadaInicio',
+// 				  mode: 'popup',
+// 				  placement: 'top',
+// 				  format: 'DD-MM-YYYY',    
+// 			      viewformat: 'DD/MM/YYYY',    
+// 			      template: 'D / MMMM / YYYY',    
+// 			      combodate: {
+// 			                minYear: 2000,
+// 			                maxYear: 2015,
+// 			                minuteStep: 1
+// 			      }
+// 			    });
 			 
 			  
-			  $('#fechaEstFin').editable({
+// 			  $('#fechaEstimadaFin').editable({
+// 				  name:'fechaEstimadaFin',
+// 				  mode: 'popup',
+// 				  placement: 'top',
+// 				  format: 'DD-MM-YYYY',    
+// 			      viewformat: 'DD/MM/YYYY',    
+// 			      template: 'D / MMMM / YYYY',    
+// 			      combodate: {
+// 			                minYear: 2000,
+// 			                maxYear: 2015,
+// 			                minuteStep: 1
+// 			      }
+// 			    });
+			  
+// 			  $('#fechaRealInicio').editable({
+// 				  name:'fechaRealInicio',	
+// 				  mode: 'popup',
+// 				  placement: 'top',
+// 				  format: 'DD-MM-YYYY',    
+// 			      viewformat: 'DD/MM/YYYY',    
+// 			      template: 'D / MMMM / YYYY',    
+// 			      combodate: {
+// 			                minYear: 2000,
+// 			                maxYear: 2015,
+// 			                minuteStep: 1
+// 			      }
+// 			    });
+			  
+// 			  $('#fechaRealFin').editable({
+// 				  name:'fechaRealFin',	
+// 				  mode: 'popup',
+// 				  placement: 'right',
+// 				  format: 'DD-MM-YYYY',    
+// 			      viewformat: 'DD/MM/YYYY',    
+// 			      template: 'D / MMMM / YYYY',    
+// 			      combodate: {
+// 			                minYear: 2000,
+// 			                maxYear: 2015,
+// 			                minuteStep: 1
+// 			      }
+// 			    });
+			  
+			  
+			  function resetLicitacionValues(){
 				  
-				 	format: 'YYYY-MM-DD',    
-			        viewformat: 'DD/MM/YYYY',    
-			        template: 'D / MMMM / YYYY',    
-			        combodate: {
-			                minYear: 2000,
-			                maxYear: 2015,
-			                minuteStep: 1
-			           }
-			    });
+				  	 $('#obra').editable('setValue', null); 
+				     $('#nroLicitacion').editable('setValue', null); 
+				     $('#nroExpediente').editable('setValue', null); 
+				     $('#valorPliego').editable('setValue', 0); 
+				     $('#unidadEjecutora').editable('setValue', null); 
+				     $('#unidadFinanciamiento').editable('setValue', null); 
+				     $('#empresaNombre').editable('setValue', null); 
+				     $('#empresaCuit').editable('setValue', null); 
+				     $('#empresaEmail').editable('setValue', null); 
+				     $('#representanteNombre').editable('setValue', null); 
+				     $('#representanteTel').editable('setValue', null); 
+				     $('#representanteEmail').editable('setValue', null); 
+				     $('#presupuestoAdjudicado').editable('setValue', 0); 
+				     $('#presupuestoFinal').editable('setValue', 0); 
+				     $('#tipo').editable('setValue', 1); 
+				     $('#estadoObra').editable('setValue', 1); 
+// 				     $('#fechaEstimadaInicio').editable('setValue', null); 
+// 				     $('#fechaEstimadaFin').editable('setValue', null); 
+// 				     $('#fechaRealInicio').editable('setValue', null); 
+// 				     $('#fechaRealFin').editable('setValue', null); 
+				     
+			  }
+			
+			 
 			  
-			  $('#fechaRealInicio').editable({
-				
-				  	format: 'YYYY-MM-DD',    
-			        viewformat: 'DD/MM/YYYY',    
-			        template: 'D / MMMM / YYYY',    
-			        combodate: {
-			                minYear: 2000,
-			                maxYear: 2015,
-			                minuteStep: 1
-			           }
-			    });
-			  
-			  $('#fechaRealFin').editable({
-				  	
-				  	format: 'YYYY-MM-DD',    
-			        viewformat: 'DD/MM/YYYY',    
-			        template: 'D / MMMM / YYYY',    
-			        combodate: {
-			                minYear: 2000,
-			                maxYear: 2015,
-			                minuteStep: 1
-			           }
-			    });
+			  //--RESET Form Licitacion 
+			  $('#reset-btn').click(function() {
+				  resetLicitacionValues();
+				});
 			  
 			  /*******************************************/
 			  
-
-			//ajax emulation
-			  $.mockjax({
-			      url: '/post',
-			      responseTime: 500,
-			      response: function(settings) {
-			          console.log(settings);
-			      }
-			  }); 
-			  
-			
-			  $( "#btn-add-licitacion" ).click( function() {
-				  copyLicitacionDataToTable();
-	   			});
-			  
-			  function copyLicitacionDataToTable(){
-				  
-			  		var obra = $("#lic-obra").val();
-			  		var nroLicitacion = $("#lic-id").val();
-			  		var nroExpediente = $("#lic-expediente").val();
-			  		var tipo = $("#lic-tipo").val();
-			  		
-			  		var estadoObra = $("#lic-estado").val();
-			  		var unidadExe = $("#lic-uni-exe").val();
-			  		var unidadFin = $("#lic-uni-fin").val();
-			  		var valorPliego = "$ " + $("#lic-pliego").val();
-			  		
-			  		var empresa = $("#lic-empresa-nombre").val() + "<br>" + $("#lic-empresa-cuit").val() + "<br>" + $("#lic-empresa-email").val();
-			  		var represTecnico = $("#lic-repres-nombre").val() + "<br>" + $("#lic-repres-tel").val() + "<br>" + $("#lic-repres-email").val();
-			  		
-			  		var presupuestoInicial = "$ " + $("#lic-prespuesto-inicio").val();
-			  		var presupuestoFinal = "$ " + $("#lic-prespuesto-fin").val();
-			  		
-			  		var fechaTmpInicio = $("#lic-fechaTemp-inicio").val();
-			  		var fechaTmpFin = $("#lic-fechaTemp-fin").val();
-			  		var fechaRealInicio = $("#lic-fechaReal-inicio").val();
-			  		var fechaRealFin = $("#lic-fechaReal-fin").val();
-			  		
-			  		var data = [ obra, nroLicitacion, nroExpediente, tipo, unidadExe, unidadFin, valorPliego,
-			  					   empresa, represTecnico, presupuestoInicial, presupuestoFinal, 
-			  					   fechaTmpInicio, fechaTmpFin, fechaRealInicio, fechaRealFin, estadoObra ];
-			  		
-			  	
-			  		var index = 0;
-			  	
-			  		$('#tbl-licitacion td').each(function(){			  		
-			  			if( $(this).hasClass("dynamic-cell") ){
-			  				if( index < data.length){				  			
-					  		      $(this).append(data[index]);
-					  		}
-			  				index++;
-			  			}						  
-				  	});
-			  	 
-			  		setTimeout(function(){			  			
-			  			$('.btnToggle').css("display", "none");
-			  			$('#tbl-licitacion').css("display", "block");
-			  			$('#mdl-licitacion').modal('hide');
-			  			$('#tbl-licitacion-form').reset();
-			  			
-			  		}, 300);			  	
-			  }
-			
 			
 			  $('#btn-update').click(function() {
 				  
-				  bootbox.confirm("Â¿Desea confirmar los cambios?", function(result){
+				  bootbox.confirm("¿Desea confirmar los cambios?", function(result){
 					  
 					  if(result){
 						  
@@ -564,7 +545,7 @@
 						 </tr>
 						 <tr>
 						    <th>Estado:</th>
-						    <td><a href="#" id="issue-status">${estado}</a></td>						   
+						    <td><a href="#" id="issue-status" data-type="text">${estado}</a></td>						   
 						 </tr>
 						  <tr>
 						    <th>Etiquetas:</th>
@@ -584,8 +565,7 @@
      
 		
 		<div class="accordion" id="accordion2">
-  
-
+ 
 
 			  <!-- 2 HISTORIAL -->
 			  <div class="accordion-group">
@@ -639,231 +619,85 @@
 			      
 			       <button id="reset-btn" class="btn btn-primary">RESET</button>
 							
-					<table class="tbl-licitacion-form"  >			  	
-	   	   		  	   		 	<tbody>
-	   	   		  	   		 		<tr>
-										<td colspan="2">
-											<label>Obra</label>
-										</td>	
-										<td>
-											<label>Tipo</label>				  			
-										</td>																
-								  	</tr>
-								  	<tr>
-										<td colspan="2" class="dynamic"> 
-											<a href="#" id="obra" data-type="textarea">${obra}</a>			               				
-										</td>	
-										<td class="dynamic">											
-											<a href="#" id="tipo" data-type="select">${tipo}</a>			  			
-										</td>																
-								  	</tr>
-								  	
-								  	
-									<tr>
-										<td width="250">
-											<label>N° de Licitación</label>
-										</td>
-										<td width="250">
-											<label>N° de Expediente</label>
-										</td>	
-								  		<td width="250">
-											<label>Estado de la obra</label>		
-										</td>
-								  	</tr>	
-								  	<tr>
-										<td class="dynamic">
-				               				<a href="#" id="nroLicitacion" data-type="text">3-33333/90</a>
-										</td>
-										<td class="dynamic">
-			               					<a href="#" id="nroExpediente" data-type="text">234345-45</a>
-										</td>	
-								  		<td class="dynamic">		
-					               			<a href="#" id="estadoObra" data-type="select">${estadoObra}</a>		
-										</td>
-								  	</tr>
-								  			
-								  							  
-								  	<tr>
-										<td>
-											<label>Unidad ejecutora</label>
-										</td>
-										<td>
-											<label>Unidad de financiación</label>
-										</td>
-										<td>
-											<label>Valor del pliego</label>
-										</td>
-									</tr>
-									<tr>
-										<td class="dynamic">
-			               					<a href="#" id="unidadEjec" data-type="text">Ministerio de Planifiación</a>					               			
-										</td>
-										<td class="dynamic">
-				               				<a href="#" id="unidadFinanc" data-type="text">Ministerio de Obras Públicas</a>			
-										</td>
-										<td class="dynamic">
-				               				$ <a href="#" id="valorPliego" data-type="number">34535656</a>			
-										</td>
-									</tr>
-									
-									
-									<tr>									
-										<td width="200">
-											<label>Empresa constructora</label>	
-										</td>
-										<td width="200">
-											<label>Representante técnico</label>
-										</td>						
-									</tr>	
-									<tr>									
-										<td class="dynamic">
-											<a href="#" id="empresaNombre" data-type="text">Una empresa ficticia SRL</a>
-										</td>
-										<td class="dynamic">
-											<a href="#" id="representanteNombre" data-type="text">Fulgencio Pérez</a>
-										</td>	
-									</tr>
-									<tr>									
-										<td class="dynamic">
-											<a href="#" id="empresaCuit" data-type="text">20-789-456-6</a>	
-										</td>
-										<td class="dynamic">
-											<a href="#" id="representanteTel" data-type="tel">011-4321-9900</a>	
-										</td>	
-									</tr>
-									<tr>									
-										<td class="dynamic">
-											<a href="#" id="empresaEmail" data-type="email">info@empresa.com</a>
-										</td>
-										<td class="dynamic">
-											<a href="#" id="representanteEmail" data-type="email">fulgenciop@gmail.com</a>	
-										</td>	
-									</tr>
-								</table>
-								
-								<br>
-								
-								<table class="tbl-licitacion-form" >	
-									</tbody>
-										<tr>
-											<td colspan="2">																			
-												<label>Presupuesto</label>	
-				               				</td>				
-				               				<td colspan="2">				
-												<label>Fecha</label>	
-											</td>			
-										</tr>	
-										<tr>
-											<td width="100">																			
-												Adjudicado
-				               				</td>	
-				               				<td class="dynamic" width="250">																			
-												$ <a href="#" id="presupuestoInicio" data-type="number">12450888</a>
-				               				</td>	
-				               				<td width="100">																			
-												Estimada	
-				               				</td>	
-				               				<td class="dynamic" width="250">																		
-												<a href="#" id="fechaEstInicio" data-type="combodate">10/05/2013</a>
-												&mdash;
-												<a href="#" id="fechaEstFin" data-type="combodate">11/06/2013</a>
-				               				</td>	
-										</tr>
-										<tr>
-											<td width="100">		
-												Final
-											</td>			
-				               				<td class="dynamic" width="200">		
-												$ <a href="#" id="presupuestoFin" data-type="number">200123045</a>
-											</td>	
-											<td width="100">																			
-												Real
-				               				</td>	
-				               				<td class="dynamic" width="250">																		
-												<a href="#" id="fechaRealInicio" data-type="combodate">11/06/2013</a>	
-												&mdash;
-												<a href="#" id="fechaRealFin" data-type="combodate">30/12/2013</a>	
-				               				</td>			
-										</tr>	
-												
-							  	</tbody>
-					  		</table>		
-							
-<!-- 					<table id="tbl-licitacion" class="table table-hover table-bordered table-striped" style="display:none;" align="center">						 -->
-<!-- 				       		<tr> -->
-<!-- 							    <th>Obra:</th> -->
-<%-- 							    <td class="dynamic-cell"><a href="#" id="obra">${obra}</a></td>						   --%>
-<!-- 						 	</tr> -->
-<!-- 						 	<tr> -->
-<!-- 							    <th>N° Licitación:</th> -->
-<%-- 							    <td class="dynamic-cell"><a href="#" id="idLic">${id}</a></td>								   --%>
-<!-- 						 	</tr> -->
-<!-- 						 	<tr> -->
-<!-- 							    <th>N° Expediente:</th> -->
-<%-- 							    <td class="dynamic-cell"><a href="#" id="nroExpediente">${nroExpediente}</a></td>								   --%>
-<!-- 						 	</tr> -->
-<!-- 						 	<tr> -->
-<!-- 							    <th>Tipo de licitación:</th> -->
-<!-- 							    <td class="dynamic-cell"></td>								   -->
-<!-- 						 	</tr> -->
-<!-- 				        	<tr> -->
-<!-- 							    <th>Valor del pliego:</th> -->
-<!-- 							    <td class="dynamic-cell"></td>								   -->
-<!-- 						 	</tr>						 	 -->
-<!-- 						 	<tr> -->
-<!-- 							    <th>Empresa constructora:</th> -->
-<!-- 							    <td class="dynamic-cell"></td>						    -->
-<!-- 						 	</tr>	 -->
-<!-- 						 	<tr> -->
-<!-- 							    <th>Unidad ejecutora:</th> -->
-<!-- 							    <td class="dynamic-cell"></td>						    -->
-<!-- 						 	</tr> -->
-<!-- 						 	<tr> -->
-<!-- 							    <th>Representante tÃ©cnico:</th>							    -->
-<!-- 							    <td class="dynamic-cell"></td>								   		   -->
-<!-- 						 	</tr> -->
-<!-- 						 	<tr> -->
-<!-- 							    <th>Financiamiento:</th> -->
-<!-- 							    <td class="dynamic-cell"></td>						    -->
-<!-- 						 	</tr>						 	 -->
-<!-- 						 	<tr> -->
-<!-- 							    <th>Presupuesto adjudicado:</th> -->
-<!-- 							    <td class="dynamic-cell"></td>						   -->
-<!-- 						 	</tr>		 -->
-<!-- 						 	<tr> -->
-<!-- 							    <th>Presupuesto final:</th> -->
-<!-- 							    <td class="dynamic-cell"></td>						   -->
-<!-- 						 	</tr> -->
-<!-- 						 	<tr> -->
-<!-- 							    <th>Fecha estimada de inicio:</th> -->
-<!-- 							    <td class="dynamic-cell"></td>						   -->
-<!-- 						 	</tr> -->
-<!-- 						 	<tr> -->
-<!-- 							    <th>Fecha estimada de finalización:</th> -->
-<!-- 							    <td class="dynamic-cell"></td>						   -->
-<!-- 						 	</tr> -->
-<!-- 						 	<tr> -->
-<!-- 							    <th>Fecha real de inicio:</th> -->
-<!-- 							    <td class="dynamic-cell"></td>						   -->
-<!-- 						 	</tr> -->
-<!-- 						 	<tr> -->
-<!-- 							    <th>Fecha real de finalización:</th> -->
-<!-- 							    <td class="dynamic-cell"></td>						   -->
-<!-- 						 	</tr> -->
-<!-- 						 	<tr> -->
-<!-- 							    <th>Estado de la obra:</th> -->
-<!-- 							    <td class="dynamic-cell"></td>						   -->
-<!-- 						 	</tr>	 -->
-							 	
-<!-- 					</table> -->
-							
-			       
-			       		
-<%-- 			       		<c:if test="${cantidadLicitacion gt 0}"> --%>
-			       		
-			       
-				      
-<%-- 						</c:if> --%>
+					<table id="tbl-licitacion" class="table table-hover table-bordered table-striped">	
+					
+						 <tr>
+						    <th>Obra:</th>
+						    <td><a href="#" id="obra" data-type="textarea">${lic-obra}</a></td>						  
+						 </tr>
+						 <tr>
+						    <th>N° de Licitación:</th>
+						    <td><a href="#" id="nroLicitacion" data-type="text">${lic-id}</a>						  
+						 </tr>
+						 <tr>
+						    <th>N° de Expediente:</th>
+						    <td><a href="#" id="nroExpediente" data-type="text">${lic-expediente}</a></td>						  
+						 </tr>
+						 <tr>
+						    <th>Estado de la obra:</th>
+						    <td><a href="#" id="estadoObra" data-type="select">${lic-estado}</a></td>						  
+						 </tr>
+						 <tr>
+						    <th>Tipo:</th>
+						    <td><a href="#" id="tipo" data-type="select" >${lic-tipo}</a>	</td>						  
+						 </tr>
+						 <tr>
+						 	<th>Unidad ejecutora:</th>
+						    <td><a href="#" id="unidadEjecutora" data-type="text">${lic-uni-exe}</a>		</td>
+						 </tr>	
+						 <tr>	
+						    <th>Unidad de financiación:</th>
+						    <td><a href="#" id="unidadFinanciamiento" data-type="text">${lic-uni-fin}</a>	</td>		
+						 </tr>
+						 <tr>	
+						    <th>Valor del pliego:</th>
+						    <td>$ <a href="#" id="valorPliego" data-type="number">${lic-pliego}</a></td>		
+						 </tr>						 <tr>
+						    <th>Empresa constructora:</th>
+						    <td>
+						    	<a href="#" id="representanteNombre" data-type="text">${lic-representante-nombre}</a>
+						    	<br><a href="#" id="representanteTel" data-type="tel">${lic-representante-tel}</a>
+						    	<br><a href="#" id="representanteEmail" data-type="email">${lic-representante-email}</a>	
+						    </td>						  
+						 </tr>
+						 <tr>
+						    <th>Representante técnico:</th>
+						    <td>
+						    	<a href="#" id="empresaNombre" data-type="text">${lic-empresa-nombre}</a>
+						    	<br><a href="#" id="empresaCuit" data-type="text">${lic-empresa-cuit}</a>	
+						    	<br><a href="#" id="empresaEmail" data-type="email">${lic-empresa-email}</a>
+						    </td>						  
+						 </tr>
+						 <tr>
+						    <th>Presupuesto Adjudicado:</th>
+						    <td>
+						    	$ <a href="#" id="presupuestoAdjudicado" data-type="number">${lic-presup-ini}</a>
+						    </td>
+						 </tr>
+						 <tr>	
+						    <th>Presupuesto Final:</th>
+						    <td>
+						    	$ <a href="#" id="presupuestoFinal" data-type="number">${lic-presup-fin}</a>
+						    </td>					  
+						 </tr>
+<!-- 						 <tr> -->
+<!-- 						    <th>Fechas estimadas:</th> -->
+<!-- 						    <td> -->
+<%-- 						    	<a href="#" id="fechaEstimadaInicio" data-type="combodate">${lic-fechaTemp-ini}</a> --%>
+<!-- 												&mdash; -->
+<%-- 												<a href="#" id="fechaEstimadaFin" data-type="combodate">${lic-fechaTemp-fin}</a> --%>
+<!-- 						    </td>	 -->
+<!-- 						 </tr> -->
+<!-- 						 <tr> -->
+<!-- 						    <th>Fechas reales:</th> -->
+<!-- 						    <td> -->
+<%-- 						    	<a href="#" id="fechaRealInicio" data-type="combodate">${lic-fechaReal-ini}</a>	 --%>
+<!-- 												&mdash; -->
+<%-- 												<a href="#" id="fechaRealFin" data-type="combodate">${lic-fechaReal-fin}</a>	 --%>
+<!-- 						    </td>					   -->
+<!-- 						 </tr> -->
+					
+					  		</table>	
 						</div>
 
 			    </div>

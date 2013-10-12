@@ -776,13 +776,24 @@ div[data-role="editor-toolbar"] {
 /* #mdl-licitacion .modal-footer{text-align:center;} */
 
 
+#tbl-issue th{width:150px;height:30px; vertical-align:middle;}
+#tbl-issue td{height:30px; }
 
-.tbl-licitacion-form{margin: 10px 20px;}
-.tbl-licitacion-form label{font-weight: bold;padding:10px 5px 0 0;}
-.tbl-licitacion-form  tbody td {border: 0px solid #000;
-	padding:5px 2px;
-		 }
-.tbl-licitacion-form  tbody td.dynamic{vertical-align: middle; height:30px;}
+#tbl-licitacion {width:700px; margin:0 auto; margin-top:100px;}
+#tbl-licitacion th{width:200px;height:30px; vertical-align:middle;}
+#tbl-licitacion td{height:30px; }
+
+.issue-textarea{height:80px; width:290px;}
+.licitacion-textarea{height:80px; width:300px;}
+
+/* .tbl-licitacion-form { margin: 10px; } */
+/* .tbl-licitacion-form label { font-weight: bold;padding:10px 5px 0 0; } */
+/* .tbl-licitacion-form  tbody td {  */
+/* 	border: 1px solid #000; */
+/* 	padding:5px 0; */
+/* 	vertical-align: top; */
+/* 		 } */
+/* .tbl-licitacion-form  tbody td.dynamic{height:30px;} */
 
 
 
