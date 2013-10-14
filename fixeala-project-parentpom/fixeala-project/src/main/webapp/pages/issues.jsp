@@ -25,7 +25,7 @@
 			var id = '${id}';
 			var newTitle;
 
-			resetLicitacionValues();
+			//resetLicitacionValues();
 			
 			//toggle `popup` / `inline` mode
 			$.fn.editable.defaults.mode = 'popup';	
@@ -49,7 +49,7 @@
 			  $("#issue-province").editable({name: 'province', disabled: true});
 			  $("#issue-lat").editable({name: 'latitude', disabled: true});
 			  $("#issue-lng").editable({name: 'longitude', disabled: true});
-			  $("#issue-status").editable({name: 'status', disabled: true});
+// 			  $("#issue-status").editable({name: 'status', disabled: true});
 			  $("#issue-user").editable({name: 'username', disabled: true});
 			  
 			  //--EDITABLE FIELDS
@@ -137,10 +137,15 @@
 			//---- CAMPOS LICITACION
 			 
 			
-			  $("#obra").editable({	
-				  placement:'right',
+			  $("#lic-obra").editable({	
+				  pk: 5,  
+				  type: 'textarea', 
+				  placement:'bottom',
 				  name: 'obra',
 				  inputclass: 'licitacion-textarea',
+				  ajaxOptions: {
+				        type: 'put'
+				  },
 				  validate: function(value) {
 					    if($.trim(value) == '') {
 					        return 'Este campo es requerido.';
@@ -151,8 +156,9 @@
 				  }
 			  });
 			  
-			  $("#nroLicitacion").editable({
-				
+			  $("#lic-nroLicitacion").editable({
+				  pk: 6,  
+				  type: 'text', 
 				  name: 'nroLicitacion',
 				  url: '/post',
 				  validate: function(value) {
@@ -162,8 +168,9 @@
 				  }
 			  });
 			  
-			  $("#nroExpediente").editable({	
-				 
+			  $("#lic-nroExpediente").editable({	
+				  pk: 7,  
+				  type: 'text', 
 				  name: 'nroExpediente',
 				  url: '/post',
 				  validate: function(value) {
@@ -176,6 +183,7 @@
 			  $("#valorPliego").editable({	
 				  name: 'valorPliego',
 				  url: '/post',
+				  value: 0,
 				  validate: function(value) {
 					    if($.trim(value) == '') {
 					        return 'Este campo es requerido.';
@@ -195,53 +203,60 @@
 			  
 			  $("#empresaNombre").editable({	
 				  name: 'empresaNombre',
-				  url: '/post'			 
+				  url: '/post',
+				  value: 'Razón social'
 			  });
 			  
 			  $("#empresaCuit").editable({		
 				  name: 'empresaCuit',
-				  url: '/post'			 
+				  url: '/post',
+				  value: 'Cuit'
 			  });
 			  
 			  $("#empresaEmail").editable({	
 				  name: 'empresaEmail',
-				  url: '/post'			 
+				  url: '/post',
+				  value: 'Email'
 			  });
 			  
 			  $("#representanteNombre").editable({			
 				  name: 'representanteNombre',
-				  url: '/post'			 
+				  url: '/post',
+				  value: 'Nombre y Apellido'
 			  });
 			  
 			  $("#representanteTel").editable({			
 				  name: 'representanteTel',
-				  url: '/post'			 
+				  url: '/post',
+				  value: 'DNI'
 			  });
 			  
 			  $("#representanteEmail").editable({		
 				  name: 'representanteEmail',
-				  url: '/post'			 
+				  url: '/post',
+				  value: 'Email'
 			  });
 			 
 			  
 			  $("#presupuestoAdjudicado").editable({	
 				  name: 'presupuestoAdjudicado',
-				  url: '/post'			 
+				  url: '/post',
+				  value: 0
 			  });
 			  
 			  $("#presupuestoFinal").editable({	
 				  name: 'presupuestoFinal',
-				  url: '/post'			 
+				  url: '/post',
+				  value: 0
 			  });
 			  
 			  $('#tipo').editable({
 				  name: 'tipo',
 				  value: 1,
 			      source: [
-						{value: 1, text: 'Indefinido'},
-			            {value: 2, text: 'Pública'},
-			            {value: 3, text: 'Privada'},
-			            {value: 4, text: 'Contratación directa'}
+						{value: 1, text: 'Pública'},
+			            {value: 2, text: 'Privada'},
+			            {value: 3, text: 'Contratación directa'}
 			        ]
 			    });    
 			  
@@ -313,6 +328,7 @@
 // 			      }
 // 			    });
 			  
+	
 			  
 			  function resetLicitacionValues(){
 				  
@@ -543,10 +559,10 @@
 						    <th>DescripciÃ³n:</th>
 						    <td><a href="#" id="issue-desc">${descripcion}</a></td>						   
 						 </tr>
-						 <tr>
-						    <th>Estado:</th>
-						    <td><a href="#" id="issue-status" data-type="text">${estado}</a></td>						   
-						 </tr>
+<!-- 						 <tr> -->
+<!-- 						    <th>Estado:</th> -->
+<%-- 						    <td><a href="#" id="issue-status" data-type="text">${estado}</a></td>						    --%>
+<!-- 						 </tr> -->
 						  <tr>
 						    <th>Etiquetas:</th>
 						    <td>
@@ -623,61 +639,62 @@
 					
 						 <tr>
 						    <th>Obra:</th>
-						    <td><a href="#" id="obra" data-type="textarea">${lic-obra}</a></td>						  
+						    <td><a href="#" id="lic-obra">${obra}</a></td>						  
 						 </tr>
 						 <tr>
 						    <th>N° de Licitación:</th>
-						    <td><a href="#" id="nroLicitacion" data-type="text">${lic-id}</a>						  
+						    <td><a href="#" id="lic-nroLicitacion">${nroLicitacion}</a>						  
 						 </tr>
 						 <tr>
 						    <th>N° de Expediente:</th>
-						    <td><a href="#" id="nroExpediente" data-type="text">${lic-expediente}</a></td>						  
+						    <td><a href="#" id="lic-nroExpediente">${nroExpediente}</a></td>						  
 						 </tr>
 						 <tr>
 						    <th>Estado de la obra:</th>
-						    <td><a href="#" id="estadoObra" data-type="select">${lic-estado}</a></td>						  
+						    <td><a href="#" id="estadoObra" data-type="select">${estadoObra}</a></td>						  
 						 </tr>
 						 <tr>
 						    <th>Tipo:</th>
-						    <td><a href="#" id="tipo" data-type="select" >${lic-tipo}</a>	</td>						  
+						    <td><a href="#" id="tipo" data-type="select" >${tipo}</a></td>						  
 						 </tr>
 						 <tr>
 						 	<th>Unidad ejecutora:</th>
-						    <td><a href="#" id="unidadEjecutora" data-type="text">${lic-uni-exe}</a>		</td>
+						    <td><a href="#" id="unidadEjecutora" data-type="text">${unidadEjecutora}</a></td>
 						 </tr>	
 						 <tr>	
 						    <th>Unidad de financiación:</th>
-						    <td><a href="#" id="unidadFinanciamiento" data-type="text">${lic-uni-fin}</a>	</td>		
+						    <td><a href="#" id="unidadFinanciamiento" data-type="text">${unidadFinanciamiento}</a></td>		
 						 </tr>
 						 <tr>	
 						    <th>Valor del pliego:</th>
-						    <td>$ <a href="#" id="valorPliego" data-type="number">${lic-pliego}</a></td>		
+						    <td>$ <a href="#" id="valorPliego" data-type="number">${valorPliego}</a></td>		
 						 </tr>						 <tr>
 						    <th>Empresa constructora:</th>
-						    <td>
-						    	<a href="#" id="representanteNombre" data-type="text">${lic-representante-nombre}</a>
-						    	<br><a href="#" id="representanteTel" data-type="tel">${lic-representante-tel}</a>
-						    	<br><a href="#" id="representanteEmail" data-type="email">${lic-representante-email}</a>	
-						    </td>						  
+						  	<td>
+						    	<a href="#" id="empresaNombre" data-type="text">${empresaNombre}</a>
+						    	<br><a href="#" id="empresaCuit" data-type="text">${empresaCuit}</a>	
+						    	<br><a href="#" id="empresaEmail" data-type="email">${empresaEmail}</a>
+						    </td>
 						 </tr>
 						 <tr>
 						    <th>Representante técnico:</th>
-						    <td>
-						    	<a href="#" id="empresaNombre" data-type="text">${lic-empresa-nombre}</a>
-						    	<br><a href="#" id="empresaCuit" data-type="text">${lic-empresa-cuit}</a>	
-						    	<br><a href="#" id="empresaEmail" data-type="email">${lic-empresa-email}</a>
-						    </td>						  
+						      <td>
+						    	<a href="#" id="representanteNombre" data-type="text">${representanteNombre}</a>
+						    	<br><a href="#" id="representanteTel" data-type="tel">${representanteTel}</a>
+						    	<br><a href="#" id="representanteEmail" data-type="email">${representanteEmail}</a>	
+						    </td>	
+						   						  
 						 </tr>
 						 <tr>
 						    <th>Presupuesto Adjudicado:</th>
 						    <td>
-						    	$ <a href="#" id="presupuestoAdjudicado" data-type="number">${lic-presup-ini}</a>
+						    	$ <a href="#" id="presupuestoAdjudicado" data-type="number">${presupuestoAdjudicado}</a>
 						    </td>
 						 </tr>
 						 <tr>	
 						    <th>Presupuesto Final:</th>
 						    <td>
-						    	$ <a href="#" id="presupuestoFinal" data-type="number">${lic-presup-fin}</a>
+						    	$ <a href="#" id="presupuestoFinal" data-type="number">${presupuestoFinal}</a>
 						    </td>					  
 						 </tr>
 <!-- 						 <tr> -->
