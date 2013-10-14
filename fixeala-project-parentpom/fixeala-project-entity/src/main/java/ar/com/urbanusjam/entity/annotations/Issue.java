@@ -19,14 +19,19 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
+import org.hibernate.bytecode.javassist.FieldHandled;
+import org.hibernate.bytecode.javassist.FieldHandler;
+
 
 
 @Entity
 @Table(name="ISSUE")
-public class Issue implements Serializable {
+public class Issue implements Serializable  {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@Column(name = "ID_ISSUE")
 	private Long id;
@@ -61,6 +66,15 @@ public class Issue implements Serializable {
 	
 	@Column(name = "DESCRIPTION")
 	private String description;
+
+		
+    @OneToMany(mappedBy="issue", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)  
+	private Collection<IssueHistorialRevision> revisiones;
+
+    
+	@OneToOne(optional = true, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "ID_ISSUE_LICITACION", nullable = true)
+	private IssueLicitacion licitacion;
 	
 	
 	@ManyToMany(cascade = CascadeType.ALL)
@@ -72,19 +86,15 @@ public class Issue implements Serializable {
 	
 	@Column(name = "STATUS")
 	private String status;
-		
-    @OneToMany(mappedBy="issue", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)  
-	private Collection<IssueHistorialRevision> revisiones;
-//	
-	@OneToOne
-	@JoinColumn(name = "ID_ISSUE_LICITACION", nullable = true)
-	private IssueLicitacion licitacion;
 //	
 //	@OneToMany(mappedBy = "issue")  
 //	private Collection<Comment> comments;
 
 	
-	public Issue(){   tagsList = new ArrayList<Tag>(); }	
+	public Issue(){   
+		tagsList = new ArrayList<Tag>(); 
+		revisiones = new ArrayList<IssueHistorialRevision>();
+	}	
 		
 	
 	public Issue(User reporter, GregorianCalendar date, String address, float latitude,
@@ -224,6 +234,8 @@ public class Issue implements Serializable {
 	public void setLicitacion(IssueLicitacion licitacion) {
 		this.licitacion = licitacion;
 	}
+	
+	
 //
 //	public Collection<Comment> getComments() {
 //		return comments;
@@ -244,6 +256,14 @@ public class Issue implements Serializable {
 		    if (!tag.getIssueList().contains(this)) {
 		        tag.getIssueList().add(this);
 		    }			
-	}	
+	}
+	
+	
+	public void addRevision(IssueHistorialRevision revision) {	
+		if (!getRevisiones().contains(revision)) {
+			getRevisiones().add(revision);
+		}
+	}
+
 	
 }

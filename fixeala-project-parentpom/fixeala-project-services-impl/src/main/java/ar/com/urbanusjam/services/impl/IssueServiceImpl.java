@@ -59,7 +59,7 @@ public class IssueServiceImpl implements IssueService{
 		Issue issue = new Issue();
 		issue = this.convertTo(issueDTO);
 		issue.getRevisiones().add(convertTo(historialDTO));
-		issue.setLicitacion(convertTo(licitacionDTO));
+//		issue.setLicitacion(convertTo(licitacionDTO));
 		//licitacionDAO.saveOrUpdateLicitacion(convertTo(licitacionDTO));
 		
 		issueDAO.updateIssue(issue);
@@ -99,13 +99,19 @@ public class IssueServiceImpl implements IssueService{
 	/********************************************************************************/
 	
 	public IssueLicitacion convertTo(IssueLicitacionDTO licitacionDTO){
-		
 		IssueLicitacion licitacion = new IssueLicitacion();
 		licitacion.setNroLicitacion(licitacionDTO.getNroLicitacion());
 		licitacion.setNroExpediente(licitacionDTO.getNroExpediente());
 		licitacion.setObjeto(licitacionDTO.getObra());
-		
 		return licitacion;
+	}
+	
+	public IssueLicitacionDTO convertTo(IssueLicitacion licitacion){
+		IssueLicitacionDTO licitacionDTO = new IssueLicitacionDTO();
+		licitacionDTO.setNroLicitacion(licitacion.getNroLicitacion());
+		licitacionDTO.setNroExpediente(licitacion.getNroExpediente());
+		licitacionDTO.setObra(licitacion.getObjeto());
+		return licitacionDTO;
 	}
 	
 	
@@ -164,7 +170,16 @@ public class IssueServiceImpl implements IssueService{
 		issue.setTitle(issueDTO.getTitle());
 		issue.setDescription(issueDTO.getDescription());
 		
-		//Collection<Tag> tagsCollection = new ArrayList<Tag>();
+		//licitacion
+		if(issueDTO.getLicitacion() != null)
+			issue.setLicitacion(convertTo(issueDTO.getLicitacion()));
+		else
+			issue.setLicitacion(null);
+	
+		//historial de reviciones
+		
+		
+		//tags
 		List<String> tagList = issueDTO.getTags();
 		
 		for(String t : tagList){
@@ -222,6 +237,9 @@ public class IssueServiceImpl implements IssueService{
 		issueDTO.setLatitude(String.valueOf(issue.getLatitude()));
 		issueDTO.setLongitude(String.valueOf(issue.getLongitude()));
 		issueDTO.setStatus(issue.getStatus());
+		
+		if(issue.getLicitacion() != null)
+			issueDTO.setLicitacion(convertTo(issue.getLicitacion()));
 		
 		List<IssueHistorialRevisionDTO> historialDTO = new ArrayList<IssueHistorialRevisionDTO>();
 		
