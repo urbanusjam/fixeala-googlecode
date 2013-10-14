@@ -5,12 +5,18 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
+import org.hibernate.bytecode.javassist.FieldHandled;
+import org.hibernate.bytecode.javassist.FieldHandler;
 
 @Entity
 @Table(name="ISSUE_LICITACION")
@@ -19,8 +25,9 @@ public class IssueLicitacion implements Serializable {
 	private static final long serialVersionUID = -3526522777509354350L;
 	
 	@Id
-	@Column(name = "ID_ISSUE_LICITACION")
-	private Long id;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "ID_ISSUE_LICITACION")	
+	private String id;
 	
 	@Column(name = "NRO_LICITACION")
 	private String nroLicitacion;
@@ -28,9 +35,9 @@ public class IssueLicitacion implements Serializable {
 	@Column(name = "NRO_EXPEDIENTE")
 	private String nroExpediente;
 	
-	@OneToOne
-	@JoinColumn(name = "ID_ISSUE")
-	private Issue issue;
+//	@OneToOne
+//	@JoinColumn(name = "ID_ISSUE")
+//	private Issue issue;
 	
 	@Column(name = "TIPO")
 	private String tipo;
@@ -83,11 +90,12 @@ public class IssueLicitacion implements Serializable {
   	   	
 	public IssueLicitacion(){}
 	
-	public Long getId() {
+	
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -107,13 +115,13 @@ public class IssueLicitacion implements Serializable {
 		this.nroExpediente = nroExpediente;
 	}
 
-	public Issue getIssue() {
-		return issue;
-	}
-
-	public void setIssue(Issue issue) {
-		this.issue = issue;
-	}
+//	public Issue getIssue() {
+//		return issue;
+//	}
+//	
+//	public void setIssue(Issue issue) {
+//		this.issue = issue;
+//	}
 
 	public String getTipo() {
 		return tipo;
@@ -242,11 +250,7 @@ public class IssueLicitacion implements Serializable {
 	public void setEstadoObra(String estadoObra) {
 		this.estadoObra = estadoObra;
 	}
-	
-	
-	
-	
-	
-	
+
+
 
 }
