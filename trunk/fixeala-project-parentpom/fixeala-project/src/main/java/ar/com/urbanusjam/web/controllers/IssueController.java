@@ -83,7 +83,7 @@ public class IssueController {
 				model.addAttribute("historial", issue.getHistorial());
 				
 				model.addAttribute("cantidadRevisiones", issue.getHistorial().size());
-				model.addAttribute("cantidadLicitacion", issue.getLicitacion().getNroReclamo() != null ? 1 : 0);
+				model.addAttribute("cantidadLicitacion", issue.getLicitacion() != null ? 1 : 0);
 				model.addAttribute("cantidadReclamosSimilares", 0);
 				model.addAttribute("cantidadArchivos", 0);
 				model.addAttribute("cantidadComentarios", issue.getComentarios().size());				
@@ -92,9 +92,10 @@ public class IssueController {
 				licitacion = issue.getLicitacion();
 				
 				if(licitacion.getNroLicitacion() != null){
-					model.addAttribute("lic-obra", licitacion.getObra());
+					model.addAttribute("obra", licitacion.getObra());
 					model.addAttribute("lic-id", licitacion.getNroLicitacion());
 					model.addAttribute("lic-expediente", licitacion.getNroExpediente());
+					//model.addAttribute("lic-estado", licitacion.getEstadoObra());
 					model.addAttribute("lic-pliego", licitacion.getValorPliego());
 					model.addAttribute("lic-empresa-nombre", licitacion.getEmpresaNombre());
 					model.addAttribute("lic-empresa-cuit", licitacion.getEmpresaCuit());
@@ -166,7 +167,8 @@ public class IssueController {
 					
 					//random id
 					issue.setId(Long.valueOf(id));
-					revision.setNroReclamo(issue.getId());			
+					revision.setNroReclamo(issue.getId());	
+					issue.setLicitacion(null);
 					issueService.reportIssue(issue, revision);			
 					
 					return new AlertStatus(true, "Su reclamo ha sido registrado.");			
@@ -225,7 +227,7 @@ public class IssueController {
 					revision.setMotivo("MODIFICACION");			
 					revision.setEstado(issue.getStatus());
 					revision.setObservaciones(Messages.ISSUE_UPDATE_OBS);		
-					
+					issue.getHistorial().add(revision);
 					issueService.updateIssue(issue, revision, licitacion);	
 					return new AlertStatus(true, "El reclamo ha sido actualizado.");			
 			}
