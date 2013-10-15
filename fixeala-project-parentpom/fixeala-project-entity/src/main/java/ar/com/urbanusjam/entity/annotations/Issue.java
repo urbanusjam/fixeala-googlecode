@@ -17,6 +17,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.LazyToOne;
@@ -72,8 +73,10 @@ public class Issue implements Serializable  {
 	private Collection<IssueHistorialRevision> revisiones;
 
     
-	@OneToOne(optional = true, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinColumn(name = "ID_ISSUE_LICITACION", nullable = true)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@PrimaryKeyJoinColumn  
+	//@PrimaryKeyJoinColumn
+	//@JoinColumn(name = "ID_ISSUE_LICITACION", nullable = true, updatable = true, insertable = true)
 	private IssueLicitacion licitacion;
 	
 	

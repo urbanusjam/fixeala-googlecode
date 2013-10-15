@@ -25,7 +25,6 @@ public class IssueServiceImpl implements IssueService{
 	
 	private IssueDAO issueDAO;
 	private IssueHistorialRevisionDAO historialDAO;
-	private IssueLicitacionDAO licitacionDAO;
 	private TagDAO tagDAO;
 	
 	public void setIssueDAO(IssueDAO issueDAO) {
@@ -34,10 +33,6 @@ public class IssueServiceImpl implements IssueService{
 		
 	public void setHistorialDAO(IssueHistorialRevisionDAO historialDAO) {
 		this.historialDAO = historialDAO;
-	}
-
-	public void setLicitacionDAO(IssueLicitacionDAO licitacionDAO) {
-		this.licitacionDAO = licitacionDAO;
 	}
 
 	public void setTagDAO(TagDAO tagDAO) {
@@ -54,18 +49,11 @@ public class IssueServiceImpl implements IssueService{
 	}
 	
 	@Override
-	public void updateIssue(IssueDTO issueDTO, IssueHistorialRevisionDTO historialDTO, 
-			IssueLicitacionDTO licitacionDTO) {
+	public void updateIssue(IssueDTO issueDTO, IssueHistorialRevisionDTO historialDTO) {
 		Issue issue = new Issue();
 		issue = this.convertTo(issueDTO);
 		issue.getRevisiones().add(convertTo(historialDTO));
-//		issue.setLicitacion(convertTo(licitacionDTO));
-		//licitacionDAO.saveOrUpdateLicitacion(convertTo(licitacionDTO));
-		
 		issueDAO.updateIssue(issue);
-		//historialDAO.saveHistorial(convertTo(historialDTO));
-		
-		
 	}
 
 	@Override
@@ -100,17 +88,53 @@ public class IssueServiceImpl implements IssueService{
 	
 	public IssueLicitacion convertTo(IssueLicitacionDTO licitacionDTO){
 		IssueLicitacion licitacion = new IssueLicitacion();
+		licitacion.setId(Long.valueOf(licitacionDTO.getNroReclamo()));
 		licitacion.setNroLicitacion(licitacionDTO.getNroLicitacion());
 		licitacion.setNroExpediente(licitacionDTO.getNroExpediente());
 		licitacion.setObjeto(licitacionDTO.getObra());
+		licitacion.setTipo(licitacionDTO.getTipoObra());
+		licitacion.setEstadoObra(licitacionDTO.getEstadoObra());
+		licitacion.setUnidadEjecutora(licitacionDTO.getUnidadEjecutora());
+		licitacion.setUnidadFinanciamiento(licitacionDTO.getUnidadFinanciamiento());
+		licitacion.setEmpresaConstructoraNombre(licitacionDTO.getEmpresaNombre());
+		licitacion.setEmpresaConstructoraCuit(licitacionDTO.getEmpresaCuit());
+		licitacion.setEmpresaConstructoraEmail(licitacionDTO.getEmpresaEmail());
+		licitacion.setRepresentanteTecnicoNombre(licitacionDTO.getRepresentanteNombre());
+		licitacion.setRepresentanteTecnicoDni(licitacionDTO.getRepresentanteDni());
+		licitacion.setRepresentanteTecnicoEmail(licitacionDTO.getRepresentanteEmail());
+		licitacion.setValorPliego(licitacionDTO.getValorPliego());
+		licitacion.setPresupuestoAdjudicado(licitacionDTO.getPresupuestoAdjudicado());
+		licitacion.setPresupuestoFinal(licitacionDTO.getPresupuestoFinal());
+		licitacion.setFechaEstimadaInicio(licitacionDTO.getFechaEstimadaInicio());
+		licitacion.setFechaEstimadaFin(licitacionDTO.getFechaEstimadaFin());
+		licitacion.setFechaRealInicio(licitacionDTO.getFechaRealInicio());
+		licitacion.setFechaRealFin(licitacionDTO.getFechaRealFin());
 		return licitacion;
 	}
 	
 	public IssueLicitacionDTO convertTo(IssueLicitacion licitacion){
+		
 		IssueLicitacionDTO licitacionDTO = new IssueLicitacionDTO();
 		licitacionDTO.setNroLicitacion(licitacion.getNroLicitacion());
 		licitacionDTO.setNroExpediente(licitacion.getNroExpediente());
 		licitacionDTO.setObra(licitacion.getObjeto());
+		licitacionDTO.setTipoObra(licitacion.getTipo());
+		licitacionDTO.setEstadoObra(licitacion.getEstadoObra());
+		licitacionDTO.setUnidadEjecutora(licitacion.getUnidadEjecutora());
+		licitacionDTO.setUnidadFinanciamiento(licitacion.getUnidadFinanciamiento());
+		licitacionDTO.setEmpresaNombre(licitacion.getEmpresaConstructoraNombre());
+		licitacionDTO.setEmpresaCuit(licitacion.getEmpresaConstructoraCuit());
+		licitacionDTO.setEmpresaEmail(licitacion.getEmpresaConstructoraEmail());
+		licitacionDTO.setRepresentanteNombre(licitacion.getRepresentanteTecnicoNombre());
+		licitacionDTO.setRepresentanteDni(licitacion.getRepresentanteTecnicoDni());
+		licitacionDTO.setRepresentanteEmail(licitacion.getRepresentanteTecnicoEmail());
+		licitacionDTO.setValorPliego(licitacion.getValorPliego());
+		licitacionDTO.setPresupuestoAdjudicado(licitacion.getPresupuestoAdjudicado());
+		licitacionDTO.setPresupuestoFinal(licitacion.getPresupuestoFinal());
+		licitacionDTO.setFechaEstimadaInicio(licitacion.getFechaEstimadaInicio());
+		licitacionDTO.setFechaEstimadaFin(licitacion.getFechaEstimadaFin());
+		licitacionDTO.setFechaRealInicio(licitacion.getFechaRealInicio());
+		licitacionDTO.setFechaRealFin(licitacion.getFechaRealFin());
 		return licitacionDTO;
 	}
 	
