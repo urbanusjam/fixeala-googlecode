@@ -3,6 +3,8 @@ package ar.com.urbanusjam.services.dto;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class IssueLicitacionDTO implements Serializable {
 
 	private static final long serialVersionUID = -7810118330923948669L;
@@ -11,25 +13,30 @@ public class IssueLicitacionDTO implements Serializable {
 	private String nroLicitacion;
 	private String nroExpediente;
 	private String nroReclamo;
-	private int valorPliego;
+	private Float valorPliego;
 	private String documentacionPliego;
 	private String unidadEjecutora;
 	private String unidadFinanciamiento;
 	private String empresaConstructora;
 	private String empresaNombre;
-	private String empresaCuit;
+	private Integer empresaCuit;
 	private String empresaEmail;
 	private String representanteTecnico;
 	private String representanteNombre;
-	private String representanteTel;
+	private Integer representanteDni;
 	private String representanteEmail;
 	private int plazoEjecucionEnDias;
-	private float presupuestoAdjudicado;
-	private float presupuestoFinal;
+	private Float presupuestoAdjudicado;
+	private Float presupuestoFinal;
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	private Date fechaEstimadaInicio;	
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	private Date fechaEstimadaFin;
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	private Date fechaRealInicio;
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	private Date fechaRealFin;
+	private String tipoObra;
 	private String estadoObra;
 	
 	
@@ -65,11 +72,11 @@ public class IssueLicitacionDTO implements Serializable {
 		this.nroReclamo = nroReclamo;
 	}
 	
-	public int getValorPliego() {
+	public Float getValorPliego() {
 		return valorPliego;
 	}
 	
-	public void setValorPliego(int valorPliego) {
+	public void setValorPliego(Float valorPliego) {
 		this.valorPliego = valorPliego;
 	}
 	
@@ -103,11 +110,11 @@ public class IssueLicitacionDTO implements Serializable {
 		this.empresaNombre = empresaNombre;
 	}
 	
-	public String getEmpresaCuit() {
+	public Integer getEmpresaCuit() {
 		return empresaCuit;
 	}
 	
-	public void setEmpresaCuit(String empresaCuit) {
+	public void setEmpresaCuit(Integer empresaCuit) {
 		this.empresaCuit = empresaCuit;
 	}
 	
@@ -141,7 +148,7 @@ public class IssueLicitacionDTO implements Serializable {
 	
 	public void setRepresentanteTecnico() {
 		this.representanteTecnico = getRepresentanteNombre() 
-				+ ","+ getRepresentanteTel() 
+				+ ","+ getRepresentanteDni() 
 				+ "," + getRepresentanteEmail();
 	}
 	
@@ -157,12 +164,12 @@ public class IssueLicitacionDTO implements Serializable {
 		this.representanteNombre = representanteNombre;
 	}
 
-	public String getRepresentanteTel() {
-		return representanteTel;
+	public Integer getRepresentanteDni() {
+		return representanteDni;
 	}
 
-	public void setRepresentanteTel(String representanteTel) {
-		this.representanteTel = representanteTel;
+	public void setRepresentanteDni(Integer representanteDni) {
+		this.representanteDni = representanteDni;
 	}
 
 	public String getRepresentanteEmail() {
@@ -181,19 +188,19 @@ public class IssueLicitacionDTO implements Serializable {
 		this.plazoEjecucionEnDias = plazoEjecucionEnDias;
 	}
 	
-	public float getPresupuestoAdjudicado() {
+	public Float getPresupuestoAdjudicado() {
 		return presupuestoAdjudicado;
 	}
 	
-	public void setPresupuestoAdjudicado(float presupuestoAdjudicado) {
+	public void setPresupuestoAdjudicado(Float presupuestoAdjudicado) {
 		this.presupuestoAdjudicado = presupuestoAdjudicado;
 	}
 	
-	public float getPresupuestoFinal() {
+	public Float getPresupuestoFinal() {
 		return presupuestoFinal;
 	}
 	
-	public void setPresupuestoFinal(float presupuestoFinal) {
+	public void setPresupuestoFinal(Float presupuestoFinal) {
 		this.presupuestoFinal = presupuestoFinal;
 	}
 	
@@ -229,6 +236,14 @@ public class IssueLicitacionDTO implements Serializable {
 		this.fechaRealFin = fechaRealFin;
 	}
 	
+	public String getTipoObra() {
+		return tipoObra;
+	}
+
+	public void setTipoObra(String tipoObra) {
+		this.tipoObra = tipoObra;
+	}
+
 	public String getEstadoObra() {
 		return estadoObra;
 	}

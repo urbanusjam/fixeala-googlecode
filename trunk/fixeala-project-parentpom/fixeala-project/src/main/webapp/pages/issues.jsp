@@ -49,7 +49,7 @@
 			  $("#issue-province").editable({name: 'province', disabled: true});
 			  $("#issue-lat").editable({name: 'latitude', disabled: true});
 			  $("#issue-lng").editable({name: 'longitude', disabled: true});
-// 			  $("#issue-status").editable({name: 'status', disabled: true});
+			  $("#issue-status").editable({name: 'status', disabled: true});
 			  $("#issue-user").editable({name: 'username', disabled: true});
 			  
 			  //--EDITABLE FIELDS
@@ -58,8 +58,8 @@
 				  pk: 1,  
 				  name: 'title', 
 				  type: 'text',
-				  mode: 'popup',			
-				  url: '/post',   
+				  mode: 'popup',
+				  placement: 'right',
 				  ajaxOptions: {
 				        type: 'json'
 				  },
@@ -83,8 +83,6 @@
 				  mode: 'popup',	
 				  placement: 'right',
 				  inputclass: 'issue-textarea',
-				  rows: 5,
-				  url: '/post', 			  
 				  ajaxOptions: {
 				        type: 'put'
 				  },				
@@ -108,7 +106,6 @@
 			        	tags: ['alumbrado', 'asfalto', 'bache', 'pozo'],
 			            tokenSeparators: [",", " "]
 			        },
-			        url: '/post',  				
 					ajaxOptions: {
 					    type: 'put'
 					}  
@@ -119,7 +116,6 @@
 				  name: 'neighborhood', 	
 				  mode: 'popup',	
 				  placement: 'right',
-				  url: '/post',   
 				  ajaxOptions: {
 				        type: 'put'
 				  },
@@ -139,9 +135,8 @@
 			
 			  $("#lic-obra").editable({	
 				  pk: 5,  
-				  type: 'textarea', 
-				  placement:'bottom',
 				  name: 'obra',
+				  placement:'bottom',
 				  inputclass: 'licitacion-textarea',
 				  ajaxOptions: {
 				        type: 'put'
@@ -158,9 +153,10 @@
 			  
 			  $("#lic-nroLicitacion").editable({
 				  pk: 6,  
-				  type: 'text', 
 				  name: 'nroLicitacion',
-				  url: '/post',
+				  ajaxOptions: {
+				        type: 'put'
+				  },
 				  validate: function(value) {
 					    if($.trim(value) == '') {
 					        return 'Este campo es requerido.';
@@ -169,10 +165,11 @@
 			  });
 			  
 			  $("#lic-nroExpediente").editable({	
-				  pk: 7,  
-				  type: 'text', 
+				  pk: 7, 
 				  name: 'nroExpediente',
-				  url: '/post',
+				  ajaxOptions: {
+				        type: 'put'
+				  },
 				  validate: function(value) {
 					    if($.trim(value) == '') {
 					        return 'Este campo es requerido.';
@@ -180,178 +177,199 @@
 				  }
 			  });
 			  
-			  $("#valorPliego").editable({	
-				  name: 'valorPliego',
-				  url: '/post',
-				  value: 0,
-				  validate: function(value) {
-					    if($.trim(value) == '') {
-					        return 'Este campo es requerido.';
-					    }
-				  }
-			  });
-			  
-			  $("#unidadEjecutora").editable({
-				  name: 'unidadEjecutora',
-				  url: '/post'			 
-			  });
-			  
-			  $("#unidadFinanciamiento").editable({				
-				  name: 'unidadFinanciamiento',
-				  url: '/post'			 
-			  });
-			  
-			  $("#empresaNombre").editable({	
-				  name: 'empresaNombre',
-				  url: '/post',
-				  value: 'Razón social'
-			  });
-			  
-			  $("#empresaCuit").editable({		
-				  name: 'empresaCuit',
-				  url: '/post',
-				  value: 'Cuit'
-			  });
-			  
-			  $("#empresaEmail").editable({	
-				  name: 'empresaEmail',
-				  url: '/post',
-				  value: 'Email'
-			  });
-			  
-			  $("#representanteNombre").editable({			
-				  name: 'representanteNombre',
-				  url: '/post',
-				  value: 'Nombre y Apellido'
-			  });
-			  
-			  $("#representanteTel").editable({			
-				  name: 'representanteTel',
-				  url: '/post',
-				  value: 'DNI'
-			  });
-			  
-			  $("#representanteEmail").editable({		
-				  name: 'representanteEmail',
-				  url: '/post',
-				  value: 'Email'
-			  });
-			 
-			  
-			  $("#presupuestoAdjudicado").editable({	
-				  name: 'presupuestoAdjudicado',
-				  url: '/post',
-				  value: 0
-			  });
-			  
-			  $("#presupuestoFinal").editable({	
-				  name: 'presupuestoFinal',
-				  url: '/post',
-				  value: 0
-			  });
-			  
-			  $('#tipo').editable({
-				  name: 'tipo',
-				  value: 1,
+			  $('#lic-tipo').editable({
+				  name: 'tipoObra',
+				  value: 'Pública',
 			      source: [
-						{value: 1, text: 'Pública'},
-			            {value: 2, text: 'Privada'},
-			            {value: 3, text: 'Contratación directa'}
+						{value: 'Pública', text: 'Pública'},
+			            {value: 'Privada', text: 'Privada'},
+			            {value: 'Contratación directa', text: 'Contratación directa'}
 			        ]
 			    });    
 			  
-			  $('#estadoObra').editable({
+			  $('#lic-estadoObra').editable({
 				  name: 'estadoObra',
-				  value: 1,
+				  value: 'Sin iniciar',
 			      source: [
-					    {value: 1, text: 'Sin iniciar'},
-			            {value: 2, text: 'En curso'},
-			            {value: 3, text: 'Interrumpida'},
-			            {value: 4, text: 'Finalizada'}
+					    {value: 'Sin iniciar', text: 'Sin iniciar'},
+			            {value: 'En curso', text: 'En curso'},
+			            {value: 'Interrumpida', text: 'Interrumpida'},
+			            {value: 'Finalizada', text: 'Finalizada'}
 			        ]
 			  });  
 			  
-// 			  $('#fechaEstimadaInicio').editable({
-// 				  name:'fechaEstimadaInicio',
-// 				  mode: 'popup',
-// 				  placement: 'top',
-// 				  format: 'DD-MM-YYYY',    
-// 			      viewformat: 'DD/MM/YYYY',    
-// 			      template: 'D / MMMM / YYYY',    
-// 			      combodate: {
-// 			                minYear: 2000,
-// 			                maxYear: 2015,
-// 			                minuteStep: 1
-// 			      }
-// 			    });
+			  $("#lic-valorPliego").editable({	
+				  name: 'valorPliego',
+				  ajaxOptions: {
+				        type: 'put'
+				  },
+				  value: 0
+			  });
+			  
+			  $("#lic-unidadEjecutora").editable({
+				  name: 'unidadEjecutora',
+				  ajaxOptions: {
+				        type: 'put'
+				  }
+			  });
+			  
+			  $("#lic-unidadFinanciamiento").editable({				
+				  name: 'unidadFinanciamiento',
+				  ajaxOptions: {
+				        type: 'put'
+				  }		 
+			  });
+			  
+			  $("#lic-empresaNombre").editable({	
+				  name: 'empresaNombre',
+				  ajaxOptions: {
+				        type: 'put'
+				  }
+			  });
+			  
+			  $("#lic-empresaCuit").editable({		
+				  name: 'empresaCuit',
+				  ajaxOptions: {
+				        type: 'put'
+				  }
+			  });
+			  
+			  $("#lic-empresaEmail").editable({	
+				  name: 'empresaEmail',
+				  ajaxOptions: {
+				        type: 'put'
+				  }
+			  });
+			  
+			  $("#lic-representanteNombre").editable({			
+				  name: 'representanteNombre',
+				  ajaxOptions: {
+				        type: 'put'
+				  }
+			  });
+			  
+			  $("#lic-representanteDni").editable({			
+				  name: 'representanteDni',
+				  ajaxOptions: {
+				        type: 'put'
+				  }
+			  });
+			  
+			  $("#lic-representanteEmail").editable({		
+				  name: 'representanteEmail',
+				  ajaxOptions: {
+				        type: 'put'
+				  }
+			  });
 			 
 			  
-// 			  $('#fechaEstimadaFin').editable({
-// 				  name:'fechaEstimadaFin',
-// 				  mode: 'popup',
-// 				  placement: 'top',
-// 				  format: 'DD-MM-YYYY',    
-// 			      viewformat: 'DD/MM/YYYY',    
-// 			      template: 'D / MMMM / YYYY',    
-// 			      combodate: {
-// 			                minYear: 2000,
-// 			                maxYear: 2015,
-// 			                minuteStep: 1
-// 			      }
-// 			    });
+			  $("#lic-presupuestoAdjudicado").editable({	
+				  name: 'presupuestoAdjudicado',
+				  value: 0,
+				  ajaxOptions: {
+				        type: 'put'
+				  }
+			  });
 			  
-// 			  $('#fechaRealInicio').editable({
-// 				  name:'fechaRealInicio',	
-// 				  mode: 'popup',
-// 				  placement: 'top',
-// 				  format: 'DD-MM-YYYY',    
-// 			      viewformat: 'DD/MM/YYYY',    
-// 			      template: 'D / MMMM / YYYY',    
-// 			      combodate: {
-// 			                minYear: 2000,
-// 			                maxYear: 2015,
-// 			                minuteStep: 1
-// 			      }
-// 			    });
+			  $("#lic-presupuestoFinal").editable({	
+				  name: 'presupuestoFinal',
+				  value: 0,
+				  ajaxOptions: {
+				        type: 'put'
+				  }
+			  });
 			  
-// 			  $('#fechaRealFin').editable({
-// 				  name:'fechaRealFin',	
-// 				  mode: 'popup',
-// 				  placement: 'right',
-// 				  format: 'DD-MM-YYYY',    
-// 			      viewformat: 'DD/MM/YYYY',    
-// 			      template: 'D / MMMM / YYYY',    
-// 			      combodate: {
-// 			                minYear: 2000,
-// 			                maxYear: 2015,
-// 			                minuteStep: 1
-// 			      }
-// 			    });
+			  
+			  
+			  $('#fechaEstimadaInicio').editable({
+				  name:'fechaEstimadaInicio',
+				  mode: 'popup',
+				  placement: 'top',
+				  format: 'DD-MM-YYYY',    
+			      viewformat: 'DD/MM/YYYY',    
+			      combodate: {
+			                minYear: 2013,
+			                maxYear: 2015,
+			                minuteStep: 1,
+			                value: new Date()
+			      },
+			      ajaxOptions: {
+				        type: 'put'
+				  }
+			    });
+			 
+			  
+			  $('#fechaEstimadaFin').editable({
+				  name:'fechaEstimadaFin',
+				  mode: 'popup',
+				  placement: 'right',
+				  format: 'DD-MM-YYYY', 
+				  viewformat: 'DD/MM/YYYY',    
+			      combodate: {
+			    	  	minYear: 2013,
+		                maxYear: 2015,
+		                minuteStep: 1,
+		                value: new Date()
+			      },
+			      ajaxOptions: {
+				        type: 'put'
+				  }
+			    });
+			  
+			  $('#fechaRealInicio').editable({
+				  name:'fechaRealInicio',	
+				  mode: 'popup',
+				  placement: 'top',
+				  format: 'DD-MM-YYYY',    
+			      viewformat: 'DD/MM/YYYY',    
+			      combodate: {
+			    	  	minYear: 2013,
+		                maxYear: 2015,
+		                minuteStep: 1,
+		                value: new Date()
+			      },
+			      ajaxOptions: {
+				        type: 'put'
+				  }
+			    });
+			  
+			  $('#fechaRealFin').editable({
+				  name:'fechaRealFin',	
+				  mode: 'popup',
+				  placement: 'right',
+				  format: 'DD-MM-YYYY',    
+			      viewformat: 'DD/MM/YYYY',   
+			      combodate: {
+			    	  	minYear: 2013,
+		                maxYear: 2015,
+		                minuteStep: 1
+			      }
+			    });
 			  
 	
 			  
 			  function resetLicitacionValues(){
 				  
-				  	 $('#obra').editable('setValue', null); 
-				     $('#nroLicitacion').editable('setValue', null); 
-				     $('#nroExpediente').editable('setValue', null); 
-				     $('#valorPliego').editable('setValue', 0); 
-				     $('#unidadEjecutora').editable('setValue', null); 
-				     $('#unidadFinanciamiento').editable('setValue', null); 
-				     $('#empresaNombre').editable('setValue', null); 
-				     $('#empresaCuit').editable('setValue', null); 
-				     $('#empresaEmail').editable('setValue', null); 
-				     $('#representanteNombre').editable('setValue', null); 
-				     $('#representanteTel').editable('setValue', null); 
-				     $('#representanteEmail').editable('setValue', null); 
-				     $('#presupuestoAdjudicado').editable('setValue', 0); 
-				     $('#presupuestoFinal').editable('setValue', 0); 
-				     $('#tipo').editable('setValue', 1); 
-				     $('#estadoObra').editable('setValue', 1); 
-// 				     $('#fechaEstimadaInicio').editable('setValue', null); 
-// 				     $('#fechaEstimadaFin').editable('setValue', null); 
-// 				     $('#fechaRealInicio').editable('setValue', null); 
-// 				     $('#fechaRealFin').editable('setValue', null); 
+				  	 $('#lic-obra').editable('setValue', null); 
+				     $('#lic-nroLicitacion').editable('setValue', null); 
+				     $('#lic-nroExpediente').editable('setValue', null); 
+				     $('#lic-valorPliego').editable('setValue', 0); 
+				     $('#lic-unidadEjecutora').editable('setValue', null); 
+				     $('#lic-unidadFinanciamiento').editable('setValue', null); 
+				     $('#lic-empresaNombre').editable('setValue', null); 
+				     $('#lic-empresaCuit').editable('setValue', null); 
+				     $('#lic-empresaEmail').editable('setValue', null); 
+				     $('#lic-representanteNombre').editable('setValue', null); 
+				     $('#lic-representanteDni').editable('setValue', null); 
+				     $('#lic-representanteEmail').editable('setValue', null); 
+				     $('#lic-presupuestoAdjudicado').editable('setValue', 0); 
+				     $('#lic-presupuestoFinal').editable('setValue', 0); 
+				     $('#lic-tipo').editable('setValue', 1); 
+				     $('#lic-estadoObra').editable('setValue', 1); 
+				     $('#fechaEstimadaInicio').editable('setValue', null); 
+				     $('#fechaEstimadaFin').editable('setValue', null); 
+				     $('#fechaRealInicio').editable('setValue', null); 
+				     $('#fechaRealFin').editable('setValue', null); 
 				     
 			  }
 			
@@ -381,6 +399,7 @@
 						    	
 						    	   if(data.result){						    		   
 
+						    		   bootbox.alert(data.message); 
 						    			setTimeout(function () {	
 						    				var url = getIssueURL(id, newTitle, 'plain');
 							    			window.location.href= url;	
@@ -409,6 +428,20 @@
 					   
 				  });//bootbox   
 				});
+			  
+			  
+			  
+			  
+			  
+			//ajax mocks
+			    $.mockjaxSettings.responseTime = 500; 
+			    
+			    $.mockjax({
+			        url: '/post',
+			        response: function(settings) {
+			            log(settings, this);
+			        }
+			    });
 
 
 		});
@@ -559,10 +592,10 @@
 						    <th>DescripciÃ³n:</th>
 						    <td><a href="#" id="issue-desc">${descripcion}</a></td>						   
 						 </tr>
-<!-- 						 <tr> -->
-<!-- 						    <th>Estado:</th> -->
-<%-- 						    <td><a href="#" id="issue-status" data-type="text">${estado}</a></td>						    --%>
-<!-- 						 </tr> -->
+						 <tr>
+						    <th>Estado:</th>
+						    <td><a href="#" id="issue-status" data-type="text">${estado}</a></td>						   
+						 </tr>
 						  <tr>
 						    <th>Etiquetas:</th>
 						    <td>
@@ -633,86 +666,94 @@
 			    <div id="collapseTwo" class="accordion-body collapse">
 			      <div class="accordion-inner">
 			      
-			       <button id="reset-btn" class="btn btn-primary">RESET</button>
+			      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sollicitudin rutrum lectus. 
+			      Ut laoreet lorem dignissim ante tristique cursus. Phasellus ut ipsum malesuada neque tempor iaculis. 
+			      Vestibulum pharetra tellus vitae tristique dapibus. Proin sed tortor rutrum, vulputate dui faucibus, sagittis justo. 
+			      Sed varius non diam a placerat. Fusce vitae velit ac metus tincidunt vehicula. 
+			      In tortor mauris, congue nec luctus vitae, suscipit in metus.
+			      
+			      <br><br>
+			      
+			      <button id="reset-btn" class="btn btn-large btn-danger" style="margin-left:595px">Resetear valores</button>
 							
 					<table id="tbl-licitacion" class="table table-hover table-bordered table-striped">	
 					
 						 <tr>
 						    <th>Obra:</th>
-						    <td><a href="#" id="lic-obra">${obra}</a></td>						  
+						    <td><a href="#" id="lic-obra" data-type="textarea">${obra}</a></td>						  
 						 </tr>
 						 <tr>
 						    <th>N° de Licitación:</th>
-						    <td><a href="#" id="lic-nroLicitacion">${nroLicitacion}</a>						  
+						    <td><a href="#" id="lic-nroLicitacion" data-type="text">${nroLicitacion}</a>						  
 						 </tr>
 						 <tr>
 						    <th>N° de Expediente:</th>
-						    <td><a href="#" id="lic-nroExpediente">${nroExpediente}</a></td>						  
+						    <td><a href="#" id="lic-nroExpediente" data-type="text">${nroExpediente}</a></td>						  
 						 </tr>
 						 <tr>
 						    <th>Estado de la obra:</th>
-						    <td><a href="#" id="estadoObra" data-type="select">${estadoObra}</a></td>						  
+						    <td><a href="#" id="lic-estadoObra" data-type="select">${estadoObra}</a></td>						  
 						 </tr>
 						 <tr>
 						    <th>Tipo:</th>
-						    <td><a href="#" id="tipo" data-type="select" >${tipo}</a></td>						  
+						    <td><a href="#" id="lic-tipo" data-type="select" >${tipoObra}</a></td>						  
 						 </tr>
 						 <tr>
 						 	<th>Unidad ejecutora:</th>
-						    <td><a href="#" id="unidadEjecutora" data-type="text">${unidadEjecutora}</a></td>
+						    <td><a href="#" id="lic-unidadEjecutora" data-type="text">${unidadEjecutora}</a></td>
 						 </tr>	
 						 <tr>	
 						    <th>Unidad de financiación:</th>
-						    <td><a href="#" id="unidadFinanciamiento" data-type="text">${unidadFinanciamiento}</a></td>		
+						    <td><a href="#" id="lic-unidadFinanciamiento" data-type="text">${unidadFinanciamiento}</a></td>		
 						 </tr>
 						 <tr>	
 						    <th>Valor del pliego:</th>
-						    <td>$ <a href="#" id="valorPliego" data-type="number">${valorPliego}</a></td>		
+						    <td>$ <a href="#" id="lic-valorPliego" data-type="number">${valorPliego}</a></td>		
 						 </tr>						 <tr>
 						    <th>Empresa constructora:</th>
 						  	<td>
-						    	<a href="#" id="empresaNombre" data-type="text">${empresaNombre}</a>
-						    	<br><a href="#" id="empresaCuit" data-type="text">${empresaCuit}</a>	
-						    	<br><a href="#" id="empresaEmail" data-type="email">${empresaEmail}</a>
+						    	Razón social: <a href="#" id="lic-empresaNombre" data-type="text">${empresaNombre}</a>
+						    	<br>CUIT: <a href="#" id="lic-empresaCuit" data-type="text">${empresaCuit}</a>	
+						    	<br>Email: <a href="#" id="lic-empresaEmail" data-type="email">${empresaEmail}</a>
 						    </td>
 						 </tr>
 						 <tr>
 						    <th>Representante técnico:</th>
 						      <td>
-						    	<a href="#" id="representanteNombre" data-type="text">${representanteNombre}</a>
-						    	<br><a href="#" id="representanteTel" data-type="tel">${representanteTel}</a>
-						    	<br><a href="#" id="representanteEmail" data-type="email">${representanteEmail}</a>	
+						    	Nombre y Apellido: <a href="#" id="lic-representanteNombre" data-type="text">${representanteNombre}</a>
+						    	<br>DNI: <a href="#" id="lic-representanteDni" data-type="number">${representanteDni}</a>
+						    	<br>Email: <a href="#" id="lic-representanteEmail" data-type="email">${representanteEmail}</a>	
 						    </td>	
 						   						  
 						 </tr>
 						 <tr>
 						    <th>Presupuesto Adjudicado:</th>
 						    <td>
-						    	$ <a href="#" id="presupuestoAdjudicado" data-type="number">${presupuestoAdjudicado}</a>
+						    	$ <a href="#" id="lic-presupuestoAdjudicado" data-type="number">${presupuestoAdjudicado}</a>
 						    </td>
 						 </tr>
 						 <tr>	
 						    <th>Presupuesto Final:</th>
 						    <td>
-						    	$ <a href="#" id="presupuestoFinal" data-type="number">${presupuestoFinal}</a>
+						    	$ <a href="#" id="lic-presupuestoFinal" data-type="number">${presupuestoFinal}</a>
 						    </td>					  
 						 </tr>
-<!-- 						 <tr> -->
-<!-- 						    <th>Fechas estimadas:</th> -->
-<!-- 						    <td> -->
-<%-- 						    	<a href="#" id="fechaEstimadaInicio" data-type="combodate">${lic-fechaTemp-ini}</a> --%>
-<!-- 												&mdash; -->
-<%-- 												<a href="#" id="fechaEstimadaFin" data-type="combodate">${lic-fechaTemp-fin}</a> --%>
-<!-- 						    </td>	 -->
-<!-- 						 </tr> -->
-<!-- 						 <tr> -->
-<!-- 						    <th>Fechas reales:</th> -->
-<!-- 						    <td> -->
-<%-- 						    	<a href="#" id="fechaRealInicio" data-type="combodate">${lic-fechaReal-ini}</a>	 --%>
-<!-- 												&mdash; -->
-<%-- 												<a href="#" id="fechaRealFin" data-type="combodate">${lic-fechaReal-fin}</a>	 --%>
-<!-- 						    </td>					   -->
-<!-- 						 </tr> -->
+						 <tr>
+						    <th>Fechas estimadas:</th>
+						    <td>
+						    	<a href="#" id="fechaEstimadaInicio" data-type="combodate">${fechaEstimadaInicio}</a>
+												&mdash;
+												<a href="#" id="fechaEstimadaFin" data-type="combodate">${fechaEstimadaFinal}</a>
+						    </td>	
+						 </tr>
+						 <tr>
+						    <th>Fechas reales:</th>
+						    <td>
+						    	<a href="#" id="fechaRealInicio" data-type="combodate">${fechaRealInicio}</a>	
+												&mdash;
+												<a href="#" id="fechaRealFin" data-type="combodate">${fechaRealFinal}</a>	
+						    </td>					  
+						 </tr>
 					
 					  		</table>	
 						</div>

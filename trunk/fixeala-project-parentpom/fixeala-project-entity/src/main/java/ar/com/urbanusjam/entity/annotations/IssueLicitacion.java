@@ -25,9 +25,9 @@ public class IssueLicitacion implements Serializable {
 	private static final long serialVersionUID = -3526522777509354350L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID_ISSUE_LICITACION")	
-	private String id;
+	//@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "ID_ISSUE")	
+	private Long id;
 	
 	@Column(name = "NRO_LICITACION")
 	private String nroLicitacion;
@@ -46,13 +46,10 @@ public class IssueLicitacion implements Serializable {
 	private String objeto;
 	
 	@Column(name = "VALOR_PLIEGO")
-	private Integer valorPliego;
+	private Float valorPliego;
 	
 	@Column(name = "DOCUMENTACION_PLIEGO")
 	private String documentacionPliego;
-	
-	@Column(name = "EMPRESA_CONSTRUCTORA")
-	private String empresaConstructora;
 	
 	@Column(name = "UNIDAD_EJECUTORA")
 	private String unidadEjecutora;
@@ -60,17 +57,32 @@ public class IssueLicitacion implements Serializable {
 	@Column(name = "UNIDAD_FINANCIAMIENTO")
 	private String unidadFinanciamiento;
 	
-	@Column(name = "REPRESENTANTE_TECNICO")
-	private String representanteTecnico;
+	@Column(name = "EMPRESA_CONSTRUCTORA_NOMBRE")
+	private String empresaConstructoraNombre;
+	
+	@Column(name = "EMPRESA_CONSTRUCTORA_CUIT")
+	private Integer empresaConstructoraCuit;
+	
+	@Column(name = "EMPRESA_CONSTRUCTORA_EMAIL")
+	private String empresaConstructoraEmail;
+	
+	@Column(name = "REPRESENTANTE_TECNICO_NOMBRE")
+	private String representanteTecnicoNombre;
+	
+	@Column(name = "REPRESENTANTE_TECNICO_DNI")
+	private Integer representanteTecnicoDni;
+	
+	@Column(name = "REPRESENTANTE_TECNICO_EMAIL")
+	private String representanteTecnicoEmail;
 	
 	@Column(name = "PLAZO_EJECUCION")
 	private int plazoEjecucionEnDias;
 	
 	@Column(name = "PRESUPUESTO_ADJUDICADO")
-	private float presupuestoAdjudicado;
+	private Float presupuestoAdjudicado;
 	
 	@Column(name = "PRESUPUESTO_FINAL")
-	private float presupuestoFinal;
+	private Float presupuestoFinal;
 		
 	@Column(name = "FECHA_ESTIMADA_INICIO")
 	private Date fechaEstimadaInicio;	
@@ -91,11 +103,11 @@ public class IssueLicitacion implements Serializable {
 	public IssueLicitacion(){}
 	
 	
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -139,11 +151,11 @@ public class IssueLicitacion implements Serializable {
 		this.objeto = objeto;
 	}
 
-	public Integer getValorPliego() {
+	public Float getValorPliego() {
 		return valorPliego;
 	}
 
-	public void setValorPliego(Integer valorPliego) {
+	public void setValorPliego(Float valorPliego) {
 		this.valorPliego = valorPliego;
 	}
 
@@ -153,14 +165,6 @@ public class IssueLicitacion implements Serializable {
 
 	public void setDocumentacionPliego(String documentacionPliego) {
 		this.documentacionPliego = documentacionPliego;
-	}
-
-	public String getEmpresaConstructora() {
-		return empresaConstructora;
-	}
-
-	public void setEmpresaConstructora(String empresaConstructora) {
-		this.empresaConstructora = empresaConstructora;
 	}
 
 	public String getUnidadEjecutora() {
@@ -179,12 +183,52 @@ public class IssueLicitacion implements Serializable {
 		this.unidadFinanciamiento = unidadFinanciamiento;
 	}
 
-	public String getRepresentanteTecnico() {
-		return representanteTecnico;
+	public String getEmpresaConstructoraNombre() {
+		return empresaConstructoraNombre;
 	}
 
-	public void setRepresentanteTecnico(String representanteTecnico) {
-		this.representanteTecnico = representanteTecnico;
+	public void setEmpresaConstructoraNombre(String empresaConstructoraNombre) {
+		this.empresaConstructoraNombre = empresaConstructoraNombre;
+	}
+
+	public Integer getEmpresaConstructoraCuit() {
+		return empresaConstructoraCuit;
+	}
+
+	public void setEmpresaConstructoraCuit(Integer empresaConstructoraCuit) {
+		this.empresaConstructoraCuit = empresaConstructoraCuit;
+	}
+
+	public String getEmpresaConstructoraEmail() {
+		return empresaConstructoraEmail;
+	}
+
+	public void setEmpresaConstructoraEmail(String empresaConstructoraEmail) {
+		this.empresaConstructoraEmail = empresaConstructoraEmail;
+	}
+
+	public String getRepresentanteTecnicoNombre() {
+		return representanteTecnicoNombre;
+	}
+
+	public void setRepresentanteTecnicoNombre(String representanteTecnicoNombre) {
+		this.representanteTecnicoNombre = representanteTecnicoNombre;
+	}
+
+	public Integer getRepresentanteTecnicoDni() {
+		return representanteTecnicoDni;
+	}
+
+	public void setRepresentanteTecnicoDni(Integer representanteTecnicoDni) {
+		this.representanteTecnicoDni = representanteTecnicoDni;
+	}
+
+	public String getRepresentanteTecnicoEmail() {
+		return representanteTecnicoEmail;
+	}
+
+	public void setRepresentanteTecnicoEmail(String representanteTecnicoEmail) {
+		this.representanteTecnicoEmail = representanteTecnicoEmail;
 	}
 
 	public int getPlazoEjecucionEnDias() {
@@ -195,19 +239,19 @@ public class IssueLicitacion implements Serializable {
 		this.plazoEjecucionEnDias = plazoEjecucionEnDias;
 	}
 
-	public float getPresupuestoAdjudicado() {
+	public Float getPresupuestoAdjudicado() {
 		return presupuestoAdjudicado;
 	}
 
-	public void setPresupuestoAdjudicado(float presupuestoAdjudicado) {
+	public void setPresupuestoAdjudicado(Float presupuestoAdjudicado) {
 		this.presupuestoAdjudicado = presupuestoAdjudicado;
 	}
 
-	public float getPresupuestoFinal() {
+	public Float getPresupuestoFinal() {
 		return presupuestoFinal;
 	}
 
-	public void setPresupuestoFinal(float presupuestoFinal) {
+	public void setPresupuestoFinal(Float presupuestoFinal) {
 		this.presupuestoFinal = presupuestoFinal;
 	}
 

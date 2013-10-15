@@ -1,5 +1,8 @@
 package ar.com.urbanusjam.web.controllers;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -25,7 +28,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import ar.com.urbanusjam.entity.annotations.IssueLicitacion;
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.UserService;
@@ -92,31 +94,34 @@ public class IssueController {
 				licitacion = issue.getLicitacion();
 				
 				if(licitacion.getNroLicitacion() != null){
+					
 					model.addAttribute("obra", licitacion.getObra());
-					model.addAttribute("lic-id", licitacion.getNroLicitacion());
-					model.addAttribute("lic-expediente", licitacion.getNroExpediente());
-					//model.addAttribute("lic-estado", licitacion.getEstadoObra());
-					model.addAttribute("lic-pliego", licitacion.getValorPliego());
-					model.addAttribute("lic-empresa-nombre", licitacion.getEmpresaNombre());
-					model.addAttribute("lic-empresa-cuit", licitacion.getEmpresaCuit());
-					model.addAttribute("lic-empresa-email", licitacion.getEmpresaEmail());
-					model.addAttribute("lic-representante-nombre", licitacion.getRepresentanteNombre());
-					model.addAttribute("lic-representante-tel", licitacion.getRepresentanteTel());
-					model.addAttribute("lic-empresa-email", licitacion.getRepresentanteEmail());
-					model.addAttribute("lic-uni-exe", licitacion.getEmpresaConstructora());
-					model.addAttribute("lic-uni-fin", licitacion.getUnidadFinanciamiento());
-				
+					model.addAttribute("nroLicitacion", licitacion.getNroLicitacion());
+					model.addAttribute("nroExpediente", licitacion.getNroExpediente());
+					model.addAttribute("estadoObra", licitacion.getEstadoObra());
+					model.addAttribute("tipoObra", licitacion.getTipoObra());
+					model.addAttribute("valorPliego", licitacion.getValorPliego());
+					model.addAttribute("unidadEjecutora", licitacion.getEmpresaConstructora());
+					model.addAttribute("unidadFinanciamiento", licitacion.getUnidadFinanciamiento());
+					model.addAttribute("empresaNombre", licitacion.getEmpresaNombre());
+					model.addAttribute("empresaCuit", licitacion.getEmpresaCuit());
+					model.addAttribute("empresaEmail", licitacion.getEmpresaEmail());
+					model.addAttribute("representanteNombre", licitacion.getRepresentanteNombre());
+					model.addAttribute("representanteDni", licitacion.getRepresentanteDni());
+					model.addAttribute("representanteEmail", licitacion.getRepresentanteEmail());
 //					model.addAttribute("lic-plazo", licitacion.getPlazoEjecucionEnDias());
-					model.addAttribute("lic-presup-ini", licitacion.getPresupuestoAdjudicado());
-					model.addAttribute("lic-presup-fin", licitacion.getPresupuestoFinal());
-//					model.addAttribute("lic-fechaTemp-ini", licitacion.getFechaEstimadaInicio());
-//					model.addAttribute("lic-fechaTemp-fin", licitacion.getFechaEstimadaFin());
-//					model.addAttribute("lic-fechaReal-ini", licitacion.getFechaRealInicio());
-//					model.addAttribute("lic-fechaReal-fin", licitacion.getFechaRealFin());
+					model.addAttribute("presupuestoAdjudicado", licitacion.getPresupuestoAdjudicado());
+					model.addAttribute("presupuestoFinal", licitacion.getPresupuestoFinal());
+					model.addAttribute("fechaEstimadaInicio", parseDate(licitacion.getFechaEstimadaInicio()));
+					model.addAttribute("fechaEstimadaFinal", parseDate(licitacion.getFechaEstimadaFin()));
+					model.addAttribute("fechaRealInicio", parseDate(licitacion.getFechaRealInicio()));
+					model.addAttribute("fechaRealFinal", parseDate(licitacion.getFechaRealFin()));
+					
+//					String string = licitacion.getFechaEstimadaInicio();
+//					SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy"); 
+//				    Date convertedDate = dateFormat.parse(string); 
 					
 				}
-				
-			
 			
 			 
 		} catch(Exception e){
@@ -182,7 +187,7 @@ public class IssueController {
 	
 	@RequestMapping(value="/issues/updateIssue", method = RequestMethod.POST)
 	public @ResponseBody AlertStatus doUpdatetIssue(@ModelAttribute("issue") IssueDTO issue, 
-			@ModelAttribute("licitacion") IssueLicitacionDTO licitacion, HttpServletRequest request){
+			@ModelAttribute("licitacion") IssueLicitacionDTO licitacion, HttpServletRequest request) throws ParseException{
 		
 		try {			
 				User user =  getCurrentUser(SecurityContextHolder.getContext().getAuthentication());
@@ -213,8 +218,6 @@ public class IssueController {
 					
 					else{
 						licitacion.setNroReclamo(String.valueOf(issue.getId()));
-						licitacion.setEmpresaConstructora();
-						licitacion.setRepresentanteTecnico();
 					}
 					
 					issue.setLicitacion(licitacion);
@@ -228,7 +231,8 @@ public class IssueController {
 					revision.setEstado(issue.getStatus());
 					revision.setObservaciones(Messages.ISSUE_UPDATE_OBS);		
 					issue.getHistorial().add(revision);
-					issueService.updateIssue(issue, revision, licitacion);	
+					issueService.updateIssue(issue, revision);	
+					
 					return new AlertStatus(true, "El reclamo ha sido actualizado.");			
 			}
 		}			
@@ -263,5 +267,11 @@ public class IssueController {
         }
         return currentUser;
     }
+	
+	private String parseDate(Date date){
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+	    String parsedDate = df.format(date);
+	    return parsedDate;
+	}
 	
 }

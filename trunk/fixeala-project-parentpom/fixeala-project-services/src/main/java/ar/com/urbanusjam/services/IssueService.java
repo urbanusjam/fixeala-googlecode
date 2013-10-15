@@ -10,7 +10,7 @@ public interface IssueService {
 	
 	public void reportIssue(IssueDTO issue, IssueHistorialRevisionDTO historial);	
 	
-	public void updateIssue(IssueDTO issue, IssueHistorialRevisionDTO historial, IssueLicitacionDTO licitacion);	
+	public void updateIssue(IssueDTO issue, IssueHistorialRevisionDTO historial);	
 	
 	public List<IssueDTO> loadAllIssues();
 	
