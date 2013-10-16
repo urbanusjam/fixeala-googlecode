@@ -70,27 +70,53 @@
               	 <!-- user logged in -->
               	 <sec:authorize access="isAuthenticated()">
               	 
-              	 		<div id="btnLoggedUser" class="btn-group">
-						  <a class="btn btn-info" href="${pageContext.request.contextPath}/users/<sec:authentication property="principal.username"/>.html">
-						  	<i class="icon-user icon-white"></i>&nbsp;&nbsp;
-						  	<sec:authentication property="principal.username" />
-						  </a>
-						  <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-angle-down "></i></a>
-						  <ul class="dropdown-menu">
-						  	<li><a href="${pageContext.request.contextPath}/users/<sec:authentication property="principal.username"/>.html">Mi Perfil<i class="icon-list-alt icon-large pull-left"></i></a></li>
-						   	<li><a href="${pageContext.request.contextPath}/users.html">Mi Cuenta<i class="icon-cog icon-large pull-left"></i></a></li>
-						   	<li><a href="${pageContext.request.contextPath}/users.html"><i class="icon-map-marker icon-large pull-left"></i>Mis Reclamos</a></li>
-						   	<li><a href="${pageContext.request.contextPath}/users.html"><i class="icon-envelope icon-large pull-left"></i>Mis Mensajes</a></li>
+              	 <li class="dropdown" style="float:right">
+	                	<a id="loginLink" href="${pageContext.request.contextPath}/users/<sec:authentication property="principal.username"/>.html" 
+	                		class="dropdown-toggle" data-toggle="dropdown">  
+	                		     	
+	                	<b><sec:authentication property="principal.username" /></b>
+	                	&nbsp;<i class="icon-angle-down "></i>
+	                	</a>
+	               	  
+						 
+						  <ul class="dropdown-menu user-menu dropdown-yellow dropdown-caret dropdown-close">
+						  	<li><a href="${pageContext.request.contextPath}/users/<sec:authentication property="principal.username"/>.html"><i class="icon-user"></i>Perfil</a></li>
+						   	<li><a href="${pageContext.request.contextPath}/users.html"><i class="icon-cog"></i>Cuenta</a></li>
+<%-- 						   	<li><a href="${pageContext.request.contextPath}/users.html"><i class="icon-map-marker"></i>Reclamos</a></li> --%>
+<%-- 						   	<li><a href="${pageContext.request.contextPath}/users.html"><i class="icon-envelope"></i>Mensajes</a></li> --%>
 						    <li class="divider"></li>
 						    <li> 
 		                  	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 		                  		<c:url value="${pageContext.request.contextPath}/logout.html" var="logoutUrl"/>
 		                  		<a class="last" href="${logoutUrl}"> 
-		                  			<span><i class="icon-off icon-large"></i></span>Salir
+		                  			<span><i class="icon-off"></i></span>Salir
 		                  		</a>
  		                  	</li>     
 						  </ul>
-						</div>
+						</li>
+						
+						
+<!-- 						<div id="btnLoggedUser" class="btn-group"> -->
+<%-- 						  <a class="btn btn-info" href="${pageContext.request.contextPath}/users/<sec:authentication property="principal.username"/>.html"> --%>
+<!-- 						  	<i class="icon-user icon-white"></i>&nbsp;&nbsp; -->
+<%-- 						  	<sec:authentication property="principal.username" /> --%>
+<!-- 						  </a> -->
+<!-- 						  <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-angle-down "></i></a> -->
+<!-- 						  <ul class="dropdown-menu"> -->
+<%-- 						  	<li><a href="${pageContext.request.contextPath}/users/<sec:authentication property="principal.username"/>.html">Mi Perfil<i class="icon-list-alt icon-large pull-left"></i></a></li> --%>
+<%-- 						   	<li><a href="${pageContext.request.contextPath}/users.html">Mi Cuenta<i class="icon-cog icon-large pull-left"></i></a></li> --%>
+<%-- 						   	<li><a href="${pageContext.request.contextPath}/users.html"><i class="icon-map-marker icon-large pull-left"></i>Mis Reclamos</a></li> --%>
+<%-- 						   	<li><a href="${pageContext.request.contextPath}/users.html"><i class="icon-envelope icon-large pull-left"></i>Mis Mensajes</a></li> --%>
+<!-- 						    <li class="divider"></li> -->
+<!-- 						    <li>  -->
+<%-- 		                  	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> --%>
+<%-- 		                  		<c:url value="${pageContext.request.contextPath}/logout.html" var="logoutUrl"/> --%>
+<%-- 		                  		<a class="last" href="${logoutUrl}">  --%>
+<!-- 		                  			<span><i class="icon-off icon-large"></i></span>Salir -->
+<!-- 		                  		</a> -->
+<!--  		                  	</li>      -->
+<!-- 						  </ul> -->
+<!-- 						</div> -->
               	 
               	 
 <!-- 	              	<li class="dropdown"> -->
