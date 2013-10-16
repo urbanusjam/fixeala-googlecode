@@ -140,15 +140,15 @@
 				  inputclass: 'licitacion-textarea',
 				  ajaxOptions: {
 				        type: 'put'
-				  },
-				  validate: function(value) {
-					    if($.trim(value) == '') {
-					        return 'Este campo es requerido.';
-					    }
-					    if($.trim(value).length > 600) {
-					        return 'La longitud máxima del campo es de 600 caracteres.';
-					    }
 				  }
+// 				  validate: function(value) {
+// 					    if($.trim(value) == '') {
+// 					        return 'Este campo es requerido.';
+// 					    }
+// 					    if($.trim(value).length > 600) {
+// 					        return 'La longitud máxima del campo es de 600 caracteres.';
+// 					    }
+// 				  }
 			  });
 			  
 			  $("#lic-nroLicitacion").editable({
@@ -156,12 +156,12 @@
 				  name: 'nroLicitacion',
 				  ajaxOptions: {
 				        type: 'put'
-				  },
-				  validate: function(value) {
-					    if($.trim(value) == '') {
-					        return 'Este campo es requerido.';
-					    }
 				  }
+// 				  validate: function(value) {
+// 					    if($.trim(value) == '') {
+// 					        return 'Este campo es requerido.';
+// 					    }
+// 				  }
 			  });
 			  
 			  $("#lic-nroExpediente").editable({	
@@ -169,12 +169,12 @@
 				  name: 'nroExpediente',
 				  ajaxOptions: {
 				        type: 'put'
-				  },
-				  validate: function(value) {
-					    if($.trim(value) == '') {
-					        return 'Este campo es requerido.';
-					    }
 				  }
+// 				  validate: function(value) {
+// 					    if($.trim(value) == '') {
+// 					        return 'Este campo es requerido.';
+// 					    }
+// 				  }
 			  });
 			  
 			  $('#lic-tipo').editable({
@@ -342,7 +342,8 @@
 			      combodate: {
 			    	  	minYear: 2013,
 		                maxYear: 2015,
-		                minuteStep: 1
+		                minuteStep: 1,
+		                value: new Date()
 			      }
 			    });
 			  
