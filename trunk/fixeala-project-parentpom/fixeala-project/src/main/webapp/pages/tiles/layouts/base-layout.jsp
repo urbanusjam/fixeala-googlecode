@@ -15,6 +15,7 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery-1.9.1.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery-ui-1.10.3.custom.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.mockjax.js"></script> 
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.tablesorter.js"></script> 
   	<script type="text/javascript" src="http://code.jquery.com/jquery-migrate-1.1.0.js"></script>
     
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.geocomplete.js"></script>
@@ -25,7 +26,7 @@
 <%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap-datetimepicker.js"></script> --%>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/select2.js"></script>
   	
-  	
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap-contextmenu.js"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap-fileupload.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootbox.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap-wysiwyg.js"></script> 
