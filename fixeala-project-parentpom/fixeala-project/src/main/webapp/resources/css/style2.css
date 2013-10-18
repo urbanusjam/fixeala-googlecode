@@ -151,6 +151,12 @@ ul#loginNav li.loginLink {
 	float: left;
 }
 
+
+.user-menu > li > a [class*="icon-"] {
+margin-right: 10px;
+font-size: 120%;
+}
+
 ul#loginNav li.signupLink {
 	float: right;
 	margin-left: 5px;
@@ -208,6 +214,8 @@ ul#loginNav li.signupLink a:hover {
 	box-shadow: 0 rgba(0, 0, 0, 0);
 	float: right;
 }
+
+
 
 #issueNav .navbar-inner {
 	background: #5095BE;
@@ -773,6 +781,12 @@ div[data-role="editor-toolbar"] {
 	overflow:hidden;
 }
 
+#userModal{margin-top:-20px;}	
+#userModal	.modal-body {
+	max-height: 430px; 
+	overflow:hidden;
+}
+
 /* #mdl-licitacion .modal-footer{text-align:center;} */
 
 
@@ -795,6 +809,13 @@ div[data-role="editor-toolbar"] {
 /* 		 } */
 /* .tbl-licitacion-form  tbody td.dynamic{height:30px;} */
 
+
+
+#dahsboard-nav li a i{width: 25px; height:25px; margin-right:10px; text-align:center;}
+
+#dahsboard-nav li, #dahsboard-nav li a  {font-size:13px;}
+
+#dahsboard-nav li a{margin:5px 0;}
 
 
 /* Autocomplete
@@ -935,3 +956,10 @@ a.editable-click.editable-disabled {
 /*   color: grey; */
 /*   font-style: italic; */
 /* } */
+
+
+
+#contextmenu-issue, #contextmenu-user {
+  position: absolute;
+  display:none;
+}

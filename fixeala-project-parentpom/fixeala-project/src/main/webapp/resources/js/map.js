@@ -27,65 +27,8 @@ $(document).ready(function(){
           scrollwheel: false
         };
         
-        map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);	 
-     /***
-        google.maps.event.addListenerOnce(map, 'bounds_changed', function() { 
-        	
-        	// Getting the boundaries of the map 
-        	var bounds = map.getBounds(); 
-        	
-        	// Getting the corners of the map 
-        	var southWest = bounds.getSouthWest(); 
-        	var northEast = bounds.getNorthEast(); 
-        	
-        	// Calculating the distance from the top to the bottom of the map 
-        	var latSpan = northEast.lat() - southWest.lat(); 
-        	
-        	// Calculating the distance from side to side 
-        	var lngSpan = northEast.lng() - southWest.lng();         	
-        	
-        	// Creating a new MarkerManager object 
-        	var mgr = new MarkerManager(map);
-        	
-        	// Creating an array that will store the markers 
-        	var markers = [];
-        	
-        	/*
-        	// Creating a loop 
-        	for (var i = 0; i < 1000; i++) { 
-        		
-	        	// Creating a random position 
-	        	var lat = southWest.lat() + latSpan * Math.random(); 
-	        	var lng = southWest.lng() + lngSpan * Math.random(); 
-	        	var latlng = new google.maps.LatLng(lat, lng); 
-	        	
-	        	// Creating a marker. Note that we don't add it to the map 
-	        	var marker = new google.maps.Marker({ 
-	        		position: latlng 
-	        	}); 
-	        	
-	        	// Adding the marker to the markers array 
-	        	markers.push(marker); 
-        	
-        	}
-        	// Creating a MarkerClusterer object and adding the markers array to it
-        	
-        	//var markerclusterer = new MarkerClusterer(map, markers);
-        	
-        	/*
-        	// Making sure the MarkerManager is properly loaded before we use it 
-        	google.maps.event.addListener(mgr, 'loaded', function() { 
-        		
-	        	// Adding the markers to the MarkerManager 
-	        	mgr.addMarkers(markers, 1); 
-	        	
-	        	// Adding the markers to the map
-	        	mgr.refresh(); 
-	        	
-        	});
-        	
-        }); ***/
-	
+        map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+    
         google.maps.event.addListener(map, 'click', function(e) {	 
         	
         	if( $("#btnIssue").hasClass('active') ){
@@ -103,6 +46,9 @@ $(document).ready(function(){
 	 
       
  });//document.ready
+
+
+
 
 
 function initializeMiniMap(lat, lng, titulo) {

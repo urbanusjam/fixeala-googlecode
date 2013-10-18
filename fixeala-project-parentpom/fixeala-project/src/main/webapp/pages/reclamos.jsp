@@ -1,6 +1,5 @@
 <div id="content">
 
-			
 		<!-- Users -->
 	    <div class="page-header">
     	 	<h4><i class="icon-group"></i>&nbsp;&nbsp;<i class="icon-angle-right"></i>&nbsp;&nbsp;Lista de Reclamos</h4>    	 	
@@ -24,5 +23,6 @@
 			<tbody>			
 			</tbody>	
 		</table>
+		
 </div>
     	

@@ -229,8 +229,9 @@ public class IssueController {
 					revision.setOperacion(Operation.UPDATE);			
 					revision.setMotivo("MODIFICACION");			
 					revision.setEstado(issue.getStatus());
-					revision.setObservaciones(Messages.ISSUE_UPDATE_OBS);		
+					revision.setObservaciones(Messages.ISSUE_UPDATE_OBS);
 					issue.getHistorial().add(revision);
+					
 					issueService.updateIssue(issue, revision);	
 					
 					return new AlertStatus(true, "El reclamo ha sido actualizado.");			
@@ -269,9 +270,13 @@ public class IssueController {
     }
 	
 	private String parseDate(Date date){
-		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-	    String parsedDate = df.format(date);
-	    return parsedDate;
+		if(date != null){
+			DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+		    String parsedDate = df.format(date);
+		    return parsedDate;
+		}
+	
+		return "";
 	}
 	
 }
