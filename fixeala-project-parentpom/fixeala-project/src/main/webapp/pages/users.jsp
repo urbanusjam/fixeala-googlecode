@@ -1,4 +1,7 @@
-	<div id="content">
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<div id="content">
 	
         
 <%--        <h3>${usuario}</h3> --%>
@@ -14,13 +17,18 @@
 	    
 	    <div class="row">
 	    	<div class="span4 pull-left" style="padding:10px;text-align:left;margin:0; border:0px solid #000">
-			  Bienvenido, <b>Guillermo R. Weissman</b>
+			  Bienvenid@, <b>${current_nombre} ${current_apellido}</b>
 			  <br>
-			  <small>(Administrador)</small>
+			  <sec:authorize access="hasRole('ROLE_ADMIN')">
+			  	<small>(Administrador)</small>
+			  </sec:authorize>
+			  <sec:authorize access="hasRole('ROLE_MANAGER')">
+			  	<small>(Moderador)</small>
+			  </sec:authorize>
 			</div>
 			<div class="span4 pull-right" style="text-align:right;border:0px solid #000;">
-			  <h4>Ministerio de Ambiente y Espacio Público</h4>
-			  Ciudad de Buenos Aires, BA
+			  <h4>${current_area}</h4>
+			  ${current_ciudad}, ${current_provincia}
 			</div> 
 		</div>
 		

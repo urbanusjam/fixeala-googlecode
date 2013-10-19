@@ -99,6 +99,17 @@ public class HomeController {
 				user = userService.getUserByUsername(userID); 
 		
 				model.addAttribute("usuario", user.getUsername());
+				
+				if(user.isVerifiedOfficial()){
+					model.addAttribute("current_nombre", user.getNombre());
+					model.addAttribute("current_apellido", user.getApellido());
+					model.addAttribute("current_rol", user.getAuthorities().size() > 0 ? user.getAuthorities().get(0) : "");
+					model.addAttribute("current_area", user.getAreaNombre());
+					model.addAttribute("current_ciudad", user.getAreaCiudad());
+					model.addAttribute("current_provincia", user.getAreaProvinciaSigla());
+				}
+				
+				
 				model.addAttribute("email", user.getEmail());
 				model.addAttribute("barrio", user.getNeighborhood());
 			

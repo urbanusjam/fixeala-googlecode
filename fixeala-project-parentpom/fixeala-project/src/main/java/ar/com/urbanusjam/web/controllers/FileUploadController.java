@@ -72,7 +72,7 @@ public class FileUploadController {
 			
 			UserDTO userDTO = new UserDTO();
 			userDTO.setUsername(user.getUsername());
-			userDTO.setProfilePic(file.getOriginalFilename());			
+			//userDTO.setProfilePic(file.getOriginalFilename());			
 			userDTO.setNeighborhood("Congreso");			
 			userDTO.setEmail("guest@gmail.com");		
 			
