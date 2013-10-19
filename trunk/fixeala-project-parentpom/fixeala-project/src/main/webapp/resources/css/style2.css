@@ -783,7 +783,7 @@ div[data-role="editor-toolbar"] {
 
 #userModal{margin-top:-20px;}	
 #userModal	.modal-body {
-	max-height: 430px; 
+	max-height: 440px; 
 	overflow:hidden;
 }
 

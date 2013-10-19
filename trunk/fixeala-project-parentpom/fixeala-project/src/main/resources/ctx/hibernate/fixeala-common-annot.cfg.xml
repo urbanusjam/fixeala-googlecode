@@ -5,7 +5,8 @@
 
 <hibernate-configuration>
     <session-factory>        
-        <mapping class="ar.com.urbanusjam.entity.annotations.ActivationToken" />       
+        <mapping class="ar.com.urbanusjam.entity.annotations.ActivationToken" />   
+        <mapping class="ar.com.urbanusjam.entity.annotations.Area" />        
         <mapping class="ar.com.urbanusjam.entity.annotations.Authority" />   
         <mapping class="ar.com.urbanusjam.entity.annotations.Comment" />   
         <mapping class="ar.com.urbanusjam.entity.annotations.Issue" />    

@@ -347,16 +347,21 @@
 								    <div class="controls">
 								      <select class="span7">
 								    	<option>Administrador</option>
-								    	<option>Moderador</option>
-								    	<option selected="selected">Usuario</option>
+								    	<option selected="selected">Editor</option>
+								    	<option>Usuario</option>
 							    	  </select>
 								    </div>
 							     </div>
-							   <div class="controls">
-							      <label class="checkbox">
-							        <input type="checkbox" checked="checked"> Activo
-							      </label>
-							      
+							   <div class="control-group">
+							       	<label class="control-label" for="inputPassword">Estado</label>
+							      	<div class="controls">
+								      	<label class="radio">
+								        	<input type="radio" checked> Activo
+								        </label>
+								        <label class="radio" >
+								        	<input type="radio"> Bloqueado
+								    	</label>
+							      </div>
 							    </div>
 							   
 							  </fieldset>
@@ -372,37 +377,37 @@
 				    	<table class="table table-striped table-hover user-table">
 					    	<thead>
 					    		<tr>
-						    		<th width="200">Nombre</th>
+						    		<th width="200">Nombre de Usuario</th>
+						    		<th>Rol</th>
 						    		<th>Cargo</th>
 						    		<th width="200">Área</th>
 						    		<th>Sub-Área</th>
-						    		<th>Rol</th>
 						    		<th>Estado</th>
 					    		</tr>
 					    	</thead>
 					    	<tbody>
 					    		<tr>
-						    		<td>Fulgencio Pérez</td>
+						    		<td>perezf</td>
+						    		<td>EDITOR</td>
 						    		<td>Responsable de Área</td>
 						    		<td>Ministerio de Ambiente y Espacio Público (MAYEPGC)</td>
 						    		<td>-</td>
-						    		<td>Moderador</td>
 						    		<td><span class="label label-success">Activo</span></td>
 					    		</tr>
 					    		<tr>
-						    		<td>Mariano Daniel Campos</td>
+						    		<td>camposm</td>
+						    		<td>EDITOR</td>
 						    		<td>Responsable de Sub-Área</td>
 						    		<td>Ministerio de Ambiente y Espacio Público (MAYEPGC)</td>
 						    		<td>D. G. Limpieza (DGLIM)</td>
-						    		<td>Usuario</td>
 						    		<td><span class="label label-success">Activo</span></td>
 					    		</tr>
 					    		<tr>
-						    		<td>Gian Pablo Muraglia Pérez</td>
+						    		<td>muragliag</td>
+						    		<td>EDITOR</td>
 						    		<td>Responsable de Sub-Área</td>
 						    		<td>Ministerio de Ambiente y Espacio Público (MAYEPGC)</td>
 						    		<td>D. G. Alumbrado (DGALUM)</td>
-						    		<td>Usuario</td>
 						    		<td><span class="label label-error">Inactivo</span></td>
 					    		</tr>
 					    	</tbody>

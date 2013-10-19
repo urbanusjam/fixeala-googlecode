@@ -1,6 +1,20 @@
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<!-- Boolean isUser -->
+<!-- needed for creating the boolean: !isUser -->
+<c:set var="isUser" value="false" />
+<sec:authorize access="hasRole('ROLE_USER')">
+    <c:set var="isUser" value="true" />
+</sec:authorize>
+
+
 <div id="content">	
+
+
 		<!-- Issue -->
 		<script type="text/javascript">
+		
 		
 		//--NON-EDITABLE FIELDS
 		
@@ -15,31 +29,48 @@
 //    		var longitud = '${longitud}';
 //    		var estado = '${estado}';
    		
-</script>
+		</script>
 		
 		<script type="text/javascript">
 		
 	
-		$(function(){		
+		$(function(){	
 			
 			var id = '${id}';
 			var newTitle;
-
-			//resetLicitacionValues();
 			
-			//toggle `popup` / `inline` mode
+			$('#btn-update').attr('disabled', true);
+			
+			//default config
 			$.fn.editable.defaults.mode = 'popup';	
+			$.fn.editable.defaults.disabled = true;
 			
 			//modify buttons style
 			$.fn.editableform.buttons = 
 			  '<button type="submit" class="btn btn-warning editable-submit"><i class="icon-ok icon-white"></i></button>' +
-			  '<button type="button" class="btn editable-cancel"><i class="icon-remove"></i></button>';        
+			  '<button type="button" class="btn editable-cancel"><i class="icon-remove"></i></button>';     
 			
-			  //enable / disable
-// 			   $('#btn-edit').click(function() {
-// 			       $('#tbl-issue .editable').editable('toggleDisabled');
-// 			   }); 
-			 
+			$('#btn-edit').addClass('notClicked');
+			
+			//enable / disable
+		    $('#btn-edit').click(function() {
+		    	enableDisableFields();
+		    	if( $('#btn-update').is(":disabled") == true )
+					$('#btn-update').attr('disabled', false);
+		    	else
+		    		$('#btn-update').attr('disabled', true);
+		    }); 
+			  
+		    function enableDisableFields(){
+			   $('#issue-title').editable('toggleDisabled');
+		       $('#issue-barrio').editable('toggleDisabled');
+		       $('#issue-desc').editable('toggleDisabled');
+// 		       $('#issue-tags').editable('toggleDisabled');
+
+			   if(!${isUser})
+		       		$('#tbl-licitacion .editable').editable('toggleDisabled');
+		    }
+	
 			  //--NON-EDITABLE FIELDS
 			  
 			  $("#issue-id").editable({name: 'id',  disabled: true});			  
@@ -97,22 +128,8 @@
 			  	
 			  });
 			  
-			  $('#issue-tags').editable({
-				  	pk: 3,  
-				  	mode: 'popup',	
-					placement: 'right',
-			        inputclass: 'input-large',
-			        select2: {
-			        	tags: ['alumbrado', 'asfalto', 'bache', 'pozo'],
-			            tokenSeparators: [",", " "]
-			        },
-					ajaxOptions: {
-					    type: 'put'
-					}  
-			    }); 
-			  
 			  $("#issue-barrio").editable({
-				  pk: 4,  
+				  pk: 3,  
 				  name: 'neighborhood', 	
 				  mode: 'popup',	
 				  placement: 'right',
@@ -129,6 +146,24 @@
 					}
 			  });
 			  
+// 			  $('#issue-tags').editable({
+// 				  	pk: 4,  
+// 				  	mode: 'popup',	
+// 				  	name: 'tags',
+// 					placement: 'right',
+// 					emptytext:'Vacío',
+// 			        inputclass: 'input-large',
+// 			        select2: {
+// 			        	tags: ['alumbrado', 'asfalto', 'bache', 'pozo'],
+// 			            tokenSeparators: [",", " "]
+// 			        },
+// 					ajaxOptions: {
+// 					    type: 'put'
+// 					}  
+// 			    }); 
+			  
+			  
+			  
 			  
 			//---- CAMPOS LICITACION
 			 
@@ -136,6 +171,7 @@
 			  $("#lic-obra").editable({	
 				  pk: 5,  
 				  name: 'obra',
+				  emptytext:'Vacío',
 				  placement:'bottom',
 				  inputclass: 'licitacion-textarea',
 				  ajaxOptions: {
@@ -154,6 +190,7 @@
 			  $("#lic-nroLicitacion").editable({
 				  pk: 6,  
 				  name: 'nroLicitacion',
+				  emptytext:'Vacío',
 				  ajaxOptions: {
 				        type: 'put'
 				  }
@@ -167,6 +204,7 @@
 			  $("#lic-nroExpediente").editable({	
 				  pk: 7, 
 				  name: 'nroExpediente',
+				  emptytext:'Vacío',
 				  ajaxOptions: {
 				        type: 'put'
 				  }
@@ -179,8 +217,9 @@
 			  
 			  $('#lic-tipo').editable({
 				  name: 'tipoObra',
-				  value: 'Pública',
+				  value: 'Indefinido',
 			      source: [
+						{value: 'Indefinido', text: 'Indefinido'},
 						{value: 'Pública', text: 'Pública'},
 			            {value: 'Privada', text: 'Privada'},
 			            {value: 'Contratación directa', text: 'Contratación directa'}
@@ -208,6 +247,7 @@
 			  
 			  $("#lic-unidadEjecutora").editable({
 				  name: 'unidadEjecutora',
+				  emptytext:'Vacío',
 				  ajaxOptions: {
 				        type: 'put'
 				  }
@@ -215,6 +255,7 @@
 			  
 			  $("#lic-unidadFinanciamiento").editable({				
 				  name: 'unidadFinanciamiento',
+				  emptytext:'Vacío',
 				  ajaxOptions: {
 				        type: 'put'
 				  }		 
@@ -222,6 +263,7 @@
 			  
 			  $("#lic-empresaNombre").editable({	
 				  name: 'empresaNombre',
+				  emptytext:'Vacío',
 				  ajaxOptions: {
 				        type: 'put'
 				  }
@@ -229,6 +271,7 @@
 			  
 			  $("#lic-empresaCuit").editable({		
 				  name: 'empresaCuit',
+				  emptytext:'Vacío',
 				  ajaxOptions: {
 				        type: 'put'
 				  }
@@ -236,6 +279,7 @@
 			  
 			  $("#lic-empresaEmail").editable({	
 				  name: 'empresaEmail',
+				  emptytext:'Vacío',
 				  ajaxOptions: {
 				        type: 'put'
 				  }
@@ -243,6 +287,7 @@
 			  
 			  $("#lic-representanteNombre").editable({			
 				  name: 'representanteNombre',
+				  emptytext:'Vacío',
 				  ajaxOptions: {
 				        type: 'put'
 				  }
@@ -250,6 +295,7 @@
 			  
 			  $("#lic-representanteDni").editable({			
 				  name: 'representanteDni',
+				  emptytext:'Vacío',
 				  ajaxOptions: {
 				        type: 'put'
 				  }
@@ -257,6 +303,7 @@
 			  
 			  $("#lic-representanteEmail").editable({		
 				  name: 'representanteEmail',
+				  emptytext:'Vacío',
 				  ajaxOptions: {
 				        type: 'put'
 				  }
@@ -285,6 +332,7 @@
 				  name:'fechaEstimadaInicio',
 				  mode: 'popup',
 				  placement: 'top',
+				  emptytext:'Vacío',
 				  format: 'DD-MM-YYYY',    
 			      viewformat: 'DD/MM/YYYY',    
 			      combodate: {
@@ -303,6 +351,7 @@
 				  name:'fechaEstimadaFin',
 				  mode: 'popup',
 				  placement: 'right',
+				  emptytext:'Vacío',
 				  format: 'DD-MM-YYYY', 
 				  viewformat: 'DD/MM/YYYY',    
 			      combodate: {
@@ -320,6 +369,7 @@
 				  name:'fechaRealInicio',	
 				  mode: 'popup',
 				  placement: 'top',
+				  emptytext:'Vacío',
 				  format: 'DD-MM-YYYY',    
 			      viewformat: 'DD/MM/YYYY',    
 			      combodate: {
@@ -337,6 +387,7 @@
 				  name:'fechaRealFin',	
 				  mode: 'popup',
 				  placement: 'right',
+				  emptytext:'Vacío',
 				  format: 'DD-MM-YYYY',    
 			      viewformat: 'DD/MM/YYYY',   
 			      combodate: {
@@ -347,10 +398,7 @@
 			      }
 			    });
 			  
-	
-			  
 			  function resetLicitacionValues(){
-				  
 				  	 $('#lic-obra').editable('setValue', null); 
 				     $('#lic-nroLicitacion').editable('setValue', null); 
 				     $('#lic-nroExpediente').editable('setValue', null); 
@@ -371,10 +419,8 @@
 				     $('#fechaEstimadaFin').editable('setValue', null); 
 				     $('#fechaRealInicio').editable('setValue', null); 
 				     $('#fechaRealFin').editable('setValue', null); 
-				     
 			  }
 			
-			 
 			  
 			  //--RESET Form Licitacion 
 			  $('#reset-btn').click(function() {
@@ -520,14 +566,18 @@
 <!-- 			<div class="btn-group" style="float:right;">			 -->
 <!-- 				<button class="btn btn-success"><i class="icon-ok icon-large"></i>&nbsp;&nbsp;&nbsp;Resolver</button> -->
 <!-- 			</div> -->
-			<div id="btn-update" class="btn-group" style="float:right;">
-				<button class="btn btn-success"><i class="icon-save icon-large"></i>&nbsp;&nbsp;&nbsp;Guardar</button>			
+ 
+			<sec:authorize access="hasAnyRole('ROLE_USER','ROLE_ADMIN', 'ROLE_MANAGER')">
+
+
+			<div class="btn-group" style="float:right;">
+				<button id="btn-update"  class="btn btn-success"><i class="icon-save icon-large"></i>&nbsp;&nbsp;&nbsp;Guardar</button>			
 			</div>
-			<div id="btn-edit" class="btn-group" style="float:right;">
-				<button class="btn btn-info"><i class="icon-pencil icon-large"></i>&nbsp;&nbsp;&nbsp;Editar</button>			
+			<div class="btn-group" style="float:right;">
+				<button id="btn-edit" class="btn btn-info"><i class="icon-pencil icon-large"></i>&nbsp;&nbsp;&nbsp;Editar</button>			
 			</div>			
 			
-			
+			</sec:authorize>
 	
 	   </div>
 	   
@@ -600,7 +650,7 @@
 						  <tr>
 						    <th>Etiquetas:</th>
 						    <td>
-						    	<a href="#" id="issue-tags" data-type="select2" class="select2-container select2-container-multi select2"></a>
+<%-- 						    	<a href="#" id="issue-tags" data-type="select2" class="select2-container select2-container-multi select2">${tags}</a> --%>
 						    </td>						   
 						 </tr>
 					</table>	 	
@@ -675,7 +725,7 @@
 			      
 			      <br><br>
 			      
-			      <button id="reset-btn" class="btn btn-large btn-danger" style="margin-left:595px">Resetear valores</button>
+<!-- 			      <button id="reset-btn" class="btn btn-large btn-danger" style="margin-left:595px">Resetear valores</button> -->
 							
 					<table id="tbl-licitacion" class="table table-hover table-bordered table-striped">	
 					

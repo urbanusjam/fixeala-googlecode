@@ -51,7 +51,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		  else
 			  return null;		 
 	}
-
+ 
 
 	@Override
 	public boolean supports(Class<? extends Object> authentication) {

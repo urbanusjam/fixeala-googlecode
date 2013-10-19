@@ -31,7 +31,7 @@
          	<ul id="loginNav" class="nav">      
          		
          		<!-- user NOT logged in -->
-                <sec:authorize ifNotGranted="ROLE_USER">               
+                <sec:authorize ifNotGranted="ROLE_USER, ROLE_ADMIN, ROLE_MANAGER">               
 	           		<li class="dropdown">
 	                	<a id="loginLink" href="#" class="dropdown-toggle" data-toggle="dropdown">                	
 	                	LOGIN&nbsp;<i class="icon-angle-down "></i>

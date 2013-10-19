@@ -1,4 +1,4 @@
-package ar.com.urbanusjam.web.controllers;
+package ar.com.urbanusjam.web.utils;
 
 import java.io.Serializable;
 
