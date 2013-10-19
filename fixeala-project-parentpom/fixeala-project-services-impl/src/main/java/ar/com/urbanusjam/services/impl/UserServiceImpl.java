@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
@@ -100,10 +101,10 @@ public class UserServiceImpl implements UserService{
 		for(User u : users){			
 			List<Authority> authorities = authorityDAO.getAuthorities(u.getUsername());
 			
-			if(u.hasSingleRole("ROLE_USER", (Collection)authorities)){
+//			if(u.hasSingleRole("ROLE_USER", (Collection)authorities)){
 				UserDTO uDTO = convertToDTO(u);
 				usersDTO.add(uDTO);
-			}		
+//			}		
 		}
 		
 		return usersDTO;
@@ -219,6 +220,15 @@ public class UserServiceImpl implements UserService{
 		userDTO.setUsername(user.getUsername());		
 		userDTO.setEmail(user.getEmail());		
 		userDTO.setNeighborhood(user.getNeighborhood());
+		
+		List<String> roles = new ArrayList<String>();
+		
+		for(GrantedAuthority auth : user.getAuthorities()){
+			roles.add(auth.getAuthority());
+		}
+		
+		userDTO.setAuthorities(roles);
+		
 		return userDTO;
 	}
 	
