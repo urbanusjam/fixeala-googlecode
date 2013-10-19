@@ -24,15 +24,10 @@ import ar.com.urbanusjam.services.utils.Operation;
 public class IssueServiceImpl implements IssueService{
 	
 	private IssueDAO issueDAO;
-	private IssueHistorialRevisionDAO historialDAO;
 	private TagDAO tagDAO;
 	
 	public void setIssueDAO(IssueDAO issueDAO) {
 		this.issueDAO = issueDAO;
-	}
-		
-	public void setHistorialDAO(IssueHistorialRevisionDAO historialDAO) {
-		this.historialDAO = historialDAO;
 	}
 
 	public void setTagDAO(TagDAO tagDAO) {
@@ -45,7 +40,7 @@ public class IssueServiceImpl implements IssueService{
 		Issue issue = new Issue();
 		issue = this.convertTo(issueDTO);
 		issueDAO.saveIssue(issue);		
-		historialDAO.saveHistorial(convertTo(historialDTO));
+	//	historialDAO.saveHistorial(convertTo(historialDTO));
 	}
 	
 	@Override
@@ -200,17 +195,24 @@ public class IssueServiceImpl implements IssueService{
 		else
 			issue.setLicitacion(null);
 	
-		//historial de reviciones
+		//historial de revisiones
+		for(IssueHistorialRevisionDTO historial : issueDTO.getHistorial()){
+			issue.getRevisiones().add(convertTo(historial));
+		}
 		
 		
 		//tags
 		List<String> tagList = issueDTO.getTags();
 		
-		for(String t : tagList){
-			Tag newTag = new Tag();
-			newTag.setTagname(t);				
-			issue.addTag(newTag);	
+		if(tagList.size() > 0){
+			for(String t : tagList){
+				Tag newTag = new Tag();
+				newTag.setTagname(t);				
+				issue.addTag(newTag);	
+			}
 		}
+		
+		
 		
 		Calendar calendar = new GregorianCalendar();
 		calendar.setTime(issueDTO.getDate());
