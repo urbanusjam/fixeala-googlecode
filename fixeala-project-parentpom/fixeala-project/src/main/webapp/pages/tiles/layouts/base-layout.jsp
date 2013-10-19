@@ -329,7 +329,8 @@
 								            		$('.ajax_loading').hide(); 
 								            		
 								            		if (data.loggedIn) {						            			
-									                	 $('#loginNav').load(location.href + " #loginNav > *");							                
+									                	 //$('#loginNav').load(location.href + " #loginNav > *");	
+									                	 window.location.reload();
 											             return false;
 		 							                } else {							                
 									                    loginFailed(data);							                    

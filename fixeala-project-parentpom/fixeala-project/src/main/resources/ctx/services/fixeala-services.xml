@@ -14,7 +14,6 @@
 		
 	<bean name="issueService" class="ar.com.urbanusjam.services.impl.IssueServiceImpl" >
 		<property name="issueDAO" ref="issueDAO" />
-		<property name="historialDAO" ref="historialDAO" />
 		<property name="tagDAO" ref="tagDAO" />
 	</bean>
 	

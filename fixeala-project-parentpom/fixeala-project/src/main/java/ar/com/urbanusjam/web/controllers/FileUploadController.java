@@ -22,6 +22,9 @@ import org.springframework.web.multipart.MultipartFile;
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.UserService;
 import ar.com.urbanusjam.services.dto.UserDTO;
+import ar.com.urbanusjam.web.utils.Message;
+import ar.com.urbanusjam.web.utils.StatusResponse;
+import ar.com.urbanusjam.web.utils.UploadedFile;
 
 @Controller
 @RequestMapping(value="/template")

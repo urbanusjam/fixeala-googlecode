@@ -1,6 +1,7 @@
 package ar.com.urbanusjam.web.controllers;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.UserService;
 import ar.com.urbanusjam.services.dto.IssueDTO;
@@ -82,11 +86,24 @@ public class HomeController {
 				HttpServletRequest request){
 		
 		UserDTO user = new UserDTO();
+	
 		try{
-			user = userService.getUserByUsername(userID);  
-			model.addAttribute("usuario", user.getUsername());
-			model.addAttribute("email", user.getEmail());
-			model.addAttribute("barrio", user.getNeighborhood());
+			
+//			if(!loggedUser.equals(userID)){
+//				user = userService.getUserByUsername(userID);  
+//				if(!user.hasRole("ROLE_USER", user.getAuthorities())){
+//					return "redirect:/" + "error.html";
+//				}
+//			}
+			
+				user = userService.getUserByUsername(userID); 
+		
+				model.addAttribute("usuario", user.getUsername());
+				model.addAttribute("email", user.getEmail());
+				model.addAttribute("barrio", user.getNeighborhood());
+			
+			
+			
 		
 		}
 		catch(Exception e){
@@ -116,6 +133,8 @@ public class HomeController {
 		   e.printStackTrace();
 		   return null;
 		  }
-		 }
+	}
+	
+	
 
 }

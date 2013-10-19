@@ -1,6 +1,9 @@
 package ar.com.urbanusjam.web.controllers;
 
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -94,7 +97,8 @@ public class LoginController {
 		      SecurityContextHolder.getContext().setAuthentication(auth);	
 		      loggedUser.setLoggedIn(auth.isAuthenticated());
 		      loggedUser.setUsername(auth.getName());
-	      return loggedUser;
+		      return loggedUser;
+		      
 	      // return new LoginStatus(auth.isAuthenticated(), auth.getName());
 	    } catch (BadCredentialsException e) {
 	   //   return new LoginStatus(false, null);
@@ -107,7 +111,8 @@ public class LoginController {
 	  
 	  
 	@RequestMapping(value ="/logout", method = RequestMethod.GET)
-    public String logout(){    	
+    public String logout(HttpServletRequest request){    
+		String s = request.getRequestURL().toString();
     	return "index";
     }
 	  

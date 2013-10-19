@@ -83,9 +83,10 @@ public class IssueController {
 				model.addAttribute("latitud", issue.getLatitude());
 				model.addAttribute("longitud", issue.getLongitude());				
 				model.addAttribute("historial", issue.getHistorial());
+				model.addAttribute("tags", issue.getTags());
 				
 				model.addAttribute("cantidadRevisiones", issue.getHistorial().size());
-				model.addAttribute("cantidadLicitacion", issue.getLicitacion() != null ? 1 : 0);
+				model.addAttribute("cantidadLicitacion", issue.getLicitacion().getNroLicitacion() != null ? 1 : 0);
 				model.addAttribute("cantidadReclamosSimilares", 0);
 				model.addAttribute("cantidadArchivos", 0);
 				model.addAttribute("cantidadComentarios", issue.getComentarios().size());				
@@ -174,6 +175,7 @@ public class IssueController {
 					issue.setId(Long.valueOf(id));
 					revision.setNroReclamo(issue.getId());	
 					issue.setLicitacion(null);
+					issue.getHistorial().add(revision);
 					issueService.reportIssue(issue, revision);			
 					
 					return new AlertStatus(true, "Su reclamo ha sido registrado.");			
