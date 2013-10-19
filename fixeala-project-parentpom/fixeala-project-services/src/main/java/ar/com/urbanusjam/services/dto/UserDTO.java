@@ -13,10 +13,16 @@ public class UserDTO implements Serializable {
 	private String password;	
 	private String newPassword;	
 	private String email;
-	private String profilePic;
+	private String nombre;
+	private String apellido;
+	private String cargo;
+	private String areaNombre;
+	private String areaCiudad;
+	private String areaProvinciaSigla;
 	private String neighborhood;
 	private Date registrationDate;
 	private List<String> authorities;	
+	private boolean verifiedOfficial;
 	private boolean enabled = false;
 	
 	public UserDTO(){}
@@ -52,6 +58,55 @@ public class UserDTO implements Serializable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getApellido() {
+		return apellido;
+	}
+
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
+	}
+
+	public String getCargo() {
+		return cargo;
+	}
+
+	public void setCargo(String cargo) {
+		this.cargo = cargo;
+	}
+
+	public String getAreaNombre() {
+		return areaNombre;
+	}
+
+	public void setAreaNombre(String areaNombre) {
+		this.areaNombre = areaNombre;
+	}
+
+	public String getAreaCiudad() {
+		return areaCiudad;
+	}
+
+	public void setAreaCiudad(String areaCiudad) {
+		this.areaCiudad = areaCiudad;
+	}
+
+	public String getAreaProvinciaSigla() {
+		return areaProvinciaSigla;
+	}
+
+	public void setAreaProvinciaSigla(String areaProvinciaSigla) {
+		this.areaProvinciaSigla = areaProvinciaSigla;
+	}
 
 	public List<String> getAuthorities() {
 		return authorities;
@@ -68,13 +123,13 @@ public class UserDTO implements Serializable {
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
-
-	public String getProfilePic() {
-		return profilePic;
+	
+	public boolean isVerifiedOfficial() {
+		return verifiedOfficial;
 	}
 
-	public void setProfilePic(String profilePic) {
-		this.profilePic = profilePic;
+	public void setVerifiedOfficial(boolean verifiedOfficial) {
+		this.verifiedOfficial = verifiedOfficial;
 	}
 
 	public String getNeighborhood() {
@@ -93,13 +148,18 @@ public class UserDTO implements Serializable {
 		this.registrationDate = registrationDate;
 	}
 
-	
+	public boolean hasRole(String role, List<String> authorities) {
+	       
+		boolean hasRole = false;
+	       
+		for (String auth : authorities) {
+    	   hasRole = auth.equals(role);
+           break;
+		}       
+     
+        return hasRole;
+	}
 
-	
-	
 
-	
-	
-	
 
 }
