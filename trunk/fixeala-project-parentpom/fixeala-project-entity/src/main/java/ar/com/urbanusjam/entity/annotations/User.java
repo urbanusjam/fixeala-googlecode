@@ -10,7 +10,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -35,8 +37,30 @@ public class User implements UserDetails {
     @Column(name="EMAIL")
     private String email;
     
+    @Column(name="NAME")
+    private String nombre;
+    
+    @Column(name="LAST_NAME")
+    private String apellido;
+    
+    @OneToOne
+	@JoinColumn(name = "ID_AREA")
+    private Area area;
+    
+    @Column(name="GOV_POSITION")
+    private String cargo;
+    
+    @Column(name="GOV_SUB_AREA")
+    private String subArea;
+    
+    @Column(name="GOV_SUB_AREA_ACRONYM")
+    private String siglaSubArea;
+    
     @Column(name="NEIGHBORHOOD")
-    private String neighborhood;    
+    private String neighborhood;   
+    
+    @Column(name="VERIFIED_OFFICIAL")
+    private boolean verifiedOfficial;
        
     @Column(name="ENABLED")
     private boolean enabled;
@@ -121,6 +145,54 @@ public class User implements UserDetails {
 		this.email = email;
 	}
 		
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getApellido() {
+		return apellido;
+	}
+
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
+	}
+	
+	public Area getArea() {
+		return area;
+	}
+
+	public void setArea(Area area) {
+		this.area = area;
+	}
+
+	public String getCargo() {
+		return cargo;
+	}
+
+	public void setCargo(String cargo) {
+		this.cargo = cargo;
+	}
+
+	public String getSubArea() {
+		return subArea;
+	}
+
+	public void setSubArea(String subArea) {
+		this.subArea = subArea;
+	}
+
+	public String getSiglaSubArea() {
+		return siglaSubArea;
+	}
+
+	public void setSiglaSubArea(String siglaSubArea) {
+		this.siglaSubArea = siglaSubArea;
+	}
+
 	public String getNeighborhood() {
 		return neighborhood;
 	}
@@ -137,7 +209,15 @@ public class User implements UserDetails {
         this.enabled = enabled;
     }
        
-    public Date getClosedAccountDate() {
+    public boolean isVerifiedOfficial() {
+		return verifiedOfficial;
+	}
+
+	public void setVerifiedOfficial(boolean verifiedOfficial) {
+		this.verifiedOfficial = verifiedOfficial;
+	}
+
+	public Date getClosedAccountDate() {
 		return closedAccountDate;
 	}
 

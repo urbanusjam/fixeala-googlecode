@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -67,18 +69,13 @@ public class Issue implements Serializable  {
 	
 	@Column(name = "DESCRIPTION")
 	private String description;
-
 		
-    @OneToMany(mappedBy="issue", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)  
-	private Collection<IssueHistorialRevision> revisiones;
+    @OneToMany(mappedBy="issue", fetch = FetchType.EAGER, cascade = CascadeType.ALL)  
+	private Set<IssueHistorialRevision> revisiones;
 
-    
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn  
-	//@PrimaryKeyJoinColumn
-	//@JoinColumn(name = "ID_ISSUE_LICITACION", nullable = true, updatable = true, insertable = true)
 	private IssueLicitacion licitacion;
-	
 	
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "ISSUE_TAG",
@@ -96,7 +93,7 @@ public class Issue implements Serializable  {
 	
 	public Issue(){   
 		tagsList = new ArrayList<Tag>(); 
-		revisiones = new ArrayList<IssueHistorialRevision>();
+		revisiones = new HashSet<IssueHistorialRevision>();
 	}	
 		
 	
@@ -222,11 +219,11 @@ public class Issue implements Serializable  {
 		this.tagsList = tagsList;
 	}
 		
-	public Collection<IssueHistorialRevision> getRevisiones() {
+	public Set<IssueHistorialRevision> getRevisiones() {
 		return revisiones;
 	}
 
-	public void setRevisiones(Collection<IssueHistorialRevision> revisiones) {
+	public void setRevisiones(Set<IssueHistorialRevision> revisiones) {
 		this.revisiones = revisiones;
 	}
 
