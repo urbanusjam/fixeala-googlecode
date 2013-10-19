@@ -219,15 +219,26 @@ public class UserServiceImpl implements UserService{
 		UserDTO userDTO = new UserDTO();
 		userDTO.setUsername(user.getUsername());		
 		userDTO.setEmail(user.getEmail());		
-		userDTO.setNeighborhood(user.getNeighborhood());
 		
 		List<String> roles = new ArrayList<String>();
-		
 		for(GrantedAuthority auth : user.getAuthorities()){
 			roles.add(auth.getAuthority());
 		}
-		
 		userDTO.setAuthorities(roles);
+		
+		if(user.isVerifiedOfficial()){
+			userDTO.setVerifiedOfficial(user.isVerifiedOfficial());
+			userDTO.setNombre(user.getNombre());
+			userDTO.setApellido(user.getApellido());
+			userDTO.setCargo(user.getCargo());
+			userDTO.setAreaNombre(user.getArea().getNombre());
+			userDTO.setAreaCiudad(user.getArea().getCiudad());
+			userDTO.setAreaProvinciaSigla(user.getArea().getProvinciaSigla());
+		}
+		
+		else{
+			userDTO.setNeighborhood(user.getNeighborhood());
+		}
 		
 		return userDTO;
 	}
