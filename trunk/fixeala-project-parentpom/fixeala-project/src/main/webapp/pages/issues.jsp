@@ -3,9 +3,9 @@
 
 <!-- Boolean isUser -->
 <!-- needed for creating the boolean: !isUser -->
-<c:set var="isUser" value="false" />
+<c:set var="isCommonUser" value="false" />
 <sec:authorize access="hasRole('ROLE_USER')">
-    <c:set var="isUser" value="true" />
+    <c:set var="isCommonUser" value="true" />
 </sec:authorize>
 
 
@@ -67,7 +67,7 @@
 		       $('#issue-desc').editable('toggleDisabled');
 // 		       $('#issue-tags').editable('toggleDisabled');
 
-			   if(!${isUser})
+			   if(!${isCommonUser})
 		       		$('#tbl-licitacion .editable').editable('toggleDisabled');
 		    }
 	
@@ -568,15 +568,12 @@
 <!-- 			</div> -->
  
 			<sec:authorize access="hasAnyRole('ROLE_USER','ROLE_ADMIN', 'ROLE_MANAGER')">
-
-
-			<div class="btn-group" style="float:right;">
-				<button id="btn-update"  class="btn btn-success"><i class="icon-save icon-large"></i>&nbsp;&nbsp;&nbsp;Guardar</button>			
-			</div>
-			<div class="btn-group" style="float:right;">
-				<button id="btn-edit" class="btn btn-info"><i class="icon-pencil icon-large"></i>&nbsp;&nbsp;&nbsp;Editar</button>			
-			</div>			
-			
+				<div class="btn-group" style="float:right;">
+					<button id="btn-update"  class="btn btn-success"><i class="icon-save icon-large"></i>&nbsp;&nbsp;&nbsp;Guardar</button>			
+				</div>
+				<div class="btn-group" style="float:right;">
+					<button id="btn-edit" class="btn btn-info"><i class="icon-pencil icon-large"></i>&nbsp;&nbsp;&nbsp;Editar</button>			
+				</div>			
 			</sec:authorize>
 	
 	   </div>
