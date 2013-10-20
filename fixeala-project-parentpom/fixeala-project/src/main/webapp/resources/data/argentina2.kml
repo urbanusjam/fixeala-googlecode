@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<NetworkLink>
+<name><![CDATA[Departamentos Argentina]]></name>
+<Link>
+<href>
+https://www.google.com/fusiontables/exporttable?query=select+col10+from+1u1HKd6V1k73KaDPk7DwQnljhuJ1L6eHRz6iyIgI&amp;o=kmllink&amp;g=col10</href>
+</Link>
+</NetworkLink>
+</kml>
