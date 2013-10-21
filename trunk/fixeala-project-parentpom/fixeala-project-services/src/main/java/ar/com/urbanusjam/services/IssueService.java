@@ -17,6 +17,8 @@ public interface IssueService {
 	
 	public List<IssueDTO> loadIssuesByStatus(String[] status);
 	
+	public List<IssueDTO> loadIssuesByUser(String username);
+	
 	public List<String> getTagList();
 	
 	public IssueDTO getIssueById(String issueID);
