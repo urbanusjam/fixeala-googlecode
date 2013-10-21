@@ -1,10 +1,12 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%-- <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%> --%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
 <head>
+<!-- <meta http-equiv="content-type" content="text/html; charset=UTF8"> -->
 <!--  	<meta name="viewport" content="initial-scale=1.0, user-scalable=no"> -->
 	<title><tiles:insertAttribute name="title" ignore="true" /></title>	
 	 
@@ -13,14 +15,20 @@
   	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&libraries=places&language=ES"></script> 
   	  	  	
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.jsonp-2.4.0.min.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery-ui-1.10.3.custom.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.mockjax.js"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.tablesorter.js"></script> 
   	<script type="text/javascript" src="http://code.jquery.com/jquery-migrate-1.1.0.js"></script>
     
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.geocomplete.js"></script>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/d3.v3.js"></script>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/d3.jsonp.js"></script>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/togeojson.js"></script>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/topojson.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/map.js"></script>
-  	 		
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/map-d3.js" charset="utf-8"></script>
+  		
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap-editable.js"></script>
 <%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap-datetimepicker.js"></script> --%>
@@ -75,6 +83,21 @@
 <!-- <link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css " rel="stylesheet"> -->
 <!-- <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" /> -->
 
+
+<style>
+
+path {
+  fill: #ccc;
+  stroke: #fff;
+  stroke-width: .5px;
+}
+
+path:hover {
+  fill: red;
+}
+
+</style>
+
   	<script type="text/javascript">
     //<![CDATA[
                
@@ -82,7 +105,8 @@
   		
 		$(document).ready(function(){
 			
-			 
+		
+
 //             $( "#province" ).typeahead({
 //               source: provinces_list
 //             });
@@ -108,8 +132,8 @@
 		
 // 			$(".issueDesc").shorten({
 // 			    "showChars" : 200,
-// 			    "moreText"  : "« mostrar más »",
-// 			    "lessText"  : "« mostrar menos »",
+// 			    "moreText"  : "Â« mostrar mÃ¡s Â»",
+// 			    "lessText"  : "Â« mostrar menos Â»",
 // 			});
 			
 			$(function(){
@@ -174,8 +198,8 @@
 				$("#issueForm").formwizard({ 				 	
 				 	focusFirstInput : true,
 				 	textSubmit: 'Enviar',
-				 	textNext: 'Siguiente »',
-				 	textBack: '« Anterior',				
+				 	textNext: 'Siguiente Â»',
+				 	textBack: 'Â« Anterior',				
 				 	formPluginEnabled: true,
 				 	validationEnabled: true,
 				 /*	formOptions :{
@@ -186,7 +210,7 @@
 				        dataType: 'json',	
 				        success: function(alertStatus){
 				        	
-// 				        	bootbox.confirm("¿Confirma que desea registrar su reclamo?", function(response) {			        		  
+// 				        	bootbox.confirm("Â¿Confirma que desea registrar su reclamo?", function(response) {			        		  
 // 			 	    			 if(response){	
 			 	    				 
 		 	    						//Confirm
@@ -275,7 +299,7 @@
 			
 			var loginFailed = function(data, status) {
 		        $(".alert").remove();
-		        $('#username').before('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times;</a>El usuario y/o la contraseña <br>son incorrectos.</div>');
+		        $('#username').before('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times;</a>El usuario y/o la contraseÃ±a <br>son incorrectos.</div>');
 		        $('.ajax_loading').hide();
 		        $('#btnLogin').show();	
 		        $('#loginForm').each(function(){
@@ -354,7 +378,7 @@
             // Tag events
             //-------------------------------
             
-            //var sampleTags = ['luminaria apagada', 'acera rota', 'bache', 'vehÃ­culo abandonado', 'residuos'];
+            //var sampleTags = ['luminaria apagada', 'acera rota', 'bache', 'vehÃƒÂ­culo abandonado', 'residuos'];
             var eventTags = $('#eventTags');
 
             var addEvent = function(text) {
@@ -430,7 +454,7 @@
                        	
             	if ($("#issueStep3").css("display") == 'block'){  		
             		
-            			bootbox.confirm("¿Confirma que desea registrar su reclamo?", function(result){
+            			bootbox.confirm("Â¿Confirma que desea registrar su reclamo?", function(result){
                     		
                     		$.ajax({
                     			url: "./reportIssue.html",

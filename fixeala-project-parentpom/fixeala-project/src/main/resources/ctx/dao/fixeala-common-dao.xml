@@ -24,6 +24,8 @@
     
     <bean id="licitacionDAO" class="ar.com.urbanusjam.dao.impl.IssueLicitacionDAOImpl" parent="hibernateParent" /> 
     
+    <bean id="areaDAO" class="ar.com.urbanusjam.dao.impl.AreaDAOImpl" parent="hibernateParent" />
+    
     <bean id="tagDAO" class="ar.com.urbanusjam.dao.impl.TagDAOImpl" parent="hibernateParent" /> 
     
       

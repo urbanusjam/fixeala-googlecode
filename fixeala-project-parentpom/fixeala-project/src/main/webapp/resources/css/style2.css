@@ -534,7 +534,7 @@ legend {
 	clear: both;
 }
 
-#map_canvas {
+#map_canvas, #map_d3 {
 	float: left;
 	overflow: hidden;
 	width: 1178px; /* border adds 2 pixels to width */

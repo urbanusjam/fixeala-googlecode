@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import ar.com.urbanusjam.entity.annotations.User;
@@ -79,22 +80,24 @@ public class IssueController {
 				model.addAttribute("ciudad", issue.getCity());
 				model.addAttribute("provincia", issue.getProvince());
 				model.addAttribute("usuario", issue.getUser().getUsername());
+				model.addAttribute("area", issue.getArea());		
 				model.addAttribute("descripcion", issue.getDescription());
 				model.addAttribute("latitud", issue.getLatitude());
-				model.addAttribute("longitud", issue.getLongitude());				
+				model.addAttribute("longitud", issue.getLongitude());	
 				model.addAttribute("historial", issue.getHistorial());
 				model.addAttribute("tags", issue.getTags());
 				
 				model.addAttribute("cantidadRevisiones", issue.getHistorial().size());
-				model.addAttribute("cantidadLicitacion", issue.getLicitacion().getNroLicitacion() != null ? 1 : 0);
+				model.addAttribute("cantidadLicitacion", issue.getLicitacion() != null ? 1 : 0);
 				model.addAttribute("cantidadReclamosSimilares", 0);
 				model.addAttribute("cantidadArchivos", 0);
 				model.addAttribute("cantidadComentarios", issue.getComentarios().size());				
 				
 				IssueLicitacionDTO licitacion = new IssueLicitacionDTO();
-				licitacion = issue.getLicitacion();
 				
-				if(licitacion.getNroLicitacion() != null){
+				if(issue.getLicitacion() != null){
+					
+					licitacion = issue.getLicitacion();
 					
 					model.addAttribute("obra", licitacion.getObra());
 					model.addAttribute("nroLicitacion", licitacion.getNroLicitacion());
@@ -176,7 +179,12 @@ public class IssueController {
 					revision.setNroReclamo(issue.getId());	
 					issue.setLicitacion(null);
 					issue.getHistorial().add(revision);
-					issueService.reportIssue(issue, revision);			
+					
+					//asignar AREA segun ubicacion geografica
+				//	issue.setAssignedArea(issueService.getAreaByName("Comuna 1"));
+					
+					//metodo buscar area segun coordenadas del reclamo
+					issueService.reportIssue(issue);			
 					
 					return new AlertStatus(true, "Su reclamo ha sido registrado.");			
 			}
@@ -215,7 +223,7 @@ public class IssueController {
 					userDTO.setAuthorities(authorities);	
 					issue.setUser(userDTO);	
 					
-					if(licitacion.getNroLicitacion() == null)
+					if(licitacion.getNroLicitacion() == null || licitacion.getNroLicitacion() == "")
 						licitacion = null;
 					
 					else{
@@ -233,8 +241,9 @@ public class IssueController {
 					revision.setEstado(issue.getStatus());
 					revision.setObservaciones(Messages.ISSUE_UPDATE_OBS);
 					issue.getHistorial().add(revision);
+					issue.setAssignedArea(issueService.getAreaByName("Comuna 1"));
 					
-					issueService.updateIssue(issue, revision);	
+					issueService.updateIssue(issue);	
 					
 					return new AlertStatus(true, "El reclamo ha sido actualizado.");			
 			}
@@ -245,7 +254,51 @@ public class IssueController {
 	
 	}
 	
+	
+	@RequestMapping(value="/issues/updateIssueStatus", method = RequestMethod.POST)
+	public @ResponseBody AlertStatus doUpdatetIssue(@RequestParam("issueID") String issueID, 
+			@RequestParam("newStatus") String newStatus, HttpServletRequest request) throws ParseException{
 		
+		try {			
+			User user =  getCurrentUser(SecurityContextHolder.getContext().getAuthentication());
+			UserDetails userDB = userService.loadUserByUsername(user.getUsername());		
+			
+			if(userDB == null){
+				return new AlertStatus(false, "Debe estar logueado para ingresar un nuevo reclamo.");
+			}						
+		
+			//user is logged-in
+			else{
+								
+				
+				IssueDTO issue = new IssueDTO();
+				issue = issueService.getIssueById(issueID);
+				issue.setUser(issue.getUser());	
+				issue.setStatus(newStatus);
+
+				IssueHistorialRevisionDTO revision = new IssueHistorialRevisionDTO();
+				revision.setFecha(new Date());
+				revision.setUsername(issue.getUser().getUsername());			
+				revision.setNroReclamo(issue.getId());			
+				revision.setOperacion(Operation.UPDATE);			
+				revision.setMotivo("MODIFICACION");			
+				revision.setEstado(issue.getStatus());
+				revision.setObservaciones("Se actualiz— el estado del reclamo.");
+				issue.getHistorial().add(revision);
+			
+				issueService.updateIssue(issue);	
+				
+				return new AlertStatus(true, "El reclamo ha sido actualizado.");			
+		}
+	}			
+	catch(AccessDeniedException e){
+		return new AlertStatus(false, "Debe estar logueado para ingresar un nuevo reclamo.");
+	}
+		
+	}
+	
+		
+	
 		
 	@RequestMapping(value="/loadTags", method = RequestMethod.GET)
 	public @ResponseBody List<String> loadTagList(HttpServletRequest request){
@@ -280,5 +333,20 @@ public class IssueController {
 	
 		return "";
 	}
+	
+	
+	
+	public static int randomNumber(int min, int max) {
+
+	    // Usually this can be a field rather than a method variable
+	    Random rand = new Random();
+
+	    // nextInt is normally exclusive of the top value,
+	    // so add 1 to make it inclusive
+	    int randomNum = rand.nextInt((max - min) + 1) + min;
+
+	    return randomNum;
+	}
+	
 	
 }
