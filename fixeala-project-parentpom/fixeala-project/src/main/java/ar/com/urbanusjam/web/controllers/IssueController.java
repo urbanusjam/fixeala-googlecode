@@ -256,7 +256,7 @@ public class IssueController {
 	
 	
 	@RequestMapping(value="/issues/updateIssueStatus", method = RequestMethod.POST)
-	public @ResponseBody AlertStatus doUpdatetIssue(@RequestParam("issueID") String issueID, 
+	public @ResponseBody AlertStatus doUpdatetIssueStatus(@RequestParam("issueID") String issueID, 
 			@RequestParam("newStatus") String newStatus, HttpServletRequest request) throws ParseException{
 		
 		try {			
@@ -269,7 +269,7 @@ public class IssueController {
 		
 			//user is logged-in
 			else{
-								
+											
 				
 				IssueDTO issue = new IssueDTO();
 				issue = issueService.getIssueById(issueID);
@@ -283,7 +283,7 @@ public class IssueController {
 				revision.setOperacion(Operation.UPDATE);			
 				revision.setMotivo("MODIFICACION");			
 				revision.setEstado(issue.getStatus());
-				revision.setObservaciones("Se actualiz— el estado del reclamo.");
+				revision.setObservaciones("El reclamo ha sido " + newStatus + ".");
 				issue.getHistorial().add(revision);
 			
 				issueService.updateIssue(issue);	
