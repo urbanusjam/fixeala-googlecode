@@ -25,6 +25,8 @@ public class UserDTO implements Serializable {
 	private boolean verifiedOfficial;
 	private boolean enabled = false;
 	
+	private int cantidadIssues; 
+	
 	public UserDTO(){}
 	
 	public String getUsername() {
@@ -146,6 +148,14 @@ public class UserDTO implements Serializable {
 
 	public void setRegistrationDate(Date registrationDate) {
 		this.registrationDate = registrationDate;
+	}
+	
+	public int getCantidadIssues() {
+		return cantidadIssues;
+	}
+
+	public void setCantidadIssues(int cantidadIssues) {
+		this.cantidadIssues = cantidadIssues;
 	}
 
 	public boolean hasRole(String role, List<String> authorities) {
