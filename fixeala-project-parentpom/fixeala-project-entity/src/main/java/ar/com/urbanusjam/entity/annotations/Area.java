@@ -1,12 +1,17 @@
 package ar.com.urbanusjam.entity.annotations;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -37,6 +42,12 @@ public class Area implements Serializable {
 	
 	@Column(name = "CITY_ACRONYM")
 	private String ciudadSigla;
+	
+	@OneToMany(mappedBy="assignedArea", fetch = FetchType.EAGER, cascade = CascadeType.ALL)  
+	private Set<Issue> issues = new HashSet<Issue>();
+	
+	//private Set<User> officials = new HashSet<User>();
+	
 	
 	
 	public Area() { }
@@ -90,16 +101,21 @@ public class Area implements Serializable {
 		this.ciudad = ciudad;
 	}
 
-
 	public String getCiudadSigla() {
 		return ciudadSigla;
 	}
-
 
 	public void setCiudadSigla(String ciudadSigla) {
 		this.ciudadSigla = ciudadSigla;
 	}
 
+	public Set<Issue> getIssues() {
+		return issues;
+	}
+
+	public void setIssues(Set<Issue> issues) {
+		this.issues = issues;
+	}
 	
 
 }

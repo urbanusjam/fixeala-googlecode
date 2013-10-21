@@ -17,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -74,14 +75,14 @@ public class Issue implements Serializable  {
 	@JoinColumn(name = "ID_ASSIGNED_OFFICIAL")
 	private User assignedOfficial;
 	
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "ID_AREA")
 	private Area assignedArea;
 		
     @OneToMany(mappedBy="issue", fetch = FetchType.EAGER, cascade = CascadeType.ALL)  
 	private Set<IssueHistorialRevision> revisiones;
 
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn  
 	private IssueLicitacion licitacion;
 	
