@@ -5,16 +5,19 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import ar.com.urbanusjam.dao.AreaDAO;
 import ar.com.urbanusjam.dao.IssueDAO;
 import ar.com.urbanusjam.dao.IssueHistorialRevisionDAO;
 import ar.com.urbanusjam.dao.IssueLicitacionDAO;
 import ar.com.urbanusjam.dao.TagDAO;
+import ar.com.urbanusjam.entity.annotations.Area;
 import ar.com.urbanusjam.entity.annotations.Issue;
 import ar.com.urbanusjam.entity.annotations.IssueHistorialRevision;
 import ar.com.urbanusjam.entity.annotations.IssueLicitacion;
 import ar.com.urbanusjam.entity.annotations.Tag;
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.IssueService;
+import ar.com.urbanusjam.services.dto.AreaDTO;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.IssueHistorialRevisionDTO;
 import ar.com.urbanusjam.services.dto.IssueLicitacionDTO;
@@ -24,10 +27,16 @@ import ar.com.urbanusjam.services.utils.Operation;
 public class IssueServiceImpl implements IssueService{
 	
 	private IssueDAO issueDAO;
+	private AreaDAO areaDAO;
 	private TagDAO tagDAO;
+
 	
 	public void setIssueDAO(IssueDAO issueDAO) {
 		this.issueDAO = issueDAO;
+	}
+
+	public void setAreaDAO(AreaDAO areaDAO) {
+		this.areaDAO = areaDAO;
 	}
 
 	public void setTagDAO(TagDAO tagDAO) {
@@ -36,18 +45,18 @@ public class IssueServiceImpl implements IssueService{
 
 
 	@Override
-	public void reportIssue(IssueDTO issueDTO, IssueHistorialRevisionDTO historialDTO) {		
+	public void reportIssue(IssueDTO issueDTO) {
+		Area area = areaDAO.getAreaByName("Comuna 1");
 		Issue issue = new Issue();
 		issue = this.convertTo(issueDTO);
+		issue.setAssignedArea(area);
 		issueDAO.saveIssue(issue);		
-	//	historialDAO.saveHistorial(convertTo(historialDTO));
 	}
 	
 	@Override
-	public void updateIssue(IssueDTO issueDTO, IssueHistorialRevisionDTO historialDTO) {
+	public void updateIssue(IssueDTO issueDTO) {
 		Issue issue = new Issue();
 		issue = this.convertTo(issueDTO);
-		issue.getRevisiones().add(convertTo(historialDTO));
 		issueDAO.updateIssue(issue);
 	}
 
@@ -79,7 +88,34 @@ public class IssueServiceImpl implements IssueService{
 		return convertToDTO(issue);		
 	}
 	
+	@Override
+	public AreaDTO getAreaByName(String areaName) {
+		return convertTo(areaDAO.getAreaByName(areaName));
+	}
+	
 	/********************************************************************************/
+	
+	public Area convertTo(AreaDTO areaDTO){
+		Area area = new Area();
+		area.setNombre(areaDTO.getAreaName());
+		area.setSigla(areaDTO.getAreaAcronym());
+		area.setCiudad(areaDTO.getCityName());
+		area.setCiudadSigla(areaDTO.getCityAcronym());
+		area.setProvincia(areaDTO.getProvinceName());
+		area.setProvinciaSigla(areaDTO.getProvinceAcronym());
+		return area;
+	}
+	
+	public AreaDTO convertTo(Area area){
+		AreaDTO areaDTO = new AreaDTO();
+		areaDTO.setAreaName(area.getNombre());
+		areaDTO.setAreaAcronym(area.getSigla());
+		areaDTO.setCityName(area.getCiudad());
+		areaDTO.setCityAcronym(area.getCiudadSigla());
+		areaDTO.setProvinceName(area.getProvincia());
+		areaDTO.setProvinceAcronym(area.getProvinciaSigla());
+		return areaDTO;
+	}
 	
 	public IssueLicitacion convertTo(IssueLicitacionDTO licitacionDTO){
 		IssueLicitacion licitacion = new IssueLicitacion();
@@ -100,10 +136,10 @@ public class IssueServiceImpl implements IssueService{
 		licitacion.setValorPliego(licitacionDTO.getValorPliego());
 		licitacion.setPresupuestoAdjudicado(licitacionDTO.getPresupuestoAdjudicado());
 		licitacion.setPresupuestoFinal(licitacionDTO.getPresupuestoFinal());
-		licitacion.setFechaEstimadaInicio(licitacionDTO.getFechaEstimadaInicio());
-		licitacion.setFechaEstimadaFin(licitacionDTO.getFechaEstimadaFin());
-		licitacion.setFechaRealInicio(licitacionDTO.getFechaRealInicio());
-		licitacion.setFechaRealFin(licitacionDTO.getFechaRealFin());
+		licitacion.setFechaEstimadaInicio(licitacionDTO.getFechaEstimadaInicio() != null ? licitacionDTO.getFechaEstimadaInicio() : null );
+		licitacion.setFechaEstimadaFin(licitacionDTO.getFechaEstimadaFin() != null ? licitacionDTO.getFechaEstimadaFin() : null);
+		licitacion.setFechaRealInicio(licitacionDTO.getFechaRealInicio() != null ? licitacionDTO.getFechaRealInicio() : null);
+		licitacion.setFechaRealFin(licitacionDTO.getFechaRealFin() != null ? licitacionDTO.getFechaRealFin() : null);
 		return licitacion;
 	}
 	
@@ -212,8 +248,6 @@ public class IssueServiceImpl implements IssueService{
 			}
 		}
 		
-		
-		
 		Calendar calendar = new GregorianCalendar();
 		calendar.setTime(issueDTO.getDate());
 		issue.setDate((GregorianCalendar) calendar);		
@@ -264,8 +298,19 @@ public class IssueServiceImpl implements IssueService{
 		issueDTO.setLongitude(String.valueOf(issue.getLongitude()));
 		issueDTO.setStatus(issue.getStatus());
 		
+		if(issue.getAssignedArea() != null){
+			issueDTO.setAssignedArea(convertTo(issue.getAssignedArea()));
+			issueDTO.setArea(issue.getAssignedArea().getNombre());
+		}
+		else{
+			issueDTO.setAssignedArea(null);
+			issueDTO.setArea("Comuna 1");
+		}
+		
 		if(issue.getLicitacion() != null)
 			issueDTO.setLicitacion(convertTo(issue.getLicitacion()));
+		else
+			issueDTO.setLicitacion(null);
 		
 		List<IssueHistorialRevisionDTO> historialDTO = new ArrayList<IssueHistorialRevisionDTO>();
 		
@@ -294,9 +339,6 @@ public class IssueServiceImpl implements IssueService{
 				
 	}
 
-	
-
-	
 
 	
 }

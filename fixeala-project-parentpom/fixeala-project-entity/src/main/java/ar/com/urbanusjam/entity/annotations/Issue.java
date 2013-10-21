@@ -40,7 +40,7 @@ public class Issue implements Serializable  {
 	private Long id;
 	
 	@OneToOne
-	@JoinColumn(name = "USERNAME")
+	@JoinColumn(name = "ID_REPORTER")
 	private User reporter;
 	
 	@Column(name = "REPORTED_DATE")
@@ -69,6 +69,14 @@ public class Issue implements Serializable  {
 	
 	@Column(name = "DESCRIPTION")
 	private String description;
+	
+	@OneToOne
+	@JoinColumn(name = "ID_ASSIGNED_OFFICIAL")
+	private User assignedOfficial;
+	
+	@OneToOne
+	@JoinColumn(name = "ID_AREA")
+	private Area assignedArea;
 		
     @OneToMany(mappedBy="issue", fetch = FetchType.EAGER, cascade = CascadeType.ALL)  
 	private Set<IssueHistorialRevision> revisiones;
@@ -86,7 +94,7 @@ public class Issue implements Serializable  {
 	
 	@Column(name = "STATUS")
 	private String status;
-//	
+	
 //	@OneToMany(mappedBy = "issue")  
 //	private Collection<Comment> comments;
 
@@ -129,7 +137,8 @@ public class Issue implements Serializable  {
 	public void setReporter(User reporter) {
 		this.reporter = reporter;
 	}
-			
+	
+
 	public GregorianCalendar getDate() {
 		return date;
 	}
@@ -209,6 +218,22 @@ public class Issue implements Serializable  {
 	
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	
+	public User getAssignedOfficial() {
+		return assignedOfficial;
+	}
+
+	public void setAssignedOfficial(User assignedOfficial) {
+		this.assignedOfficial = assignedOfficial;
+	}
+	
+	public Area getAssignedArea() {
+		return assignedArea;
+	}
+
+	public void setAssignedArea(Area assignedArea) {
+		this.assignedArea = assignedArea;
 	}
 
 	public Collection<Tag> getTagsList() {
