@@ -15,6 +15,8 @@ public interface IssueDAO {
 	
 	public List<Issue> getIssuesByStatus(String[] status);
 	
+	public List<Issue> getIssuesByUser(String username);
+	
 	public Issue findIssueById(String id);
 
 }
