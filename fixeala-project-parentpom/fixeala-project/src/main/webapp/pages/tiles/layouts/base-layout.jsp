@@ -33,6 +33,7 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap-editable.js"></script>
 <%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap-datetimepicker.js"></script> --%>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/select2.js"></script>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap-sortable.js"></script> 
   	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap-contextmenu.js"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap-fileupload.js"></script>
@@ -68,6 +69,7 @@
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap.css" rel="stylesheet">   
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap-combined.min.css" rel="stylesheet"> 
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap-editable.css" rel="stylesheet"> 
+	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap-sortable.css" rel="stylesheet">
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap-responsive.css" rel="stylesheet">
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap-fileupload.css" rel="stylesheet">
 <%-- 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/datetimepicker.css" rel="stylesheet"> --%>

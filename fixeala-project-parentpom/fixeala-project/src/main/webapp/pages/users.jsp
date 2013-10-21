@@ -2,6 +2,68 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <div id="content">
+
+
+	<script type="text/javascript">
+	
+		$(document).ready(function(){
+			
+			$("#tblUserIssues").tablesorter(); 
+		   
+		         $.get("http://localhost:8080/fixeala/users/" + '${profileUser}' + "/loadUserIssues.html", function(html) { 
+		             // append the "ajax'd" data to the table body 
+		             $("#tblUserIssues tbody").append(html); 
+		            // let the plugin know that we made a update 
+		            $("#tblUserIssues").trigger("update"); 
+		            // set sorting column and direction, this will sort on the first and third column 
+		            var sorting = [[2,1],[0,0]]; 
+		            // sort on the first column 
+		            $("#tblUserIssues").trigger("sorton",[sorting]); 
+		        }); 
+		        return false; 
+	
+			
+			
+// 			$('#tblUserIssues').dataTable({
+// 				"bProcessing": true,
+// 				"bServerSide": true,
+// 				"bSortable": true,
+// 				"aaSorting": [[ 7, "desc" ]],
+// 				"sPaginationType": "bootstrap",
+// 				"aoColumns" : [	 
+// 				               	 { "sTitle" : "#", "mData" : "id"     },
+// 				            	 { "sTitle" : "Fecha" , "mData" : "date",  
+// 				            		 "fnRender": function ( data ) {
+// 				                         var date = new Date(data.aData["date"]);
+// 				                         date = date.getDate()+"/"+ (date.getMonth() + 1) +"/"+date.getFullYear();
+// 				                         return "<div class= date>"+date+"<div>";
+// 				                         }
+// 				               	 },
+// 				             	 { "sTitle" : "T�tulo" , "mData" : "title" },
+// 				                 { "sTitle" : "Direcci�n" , "mData" : "address" },
+// 				               	 { "sTitle" : "Barrio" , "mData" : "neighborhood" },
+// 				               	 { "sTitle" : "Ciudad" , "mData" : "city" },
+// 				               	 { "sTitle" : "Provincia" , "mData" : "province" },
+// 				               	 { "sTitle" : "Estado" , "mData" : "status"}
+				            	
+// 			                  ],		  		
+// 				"sAjaxSource": "http://localhost:8080/fixeala/users/" + '${profileUser}' + "/loadUserIssues.html",
+// 				"fnServerData": function ( sSource, aoData, fnCallback ) {
+// 			            $.ajax( {
+// 			                "dataType": 'json',
+// 			                "type": "GET",
+// 			                "url": sSource,
+// 			                "data": aoData,
+// 			                "success": fnCallback
+// 			            } );
+// 			        }	  
+// 			});//TBL ISSUES
+			
+			
+		});
+		
+	
+	</script>
 	
         
 <%--        <h3>${usuario}</h3> --%>
@@ -15,51 +77,612 @@
 <!-- 		    <li><a href="#activity" data-toggle="tab"><i class="icon-star"></i>&nbsp;&nbsp;MI ACTIVIDAD</a></li>		   -->
 <!-- 	    </ul> -->
 	    
-	    <div class="row">
-	    	<div class="span4 pull-left" style="padding:10px;text-align:left;margin:0; border:0px solid #000">
-			  Bienvenid@, <b>${current_nombre} ${current_apellido}</b>
-			  <br>
-			  <sec:authorize access="hasRole('ROLE_ADMIN')">
-			  	<small>(Administrador)</small>
-			  </sec:authorize>
-			  <sec:authorize access="hasRole('ROLE_MANAGER')">
-			  	<small>(Moderador)</small>
-			  </sec:authorize>
+	    
+	 	<!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+	 	<!--------------------------- AUTHENTICATED USER ------------------------------------------------------------------------>
+	 	
+	    <sec:authorize access="isAuthenticated()">
+	    
+		    <div class="row">
+	    	   	<div class="span4 pull-left" style="padding:10px;text-align:left;margin:0; border:0px solid #000">
+	    	   		<c:if test="${ loggedMatchesProfile }">
+	    	   			Bienvenid@, <b>${current_nombre} ${current_apellido}</b>
+					    <br>
+	    	   			<sec:authorize access="hasRole('ROLE_ADMIN')">
+					  		<small>(Administrador)</small>
+					  	</sec:authorize>
+					  	<sec:authorize access="hasRole('ROLE_MANAGER')">
+					  		<small>(Moderador)</small>
+					  	</sec:authorize>
+	    	   		</c:if>
+					  
+				</div>
+				<div class="span4 pull-right" style="text-align:right;border:0px solid #000;">
+				  <h3>${current_area}</h3>
+				  <br>
+				  <small>${current_ciudad}, ${current_provincia}</small>
+				</div> 
 			</div>
-			<div class="span4 pull-right" style="text-align:right;border:0px solid #000;">
-			  <b>${current_area}</b>
-			  <br>
-			  <small>${current_ciudad}, ${current_provincia}</small>
-			</div> 
-		</div>
 		
-		<br>
+			<br>
+	    
+			<div class="container-fluid">
+			  <div class="row-fluid">
+			  
+			    <!--Sidebar content-->
+			    <div class="span2">
+			      	<div class="span2" style="border-left:1px solid #ccc; margin-left:0;">
+			              <ul id="dahsboard-nav" class="nav nav-list" style="width:170px;">
+			              		<c:if test="${ loggedMatchesProfile }">
+			              			<!-- MENU ADMIN -->
+					              	<sec:authorize access="hasRole('ROLE_ADMIN')">
+					              		<li class="nav-header">DASHBOARD</li>
+						                <li class="active"><a href="#">Inicio</a></li>
+						                <li><a href="#notifications" data-toggle="tab">Notificaciones</a></li>
+						                <li><a href="#issues" data-toggle="tab">Reclamos</a></li>
+						                <li><a href="#map" data-toggle="tab">Mapa</a></li>
+						                <li><a href="#comments" data-toggle="tab">Comentarios</a></li>
+						                <li><a href="#users" data-toggle="tab">Usuarios</a></li>
+					              	</sec:authorize>
+					              	
+					              	<!-- MENU MANAGER -->
+					              	<sec:authorize access="hasRole('ROLE_MANAGER')">
+					              		<li class="nav-header">DASHBOARD</li>
+						                <li class="active"><a href="#">Inicio</a></li>
+						                <li><a href="#notifications" data-toggle="tab">Notificaciones</a></li>
+						                <li><a href="#issues" data-toggle="tab">Reclamos</a></li>
+						                <li><a href="#map" data-toggle="tab">Mapa</a></li>
+						                <li><a href="#comments" data-toggle="tab">Comentarios</a></li>
+					              	</sec:authorize>
+					              	
+					              	<!-- MENU USER -->
+					              	<sec:authorize access="hasRole('ROLE_USER')">
+						              		<li class="nav-header">DASHBOARD</li>
+							                <li class="active"><a href="#">Inicio</a></li>
+							                <li><a href="#notifications" data-toggle="tab">Notificaciones</a></li>
+							                <li><a href="#issues" data-toggle="tab">Reclamos</a></li>
+							                <li><a href="#comments" data-toggle="tab">Comentarios</a></li>
+							                <li class="divider"></li>
+							                <li class="nav-header">CUENTA</li>
+							                <li><a href="#">Perfil</a></li>
+							                <li><a href="#">Seguridad</a></li>
+							                <li><a href="#">Desactivacion</a></li>
+					              	</sec:authorize>
+			              		</c:if>
+			              		
+			              		<c:if test="${ !loggedMatchesProfile }">
+				              	 	<!-- MENU ADMIN / MAANGER -->
+					              	<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')">
+					              		<li class="nav-header">DASHBOARD</li>
+						                <li class="active"><a href="#">Inicio</a></li>
+						                <li><a href="#issues" data-toggle="tab">Reclamos</a></li>
+					              	</sec:authorize>
+					              	
+					              	<!-- MENU USER -->
+					              	<sec:authorize access="hasRole('ROLE_USER')">
+						              	<c:if test="${ !loggedMatchesProfile }">
+						              		<li class="nav-header">DASHBOARD</li>
+							                <li class="active"><a href="#">Inicio</a></li>
+							                <li><a href="#issues" data-toggle="tab">Reclamos</a></li>
+						              	</c:if>		
+					              	</sec:authorize>
+				              	</c:if>
+			              </ul>
+		            </div>
+			    </div>
+			    
+			    <!--Body content-->
+			    <div class="span10">
+			    
+			    <!-- TAB CONTENT -->
+			    <div class="tab-content">
+					
+					
+					<!-- TAB RECLAMOS -->
+					<div class="tab-pane fade in active" id="issues">
+					    	<div class="page-header">
+					    	<h3>Reclamos</h3>
+					    	</div>
+					    	
+					    	<ul class="nav nav-tabs">
+						    	<li class="active"><a href="#issuesNuevos" data-toggle="tab">Nuevos (3)</a></li>
+							  	<li><a href="#issuesAsignados" data-toggle="tab">Asignados (1)</a></li>
+							  	<li><a href="#issuesTodos" data-toggle="tab">Todos (4)</a></li>
+							</ul>
+							
+							<div class="tab-content">
+								<div class="tab-pane fade in active" id="issuesNuevos">
+								   	<table class="table table-striped table-hover issueTable">
+								    	<thead>
+								    		<tr>
+									   			<th>#</th>
+									   			<th>Fecha</th>
+									   			<th>Estado</th>
+									   			<th>Título</th>
+									   			<th>Dirección</th>
+									   			<th>Barrio</th>
+									   			<th>Usuario</th>
+								   			</tr>
+								   		<tbody>
+								   			<tr>
+								   				<td>2345</td>
+								   				<td>12/03/13 14:22</td>
+								   				<td>ABIERTO</td>
+								   				<td><a href="#">Un bache mal arreglado</a></td>
+								   				<td>Libertad 1111</td>
+								   				<td>Recoleta</td>
+								   				<td>Sin asignar</td>
+								   			</tr>
+								   			<tr>
+								   				<td>4489</td>
+								   				<td>15/03/13 09:45</td>
+								   				<td>ABIERTO</td>
+								   				<td><a href="#">El alumbrado está defectuoso</a></td>
+								   				<td>Av. Córdoba 999</td>
+								   				<td>San Nicolás</td>
+								   				<td>Sin asignar</td>
+								   			</tr>
+								   			<tr>
+								   				<td>7856</td>
+								   				<td>12/03/13 14:22</td>
+								   				<td>ABIERTO</td>
+								   				<td><a href="#">Vereda destruida por obras</a></td>
+								   				<td>Cochabamba 888</td>
+								   				<td>San Telmo</td>
+								   				<td>Sin asignar</td>
+								   			</tr>
+								   		</tbody>
+								   	</table>
+								   	<div class="pagination pagination-right">
+									  <ul>
+									    <li><a href="#">&laquo; Anterior</a></li>
+									    <li><a href="#">1</a></li>
+									    <li><a href="#">2</a></li>
+									    <li><a href="#">3</a></li>
+									    <li><a href="#">4</a></li>
+									    <li><a href="#">5</a></li>
+									    <li><a href="#">Siguiente &raquo;</a></li>
+									  </ul>
+									</div>
+								</div>
+								
+								<div class="tab-pane fade" id="issuesAsignados">
+									<table class="table table-striped table-hover">
+								    	<thead>
+								    		<tr>
+									   			<th>#</th>
+									   			<th>Fecha</th>
+									   			<th>Estado</th>
+									   			<th>Título</th>
+									   			<th>Dirección</th>
+									   			<th>Barrio</th>
+									   			<th>Usuario</th>
+								   			</tr>
+								   		<tbody>
+								   			<tr>
+								   				<td>2345</td>
+								   				<td>19/06/13 11:09</td>
+								   				<td>ABIERTO</td>
+								   				<td><a href="#">Arreglo defectuoso de alcantarilla</a></td>
+								   				<td>Av. de Mayo 434</td>
+								   				<td>Monsetrrat</td>
+								   				<td><a href="#">FerreroP</a></td>
+								   			</tr>
+								   		</tbody>
+								   	</table>
+								</div>
+							
+								<div class="tab-pane fade" id="issuesTodos">
+									Todos los reclamos.
+								</div>
+							</div>
+							
+							<!-- Context Menu -->
+					    	<div id="contextmenu-issue" class="dropdown clearfix">
+							    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" style="display:block;position:static;margin-bottom:5px;">
+							      <li><a tabindex="-1" href="#"><i class="icon-paper-clip"></i>&nbsp;&nbsp;Ver detalles</a></li>
+							      <li><a tabindex="-1" href="#"><i class="icon-globe"></i>&nbsp;&nbsp;Ver en mapa</a></li>
+							      <li class="divider"></li>
+							      <li><a tabindex="-1" href="#"><i class="icon-user"></i>&nbsp;&nbsp;Asignar a usuario</a></li>
+							      <li class="divider"></li>
+							      <li><a tabindex="-1" href="#"><i class="icon-thumbs-up-alt"></i>&nbsp;&nbsp;Admitir</a></li>
+							      <li><a tabindex="-1" href="#"><i class="icon-ok"></i>&nbsp;&nbsp;Resolver</a></li>
+							      <li><a tabindex="-1" href="#"><i class="icon-lock"></i>&nbsp;&nbsp;Cerrar</a></li>
+							      <li><a tabindex="-1" href="#"><i class="icon-folder-open-alt"></i>&nbsp;&nbsp;Reabrir</a></li>
+							    </ul>
+	  						</div>
+					    	
+					    	<script>
+						    	$(function() {
+						    		  
+						    		  var $contextMenu = $("#contextmenu-issue");
+						    		  
+						    		  $("body").on("contextmenu", "table.issueTable tr", function(e) {
+						    		    $contextMenu.css({
+						    		      display: "block",
+						    		      left: e.pageX,
+						    		      top: e.pageY
+						    		    });
+						    		    return false;
+						    		  });
+						    		  
+						    		  $contextMenu.on("click", "a", function() {
+						    		     $contextMenu.hide();
+						    		  });
+						    		  
+						    		  $("body").on("click", function() {
+							    		     $contextMenu.hide();
+							    		  });
+						    		  
+						    		});
+					    	</script>
+					    	
+					    </div>
+					    <!-- fin TAB RECLAMOS -->
+					    
+					    
+					    <!-- TAB MAPA -->
+					    <div class="tab-pane fade" id="map">
+					    	<div class="page-header">
+					    		<h3>Mapa</h3>
+					    	</div>
+			         	</div>
+			         	<!-- fin TAB MAPA -->
+			         	
+			         	
+			         	<!-- TAB COMENTARIOS -->   
+			         	<div class="tab-pane fade" id="comments">
+			         		<div class="page-header">
+					    		<h3>Comentarios</h3>
+					    	</div>
+					    	
+					    	<ul class="nav nav-tabs">
+						    	<li class="active"><a href="#commentsPublicados" data-toggle="tab">Publicados (1)</a></li>
+							  	<li><a href="#commentsRecibidos" data-toggle="tab">Recibidos (1)</a></li>
+							</ul>
+							
+							<div class="tab-content">
+								<div class="tab-pane fade in active" id="commentsPublicados">
+									<table class="table table-striped table-hover">
+								    	<thead>
+								    		<tr>
+									   			<th>Fecha</th>
+									   			<th>Descripción</th>
+									   			<th>Nro. Reclamo</th>
+								   			</tr>
+								   		<tbody>
+								   			<tr>
+								   				<td>13/03/13 15:44</td>
+								   				<td>El reclamo ha sido admitido. Se le ha asignado el Nº de trámite 98993/2.</td>
+								   				<td><a href="#">2345</a></td>
+								   			</tr>
+								   		</tbody>
+								   	</table>
+								   	<div class="pagination pagination-right">
+									  <ul>
+									    <li><a href="#">&laquo; Anterior</a></li>
+									    <li><a href="#">1</a></li>
+									    <li><a href="#">2</a></li>
+									    <li><a href="#">3</a></li>
+									    <li><a href="#">4</a></li>
+									    <li><a href="#">5</a></li>
+									    <li><a href="#">Siguiente &raquo;</a></li>
+									  </ul>
+									</div>
+								 </div>
+								 <div class="tab-pane fade" id="commentsRecibidos">
+									<table class="table table-striped table-hover">
+								    	<thead>
+								    		<tr>
+									   			<th>Fecha</th>
+									   			<th>Descripción</th>
+									   			<th>Nro. Reclamo</th>
+									   			<th>Usuario</th>
+								   			</tr>
+								   		<tbody>
+								   			<tr>
+								   				<td>14/05/13 09:33</td>
+								   				<td>La vereda todavía no fue reparada.</td>
+								   				<td><a href="#">7856</a></td>
+								   				<td><a href="#">pedro77</a></td>
+								   			</tr>
+								   		</tbody>
+								   	</table>
+								 </div>
+							</div>
+					    </div>
+					    <!-- fin TAB COMENTARIOS -->
+					    	
+					    	
+					    <!-- TAB USUARIOS -->
+					    <div class="tab-pane fade" id="users"> 	
+			         		<div class="page-header">
+					    		<h3>Usuarios</h3>
+					    	</div>
+					    	
+					    	
+					    	<!-- Modal -->
+							<div id="userModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+							  <div class="modal-header">
+							    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+							    <h3 id="myModalLabel">Registro de nuevo usuario</h3>
+							  </div>
+							  <div class="modal-body">
+							    <form class="form-horizontal">
+								  <fieldset>
+								  	 <div class="control-group">
+									    <label class="control-label" for="inputPassword">Apellido y Nombre(s)</label>
+									    <div class="controls">
+									      <input type="text" id="inputPassword" placeholder="Nombre y Apellido">
+									    </div>
+								     </div>
+								     <div class="control-group">
+									    <label class="control-label" for="inputPassword">Usuario</label>
+									    <div class="controls">
+									      <input type="text" id="inputPassword" placeholder="Nombre de usuario">
+									    </div>
+								     </div>
+									  <div class="control-group">
+									  	<label class="control-label" for="inputEmail">Email</label>
+									    <div class="controls">
+									      <input type="text" id="inputEmail" placeholder="Email">
+									    </div>
+									  </div>
+								      <div class="control-group">
+									    <label class="control-label" for="inputPassword">Contrase�a</label>
+									    <div class="controls">
+									      <input type="password" id="inputPassword" placeholder="Contrase�a">
+									    </div>
+								     </div>
+								     <div class="control-group">
+									    <label class="control-label" for="inputPassword">Confirme contrase�a</label>
+									    <div class="controls">
+									      <input type="password" id="inputPassword" placeholder="Confirme contrase�a">
+									    </div>
+								     </div>
+								     <div class="control-group">
+									    <label class="control-label" for="inputPassword">Cargo</label>
+									    <div class="controls">
+									      <select class="span7">
+									    	<option>Responsable de Area</option>
+									    	<option>Asistente</option>
+								    	  </select>
+									    </div>
+								     </div>
+								     <div class="control-group">
+									    <label class="control-label" for="inputPassword">Sub-Area</label>
+									    <div class="controls">
+										    <select class="span7">
+										    	<option>S. S. de Administracion (SSADM)</option>
+										    	<option>S. S. de Higiene Urbana (SSHU)</option>
+										    	<option>D. G. Cementerios (CGCEM)</option>
+										    	<option>D. G. Espacios Verdes (DGEV)</option>
+										    	<option>D. G. Reciclado (DGREC)</option>
+									    	</select>
+									    </div>
+								     </div>
+								     <div class="control-group">
+									    <label class="control-label" for="inputPassword">Rol</label>
+									    <div class="controls">
+									      <select class="span7">
+									    	<option>Administrador</option>
+									    	<option selected="selected">Editor</option>
+									    	<option>Usuario</option>
+								    	  </select>
+									    </div>
+								     </div>
+								   <div class="control-group">
+								       	<label class="control-label" for="inputPassword">Estado</label>
+								      	<div class="controls">
+									      	<label class="radio">
+									        	<input type="radio" checked> Activo
+									        </label>
+									        <label class="radio" >
+									        	<input type="radio"> Bloqueado
+									    	</label>
+								      </div>
+								    </div>
+								   
+								  </fieldset>
+								</form>
+							  </div>
+							  <div class="modal-footer" style="margin-bottom:0">
+							    <button class="btn btn-primary"><i class="icon-ok"></i>&nbsp;&nbsp;Guardar</button>
+							    <button class="btn" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i>&nbsp;&nbsp;Cancelar</button>
+							  </div>
+							</div>
+					    	
+					    	
+					    	<table class="table table-striped table-hover user-table">
+						    	<thead>
+						    		<tr>
+							    		<th width="200">Nombre de Usuario</th>
+							    		<th>Rol</th>
+							    		<th>Cargo</th>
+							    		<th width="200">Área</th>
+							    		<th>Sub-Área</th>
+							    		<th>Estado</th>
+						    		</tr>
+						    	</thead>
+						    	<tbody>
+						    		<tr>
+							    		<td>perezf</td>
+							    		<td>EDITOR</td>
+							    		<td>Responsable de Área</td>
+							    		<td>Ministerio de Ambiente y Espacio Público (MAYEPGC)</td>
+							    		<td>-</td>
+							    		<td><span class="label label-success">Activo</span></td>
+						    		</tr>
+						    		<tr>
+							    		<td>camposm</td>
+							    		<td>EDITOR</td>
+							    		<td>Responsable de Sub-Área</td>
+							    		<td>Ministerio de Ambiente y Espacio Público (MAYEPGC)</td>
+							    		<td>D. G. Limpieza (DGLIM)</td>
+							    		<td><span class="label label-success">Activo</span></td>
+						    		</tr>
+						    		<tr>
+							    		<td>muragliag</td>
+							    		<td>EDITOR</td>
+							    		<td>Responsable de Sub-Área</td>
+							    		<td>Ministerio de Ambiente y Espacio Público (MAYEPGC)</td>
+							    		<td>D. G. Alumbrado (DGALUM)</td>
+							    		<td><span class="label label-error">Inactivo</span></td>
+						    		</tr>
+						    	</tbody>
+					    	</table>
+					    	
+					    	<br><br>
+					    	<center>
+						    	<button href="#userModal" type="button" data-toggle="modal" 
+						    	class="btn btn-medium btn-warning" >
+						    		<i class="icon-plus"></i>&nbsp;&nbsp;Nuevo usuario
+						    	</button>
+					    	</center>
+					    	
+					    	<!-- Context Menu -->
+					    	<div id="contextmenu-user" class="dropdown clearfix">
+							    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" style="display:block;position:static;margin-bottom:5px;">
+							        <li><a tabindex="-1" href="#"><i class="icon-user"></i>&nbsp;&nbsp;Detalles</a></li>
+											      <li><a tabindex="-1" href="#"><i class="icon-pencil"></i>&nbsp;&nbsp;Editar</a></li>
+											      <li><a tabindex="-1" href="#"><i class="icon-trash"></i>&nbsp;&nbsp;Borrar</a></li>
+											      <li class="divider"></li>
+											      <li><a tabindex="-1" href="#"><i class="icon-lock"></i>&nbsp;&nbsp;Deshabilitar</a></li>
+								      			  <li class="disabled"><a tabindex="-1" href="#"><i class="icon-unlock"></i>&nbsp;&nbsp;Habilitar</a></li>
+							    </ul>
+	  						</div>
+					    	
+					    	<script>
+						    	$(function() {
+						    		  
+						    		  var $contextMenu = $("#contextmenu-user");
+						    		  
+						    		  $("body").on("contextmenu", "table.user-table tr", function(e) {
+						    		    $contextMenu.css({
+						    		      display: "block",
+						    		      left: e.pageX,
+						    		      top: e.pageY
+						    		    });
+						    		    return false;
+						    		  });
+						    		  
+						    		  $contextMenu.on("click", "a", function() {
+						    		     $contextMenu.hide();
+						    		  });
+						    		  
+						    		  $("body").on("click", function() {
+							    		     $contextMenu.hide();
+							    		  });
+						    		  
+						    		});
+					    	</script>
+			         	</div>
+			         	<!-- tab END USUARIOS -->
+			         		
+			         		
+			         		
+			         		<!-- ESTADI�STICAS -->
+			         		
+			         		
+		         		<!-- NOTIFICACIONES -->
+		         		<div class="tab-pane fade" id="notifications"> 	
+			         		<div class="page-header">
+					    		<h3>Notificaciones</h3>
+					    	</div>
+					    	
+					    	<table class="table table-hover offset1" style="width:700px;">
+						    	<tr>
+						    		<td style="border-top:none;"><i class="icon-map-marker"></i></td>
+							    	<td style="border-top:none;width:500px">Nuevo reclamo <a href="#">#4455</a> pubicado por <a href="#">fulanito_11</a></td>
+							    	<td style="border-top:none;"><i class="icon-time icon-grey"></i> hace 11 minutos</td>
+							    <tr>
+							    <tr>
+						    		<td><i class="icon-comments-alt"></i></td>
+							    	<td>Nuevo comentario pubicado por <a href="#">fulanito_11</a></td>
+							    	<td><i class="icon-time icon-grey"></i> hace 2 horas</td>
+							    <tr>
+							    <tr>
+						    		<td><i class="icon-ok"></i></td>
+							    	<td>El reclamo <a href="#">#78657</a>fue <span class="label label-success">resuelto</span> por <a href="#">fulanito_11</a></td>
+							    	<td><i class="icon-time icon-grey"></i> ayer</td>
+							    <tr>
+							    <tr>
+						    		<td><i class="icon-map-marker"></i></td>
+							    	<td>Nuevo reclamo <a href="#">#4344</a> publicado por <a href="#">GustavoF</a></td>
+							    	<td><i class="icon-time icon-grey"></i> 16/10/2013</td>
+							    <tr>
+					    	</table>
+				    	</div>
+				    	<!-- end TAB NOTIFICACIONES -->
+					    	
+			         		
+			         		<!-- ACTIVIDAD -->
+			         
+							
+							<!-- PERFIL -->
+							
+							
+							<!-- CONTRASEÑA -->
+							
+							
+							<!-- DESACTIVACION -->      		
+			         		
+		         	</div>	
+		         	<!-- fin tab content -->
+				 
+			    </div>
+			  </div>
+			</div><!-- container fluid -->
+	    
+	    
+	    </sec:authorize>
+	    
+	    
+	    
+	    
+	    
+	    <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+	 	<!--------------------------- ANONYMOUS USER ---------------------------------------------------------------------------->
+	 	
+	    <sec:authorize access="isAnonymous()">
+	    
+	    	<div class="row">
+<!--     			<div class="span4 pull-left" style="padding:10px;text-align:left;margin:0; border:0px solid #000"> -->
+	    			
+<!-- 		  		</div> -->
+		  		<div class="span4 pull-right" style="text-align:right;border:0px solid #000;">
+				  	<!-- USERprofile -->
+	    			<c:if test="${ profileRole eq 'ROLE_USER' }">
+			  			<h3>${profileUser}</h3>
+					  	<br>
+					  	<small>${barrio}</small>
+			  		</c:if>
+			  		
+			  		<!-- AREA profile -->
+			  		<c:if test="${ profileRole eq 'ROLE_AREA' }">
+			  			<h3>${current_area}</h3>
+					  	<br>
+					  	<small>${current_ciudad}, ${current_provincia}</small>
+			  		</c:if>
+				</div> 
+			</div>
+		
+			<br>
 	    
 		<div class="container-fluid">
 		  <div class="row-fluid">
 		  
-		    <!--Sidebar content-->
-		    <div class="span2">
-		      
-		      <div class="span2" style="border-left:1px solid #ccc; margin-left:0;">
-		              <ul id="dahsboard-nav" class="nav nav-list" style="width:170px;">
-		                <li class="nav-header">DASHBOARD</li>
-		                <li class="active"><a href="#">Inicio</a></li>
-		                <li><a href="#notifications" data-toggle="tab">Notificaciones</a></li>
-		                <li><a href="#issues" data-toggle="tab">Reclamos</a></li>
-		                <li><a href="#map" data-toggle="tab">Mapa</a></li>
-		                <li><a href="#comments" data-toggle="tab">Comentarios</a></li>
-		                <li><a href="#users" data-toggle="tab">Usuarios</a></li>
-		              
-		                <li class="divider"></li>
-		                
-		                <li class="nav-header">CUENTA</li>
-		                <li><a href="#">Perfil</a></li>
-		                <li><a href="#">Seguridad</a></li>
-		                <li><a href="#">Desactivación</a></li>
-		              </ul>
+		     	<!--Sidebar content-->
+			    <div class="span2">
+			      	<div class="span2" style="border-left:1px solid #ccc; margin-left:0;">
+			              <ul id="dahsboard-nav" class="nav nav-list" style="width:170px;">
+				              		<li class="nav-header">DASHBOARD</li>
+					                <li class="active"><a href="#">Inicio</a></li>
+					                <li><a href="#issues" data-toggle="tab">Reclamos</a></li>
+			              </ul>
 		            </div>
-		    </div>
+			    </div>
+		  
 		    
 		    <!--Body content-->
 		    <div class="span10">
@@ -71,69 +694,34 @@
 				<!-- TAB RECLAMOS -->
 				<div class="tab-pane fade in active" id="issues">
 				    	<div class="page-header">
-				    	<h3>Reclamos</h3>
+				    	<h3>Reclamos (${cantidadIssues})</h3>
 				    	</div>
 				    	
 				    	<ul class="nav nav-tabs">
-					    	<li class="active"><a href="#issuesNuevos" data-toggle="tab">Nuevos (3)</a></li>
-						  	<li><a href="#issuesAsignados" data-toggle="tab">Asignados (1)</a></li>
-						  	<li><a href="#issuesTodos" data-toggle="tab">Todos (4)</a></li>
+					    	<li class="active"><a href="#issuesNuevos" data-toggle="tab">Todos</a></li>
+<!-- 						  	<li><a href="#issuesAsignados" data-toggle="tab">Asignados (1)</a></li> -->
+<!-- 						  	<li><a href="#issuesTodos" data-toggle="tab">Todos (4)</a></li> -->
 						</ul>
 						
 						<div class="tab-content">
 							<div class="tab-pane fade in active" id="issuesNuevos">
-							   	<table class="table table-striped table-hover issueTable">
-							    	<thead>
-							    		<tr>
-								   			<th>#</th>
-								   			<th>Fecha</th>
-								   			<th>Estado</th>
-								   			<th>Título</th>
-								   			<th>Dirección</th>
-								   			<th>Barrio</th>
-								   			<th>Usuario</th>
-							   			</tr>
-							   		<tbody>
-							   			<tr>
-							   				<td>2345</td>
-							   				<td>12/03/13 14:22</td>
-							   				<td>ABIERTO</td>
-							   				<td><a href="#">Un bache mal arreglado</a></td>
-							   				<td>Libertad 1111</td>
-							   				<td>Recoleta</td>
-							   				<td>Sin asignar</td>
-							   			</tr>
-							   			<tr>
-							   				<td>4489</td>
-							   				<td>15/03/13 09:45</td>
-							   				<td>ABIERTO</td>
-							   				<td><a href="#">El alumbrado está defectuoso</a></td>
-							   				<td>Av. Córdoba 999</td>
-							   				<td>San Nicolás</td>
-							   				<td>Sin asignar</td>
-							   			</tr>
-							   			<tr>
-							   				<td>7856</td>
-							   				<td>12/03/13 14:22</td>
-							   				<td>ABIERTO</td>
-							   				<td><a href="#">Vereda destruida por obras</a></td>
-							   				<td>Cochabamba 888</td>
-							   				<td>San Telmo</td>
-							   				<td>Sin asignar</td>
-							   			</tr>
-							   		</tbody>
-							   	</table>
-							   	<div class="pagination pagination-right">
-								  <ul>
-								    <li><a href="#">&laquo; Anterior</a></li>
-								    <li><a href="#">1</a></li>
-								    <li><a href="#">2</a></li>
-								    <li><a href="#">3</a></li>
-								    <li><a href="#">4</a></li>
-								    <li><a href="#">5</a></li>
-								    <li><a href="#">Siguiente &raquo;</a></li>
-								  </ul>
-								</div>
+							   	<table id="tblUserIssues" cellpadding="0" cellspacing="0" border="0" 
+    								class="table table-striped table-bordered table-hover tablesorter">
+									<thead>
+										<tr>				
+											<th data-sortkey="0" width="50">id</th>
+											<th data-defaultsort="desc" data-sortkey="1" width="100">date</th>
+											<th data-sortkey="2" width="250">title</th>			
+											<th data-sortkey="3" width="200">address</th>
+											<th data-sortkey="4" width="150">neighborhood</th>
+											<th data-sortkey="5" width="150">city</th>
+											<th data-sortkey="6" width="150">province</th>
+											<th data-sortkey="7">status</th>		
+										</tr>
+									</thead>
+									<tbody>			
+									</tbody>	
+								</table>
 							</div>
 							
 							<div class="tab-pane fade" id="issuesAsignados">
@@ -503,28 +1091,35 @@
 						    <tr>
 				    	</table>
 			    	</div>
-			    	<!-- end TAB NOTIFICACIONES -->
-				    	
-		         		
-		         		<!-- ACTIVIDAD -->
-		         
-						
-						<!-- PERFIL -->
-						
-						
-						<!-- CONTRASEÑA -->
-						
-						
-						<!-- DESACTIVACION -->      		
-		         		
-	         	</div>	
-	         	<!-- fin tab content -->
-			 
-		    </div>
-		  </div>
-		</div>
+				    	<!-- end TAB NOTIFICACIONES -->
+					    	
+			         		
+			         		<!-- ACTIVIDAD -->
+			         
+							
+							<!-- PERFIL -->
+							
+							
+							<!-- CONTRASEÑA -->
+							
+							
+							<!-- DESACTIVACION -->      		
+			         		
+		         	</div>	
+		         	<!-- fin tab content -->
+				 
+			    </div>
+			  </div>
+			</div><!-- container fluid -->
+	    
+	    
+	    </sec:authorize>
+	    
+	    
+	    
 
-	
+	</div>
+	<!-- /content -->  
 	   
 	  
 <!-- 		<div id="dashboardTabContent" class="tab-content"> -->
@@ -623,10 +1218,7 @@
 <!-- 			 </div> -->
 				
 <!-- 			</div> -->
-			
-		
-		</div>
+<!-- 		</div> -->
 		<!-- /dashboardTabContent -->
 		    
-	</div>
-	<!-- /content -->  
+	

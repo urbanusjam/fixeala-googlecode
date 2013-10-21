@@ -1,7 +1,7 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<!-- Boolean isUser -->
+<!-- Boolean isCommonUser -->
 <!-- needed for creating the boolean: !isUser -->
 <c:set var="isCommonUser" value="false" />
 <sec:authorize access="hasRole('ROLE_USER')">
@@ -501,12 +501,12 @@
 				        success: function(data){		
 				        	if(data.result){				
 				        		
-					    		   bootbox.alert(data.message); 
-					    			setTimeout(function () {	
-					    				
+				        			bootbox.alert(data.message); 
+				        			
+					    			setTimeout(function () {
 					    				var url = getIssueURL(id, title, 'plain');
 						    			window.location.href= url;	
-					    			}, 500);						    			
+					    			}, 2000);						    			
 
 					    	   }
 					    	   
