@@ -82,6 +82,7 @@
 			  $("#issue-lng").editable({name: 'longitude', disabled: true});
 			  $("#issue-status").editable({name: 'status', disabled: true});
 			  $("#issue-user").editable({name: 'username', disabled: true});
+			  $("#issue-area").editable({name: 'area', disabled: true});
 			  
 			  //--EDITABLE FIELDS
 			  
@@ -477,6 +478,48 @@
 				});
 			  
 			  
+			  	//update status only
+				$('#btn-status').click(function() {
+					var label = $(this).text().trim();
+					var status = "";
+					var id = ${id};
+					var title = '${titulo}';
+					
+					if(label == 'Resolver')
+						status = 'RESUELTO';
+					
+					if(label == 'Reabrir')
+						status = "REABIERTO";
+					
+					var data = 'issueID='+ id + '&newStatus='+ status;
+				
+					$.ajax({
+        			    url: "./updateIssueStatus.html",
+				 		type: "POST",	
+				 		data: data,
+				 		dataType: "json",									 
+				        success: function(data){		
+				        	if(data.result){				
+				        		
+					    		   bootbox.alert(data.message); 
+					    			setTimeout(function () {	
+					    				
+					    				var url = getIssueURL(id, title, 'plain');
+						    			window.location.href= url;	
+					    			}, 500);						    			
+
+					    	   }
+					    	   
+					    	   else{
+					    		   bootbox.alert(data.message);		
+					    	   }
+	            		}
+        		});
+						  
+						 
+				});
+			  
+			  
 			  
 			  
 			  
@@ -550,30 +593,37 @@
 			  <button type="button" class="btn" title="Denunciar"><i class="icon-warning-sign icon-large"></i></button>
 		  </div>
 		  		  		
-	 	  <div id="btnGroupSocial" class="btn-group">
-	 			<button class="btn"><i class="icon-share icon-large"></i>&nbsp;&nbsp;Compartir</button>
-	 			<button class="btn dropdown-toggle" data-toggle="dropdown">
-	   			<span class="caret"></span>
-	 			</button>	  	
-	 			<ul class="dropdown-menu">
-		    	<li><a href="#" title=""><i class="icon-envelope-alt icon-large"></i>&nbsp;&nbsp;&nbsp;Email</a></li>
-		    	<li><a href="#" title=""><i class="icon-facebook-sign icon-large"></i>&nbsp;&nbsp;&nbsp;Facebook</a></li>
-		    	<li><a href="#" title=""><i class="icon-google-plus icon-large"></i>&nbsp;&nbsp;&nbsp;Google+</a></li>
-		    	<li><a href="#" title=""><i class="icon-twitter icon-large"></i>&nbsp;&nbsp;&nbsp;Twitter</a></li>
-	 			</ul>
-		   </div>
+<!-- 	 	  <div id="btnGroupSocial" class="btn-group"> -->
+<!-- 	 			<button class="btn"><i class="icon-share icon-large"></i>&nbsp;&nbsp;Compartir</button> -->
+<!-- 	 			<button class="btn dropdown-toggle" data-toggle="dropdown"> -->
+<!-- 	   			<span class="caret"></span> -->
+<!-- 	 			</button>	  	 -->
+<!-- 	 			<ul class="dropdown-menu"> -->
+<!-- 		    	<li><a href="#" title=""><i class="icon-envelope-alt icon-large"></i>&nbsp;&nbsp;&nbsp;Email</a></li> -->
+<!-- 		    	<li><a href="#" title=""><i class="icon-facebook-sign icon-large"></i>&nbsp;&nbsp;&nbsp;Facebook</a></li> -->
+<!-- 		    	<li><a href="#" title=""><i class="icon-google-plus icon-large"></i>&nbsp;&nbsp;&nbsp;Google+</a></li> -->
+<!-- 		    	<li><a href="#" title=""><i class="icon-twitter icon-large"></i>&nbsp;&nbsp;&nbsp;Twitter</a></li> -->
+<!-- 	 			</ul> -->
+<!-- 		   </div> -->
 
-<!-- 			<div class="btn-group" style="float:right;">			 -->
-<!-- 				<button class="btn btn-success"><i class="icon-ok icon-large"></i>&nbsp;&nbsp;&nbsp;Resolver</button> -->
-<!-- 			</div> -->
- 
 			<sec:authorize access="hasAnyRole('ROLE_USER','ROLE_ADMIN', 'ROLE_MANAGER')">
+				<c:if test="${estado eq 'ABIERTO' || estado eq 'REABIERTO'}">
+					<div id="btn-status" class="btn-group" style="float:right;">			
+						<button class="btn btn-success"><i class="icon-ok icon-large"></i>&nbsp;&nbsp;Resolver</button>
+					</div>
+				</c:if>
+				<c:if test="${estado eq 'RESUELTO' || estado eq 'CERRADO'}">
+					<div id="btn-status" class="btn-group" style="float:right;">			
+						<button class="btn btn-warning"><i class="icon-rotate-right icon-large"></i>&nbsp;&nbsp;Reabrir</button>
+					</div>
+				</c:if>	
 				<div class="btn-group" style="float:right;">
-					<button id="btn-update"  class="btn btn-success"><i class="icon-save icon-large"></i>&nbsp;&nbsp;&nbsp;Guardar</button>			
+					<button id="btn-update"  class="btn btn-primary"><i class="icon-save icon-large"></i>&nbsp;&nbsp;Guardar</button>			
 				</div>
 				<div class="btn-group" style="float:right;">
-					<button id="btn-edit" class="btn btn-info"><i class="icon-pencil icon-large"></i>&nbsp;&nbsp;&nbsp;Editar</button>			
-				</div>			
+					<button id="btn-edit" class="btn btn-info"><i class="icon-pencil icon-large"></i>&nbsp;&nbsp;Editar</button>			
+				</div>		
+				
 			</sec:authorize>
 	
 	   </div>
@@ -634,7 +684,7 @@
 						 </tr>
 						 <tr>
 						    <th>Asignado a:</th>
-						    <td><a href="#">minAyEBA</a></td>						   
+						    <td><a href="#" id="issue-area">${area}</a></td>						   
 						 </tr>
 						  <tr>
 						    <th>Descripción:</th>

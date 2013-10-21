@@ -28,16 +28,28 @@ $(document).ready(function(){
         };
         
         map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
-    
-        google.maps.event.addListener(map, 'click', function(e) {	 
-        	
-        	if( $("#btnIssue").hasClass('active') ){
-        		getAddressOnMapClick(e.latLng);
-        	}
         
-        });     
-      
-        loadMarkers(map);
+     // Layer
+//        var kmlLayer = new google.maps.KmlLayer({
+//            url: 'http://fixeala.googlecode.com/svn/trunk/fixeala-project-parentpom/fixeala-project/src/main/webapp/resources/data/comunas.kml'
+//          });
+//      
+//        kmlLayer.setMap(map);
+//        google.maps.event.addListener(kmlLayer, 'click', function(kmlEvent) {
+//          
+//        });
+    
+	        google.maps.event.addListener(map, 'click', function(e) {	 
+	        	
+	        	if( $("#btnIssue").hasClass('active') ){
+	        		getAddressOnMapClick(e.latLng);
+	        	}
+	        
+	        });     
+	        
+	        
+	      
+	        loadMarkers(map);
       
 	 }//initialize     
 	 

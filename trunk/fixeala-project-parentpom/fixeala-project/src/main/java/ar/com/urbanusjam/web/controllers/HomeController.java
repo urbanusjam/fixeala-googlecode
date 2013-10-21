@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.UserService;
+import ar.com.urbanusjam.services.dto.AreaDTO;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
 import ar.com.urbanusjam.web.utils.DataTableResultSet;
@@ -86,6 +87,7 @@ public class HomeController {
 				HttpServletRequest request){
 		
 		UserDTO user = new UserDTO();
+		AreaDTO area = new AreaDTO();
 	
 		try{
 			
@@ -97,6 +99,9 @@ public class HomeController {
 //			}
 			
 				user = userService.getUserByUsername(userID); 
+				
+				if(user == null)
+					area = issueService.getAreaByName("Comuna 1");
 		
 				model.addAttribute("usuario", user.getUsername());
 				

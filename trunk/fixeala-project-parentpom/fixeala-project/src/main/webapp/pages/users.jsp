@@ -27,8 +27,9 @@
 			  </sec:authorize>
 			</div>
 			<div class="span4 pull-right" style="text-align:right;border:0px solid #000;">
-			  <h4>${current_area}</h4>
-			  ${current_ciudad}, ${current_provincia}
+			  <b>${current_area}</b>
+			  <br>
+			  <small>${current_ciudad}, ${current_provincia}</small>
 			</div> 
 		</div>
 		

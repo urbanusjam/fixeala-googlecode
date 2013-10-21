@@ -54,7 +54,9 @@
 					<option value="TM">Tucumán</option>					
 		  		</select>
 		  		
-		  		<div id="map_canvas"></div>		  
+		  		<div id="map_canvas"></div>	
+		  		
+<!-- 		  		<div id="map_d3"></div>		   -->
 	
 		  <!-- ISSUE FORM -->
 				<form id="issueForm" class="form-issue" method="POST">	
