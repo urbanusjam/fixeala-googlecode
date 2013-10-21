@@ -397,7 +397,7 @@ public class AccountController {
 	
 	
 
-	public UserDTO convertTo(User user){
+	public static UserDTO convertTo(User user){
 		UserDTO userDTO = new UserDTO();
 		userDTO.setUsername(user.getUsername());
 		userDTO.setPassword(user.getPassword());

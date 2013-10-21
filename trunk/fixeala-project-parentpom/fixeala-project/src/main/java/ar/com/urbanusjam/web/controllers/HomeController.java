@@ -1,6 +1,7 @@
 package ar.com.urbanusjam.web.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -10,8 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -82,28 +85,68 @@ public class HomeController {
 	}
 	
 	
+	@RequestMapping(value="/users/{userID}/loadUserIssues", produces={"application/json; charset=ISO-8859-1"}, method = RequestMethod.GET)
+	public @ResponseBody String getUserIssuesJSON(	Model model,
+												@PathVariable("userID") String userID,
+												@RequestParam int iDisplayStart,
+								            	@RequestParam int iDisplayLength, 
+								            	@RequestParam int sEcho) throws IOException {
+		
+		
+		
+		DataTableResultSet<IssueDTO> dt = new DataTableResultSet<IssueDTO>();
+		List<IssueDTO> issues = issueService.loadIssuesByUser(userID);		
+	    dt.setAaData(issues);  
+	    dt.setiTotalDisplayRecords(issues.size()); 
+	    dt.setiTotalRecords(issues.size());   
+	    dt.setsEcho(sEcho);		
+	 
+	   
+		return toJson(dt);		
+	}
+	
+	
 	@RequestMapping(value="/users/{userID}", method = RequestMethod.GET)
 	public String showUserProfilePage(Model model, @PathVariable("userID") String userID, 
 				HttpServletRequest request){
 		
-		UserDTO user = new UserDTO();
-		AreaDTO area = new AreaDTO();
+		
 	
 		try{
 			
 //			if(!loggedUser.equals(userID)){
 //				user = userService.getUserByUsername(userID);  
-//				if(!user.hasRole("ROLE_USER", user.getAuthorities())){
-//					return "redirect:/" + "error.html";
-//				}
+//				
 //			}
+				Object loggedUser = SecurityContextHolder.getContext().getAuthentication().getPrincipal();	
+				UserDTO user = new UserDTO();
+				boolean isSameUser = false;
 			
 				user = userService.getUserByUsername(userID); 
 				
-				if(user == null)
-					area = issueService.getAreaByName("Comuna 1");
-		
-				model.addAttribute("usuario", user.getUsername());
+//				if(loggedUser.equals("anonymousUser")){
+//					
+//				}
+				
+				if(loggedUser instanceof User){
+					isSameUser = ((User) loggedUser).getUsername().equals(user.getUsername());
+				}
+				
+				if( user.hasRole("ROLE_ADMIN", user.getAuthorities()) 
+						|| user.hasRole("ROLE_MANAGER", user.getAuthorities()) ){
+					if(!isSameUser){
+						return "redirect:/" + "error.html";
+					}					
+				}
+				
+				model.addAttribute("loggedUser", loggedUser);
+				model.addAttribute("profileUser", user.getUsername());
+				model.addAttribute("profileRole", user.getAuthorities().get(0));
+				model.addAttribute("barrio", user.getNeighborhood());
+				model.addAttribute("loggedMatchesProfile", isSameUser);
+				
+				model.addAttribute("cantidadIssues", issueService.loadIssuesByUser(user.getUsername()).size());
+				
 				
 				if(user.isVerifiedOfficial()){
 					model.addAttribute("current_nombre", user.getNombre());
@@ -115,12 +158,6 @@ public class HomeController {
 				}
 				
 				
-				model.addAttribute("email", user.getEmail());
-				model.addAttribute("barrio", user.getNeighborhood());
-			
-			
-			
-		
 		}
 		catch(Exception e){
 			return "redirect:/" + "error.html";

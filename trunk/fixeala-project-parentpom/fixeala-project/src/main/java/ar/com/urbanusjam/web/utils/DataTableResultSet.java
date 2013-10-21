@@ -4,7 +4,7 @@ import java.util.List;
 
 import ar.com.urbanusjam.services.dto.UserDTO;
 
-public class DataTableResultSet<T>  {
+public class DataTableResultSet<T> {
 	
 	private int sEcho;
 	private int iTotalRecords;
