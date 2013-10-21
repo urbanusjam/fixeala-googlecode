@@ -39,6 +39,13 @@ public class IssueDAOImpl extends GenericDAOImpl<Issue, Serializable> implements
 								"statusOptions", status);
 		return issues;
 	}
+	
+	@Override
+	public List<Issue> getIssuesByUser(String username) {
+		List<Issue> issues = new ArrayList<Issue>();
+		issues = this.findWhere(" reporter.username = ? ", new Object[]{ username});
+		return issues;
+	}
 
 	@Override
 	public Issue findIssueById(String issueID) {
@@ -47,6 +54,7 @@ public class IssueDAOImpl extends GenericDAOImpl<Issue, Serializable> implements
 		return issues.get(0);
 	}
 
+	
 	
 
 }
