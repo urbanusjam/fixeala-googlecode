@@ -3,7 +3,11 @@ package ar.com.urbanusjam.services.impl;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+
+import org.hibernate.Hibernate;
 
 import ar.com.urbanusjam.dao.AreaDAO;
 import ar.com.urbanusjam.dao.IssueDAO;
@@ -47,6 +51,7 @@ public class IssueServiceImpl implements IssueService{
 	@Override
 	public void reportIssue(IssueDTO issueDTO) {
 		Area area = areaDAO.getAreaByName("Comuna 1");
+		int i = area.getIssues().size();
 		Issue issue = new Issue();
 		issue = this.convertTo(issueDTO);
 		issue.setAssignedArea(area);
@@ -55,9 +60,13 @@ public class IssueServiceImpl implements IssueService{
 	
 	@Override
 	public void updateIssue(IssueDTO issueDTO) {
+		int i = 1;
 		Issue issue = new Issue();
 		issue = this.convertTo(issueDTO);
 		issueDAO.updateIssue(issue);
+		
+		System.out.println("****************************************************** UPDATE ISSUE >>>> " + i);
+		i++;
 	}
 
 	@Override
@@ -81,6 +90,18 @@ public class IssueServiceImpl implements IssueService{
 		}
 		return issuesDTO;	
 	}
+	
+	@Override
+	public List<IssueDTO> loadIssuesByUser(String username) {
+		List<Issue> issues = new ArrayList<Issue>();
+		issues = issueDAO.getIssuesByUser(username);
+		List<IssueDTO> issuesDTO = new ArrayList<IssueDTO>();
+		for(Issue issue : issues){			
+			issuesDTO.add(convertToDTO(issue));
+		}
+		return issuesDTO;	
+	}
+
 	
 	@Override
 	public IssueDTO getIssueById(String issueID){
@@ -339,6 +360,7 @@ public class IssueServiceImpl implements IssueService{
 				
 	}
 
+	
 
 	
 }
