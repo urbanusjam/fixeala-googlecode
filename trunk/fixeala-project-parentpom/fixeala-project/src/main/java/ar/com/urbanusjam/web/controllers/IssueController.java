@@ -183,7 +183,17 @@ public class IssueController {
 					//asignar AREA segun ubicacion geografica
 					
 					
-					//asignar USUARIO (ADMIN o MANAGER) automaticamente
+					//asignar USUARIO (ADMIN o MANAGER) según AREA
+						//obtener usuarios del area
+							//asignar si el usuario: 
+								//- no tiene reclamos asignados
+										//- lista de reclamos == 0
+										//- todos resueltos, cerrados o archivados
+								//- tiene la menor cantidad de reclamos asignados
+							
+								
+							
+					
 			
 					
 					issueService.reportIssue(issue);			

@@ -18,38 +18,49 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.jsonp-2.4.0.min.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery-ui-1.10.3.custom.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.mockjax.js"></script> 
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.tablesorter.js"></script> 
+<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.tablesorter.js"></script>  --%>
   	<script type="text/javascript" src="http://code.jquery.com/jquery-migrate-1.1.0.js"></script>
     
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.geocomplete.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/d3.v3.js"></script>
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/d3.jsonp.js"></script>
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/togeojson.js"></script>
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/topojson.js"></script>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/d3.jsonp.js"></script>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/togeojson.js"></script>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/topojson.js"></script>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/json.min.js"></script>	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/map.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/map-d3.js" charset="utf-8"></script>
   		
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap.js"></script>
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap-editable.js"></script>
-<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap-datetimepicker.js"></script> --%>
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/select2.js"></script>
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap-sortable.js"></script> 
+<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap.js"></script> --%>
+<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-editable.js"></script> --%>
+<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-datetimepicker.js"></script> --%>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/select2.js"></script>
+<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-sortable.js"></script>  --%>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-rowlink.js"></script>
   	
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap-contextmenu.js"></script> 
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap-fileupload.js"></script>
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootbox.js"></script>
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap-wysiwyg.js"></script> 
+  	<!-- Fuel UX CDN link to responsive css -->
+        <link href="http://fuelux.exacttargetapps.com/fuelux/2.0/css/fuelux-responsive.css" rel="stylesheet" />
+        
+  	<link rel="stylesheet" href="https://fuelcdn.com/fuelux/2.3/css/fuelux.min.css">
+<script src="https://fuelcdn.com/fuelux/2.3/loader.min.js"></script>
+
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-contextmenu.js"></script> 
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-fileupload.js"></script>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootbox.js"></script>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-wysiwyg.js"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.hotkeys.js"></script>	 
+<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fuelux/require.js"></script> --%>
+<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fuelux/datagrid.js"></script> --%>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fuelux/underscore.js"></script>
   	  	
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json.min.js"></script>	
+
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.form.js"></script>  
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.form.wizard.js"></script>    	
   	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/markerclusterer.js"></script>	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/markermanager.js"></script>	
     
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.dataTables.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/DT_bootstrap.js"></script>
+<%--     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.dataTables.js"></script> --%>
+<%--     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/DT_bootstrap.js"></script> --%>
     	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.validate.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.tagit.js"></script>
@@ -66,16 +77,18 @@
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.tagit.css" rel="stylesheet">
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/tagit.ui-zendesk.css" rel="stylesheet">	
 	 
-	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap.css" rel="stylesheet">   
-	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap-combined.min.css" rel="stylesheet"> 
-	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap-editable.css" rel="stylesheet"> 
-	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap-sortable.css" rel="stylesheet">
-	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap-responsive.css" rel="stylesheet">
-	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap-fileupload.css" rel="stylesheet">
+<%-- 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/bootstrap.css" rel="stylesheet">    --%>
+	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/bootstrap-combined.min.css" rel="stylesheet"> 
+	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/bootstrap-editable.css" rel="stylesheet"> 
+	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/bootstrap-sortable.css" rel="stylesheet">
+	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/bootstrap-rowlink.css" rel="stylesheet"> 
+	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/bootstrap-responsive.css" rel="stylesheet">
+	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/bootstrap-fileupload.css" rel="stylesheet">
 <%-- 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/datetimepicker.css" rel="stylesheet"> --%>
-	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/select2.css" rel="stylesheet">   
-	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/select2-bootstrap.css" rel="stylesheet">   
+	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/select2.css" rel="stylesheet">   
+	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/select2-bootstrap.css" rel="stylesheet">   
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/font-awesome.css" rel="stylesheet">
+	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/fuelux/fuelux.css" rel="stylesheet">
 	
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/tooltipster.css" rel="stylesheet">		
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/style2.css" rel="stylesheet">

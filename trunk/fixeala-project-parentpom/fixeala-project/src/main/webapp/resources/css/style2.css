@@ -809,8 +809,10 @@ div[data-role="editor-toolbar"] {
 /* 		 } */
 /* .tbl-licitacion-form  tbody td.dynamic{height:30px;} */
 
-
-
+#tblUserIssues{table-layout:fixed;}
+#tblUserIssues thead th{cursor:pointer; }
+#tblUserIssues thead th:hover{background-color: #f1f1f1;}
+#tblUserIssues thead th i{float:right;margin-top: 4px;}
 #dahsboard-nav li a i{width: 25px; height:25px; margin-right:10px; text-align:center;}
 
 #dahsboard-nav li, #dahsboard-nav li a  {font-size:13px;}

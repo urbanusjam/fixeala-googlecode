@@ -44,13 +44,19 @@ public class UserDAOImpl extends GenericDAOImpl<User, Serializable>  implements 
 	public User loadUserByUsername(String username) throws UsernameNotFoundException {
 		List<User> users = this.findWhere(" username = ? ",  new Object[]{username});		
 		return users.size() > 0 ? users.get(0) : null;						
-	}
-	
+	}	
 	
 	@Override
 	public List<User> findAllActiveUsers() {
 		List<User> users = new ArrayList<User>();		
 		users = this.findWhere(" enabled = true ORDER BY username, neighborhood");			
+		return users;
+	}
+	
+	@Override
+	public List<User> findUsersByArea(String areaID) {
+		List<User> users = new ArrayList<User>();		
+		users = this.findWhere(" enabled = true AND area.nombre = ? AND isArea = false ORDER BY username ASC", new Object[]{areaID});			
 		return users;
 	}
 	
@@ -175,6 +181,5 @@ public class UserDAOImpl extends GenericDAOImpl<User, Serializable>  implements 
 		activationDAO.deleteTokenByUsername(username);	
 	}
 
-		
 
 }

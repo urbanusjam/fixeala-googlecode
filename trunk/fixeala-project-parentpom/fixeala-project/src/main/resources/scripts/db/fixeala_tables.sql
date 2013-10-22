@@ -44,6 +44,7 @@ CREATE TABLE USER (
 	   LAST_PASSWORD_CHANGE_DATE DATETIME NULL,    	   
 	   LAST_LOGIN_DATE DATETIME NULL,   
 	   CLOSED_ACCOUNT_DATE DATETIME NULL,   
+	   IS_AREA TINYINT(1) NOT NULL,
 	   VERIFIED_OFFICIAL TINYINT(1) NOT NULL,
 	   ENABLED TINYINT(1) NOT NULL,		
 	   
@@ -232,9 +233,10 @@ INSERT INTO `user`
 `NEIGHBORHOOD`,`REGISTRATION_DATE`,`LAST_PASSWORD_CHANGE_DATE`,`LAST_LOGIN_DATE`,`CLOSED_ACCOUNT_DATE`, `VERIFIED_OFFICIAL`, `ENABLED`) 
 VALUES
 ('coripel','c7589745dd1841655ac79a8f6fbb8e63b01b1e00','coripel@gmail.com','Cora','Reyes Calens',NULL, 5, 'Responsable de area', NULL, NULL, NULL,NULL,NULL,NULL,NULL,1,1),
-('fakeuser','43a3f7f06dc85a1d3249e073c2fe3fa2cfe06cc5','fakeuser@gmail.com','Juan','Vasquez',NULL, 1, 'Presidente Comunal', NULL, NULL, NULL,NULL,NULL,NULL,NULL,1,1),
+('fakeuser','20dc925be88e7d0bd130c6c2cf43a77eb344243f','fakeuser@gmail.com','Juan','Vasquez',NULL, 1, 'Presidente Comunal', NULL, NULL, NULL,NULL,NULL,NULL,NULL,1,1),
 ('mock','3a49a0e2f78aa4d0300177f4588388a21833b0b5','mock@gmail.com','Julia','Rikiki', NULL, 1, 'Miembro Junta Comunal', NULL, NULL, NULL,NULL,NULL,NULL,NULL,0,1),
 ('helloworld','dce876c90f1e39b5a195d468ebbdfb7f192c4c8a','helloworld@gmail.com',NULL,NULL, NULL, NULL, NULL, NULL, NULL, 'San Telmo',NULL,NULL,NULL,NULL,0,1),
+('dummy','37323501a7840726056e7d2159f2c776482f13ef','dummy@gmail.com',NULL,NULL, NULL, NULL, NULL, NULL, NULL, 'Caballito',NULL,NULL,NULL,NULL,0,1),
 ('comuna1',NULL,'comuna_uno@buenosaires.gob.ar',NULL,NULL, NULL, 1, 'Area', NULL, NULL, NULL,NULL,NULL,NULL,NULL,1,1),
 ('comuna2',NULL,'comuna_dos@buenosaires.gob.ar',NULL,NULL, NULL, 2, 'Area', NULL, NULL, NULL,NULL,NULL,NULL,NULL,1,1);
 
@@ -245,7 +247,8 @@ VALUES
 ('mock','ROLE_MANAGER'),
 ('comuna1','ROLE_AREA'), 
 ('comuna2','ROLE_AREA'),
-('helloworld','ROLE_USER');
+('helloworld','ROLE_USER'),
+('dummy','ROLE_USER');
 
 
 

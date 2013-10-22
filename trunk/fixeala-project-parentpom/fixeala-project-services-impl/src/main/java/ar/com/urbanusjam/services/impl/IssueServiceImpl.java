@@ -3,9 +3,16 @@ package ar.com.urbanusjam.services.impl;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.hibernate.Hibernate;
 
@@ -14,6 +21,7 @@ import ar.com.urbanusjam.dao.IssueDAO;
 import ar.com.urbanusjam.dao.IssueHistorialRevisionDAO;
 import ar.com.urbanusjam.dao.IssueLicitacionDAO;
 import ar.com.urbanusjam.dao.TagDAO;
+import ar.com.urbanusjam.dao.UserDAO;
 import ar.com.urbanusjam.entity.annotations.Area;
 import ar.com.urbanusjam.entity.annotations.Issue;
 import ar.com.urbanusjam.entity.annotations.IssueHistorialRevision;
@@ -26,17 +34,24 @@ import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.IssueHistorialRevisionDTO;
 import ar.com.urbanusjam.services.dto.IssueLicitacionDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
+import ar.com.urbanusjam.services.mock.MapUtil;
+import ar.com.urbanusjam.services.utils.IssueStatus;
 import ar.com.urbanusjam.services.utils.Operation;
 
-public class IssueServiceImpl implements IssueService{
+public class IssueServiceImpl implements IssueService {
 	
 	private IssueDAO issueDAO;
+	private UserDAO userDAO;
 	private AreaDAO areaDAO;
 	private TagDAO tagDAO;
-
+	
 	
 	public void setIssueDAO(IssueDAO issueDAO) {
 		this.issueDAO = issueDAO;
+	}
+
+	public void setUserDAO(UserDAO userDAO) {
+		this.userDAO = userDAO;
 	}
 
 	public void setAreaDAO(AreaDAO areaDAO) {
@@ -50,11 +65,11 @@ public class IssueServiceImpl implements IssueService{
 
 	@Override
 	public void reportIssue(IssueDTO issueDTO) {
-		Area area = areaDAO.getAreaByName("Comuna 1");
-		int i = area.getIssues().size();
+		Area area = areaDAO.getAreaByName("Comuna 1"); //cambiar!!!!
 		Issue issue = new Issue();
 		issue = this.convertTo(issueDTO);
 		issue.setAssignedArea(area);
+		asignarUsuarioDefault(issue);
 		issueDAO.saveIssue(issue);		
 	}
 	
@@ -68,6 +83,98 @@ public class IssueServiceImpl implements IssueService{
 		System.out.println("****************************************************** UPDATE ISSUE >>>> " + i);
 		i++;
 	}
+	
+	
+	private void asignarUsuarioDefault(Issue issue) {
+		
+		//asignar USUARIO (ADMIN o MANAGER) según AREA
+		//obtener usuarios del area
+		List<User> users = new ArrayList<User>();
+		users = userDAO.findUsersByArea(issue.getAssignedArea().getNombre());
+				
+			for(User u : users){
+									
+					List<Issue> assignedIssues = new ArrayList<Issue>();
+					assignedIssues = issueDAO.getAssignedIssuesByVerifiedOfficial(u.getUsername());
+					
+					//asignar si el usuario: 
+					
+						//- no tiene reclamos asignados
+						if(assignedIssues.size() == 0){
+							//- lista de reclamos == 0
+							issue.setAssignedOfficial(u);
+							break;
+						}						
+						
+						//- tiene reclamos asignados
+						else{
+							boolean hasPendingIssues = false;
+							for(Issue i : assignedIssues){
+								//- todos resueltos, cerrados o archivados
+								if( i.getStatus().equals(IssueStatus.SOLVED) 
+										|| i.getStatus().equals(IssueStatus.CLOSED)
+										|| i.getStatus().equals(IssueStatus.ARCHIVED) ){
+									hasPendingIssues = false;
+								}
+								else
+									hasPendingIssues = true;
+							}
+							
+							if(!hasPendingIssues){
+								issue.setAssignedOfficial(u);
+								break;
+							}
+							
+							else{
+								//- tiene la menor cantidad de reclamos asignados
+								if(hasLessAssignedIssues(users, u)){
+									issue.setAssignedOfficial(u);
+									break;
+								}
+								//- random
+								else{
+									Random random = new Random();
+									int randomUser = 1 + random.nextInt(users.size());
+									issue.setAssignedOfficial(users.get(randomUser));
+									break;
+								}
+							}
+							
+						}
+					
+				}
+				
+		
+	}
+	
+	private boolean hasLessAssignedIssues(List<User> users, User user){
+		HashMap<String, Integer> unSorted = new HashMap<String, Integer>();
+		
+		for(User u : users){
+			unSorted.put(u.getUsername(), (issueDAO.getAssignedIssuesByVerifiedOfficial(u.getUsername()).size()));
+		}
+		
+		Map<String, Integer> sorted = (SortedMap<String, Integer>) MapUtil.sortByComparator(unSorted);
+		
+		if(sorted.entrySet().iterator().next().getKey().equals(user.getUsername()))
+			return true;
+		
+		return false;
+		
+	}
+	
+	
+	@Override
+	public List<IssueDTO> getIssuesAsignados(String username){
+		List<Issue> issues = new ArrayList<Issue>();
+		issues = issueDAO.getAssignedIssuesByVerifiedOfficial(username);
+		List<IssueDTO> issuesDTO = new ArrayList<IssueDTO>();
+		for(Issue issue : issues){		
+			issuesDTO.add(convertToDTO(issue));
+		}
+		return issuesDTO;	
+	}
+	
 
 	@Override
 	public List<IssueDTO> loadAllIssues() {
@@ -95,6 +202,17 @@ public class IssueServiceImpl implements IssueService{
 	public List<IssueDTO> loadIssuesByUser(String username) {
 		List<Issue> issues = new ArrayList<Issue>();
 		issues = issueDAO.getIssuesByUser(username);
+		List<IssueDTO> issuesDTO = new ArrayList<IssueDTO>();
+		for(Issue issue : issues){			
+			issuesDTO.add(convertToDTO(issue));
+		}
+		return issuesDTO;	
+	}
+	
+	@Override
+	public List<IssueDTO> loadIssuesByArea(String areaName) {
+		List<Issue> issues = new ArrayList<Issue>();
+		issues = issueDAO.getIssuesByArea(areaName);
 		List<IssueDTO> issuesDTO = new ArrayList<IssueDTO>();
 		for(Issue issue : issues){			
 			issuesDTO.add(convertToDTO(issue));
@@ -318,6 +436,7 @@ public class IssueServiceImpl implements IssueService{
 		issueDTO.setLatitude(String.valueOf(issue.getLatitude()));
 		issueDTO.setLongitude(String.valueOf(issue.getLongitude()));
 		issueDTO.setStatus(issue.getStatus());
+		issueDTO.setUsername(userDTO.getUsername());
 		
 		if(issue.getAssignedArea() != null){
 			issueDTO.setAssignedArea(convertTo(issue.getAssignedArea()));
