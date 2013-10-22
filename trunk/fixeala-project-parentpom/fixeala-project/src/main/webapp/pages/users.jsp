@@ -8,56 +8,42 @@
 	
 		$(document).ready(function(){
 			
-			$("#tblUserIssues").tablesorter(); 
-		   
-		         $.get("http://localhost:8080/fixeala/users/" + '${profileUser}' + "/loadUserIssues.html", function(html) { 
-		             // append the "ajax'd" data to the table body 
-		             $("#tblUserIssues tbody").append(html); 
-		            // let the plugin know that we made a update 
-		            $("#tblUserIssues").trigger("update"); 
-		            // set sorting column and direction, this will sort on the first and third column 
-		            var sorting = [[2,1],[0,0]]; 
-		            // sort on the first column 
-		            $("#tblUserIssues").trigger("sorton",[sorting]); 
-		        }); 
-		        return false; 
-	
+		
 			
-			
-// 			$('#tblUserIssues').dataTable({
-// 				"bProcessing": true,
-// 				"bServerSide": true,
-// 				"bSortable": true,
-// 				"aaSorting": [[ 7, "desc" ]],
-// 				"sPaginationType": "bootstrap",
-// 				"aoColumns" : [	 
-// 				               	 { "sTitle" : "#", "mData" : "id"     },
-// 				            	 { "sTitle" : "Fecha" , "mData" : "date",  
-// 				            		 "fnRender": function ( data ) {
-// 				                         var date = new Date(data.aData["date"]);
-// 				                         date = date.getDate()+"/"+ (date.getMonth() + 1) +"/"+date.getFullYear();
-// 				                         return "<div class= date>"+date+"<div>";
-// 				                         }
-// 				               	 },
-// 				             	 { "sTitle" : "Título" , "mData" : "title" },
-// 				                 { "sTitle" : "Dirección" , "mData" : "address" },
-// 				               	 { "sTitle" : "Barrio" , "mData" : "neighborhood" },
-// 				               	 { "sTitle" : "Ciudad" , "mData" : "city" },
-// 				               	 { "sTitle" : "Provincia" , "mData" : "province" },
-// 				               	 { "sTitle" : "Estado" , "mData" : "status"}
+			$('#tblUserIssues').dataTable({
+				"bProcessing": true,
+				"bServerSide": true,
+				"bSortable": true,
+				"aaSorting": [[ 7, "desc" ]],
+				"sPaginationType": "bootstrap",
+				"aoColumns" : [	 
+				               	 { "sTitle" : "#", "mData" : "id"     },
+				            	 { "sTitle" : "Fecha" , "mData" : "date",  
+				            		 "fnRender": function ( data ) {
+				                         var date = new Date(data.aData["date"]);
+				                         date = date.getDate()+"/"+ (date.getMonth() + 1) +"/"+date.getFullYear();
+				                         return "<div class= date>"+date+"<div>";
+				                         }
+				               	 },
+				             	 { "sTitle" : "Título" , "mData" : "title" },
+				                 { "sTitle" : "Dirección" , "mData" : "address" },
+				               	 { "sTitle" : "Barrio" , "mData" : "neighborhood" },
+				               	 { "sTitle" : "Ciudad" , "mData" : "city" },
+				               	 { "sTitle" : "Provincia" , "mData" : "province" },
+				               	 { "sTitle" : "Estado" , "mData" : "status"}
 				            	
-// 			                  ],		  		
-// 				"sAjaxSource": "http://localhost:8080/fixeala/users/" + '${profileUser}' + "/loadUserIssues.html",
-// 				"fnServerData": function ( sSource, aoData, fnCallback ) {
-// 			            $.ajax( {
-// 			                "dataType": 'json',
-// 			                "type": "GET",
-// 			                "url": sSource,
-// 			                "data": aoData,
-// 			                "success": fnCallback
-// 			            } );
-// 			        }	  
-// 			});//TBL ISSUES
+			                  ],		  		
+				"sAjaxSource": "http://localhost:8080/fixeala/users/" + '${profileUser}' + "/loadUserIssues.html",
+				"fnServerData": function ( sSource, aoData, fnCallback ) {
+			            $.ajax( {
+			                "dataType": 'json',
+			                "type": "GET",
+			                "url": sSource,
+			                "data": aoData,
+			                "success": fnCallback
+			            } );
+			        }	  
+			});//TBL ISSUES
 			
 			
 		});
@@ -706,7 +692,7 @@
 						<div class="tab-content">
 							<div class="tab-pane fade in active" id="issuesNuevos">
 							   	<table id="tblUserIssues" cellpadding="0" cellspacing="0" border="0" 
-    								class="table table-striped table-bordered table-hover tablesorter">
+    								class="table table-striped table-bordered table-hover datatable">
 									<thead>
 										<tr>				
 											<th data-sortkey="0" width="50">id</th>
