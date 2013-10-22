@@ -40,5 +40,7 @@ public interface UserService extends UserDetailsService{
 	public void activateAccount(String username);	
 	public void closeAccount(String username);
 	
+	public List<String> getUserRoles(String username);
+	
 
 }
