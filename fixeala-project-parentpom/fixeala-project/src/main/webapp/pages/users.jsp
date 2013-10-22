@@ -8,42 +8,186 @@
 	
 		$(document).ready(function(){
 			
-		
 			
-			$('#tblUserIssues').dataTable({
-				"bProcessing": true,
-				"bServerSide": true,
-				"bSortable": true,
-				"aaSorting": [[ 7, "desc" ]],
-				"sPaginationType": "bootstrap",
-				"aoColumns" : [	 
-				               	 { "sTitle" : "#", "mData" : "id"     },
-				            	 { "sTitle" : "Fecha" , "mData" : "date",  
-				            		 "fnRender": function ( data ) {
-				                         var date = new Date(data.aData["date"]);
-				                         date = date.getDate()+"/"+ (date.getMonth() + 1) +"/"+date.getFullYear();
-				                         return "<div class= date>"+date+"<div>";
-				                         }
-				               	 },
-				             	 { "sTitle" : "Título" , "mData" : "title" },
-				                 { "sTitle" : "Dirección" , "mData" : "address" },
-				               	 { "sTitle" : "Barrio" , "mData" : "neighborhood" },
-				               	 { "sTitle" : "Ciudad" , "mData" : "city" },
-				               	 { "sTitle" : "Provincia" , "mData" : "province" },
-				               	 { "sTitle" : "Estado" , "mData" : "status"}
+			var myDataSource = function (options) {
+				 this._formatter = options.formatter;
+			     this._columns = options.columns;
+			};
+
+			myDataSource.prototype = {
+
+			        columns: function () {
+			                return this._columns;
+			        },
+
+			        data: function (options, callback) {
+
+			                var url = "http://localhost:8080/fixeala/users/" + '${profileUser}' + "/loadUserIssues.html";
+			              
+			               
+			                
+
+// 			                if (options.search) {
+
+			                        // Search active.  Add URL parameters for Flickr API.
+// 			                        url += '&tags=' + options.search;
+// 			                        url += '&per_page=' + options.pageSize;
+// 			                        url += '&page=' + (options.pageIndex + 1);
+
+								$.ajax({
+										url: url,
+									 	dataType: 'json',
+		                             	type: 'GET', 
+							            success: function(response) { 
+							            	
+							            	
+							            	// Prepare data to return to Datagrid
+			                                var data = response;
+			                                var count = data.length;			                             
+			                              
+			                               
+
+											// SORTING
+											if (options.sortProperty) {
+												data = _.sortBy(data, options.sortProperty);
+												if (options.sortDirection === 'desc') data.reverse();
+											}
+											
+				                               
+											
+// 											if (self._formatter) self._formatter(data);
+
+											callback({ data: data, start: 0, end: 0, count: count, pages: 0, page: 0 });
+							            		
+							            },
+						            						           
+							            error: function(jqXHR, exception) {
+							                if (jqXHR.status === 0) {
+							                    alert('Not connect.\n Verify Network.');
+							                } else if (jqXHR.status == 404) {
+							                    alert('Requested page not found. [404]');
+							                } else if (jqXHR.status == 500) {
+							                    alert('Internal Server Error [500].');
+							                } else if (exception === 'parsererror') {
+							                    alert('Requested JSON parse failed.');
+							                } else if (exception === 'timeout') {
+							                    alert('Time out error.');
+							                } else if (exception === 'abort') {
+							                    alert('Ajax request aborted.');
+							                } else {
+							                    alert('Uncaught Error.\n' + jqXHR.responseText);
+							                }
+							            }
+				        		});	    
+								
+								
+								
+
+			                      
+// 			                } else {
+
+// 			                        // No search. Return zero results to Datagrid
+// 			                        callback({ data: [], start: 0, end: 0, count: 0, pages: 0, page: 0 });
+
+// 			                }
+			        }
+			};
+			
+			$('#tblUserIssues').datagrid({ 
+				
+				dataSource: new myDataSource({
+
+                    // Column definitions for Datagrid
+                    columns: [{
+                    		label: '#',
+                            property: 'id',
+                            sortable: true,
+                            sortProperty: 'id'
+                    },{
+                    	 	label: 'Fecha',
+                            property: 'date',
+                            sortable: true,
+                            sortProperty: 'date'
+                    },{
+	                	 	label: 'Título',
+	                        property: 'title',
+	                        sortable: true,
+	                        sortProperty: 'title'
+                    },{
+	                	 	label: 'Dirección',
+	                        property: 'address',
+	                        sortable: true,
+	                        sortProperty: 'address'
+                	},{
+	                	 	label: 'Barrio',
+	                        property: 'neighborhood',
+	                        sortable: true,
+	                        sortProperty: 'neighborhood'
+                	},{
+	                	 	label: 'Ciudad',
+	                        property: 'city',
+	                        sortable: true,
+	                        sortProperty: 'city'
+                	},{
+	                	 	label: 'Provincia',
+	                        property: 'province',
+	                        sortable: true,
+	                        sortProperty: 'province'
+                	},{
+                	 	label: 'Usuario',
+                        property: 'username',
+                        sortable: true
+                     
+                	},{
+                	 	label: 'Estado',
+                        property: 'status',
+                        sortable: true,
+                        sortProperty: 'status'
+                	}],
+
+                   
+            })
+			});
+			
+		
+// 		$('#tblUserIssues').dataTable({
+// 				"bProcessing": true,
+// 				"bServerSide": true,
+// 				"bSortable": true,
+// 				"aaSorting": [[ 7, "desc" ]],
+// 				"sPaginationType": "bootstrap",
+// 				"aoColumns" : [	 
+// 				               	 { "sTitle" : "#", "mData" : "id"     },
+// 				            	 { "sTitle" : "Fecha" , "mData" : "date",  
+// 				            		 "fnRender": function ( data ) {
+// 				                         var date = new Date(data.aData["date"]);
+// 				                         date = date.getDate()+"/"+ (date.getMonth() + 1) +"/"+date.getFullYear();
+// 				                         return "<div class= date>"+date+"<div>";
+// 				                         }
+// 				               	 },
+// 				             	 { "sTitle" : "Título" , "mData" : "title" },
+// 				                 { "sTitle" : "Dirección" , "mData" : "address" },
+// 				               	 { "sTitle" : "Barrio" , "mData" : "neighborhood" },
+// 				               	 { "sTitle" : "Ciudad" , "mData" : "city" },
+// 				               	 { "sTitle" : "Provincia" , "mData" : "province" },
+// 				               	 { "sTitle" : "Usuario", "mData" : "user.username" },
+// 				               	 { "sTitle" : "Estado" , "mData" : "status"}
 				            	
-			                  ],		  		
-				"sAjaxSource": "http://localhost:8080/fixeala/users/" + '${profileUser}' + "/loadUserIssues.html",
-				"fnServerData": function ( sSource, aoData, fnCallback ) {
-			            $.ajax( {
-			                "dataType": 'json',
-			                "type": "GET",
-			                "url": sSource,
-			                "data": aoData,
-			                "success": fnCallback
-			            } );
-			        }	  
-			});//TBL ISSUES
+// 			                  ],		  		
+// 				"sAjaxSource": "http://localhost:8080/fixeala/users/" + '${profileUser}' + "/loadUserIssues.html",
+// 				"fnServerData": function ( sSource, aoData, fnCallback ) {
+// 			            $.ajax( {
+// 			                "dataType": 'json',
+// 			                "type": "GET",
+// 			                "url": sSource,
+// 			                "data": aoData,
+// 			                "success": fnCallback
+// 			            } );
+// 			        }	  
+// 			});
+			
+			
+		$('tbody.rowlink').rowlink();
 			
 			
 		});
@@ -171,96 +315,32 @@
 					    	</div>
 					    	
 					    	<ul class="nav nav-tabs">
-						    	<li class="active"><a href="#issuesNuevos" data-toggle="tab">Nuevos (3)</a></li>
-							  	<li><a href="#issuesAsignados" data-toggle="tab">Asignados (1)</a></li>
-							  	<li><a href="#issuesTodos" data-toggle="tab">Todos (4)</a></li>
+						    	<li class="active"><a href="#issuesAsignados" data-toggle="tab">Asignados</a></li>
 							</ul>
 							
-							<div class="tab-content">
-								<div class="tab-pane fade in active" id="issuesNuevos">
-								   	<table class="table table-striped table-hover issueTable">
-								    	<thead>
-								    		<tr>
-									   			<th>#</th>
-									   			<th>Fecha</th>
-									   			<th>Estado</th>
-									   			<th>TÃ­tulo</th>
-									   			<th>DirecciÃ³n</th>
-									   			<th>Barrio</th>
-									   			<th>Usuario</th>
-								   			</tr>
-								   		<tbody>
-								   			<tr>
-								   				<td>2345</td>
-								   				<td>12/03/13 14:22</td>
-								   				<td>ABIERTO</td>
-								   				<td><a href="#">Un bache mal arreglado</a></td>
-								   				<td>Libertad 1111</td>
-								   				<td>Recoleta</td>
-								   				<td>Sin asignar</td>
-								   			</tr>
-								   			<tr>
-								   				<td>4489</td>
-								   				<td>15/03/13 09:45</td>
-								   				<td>ABIERTO</td>
-								   				<td><a href="#">El alumbrado estÃ¡ defectuoso</a></td>
-								   				<td>Av. CÃ³rdoba 999</td>
-								   				<td>San NicolÃ¡s</td>
-								   				<td>Sin asignar</td>
-								   			</tr>
-								   			<tr>
-								   				<td>7856</td>
-								   				<td>12/03/13 14:22</td>
-								   				<td>ABIERTO</td>
-								   				<td><a href="#">Vereda destruida por obras</a></td>
-								   				<td>Cochabamba 888</td>
-								   				<td>San Telmo</td>
-								   				<td>Sin asignar</td>
-								   			</tr>
-								   		</tbody>
-								   	</table>
-								   	<div class="pagination pagination-right">
-									  <ul>
-									    <li><a href="#">&laquo; Anterior</a></li>
-									    <li><a href="#">1</a></li>
-									    <li><a href="#">2</a></li>
-									    <li><a href="#">3</a></li>
-									    <li><a href="#">4</a></li>
-									    <li><a href="#">5</a></li>
-									    <li><a href="#">Siguiente &raquo;</a></li>
-									  </ul>
-									</div>
-								</div>
-								
-								<div class="tab-pane fade" id="issuesAsignados">
-									<table class="table table-striped table-hover">
-								    	<thead>
-								    		<tr>
-									   			<th>#</th>
-									   			<th>Fecha</th>
-									   			<th>Estado</th>
-									   			<th>TÃ­tulo</th>
-									   			<th>DirecciÃ³n</th>
-									   			<th>Barrio</th>
-									   			<th>Usuario</th>
-								   			</tr>
-								   		<tbody>
-								   			<tr>
-								   				<td>2345</td>
-								   				<td>19/06/13 11:09</td>
-								   				<td>ABIERTO</td>
-								   				<td><a href="#">Arreglo defectuoso de alcantarilla</a></td>
-								   				<td>Av. de Mayo 434</td>
-								   				<td>Monsetrrat</td>
-								   				<td><a href="#">FerreroP</a></td>
-								   			</tr>
-								   		</tbody>
-								   	</table>
-								</div>
 							
-								<div class="tab-pane fade" id="issuesTodos">
-									Todos los reclamos.
+							<div class="tab-content">
+								<div class="tab-pane fade in active" id="issuesAsignados">
+								   	<table id="tblUserIssues" cellpadding="0" cellspacing="0" border="0" 
+    								class="table table-striped table-bordered table-hover datagrid" data-provides="rowlink">
+									<thead>
+<!-- 										<tr>				 -->
+<!-- 											<th width="50">id</th> -->
+<!-- 											<th width="100">date</th> -->
+<!-- 											<th width="250">title</th>			 -->
+<!-- 											<th width="200">address</th> -->
+<!-- 											<th width="150">neighborhood</th> -->
+<!-- 											<th width="150">city</th> -->
+<!-- 											<th width="150">user.username</th> -->
+<!-- 											<th width="150">province</th> -->
+<!-- 											<th>status</th>		 -->
+<!-- 										</tr> -->
+									</thead>
+									<tbody>			
+									</tbody>	
+								</table>
 								</div>
+													
 							</div>
 							
 							<!-- Context Menu -->
@@ -269,7 +349,7 @@
 							      <li><a tabindex="-1" href="#"><i class="icon-paper-clip"></i>&nbsp;&nbsp;Ver detalles</a></li>
 							      <li><a tabindex="-1" href="#"><i class="icon-globe"></i>&nbsp;&nbsp;Ver en mapa</a></li>
 							      <li class="divider"></li>
-							      <li><a tabindex="-1" href="#"><i class="icon-user"></i>&nbsp;&nbsp;Asignar a usuario</a></li>
+							      <li><a tabindex="-1" href="#assignUserModal" data-toggle="modal" ><i class="icon-user"></i>&nbsp;&nbsp;Asignar a usuario</a></li>
 							      <li class="divider"></li>
 							      <li><a tabindex="-1" href="#"><i class="icon-thumbs-up-alt"></i>&nbsp;&nbsp;Admitir</a></li>
 							      <li><a tabindex="-1" href="#"><i class="icon-ok"></i>&nbsp;&nbsp;Resolver</a></li>
@@ -277,13 +357,15 @@
 							      <li><a tabindex="-1" href="#"><i class="icon-folder-open-alt"></i>&nbsp;&nbsp;Reabrir</a></li>
 							    </ul>
 	  						</div>
+	  						
+	  						
 					    	
 					    	<script>
 						    	$(function() {
 						    		  
 						    		  var $contextMenu = $("#contextmenu-issue");
 						    		  
-						    		  $("body").on("contextmenu", "table.issueTable tr", function(e) {
+						    		  $("body").on("contextmenu", "#tblUserIssues tr", function(e) {
 						    		    $contextMenu.css({
 						    		      display: "block",
 						    		      left: e.pageX,
@@ -385,99 +467,6 @@
 			         		<div class="page-header">
 					    		<h3>Usuarios</h3>
 					    	</div>
-					    	
-					    	
-					    	<!-- Modal -->
-							<div id="userModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-							  <div class="modal-header">
-							    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-							    <h3 id="myModalLabel">Registro de nuevo usuario</h3>
-							  </div>
-							  <div class="modal-body">
-							    <form class="form-horizontal">
-								  <fieldset>
-								  	 <div class="control-group">
-									    <label class="control-label" for="inputPassword">Apellido y Nombre(s)</label>
-									    <div class="controls">
-									      <input type="text" id="inputPassword" placeholder="Nombre y Apellido">
-									    </div>
-								     </div>
-								     <div class="control-group">
-									    <label class="control-label" for="inputPassword">Usuario</label>
-									    <div class="controls">
-									      <input type="text" id="inputPassword" placeholder="Nombre de usuario">
-									    </div>
-								     </div>
-									  <div class="control-group">
-									  	<label class="control-label" for="inputEmail">Email</label>
-									    <div class="controls">
-									      <input type="text" id="inputEmail" placeholder="Email">
-									    </div>
-									  </div>
-								      <div class="control-group">
-									    <label class="control-label" for="inputPassword">Contraseña</label>
-									    <div class="controls">
-									      <input type="password" id="inputPassword" placeholder="Contraseña">
-									    </div>
-								     </div>
-								     <div class="control-group">
-									    <label class="control-label" for="inputPassword">Confirme contraseña</label>
-									    <div class="controls">
-									      <input type="password" id="inputPassword" placeholder="Confirme contraseña">
-									    </div>
-								     </div>
-								     <div class="control-group">
-									    <label class="control-label" for="inputPassword">Cargo</label>
-									    <div class="controls">
-									      <select class="span7">
-									    	<option>Responsable de Area</option>
-									    	<option>Asistente</option>
-								    	  </select>
-									    </div>
-								     </div>
-								     <div class="control-group">
-									    <label class="control-label" for="inputPassword">Sub-Area</label>
-									    <div class="controls">
-										    <select class="span7">
-										    	<option>S. S. de Administracion (SSADM)</option>
-										    	<option>S. S. de Higiene Urbana (SSHU)</option>
-										    	<option>D. G. Cementerios (CGCEM)</option>
-										    	<option>D. G. Espacios Verdes (DGEV)</option>
-										    	<option>D. G. Reciclado (DGREC)</option>
-									    	</select>
-									    </div>
-								     </div>
-								     <div class="control-group">
-									    <label class="control-label" for="inputPassword">Rol</label>
-									    <div class="controls">
-									      <select class="span7">
-									    	<option>Administrador</option>
-									    	<option selected="selected">Editor</option>
-									    	<option>Usuario</option>
-								    	  </select>
-									    </div>
-								     </div>
-								   <div class="control-group">
-								       	<label class="control-label" for="inputPassword">Estado</label>
-								      	<div class="controls">
-									      	<label class="radio">
-									        	<input type="radio" checked> Activo
-									        </label>
-									        <label class="radio" >
-									        	<input type="radio"> Bloqueado
-									    	</label>
-								      </div>
-								    </div>
-								   
-								  </fieldset>
-								</form>
-							  </div>
-							  <div class="modal-footer" style="margin-bottom:0">
-							    <button class="btn btn-primary"><i class="icon-ok"></i>&nbsp;&nbsp;Guardar</button>
-							    <button class="btn" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i>&nbsp;&nbsp;Cancelar</button>
-							  </div>
-							</div>
-					    	
 					    	
 					    	<table class="table table-striped table-hover user-table">
 						    	<thead>
@@ -619,9 +608,151 @@
 			    </div>
 			  </div>
 			</div><!-- container fluid -->
-	    
-	    
+			
+			
+			
+			<!-- Modal ASSIGN USER -->
+			<div id="assignUserModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			  <div class="modal-header">
+			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+			    <h3 id="myModalLabel">Asignación de usuario</h3>
+			  </div>
+			  <div class="modal-body">
+			    <form class="form-horizontal">
+				  <fieldset>
+					  <div class="control-group">
+						    <h4>Reclamo #2222</h4>
+						    <p>
+						      Semaforo interrumpido en la Avenida Libertador.</p>
+					     </div>
+				  	
+				     <div class="control-group">
+					    <label>Seleccione usuario:</label>
+					    <div>
+						    <select class="span3">
+						    	<option>Juan Vásquez</option>
+						    	<option>Julia Rikiki</option>
+						    	<option>Cora Reyes Calens</option>
+					    	</select>
+					    </div>
+				     </div>
+				  </fieldset>
+				</form>
+			  </div>
+			  <div class="modal-footer" style="margin-bottom:0">
+			    <button class="btn btn-primary"><i class="icon-ok"></i>&nbsp;&nbsp;Asignar</button>
+			    <button class="btn" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i>&nbsp;&nbsp;Cancelar</button>
+			  </div>
+			</div>
+			
+			
+			
+			<!-- Modal NEW USER -->
+			<div id="userModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			  <div class="modal-header">
+			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+			    <h3 id="myModalLabel">Registro de nuevo usuario</h3>
+			  </div>
+			  <div class="modal-body">
+			    <form class="form-horizontal">
+				  <fieldset>
+				  	 <div class="control-group">
+					    <label class="control-label" for="inputPassword">Apellido y Nombre(s)</label>
+					    <div class="controls">
+					      <input type="text" id="inputPassword" placeholder="Nombre y Apellido">
+					    </div>
+				     </div>
+				     <div class="control-group">
+					    <label class="control-label" for="inputPassword">Usuario</label>
+					    <div class="controls">
+					      <input type="text" id="inputPassword" placeholder="Nombre de usuario">
+					    </div>
+				     </div>
+					  <div class="control-group">
+					  	<label class="control-label" for="inputEmail">Email</label>
+					    <div class="controls">
+					      <input type="text" id="inputEmail" placeholder="Email">
+					    </div>
+					  </div>
+				      <div class="control-group">
+					    <label class="control-label" for="inputPassword">Contraseña</label>
+					    <div class="controls">
+					      <input type="password" id="inputPassword" placeholder="Contraseña">
+					    </div>
+				     </div>
+				     <div class="control-group">
+					    <label class="control-label" for="inputPassword">Confirme contraseña</label>
+					    <div class="controls">
+					      <input type="password" id="inputPassword" placeholder="Confirme contraseña">
+					    </div>
+				     </div>
+				     <div class="control-group">
+					    <label class="control-label" for="inputPassword">Cargo</label>
+					    <div class="controls">
+					      <select class="span7">
+					    	<option>Responsable de Area</option>
+					    	<option>Asistente</option>
+				    	  </select>
+					    </div>
+				     </div>
+				     <div class="control-group">
+					    <label class="control-label" for="inputPassword">Sub-Area</label>
+					    <div class="controls">
+						    <select class="span7">
+						    	<option>S. S. de Administracion (SSADM)</option>
+						    	<option>S. S. de Higiene Urbana (SSHU)</option>
+						    	<option>D. G. Cementerios (CGCEM)</option>
+						    	<option>D. G. Espacios Verdes (DGEV)</option>
+						    	<option>D. G. Reciclado (DGREC)</option>
+					    	</select>
+					    </div>
+				     </div>
+				     <div class="control-group">
+					    <label class="control-label" for="inputPassword">Rol</label>
+					    <div class="controls">
+					      <select class="span7">
+					    	<option>Administrador</option>
+					    	<option selected="selected">Editor</option>
+					    	<option>Usuario</option>
+				    	  </select>
+					    </div>
+				     </div>
+				   <div class="control-group">
+				       	<label class="control-label" for="inputPassword">Estado</label>
+				      	<div class="controls">
+					      	<label class="radio">
+					        	<input type="radio" checked> Activo
+					        </label>
+					        <label class="radio" >
+					        	<input type="radio"> Bloqueado
+					    	</label>
+				      </div>
+				    </div>
+				   
+				  </fieldset>
+				</form>
+			  </div>
+			  <div class="modal-footer" style="margin-bottom:0">
+			    <button class="btn btn-primary"><i class="icon-ok"></i>&nbsp;&nbsp;Guardar</button>
+			    <button class="btn" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i>&nbsp;&nbsp;Cancelar</button>
+			  </div>
+			</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 	    </sec:authorize>
+	    
+	    
+	    
+	    
+	    
 	    
 	    
 	    
@@ -680,7 +811,7 @@
 				<!-- TAB RECLAMOS -->
 				<div class="tab-pane fade in active" id="issues">
 				    	<div class="page-header">
-				    	<h3>Reclamos (${cantidadIssues})</h3>
+				    	<h3>Reclamos ()</h3>
 				    	</div>
 				    	
 				    	<ul class="nav nav-tabs">
@@ -695,14 +826,14 @@
     								class="table table-striped table-bordered table-hover datatable">
 									<thead>
 										<tr>				
-											<th data-sortkey="0" width="50">id</th>
-											<th data-defaultsort="desc" data-sortkey="1" width="100">date</th>
-											<th data-sortkey="2" width="250">title</th>			
-											<th data-sortkey="3" width="200">address</th>
-											<th data-sortkey="4" width="150">neighborhood</th>
-											<th data-sortkey="5" width="150">city</th>
-											<th data-sortkey="6" width="150">province</th>
-											<th data-sortkey="7">status</th>		
+											<th width="50">id</th>
+											<th width="100">date</th>
+											<th width="250">title</th>			
+											<th width="200">address</th>
+											<th width="150">neighborhood</th>
+											<th width="150">city</th>
+											<th width="150">province</th>
+											<th>status</th>		
 										</tr>
 									</thead>
 									<tbody>			

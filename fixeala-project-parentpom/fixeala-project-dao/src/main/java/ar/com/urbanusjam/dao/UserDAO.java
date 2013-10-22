@@ -20,6 +20,8 @@ public interface UserDAO extends UserDetailsManager {
 
 	public List<User> findAllActiveUsers();
 	
+	public List<User> findUsersByArea(String areaID);
+	
 	public void createUser(User user);
 	
 	public boolean usernameExists(String username);

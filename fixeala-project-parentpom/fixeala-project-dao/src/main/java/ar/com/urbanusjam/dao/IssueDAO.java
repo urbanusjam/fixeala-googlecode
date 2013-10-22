@@ -17,6 +17,10 @@ public interface IssueDAO {
 	
 	public List<Issue> getIssuesByUser(String username);
 	
+	public List<Issue> getIssuesByArea(String areaName);
+	
+	public List<Issue> getAssignedIssuesByVerifiedOfficial(String username);
+	
 	public Issue findIssueById(String id);
 
 }

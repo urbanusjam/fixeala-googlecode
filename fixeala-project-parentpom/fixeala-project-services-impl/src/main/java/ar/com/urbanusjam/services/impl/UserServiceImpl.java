@@ -94,6 +94,12 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	@Override
+	public List<String> getUserRoles(String username){
+		 List<String> authorities = authorityDAO.getAuthoritiesByUserName(username);
+		 return authorities;
+	}
+	
+	@Override
 	public List<UserDTO> loadAllActiveUsers() {
 		List<User> users = userDAO.findAllActiveUsers();
 		List<UserDTO> usersDTO = new ArrayList<UserDTO>();

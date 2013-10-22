@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.util.JSONWrappedObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import ar.com.restba.json.JsonArray;
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.UserService;
@@ -85,24 +87,54 @@ public class HomeController {
 	}
 	
 	
-	@RequestMapping(value="/users/{userID}/loadUserIssues", produces={"application/json; charset=ISO-8859-1"}, method = RequestMethod.GET)
-	public @ResponseBody String getUserIssuesJSON(	Model model,
-												@PathVariable("userID") String userID,
-												@RequestParam int iDisplayStart,
-								            	@RequestParam int iDisplayLength, 
-								            	@RequestParam int sEcho) throws IOException {
+//	@RequestMapping(value="/users/{userID}/loadUserIssues", produces={"application/json; charset=ISO-8859-1"}, method = RequestMethod.GET)
+//	public @ResponseBody String getUserIssuesJSON(	Model model,
+//												@PathVariable("userID") String userID,
+//												@RequestParam int iDisplayStart,
+//								            	@RequestParam int iDisplayLength, 
+//								            	@RequestParam int sEcho) throws IOException {
+//		
+//		DataTableResultSet<IssueDTO> dt = new DataTableResultSet<IssueDTO>();
+//		UserDTO user = userService.getUserByUsername(userID); 
+//		List<IssueDTO> issues = new ArrayList<IssueDTO>();
+//		
+//		if(user.hasRole("ROLE_AREA", user.getAuthorities()))
+//			issues = issueService.loadIssuesByArea(user.getAreaNombre());
+//		
+//		if(user.hasRole("ROLE_ADMIN", user.getAuthorities()) 
+//				|| user.hasRole("ROLE_MANAGER", user.getAuthorities()))
+//			issues = issueService.getIssuesAsignados(userID);
+//		
+//		else
+//			issues = issueService.loadIssuesByUser(userID);		
+//		
+//	    dt.setAaData(issues);  
+//	    dt.setiTotalDisplayRecords(issues.size()); 
+//	    dt.setiTotalRecords(issues.size());   
+//	    dt.setsEcho(sEcho);		
+//	 
+//	   
+//		return toJson(dt);		
+//	}
+	
+	@RequestMapping(value="/users/{userID}/loadUserIssues",  produces = "application/json", method = RequestMethod.GET)
+	public @ResponseBody List<IssueDTO> getUserIssuesJSON(@PathVariable("userID") String userID) throws IOException {
 		
 		
+		UserDTO user = userService.getUserByUsername(userID); 
+		List<IssueDTO> issues = new ArrayList<IssueDTO>();
 		
-		DataTableResultSet<IssueDTO> dt = new DataTableResultSet<IssueDTO>();
-		List<IssueDTO> issues = issueService.loadIssuesByUser(userID);		
-	    dt.setAaData(issues);  
-	    dt.setiTotalDisplayRecords(issues.size()); 
-	    dt.setiTotalRecords(issues.size());   
-	    dt.setsEcho(sEcho);		
-	 
-	   
-		return toJson(dt);		
+		if(user.hasRole("ROLE_AREA", user.getAuthorities()))
+			issues = issueService.loadIssuesByArea(user.getAreaNombre());
+		
+		if(user.hasRole("ROLE_ADMIN", user.getAuthorities()) 
+				|| user.hasRole("ROLE_MANAGER", user.getAuthorities()))
+			issues = issueService.getIssuesAsignados(userID);
+		
+		else
+			issues = issueService.loadIssuesByUser(userID);		
+		
+	    return issues;
 	}
 	
 	
@@ -145,9 +177,7 @@ public class HomeController {
 				model.addAttribute("barrio", user.getNeighborhood());
 				model.addAttribute("loggedMatchesProfile", isSameUser);
 				
-				model.addAttribute("cantidadIssues", issueService.loadIssuesByUser(user.getUsername()).size());
-				
-				
+								
 				if(user.isVerifiedOfficial()){
 					model.addAttribute("current_nombre", user.getNombre());
 					model.addAttribute("current_apellido", user.getApellido());
