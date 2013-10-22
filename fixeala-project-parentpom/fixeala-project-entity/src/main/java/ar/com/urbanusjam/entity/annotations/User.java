@@ -57,7 +57,10 @@ public class User implements UserDetails {
     private String siglaSubArea;
     
     @Column(name="NEIGHBORHOOD")
-    private String neighborhood;   
+    private String neighborhood;  
+    
+    @Column(name="IS_AREA")
+    private boolean isArea;
     
     @Column(name="VERIFIED_OFFICIAL")
     private boolean verifiedOfficial;
@@ -199,6 +202,14 @@ public class User implements UserDetails {
 
 	public void setNeighborhood(String neighborhood) {
 		this.neighborhood = neighborhood;
+	}
+	
+	public boolean isArea() {
+		return isArea;
+	}
+
+	public void setArea(boolean isArea) {
+		this.isArea = isArea;
 	}
 
 	public boolean isEnabled() {
