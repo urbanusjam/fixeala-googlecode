@@ -181,9 +181,11 @@ public class IssueController {
 					issue.getHistorial().add(revision);
 					
 					//asignar AREA segun ubicacion geografica
-				//	issue.setAssignedArea(issueService.getAreaByName("Comuna 1"));
 					
-					//metodo buscar area segun coordenadas del reclamo
+					
+					//asignar USUARIO (ADMIN o MANAGER) automaticamente
+			
+					
 					issueService.reportIssue(issue);			
 					
 					return new AlertStatus(true, "Su reclamo ha sido registrado.");			
