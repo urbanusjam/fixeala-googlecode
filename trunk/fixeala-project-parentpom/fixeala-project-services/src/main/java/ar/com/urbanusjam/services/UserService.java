@@ -17,6 +17,7 @@ public interface UserService extends UserDetailsService{
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 	public UserDTO getUserByUsername(String username) throws UsernameNotFoundException;
 	
+	public List<UserDTO> loadVerifiedUsersByArea(String areaID);
 	public List<UserDTO> loadAllActiveUsers();
 	public String findUsernameByEmail(String email);
 	

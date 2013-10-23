@@ -13,6 +13,8 @@ public interface IssueService {
 	
 	public void updateIssue(IssueDTO issue);	
 	
+	public void updateIssueStatus(String issueID, String newStatus);
+	
 	public List<IssueDTO> getIssuesAsignados(String username);
 	
 	public List<IssueDTO> loadAllIssues();

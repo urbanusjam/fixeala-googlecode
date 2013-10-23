@@ -1,7 +1,7 @@
 /*
 Copyright 2012 Igor Vaynberg
 
-Version: @@ver@@ Timestamp: @@timestamp@@
+Version: 3.4.3 Timestamp: Tue Sep 17 06:47:14 PDT 2013
 
 This software is licensed under the Apache License, Version 2.0 (the "Apache License") or the GNU
 General Public License version 2 (the "GPL License"). You may choose either license to govern your
@@ -1130,7 +1130,7 @@ the specific language governing permissions and limitations under the Apache Lic
 
         // abstract
         positionDropdown: function() {
-            var $dropdown = this.dropdown.hide(),
+            var $dropdown = this.dropdown,
                 offset = this.container.offset(),
                 height = this.container.outerHeight(false),
                 width = this.container.outerWidth(false),
@@ -1148,8 +1148,6 @@ the specific language governing permissions and limitations under the Apache Lic
                 above,
                 css,
                 resultsListNode;
-
-            $dropdown.show();
 
             if (this.opts.dropdownAutoWidth) {
                 resultsListNode = $('.select2-results', $dropdown)[0];
@@ -1710,7 +1708,7 @@ the specific language governing permissions and limitations under the Apache Lic
         // abstract
         getPlaceholderOption: function() {
             if (this.select) {
-                var firstOption = this.select.children('option').first();
+                var firstOption = this.select.children().first();
                 if (this.opts.placeholderOption !== undefined ) {
                     //Determine the placeholder option based on the specified placeholderOption setting
                     return (this.opts.placeholderOption === "first" && firstOption) ||

@@ -16,6 +16,7 @@ public class UserDTO implements Serializable {
 	private String nombre;
 	private String apellido;
 	private String cargo;
+	private String areaId;
 	private String areaNombre;
 	private String areaCiudad;
 	private String areaProvinciaSigla;
@@ -84,6 +85,14 @@ public class UserDTO implements Serializable {
 
 	public void setCargo(String cargo) {
 		this.cargo = cargo;
+	}
+	
+	public String getAreaId() {
+		return areaId;
+	}
+
+	public void setAreaId(String areaId) {
+		this.areaId = areaId;
 	}
 
 	public String getAreaNombre() {

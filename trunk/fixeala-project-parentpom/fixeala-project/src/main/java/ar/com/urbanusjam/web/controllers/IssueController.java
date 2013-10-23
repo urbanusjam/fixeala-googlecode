@@ -269,7 +269,7 @@ public class IssueController {
 	
 	@RequestMapping(value="/issues/updateIssueStatus", method = RequestMethod.POST)
 	public @ResponseBody AlertStatus doUpdatetIssueStatus(@RequestParam("issueID") String issueID, 
-			@RequestParam("newStatus") String newStatus, HttpServletRequest request) throws ParseException{
+			@RequestParam("newStatus") String newStatus, HttpServletRequest request) throws ParseException {
 		
 		try {			
 			User user =  getCurrentUser(SecurityContextHolder.getContext().getAuthentication());
@@ -279,37 +279,21 @@ public class IssueController {
 				return new AlertStatus(false, "Debe estar logueado para ingresar un nuevo reclamo.");
 			}						
 		
-			//user is logged-in
 			else{
-											
-				
-				IssueDTO issue = new IssueDTO();
-				issue = issueService.getIssueById(issueID);
-				issue.setUser(issue.getUser());	
-				issue.setStatus(newStatus);
-
-				IssueHistorialRevisionDTO revision = new IssueHistorialRevisionDTO();
-				revision.setFecha(new Date());
-				revision.setUsername(issue.getUser().getUsername());			
-				revision.setNroReclamo(issue.getId());			
-				revision.setOperacion(Operation.UPDATE);			
-				revision.setMotivo("MODIFICACION");			
-				revision.setEstado(issue.getStatus());
-				revision.setObservaciones("El reclamo ha sido " + newStatus + ".");
-				issue.getHistorial().add(revision);
-			
-				issueService.updateIssue(issue);	
-				
+				issueService.updateIssueStatus(issueID, newStatus);					
 				return new AlertStatus(true, "El reclamo ha sido actualizado.");			
-		}
-	}			
-	catch(AccessDeniedException e){
-		return new AlertStatus(false, "Debe estar logueado para ingresar un nuevo reclamo.");
-	}
-		
+			}
+			
+		}catch(AccessDeniedException e){
+			return new AlertStatus(false, "Debe estar logueado para ingresar un nuevo reclamo.");
+		}		
 	}
 	
-		
+	@RequestMapping(value="/issues/getAvailableUsers/{areaID}", produces = "application/json", method = RequestMethod.GET)
+	public @ResponseBody List<UserDTO> loadAvailableUsers(@PathVariable("areaID") String areaID, HttpServletRequest request){		
+		List<UserDTO> u = userService.loadVerifiedUsersByArea(areaID);	
+		return u;		
+	}
 	
 		
 	@RequestMapping(value="/loadTags", method = RequestMethod.GET)
@@ -323,6 +307,8 @@ public class IssueController {
 	public @ResponseBody List<IssueDTO> loadMapMarkers(@ModelAttribute("issue") IssueDTO issue, HttpServletRequest request){			
 		return issueService.loadAllIssues();		
 	}
+	
+	
 
 	private User getCurrentUser(Authentication auth) {
         User currentUser;

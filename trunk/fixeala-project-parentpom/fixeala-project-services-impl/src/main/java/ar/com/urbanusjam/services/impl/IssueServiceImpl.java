@@ -2,6 +2,7 @@ package ar.com.urbanusjam.services.impl;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -75,13 +76,29 @@ public class IssueServiceImpl implements IssueService {
 	
 	@Override
 	public void updateIssue(IssueDTO issueDTO) {
-		int i = 1;
 		Issue issue = new Issue();
 		issue = this.convertTo(issueDTO);
 		issueDAO.updateIssue(issue);
+	}
+	
+	@Override
+	public void updateIssueStatus(String issueID, String newStatus) {
+	
+		Issue issue = new Issue();
+		issue = issueDAO.findIssueById(issueID);
+		issue.setStatus(newStatus);
 		
-		System.out.println("****************************************************** UPDATE ISSUE >>>> " + i);
-		i++;
+		IssueHistorialRevisionDTO revision = new IssueHistorialRevisionDTO();
+		revision.setFecha(new Date());
+		revision.setUsername(issue.getReporter().getUsername());			
+		revision.setNroReclamo(issue.getId());			
+		revision.setOperacion(Operation.UPDATE);			
+		revision.setMotivo("MODIFICACION");			
+		revision.setEstado(issue.getStatus());
+		revision.setObservaciones("El reclamo ha sido " + newStatus + ".");
+		issue.getRevisiones().add(convertTo(revision));
+		
+		issueDAO.updateIssue(issue);
 	}
 	
 	
@@ -446,6 +463,14 @@ public class IssueServiceImpl implements IssueService {
 			issueDTO.setAssignedArea(null);
 			issueDTO.setArea("Comuna 1");
 		}
+		
+		if(issue.getAssignedOfficial() != null){
+			UserDTO official = new UserDTO();
+			official.setUsername(issue.getAssignedArea().getNombre());
+			issueDTO.setAssignedOfficial(official);		
+		}
+		else
+			issueDTO.setAssignedOfficial(null);
 		
 		if(issue.getLicitacion() != null)
 			issueDTO.setLicitacion(convertTo(issue.getLicitacion()));

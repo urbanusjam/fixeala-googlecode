@@ -38,8 +38,8 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-rowlink.js"></script>
   	
   	<!-- Fuel UX CDN link to responsive css -->
-        <link href="http://fuelux.exacttargetapps.com/fuelux/2.0/css/fuelux-responsive.css" rel="stylesheet" />
-        
+        <link href="http://www.fuelcdn.com/fuelux-imh/2.3/css/fuelux-responsive.css" rel="stylesheet" />
+       
   	<link rel="stylesheet" href="https://fuelcdn.com/fuelux/2.3/css/fuelux.min.css">
 <script src="https://fuelcdn.com/fuelux/2.3/loader.min.js"></script>
 
