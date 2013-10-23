@@ -127,17 +127,17 @@ public class IssueServiceImpl implements IssueService {
 							
 							else{
 								//- tiene la menor cantidad de reclamos asignados
-								if(hasLessAssignedIssues(users, u)){
-									issue.setAssignedOfficial(u);
-									break;
-								}
+//								if(hasLessAssignedIssues(users, u)){
+//									issue.setAssignedOfficial(u);
+//									break;
+//								}
 								//- random
-								else{
+								//else{
 									Random random = new Random();
-									int randomUser = 1 + random.nextInt(users.size());
+									int randomUser = 0 + random.nextInt(users.size()-1);
 									issue.setAssignedOfficial(users.get(randomUser));
 									break;
-								}
+								//}
 							}
 							
 						}
