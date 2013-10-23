@@ -1,17 +1,50 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<style type="text/css">
+
+.table-striped tbody tr.highlight td { 
+    background-color: #A8D3E6;
+}
+</style>
 
 <div id="content">
 
 
+
+
 	<script type="text/javascript">
+	
+		var rowId;
+		
+		function redirect(){
+			var url = window.location.origin + '/'+ 'fixeala/issues/' + rowId + '.html';
+			return window.location.href = url;
+		}
 	
 		$(document).ready(function(){
 			
 			
+			
+			$('#tblUserIssues').on('click', 'tbody tr', function(event) {
+			    $(this).addClass('highlight').siblings().removeClass('highlight');
+			});
+			
+			
+			
+			
+			$("#tblUserIssues").delegate("tr", "contextmenu", function(e) {
+				$(this).each(function(){
+					rowId = $(this).find("td").eq(0).html(); 
+				});
+			   
+			});
+ 
+			
 			var myDataSource = function (options) {
 				 this._formatter = options.formatter;
 			     this._columns = options.columns;
+			     this._data = options.data;
+			 	 this._delay = options.delay || 0;
 			};
 
 			myDataSource.prototype = {
@@ -23,16 +56,7 @@
 			        data: function (options, callback) {
 
 			                var url = "http://localhost:8080/fixeala/users/" + '${profileUser}' + "/loadUserIssues.html";
-			              
-			               
-			                
 
-// 			                if (options.search) {
-
-			                        // Search active.  Add URL parameters for Flickr API.
-// 			                        url += '&tags=' + options.search;
-// 			                        url += '&per_page=' + options.pageSize;
-// 			                        url += '&page=' + (options.pageIndex + 1);
 
 								$.ajax({
 										url: url,
@@ -43,19 +67,46 @@
 							            	
 							            	// Prepare data to return to Datagrid
 			                                var data = response;
-			                                var count = data.length;			                             
+			                                var count = data.length;	
+			                                
+			                                // here we give all data a 'flat' property
+			                                $.each(data, function (index, row) {
+			                                	$("#tblUserIssues tbody tr").attr('id', data[0].id);
+			                                });
 			                              
-			                               
-
 											// SORTING
 											if (options.sortProperty) {
 												data = _.sortBy(data, options.sortProperty);
 												if (options.sortDirection === 'desc') data.reverse();
 											}
 											
-				                               
+											// SEARCHING
+// 							                if (options.search) {
+// 							                  data = _.filter(data, function (item) {
+// 							                    for (var prop in item) {
+// 							                      if (!item.hasOwnProperty(prop)) continue;
+// 							                      if (~item[prop].toString().toLowerCase().indexOf(options.search.toLowerCase())) return true;
+// 							                    }
+// 							                    return false;
+// 							                  });
+// 							                }
+							            
+							                
+							                // PAGING
+// 							                var startIndex = options.pageIndex * options.pageSize;
+// 							                var endIndex = startIndex + options.pageSize;
+// 							                var end = (endIndex > count) ? count : endIndex;
+// 							                var pages = Math.ceil(count / options.pageSize);
+// 							                var page = options.pageIndex + 1;
+// 							                var start = startIndex + 1;
+							                
+// 							                data = data.slice(startIndex, endIndex);
+							                
+// 							                if (self._formatter) self._formatter(data);
+							                
+// 							                callback({ data: data, start: start, end: end, count: count, pages: pages, page: page });
 											
-// 											if (self._formatter) self._formatter(data);
+				                          
 
 											callback({ data: data, start: 0, end: 0, count: count, pages: 0, page: 0 });
 							            		
@@ -79,17 +130,7 @@
 							                }
 							            }
 				        		});	    
-								
-								
-								
 
-			                      
-// 			                } else {
-
-// 			                        // No search. Return zero results to Datagrid
-// 			                        callback({ data: [], start: 0, end: 0, count: 0, pages: 0, page: 0 });
-
-// 			                }
 			        }
 			};
 			
@@ -134,20 +175,23 @@
 	                        sortable: true,
 	                        sortProperty: 'province'
                 	},{
-                	 	label: 'Usuario',
-                        property: 'username',
-                        sortable: true
+	                	 	label: 'Usuario',
+	                        property: 'username',
+	                        sortable: true
                      
                 	},{
-                	 	label: 'Estado',
-                        property: 'status',
-                        sortable: true,
-                        sortProperty: 'status'
-                	}],
+	                	 	label: 'Estado',
+	                        property: 'status',
+	                        sortable: true,
+	                        sortProperty: 'status'
+                	}]
 
                    
             })
 			});
+			
+			
+			
 			
 		
 // 		$('#tblUserIssues').dataTable({
@@ -185,13 +229,8 @@
 // 			            } );
 // 			        }	  
 // 			});
-			
-			
-		$('tbody.rowlink').rowlink();
-			
-			
-		});
 		
+		});
 	
 	</script>
 	
@@ -346,7 +385,7 @@
 							<!-- Context Menu -->
 					    	<div id="contextmenu-issue" class="dropdown clearfix">
 							    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" style="display:block;position:static;margin-bottom:5px;">
-							      <li><a tabindex="-1" href="#"><i class="icon-paper-clip"></i>&nbsp;&nbsp;Ver detalles</a></li>
+							      <li><a tabindex="-1" href="javascript:redirect();"><i class="icon-paper-clip"></i>&nbsp;&nbsp;Ver detalles</a></li>
 							      <li><a tabindex="-1" href="#"><i class="icon-globe"></i>&nbsp;&nbsp;Ver en mapa</a></li>
 							      <li class="divider"></li>
 							      <li><a tabindex="-1" href="#assignUserModal" data-toggle="modal" ><i class="icon-user"></i>&nbsp;&nbsp;Asignar a usuario</a></li>
