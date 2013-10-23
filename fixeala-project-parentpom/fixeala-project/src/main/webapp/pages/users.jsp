@@ -5,6 +5,10 @@
 .table-striped tbody tr.highlight td { 
     background-color: #A8D3E6;
 }
+
+th, td{font-size:12px;text-align:center !important;}
+
+
 </style>
 
 <div id="content">
@@ -14,29 +18,90 @@
 
 	<script type="text/javascript">
 	
-		var rowId;
-		
-		function redirect(){
-			var url = window.location.origin + '/'+ 'fixeala/issues/' + rowId + '.html';
-			return window.location.href = url;
-		}
+	var rowId;
 	
-		$(document).ready(function(){
-			
-			
-			
+	
+	
+	
+	function redirect(){
+		var url = window.location.origin + '/'+ 'fixeala/issues/' + rowId + '.html';
+		return window.location.href = url;
+	}
+	
+	
+	function updateStatus(status){
+		    var url = "http://localhost:8080/fixeala/issues/updateIssueStatus.html";
+		    var data = 'newStatus='+ status + '&issueID='+ rowId;
+	     
+			$.ajax({
+					url: url,
+				 	dataType: 'text',
+				 	data: data,
+             		type: 'POST', 
+		            success: function(response) { 
+		            	$("#tblUserIssues").datagrid('reload');
+		            },
+		            error: function(jqXHR, exception) {
+		                if (jqXHR.status === 0) {
+		                    alert('Not connect.\n Verify Network.');
+		                } else if (jqXHR.status == 404) {
+		                    alert('Requested page not found. [404]');
+		                } else if (jqXHR.status == 500) {
+		                    alert('Internal Server Error [500].');
+		                } else if (exception === 'parsererror') {
+		                    alert('Requested JSON parse failed.');
+		                } else if (exception === 'timeout') {
+		                    alert('Time out error.');
+		                } else if (exception === 'abort') {
+		                    alert('Ajax request aborted.');
+		                } else {
+		                    alert('Uncaught Error.\n' + jqXHR.responseText);
+		                }
+		            }
+			});
+	}
+	
+	$(function(){	
+		
+		var users;
+		
+	
+		$("#combo-users").select2({
+	        placeholder: "Buscar usuario...",
+	        ajax: { 
+	            url: "http://localhost:8080/fixeala/issues/getAvailableUsers/${current_areaID}.html",
+	        	dataType: 'json',
+	     		data: function (term, page) {
+	                    return {
+	                    	q: term,
+	                    	limits: -1,	                        
+	                        term : term
+	                    };
+	            },
+                results: function (data, page) { // parse the results into the format expected by Select2.
+                    // since we are using custom formatting functions we do not need to alter remote JSON data
+                    return {results: data.users};
+                },
+                formatResult: function(data){
+                	return "<div class='select2-user-result>'" + data.users.username + "</div>";
+                },
+                formatSelection: function(data){
+                	return data.users.username;
+                }
+	   
+	        } 
+	    });
+					
 			$('#tblUserIssues').on('click', 'tbody tr', function(event) {
 			    $(this).addClass('highlight').siblings().removeClass('highlight');
 			});
 			
 			
-			
-			
 			$("#tblUserIssues").delegate("tr", "contextmenu", function(e) {
 				$(this).each(function(){
-					rowId = $(this).find("td").eq(0).html(); 
+					rowId = $(this).find("td").eq(0).html().trim(); 
+					//var rowStatus = $(this).find("td").eq(8).html().trim(); 
 				});
-			   
 			});
  
 			
@@ -233,18 +298,7 @@
 		});
 	
 	</script>
-	
-        
-<%--        <h3>${usuario}</h3> --%>
-         
-		<!-- User dashboard -->
-<!--     	<ul id="dashboardTab" class="nav nav-tabs">		   -->
-<!--     	  	<li class="active"><a href="#profile" data-toggle="tab"><i class="icon-user"></i>&nbsp;&nbsp;MI PERFIL</a></li> -->
-<!-- 		    <li><a href="#account" data-toggle="tab"><i class="icon-wrench"></i>&nbsp;&nbsp;MI CUENTA</a></li> -->
-<!-- 		    <li><a href="#issues" data-toggle="tab"><i class="icon-list"></i>&nbsp;&nbsp;MIS RECLAMOS</a></li> -->
-<!-- 		    <li><a href="#messages" data-toggle="tab"><i class="icon-comments"></i>&nbsp;&nbsp;MIS MENSAJES</a></li> -->
-<!-- 		    <li><a href="#activity" data-toggle="tab"><i class="icon-star"></i>&nbsp;&nbsp;MI ACTIVIDAD</a></li>		   -->
-<!-- 	    </ul> -->
+
 	    
 	    
 	 	<!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
@@ -360,20 +414,9 @@
 							
 							<div class="tab-content">
 								<div class="tab-pane fade in active" id="issuesAsignados">
-								   	<table id="tblUserIssues" cellpadding="0" cellspacing="0" border="0" 
+								   	<table id="tblUserIssues" cellpadding="0" cellspacing="0" border="0"  data-toggle="context" data-target="#contextmenu-issue"
     								class="table table-striped table-bordered table-hover datagrid" data-provides="rowlink">
 									<thead>
-<!-- 										<tr>				 -->
-<!-- 											<th width="50">id</th> -->
-<!-- 											<th width="100">date</th> -->
-<!-- 											<th width="250">title</th>			 -->
-<!-- 											<th width="200">address</th> -->
-<!-- 											<th width="150">neighborhood</th> -->
-<!-- 											<th width="150">city</th> -->
-<!-- 											<th width="150">user.username</th> -->
-<!-- 											<th width="150">province</th> -->
-<!-- 											<th>status</th>		 -->
-<!-- 										</tr> -->
 									</thead>
 									<tbody>			
 									</tbody>	
@@ -384,44 +427,42 @@
 							
 							<!-- Context Menu -->
 					    	<div id="contextmenu-issue" class="dropdown clearfix">
-							    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" style="display:block;position:static;margin-bottom:5px;">
+							    <ul id="ctxMenu" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" style="display:block;position:static;margin-bottom:5px;">
 							      <li><a tabindex="-1" href="javascript:redirect();"><i class="icon-paper-clip"></i>&nbsp;&nbsp;Ver detalles</a></li>
 							      <li><a tabindex="-1" href="#"><i class="icon-globe"></i>&nbsp;&nbsp;Ver en mapa</a></li>
 							      <li class="divider"></li>
-							      <li><a tabindex="-1" href="#assignUserModal" data-toggle="modal" ><i class="icon-user"></i>&nbsp;&nbsp;Asignar a usuario</a></li>
-							      <li class="divider"></li>
-							      <li><a tabindex="-1" href="#"><i class="icon-thumbs-up-alt"></i>&nbsp;&nbsp;Admitir</a></li>
-							      <li><a tabindex="-1" href="#"><i class="icon-ok"></i>&nbsp;&nbsp;Resolver</a></li>
-							      <li><a tabindex="-1" href="#"><i class="icon-lock"></i>&nbsp;&nbsp;Cerrar</a></li>
-							      <li><a tabindex="-1" href="#"><i class="icon-folder-open-alt"></i>&nbsp;&nbsp;Reabrir</a></li>
+							      <li><a tabindex="-1" href="#assignUserModal" data-toggle="modal"><i class="icon-user"></i>&nbsp;&nbsp;Asignar a usuario</a></li>
+							      <li class="divider" id="actionsDivider"></li>
+						      	  <li><a tabindex="-1" href="#" onclick="updateStatus('ADMITIDO');"><i class="icon-thumbs-up-alt"></i>&nbsp;&nbsp;Admitir</a></li>
+						      	  <li><a tabindex="-1" href="#" onclick="updateStatus('RESUELTO');"><i class="icon-ok"></i>&nbsp;&nbsp;Resolver</a></li>
+						      	  <li><a tabindex="-1" href="#" onclick="updateStatus('CERRADO');"><i class="icon-lock"></i>&nbsp;&nbsp;Cerrar</a></li>
+						      	  <li><a tabindex="-1" href="#" onclick="updateStatus('REABIERTO');"><i class="icon-folder-open-alt"></i>&nbsp;&nbsp;Reabrir</a></li>  
 							    </ul>
 	  						</div>
-	  						
-	  						
-					    	
+	  											    	
 					    	<script>
-						    	$(function() {
-						    		  
-						    		  var $contextMenu = $("#contextmenu-issue");
-						    		  
-						    		  $("body").on("contextmenu", "#tblUserIssues tr", function(e) {
-						    		    $contextMenu.css({
-						    		      display: "block",
-						    		      left: e.pageX,
-						    		      top: e.pageY
-						    		    });
-						    		    return false;
-						    		  });
-						    		  
-						    		  $contextMenu.on("click", "a", function() {
-						    		     $contextMenu.hide();
-						    		  });
-						    		  
-						    		  $("body").on("click", function() {
+							    	$(function() {
+							    		
+							    		  var $contextMenu = $("#contextmenu-issue");
+							    		  
+							    		  $("body").on("contextmenu", "#tblUserIssues tr", function(e) {
+							    		  	$contextMenu.css({
+								    		      display: "block",
+								    		      left: e.pageX,
+								    		      top: e.pageY
+							    		    });
+							    		    return false;
+							    		  });
+							    		  
+							    		  $contextMenu.on("click", "a", function() {
 							    		     $contextMenu.hide();
 							    		  });
-						    		  
-						    		});
+							    		  
+							    		  $("body").on("click", function() {
+								    		     $contextMenu.hide();
+								    	  });
+							    		  
+							    	});
 					    	</script>
 					    	
 					    </div>
@@ -593,10 +634,7 @@
 			         	</div>
 			         	<!-- tab END USUARIOS -->
 			         		
-			         		
-			         		
-			         		<!-- ESTADISTICAS -->
-			         		
+			         				         		
 			         		
 		         		<!-- NOTIFICACIONES -->
 		         		<div class="tab-pane fade" id="notifications"> 	
@@ -628,19 +666,7 @@
 					    	</table>
 				    	</div>
 				    	<!-- end TAB NOTIFICACIONES -->
-					    	
-			         		
-			         		<!-- ACTIVIDAD -->
-			         
-							
-							<!-- PERFIL -->
-							
-							
-							<!-- CONTRASEÃ‘A -->
-							
-							
-							<!-- DESACTIVACION -->      		
-			         		
+					   			         		
 		         	</div>	
 		         	<!-- fin tab content -->
 				 
@@ -651,7 +677,7 @@
 			
 			
 			<!-- Modal ASSIGN USER -->
-			<div id="assignUserModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div id="assignUserModal"class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			  <div class="modal-header">
 			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
 			    <h3 id="myModalLabel">Asignación de usuario</h3>
@@ -668,11 +694,7 @@
 				     <div class="control-group">
 					    <label>Seleccione usuario:</label>
 					    <div>
-						    <select class="span3">
-						    	<option>Juan Vásquez</option>
-						    	<option>Julia Rikiki</option>
-						    	<option>Cora Reyes Calens</option>
-					    	</select>
+						    <input type="hidden" id="combo-users" style="width:300px" class="input-xlarge" />
 					    </div>
 				     </div>
 				  </fieldset>
@@ -693,7 +715,7 @@
 			    <h3 id="myModalLabel">Registro de nuevo usuario</h3>
 			  </div>
 			  <div class="modal-body">
-			    <form class="form-horizontal">
+			    <form class="form-horizontal" onload="loadOfficials();">
 				  <fieldset>
 				  	 <div class="control-group">
 					    <label class="control-label" for="inputPassword">Apellido y Nombre(s)</label>

@@ -115,6 +115,21 @@ public class UserServiceImpl implements UserService{
 		
 		return usersDTO;
 	}
+	
+	@Override
+	public List<UserDTO> loadVerifiedUsersByArea(String areaID) {
+		List<User> users = userDAO.findUsersByArea(areaID);
+		List<UserDTO> usersDTO = new ArrayList<UserDTO>();
+		
+		for(User u : users){	
+			List<Authority> authorities = new ArrayList<Authority>();
+			authorities = authorityDAO.getAuthorities(u.getUsername());
+			u.setAuthorities(convertTo(authorities));
+			UserDTO uDTO = convertToDTO(u);
+			usersDTO.add(uDTO);	
+		}
+		return usersDTO;
+	}
 
 
 	@Override
@@ -237,6 +252,7 @@ public class UserServiceImpl implements UserService{
 			userDTO.setNombre(user.getNombre());
 			userDTO.setApellido(user.getApellido());
 			userDTO.setCargo(user.getCargo());
+			userDTO.setAreaId(String.valueOf(user.getArea().getId()));
 			userDTO.setAreaNombre(user.getArea().getNombre());
 			userDTO.setAreaCiudad(user.getArea().getCiudad());
 			userDTO.setAreaProvinciaSigla(user.getArea().getProvinciaSigla());
@@ -277,6 +293,14 @@ public class UserServiceImpl implements UserService{
 		return actv;
 	}
 
+	
+	private List<String> convertTo(List<Authority> roles){
+		List<String> authorities = new ArrayList<String>();
+		for(Authority role : roles){
+			authorities.add(role.getAuthority());
+		}
+		return authorities;
+	}
 	
 
 	

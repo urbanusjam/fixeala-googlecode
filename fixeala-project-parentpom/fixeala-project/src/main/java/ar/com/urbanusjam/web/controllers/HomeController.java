@@ -32,6 +32,7 @@ import ar.com.urbanusjam.services.UserService;
 import ar.com.urbanusjam.services.dto.AreaDTO;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
+import ar.com.urbanusjam.services.utils.IssueStatus;
 import ar.com.urbanusjam.web.utils.DataTableResultSet;
 
 
@@ -118,9 +119,8 @@ public class HomeController {
 //	}
 	
 	@RequestMapping(value="/users/{userID}/loadUserIssues",  produces = "application/json", method = RequestMethod.GET)
-	public @ResponseBody List<IssueDTO> getUserIssuesJSON(@PathVariable("userID") String userID) throws IOException {
-		
-		
+	public @ResponseBody List<IssueDTO> getUserIssuesJSON(Model model, @PathVariable("userID") String userID) throws IOException {
+				
 		UserDTO user = userService.getUserByUsername(userID); 
 		List<IssueDTO> issues = new ArrayList<IssueDTO>();
 		
@@ -135,6 +135,54 @@ public class HomeController {
 			issues = issueService.loadIssuesByUser(userID);		
 		
 	    return issues;
+	}
+	
+	@RequestMapping(value="/users/{userID}/getIssueStatus",  method = RequestMethod.GET)
+	public @ResponseBody String getIssueStatus(Model model,  
+			@PathVariable("userID") String userID, @RequestParam("issueID") String issueID) throws IOException {
+		
+	
+			IssueDTO issue = issueService.getIssueById(issueID);
+			model.addAttribute("currentIssueStatus", issue.getStatus());
+			model.addAttribute("isAssigned", issue.getAssignedOfficial().getUsername() != null ? true : false);
+			
+			String currentStatus = issue.getStatus();
+			boolean isAssigned = issue.getAssignedOfficial().getUsername() != null ? true : false; 
+			
+			List<String> statusList = new ArrayList<String>();
+			
+			if(currentStatus.equals(IssueStatus.OPEN)){
+				statusList.add("Admitir");
+				statusList.add("Resolver");
+				statusList.add("Cerrar");
+			}
+			
+			if(currentStatus.equals(IssueStatus.ACKNOWLEDGED)){
+				statusList.add("Resolver");
+				statusList.add("Cerrar");
+			}
+			
+			if(currentStatus.equals(IssueStatus.SOLVED)){
+				statusList.add("Reabrir");
+				statusList.add("Resolver");
+				statusList.add("Cerrar");
+			}
+			
+			if(currentStatus.equals(IssueStatus.REOPENED)){
+				statusList.add("Resolver");
+				statusList.add("Cerrar");
+			}
+			
+			if(currentStatus.equals(IssueStatus.CLOSED)){
+				statusList.add("Reabrir");
+			}
+			
+			if(currentStatus.equals(IssueStatus.ARCHIVED)){
+				statusList = new ArrayList<String>();
+			}
+			
+		return "users";
+		
 	}
 	
 	
@@ -183,6 +231,7 @@ public class HomeController {
 					model.addAttribute("current_apellido", user.getApellido());
 					model.addAttribute("current_rol", user.getAuthorities().size() > 0 ? user.getAuthorities().get(0) : "");
 					model.addAttribute("current_area", user.getAreaNombre());
+					model.addAttribute("current_areaID", user.getAreaId());
 					model.addAttribute("current_ciudad", user.getAreaCiudad());
 					model.addAttribute("current_provincia", user.getAreaProvinciaSigla());
 				}

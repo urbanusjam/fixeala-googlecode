@@ -28,6 +28,7 @@ public class IssueDTO implements Serializable {
 	private Date date;	
 	private String area;
 	private AreaDTO assignedArea;
+	private UserDTO assignedOfficial;
 	private IssueLicitacionDTO licitacion = new IssueLicitacionDTO();
 	private List<String> tags = new ArrayList<String>();
 	private List<IssueHistorialRevisionDTO> historial = new ArrayList<IssueHistorialRevisionDTO>();
@@ -121,6 +122,14 @@ public class IssueDTO implements Serializable {
 
 	public void setAssignedArea(AreaDTO assignedArea) {
 		this.assignedArea = assignedArea;
+	}
+	
+	public UserDTO getAssignedOfficial() {
+		return assignedOfficial;
+	}
+
+	public void setAssignedOfficial(UserDTO assignedOfficial) {
+		this.assignedOfficial = assignedOfficial;
 	}
 
 	public IssueLicitacionDTO getLicitacion() {
