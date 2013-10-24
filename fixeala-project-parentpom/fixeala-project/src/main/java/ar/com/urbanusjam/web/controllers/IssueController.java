@@ -289,6 +289,28 @@ public class IssueController {
 		}		
 	}
 	
+	@RequestMapping(value="/issues/assignUser", method = RequestMethod.POST)
+	public @ResponseBody AlertStatus doAssignUser(@RequestParam("issueID") String issueID, 
+			@RequestParam("selectedUser") String selectedUser, HttpServletRequest request) throws ParseException {
+		
+		try {			
+			User user =  getCurrentUser(SecurityContextHolder.getContext().getAuthentication());
+			UserDetails userDB = userService.loadUserByUsername(user.getUsername());		
+			
+			if(userDB == null){
+				return new AlertStatus(false, "Debe estar logueado para ingresar un nuevo reclamo.");
+			}						
+		
+			else{
+				issueService.assignUserToIssue(issueID, selectedUser);					
+				return new AlertStatus(true, "El reclamo ha sido actualizado.");			
+			}
+			
+		}catch(AccessDeniedException e){
+			return new AlertStatus(false, "Debe estar logueado para ingresar un nuevo reclamo.");
+		}		
+	}
+	
 	@RequestMapping(value="/issues/getAvailableUsers/{areaID}", produces = "application/json", method = RequestMethod.GET)
 	public @ResponseBody List<UserDTO> loadAvailableUsers(@PathVariable("areaID") String areaID, HttpServletRequest request){		
 		List<UserDTO> u = userService.loadVerifiedUsersByArea(areaID);	

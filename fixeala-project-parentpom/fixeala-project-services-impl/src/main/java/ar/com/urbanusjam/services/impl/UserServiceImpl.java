@@ -241,6 +241,8 @@ public class UserServiceImpl implements UserService{
 		userDTO.setUsername(user.getUsername());		
 		userDTO.setEmail(user.getEmail());		
 		
+		userDTO.setId(user.getUsername());
+		
 		List<String> roles = new ArrayList<String>();
 		for(GrantedAuthority auth : user.getAuthorities()){
 			roles.add(auth.getAuthority());

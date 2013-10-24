@@ -102,6 +102,28 @@ public class IssueServiceImpl implements IssueService {
 	}
 	
 	
+	@Override
+	public void assignUserToIssue(String issueID, String username) {
+
+		Issue issue = new Issue();
+		issue = issueDAO.findIssueById(issueID);
+		User user = userDAO.loadUserByUsername(username);
+		issue.setAssignedOfficial(user);
+		
+		IssueHistorialRevisionDTO revision = new IssueHistorialRevisionDTO();
+		revision.setFecha(new Date());
+		revision.setUsername(issue.getReporter().getUsername());			
+		revision.setNroReclamo(issue.getId());			
+		revision.setOperacion(Operation.UPDATE);			
+		revision.setMotivo("MODIFICACION");			
+		revision.setEstado(issue.getStatus());
+		revision.setObservaciones("El reclamo ha sido asignado a" + user.getUsername().toUpperCase() + ".");
+		issue.getRevisiones().add(convertTo(revision));
+		
+		issueDAO.updateIssue(issue);
+	}
+	
+	
 	private void asignarUsuarioDefault(Issue issue) {
 		
 		//asignar USUARIO (ADMIN o MANAGER) según AREA
@@ -503,6 +525,8 @@ public class IssueServiceImpl implements IssueService {
 		return list;
 				
 	}
+
+	
 
 	
 
