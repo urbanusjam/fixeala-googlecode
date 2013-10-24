@@ -10,6 +10,7 @@
 		<property name="authorityDAO" ref="authorityDAO" />
 		<property name="passwordResetDAO" ref="passwordResetDAO" />
 		<property name="activationDAO" ref="activationDAO" />
+		<property name="areaDAO" ref="areaDAO" />
 	</bean>
 		
 	<bean name="issueService" class="ar.com.urbanusjam.services.impl.IssueServiceImpl" >

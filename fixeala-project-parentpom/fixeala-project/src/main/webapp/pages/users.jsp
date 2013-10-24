@@ -1,14 +1,11 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <style type="text/css">
 
-.table-striped tbody tr.highlight td { 
-    background-color: #A8D3E6;
-}
-
-th, td{font-size:12px;text-align:center !important;}
-
-
+	th, td { font-size: 12px; }
+	.table-striped tbody tr.highlight td { background-color: #A8D3E6; }
+	
 </style>
 
 <div id="content">
@@ -21,6 +18,25 @@ th, td{font-size:12px;text-align:center !important;}
 	var rowId;
 	var rowTitle;
 	var selectedUser;
+	var currentArea = '${current_areaID}';
+	
+	function errorHandler (jqXHR, exception) {
+        if (jqXHR.status === 0) {
+            alert('Not connect.\n Verify Network.');
+        } else if (jqXHR.status == 404) {
+            alert('Requested page not found. [404]');
+        } else if (jqXHR.status == 500) {
+            alert('Internal Server Error [500].');
+        } else if (exception === 'parsererror') {
+            alert('Requested JSON parse failed.');
+        } else if (exception === 'timeout') {
+            alert('Time out error.');
+        } else if (exception === 'abort') {
+            alert('Ajax request aborted.');
+        } else {
+            alert('Uncaught Error.\n' + jqXHR.responseText);
+        }
+	}
 	
 	
 	function redirect(){
@@ -38,26 +54,17 @@ th, td{font-size:12px;text-align:center !important;}
 			 	data: data,
          		type: 'POST', 
 	            success: function(response) { 
-	            	$("#contextmenu-issue").hide();
-	            	//$("#tblUserIssues").datagrid('reload');
+	            	$("#assignUserModal").modal('hide');
+	            	
+	            	setTimeout(function(){
+	            		$("#tblUserIssues").datagrid('reload');
+	            	}, 1000);
+	            	
 	            },
-	            error: function(jqXHR, exception) {
-	                if (jqXHR.status === 0) {
-	                    alert('Not connect.\n Verify Network.');
-	                } else if (jqXHR.status == 404) {
-	                    alert('Requested page not found. [404]');
-	                } else if (jqXHR.status == 500) {
-	                    alert('Internal Server Error [500].');
-	                } else if (exception === 'parsererror') {
-	                    alert('Requested JSON parse failed.');
-	                } else if (exception === 'timeout') {
-	                    alert('Time out error.');
-	                } else if (exception === 'abort') {
-	                    alert('Ajax request aborted.');
-	                } else {
-	                    alert('Uncaught Error.\n' + jqXHR.responseText);
-	                }
+	            error: function(jqXHR, exception){
+	            	errorHandler (jqXHR, exception);
 	            }
+	            
 		});
 	}
 	
@@ -73,35 +80,161 @@ th, td{font-size:12px;text-align:center !important;}
 		            success: function(response) { 
 		            	$("#tblUserIssues").datagrid('reload');
 		            },
-		            error: function(jqXHR, exception) {
-		                if (jqXHR.status === 0) {
-		                    alert('Not connect.\n Verify Network.');
-		                } else if (jqXHR.status == 404) {
-		                    alert('Requested page not found. [404]');
-		                } else if (jqXHR.status == 500) {
-		                    alert('Internal Server Error [500].');
-		                } else if (exception === 'parsererror') {
-		                    alert('Requested JSON parse failed.');
-		                } else if (exception === 'timeout') {
-		                    alert('Time out error.');
-		                } else if (exception === 'abort') {
-		                    alert('Ajax request aborted.');
-		                } else {
-		                    alert('Uncaught Error.\n' + jqXHR.responseText);
-		                }
+		            error: function(jqXHR, exception){
+		            	errorHandler (jqXHR, exception);
 		            }
 			});
 	}
 	
-	$(function(){	
+
 	
-	
+	$(function(){
+		
+		 $('#backendUserForm input[type="text"], #backendUserForm input[type="password"]').tooltipster({ 		    
+		    	animation: 'fade',		
+		    	delay: 200,
+		    	interactive: true,
+		    	timer: 2500,
+		    	maxWidth: 230,
+		        trigger: 'custom', 
+		        onlyOne: false,    
+		        position: 'right'  
+		    });
+		
+		$("#backendUserForm").validate({		
+			
+			rules: 
+			{	 
+				 onfocusin: false,	
+				 
+				 apellido: {  required : true },
+				 
+				 nombre: {  required : true },
+			
+				 username: { 
+					 required : true, 
+					 minlength: 4,
+					 maxlength: 20,
+					 remote: {
+			 	    		url: "http://localhost:8080/fixeala/account/signup/checkUsernameAvailability.html", 
+							type: "POST", 
+							data: {
+						        username: function(){ return $("#backendUserForm #username").val(); }
+						    }		
+		 	    	 }					 	    	
+				 },								
+		 	     email: { 
+		 	    	 required : true,
+		 	    	 email : true,
+		 	    	 remote: {
+			 	    		url: "http://localhost:8080/fixeala/account/signup/checkEmailAvailability.html", 
+							type: "POST", 
+							data: {
+						        email: function(){ return $("#backendUserForm #email").val(); }
+						      }		
+		 	    	 }
+		 	     },
+				 password: {  
+					 required : true, 
+					 minlength: 6,
+					 maxlength: 30
+				 } ,
+	   	    	 confirmPassword: {		
+	   	    		 required : true, 
+	   	      		 equalTo: "#password"				   	      		 
+	   	    	 },
+	   	    	
+		 	}, 	 
+		 	
+			 	messages: 
+			 	{ 	 	 
+			 			apellido: {	required: "Este campo es requerido." },
+			 			
+			 			nombre: { required: "Este campo es requerido." },
+			 		    
+		     			username: 
+		     			{		
+		     					required: "Este campo es requerido.",	 	     			 	
+		     			 		minlength: "El nombre de usuario debe tener por lo menos 4 caracteres.",
+		     			 		maxlength: "El m&aacute;ximo es de 20 caracteres.",
+		     			 		remote: "El nombre de usuario ya ha sido registrado."
+		     		 	},
+		     			email: 
+		     			{
+		     					required: "Este campo es requerido.",	 	
+		     					email: "Ingrese una direcci&oacute;n de email v&aacute;lida.",
+		     					remote: "La direcci&oacute;n de email ya ha sido registrada."
+		     			},
+		     			password: 
+		     			{		
+		     					required: "Este campo es requerido.",	 	
+		     			 		minlength: "La contrase&ntilde;a debe tener por lo menos 6 caracteres.",
+		     			 		maxlength: "El m&aacute;ximo es de 30 caracteres."
+		     		 	},			     				
+	 				confirmPassword: 
+	 				{			     				
+	 						equalTo:  "La contrase&ntilde;a y la confirmaci&oacute;n no coinciden.",
+	 						required: "Este campo es requerido."
+	 				}
+	 				
+		     	},
+		    	
+		    	highlight: function (element) { 
+		    		$(element).closest('.control-group').removeClass('success').addClass('error');
+			},
+		    	
+		    unhighlight: function (element) { 
+		    	$(element).closest('.control-group').removeClass('error');
+		    },
+
+	 		errorPlacement: function (error, element) {
+	 			$(element).closest('.control-group').tooltipster('update', $(error).text());
+	 			$(element).closest('.control-group').tooltipster('show');				        
+	        }
+		    	
+			});
+		
+		
+		$("#btn-saveBackendUser").click(function(){
+			
+			$backendUserForm = $("#backendUserForm");
+			
+			if( $backendUserForm.valid() ){	
+				
+				alert("valid");
+		
+				var url = "http://localhost:8080/fixeala/account/signup.html";
+				var backendUser = true;
+				 
+				$.ajax({
+						url: url,
+						data: 'user='+ $("#backendUserForm").serialize() + '&userArea=' + currentArea + '&backendUser=' + backendUser,
+					 	dataType: 'json',
+	             		type: 'POST', 
+			            success: function(alertStatus) { 
+			            	$("#userModal").modal('hide');
+			            	
+			            	setTimeout(function(){		
+			            		bootbox.alert(alertStatus.message);
+	// 		            		setTimeout(function(){		
+	// 		            			$("#tblUsers").datagrid('reload');
+	// 		            		}, 600);
+			            	}, 600);
+			            },
+			            error: function(jqXHR, exception){
+			            	errorHandler (jqXHR, exception);
+			            }
+				});
+			}
+			
+		});
+		
 		$("#combo-users").select2({
 	        placeholder: "Buscar usuario...",
 	        minimumInputLength: 1,
 	        multiple: true,
 	        ajax: { 
-	            url: "http://localhost:8080/fixeala/issues/getAvailableUsers/1.html",
+	            url: "http://localhost:8080/fixeala/issues/getAvailableUsers/" +currentArea+ ".html",
 	        	dataType: 'json',
 	        	quietMillis: 100,
 	            data: function (term) {
@@ -164,82 +297,68 @@ th, td{font-size:12px;text-align:center !important;}
 			        },
 
 			        data: function (options, callback) {
+			        	
+			        	var self = this;
+		                var url = "http://localhost:8080/fixeala/users/" + '${profileUser}' + "/loadUserIssues.html";
 
-			                var url = "http://localhost:8080/fixeala/users/" + '${profileUser}' + "/loadUserIssues.html";
+		                $.ajax({
+							url: url,
+						 	dataType: 'json',
+                         	type: 'GET', 
+				            success: function(response) { 
+				            	
+                                var data = response;
+                                var count = data.length;	
+                                
+                                // here we give all data a 'flat' property
+                                $.each(data, function (index, row) {
+                                	$("#tblUserIssues tbody tr").attr('id', data[0].id);
+                                });
+                                
+                             	// SEARCHING
+								if (options.search) {
+									data = _.filter(data, function (item) {
+										for (var prop in item) {
+											if (!item.hasOwnProperty(prop)) continue;
+											if (~item[prop].toString().toLowerCase().indexOf(options.search.toLowerCase())) return true;
+										}
+										return false;
+									});
+								}
+                              
+								var count = data.length;
+								
+								// SORTING
+								if (options.sortProperty) {
+									data = _.sortBy(data, options.sortProperty);
+									if (options.sortDirection === 'desc') data.reverse();
+								}
+				                
+				                // PAGING
+								var startIndex = options.pageIndex * options.pageSize;
+								var endIndex = startIndex + options.pageSize;
+								var end = (endIndex > count) ? count : endIndex;
+								var pages = Math.ceil(count / options.pageSize);
+								var page = options.pageIndex + 1;
+								var start = startIndex + 1;
+				
+								data = data.slice(startIndex, endIndex);
+				
+								if (self._formatter) self._formatter(data);
+				
+								callback({ data: data, start: start, end: end, count: count, pages: pages, page: page });
+								
+	                          
 
-
-								$.ajax({
-										url: url,
-									 	dataType: 'json',
-		                             	type: 'GET', 
-							            success: function(response) { 
-							            	
-							            	
-							            	// Prepare data to return to Datagrid
-			                                var data = response;
-			                                var count = data.length;	
-			                                
-			                                // here we give all data a 'flat' property
-			                                $.each(data, function (index, row) {
-			                                	$("#tblUserIssues tbody tr").attr('id', data[0].id);
-			                                });
-			                              
-											// SORTING
-											if (options.sortProperty) {
-												data = _.sortBy(data, options.sortProperty);
-												if (options.sortDirection === 'desc') data.reverse();
-											}
-											
-											// SEARCHING
-// 							                if (options.search) {
-// 							                  data = _.filter(data, function (item) {
-// 							                    for (var prop in item) {
-// 							                      if (!item.hasOwnProperty(prop)) continue;
-// 							                      if (~item[prop].toString().toLowerCase().indexOf(options.search.toLowerCase())) return true;
-// 							                    }
-// 							                    return false;
-// 							                  });
-// 							                }
-							            
-							                
-							                // PAGING
-// 							                var startIndex = options.pageIndex * options.pageSize;
-// 							                var endIndex = startIndex + options.pageSize;
-// 							                var end = (endIndex > count) ? count : endIndex;
-// 							                var pages = Math.ceil(count / options.pageSize);
-// 							                var page = options.pageIndex + 1;
-// 							                var start = startIndex + 1;
-							                
-// 							                data = data.slice(startIndex, endIndex);
-							                
-// 							                if (self._formatter) self._formatter(data);
-							                
-// 							                callback({ data: data, start: start, end: end, count: count, pages: pages, page: page });
-											
-				                          
-
-											callback({ data: data, start: 0, end: 0, count: count, pages: 0, page: 0 });
-							            		
-							            },
-						            						           
-							            error: function(jqXHR, exception) {
-							                if (jqXHR.status === 0) {
-							                    alert('Not connect.\n Verify Network.');
-							                } else if (jqXHR.status == 404) {
-							                    alert('Requested page not found. [404]');
-							                } else if (jqXHR.status == 500) {
-							                    alert('Internal Server Error [500].');
-							                } else if (exception === 'parsererror') {
-							                    alert('Requested JSON parse failed.');
-							                } else if (exception === 'timeout') {
-							                    alert('Time out error.');
-							                } else if (exception === 'abort') {
-							                    alert('Ajax request aborted.');
-							                } else {
-							                    alert('Uncaught Error.\n' + jqXHR.responseText);
-							                }
-							            }
-				        		});	    
+								//callback({ data: data, start: 0, end: 0, count: count, pages: 0, page: 0 });
+				            		
+				            },
+			            						           
+				            error: function(jqXHR, exception){
+				            	errorHandler (jqXHR, exception);
+				            }
+	        		});	    
+								
 
 			        }
 			};
@@ -362,13 +481,19 @@ th, td{font-size:12px;text-align:center !important;}
 					  	<sec:authorize access="hasRole('ROLE_MANAGER')">
 					  		<small>(Moderador)</small>
 					  	</sec:authorize>
-	    	   		</c:if>
-					  
+					</c:if>
 				</div>
 				<div class="span4 pull-right" style="text-align:right;border:0px solid #000;">
-				  <h3>${current_area}</h3>
-				  <br>
-				  <small>${current_ciudad}, ${current_provincia}</small>
+					<c:if test="${ ! empty current_area }">
+					  <h3>${current_area}</h3>
+					  <br>
+					  <small>${current_ciudad}, ${current_provincia}</small>
+					</c:if>
+					<c:if test="${ !loggedMatchesProfile }">
+			  			<h3>${profileUser}</h3>
+					  	<br>
+					  	<small>${barrio}</small>
+			  		</c:if>
 				</div> 
 			</div>
 		
@@ -460,11 +585,78 @@ th, td{font-size:12px;text-align:center !important;}
 							<div class="tab-content">
 								<div class="tab-pane fade in active" id="issuesAsignados">
 								   	<table id="tblUserIssues" cellpadding="0" cellspacing="0" border="0"  data-toggle="context" data-target="#contextmenu-issue"
-    								class="table table-striped table-bordered table-hover datagrid" data-provides="rowlink">
+    								class="table table-striped table-bordered table-hover datagrid datagrid-stretch-header" data-provides="rowlink">
 									<thead>
+									<tr>
+										<th>
+<!-- 											<span class="datagrid-header-title">Listado de reclamos</span> -->
+							
+											<div class="datagrid-header-left">
+												<div class="input-append search datagrid-search">
+													<input type="text" class="input-small" placeholder="Buscar...">
+													<button class="btn"><i class="icon-search"></i></button>
+												</div>
+											</div>
+<!-- 											<div class="datagrid-header-right"> -->
+<!-- 												<div class="select filter" data-resize="auto"> -->
+<!-- 													<button data-toggle="dropdown" class="btn dropdown-toggle"> -->
+<!-- 														<span class="dropdown-label"></span> -->
+<!-- 														<span class="caret"></span> -->
+<!-- 													</button> -->
+<!-- 													<ul class="dropdown-menu"> -->
+<!-- 														<li data-value="all" data-selected="true"><a href="#">All</a></li> -->
+<!-- 														<li data-value="lt5m"><a href="#">Population &lt; 5M</a></li> -->
+<!-- 														<li data-value="gte5m"><a href="#">Population &gt;= 5M</a></li> -->
+<!-- 													</ul> -->
+<!-- 												</div> -->
+<!-- 											</div> -->
+										</th>
+									</tr>
 									</thead>
-									<tbody>			
-									</tbody>	
+							
+									<tfoot>
+									<tr>
+										<th>
+											<div class="datagrid-footer-left" style="display:none;">
+												<div class="grid-controls">
+													<span>
+														<span class="grid-start"></span> -
+														<span class="grid-end"></span> de
+														<span class="grid-count"></span>
+													</span>
+													<div class="select grid-pagesize" data-resize="auto">
+														<button data-toggle="dropdown" class="btn dropdown-toggle">
+															<span class="dropdown-label"></span>
+															<span class="caret"></span>
+														</button>
+														<ul class="dropdown-menu">
+															<li data-value="5" data-selected="true"><a href="#">5</a></li>
+															<li data-value="10"><a href="#">10</a></li>
+															<li data-value="20"><a href="#">20</a></li>
+															<li data-value="50"><a href="#">50</a></li>
+															<li data-value="100"><a href="#">100</a></li>
+														</ul>
+													</div>
+													<span>Por Página</span>
+												</div>
+											</div>
+											<div class="datagrid-footer-right" style="display:none;">
+												<div class="grid-pager">
+													<button type="button" class="btn grid-prevpage"><i class="icon-chevron-left"></i></button>
+													<span>Página</span>
+							
+													<div class="input-append dropdown combobox">
+														<input class="span1" type="text">
+														<button class="btn" data-toggle="dropdown"><i class="caret"></i></button>
+														<ul class="dropdown-menu"></ul>
+													</div>
+													<span>de <span class="grid-pages"></span></span>
+													<button type="button" class="btn grid-nextpage"><i class="icon-chevron-right"></i></button>
+												</div>
+											</div>
+										</th>
+									</tr>
+									</tfoot>
 								</table>
 								</div>
 													
@@ -593,7 +785,7 @@ th, td{font-size:12px;text-align:center !important;}
 					    		<h3>Usuarios</h3>
 					    	</div>
 					    	
-					    	<table class="table table-striped table-hover user-table">
+					    	<table id="tblUsers" class="table table-striped table-hover user-table">
 						    	<thead>
 						    		<tr>
 							    		<th width="200">Nombre de Usuario</th>
@@ -705,6 +897,11 @@ th, td{font-size:12px;text-align:center !important;}
 							    	<td><i class="icon-time icon-grey"></i> hace 2 horas</td>
 							    <tr>
 							    <tr>
+						    		<td><i class="icon-realod"></i></td>
+							    	<td>El reclamo <a href="#">#64256</a>fue <span class="label label-warning">reasignado</span> a <a href="#">fakeuser</a></td>
+							    	<td><i class="icon-time icon-grey"></i> ayer</td>
+							    <tr>
+							    <tr>
 						    		<td><i class="icon-ok"></i></td>
 							    	<td>El reclamo <a href="#">#78657</a>fue <span class="label label-success">resuelto</span> por <a href="#">fulanito_11</a></td>
 							    	<td><i class="icon-time icon-grey"></i> ayer</td>
@@ -764,51 +961,57 @@ th, td{font-size:12px;text-align:center !important;}
 			    <h3 id="myModalLabel">Registro de nuevo usuario</h3>
 			  </div>
 			  <div class="modal-body">
-			    <form class="form-horizontal" onload="loadOfficials();">
+			    <form id="backendUserForm" class="form-horizontal">
 				  <fieldset>
 				  	 <div class="control-group">
-					    <label class="control-label" for="inputPassword">Apellido y Nombre(s)</label>
+					    <label class="control-label">Apellido(s)</label>
 					    <div class="controls">
-					      <input type="text" id="inputPassword" placeholder="Nombre y Apellido">
+					      <input type="text" id="apellido" name="apellido" placeholder="ej: Vásquez">
 					    </div>
-				     </div>
+				     </div>		
 				     <div class="control-group">
-					    <label class="control-label" for="inputPassword">Usuario</label>
+				      	<label class="control-label">Nombre(s)</label>
 					    <div class="controls">
-					      <input type="text" id="inputPassword" placeholder="Nombre de usuario">
+					      <input type="text" id="nombre" name="nombre" placeholder="ej: Benancio Alberto">
+					    </div>
+				     </div>		    
+				     <div class="control-group">
+					    <label class="control-label">Usuario</label>
+					    <div class="controls">
+					      <input type="text" id="username" name="username" placeholder="ej: vasquezb">
 					    </div>
 				     </div>
 					  <div class="control-group">
-					  	<label class="control-label" for="inputEmail">Email</label>
+					  	<label class="control-label">Email</label>
 					    <div class="controls">
-					      <input type="text" id="inputEmail" placeholder="Email">
+					      <input type="email" id="email" name="email" placeholder="vasquezb@fixeala.com">
 					    </div>
 					  </div>
 				      <div class="control-group">
-					    <label class="control-label" for="inputPassword">Contraseña</label>
+					    <label class="control-label">Contraseña</label>
 					    <div class="controls">
-					      <input type="password" id="inputPassword" placeholder="Contraseña">
+					      <input type="password" id="password" name="password" placeholder="Contraseña">
 					    </div>
 				     </div>
 				     <div class="control-group">
-					    <label class="control-label" for="inputPassword">Confirme contraseña</label>
+					    <label class="control-label">Confirme contraseña</label>
 					    <div class="controls">
-					      <input type="password" id="inputPassword" placeholder="Confirme contraseña">
+					      <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirme contraseña">
 					    </div>
 				     </div>
 				     <div class="control-group">
-					    <label class="control-label" for="inputPassword">Cargo</label>
+					    <label class="control-label" class="input-large">Cargo</label>
 					    <div class="controls">
-					      <select class="span7">
+					      <select id="cargo" name="cargo">
 					    	<option>Responsable de Area</option>
 					    	<option>Asistente</option>
 				    	  </select>
 					    </div>
 				     </div>
 				     <div class="control-group">
-					    <label class="control-label" for="inputPassword">Sub-Area</label>
+					    <label class="control-label" class="input-large">Sub-Area</label>
 					    <div class="controls">
-						    <select class="span7">
+						    <select id="subarea" name="subarea">
 						    	<option>S. S. de Administracion (SSADM)</option>
 						    	<option>S. S. de Higiene Urbana (SSHU)</option>
 						    	<option>D. G. Cementerios (CGCEM)</option>
@@ -818,23 +1021,22 @@ th, td{font-size:12px;text-align:center !important;}
 					    </div>
 				     </div>
 				     <div class="control-group">
-					    <label class="control-label" for="inputPassword">Rol</label>
+					    <label class="control-label" class="input-large">Rol</label>
 					    <div class="controls">
-					      <select class="span7">
-					    	<option>Administrador</option>
-					    	<option selected="selected">Editor</option>
-					    	<option>Usuario</option>
+					      <select id="rol" name="rol">
+					    	<option value="ROLE_ADMIN">Administrador</option>
+					    	<option value="ROLE_MANAGER" selected="selected">Fiscal</option>
 				    	  </select>
 					    </div>
 				     </div>
 				   <div class="control-group">
-				       	<label class="control-label" for="inputPassword">Estado</label>
+				       	<label class="control-label">Estado</label>
 				      	<div class="controls">
-					      	<label class="radio">
-					        	<input type="radio" checked> Activo
+					      	<label class="radio inline">
+					        	<input type="radio" name="accountStatus" value="active" name="optionsRadios" checked> Activo
 					        </label>
-					        <label class="radio" >
-					        	<input type="radio"> Bloqueado
+					        <label class="radio inline">
+					        	<input type="radio" name="accountStatus" value="blocked" name="optionsRadios"> Bloqueado
 					    	</label>
 				      </div>
 				    </div>
@@ -843,20 +1045,11 @@ th, td{font-size:12px;text-align:center !important;}
 				</form>
 			  </div>
 			  <div class="modal-footer" style="margin-bottom:0">
-			    <button class="btn btn-primary"><i class="icon-ok"></i>&nbsp;&nbsp;Guardar</button>
+			    <button type="submit" id="btn-saveBackendUser" class="btn btn-primary"><i class="icon-ok"></i>&nbsp;&nbsp;Crear usuario</button>
 			    <button class="btn" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i>&nbsp;&nbsp;Cancelar</button>
 			  </div>
 			</div>
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
+						
 	    </sec:authorize>
 	    
 	    
@@ -1104,98 +1297,6 @@ th, td{font-size:12px;text-align:center !important;}
 		         		<div class="page-header">
 				    		<h3>Usuarios</h3>
 				    	</div>
-				    	
-				    	
-				    	<!-- Modal -->
-						<div id="userModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-						  <div class="modal-header">
-						    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-						    <h3 id="myModalLabel">Registro de nuevo usuario</h3>
-						  </div>
-						  <div class="modal-body">
-						    <form class="form-horizontal">
-							  <fieldset>
-							  	 <div class="control-group">
-								    <label class="control-label" for="inputPassword">Apellido y Nombre(s)</label>
-								    <div class="controls">
-								      <input type="text" id="inputPassword" placeholder="Nombre y Apellido">
-								    </div>
-							     </div>
-							     <div class="control-group">
-								    <label class="control-label" for="inputPassword">Usuario</label>
-								    <div class="controls">
-								      <input type="text" id="inputPassword" placeholder="Nombre de usuario">
-								    </div>
-							     </div>
-								  <div class="control-group">
-								  	<label class="control-label" for="inputEmail">Email</label>
-								    <div class="controls">
-								      <input type="text" id="inputEmail" placeholder="Email">
-								    </div>
-								  </div>
-							      <div class="control-group">
-								    <label class="control-label" for="inputPassword">Contraseña</label>
-								    <div class="controls">
-								      <input type="password" id="inputPassword" placeholder="Contraseña">
-								    </div>
-							     </div>
-							     <div class="control-group">
-								    <label class="control-label" for="inputPassword">Confirme contraseña</label>
-								    <div class="controls">
-								      <input type="password" id="inputPassword" placeholder="Confirme contraseña">
-								    </div>
-							     </div>
-							     <div class="control-group">
-								    <label class="control-label" for="inputPassword">Cargo</label>
-								    <div class="controls">
-								      <select class="span7">
-								    	<option>Responsable de Area</option>
-								    	<option>Asistente</option>
-							    	  </select>
-								    </div>
-							     </div>
-							     <div class="control-group">
-								    <label class="control-label" for="inputPassword">Sub-Area</label>
-								    <div class="controls">
-									    <select class="span7">
-									    	<option>S. S. de Administracion (SSADM)</option>
-									    	<option>S. S. de Higiene Urbana (SSHU)</option>
-									    	<option>D. G. Cementerios (CGCEM)</option>
-									    	<option>D. G. Espacios Verdes (DGEV)</option>
-									    	<option>D. G. Reciclado (DGREC)</option>
-								    	</select>
-								    </div>
-							     </div>
-							     <div class="control-group">
-								    <label class="control-label" for="inputPassword">Rol</label>
-								    <div class="controls">
-								      <select class="span7">
-								    	<option>Administrador</option>
-								    	<option selected="selected">Editor</option>
-								    	<option>Usuario</option>
-							    	  </select>
-								    </div>
-							     </div>
-							   <div class="control-group">
-							       	<label class="control-label" for="inputPassword">Estado</label>
-							      	<div class="controls">
-								      	<label class="radio">
-								        	<input type="radio" checked> Activo
-								        </label>
-								        <label class="radio" >
-								        	<input type="radio"> Bloqueado
-								    	</label>
-							      </div>
-							    </div>
-							   
-							  </fieldset>
-							</form>
-						  </div>
-						  <div class="modal-footer" style="margin-bottom:0">
-						    <button class="btn btn-primary"><i class="icon-ok"></i>&nbsp;&nbsp;Guardar</button>
-						    <button class="btn" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i>&nbsp;&nbsp;Cancelar</button>
-						  </div>
-						</div>
 				    	
 				    	
 				    	<table class="table table-striped table-hover user-table">
