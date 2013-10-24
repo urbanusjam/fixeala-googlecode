@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import ar.com.urbanusjam.dao.ActivationDAO;
+import ar.com.urbanusjam.dao.AreaDAO;
 import ar.com.urbanusjam.dao.AuthorityDAO;
 import ar.com.urbanusjam.dao.PasswordResetDAO;
 import ar.com.urbanusjam.dao.UserDAO;
@@ -30,6 +31,7 @@ public class UserServiceImpl implements UserService{
 	private AuthorityDAO authorityDAO;
 	private PasswordResetDAO passwordResetDAO;
 	private ActivationDAO activationDAO;
+	private AreaDAO areaDAO;
 	
 	
 	public void setUserDAO(UserDAO userDAO) {
@@ -47,8 +49,11 @@ public class UserServiceImpl implements UserService{
 	public void setActivationDAO(ActivationDAO activationDAO) {
 		this.activationDAO = activationDAO;
 	}
+		
+	public void setAreaDAO(AreaDAO areaDAO) {
+		this.areaDAO = areaDAO;
+	}
 
-	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, DisabledException{	
 		
@@ -141,7 +146,7 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public void createAccount(UserDTO userDTO) {
 		User user = new User();
-		user = this.convertToNew(userDTO);
+		user = this.convertTo(userDTO);
 		userDAO.createUser(user);		
 	}
 	
@@ -226,13 +231,27 @@ public class UserServiceImpl implements UserService{
 	
 	
 	
-	public User convertToNew(UserDTO userDTO){
+	public User convertTo(UserDTO userDTO){
 		User user = new User();
 		user.setUsername(userDTO.getUsername());
 		user.setPassword(userDTO.getPassword());
 		user.setEmail(userDTO.getEmail());
 		user.setAuthorities(userDTO.getAuthorities());
 		user.setEnabled(userDTO.isEnabled());
+		
+		if(userDTO.isVerifiedOfficial()){
+			user.setVerifiedOfficial(true);
+			user.setNombre(userDTO.getNombre());
+			user.setApellido(userDTO.getApellido());
+			user.setCargo(userDTO.getCargo());
+			user.setSubArea(userDTO.getSubarea());
+			user.setArea(areaDAO.getAreaById(userDTO.getAreaId()));
+		}
+		
+		else{
+			userDTO.setNeighborhood(userDTO.getNeighborhood());
+		}
+		
 		return user;
 	}
 	

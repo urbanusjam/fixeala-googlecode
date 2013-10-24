@@ -21,11 +21,14 @@ public class UserDTO implements Serializable {
 	private String areaNombre;
 	private String areaCiudad;
 	private String areaProvinciaSigla;
+	private String subarea;
 	private String neighborhood;
 	private Date registrationDate;
 	private List<String> authorities;	
 	private boolean verifiedOfficial;
-	private boolean enabled = false;
+	private String accountStatus;
+	private boolean enabled;
+	private String rol;
 	
 	private int cantidadIssues; 
 	
@@ -77,7 +80,6 @@ public class UserDTO implements Serializable {
 		this.email = email;
 	}
 	
-
 	public String getNombre() {
 		return nombre;
 	}
@@ -133,6 +135,14 @@ public class UserDTO implements Serializable {
 	public void setAreaProvinciaSigla(String areaProvinciaSigla) {
 		this.areaProvinciaSigla = areaProvinciaSigla;
 	}
+	
+	public String getSubarea() {
+		return subarea;
+	}
+
+	public void setSubarea(String subarea) {
+		this.subarea = subarea;
+	}
 
 	public List<String> getAuthorities() {
 		return authorities;
@@ -180,6 +190,22 @@ public class UserDTO implements Serializable {
 
 	public void setCantidadIssues(int cantidadIssues) {
 		this.cantidadIssues = cantidadIssues;
+	}
+	
+	public String getRol() {
+		return rol;
+	}
+
+	public void setRol(String rol) {
+		this.rol = rol;
+	}
+
+	public String getAccountStatus() {
+		return accountStatus;
+	}
+
+	public void setAccountStatus(String accountStatus) {
+		this.accountStatus = accountStatus;
 	}
 
 	public boolean hasRole(String role, List<String> authorities) {

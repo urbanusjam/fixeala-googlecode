@@ -13,13 +13,16 @@ public class AreaDAOImpl extends GenericDAOImpl<Area, Serializable> implements A
 		super(Area.class);
 	}
 
+	@Override
+	public Area getAreaById(String id) {
+		List<Area> areas = this.findWhere(" id = ? ", new Object[]{Long.valueOf(id)});
+		return areas.size() > 0 ? areas.get(0) : null;
+	}
 
 	@Override
 	public Area getAreaByName(String name) {
-		List<Area> areas = this.findWhere(" name = ? ", name);
+		List<Area> areas = this.findWhere(" name = ? ", new Object[]{name});
 		return areas.size() > 0 ? areas.get(0) : null;
 	}
 	
-	
-
 }
