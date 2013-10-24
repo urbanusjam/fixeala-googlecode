@@ -34,6 +34,7 @@ public class IssueDTO implements Serializable {
 	private List<IssueHistorialRevisionDTO> historial = new ArrayList<IssueHistorialRevisionDTO>();
 	private List<CommentDTO> comentarios = new ArrayList<CommentDTO>();
 	private String status;
+	private String statusCss;
 
 
 	public Long getId() {
@@ -196,6 +197,14 @@ public class IssueDTO implements Serializable {
 		this.status = status;
 	}
 	
+	public String getStatusCss() {
+		return statusCss;
+	}
+
+	public void setStatusCss(String statusCss) {
+		this.statusCss = statusCss;
+	}
+
 	public String getUsername() {
 		return username;
 	}

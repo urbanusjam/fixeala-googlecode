@@ -117,7 +117,7 @@ public class IssueServiceImpl implements IssueService {
 		revision.setOperacion(Operation.UPDATE);			
 		revision.setMotivo("MODIFICACION");			
 		revision.setEstado(issue.getStatus());
-		revision.setObservaciones("El reclamo ha sido asignado a" + user.getUsername().toUpperCase() + ".");
+		revision.setObservaciones("El reclamo ha sido asignado a " + user.getUsername().toUpperCase() + ".");
 		issue.getRevisiones().add(convertTo(revision));
 		
 		issueDAO.updateIssue(issue);
