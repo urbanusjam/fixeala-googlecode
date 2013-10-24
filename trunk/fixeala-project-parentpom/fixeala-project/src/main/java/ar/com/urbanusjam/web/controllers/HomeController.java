@@ -134,7 +134,35 @@ public class HomeController {
 		else
 			issues = issueService.loadIssuesByUser(userID);		
 		
-	    return issues;
+		for(IssueDTO i : issues){
+			String status = i.getStatus();
+			
+			if(status.equals(IssueStatus.OPEN)){
+				i.setStatusCss("label label-important");
+			}
+			
+			if(status.equals(IssueStatus.ACKNOWLEDGED)){
+				i.setStatusCss("label label-info");
+			}
+			
+			if(status.equals(IssueStatus.SOLVED)){
+				i.setStatusCss("label label-success");
+			}
+			
+			if(status.equals(IssueStatus.REOPENED)){
+				i.setStatusCss("label label-warning");
+			}
+			
+			if(status.equals(IssueStatus.CLOSED)){
+				i.setStatusCss("label label-inverse");
+			}
+			
+			if(status.equals(IssueStatus.ARCHIVED)){
+				i.setStatusCss("label");
+			}
+		}
+		
+		return issues;
 	}
 	
 	@RequestMapping(value="/users/{userID}/getIssueStatus",  method = RequestMethod.GET)

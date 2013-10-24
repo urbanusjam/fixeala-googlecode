@@ -95,43 +95,56 @@ public class AccountController {
     
         
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
-	public @ResponseBody AlertStatus doCreateAccount(@ModelAttribute(value="user") UserDTO user, 
-			HttpServletRequest request){
+	public @ResponseBody AlertStatus doCreateAccount(@ModelAttribute("user") UserDTO user, 
+			@RequestParam("userArea") String userArea, @RequestParam("backendUser") boolean backendUser, HttpServletRequest request){
  					
 		try {
-
+			
 			String encodedPass = passwordEncoder.encodePassword(user.getPassword(), user.getUsername());
 	    	user.setPassword(encodedPass);
-	    	user.setEnabled(false);
-	    	 
+	    	
+	    	if(user.getAccountStatus().equals("active"))	    	
+	    		user.setEnabled(true);
+	    	else
+	    		user.setEnabled(false);
+	    	
 	    	List<String> authorities = new ArrayList<String>();
-			authorities.add("ROLE_USER");		
+			authorities.add(user.getRol());
 			user.setAuthorities(authorities);	
 			user.setRegistrationDate(new Date());
-			
-			//create account
+	    				
+	        String message = "Se ha creado el usuario.";
+	        
+	        //ROLE_USER
+	        if(!backendUser){
+	        	DateTime creation = new DateTime();
+	 			DateTime expiration = creation.plusDays(3); 
+	 						
+	 			//random token generation
+	 			String token = UUID.randomUUID().toString();
+	 			EmailUtils emailUtils = new EmailUtils();
+	 			
+	 			ActivationDTO tokenDTO = new ActivationDTO();
+	 			tokenDTO.setToken(token);
+	 			tokenDTO.setUsername(user.getUsername());
+	 			tokenDTO.setCreation(creation.toDate());
+	 			tokenDTO.setExpiration(expiration.toDate());
+	 			
+	 			//save token in DB
+	 			userService.saveActivationToken(tokenDTO);		
+	 		
+	 			//send activation email
+	 			emailUtils.sendActivationEmail(user.getUsername(), token, user.getEmail());		
+	 			
+	 			message = "¡Felicitaciones! Se ha enviado un link de activación de cuenta a su casilla de correo. ";
+	        }
+	        
+	        user.setVerifiedOfficial(true);	   
+	        user.setAreaId(userArea);
+	        //create account
 	        userService.createAccount(user);
-			               
-	        DateTime creation = new DateTime();
-			DateTime expiration = creation.plusDays(3); 
-						
-			//random token generation
-			String token = UUID.randomUUID().toString();
-			EmailUtils emailUtils = new EmailUtils();
-			
-			ActivationDTO tokenDTO = new ActivationDTO();
-			tokenDTO.setToken(token);
-			tokenDTO.setUsername(user.getUsername());
-			tokenDTO.setCreation(creation.toDate());
-			tokenDTO.setExpiration(expiration.toDate());
-			
-			//save token in DB
-			userService.saveActivationToken(tokenDTO);		
-		
-			//send activation email
-			emailUtils.sendActivationEmail(user.getUsername(), token, user.getEmail());			
-
-			return new AlertStatus(true, "¡Felicitaciones! Se ha enviado un link de activación de cuenta a su casilla de correo. ");
+	         
+			return new AlertStatus(true, message);
 					
 			
 		} catch (Exception e) {
