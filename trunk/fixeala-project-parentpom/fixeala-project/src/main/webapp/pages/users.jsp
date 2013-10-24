@@ -19,8 +19,8 @@ th, td{font-size:12px;text-align:center !important;}
 	<script type="text/javascript">
 	
 	var rowId;
-	
-	
+	var rowTitle;
+	var selectedUser;
 	
 	
 	function redirect(){
@@ -28,6 +28,38 @@ th, td{font-size:12px;text-align:center !important;}
 		return window.location.href = url;
 	}
 	
+	function assignUser(){
+		var url = "http://localhost:8080/fixeala/issues/assignUser.html";
+	    var data = 'selectedUser='+ selectedUser + '&issueID='+ rowId;
+  
+		$.ajax({
+				url: url,
+			 	dataType: 'text',
+			 	data: data,
+         		type: 'POST', 
+	            success: function(response) { 
+	            	$("#contextmenu-issue").hide();
+	            	//$("#tblUserIssues").datagrid('reload');
+	            },
+	            error: function(jqXHR, exception) {
+	                if (jqXHR.status === 0) {
+	                    alert('Not connect.\n Verify Network.');
+	                } else if (jqXHR.status == 404) {
+	                    alert('Requested page not found. [404]');
+	                } else if (jqXHR.status == 500) {
+	                    alert('Internal Server Error [500].');
+	                } else if (exception === 'parsererror') {
+	                    alert('Requested JSON parse failed.');
+	                } else if (exception === 'timeout') {
+	                    alert('Time out error.');
+	                } else if (exception === 'abort') {
+	                    alert('Ajax request aborted.');
+	                } else {
+	                    alert('Uncaught Error.\n' + jqXHR.responseText);
+	                }
+	            }
+		});
+	}
 	
 	function updateStatus(status){
 		    var url = "http://localhost:8080/fixeala/issues/updateIssueStatus.html";
@@ -62,35 +94,48 @@ th, td{font-size:12px;text-align:center !important;}
 	}
 	
 	$(function(){	
-		
-		var users;
-		
+	
 	
 		$("#combo-users").select2({
 	        placeholder: "Buscar usuario...",
+	        minimumInputLength: 1,
+	        multiple: true,
 	        ajax: { 
-	            url: "http://localhost:8080/fixeala/issues/getAvailableUsers/${current_areaID}.html",
+	            url: "http://localhost:8080/fixeala/issues/getAvailableUsers/1.html",
 	        	dataType: 'json',
-	     		data: function (term, page) {
-	                    return {
-	                    	q: term,
-	                    	limits: -1,	                        
-	                        term : term
-	                    };
+	        	quietMillis: 100,
+	            data: function (term) {
+	                return {
+	                    term: term
+	                };
 	            },
-                results: function (data, page) { // parse the results into the format expected by Select2.
-                    // since we are using custom formatting functions we do not need to alter remote JSON data
-                    return {results: data.users};
-                },
-                formatResult: function(data){
-                	return "<div class='select2-user-result>'" + data.users.username + "</div>";
-                },
-                formatSelection: function(data){
-                	return data.users.username;
-                }
+	            results: function (data) {
+	              var results = [];
+	              $.each(data, function(index, item){
+	                results.push({
+	                  id: item.id,
+	                  text: item.nombre + " " + item.apellido + " (" + item.username + ")"
+	                });
+	              });
+	              return {
+	                  results: results
+	              };
+	            },
+	            formatResult: function (item) { return item.nombre; },
+                formatSelection: function (item) { return item.email; }
+
 	   
 	        } 
 	    });
+		
+		$("#combo-users")
+//         .on("change", function(e) { 
+//         	alert("change "+JSON.stringify({val:e.val, added:e.added, removed:e.removed})); 
+//         	})
+        .on("select2-selecting", function(e) { 
+        	selectedUser = e.val;
+        	//alert("selecting val="+ e.val+" choice="+ JSON.stringify(e.choice));
+        	})
 					
 			$('#tblUserIssues').on('click', 'tbody tr', function(event) {
 			    $(this).addClass('highlight').siblings().removeClass('highlight');
@@ -100,7 +145,7 @@ th, td{font-size:12px;text-align:center !important;}
 			$("#tblUserIssues").delegate("tr", "contextmenu", function(e) {
 				$(this).each(function(){
 					rowId = $(this).find("td").eq(0).html().trim(); 
-					//var rowStatus = $(this).find("td").eq(8).html().trim(); 
+					rowTitle = $(this).find("td").eq(2).html().trim(); 
 				});
 			});
  
@@ -618,6 +663,12 @@ th, td{font-size:12px;text-align:center !important;}
 						    		      left: e.pageX,
 						    		      top: e.pageY
 						    		    });
+						    		    
+						    		    $("div#issueAssignment").text(
+						    		    		
+						    		    		'<h4>Reclamo #'+rowId+'</h4>' +
+						    		    		'<p>'+rowTitle+'</p>'
+										);
 						    		    return false;
 						    		  });
 						    		  
@@ -685,10 +736,8 @@ th, td{font-size:12px;text-align:center !important;}
 			  <div class="modal-body">
 			    <form class="form-horizontal">
 				  <fieldset>
-					  <div class="control-group">
-						    <h4>Reclamo #2222</h4>
-						    <p>
-						      Semaforo interrumpido en la Avenida Libertador.</p>
+					  <div class="control-group" id="issueAssignment">
+						
 					     </div>
 				  	
 				     <div class="control-group">
@@ -701,7 +750,7 @@ th, td{font-size:12px;text-align:center !important;}
 				</form>
 			  </div>
 			  <div class="modal-footer" style="margin-bottom:0">
-			    <button class="btn btn-primary"><i class="icon-ok"></i>&nbsp;&nbsp;Asignar</button>
+			    <button class="btn btn-primary" onclick="assignUser();"><i class="icon-ok"></i>&nbsp;&nbsp;Asignar</button>
 			    <button class="btn" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i>&nbsp;&nbsp;Cancelar</button>
 			  </div>
 			</div>
