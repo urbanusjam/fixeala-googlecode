@@ -15,6 +15,8 @@ public interface IssueService {
 	
 	public void updateIssueStatus(String issueID, String newStatus);
 	
+	public void assignUserToIssue(String issueID, String user);
+	
 	public List<IssueDTO> getIssuesAsignados(String username);
 	
 	public List<IssueDTO> loadAllIssues();
