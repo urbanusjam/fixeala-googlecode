@@ -29,7 +29,7 @@ public class IssueHistorialRevision implements Serializable {
 	private Issue issue;
 	
 	@OneToOne
-	@JoinColumn(name = "USERNAME")
+	@JoinColumn(name = "ID_USER")
 	private User usuario;
 	
 	@Column(name = "HISTORIAL_DATE")

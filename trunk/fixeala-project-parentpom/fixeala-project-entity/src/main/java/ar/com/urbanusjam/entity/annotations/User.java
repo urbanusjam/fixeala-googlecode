@@ -3,14 +3,22 @@ package ar.com.urbanusjam.entity.annotations;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -28,7 +36,11 @@ public class User implements UserDetails {
     private static final long serialVersionUID = 1L;
     
     @Id
-    @Column(name="USERNAME")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="ID_USER")
+    private Long id;
+  
+    @Column(name="USERNAME", unique=true)
     private String username;
     
     @Column(name="PASSWORD")
@@ -79,34 +91,35 @@ public class User implements UserDetails {
 
     @Transient
     private boolean credentialsNonExpired;
-//
-//    @OneToMany(
-//            fetch = FetchType.EAGER, cascade = CascadeType.ALL,
-//            mappedBy = "user"
-//    ) 
-    @Transient
-    private Collection<GrantedAuthority> authorities;
+
+//	@Transient
+//	private Collection<GrantedAuthority> grantedAuthorities;
+    
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name = "USER_ROLE",
+	         joinColumns = @JoinColumn(name = "ID_USER"),
+	         inverseJoinColumns = @JoinColumn(name = "ID_ROLE"))
+    private Collection<Authority> roles;  
     
   
 
 	//Constructors
-    public User() {
-    }
+	public User() { }
     
     public User(String username) {
     	this.username = username;
     }
 
-    public User(String username, String password, String email, boolean enabled, Collection<GrantedAuthority> authorities) {
+    public User(String username, String password, String email, boolean enabled, Collection<Authority> roles) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.enabled = enabled;
-        this.authorities =  authorities;
+        this.roles =  roles;
     }
 
     public User(String username, String password, boolean enabled, boolean accountNonExpired, boolean accountNonLocked, 
-    		boolean credentialsNonExpired, Collection<GrantedAuthority> authorities) {
+    		boolean credentialsNonExpired, Collection<Authority> authorities) {
     	
         if (((username == null) || "".equals(username)) || (password == null)) {
             throw new IllegalArgumentException("Cannot pass null or empty values to constructor");
@@ -118,12 +131,19 @@ public class User implements UserDetails {
         this.accountNonExpired = accountNonExpired;
         this.accountNonLocked = accountNonLocked;
         this.credentialsNonExpired = credentialsNonExpired;
-        this.authorities =  authorities;
+        this.roles =  roles;
     }
     
     
       
-    // Getters & Setters for original props
+    public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
     public String getUsername() {
         return this.username;
     }
@@ -227,6 +247,10 @@ public class User implements UserDetails {
 	public void setVerifiedOfficial(boolean verifiedOfficial) {
 		this.verifiedOfficial = verifiedOfficial;
 	}
+	
+	public void setRoles(Collection<Authority> roles) {
+		this.roles = roles;
+	}
 
 	public Date getClosedAccountDate() {
 		return closedAccountDate;
@@ -259,17 +283,8 @@ public class User implements UserDetails {
     public void setCredentialsNonExpired(boolean credentialsNonExpired) {
     	this.credentialsNonExpired = credentialsNonExpired; 
     }
-    
-    @Override
-	public Collection<GrantedAuthority> getAuthorities() {
-		return this.authorities;
-	}
 
-//	public void setAuthorities(Collection<GrantedAuthority> authorities) {
-//		this.authorities = authorities;
-//	}
-    
-    public boolean hasRole(String role, Collection<GrantedAuthority> authorities) {
+	public boolean hasRole(String role, Collection<GrantedAuthority> authorities) {
        boolean hasRole = false;
        
        for (GrantedAuthority grantedAuthority : authorities) {
@@ -291,13 +306,25 @@ public class User implements UserDetails {
      }
     
     
-    public void setAuthorities(List<String> roles) {
-        List<GrantedAuthority> listOfAuthorities = new ArrayList<GrantedAuthority>();
-        for (String role : roles) {
-            listOfAuthorities.add(new GrantedAuthorityImpl(role));
+    public void setGrantedAuthorities(List<Authority> roles) {
+        List<Authority> listOfAuthorities = new ArrayList<Authority>();
+        for (Authority role : roles) {
+            listOfAuthorities.add(new Authority(role.getAuthority()));
         }
-        this.authorities = (Collection<GrantedAuthority>) listOfAuthorities;
+        this.roles = (Collection<Authority>) listOfAuthorities;
     }
+    
+    
+
+	public Collection<Authority> getRoles() {
+		return roles;
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	
    

@@ -165,7 +165,19 @@ public class HomeController {
 		return issues;
 	}
 	
-	@RequestMapping(value="/users/{userID}/getIssueStatus",  method = RequestMethod.GET)
+	@RequestMapping(value="/users/{userID}/loadBackendUsers", produces = "application/json", method = RequestMethod.POST)
+	public @ResponseBody List<UserDTO> getBackendUsers(@PathVariable("userID") String userID,  
+			@RequestParam("areaID") String areaID) throws IOException {
+		
+		List<UserDTO> users = new ArrayList<UserDTO>();
+		
+		if(!areaID.isEmpty())
+			users = userService.loadVerifiedUsersByArea(areaID);
+		
+		return users;
+	}
+	
+	@RequestMapping(value="/users/{userID}/getIssueStatus", method = RequestMethod.GET)
 	public @ResponseBody String getIssueStatus(Model model,  
 			@PathVariable("userID") String userID, @RequestParam("issueID") String issueID) throws IOException {
 		
@@ -218,23 +230,12 @@ public class HomeController {
 	public String showUserProfilePage(Model model, @PathVariable("userID") String userID, 
 				HttpServletRequest request){
 		
-		
-	
 		try{
-			
-//			if(!loggedUser.equals(userID)){
-//				user = userService.getUserByUsername(userID);  
-//				
-//			}
 				Object loggedUser = SecurityContextHolder.getContext().getAuthentication().getPrincipal();	
 				UserDTO user = new UserDTO();
 				boolean isSameUser = false;
 			
 				user = userService.getUserByUsername(userID); 
-				
-//				if(loggedUser.equals("anonymousUser")){
-//					
-//				}
 				
 				if(loggedUser instanceof User){
 					isSameUser = ((User) loggedUser).getUsername().equals(user.getUsername());
@@ -262,18 +263,13 @@ public class HomeController {
 					model.addAttribute("current_areaID", user.getAreaId());
 					model.addAttribute("current_ciudad", user.getAreaCiudad());
 					model.addAttribute("current_provincia", user.getAreaProvinciaSigla());
-				}
+				}				
 				
-				
-		}
-		catch(Exception e){
+		}catch(Exception e){
 			return "redirect:/" + "error.html";
 		}
 		
-	
-		
-		return "users";
-		
+		return "users";		
 	}
 	
 	@RequestMapping(value="/error")
@@ -295,6 +291,4 @@ public class HomeController {
 		  }
 	}
 	
-	
-
 }

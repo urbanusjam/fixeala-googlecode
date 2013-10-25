@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.UserService;
 
 public class CustomAuthenticationProvider implements AuthenticationProvider {
@@ -22,13 +23,14 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		
-		  UserDetails user = userService.loadUserByUsername((String) authentication.getPrincipal());
+		  User user = userService.loadUserByUsername((String) authentication.getPrincipal());
 		  String plainPass = (String) authentication.getCredentials();
 		  String encodedPass = passwordEncoder.encodePassword(plainPass, user.getUsername());
+		 
 		
 		  if(user.isEnabled()){
 			  if (user.getPassword().equals(encodedPass))
-				  return new UsernamePasswordAuthenticationToken(user, authentication.getCredentials(), user.getAuthorities());
+				  return new UsernamePasswordAuthenticationToken(user, authentication.getCredentials(), user.getRoles());
 			   else
 				  return null;
 		  }

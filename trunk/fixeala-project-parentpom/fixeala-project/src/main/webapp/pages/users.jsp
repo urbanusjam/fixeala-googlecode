@@ -283,14 +283,19 @@
 			});
  
 			
-			var myDataSource = function (options) {
+			//-------------------------------------------------------------------------------------------------------------------------------------//
+			//------------------------------------------------------------- DATAGRIDS -------------------------------------------------------------//
+			
+			//--- 01 DATAGRID ISSUES PER USER ---//
+			
+			var UserIssuesDataSource = function (options) {
 				 this._formatter = options.formatter;
 			     this._columns = options.columns;
 			     this._data = options.data;
 			 	 this._delay = options.delay || 0;
 			};
 
-			myDataSource.prototype = {
+			UserIssuesDataSource.prototype = {
 
 			        columns: function () {
 			                return this._columns;
@@ -357,17 +362,14 @@
 				            error: function(jqXHR, exception){
 				            	errorHandler (jqXHR, exception);
 				            }
-	        		});	    
-								
-
+	        			});	 
 			        }
 			};
-			
+						
 			$('#tblUserIssues').datagrid({ 
 				
-				dataSource: new myDataSource({
+				dataSource: new UserIssuesDataSource({
 
-                    // Column definitions for Datagrid
                     columns: [{
                     		label: '#',
                             property: 'id',
@@ -406,7 +408,8 @@
                 	},{
 	                	 	label: 'Usuario',
 	                        property: 'username',
-	                        sortable: true
+	                        sortable: true,
+	                        sortProperty: 'username'
                      
                 	},{
 	                	 	label: 'Estado',
@@ -415,49 +418,139 @@
 	                        sortProperty: 'status'
                 	}]
 
-                   
-            })
+            	})
 			});
 			
+			//--- 02 DATAGRID BACKEND USERS PER AREA ---//
 			
+			var BackendUsersDataSource = function (options) {
+				 this._formatter = options.formatter;
+			     this._columns = options.columns;
+			     this._data = options.data;
+			 	 this._delay = options.delay || 0;
+			 	 
+		       
+			};
+
+			BackendUsersDataSource.prototype = {
+
+			        columns: function () {
+			                return this._columns;
+			        },
+
+			        data: function (options, callback) {
+			        	
+			        	   var self = this;
+			        	   
+			          
+			        	   var url = "http://localhost:8080/fixeala/users/" + '${profileUser}' + "/loadBackendUsers.html";
+
+			                 $.ajax({
+										url: url,
+									 	dataType: 'json',
+			                        	type: 'POST', 
+			                        	data: "areaID=" + currentArea,
+							            success: function(response) { 
+							            
+		 		                             
+				                               
+				                               var data = $.extend(true, [], response);
+				                               // var data = response;
+				                               var count = response.length;	
+				             
+		 		                               // here we give all data a 'flat' property
+//		 		                               $.each(data, function (index, row) {
+//		 		                               	$("#tblBackendUsers tbody tr").attr('id', data[0].id);
+//		 		                               });
+				                              
+							            	
+							            	 // all tricks are here, the rest are completely the same as StaticDataSource 
+									        // check every column
+									        $.each(this._columns, function(index, column) {
+									 			alert("1");
+									            // split column property by dot
+									            var pros = column.property.split('.');
+									        	alert("2");
+									            // if splited array length bigger than 1, we found column that point to a nested property
+									            if (pros.length > 1) {
+									            	alert("3");
+									                // here we give all data a 'flat' property
+									                $.each(data, function(index, row) {
+									 
+									                    // setup a tick start from 1 (the property name after the first dot)
+									                    var tick = 1;
+									                    // here we actually get the nested object
+									                    var result = row[pros[0]];
+									                    // loop through the nested object, until we hit null or undefined
+									                    while (result && tick < pros.length) {
+									                        result = result[pros[tick]];
+									                        tick++;
+									                    }
+									                    // set the value of 'flat' property
+									                    row[column.property] = result;
+									                });
+									            }
+									        });
+							            	 
+									    	// SORTING
+// 											if (options.sortProperty) {
+// 												data = _.sortBy(data, options.sortProperty);
+// 												if (options.sortDirection === 'desc') data.reverse();
+// 											}
+							            	 
+									        callback({ data: data, start: 0, end: 0, count: count, pages: 0, page: 0 });
+							            	 
+							            },
+							           
+	 						            error: function(jqXHR, exception){
+	 						            	errorHandler (jqXHR, exception);
+	 						            }
+			                 });
+			        
+		     
+			        }
+			};
 			
-			
-		
-// 		$('#tblUserIssues').dataTable({
-// 				"bProcessing": true,
-// 				"bServerSide": true,
-// 				"bSortable": true,
-// 				"aaSorting": [[ 7, "desc" ]],
-// 				"sPaginationType": "bootstrap",
-// 				"aoColumns" : [	 
-// 				               	 { "sTitle" : "#", "mData" : "id"     },
-// 				            	 { "sTitle" : "Fecha" , "mData" : "date",  
-// 				            		 "fnRender": function ( data ) {
-// 				                         var date = new Date(data.aData["date"]);
-// 				                         date = date.getDate()+"/"+ (date.getMonth() + 1) +"/"+date.getFullYear();
-// 				                         return "<div class= date>"+date+"<div>";
-// 				                         }
-// 				               	 },
-// 				             	 { "sTitle" : "T�tulo" , "mData" : "title" },
-// 				                 { "sTitle" : "Direcci�n" , "mData" : "address" },
-// 				               	 { "sTitle" : "Barrio" , "mData" : "neighborhood" },
-// 				               	 { "sTitle" : "Ciudad" , "mData" : "city" },
-// 				               	 { "sTitle" : "Provincia" , "mData" : "province" },
-// 				               	 { "sTitle" : "Usuario", "mData" : "user.username" },
-// 				               	 { "sTitle" : "Estado" , "mData" : "status"}
-				            	
-// 			                  ],		  		
-// 				"sAjaxSource": "http://localhost:8080/fixeala/users/" + '${profileUser}' + "/loadUserIssues.html",
-// 				"fnServerData": function ( sSource, aoData, fnCallback ) {
-// 			            $.ajax( {
-// 			                "dataType": 'json',
-// 			                "type": "GET",
-// 			                "url": sSource,
-// 			                "data": aoData,
-// 			                "success": fnCallback
-// 			            } );
-// 			        }	  
-// 			});
+			$('#tblBackendUsers').datagrid({ 
+				
+				dataSource: new BackendUsersDataSource({
+
+                   columns: [{                   				
+		                	 	label: 'Usuario',
+		                        property: 'username',
+		                        sortable: true,
+		                        sortProperty: 'username'
+	                   	},{    
+								label: 'Rol',
+		                        property: 'roles',
+		                        sortable: true,
+		                        sortProperty: 'rol.authority'  
+               			},{		                	 	
+		                	 	label: 'Nombre',
+		                        property: 'nombre',
+		                        sortable: true,
+		                        sortProperty: 'nombre'
+               			},{	
+		                        label: 'Apellido',
+		                        property: 'apellido',
+		                        sortable: true,
+		                        sortProperty: 'apellido' 
+               			},{	
+		                        label: '�ltimo acceso',
+		                        property: 'lastLogin',
+		                        sortable: true,
+		                        sortProperty: 'lastLogin'            				         		
+           				},{
+	           					label: 'Estado',
+		                        property: 'status',
+		                        sortable: true,
+		                        sortProperty: 'status'
+           				},{
+               		}]
+
+           		})
+			});
+
 		
 		});
 	
@@ -585,7 +678,7 @@
 							<div class="tab-content">
 								<div class="tab-pane fade in active" id="issuesAsignados">
 								   	<table id="tblUserIssues" cellpadding="0" cellspacing="0" border="0"  data-toggle="context" data-target="#contextmenu-issue"
-    								class="table table-striped table-bordered table-hover datagrid datagrid-stretch-header" data-provides="rowlink">
+    								class="table table-striped table-bordered table-hover datagrid datagrid-stretch-header">
 									<thead>
 									<tr>
 										<th>
@@ -785,43 +878,9 @@
 					    		<h3>Usuarios</h3>
 					    	</div>
 					    	
-					    	<table id="tblUsers" class="table table-striped table-hover user-table">
-						    	<thead>
-						    		<tr>
-							    		<th width="200">Nombre de Usuario</th>
-							    		<th>Rol</th>
-							    		<th>Cargo</th>
-							    		<th width="200">Área</th>
-							    		<th>Sub-Área</th>
-							    		<th>Estado</th>
-						    		</tr>
+					    	<table id="tblBackendUsers" class="table table-striped table-bordered table-hover datagrid datagrid-stretch-header">
+						    	<thead>  
 						    	</thead>
-						    	<tbody>
-						    		<tr>
-							    		<td>perezf</td>
-							    		<td>EDITOR</td>
-							    		<td>Responsable de Área</td>
-							    		<td>Ministerio de Ambiente y Espacio Público (MAYEPGC)</td>
-							    		<td>-</td>
-							    		<td><span class="label label-success">Activo</span></td>
-						    		</tr>
-						    		<tr>
-							    		<td>camposm</td>
-							    		<td>EDITOR</td>
-							    		<td>Responsable de Sub-Área</td>
-							    		<td>Ministerio de Ambiente y Espacio Público (MAYEPGC)</td>
-							    		<td>D. G. Limpieza (DGLIM)</td>
-							    		<td><span class="label label-success">Activo</span></td>
-						    		</tr>
-						    		<tr>
-							    		<td>muragliag</td>
-							    		<td>EDITOR</td>
-							    		<td>Responsable de Sub-Área</td>
-							    		<td>Ministerio de Ambiente y Espacio Público (MAYEPGC)</td>
-							    		<td>D. G. Alumbrado (DGALUM)</td>
-							    		<td><span class="label label-error">Inactivo</span></td>
-						    		</tr>
-						    	</tbody>
 					    	</table>
 					    	
 					    	<br><br>

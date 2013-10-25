@@ -7,35 +7,24 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.transaction.annotation.Transactional;
 
 import ar.com.urbanusjam.dao.ActivationDAO;
-import ar.com.urbanusjam.dao.AuthorityDAO;
 import ar.com.urbanusjam.dao.UserDAO;
 import ar.com.urbanusjam.dao.impl.utils.GenericDAOImpl;
 import ar.com.urbanusjam.entity.annotations.User;
 
-
-
 public class UserDAOImpl extends GenericDAOImpl<User, Serializable>  implements UserDAO, UserDetailsManager  {
 
-	private AuthorityDAO authorityDAO;	
 	private ActivationDAO activationDAO;
 		
 	public UserDAOImpl() {
 		super(User.class);
 	}
-	
-	public void setAuthorityDAO(AuthorityDAO authorityDAO) {
-		this.authorityDAO = authorityDAO;
-	}	
-	
+
 	public void setActivationDAO(ActivationDAO activationDAO) {
 		this.activationDAO = activationDAO;
 	}
@@ -56,7 +45,7 @@ public class UserDAOImpl extends GenericDAOImpl<User, Serializable>  implements 
 	@Override
 	public List<User> findUsersByArea(String areaID) {
 		List<User> users = new ArrayList<User>();		
-		users = this.findWhere(" enabled = true AND area.id = ? AND isArea = false ORDER BY username ASC", new Object[]{Long.valueOf(areaID)});			
+		users = this.findWhere(" enabled = true AND area.id = ? AND verifiedOfficial = true AND isArea = false ORDER BY username ASC", new Object[]{Long.valueOf(areaID)});			
 		return users;
 	}
 	
@@ -71,7 +60,6 @@ public class UserDAOImpl extends GenericDAOImpl<User, Serializable>  implements 
 		try{				
 			trx = session.beginTransaction();
 			this.save(user);				
-			authorityDAO.saveAuthorities(user.getUsername(), user.getAuthorities());
 			trx.commit();			
 		}
 		catch(Exception e){
