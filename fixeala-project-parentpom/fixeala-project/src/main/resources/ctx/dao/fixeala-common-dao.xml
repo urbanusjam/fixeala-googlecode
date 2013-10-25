@@ -8,10 +8,8 @@
         <property name="hibernateTemplate" ref="hibernateTemplateFixeala" />    
 	</bean>
 
-    <bean id="userDAO" class="ar.com.urbanusjam.dao.impl.UserDAOImpl" parent="hibernateParent" >
-      	<property name="authorityDAO" ref="authorityDAO" />
-    </bean> 
-    
+    <bean id="userDAO" class="ar.com.urbanusjam.dao.impl.UserDAOImpl" parent="hibernateParent" />
+
     <bean id="authorityDAO" class="ar.com.urbanusjam.dao.impl.AuthorityDAOImpl" parent="hibernateParent" /> 
     
     <bean id="passwordResetDAO" class="ar.com.urbanusjam.dao.impl.PasswordResetDAOImpl" parent="hibernateParent" /> 
@@ -27,7 +25,5 @@
     <bean id="areaDAO" class="ar.com.urbanusjam.dao.impl.AreaDAOImpl" parent="hibernateParent" />
     
     <bean id="tagDAO" class="ar.com.urbanusjam.dao.impl.TagDAOImpl" parent="hibernateParent" /> 
-    
-      
-    
+              
 </beans>

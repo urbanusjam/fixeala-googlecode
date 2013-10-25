@@ -29,7 +29,7 @@ public class Comment implements Serializable {
 	private Issue issue;
 	
 	@OneToOne
-	@JoinColumn(name = "USERNAME")
+	@JoinColumn(name = "ID_USER")
 	private User usuario;
 	
 	@Column(name = "COMMENT_DATE")

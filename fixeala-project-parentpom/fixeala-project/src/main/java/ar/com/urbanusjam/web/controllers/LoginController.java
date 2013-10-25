@@ -2,7 +2,6 @@ package ar.com.urbanusjam.web.controllers;
 
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -51,63 +50,35 @@ public class LoginController {
 	public String template(){
 		return "template2";
 	}
-	
-	
 
-//	@RequestMapping(value="/doLogin", method = RequestMethod.GET)
-//	public String login(ModelAndView model) { 		
-//		
-//		User loggedUser = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();	
-//		
-//		if(loggedUser != null){	
-//			model.addObject("principal", loggedUser);		
-//		}				
-//		
-//		return "index";	 
-//	}
-	
-	
-//	  @RequestMapping(method = RequestMethod.GET)
-//	  @ResponseBody	 
-//	  public LoginStatus getStatus() {
-//	    Authentication auth = SecurityContextHolder.getContext().getAuthentication();	    
-//	    if (auth != null && !auth.getName().equals("anonymousUser") && auth.isAuthenticated()) {
-//	      return new LoginStatus(true, auth.getName());
-//	    } else {
-//	      return new LoginStatus(false, null);
-//	    }
-//	  }
 	
 	@RequestMapping(value="/login", method = RequestMethod.GET)
 	public String login(){
 		return "index";
 	}
 
-	  @RequestMapping(value="/login", method = RequestMethod.POST)	  
-	  public @ResponseBody LoginStatus login(@RequestParam("j_username") String username,
-	                      					 @RequestParam("j_password") String password){
-		
+	@RequestMapping(value="/login", method = RequestMethod.POST)	  
+	public @ResponseBody LoginStatus login(@RequestParam("j_username") String username,
+                      					 @RequestParam("j_password") String password){
+	
 		LoginStatus loggedUser = new LoginStatus();
 	    UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);	   
 
 	    try {
-	    	  User details = (User) userService.loadUserByUsername(username);
-	 	      token.setDetails(details);
+//	    	  User details = (User) userService.loadUserByUsername(username);
+//	 	      token.setDetails(details);
 		      Authentication auth = fixealaAuthenticationManager.authenticate(token);
 		      SecurityContextHolder.getContext().setAuthentication(auth);	
 		      loggedUser.setLoggedIn(auth.isAuthenticated());
 		      loggedUser.setUsername(auth.getName());
 		      return loggedUser;
-		      
-	      // return new LoginStatus(auth.isAuthenticated(), auth.getName());
+
 	    } catch (BadCredentialsException e) {
-	   //   return new LoginStatus(false, null);
 	    	  loggedUser.setLoggedIn(false);
 	    	  loggedUser.setUsername(null);
 		      return loggedUser;	    
-	    } 
-	 
-	  }
+	    }  
+	}
 	  
 	  
 	@RequestMapping(value ="/logout", method = RequestMethod.GET)
@@ -115,12 +86,5 @@ public class LoginController {
 		String s = request.getRequestURL().toString();
     	return "index";
     }
-	  
-	
-	
-	
-	
-
- 
-
+	 
 }

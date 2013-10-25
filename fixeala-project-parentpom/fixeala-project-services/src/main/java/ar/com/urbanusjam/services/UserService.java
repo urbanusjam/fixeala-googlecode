@@ -12,9 +12,9 @@ import ar.com.urbanusjam.services.dto.ActivationDTO;
 import ar.com.urbanusjam.services.dto.PasswordResetTokenDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
 
-public interface UserService extends UserDetailsService{
-	
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
+public interface UserService extends UserDetailsService {
+
+	public User loadUserByUsername(String username) throws UsernameNotFoundException;
 	public UserDTO getUserByUsername(String username) throws UsernameNotFoundException;
 	
 	public List<UserDTO> loadVerifiedUsersByArea(String areaID);
@@ -40,8 +40,5 @@ public interface UserService extends UserDetailsService{
 	public void updateAccount(UserDTO userDTO);
 	public void activateAccount(String username);	
 	public void closeAccount(String username);
-	
-	public List<String> getUserRoles(String username);
-	
 
 }

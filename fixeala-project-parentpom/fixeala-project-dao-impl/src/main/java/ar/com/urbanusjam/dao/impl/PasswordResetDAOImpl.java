@@ -1,7 +1,6 @@
 package ar.com.urbanusjam.dao.impl;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 import ar.com.urbanusjam.dao.PasswordResetDAO;

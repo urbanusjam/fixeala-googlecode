@@ -1,13 +1,11 @@
 package ar.com.urbanusjam.services.impl;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import ar.com.urbanusjam.dao.ActivationDAO;
@@ -25,7 +23,7 @@ import ar.com.urbanusjam.services.dto.PasswordResetTokenDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
 
 
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 	
 	private UserDAO userDAO;
 	private AuthorityDAO authorityDAO;
@@ -53,24 +51,18 @@ public class UserServiceImpl implements UserService{
 	public void setAreaDAO(AreaDAO areaDAO) {
 		this.areaDAO = areaDAO;
 	}
-
+	
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, DisabledException{	
+	public User loadUserByUsername(String username) throws UsernameNotFoundException, DisabledException{	
 		
 			try {
 				User user = (User) userDAO.loadUserByUsername(username);
 				
-			 	 if(user == null){
+			 	 if(user == null)
 			 		 throw new BadCredentialsException("Authentication failed.");
-			 	 }
-//			 	 else if(!user.isEnabled()){
-//			    	 throw new DisabledException("Account disabled.");  
-//			     }
-			 	 else{
-			    	 List<String> authorities = authorityDAO.getAuthoritiesByUserName(username);
-			    	 user.setAuthorities(authorities);
-			    	 return (UserDetails) user;	
-			     }			   
+			 	 
+			 	 else			 	
+			 		 return user;				   			   
 	        } 
 			catch (UsernameNotFoundException e) {
 	            throw new UsernameNotFoundException("User not found.");
@@ -83,39 +75,26 @@ public class UserServiceImpl implements UserService{
 			try {
 				User user = (User) userDAO.loadUserByUsername(username);
 				
-			 	 if(user == null){
+			 	 if(user == null)
 			 		 throw new BadCredentialsException("Authentication failed.");
-			 	 }
-
-			 	 else{
-			    	 List<String> authorities = authorityDAO.getAuthoritiesByUserName(username);
-			    	 user.setAuthorities(authorities);
-			    	 return convertToDTO(user);	
-			     }			   
+			 	
+			 	 else
+			    	 return convertToDTO(user);				     	   
 	        } 
 			catch (UsernameNotFoundException e) {
 	            throw new UsernameNotFoundException("User not found.");
 	        }	
 	}
 	
-	@Override
-	public List<String> getUserRoles(String username){
-		 List<String> authorities = authorityDAO.getAuthoritiesByUserName(username);
-		 return authorities;
-	}
 	
 	@Override
 	public List<UserDTO> loadAllActiveUsers() {
 		List<User> users = userDAO.findAllActiveUsers();
 		List<UserDTO> usersDTO = new ArrayList<UserDTO>();
 		
-		for(User u : users){			
-			List<Authority> authorities = authorityDAO.getAuthorities(u.getUsername());
-			
-//			if(u.hasSingleRole("ROLE_USER", (Collection)authorities)){
-				UserDTO uDTO = convertToDTO(u);
-				usersDTO.add(uDTO);
-//			}		
+		for(User u : users){	
+			UserDTO uDTO = convertToDTO(u);
+			usersDTO.add(uDTO);	
 		}
 		
 		return usersDTO;
@@ -127,9 +106,6 @@ public class UserServiceImpl implements UserService{
 		List<UserDTO> usersDTO = new ArrayList<UserDTO>();
 		
 		for(User u : users){	
-			List<Authority> authorities = new ArrayList<Authority>();
-			authorities = authorityDAO.getAuthorities(u.getUsername());
-			u.setAuthorities(convertTo(authorities));
 			UserDTO uDTO = convertToDTO(u);
 			usersDTO.add(uDTO);	
 		}
@@ -236,7 +212,7 @@ public class UserServiceImpl implements UserService{
 		user.setUsername(userDTO.getUsername());
 		user.setPassword(userDTO.getPassword());
 		user.setEmail(userDTO.getEmail());
-		user.setAuthorities(userDTO.getAuthorities());
+		user.setRoles(convertToAuthority(userDTO.getAuthorities()));
 		user.setEnabled(userDTO.isEnabled());
 		
 		if(userDTO.isVerifiedOfficial()){
@@ -263,7 +239,7 @@ public class UserServiceImpl implements UserService{
 		userDTO.setId(user.getUsername());
 		
 		List<String> roles = new ArrayList<String>();
-		for(GrantedAuthority auth : user.getAuthorities()){
+		for(GrantedAuthority auth : user.getRoles()){
 			roles.add(auth.getAuthority());
 		}
 		userDTO.setAuthorities(roles);
@@ -323,13 +299,15 @@ public class UserServiceImpl implements UserService{
 		return authorities;
 	}
 	
+	private List<Authority> convertToAuthority(List<String> roles){
+		List<Authority> authorities = new ArrayList<Authority>();
+		for(String role : roles){
+			Authority authority = new Authority();
+			authority = authorityDAO.getRoleByName(role);
+			authorities.add(authority);
+		}
+		return authorities;
+	}
 
 	
-
-	
-
-	
-
-	
-
 }

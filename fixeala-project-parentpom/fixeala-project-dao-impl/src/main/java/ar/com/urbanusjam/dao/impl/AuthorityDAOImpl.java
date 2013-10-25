@@ -1,7 +1,6 @@
 package ar.com.urbanusjam.dao.impl;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -13,34 +12,23 @@ import ar.com.urbanusjam.dao.impl.utils.GenericDAOImpl;
 import ar.com.urbanusjam.entity.annotations.Authority;
 import ar.com.urbanusjam.entity.annotations.AuthorityPK;
 
-
-
 public class AuthorityDAOImpl extends GenericDAOImpl<Authority, Serializable> implements AuthorityDAO  {
 
 	public AuthorityDAOImpl() {
 		super(Authority.class);
 	}
 	
-
+	@Override
+	public Authority getRoleById(Long id){
+		List<Authority> roles = this.findWhere(" id = ? ", new Object[]{id});
+		return roles.size() > 0 ? roles.get(0) : null;
+	}
 	
 	@Override
-    public List<String> getAuthoritiesByUserName(String username) {
-		List<Authority> authorities = this.findWhere(" username = ? ",  new Object[]{username});		
-        List<String> l = new ArrayList<String>();        
-        for(Authority a : authorities){
-        	 l.add(a.getAuthority());
-        }
-       
-        return l;
-    }
-	
-	@Override
-    public List<Authority> getAuthorities(String username) {
-		List<Authority> authorities = this.findWhere(" username = ? ",  new Object[]{username});      
-        return authorities;
-    }
-
-	
+	public Authority getRoleByName(String rolename){
+		List<Authority> roles = this.findWhere(" role = ? ", new Object[]{rolename});
+		return roles.size() > 0 ? roles.get(0) : null;
+	}	
 	
 	@Override
 	@Transactional
@@ -50,16 +38,9 @@ public class AuthorityDAOImpl extends GenericDAOImpl<Authority, Serializable> im
 			id.setUsername(username);
 			id.setAuthority(auth.getAuthority());
 			Authority a = new Authority();			
-			a.setId(id);
 			this.save(a);
 		}
 	}
 
-
-
-	
-	
-	
-	
 
 }
