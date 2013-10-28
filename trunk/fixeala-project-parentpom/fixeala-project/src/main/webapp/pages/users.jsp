@@ -429,7 +429,7 @@
 			     this._data = options.data;
 			 	 this._delay = options.delay || 0;
 			 	 
-		       
+			 	 var self = this;			 	 
 			};
 
 			BackendUsersDataSource.prototype = {
@@ -440,72 +440,38 @@
 
 			        data: function (options, callback) {
 			        	
-			        	   var self = this;
-			        	   
-			          
 			        	   var url = "http://localhost:8080/fixeala/users/" + '${profileUser}' + "/loadBackendUsers.html";
-
-			                 $.ajax({
-										url: url,
-									 	dataType: 'json',
-			                        	type: 'POST', 
-			                        	data: "areaID=" + currentArea,
-							            success: function(response) { 
-							            
-		 		                             
-				                               
-				                               var data = $.extend(true, [], response);
-				                               // var data = response;
-				                               var count = response.length;	
-				             
-		 		                               // here we give all data a 'flat' property
-//		 		                               $.each(data, function (index, row) {
-//		 		                               	$("#tblBackendUsers tbody tr").attr('id', data[0].id);
-//		 		                               });
-				                              
-							            	
-							            	 // all tricks are here, the rest are completely the same as StaticDataSource 
-									        // check every column
-									        $.each(this._columns, function(index, column) {
-									 			alert("1");
-									            // split column property by dot
-									            var pros = column.property.split('.');
-									        	alert("2");
-									            // if splited array length bigger than 1, we found column that point to a nested property
-									            if (pros.length > 1) {
-									            	alert("3");
-									                // here we give all data a 'flat' property
-									                $.each(data, function(index, row) {
-									 
-									                    // setup a tick start from 1 (the property name after the first dot)
-									                    var tick = 1;
-									                    // here we actually get the nested object
-									                    var result = row[pros[0]];
-									                    // loop through the nested object, until we hit null or undefined
-									                    while (result && tick < pros.length) {
-									                        result = result[pros[tick]];
-									                        tick++;
-									                    }
-									                    // set the value of 'flat' property
-									                    row[column.property] = result;
-									                });
-									            }
-									        });
-							            	 
-									    	// SORTING
-// 											if (options.sortProperty) {
-// 												data = _.sortBy(data, options.sortProperty);
-// 												if (options.sortDirection === 'desc') data.reverse();
-// 											}
-							            	 
-									        callback({ data: data, start: 0, end: 0, count: count, pages: 0, page: 0 });
-							            	 
-							            },
-							           
-	 						            error: function(jqXHR, exception){
-	 						            	errorHandler (jqXHR, exception);
-	 						            }
-			                 });
+					 	 
+					 	   $.ajax({
+								url: url,
+							 	dataType: 'json',
+		                  		type: 'POST', 
+		                  		data: "areaID=" + currentArea,
+					            success: function(response) { 
+		                            
+					            	var self = this;
+					            	var data = response;
+					            	var count = data.length;
+					            
+		                              // here we give all data a 'flat' property
+		                              $.each(data, function (index, row) {
+		                              	$("#tblBackendUsers tbody tr").attr('id', data[0].id);
+		                              });
+		                              
+					            	 // SORTING
+					                if (options.sortProperty) {
+					                    data = _.sortBy(data, options.sortProperty);
+					                    if (options.sortDirection === 'desc') data.reverse();
+					                }
+						            	 
+									callback({ data: data, start: 0, end: 0, count: count, pages: 0, page: 0 });
+		                             						            	 
+					            },				           
+					            error: function(jqXHR, exception){
+					            	errorHandler (jqXHR, exception);
+					            }
+		           		});
+			               
 			        
 		     
 			        }
@@ -517,7 +483,7 @@
 
                    columns: [{                   				
 		                	 	label: 'Usuario',
-		                        property: 'username',
+		                        property: 'user.username',
 		                        sortable: true,
 		                        sortProperty: 'username'
 	                   	},{    
