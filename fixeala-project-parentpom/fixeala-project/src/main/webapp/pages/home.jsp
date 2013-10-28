@@ -55,8 +55,7 @@
 		  		</select>
 		  		
 		  		<div id="map_canvas"></div>	
-		  		
-<!-- 		  		<div id="map_d3"></div>		   -->
+
 	
 		  <!-- ISSUE FORM -->
 				<form id="issueForm" class="form-issue" method="POST">	
@@ -68,11 +67,19 @@
 							<fieldset id="issueStep1" class="step">
 								<input type="hidden" id="latitude" name="latitude"  />
 								<input type="hidden" id="longitude" name="longitude" />	
-															
-								<input type="text" id="address" name="address" placeholder="Dirección (calle y altura)" />	
+													
+								<input type="text" id="fullAddress" name="fullAddress"  onfocus="geolocate()"placeholder="Riobamba 1666, Del Abasto, Rosario, Santa Fé" />			
+<!-- 								<input type="text" id="address" name="address" placeholder="Dirección (calle y altura)" />	 -->
+<!-- 								<input type="text" id="neighborhood" name="neighborhood" placeholder="Barrio (opcional)"/>										 -->
+<!-- 								<input type="text" id="city" name="city" placeholder="Ciudad" />		 -->
+<!-- 								<input type="text" id="province" name="province" placeholder="Provincia"/>	 -->
+								
+								<input type="text" id="route" name="route" class="input-medium" placeholder="Dirección (calle y altura)"  />	
+								<input type="text" id="street_number" name="street_number" class="input-small" placeholder="Altura"/>	
 								<input type="text" id="neighborhood" name="neighborhood" placeholder="Barrio (opcional)"/>										
-								<input type="text" id="city" name="city" placeholder="Ciudad" />		
-								<input type="text" id="province" name="province" placeholder="Provincia"/>												
+								<input type="text" id="locality" name="locality" placeholder="Ciudad" />		
+								<input type="text" id="administrative_area_level_1" name="administrative_area_level_1" placeholder="Provincia"/>
+								
 
 							</fieldset>
 							

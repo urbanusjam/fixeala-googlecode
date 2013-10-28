@@ -28,7 +28,8 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/topojson.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/json.min.js"></script>	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/map.js"></script>
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/map-d3.js" charset="utf-8"></script>
+<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/d3.populationMap.js" charset="utf-8"></script> --%>
+<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala-datagrid.js"></script> --%>
   		
 <%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap.js"></script> --%>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-editable.js"></script>
@@ -115,35 +116,14 @@ path:hover {
 
   	<script type="text/javascript">
     //<![CDATA[
-               
-           	
+                 	
   		
 		$(document).ready(function(){
-			
-		
 
-//             $( "#province" ).typeahead({
-//               source: provinces_list
-//             });
-			
-// 			$("#address").geocomplete({
-// 						  map: "#map_canvas",
-// 		 				  details: "form",
-// 		 				  types: ["geocode"],
-// 		 				  country: "AR",
-// 		 				  markerOptions: {
-// 		 				    draggable: true
-// 		 				  }
-// 	 				  });
-	 						
-// 	 		});
-		
 
-			$("#menuNav li").click(function(){
-				if($(this).hasClass("active"))
-					alert("ddd");
-					//$("#menuNav li a i").addClass("icon-white");
-			});
+// 			$("#menuNav li").click(function(){
+// 				if($(this).hasClass("active"))
+// 			});
 		
 // 			$(".issueDesc").shorten({
 // 			    "showChars" : 200,
@@ -209,74 +189,57 @@ path:hover {
 			
 			$("#btnBackNext").append('<i class="icon-chevron-left"></i> ');
 			
+			//bind callback to the before_remote_ajax event
+			$("#issueForm").bind("before_remote_ajax", function(event, data){
+				if(data.currentStep == 'issueStep1')
+					validateAddress();
+			})
+			
 		
 				$("#issueForm").formwizard({ 				 	
 				 	focusFirstInput : true,
 				 	textSubmit: 'Enviar',
-				 	textNext: 'Siguiente »',
-				 	textBack: '« Anterior',				
+				 	textNext: 'Siguiente &raquo;',
+				 	textBack: '� Anterior',				
 				 	formPluginEnabled: true,
 				 	validationEnabled: true,
-				 /*	formOptions :{
-				 	
-				 		url: "http://localhost:8080/fixeala/reportIssue.html",
-				 		type: "POST",
-				        data: $("#issueForm").serialize(),     
-				        dataType: 'json',	
-				        success: function(alertStatus){
-				        	
-// 				        	bootbox.confirm("¿Confirma que desea registrar su reclamo?", function(response) {			        		  
-// 			 	    			 if(response){	
-			 	    				 
-		 	    						//Confirm
-				 	    				if(alertStatus.result){	
-
-				 	    					setTimeout(function () {
-
-				 	    						$("#issueForm").fadeOut('slow');	
-				 	    						
-				 	    						setTimeout(function () {
-				 	    							showAlert(alertStatus.message, "alert-success");		
-				 	    											 	    						
-				 	    							setTimeout(function () {
-				 	    								 $("#issueForm").fadeIn('slow');	
-				 	    							}, 3500);
-				 	    							
-				 	    						}, 1000);
-				 	    					
-		
-				 	    					}, 400);			 	    					  
-				 	    						  
-				 	    				}
-				 	    				else{
-				 	    					 alert(alertStatus.message);
-				 	    				}
-		 	    				
-// 			 	        		 }	
-// 			 	    			 else{
-// 			 	    				 alert(alertStatus.message);
-// 			 	    			 }
-			 	    			
-
-	        				//}); 
-	        			
-	        				getCoordinates($("#address").val());
-				        		  
-				       	}
-				 	},	*/			 
+				 	remoteAjax : {"issueStep1" : { // add a remote ajax call when moving next from the second step
+				 		url : "validate.html", 
+				 		dataType : 'json',
+// 				 		beforeSend : function(){alert("Starting validation.")},
+// 				 		complete : function(){alert("Validation complete.")},
+				 		success : function(data){
+				 		
+				 			if(data.emailtaken){ // change this value to false in validate.html to simulate successful validation
+					 			$("#status").fadeTo(500,1,function(){
+					 				$(this).html(data.emailerrormessage).fadeTo(5000, 0) 
+					 			}); 
+				 				return false; //return false to stop the wizard from going forward to the next step (this will always happen)
+				 			}
+				 			return true; //return true to make the wizard move to the next step
+				 		}
+				 	}},
+// 				 	formOptions :{
+// 						success: function(data){$("#status").fadeTo(500,1,function(){ $(this).html("You are now registered!").fadeTo(5000, 0); })},
+// 						beforeSubmit: function(data){$("#data").html("data sent to the server: " + $.param(data));},
+// 						dataType: 'json',
+// 						resetForm: true
+// 				 	},
 				 	validationOptions : {				 		
 				 		
 				 		rules: {
-				 			address: { required: true},				    
-				 			city: { required: true},		
-				 			province: { required: true},		
+				 			route: { required: true},	
+				 			street_number: { required: true},	
+				 			locality: { required: true},		
+				 			administrative_level_1: { required: true},		
 		 				    title: { required: true, maxlength: 50},				    
 		 				    description: { required: true, maxlength: 300}							
 		 				  },
 		 			    messages: {
-		 			    	  address: { required : 'Este campo es requerido.'},		 					
-		 			    	  city: { required : 'Este campo es requerido.' },	
-		 			    	  province: { required : 'Este campo es requerido.' },
+		 			    	  route: { required : 'Este campo es requerido.'},	
+		 			    	  street_number: { required : 'Este campo es requerido.'},	
+		 			    	  locality: { required : 'Este campo es requerido.' },	
+		 			    	  administrative_level_1: { required : 'Este campo es requerido.' },
 		 					  title: { required : 'Este campo es requerido.', maxlength: 'El m&aacute;ximo es de 50 caracteres.' },
 		 					  description: { required : 'Este campo es requerido.' , maxlength: 'El m&aacute;ximo es de 300 caracteres'}
 		 					

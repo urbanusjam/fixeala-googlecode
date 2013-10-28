@@ -13,6 +13,15 @@ var provinces = ["Buenos Aires", "Catamarca", "Chaco", "Chubut", "Córdoba","Cor
 var initMarker;
 var markers = [];
 
+var placeSearch, autocomplete;
+var component_form = {
+  'route': 'long_name',
+  'street_number': 'short_name',  
+  'neighborhood': 'short_name',
+  'locality': 'long_name',
+  'administrative_area_level_1': 'long_name'
+};
+
 $(document).ready(function(){	
 	
 	 var geocoder;	 
@@ -29,31 +38,66 @@ $(document).ready(function(){
         
         map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
         
-     // Layer
+        // Layer
 //        var kmlLayer = new google.maps.KmlLayer({
-//            url: 'http://fixeala.googlecode.com/svn/trunk/fixeala-project-parentpom/fixeala-project/src/main/webapp/resources/data/comunas.kml'
-//          });
-//      
-//        kmlLayer.setMap(map);
-//        google.maps.event.addListener(kmlLayer, 'click', function(kmlEvent) {
+//            url: 'http://fixeala.googlecode.com/svn/trunk/fixeala-project-parentpom/fixeala-project/src/main/webapp/resources/data/barrios_caba.kml',
+//            preserveViewport: true
+//        });      
 //          
+//        kmlLayer.setMap(map);
+//        
+//        google.maps.event.addListener(kmlLayer, 'click', function(kmlEvent) {     
+//        	showInContentWindow(kmlEvent.latLng, kmlEvent.featureData.description);
 //        });
-    
-	        google.maps.event.addListener(map, 'click', function(e) {	 
-	        	
-	        	if( $("#btnIssue").hasClass('active') ){
-	        		getAddressOnMapClick(e.latLng);
-	        	}
-	        
-	        });     
-	        
-	        
-	      
-	        loadMarkers(map);
+        
+       
+        
+        
+
+		//AUTOCOMPLETE
+		var input = document.getElementById('fullAddress');
+		var options = {
+				 types: [ 'geocode' ],        		
+				  componentRestrictions: {country: "ar"}
+				 };
+		
+	    autocomplete = new google.maps.places.Autocomplete(input, options);
+	    
+	    google.maps.event.addListener(autocomplete, 'place_changed', function(e) {
+	    	fillInAddress();	
+	    	
+	    	
+	    	
+	    	var arr = [];
+	    	arr = ($('#fullAddress').val()).split(",");
+	    	setTimeout(function(){$('#fullAddress').val(arr[0]);},50);
+	    	
+	    });
+		
+
+        
+            
+        //SET MARKER COORDINATES ON MAP CLICK
+        google.maps.event.addListener(map, 'click', function(e) {	 
+        	
+        	if( $("#btnIssue").hasClass('active') ){
+        		getAddressOnMapClick(e.latLng);
+        	}
+        
+        });     
+	       
+	    //DISPLAY MARKERS FROM DB
+        loadMarkers(map);
       
-	 }//initialize     
+	 }//initialize   
+	 
+	 
+	 
 	 
 	 google.maps.event.addDomListener(window, 'load', initialize); 
+	 
+	 
+	 
 	
 	 
       
@@ -62,6 +106,54 @@ $(document).ready(function(){
 
 
 
+
+
+//end AUTOCOMPLETE
+
+function fillInAddress() {
+    var place = autocomplete.getPlace();
+   
+    for (var component in component_form) {
+      document.getElementById(component).value = "";
+      document.getElementById(component).disabled = false;
+    }
+ 
+    var result = place.address_components;
+    
+    if(result == null){
+      	alert("No se encontraron resultados");
+        return false;        
+    }
+  
+    // hay resultados
+    else{
+    	for (var j = 0; j < result.length; j++) {
+    	      var att = result[j].types[0];
+    	      if (component_form[att]) {
+    	        var val = result[j][component_form[att]];
+    	        document.getElementById(att).value = val;
+    	       
+    	        
+    	      }    	    
+    	}   
+    	
+    
+    }
+	
+    
+    
+}
+    
+  function geolocate() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        var geolocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+        autocomplete.setBounds(new google.maps.LatLngBounds(geolocation, geolocation));
+        
+       
+      });
+    }
+  }
 
 function initializeMiniMap(lat, lng, titulo) {
 	  
@@ -278,38 +370,42 @@ function validateAddress(){
 	        		
 	        		isValid = true;
 	        	
-	        		/**	   			 
-					 var addr_street = "",
-					 addr_number = "",
-					 addr_neighborhood = "";
-		             addr_city = "",
-		             addr_province = "";
-				 
-		
-					for (var i = 0; i < results[0].address_components.length; i++) {				
-						
-						var addr = results[0].address_components[i];	
-											
-						 if (addr.types[0] == ['route'])		                
-							addr_street = addr.long_name;	                 
-		                 
-		                 else if (addr.types[0] == ['street_number']){
-		                	 addr_number = addr.long_name;
-		                 }
-						
-		                 else if (addr.types[0] == ['neighborhood']){										
-								addr_neighborhood = neighborhood;
-						 }
-						
-						 else if (addr.types[0] == ['locality']){						
-								 addr_city = addr.long_name;
-						 }
-							                 
-		                 else if (addr.types[0] == ['administrative_area_level_1']){	                	
-		                		 addr_province = addr.long_name;	
-		                 }
-						 
-					}    	
+	        		  			alert("range interpolated"); 
+//					 var addr_street = "",
+//					 addr_number = "",
+//					 addr_neighborhood = "";
+//		             addr_city = "",
+//		             addr_province = "";
+//				 
+//		
+//					for (var i = 0; i < results[0].address_components.length; i++) {				
+//						
+//						var addr = results[0].address_components[i];	
+//											
+//						 if (addr.types[0] == ['route'])		                
+//							 addr_street = addr.long_name;	                 
+//		                 
+//		                 else if (addr.types[0] == ['street_number']){
+//		                	 addr_number = addr.long_name;
+//		                 }
+//						
+//		                 else if (addr.types[0] == ['neighborhood']){										
+//							 addr_neighborhood = neighborhood;
+//						 }
+//						
+//						 else if (addr.types[0] == ['locality']){						
+//							 addr_city = addr.long_name;
+//						 }
+//							                 
+//		                 else if (addr.types[0] == ['administrative_area_level_1']){	                	
+//		                	 addr_province = addr.long_name;	
+//		                 }
+//						 
+//					}    
+//					
+//					alert(addr_street + " " + addr_number + ", " + addr_neighborhood +  ", " + addr_city + ", " + addr_province);
+					
+					/**	 
 					
 					if( (addr_neighborhood.length > 0) && (addr_city.length > 0) ) {			
 						fullAddress = addr_street + " " + addr_number + ", " + addr_neighborhood + ", " + addr_city + ", " + addr_province;	
@@ -463,9 +559,15 @@ function validateAddress(){
 					} 
 					
 				
+//					$("#neighborhood").val(neighborhood);
+//					$("#city").val(city);
+//					$("#province").val(province);
+					
+					$("#route").val(streetName);
+					$("#street_number").val(streetNumber);
 					$("#neighborhood").val(neighborhood);
-					$("#city").val(city);
-					$("#province").val(province);
+					$("#locality").val(city);
+					$("#administrative_area_level_1").val(province);
 					
 					$("#latitude").val(latLng.lat());
 					$("#longitude").val(latLng.lng());
@@ -524,7 +626,3 @@ function validateAddress(){
 	
 } 
  
- 
- 
- 
-

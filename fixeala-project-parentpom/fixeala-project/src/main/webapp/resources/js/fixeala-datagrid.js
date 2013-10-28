@@ -2,7 +2,7 @@
     if (typeof define === 'function' && define.amd) {
         define(['underscore'], factory);
     } else {
-        root.NestedDataSource = factory();
+        root.BackendUsersDataSource = factory();
     }
 }(this, function () {
  
@@ -43,7 +43,7 @@
         });
     };
  
-    NestedDataSource.prototype = {
+    BackendUsersDataSource.prototype = {
  
         columns: function () {
             return this._columns;
@@ -54,6 +54,38 @@
  
             setTimeout(function () {
                 var data = $.extend(true, [], self._data);
+                
+                var url = "http://localhost:8080/fixeala/users/" + '${profileUser}' + "/loadBackendUsers.html";
+			 	 
+			 	   $.ajax({
+						url: url,
+					 	dataType: 'json',
+	               		type: 'POST', 
+	               		data: "areaID=" + currentArea,
+			            success: function(response) { 
+                         
+			            	var self = this;
+			            	var data = response;
+			            	var count = data.length;
+			            
+                           // here we give all data a 'flat' property
+                           $.each(data, function (index, row) {
+                           	$("#tblBackendUsers tbody tr").attr('id', data[0].id);
+                           });
+                           
+			            	 // SORTING
+			                if (options.sortProperty) {
+			                    data = _.sortBy(data, options.sortProperty);
+			                    if (options.sortDirection === 'desc') data.reverse();
+			                }
+				            	 
+							callback({ data: data, start: 0, end: 0, count: count, pages: 0, page: 0 });
+                          						            	 
+			            },				           
+			            error: function(jqXHR, exception){
+			            	errorHandler (jqXHR, exception);
+			            }
+        		});
  
                 // SEARCHING
                 if (options.search) {
@@ -113,51 +145,54 @@
         }
     };
  
-    return NestedDataSource;
+    return BackendUsersDataSource;
 }));
  
- 
-// usage
-// say I have a "me" object:
-//   {
-//  	name: "JoeHetfield",
-//  	age: 39,
-//  	pet: {
-//  		name: "Back Jack",
-//  		age: 5
-//  	}
-//  }
-// then I can use datagrid like this:
+
  
     // INITIALIZING THE DATAGRID
-    var dataSource = new StaticDataSource({
-        columns: [
-            {
-                property: 'name',
-                label: 'My Name',
-                sortable: true
-            },
-            {
-                property: 'age',
-                label: 'My Age',
-                sortable: true
-            },
-            {
-                property: 'pet.name',
-                label: 'Pet Name',
-                sortable: true
-            },
-            {
-                property: 'pet.age',
-                label: 'Pet Age',
-                sortable: true
-            }
-        ],
-        data: dataOfPersonAndTheirPet,
+    var dataSource = new BackendUsersDataSource({
+    	columns: [{
+    		
+    	 	label: 'Usuario',
+            property: 'user.username',
+            sortable: true,
+            sortProperty: 'username'
+    	},
+    	{    
+			label: 'Rol',
+            property: 'roles',
+            sortable: true,
+            sortProperty: 'rol.authority'  
+		},
+		{		                	 	
+    	 	label: 'Nombre',
+            property: 'nombre',
+            sortable: true,
+            sortProperty: 'nombre'
+		},
+		{	
+            label: 'Apellido',
+            property: 'apellido',
+            sortable: true,
+            sortProperty: 'apellido' 
+		},
+		{	
+            label: 'Último acceso',
+            property: 'lastLogin',
+            sortable: true,
+            sortProperty: 'lastLogin'            				         		
+		},
+		{
+			label: 'Estado',
+            property: 'status',
+            sortable: true,
+            sortProperty: 'status'
+		}],		
         delay: 250
     });
  
-    $('#MyGrid').datagrid({
+    $('#tblBackendUsers').datagrid({
         dataSource: dataSource,
         stretchHeight: true
     });
