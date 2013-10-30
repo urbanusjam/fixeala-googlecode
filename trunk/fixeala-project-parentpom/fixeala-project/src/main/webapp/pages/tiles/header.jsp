@@ -50,7 +50,7 @@
 							           Login
 							    	</button>							    	
 							    	<div class="ajax_loading" style="display:none" >
-										<img src="${pageContext.request.contextPath}/resources/images/ajax-loader.gif" alt="Loading"/>&nbsp;Procesando...
+										<img src="${pageContext.request.contextPath}/resources/images/loader.gif" alt="Loading"/>&nbsp;Procesando...
 									</div>										
 									 <label class="checkbox">									   
 									         	<input type="checkbox" id="_spring_security_remember_me" name="_spring_security_remember_me" value="remember_me" > 

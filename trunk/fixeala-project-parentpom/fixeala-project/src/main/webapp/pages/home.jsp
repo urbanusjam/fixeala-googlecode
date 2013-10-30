@@ -64,33 +64,25 @@
     				 </div>  				 
 					 <div id="fieldWrapper">					 
 					 		<!-- STEP 1 -->
-							<fieldset id="issueStep1" class="step">
+							<fieldset id="issueStep1" class="step" style="dispay:block">
 								<input type="hidden" id="latitude" name="latitude"  />
 								<input type="hidden" id="longitude" name="longitude" />	
 													
-								<input type="text" id="fullAddress" name="fullAddress"  onfocus="geolocate()"placeholder="Riobamba 1666, Del Abasto, Rosario, Santa Fé" />			
-<!-- 								<input type="text" id="address" name="address" placeholder="Dirección (calle y altura)" />	 -->
-<!-- 								<input type="text" id="neighborhood" name="neighborhood" placeholder="Barrio (opcional)"/>										 -->
-<!-- 								<input type="text" id="city" name="city" placeholder="Ciudad" />		 -->
-<!-- 								<input type="text" id="province" name="province" placeholder="Provincia"/>	 -->
-								
-								<input type="text" id="route" name="route" class="input-medium" placeholder="Dirección (calle y altura)"  />	
-								<input type="text" id="street_number" name="street_number" class="input-small" placeholder="Altura"/>	
+								<input type="text" id="address" name="address" onfocus="geolocate()" autocomplete="off" placeholder="Dirección (calle y altura)" />			
 								<input type="text" id="neighborhood" name="neighborhood" placeholder="Barrio (opcional)"/>										
 								<input type="text" id="locality" name="locality" placeholder="Ciudad" />		
-								<input type="text" id="administrative_area_level_1" name="administrative_area_level_1" placeholder="Provincia"/>
-								
-
+								<input type="text" id="administrative_area_level_1" name="administrative_area_level_1" placeholder="Provincia"/>								
+							<div class="pac-container" style="position: absolute; z-index: 1000; display: none;"></div>
 							</fieldset>
 							
 							<!-- STEP 2 -->
-						 	<fieldset id="issueStep2" class="step">
+						 	<fieldset id="issueStep2" class="step" style="dispay:none">
 						 		<input type="text" id="title" name="title" placeholder="T&iacute;tulo"/>
 								<textarea rows="5" id="description" name="description" placeholder="Descripci&oacute;n..."></textarea>		
 						 	</fieldset>
 					
 							<!-- STEP 3 -->
-						  	<fieldset id="issueStep3" class="step">						
+						  	<fieldset id="issueStep3" class="step" style="dispay:none">						
 								<div class="fileupload fileupload-new" data-provides="fileupload">
 									<div class="fileupload-new thumbnail" style="width: 304px; height: 150px;">
 										<img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=no+image" />
@@ -111,13 +103,12 @@
 						
 						<div id="demoNavigation"> 
 							<input class="btn btn-primary" id="btnBackNext" type="reset" />
-							<input class="btn btn-primary" id="btnIssueSubmit" type="submit" />
+							<input class="btn btn-primary" id="btnIssueSubmit" type="submit"/>
+						
 						</div>						
 				</form>		
 				</div>
-		    	
-
-<!-- 	<div id="alert_placeholder" style="height:50px;display:none"></div>	 -->
+		
 	<!-- ROW 2 -->
 
 		<!--Sidebar content-->

@@ -12,7 +12,7 @@
 	 
 <!--   	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&sensor=false"></script> -->
   	
-  	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&libraries=places&language=ES"></script> 
+  	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&components=country:ar&libraries=places&language=ES"></script> 
   	  	  	
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery-1.9.1.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.jsonp-2.4.0.min.js"></script>
@@ -55,7 +55,8 @@
   	  	
 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.form.js"></script>  
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.form.wizard.js"></script>    	
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.form.wizard.js"></script>   
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bbq.js"></script>    	
   	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/markerclusterer.js"></script>	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/markermanager.js"></script>	
@@ -64,6 +65,7 @@
 <%--     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/DT_bootstrap.js"></script> --%>
     	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.validate.js"></script>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.blockUI.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.tagit.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.tooltipster.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/recaptcha_ajax.js"></script>	
@@ -116,10 +118,13 @@ path:hover {
 
   	<script type="text/javascript">
     //<![CDATA[
-                 	
+            
   		
 		$(document).ready(function(){
-
+			
+			
+		
+			
 
 // 			$("#menuNav li").click(function(){
 // 				if($(this).hasClass("active"))
@@ -187,59 +192,85 @@ path:hover {
 			    }, 3000);
 			}   
 			
-			$("#btnBackNext").append('<i class="icon-chevron-left"></i> ');
-			
-			//bind callback to the before_remote_ajax event
-			$("#issueForm").bind("before_remote_ajax", function(event, data){
-				if(data.currentStep == 'issueStep1')
-					validateAddress();
-			})
+// 			$("#btnBackNext").append('<i class="icon-chevron-left"></i> ');
 			
 		
+			
+// 			$('#issueStep1 input').bind("change keyup", function() {		        
+// 			    if ( $('#address').val() !='' &&
+// 			    		$('#locality').val() != '' &&
+// 			    		$('#administrative_area_level_1').val() != '' ) {
+			      
+// 			        $('#btnIssueSubmit').removeAttr('disabled', 'disabled');
+// 			    } else {
+// 			        $('#btnIssueSubmit').attr('disabled', 'disabled');
+// 			    }
+// 			});
+
+  
+
+
+			$("#btnIssueSubmit").click(function(e) {
+				e.preventDefault(); 
+            	var $issueForm = $("#issueForm");   
+            	
+            		 
+            		if($("#issueStep1").css("display") == 'block'){ 
+            			
+            			validateAddress();
+            			
+            		
+            			
+            			
+                	}    
+            	
+
+            });
+
+
+ // Define a new jQuery Validator method
+    $.validator.addMethod("geocodeAddress", validateAddress);
+		
+			
 				$("#issueForm").formwizard({ 				 	
 				 	focusFirstInput : true,
 				 	textSubmit: 'Enviar',
-				 	textNext: 'Siguiente &raquo;',
-				 	textBack: '« Anterior',				
+				 	textNext: 'Siguiente',
+				 	textBack: 'Anterior',				
 				 	formPluginEnabled: true,
 				 	validationEnabled: true,
-				 	remoteAjax : {"issueStep1" : { // add a remote ajax call when moving next from the second step
-				 		url : "validate.html", 
-				 		dataType : 'json',
-// 				 		beforeSend : function(){alert("Starting validation.")},
-// 				 		complete : function(){alert("Validation complete.")},
-				 		success : function(data){
-				 		
-				 			if(data.emailtaken){ // change this value to false in validate.html to simulate successful validation
-					 			$("#status").fadeTo(500,1,function(){
-					 				$(this).html(data.emailerrormessage).fadeTo(5000, 0) 
-					 			}); 
-				 				return false; //return false to stop the wizard from going forward to the next step (this will always happen)
-				 			}
-				 			return true; //return true to make the wizard move to the next step
-				 		}
-				 	}},
-// 				 	formOptions :{
-// 						success: function(data){$("#status").fadeTo(500,1,function(){ $(this).html("You are now registered!").fadeTo(5000, 0); })},
-// 						beforeSubmit: function(data){$("#data").html("data sent to the server: " + $.param(data));},
-// 						dataType: 'json',
-// 						resetForm: true
-// 				 	},
+				 	disableUIStyles: true,
+// 				 	remoteAjax : { "issueStep3" : { 
+// 				 		url: "./reportIssue.html", 			 		
+// 				 		dataType : 'json',
+// 				 		success : function(alertStatus){
+// 				 			alert("en el submit");
+// 				 			if(alertStatus.result){
+// 	 	    					setTimeout(function () {
+// 	 	    						window.location.reload;
+// 	 	    					}, 400);	
+// 	 	    				}
+// 	 	    				else{	 	    			
+// 	 	    					bootbox.alert(alertStatus.message);	 	    										 	    					
+// 	 	    				}  
+// 				 		}
+// 				 	}},
+					formOptions:{
+						beforeSubmit: function(){validateAddress()}
+					},
 				 	validationOptions : {				 		
 				 		
 				 		rules: {
-				 			route: { required: true},	
-				 			street_number: { required: true},	
+				 			address: { required: true},					 		
 				 			locality: { required: true},		
-				 			administrative_level_1: { required: true},		
+				 			administrative_area_level_1: { required: true},		
 		 				    title: { required: true, maxlength: 50},				    
 		 				    description: { required: true, maxlength: 300}							
 		 				  },
 		 			    messages: {
-		 			    	  route: { required : 'Este campo es requerido.'},	
-		 			    	  street_number: { required : 'Este campo es requerido.'},	
+		 			    	  address: { required : 'Este campo es requerido.'},			 			    
 		 			    	  locality: { required : 'Este campo es requerido.' },	
-		 			    	  administrative_level_1: { required : 'Este campo es requerido.' },
+		 			    	  administrative_area_level_1: { required : 'Este campo es requerido.' },
 		 					  title: { required : 'Este campo es requerido.', maxlength: 'El m&aacute;ximo es de 50 caracteres.' },
 		 					  description: { required : 'Este campo es requerido.' , maxlength: 'El m&aacute;ximo es de 300 caracteres'}
 		 					
@@ -258,9 +289,26 @@ path:hover {
 		  		        }
 				 	}
 				});//wizard
-  	
-    
 			
+			function initBlokUI(){
+				
+					
+				$("#issueForm").block({ 
+	                message: '<img src="resources/images/loader5.gif" />', 
+	                css: { 
+	                	border: 'none', 
+	                	width:  '100px', 
+	                	height: '100px', 
+	                	top:    '50%',
+	                	left:   '50%'
+	                },		       
+	                overlayCSS:  { 
+	                    backgroundColor: '#000', 
+	                    opacity:          0.2		                 
+	                },				              
+	                fadeOut: 500
+	            });
+			}
 			
 			function getUrl(){
 				 return "http://localhost:8080/fixeala";
@@ -425,58 +473,7 @@ path:hover {
 				
 			}
             
-            
-            $('#btnIssueSubmit').click(function() {
-            	
-            	var $issueForm = $("#issueForm");     
-                       	
-            	if ($("#issueStep3").css("display") == 'block'){  		
-            		
-            			bootbox.confirm("Â¿Confirma que desea registrar su reclamo?", function(result){
-                    		
-                    		$.ajax({
-                    			url: "./reportIssue.html",
-    					 		type: "POST",
-    					        data: $issueForm.serialize(),     
-    					        dataType: 'json',	
-    					        success: function(alertStatus){
-    		
-    		 	    				if(alertStatus.result){	
-    		 	    			
-//     		 	    					bootbox.alert(alertStatus.message);
-
-    		 	    					setTimeout(function () {		
-//     		 	    						$issueForm.fadeOut('slow');					 	    						
-//     		 	    						setTimeout(function () {					 	    										 	    						
-//     		 	    							setTimeout(function () {					 	    								
-//     		 	    								$issueForm.formwizard({ 
-//     				 	    							formOptions: {resetForm:true}
-//     				 	    						});					 	    								
-//     		 	    								clearForm($issueForm);					 	    								
-//     		 	    								$issueForm.fadeIn('slow');	
-												
-//     		 	    							}, 1000);					 	    							
-//     		 	    						}, 1000); 
-    		 	    						window.location.href = "http://localhost:8080/fixeala";
-    		 	    					}, 400);					 	    					
-    		 	    						
-    		 	    				}
-    		 	    				else{
-    		 	    			
-    		 	    					bootbox.alert(alertStatus.message);
-    		 	    					//showAlert(alertStatus.message, "alert-error");						 	    					
-    		 	    				}            		
-    		            		
-    		            		}//success
-                			});//ajax
-                    		
-                    	});//bootbox  
-            			
-    		
-	            	
-            	}            	
-
-            });
+         
             
             
             $('#btnIssue').click(function(){ 
