@@ -578,12 +578,16 @@ legend {
 	font-weight: bold;
 }
 
+/* .pac-item:hover { */
+/*     background-color: black;  */
+/* } */
+
 .form-issue input[type="text"], .form-issue select, .form-issue textarea {
 	color: #000;
 }
 
 .form-issue input {
-/* 	width: 300px; */
+	width: 300px;
 	height: 30px;
 	margin-bottom: 20px;
 	display: block;

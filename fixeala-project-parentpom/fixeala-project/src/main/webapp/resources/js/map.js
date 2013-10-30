@@ -15,8 +15,7 @@ var markers = [];
 
 var placeSearch, autocomplete;
 var component_form = {
-  'route': 'long_name',
-  'street_number': 'short_name',  
+
   'neighborhood': 'short_name',
   'locality': 'long_name',
   'administrative_area_level_1': 'long_name'
@@ -51,30 +50,81 @@ $(document).ready(function(){
 //        });
         
        
-        
-        
+       
 
 		//AUTOCOMPLETE
-		var input = document.getElementById('fullAddress');
+		var pac_input = document.getElementById('address');
 		var options = {
-				 types: [ 'geocode' ],        		
-				  componentRestrictions: {country: "ar"}
-				 };
+				 		types: [ 'geocode' ],        		
+				 		componentRestrictions: {country: "ar"}
+				 	};
 		
-	    autocomplete = new google.maps.places.Autocomplete(input, options);
-	    
-	    google.maps.event.addListener(autocomplete, 'place_changed', function(e) {
-	    	fillInAddress();	
-	    	
-	    	
-	    	
-	    	var arr = [];
-	    	arr = ($('#fullAddress').val()).split(",");
-	    	setTimeout(function(){$('#fullAddress').val(arr[0]);},50);
-	    	
-	    });
-		
+		// prevents enter key to submit form//	
+		$('#address').keydown(function (e) {
+		  if (e.which == 13 && $('.pac-container:visible').length) return false;
+		});	
+		// prevents enter key to submit form//
 
+		// pick first item when list opens//	
+		    if (!$('.pac-container').is(':visible')) {
+		  $('#address').val($('.pac-container').find('.pac-item').eq(0).text());
+		  
+		  $('.pac-container').find('.pac-item').eq(0).addClass('.pac-item-selected');
+		
+		
+		}      
+		    
+		    (function pacSelectFirst(input){
+		        // store the original event binding function
+		        var _addEventListener = (input.addEventListener) ? input.addEventListener : input.attachEvent;
+
+		        function addEventListenerWrapper(type, listener) {
+		        // Simulate a 'down arrow' keypress on hitting 'return' when no pac suggestion is selected,
+		        // and then trigger the original listener.
+
+		        if (type == "keydown") {
+		          var orig_listener = listener;
+		          listener = function (event) {
+		            var suggestion_selected = $(".pac-item.pac-selected").length > 0;
+		            if (event.which == 13 && !suggestion_selected) {
+		              var simulated_downarrow = $.Event("keydown", {keyCode:40, which:40})
+		              orig_listener.apply(input, [simulated_downarrow]);
+		            }
+
+		            orig_listener.apply(input, [event]);
+		          };
+		        }
+
+		        // add the modified listener
+		        _addEventListener.apply(input, [type, listener]);
+		      }
+
+		      if (input.addEventListener)
+		        input.addEventListener = addEventListenerWrapper;
+		      else if (input.attachEvent)
+		        input.attachEvent = addEventListenerWrapper;
+
+		    })(pac_input);
+		    
+
+	    autocomplete = new google.maps.places.Autocomplete(pac_input, options);
+//	    $('#address').keypress(function(e) {
+//	    	  if (e.which == 13) {
+//	    		  $(".pac-container").show();
+//	    	    return false;
+//	    	  }
+//	    	});
+	 
+	    
+	    google.maps.event.addListener(autocomplete, 'place_changed', function(e) {	   
+	    	fillInAddress();	
+	    	var arr = [];
+	    	arr = ($('#address').val()).split(",");
+	    	setTimeout(function(){$('#address').val(arr[0]);},0);
+	    });
+	    
+	   
+		
         
             
         //SET MARKER COORDINATES ON MAP CLICK
@@ -102,8 +152,6 @@ $(document).ready(function(){
 	 
       
  });//document.ready
-
-
 
 
 
@@ -334,18 +382,14 @@ function findProvincia (value) {
 
 function validateAddress(){
 	
-	var isValid;
-	
 	 var address = $("#address").val();
-	 var city = $("#city").val();
-	 var province = $("#province").val();		
-	
 	 var neighborhood = $("#neighborhood").val();	 
+	 var city = $("#locality").val();
+	 var province = $("#administrative_area_level_1").val();	 
 	 var title = $("#title").val();
 	 var desc = $("#description").val();
 
-	 var searchAddress = address + ", " + city + ", " + province;		
-	 var fullAddress;
+	 var searchAddress = address + ", " + neighborhood + ", " + city + ", " + province;			
 	 var geocoder;
 	 
 	 if(!geocoder) { 
@@ -358,147 +402,97 @@ function validateAddress(){
 	 } 
 	
 	 geocoder.geocode(geocoderRequest, function(results, status) { 
-		 	
-		 switch(status) {
 		 
-		 	//OK
-	        case google.maps.GeocoderStatus.OK:
-	        	
-	        	var location_type = results[0].geometry.location_type;
-	        	
-	        	if(location_type == "RANGE_INTERPOLATED"){
-	        		
-	        		isValid = true;
-	        	
-	        		  			alert("range interpolated"); 
-//					 var addr_street = "",
-//					 addr_number = "",
-//					 addr_neighborhood = "";
-//		             addr_city = "",
-//		             addr_province = "";
-//				 
-//		
-//					for (var i = 0; i < results[0].address_components.length; i++) {				
-//						
-//						var addr = results[0].address_components[i];	
-//											
-//						 if (addr.types[0] == ['route'])		                
-//							 addr_street = addr.long_name;	                 
-//		                 
-//		                 else if (addr.types[0] == ['street_number']){
-//		                	 addr_number = addr.long_name;
-//		                 }
-//						
-//		                 else if (addr.types[0] == ['neighborhood']){										
-//							 addr_neighborhood = neighborhood;
-//						 }
-//						
-//						 else if (addr.types[0] == ['locality']){						
-//							 addr_city = addr.long_name;
-//						 }
-//							                 
-//		                 else if (addr.types[0] == ['administrative_area_level_1']){	                	
-//		                	 addr_province = addr.long_name;	
-//		                 }
-//						 
-//					}    
-//					
-//					alert(addr_street + " " + addr_number + ", " + addr_neighborhood +  ", " + addr_city + ", " + addr_province);
-					
-					/**	 
-					
-					if( (addr_neighborhood.length > 0) && (addr_city.length > 0) ) {			
-						fullAddress = addr_street + " " + addr_number + ", " + addr_neighborhood + ", " + addr_city + ", " + addr_province;	
-					}
-					
-					else if( (addr_neighborhood.length <= 0) && (addr_city.length <= 0) ) {
-						fullAddress = addr_street + " " + addr_number + ", " + addr_province;	
-					}	
-					
-					else if ( (addr_neighborhood.length <= 0) && (addr_city.length > 0) ) {		
-						fullAddress = addr_street + " " + addr_number + ", " + addr_city + ", " + addr_province;
-					}
-									 	
-				map.setCenter(results[0].geometry.location); 	
-				
-				if(initMarker)
-         			initMarker.setMap(null);
-         		
-         		initMarker = new google.maps.Marker({ 
-         			 map: map,         	
-         			 icon: "resources/images/markers/blue_MarkerA.png",
-         			 draggable: false,
-         			 position: results[0].geometry.location
-         		}); 
-				
-				 
-				 var html = '<table border="0" cellpadding="0" cellspacing="0" width="380px" height="90px" style="background-color:white;font-family:Arial;font-size:12px">'
-					 +'   <tr>'
-					 +'	 	<td style="text-align:left; font:16px Arial;"><b><div style="color:BlueViolet;display:inline">'+title+'</div><div style="color:#ccc;display:inline;"> &nbsp;&nbsp; <i class="icon-chevron-right"></i> &nbsp;&nbsp; </div><div style="color:orange;display:inline;">En tratamiento</div></b></td>'				
-					 +'	 </tr>'	
-					 +'  <tr style="font-size:11px">'
-					 +'	 	<td style="text-align:left;color:grey">'+fullAddress+'</td>'				
-					 +'	 </tr><tr><td>&nbsp;</td></tr>'	
-					 +'   <tr style="font-size:12px">'
-					 +'	 	<td style="text-align:justify;color:black">'+desc+'<a href="#" class="readMore"> (leer m&aacute;s)</a></td>'				
-					 +'	 </tr>'	
-					 +'   <tr style="height:3px">'
-					 +'	 	<td>&nbsp;</td>'				
-					 +'	 </tr>'			
-					 +'	 <tr style="font-size:11px;padding-top:1px">'
-					 +'		<td style="text-align:left;color:grey;border-top:1px solid grey">Posteado por: <a href="#" class="user">fulanito88</a> &nbsp; | &nbsp; <a href="#" class="user">7 reclamos</a> <div style="margin:0;padding:0;float:right;clear;both;display:inline">12/12/2011</div></td>'
-					 +'	 </tr>'				
-					 +'	 </table>';	
+		 alert(results[0].geometry.location_type);
+		 
+		 //OK
+		 if (status == google.maps.GeocoderStatus.OK) {
+		        	
+		        	var location_type = results[0].geometry.location_type;
+		        	
+		        	if(location_type == "RANGE_INTERPOLATED" || location_type == "ROOFTOP"){
+		        	
+		        		return true;			        	
+		        	}			        	
+				        	
+		        	if(location_type == "APPROXIMATE"){		        		
+		        		bootbox.alert("No se hall&oacute; un resultado exacto. Espeficique mo&aacute;s datos, por favor.");	
+		        		return false;
+		        	
+		        	}
+		        	
+//		        	if(location_type == "GEOMETRIC_CENTER"){
+//		        		if(hasAddressTypes(results))	
+//		        			return true;	        		
+//		        	}
+		        		
+		 }
+		//ZERO RESULTS
+		 if (status == google.maps.GeocoderStatus.ZERO_RESULTS) { 
+		        		bootbox.alert("No se encontraron resultados para la direcci&oacute;n sumninistrada.");	
+		        		return false;
+		   
+		 }       
+		 if ( (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) 
+				 || (status == google.maps.GeocoderStatus.REQUEST_DENIED)
+				 || (status == google.maps.GeocoderStatus.INVALID_REQUEST)
+				 || (status == google.maps.GeocoderStatus.UNKNOWN_ERROR ) ){    		 
 
-				 var infowindow;
-				 				 
-		         google.maps.event.addListener(initMarker, 'click', function() {
-		        	 if (!infowindow){
-						 infowindow = new google.maps.InfoWindow();     
-					 }
-		        	infowindow.setContent(html);
-		        	infowindow.open(map, initMarker); 		        	  
-		         });**/
-	        		
-	        	
-		         
-	        	}
-	        	
-	        	else if(location_type == "APPROXIMATE"){
-	        		bootbox.alert("No se encontr&oacute; un resultado exacto para la direcci&oacute;n suministrada. Verifique los datos ingresados.");	
-	        		isValid = false;
-	        	}
-	        	
-	        	else{
-	        		bootbox.alert("No se encontr&oacute; un resultado exacto para la direcci&oacute;n suministrada. Verifique los datos ingresados.");	  
-	        		isValid = false;
-	        	}
-	        				        	
-	        break;
-	        
-	        //ZERO RESULTS
-	        case google.maps.GeocoderStatus.ZERO_RESULTS:
-	        		bootbox.alert("No se encontraron resultados.");	 
-	        		isValid = false;
-	        break;
-	        
-	        default: 
-	        	bootbox.alert("Ocurri&oacute; un error al validar la direcci&oacute;n. Intente m&aacute;s tarde.");	     
-	        	isValid = false;
-	        break;
-	          
-	     }//switch
+	        	bootbox.alert("Ocurri&oacute; un error al validar la direcci&oacute;n. Intente de nuevo.");
+	        	return false;
+	     
+		 }
 		
 	 });//geocoder
-	 
-	 if(isValid)
-		 return true;
-	 else
-		 return false;
-	 
+
 	
-	 
 } 
+
+function hasAddressTypes(results) {	
+	
+	var types = 0;
+	var sameField = 0;
+	
+//	var address = $("#address").val();
+//	var neighborhood = $("#neighborhood").val();	 
+//	var city = $("#locality").val();
+//	var province = $("#administrative_area_level_1").val();	 
+	
+	for (var i = 0; i < results[0].address_components.length; i++) {				
+		
+		var addr = results[0].address_components[i];	
+							
+		 //calle
+		 if (addr.types[0] == ['route'])		                
+			 types++;      
+         
+		 //altura
+         else if (addr.types[0] == ['street_number']){
+        	 types++;    
+         }
+		
+		 //barrio (opcional)
+         else if (addr.types[0] == ['neighborhood']){										
+        	 types++;   
+        	
+		 }
+		
+		 //ciudad - localidad
+		 else if (addr.types[0] == ['locality']){						
+			 types++;    
+		 }
+		
+		 //provincia
+         else if (addr.types[0] == ['administrative_area_level_1']){	                	
+        	 types++;    
+         }
+		 
+	}    
+	
+	if(types == 4 || types == 5){alert("campos completos!"); return true;}
+	else{alert("faltan datos!"); return false;}
+	//return false;	
+}
  
  function listenMarker (marker, infowindow){
 	  google.maps.event.addListener(marker, 'click', function() {         
@@ -557,12 +551,7 @@ function validateAddress(){
 		                     province = addr.long_name;		                 
 		                  
 					} 
-					
-				
-//					$("#neighborhood").val(neighborhood);
-//					$("#city").val(city);
-//					$("#province").val(province);
-					
+
 					$("#route").val(streetName);
 					$("#street_number").val(streetNumber);
 					$("#neighborhood").val(neighborhood);
@@ -573,12 +562,12 @@ function validateAddress(){
 					$("#longitude").val(latLng.lng());
 			
 					var formattedAddress;
+					
                     if (results[0].formatted_address != null) {
                           formattedAddress = results[0].formatted_address;
                           $("#address").val(streetName + " " + streetNumber);
-                      }
-                    
-                    
+                    }
+                                        
                     if(initMarker)
             			initMarker.setMap(null);
             		
@@ -592,9 +581,6 @@ function validateAddress(){
             		 google.maps.event.addListener(initMarker, 'dragend', function(e) {  
             			 getAddressOnMapClick(e.latLng);             	  	 
              	  	});  
-					
-					
-					
 				}
 				
 			
