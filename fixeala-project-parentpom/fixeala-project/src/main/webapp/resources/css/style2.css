@@ -538,7 +538,7 @@ legend {
 	float: left;
 	overflow: hidden;
 	width: 1178px; /* border adds 2 pixels to width */
-	height: 430px;
+	height: 460px;
 	/* 	background:#CFCFCF url("../images/mapa.png") no-repeat center; */
 	background-color: #CFCFCF;
 	border: 1px solid #CFCFCF;
@@ -556,18 +556,30 @@ legend {
 
 #searchBar .span9, #searchBar .span3{height:42px;}
 
+#issueFormWizard {
+	width: 316px;
+	height: 450px;		
+	overflow: hidden;
+	position: relative;	
+	padding: 0 10px 10px 10px;	
+	margin-right: -316px;
+	margin-bottom: 0;
+	background: #fff;
+	border: 1px solid #CFCFCF;
+}
+
 #issueForm {
+	width: 316px;
+	height: 450px;
+	display: none;			
 	overflow: hidden;
 	position: relative;
-	float: right;
-	display: none;
+	float: right;	
+	padding: 0 10px 10px 10px;	
 	margin-right: -316px;
-	width: 316px;
-	height: 420px;
-	background: #fff;
-	padding: 0 10px 10px 10px;
-	border: 1px solid #CFCFCF;
 	margin-bottom: 0;
+	background: #fff;
+	border: 1px solid #CFCFCF;
 }
 
 #issueForm #fieldWrapper {
@@ -587,23 +599,23 @@ legend {
 }
 
 .form-issue input {
-	width: 300px;
+	width: 306px;
 	height: 30px;
 	margin-bottom: 20px;
-	display: block;
+/* 	display: block; */
 }
 
 .form-issue select {
 	width: 170px;
 	height: 40px;
 	margin-bottom: 20px;
-	display: block;
+/* 	display: block; */
 	clear: both;
 }
 
 .form-issue textarea {
-	width: 300px;
-	height: 200px;
+	width: 306px;
+	height: 170px;
 }
 
 .form-issue legend {
@@ -611,9 +623,9 @@ legend {
 }
 
 .form-issue .btn {
-	width: 90px;
-	display: inline;
-	height: 40px;
+	width: 100px;
+/* 	display: inline; */
+	height: 30px;
 }
 
 .form-issue #btnBackNext {
