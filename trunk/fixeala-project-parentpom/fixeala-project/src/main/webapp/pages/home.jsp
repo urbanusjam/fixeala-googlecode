@@ -57,33 +57,82 @@
 		  		<div id="map_canvas"></div>	
 
 	
-		  <!-- ISSUE FORM -->
-				<form id="issueForm" class="form-issue" method="POST">	
-					 <div id="issueHeader" class="page-header ">
-    	 				<h4>Carg&aacute; tu reclamo</h4>    	 	
-    				 </div>  				 
-					 <div id="fieldWrapper">					 
-					 		<!-- STEP 1 -->
-							<fieldset id="issueStep1" class="step" style="dispay:block">
-								<input type="hidden" id="latitude" name="latitude"  />
-								<input type="hidden" id="longitude" name="longitude" />	
+		  		<!-- ISSUE FORM -->
+<!-- 				<form id="issueForm" class="form-issue" method="POST">	 -->
+<!-- 					 <div id="issueHeader" class="page-header "> -->
+<!--     	 				<h4>Carg&aacute; tu reclamo</h4>    	 	 -->
+<!--     				 </div>  				  -->
+<!-- 					 <div id="fieldWrapper">					  -->
+<!-- 					 		STEP 1 -->
+<!-- 							<fieldset id="issueStep1" class="step" style="dispay:block"> -->
+<!-- 								<input type="hidden" id="latitude" name="latitude"  /> -->
+<!-- 								<input type="hidden" id="longitude" name="longitude" />	 -->
 													
-								<input type="text" id="address" name="address" onfocus="geolocate()" autocomplete="off" placeholder="Dirección (calle y altura)" />			
-								<input type="text" id="neighborhood" name="neighborhood" placeholder="Barrio (opcional)"/>										
-								<input type="text" id="locality" name="locality" placeholder="Ciudad" />		
-								<input type="text" id="administrative_area_level_1" name="administrative_area_level_1" placeholder="Provincia"/>								
-							<div class="pac-container" style="position: absolute; z-index: 1000; display: none;"></div>
-							</fieldset>
+<!-- 								<input type="text" id="address" name="address" onfocus="geolocate()" autocomplete="off" placeholder="Dirección (calle y altura)" />			 -->
+<!-- 								<input type="text" id="neighborhood" name="neighborhood" placeholder="Barrio (opcional)"/>										 -->
+<!-- 								<input type="text" id="locality" name="locality" placeholder="Ciudad" />		 -->
+<!-- 								<input type="text" id="administrative_area_level_1" name="administrative_area_level_1" placeholder="Provincia"/>								 -->
+<!-- 							<div class="pac-container" style="position: absolute; z-index: 1000; display: none;"></div> -->
+<!-- 							</fieldset> -->
 							
-							<!-- STEP 2 -->
-						 	<fieldset id="issueStep2" class="step" style="dispay:none">
-						 		<input type="text" id="title" name="title" placeholder="T&iacute;tulo"/>
-								<textarea rows="5" id="description" name="description" placeholder="Descripci&oacute;n..."></textarea>		
-						 	</fieldset>
+<!-- 							STEP 2 -->
+<!-- 						 	<fieldset id="issueStep2" class="step" style="dispay:none"> -->
+<!-- 						 		<input type="text" id="title" name="title" placeholder="T&iacute;tulo"/> -->
+<!-- 								<textarea rows="5" id="description" name="description" placeholder="Descripci&oacute;n..."></textarea>		 -->
+<!-- 						 	</fieldset> -->
 					
-							<!-- STEP 3 -->
-						  	<fieldset id="issueStep3" class="step" style="dispay:none">						
-								<div class="fileupload fileupload-new" data-provides="fileupload">
+<!-- 							STEP 3 -->
+<!-- 						  	<fieldset id="issueStep3" class="step" style="dispay:none">						 -->
+<!-- 								<div class="fileupload fileupload-new" data-provides="fileupload"> -->
+<!-- 									<div class="fileupload-new thumbnail" style="width: 304px; height: 150px;"> -->
+<!-- 										<img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=no+image" /> -->
+<!-- 									</div> -->
+<!-- 									<div class="fileupload-preview fileupload-exists thumbnail" style="height: 150px;min-width:300px;max-width: 200px; max-height: 150px; line-height: 20px;"></div> -->
+<!-- 									<div> -->
+<!-- 										<span class="btn btn-file"> -->
+<!-- 											<span class="fileupload-new"><i class="icon-plus"></i>&nbsp;&nbsp;Seleccionar imagen</span> -->
+<!-- 											<span class="fileupload-exists"><i class="icon-refresh"></i>&nbsp;&nbsp;Cambiar</span> -->
+<!-- 											<input type="file" /> -->
+<!-- 										</span> -->
+<!-- 										<a href="#" class="btn fileupload-exists" data-dismiss="fileupload"><i class="icon-trash"></i>&nbsp;&nbsp; Quitar</a> -->
+<!-- 									</div> -->
+<!-- 								</div>					 -->
+<!-- 								<ul id="eventTags"></ul> -->
+<!-- 							</fieldset>							 -->
+<!-- 						</div>	 -->
+						
+<!-- 						<div id="demoNavigation">  -->
+<!-- 							<input class="btn btn-primary" id="btnBackNext" type="reset" /> -->
+<!-- 							<input class="btn btn-primary" id="btnIssueSubmit" type="submit"/> -->
+						
+<!-- 						</div>						 -->
+<!-- 				</form>	 -->
+				
+				
+<br>
+				
+			<div id="issueFormWizard">
+			
+			
+				
+					<form id="issueWizard" class="form-issue form-horizontal" style="overflow:hidden;">
+							
+							<section id="issueStep1" class="step" data-step-title="Localización">													
+									<input type="hidden" id="latitude" name="latitude"  />
+									<input type="hidden" id="longitude" name="longitude" />													
+									<input type="text" id="address" name="address" onfocus="geolocate()" autocomplete="off" placeholder="Dirección (calle y altura)" />			
+									<input type="text" id="neighborhood" name="neighborhood" placeholder="Barrio (opcional)"/>										
+									<input type="text" id="locality" name="locality" placeholder="Ciudad" />		
+									<input type="text" id="administrative_area_level_1" name="administrative_area_level_1" placeholder="Provincia"/>							
+							</section>
+							
+							<section id="issueStep2" class="step" data-step-title="Detalles">
+								<input type="text" id="title" name="title" placeholder="T&iacute;tulo"/>
+								<textarea rows="5" id="description" name="description" placeholder="Descripci&oacute;n..."></textarea>	
+							</section>
+							
+							<section id="issueStep3" class="step" data-step-title="Imagen">	
+															<div class="fileupload fileupload-new" data-provides="fileupload">
 									<div class="fileupload-new thumbnail" style="width: 304px; height: 150px;">
 										<img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=no+image" />
 									</div>
@@ -96,18 +145,29 @@
 										</span>
 										<a href="#" class="btn fileupload-exists" data-dismiss="fileupload"><i class="icon-trash"></i>&nbsp;&nbsp; Quitar</a>
 									</div>
-								</div>					
+								</div>						
 								<ul id="eventTags"></ul>
-							</fieldset>							
-						</div>	
+							</section>
 						
-						<div id="demoNavigation"> 
-							<input class="btn btn-primary" id="btnBackNext" type="reset" />
-							<input class="btn btn-primary" id="btnIssueSubmit" type="submit"/>
-						
-						</div>						
-				</form>		
+					</form>
+				
+					<div id="bar" class="progress progress-info progress-striped active" style="width:316px; dispaly:none;">
+	  					<div class="bar"></div>
+					</div>
+				
 				</div>
+			
+				
+				<div class="clearfix"></div>
+				
+				
+				
+				
+				
+				
+				
+				
+				
 		
 	<!-- ROW 2 -->
 

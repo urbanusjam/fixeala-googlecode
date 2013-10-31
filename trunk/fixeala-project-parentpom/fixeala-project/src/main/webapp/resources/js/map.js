@@ -401,9 +401,11 @@ function validateAddress(){
 			 country: "AR"			
 	 } 
 	
+	 var isValid = false;
+	 
 	 geocoder.geocode(geocoderRequest, function(results, status) { 
 		 
-		 alert(results[0].geometry.location_type);
+//		 alert(results[0].geometry.location_type);
 		 
 		 //OK
 		 if (status == google.maps.GeocoderStatus.OK) {
@@ -412,12 +414,12 @@ function validateAddress(){
 		        	
 		        	if(location_type == "RANGE_INTERPOLATED" || location_type == "ROOFTOP"){
 		        	
-		        		return true;			        	
+		        		 isValid = true;			        	
 		        	}			        	
 				        	
 		        	if(location_type == "APPROXIMATE"){		        		
 		        		bootbox.alert("No se hall&oacute; un resultado exacto. Espeficique mo&aacute;s datos, por favor.");	
-		        		return false;
+		        		
 		        	
 		        	}
 		        	
@@ -430,7 +432,7 @@ function validateAddress(){
 		//ZERO RESULTS
 		 if (status == google.maps.GeocoderStatus.ZERO_RESULTS) { 
 		        		bootbox.alert("No se encontraron resultados para la direcci&oacute;n sumninistrada.");	
-		        		return false;
+
 		   
 		 }       
 		 if ( (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) 
@@ -439,7 +441,7 @@ function validateAddress(){
 				 || (status == google.maps.GeocoderStatus.UNKNOWN_ERROR ) ){    		 
 
 	        	bootbox.alert("Ocurri&oacute; un error al validar la direcci&oacute;n. Intente de nuevo.");
-	        	return false;
+	        
 	     
 		 }
 		

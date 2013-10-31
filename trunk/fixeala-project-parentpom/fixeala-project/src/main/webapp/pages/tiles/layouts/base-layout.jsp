@@ -18,7 +18,6 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.jsonp-2.4.0.min.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery-ui-1.10.3.custom.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.mockjax.js"></script> 
-<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.tablesorter.js"></script>  --%>
   	<script type="text/javascript" src="http://code.jquery.com/jquery-migrate-1.1.0.js"></script>
     
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.geocomplete.js"></script>
@@ -28,7 +27,6 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/topojson.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/json.min.js"></script>	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/map.js"></script>
-<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/d3.populationMap.js" charset="utf-8"></script> --%>
 <%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala-datagrid.js"></script> --%>
   		
 <%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap.js"></script> --%>
@@ -53,10 +51,12 @@
 <%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fuelux/datagrid.js"></script> --%>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fuelux/underscore.js"></script>
   	  	
-
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.form.js"></script>  
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.form.wizard.js"></script>   
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bbq.js"></script>    	
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.easyWizard.js"></script>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.snippet.min.js"></script>
+<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.bootstrap.wizard.js"></script> --%>
+<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.form.js"></script>   --%>
+<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.form.wizard.js"></script>    --%>
+<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bbq.js"></script>    	 --%>
   	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/markerclusterer.js"></script>	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/markermanager.js"></script>	
@@ -95,7 +95,7 @@
 	
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/tooltipster.css" rel="stylesheet">		
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/style2.css" rel="stylesheet">
-	
+	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.snippet.min.css" rel="stylesheet"> 
 <%-- <link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery-ui-1.10.0.custom.css" rel="stylesheet">	 --%>	
 <%-- <link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.dataTables.css" rel="stylesheet"> --%>	
 <!-- <link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css " rel="stylesheet"> -->
@@ -114,6 +114,22 @@ path:hover {
   fill: red;
 }
 
+/* #issueWizard {zwidth:600px;border:1px solid #ccc}  */
+.easyWizardSteps {list-style:none;width:100%;overflow:hidden;margin:0;padding:0;border-bottom:1px solid #ccc;margin-bottom:20px}
+.easyWizardSteps li {font-size:12px;display:inline-block;padding:15px 0px 10px 0px;color:#B0B1B3;margin-right:20px;}
+.easyWizardSteps li span {font-size:24px}
+.easyWizardSteps li.current {color:#000}
+
+.easyWizardButtons {overflow:hidden;padding:5px;}
+.easyWizardButtons button, .easyWizardButtons .submit {cursor:pointer; }
+.easyWizardButtons .prev {float:left}
+.easyWizardButtons .next, .easyWizardButtons .submit {float:right}
+
+.step{display:inline;} 
+
+.easyWizardWrapper{height:280px;width:600px;}  
+
+
 </style>
 
   	<script type="text/javascript">
@@ -122,19 +138,54 @@ path:hover {
   		
 		$(document).ready(function(){
 			
+			//inti step1
+			updateProgressBar(3, 1);
 			
+			
+			
+				
+			function updateProgressBar(navItems, stepIndex){
+				var $total = navItems;		
+				var $current = stepIndex;			
+				var $percent = ($current/$total) * 100;
+				$('.bar').css({width:$percent+'%'});
+			}
 		
+		
+			$('#issueWizard').easyWizard({				
+				prevButton: '&laquo; Anterior',
+				nextButton: 'Siguiente &raquo;', 
+				submitButtonText: 'Enviar',	
+				submitButtonClass: 'btn btn-success',
+				buttonsClass: 'btn btn-primary',			
+				after: function(wizardObj, prevStepObj, currentStepObj) {
+					var $total = $("ul.easyWizardSteps ").find('li').length;
+					var $index = currentStepObj.attr("data-step");		
+					updateProgressBar($total, $index);
+				},
+			 	before: function(wizardObj, currentStepObj, nextStepObj) {
+			 		var step = currentStepObj.attr('data-step');
 			
+			        if(step == '1'){
+			        	
+// 			        	$("#issueWizard").valid();
+var v = validateAddress();
+alert(v);
+			        	
+// 			        		 easyWizardMethods.goToStep.call(wizardObj, 1);
+			        
+			        	
+// 			        	else{
+// 			        		 easyWizardMethods.goToStep.call(wizardObj, 2);
+// 			        	}
+			    		  
+			    		
+			    	   return false;
+			       }
+			    	 
+			    },
+			});
 
-// 			$("#menuNav li").click(function(){
-// 				if($(this).hasClass("active"))
-// 			});
-		
-// 			$(".issueDesc").shorten({
-// 			    "showChars" : 200,
-// 			    "moreText"  : "« mostrar más »",
-// 			    "lessText"  : "« mostrar menos »",
-// 			});
 			
 			$(function(){
 				function initToolbarBootstrapBindings() {
@@ -166,7 +217,7 @@ path:hover {
 		
 			
 			 // initialize tooltipster on form input elements
-		    $('#issueForm input[type="text"], #issueForm textarea').tooltipster({ 		    
+		    $('#issueWizard input[type="text"], #issueForm textarea').tooltipster({ 		    
 		    	animation: 'fade',		
 		    	delay: 200,
 		    	interactive: true,
@@ -190,77 +241,26 @@ path:hover {
 			    setTimeout(function() { // this will automatically close the alert and remove this if the users doesnt close it in 5 secs
 			      $("#alertdiv").fadeOut('slow');					 
 			    }, 3000);
-			}   
+			}  
 			
-// 			$("#btnBackNext").append('<i class="icon-chevron-left"></i> ');
 			
-		
-			
-// 			$('#issueStep1 input').bind("change keyup", function() {		        
-// 			    if ( $('#address').val() !='' &&
-// 			    		$('#locality').val() != '' &&
-// 			    		$('#administrative_area_level_1').val() != '' ) {
-			      
-// 			        $('#btnIssueSubmit').removeAttr('disabled', 'disabled');
-// 			    } else {
-// 			        $('#btnIssueSubmit').attr('disabled', 'disabled');
-// 			    }
-// 			});
-
-  
 
 
-			$("#btnIssueSubmit").click(function(e) {
-				e.preventDefault(); 
-            	var $issueForm = $("#issueForm");   
-            	
+
+// 			$("#btnIssueSubmit").click(function(e) {
+// 				e.preventDefault(); 
+//             	var $issueForm = $("#issueForm");            	
             		 
-            		if($("#issueStep1").css("display") == 'block'){ 
+//             		if($("#issueStep1").css("display") == 'block'){ 
             			
-            			validateAddress();
-            			
+//             			validateAddress();
             		
-            			
-            			
-                	}    
-            	
+//                 	}   
+//             });
 
-            });
-
-
- // Define a new jQuery Validator method
-    $.validator.addMethod("geocodeAddress", validateAddress);
-		
-			
-				$("#issueForm").formwizard({ 				 	
-				 	focusFirstInput : true,
-				 	textSubmit: 'Enviar',
-				 	textNext: 'Siguiente',
-				 	textBack: 'Anterior',				
-				 	formPluginEnabled: true,
-				 	validationEnabled: true,
-				 	disableUIStyles: true,
-// 				 	remoteAjax : { "issueStep3" : { 
-// 				 		url: "./reportIssue.html", 			 		
-// 				 		dataType : 'json',
-// 				 		success : function(alertStatus){
-// 				 			alert("en el submit");
-// 				 			if(alertStatus.result){
-// 	 	    					setTimeout(function () {
-// 	 	    						window.location.reload;
-// 	 	    					}, 400);	
-// 	 	    				}
-// 	 	    				else{	 	    			
-// 	 	    					bootbox.alert(alertStatus.message);	 	    										 	    					
-// 	 	    				}  
-// 				 		}
-// 				 	}},
-					formOptions:{
-						beforeSubmit: function(){validateAddress()}
-					},
-				 	validationOptions : {				 		
-				 		
-				 		rules: {
+				$("#issueWizard").validate({
+					ignore: '.step .active ',
+						rules: {
 				 			address: { required: true},					 		
 				 			locality: { required: true},		
 				 			administrative_area_level_1: { required: true},		
@@ -287,8 +287,66 @@ path:hover {
 		 		            $(element).tooltipster('update', $(error).text());
 		 		            $(element).tooltipster('show');				        
 		  		        }
-				 	}
-				});//wizard
+
+				});
+			
+// 				$("#issueForm").formwizard({ 				 	
+// 				 	focusFirstInput : true,
+// 				 	textSubmit: 'Enviar',
+// 				 	textNext: 'Siguiente',
+// 				 	textBack: 'Anterior',				
+// 				 	formPluginEnabled: true,
+// 				 	validationEnabled: true,
+// 				 	disableUIStyles: true,
+// 				 	remoteAjax : { "issueStep3" : { 
+// 				 		url: "./reportIssue.html", 			 		
+// 				 		dataType : 'json',
+// 				 		success : function(alertStatus){
+// 				 			alert("en el submit");
+// 				 			if(alertStatus.result){
+// 	 	    					setTimeout(function () {
+// 	 	    						window.location.reload;
+// 	 	    					}, 400);	
+// 	 	    				}
+// 	 	    				else{	 	    			
+// 	 	    					bootbox.alert(alertStatus.message);	 	    										 	    					
+// 	 	    				}  
+// 				 		}
+// 				 	}},
+// 					formOptions:{
+// 						beforeSubmit: function(){validateAddress()}
+// 					},
+// 				 	validationOptions : {				 		
+				 		
+// 				 		rules: {
+// 				 			address: { required: true},					 		
+// 				 			locality: { required: true},		
+// 				 			administrative_area_level_1: { required: true},		
+// 		 				    title: { required: true, maxlength: 50},				    
+// 		 				    description: { required: true, maxlength: 300}							
+// 		 				  },
+// 		 			    messages: {
+// 		 			    	  address: { required : 'Este campo es requerido.'},			 			    
+// 		 			    	  locality: { required : 'Este campo es requerido.' },	
+// 		 			    	  administrative_area_level_1: { required : 'Este campo es requerido.' },
+// 		 					  title: { required : 'Este campo es requerido.', maxlength: 'El m&aacute;ximo es de 50 caracteres.' },
+// 		 					  description: { required : 'Este campo es requerido.' , maxlength: 'El m&aacute;ximo es de 300 caracteres'}
+		 					
+// 		 				},
+// 		 				highlight: function (element) { 
+// 		 			        $(element).addClass("error"); 
+// 		 			    },
+			 	    	
+// 		 			    unhighlight: function (element) { 
+// 		 			        $(element).removeClass("error"); 
+// 		 			    },
+				
+// 		 		 		errorPlacement: function (error, element) {
+// 		 		            $(element).tooltipster('update', $(error).text());
+// 		 		            $(element).tooltipster('show');				        
+// 		  		        }
+// 				 	}
+// 				});//wizard
 			
 			function initBlokUI(){
 				
