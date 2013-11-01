@@ -52,7 +52,7 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fuelux/underscore.js"></script>
   	  	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.easyWizard.js"></script>
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.snippet.min.js"></script>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.stepy.js"></script>
 <%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.bootstrap.wizard.js"></script> --%>
 <%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.form.js"></script>   --%>
 <%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.form.wizard.js"></script>    --%>
@@ -95,7 +95,7 @@
 	
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/tooltipster.css" rel="stylesheet">		
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/style2.css" rel="stylesheet">
-	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.snippet.min.css" rel="stylesheet"> 
+	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.stepy.css" rel="stylesheet"> 
 <%-- <link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery-ui-1.10.0.custom.css" rel="stylesheet">	 --%>	
 <%-- <link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.dataTables.css" rel="stylesheet"> --%>	
 <!-- <link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css " rel="stylesheet"> -->
@@ -129,20 +129,19 @@ path:hover {
 
 .easyWizardWrapper{height:280px;width:600px;}  
 
+#issueWizard fieldset{width:300px; padding:0; border:none;}
+/* #issueWizard legend.none{display:none;} */
 
 </style>
 
   	<script type="text/javascript">
     //<![CDATA[
-            
-  		
+        
 		$(document).ready(function(){
 			
-			//inti step1
-			updateProgressBar(3, 1);
+			$(".finish").addClass("btn btn-success");
 			
-			
-			
+			var isValid = false;
 				
 			function updateProgressBar(navItems, stepIndex){
 				var $total = navItems;		
@@ -151,6 +150,56 @@ path:hover {
 				$('.bar').css({width:$percent+'%'});
 			}
 		
+			
+// 			$('#issueWizard').stepy({
+// 				ignore: ':hidden ',
+// 				backLabel :  '&laquo; Anterior',
+// 				nextLabel : 'Siguiente &raquo;', 
+// 				legend:       false,
+// 				transition : 'fade',
+// 				next: function(index) {
+// 				    if (!$('#issueWizard').valid()) {				     
+// 				      return false;
+// 				    }
+// 				    else{
+// 			    		geocodeAddress(function(value) { isValid = value; });				    		
+// 			    		setTimeout(2000); 		    	
+	
+// 				    	if(!isValid){
+// 				    		return false;
+// 				    	}
+// 				    	else
+// 				    		updateProgressBar(3, index-1);
+// 				    }
+// 				},
+// 				back: function(index) {
+// 					updateProgressBar(3, index-1);
+				
+// 				}, finish: function(index) {
+					
+					
+// 						$.ajax({ 
+// 						 		url: "./reportIssue.html", 		
+// 						 		type: "POST",
+// 						 		dataType: 'json',
+// 						 		contentType: 'application/json',
+// 						 		data : $("#issueWizard").serialize(),				 		
+// 						 		beforeSubmit: function(e){e.preventDefault();},
+// 						 		success : function(alertStatus){
+// 						 			alert("en el submit");
+// 						 			if(alertStatus.result){
+// 			 	    					setTimeout(function () {
+// 			 	    						window.location.reload;
+// 			 	    					}, 400);	
+// 			 	    				}
+// 			 	    				else{	 	    			
+// 			 	    					bootbox.alert(alertStatus.message);	 	    										 	    					
+// 			 	    				}  
+// 						 		}
+// 						 	});
+				
+// 			  }
+// 			});
 		
 			$('#issueWizard').easyWizard({				
 				prevButton: '&laquo; Anterior',
@@ -164,26 +213,17 @@ path:hover {
 					updateProgressBar($total, $index);
 				},
 			 	before: function(wizardObj, currentStepObj, nextStepObj) {
-			 		var step = currentStepObj.attr('data-step');
-			
-			        if(step == '1'){
-			        	
-// 			        	$("#issueWizard").valid();
-var v = validateAddress();
-alert(v);
-			        	
-// 			        		 easyWizardMethods.goToStep.call(wizardObj, 1);
-			        
-			        	
-// 			        	else{
-// 			        		 easyWizardMethods.goToStep.call(wizardObj, 2);
-// 			        	}
-			    		  
-			    		
-			    	   return false;
-			       }
-			    	 
-			    },
+			 		if( !$("#issueWizard").valid() ){
+			 			return false;
+			 		}
+					
+// 			        		geocodeAddress(function(value) { isValid = value; });				    		
+// 				    		setTimeout(2000); //wait for geocoder to return value	
+				    		
+// 				    		if(!isValid)
+// 				    			 easyWizardMethods.goToStep.call(wizardObj, 1);
+	        	
+			 	}
 			});
 
 			
@@ -217,7 +257,7 @@ alert(v);
 		
 			
 			 // initialize tooltipster on form input elements
-		    $('#issueWizard input[type="text"], #issueForm textarea').tooltipster({ 		    
+		    $('#issueWizard input[type="text"], #issueWizard textarea').tooltipster({ 		    
 		    	animation: 'fade',		
 		    	delay: 200,
 		    	interactive: true,
@@ -242,24 +282,10 @@ alert(v);
 			      $("#alertdiv").fadeOut('slow');					 
 			    }, 3000);
 			}  
-			
-			
-
-
-
-// 			$("#btnIssueSubmit").click(function(e) {
-// 				e.preventDefault(); 
-//             	var $issueForm = $("#issueForm");            	
-            		 
-//             		if($("#issueStep1").css("display") == 'block'){ 
-            			
-//             			validateAddress();
-            		
-//                 	}   
-//             });
+	
 
 				$("#issueWizard").validate({
-					ignore: '.step .active ',
+						ignore: ".inactive",
 						rules: {
 				 			address: { required: true},					 		
 				 			locality: { required: true},		
@@ -290,68 +316,11 @@ alert(v);
 
 				});
 			
-// 				$("#issueForm").formwizard({ 				 	
-// 				 	focusFirstInput : true,
-// 				 	textSubmit: 'Enviar',
-// 				 	textNext: 'Siguiente',
-// 				 	textBack: 'Anterior',				
-// 				 	formPluginEnabled: true,
-// 				 	validationEnabled: true,
-// 				 	disableUIStyles: true,
-// 				 	remoteAjax : { "issueStep3" : { 
-// 				 		url: "./reportIssue.html", 			 		
-// 				 		dataType : 'json',
-// 				 		success : function(alertStatus){
-// 				 			alert("en el submit");
-// 				 			if(alertStatus.result){
-// 	 	    					setTimeout(function () {
-// 	 	    						window.location.reload;
-// 	 	    					}, 400);	
-// 	 	    				}
-// 	 	    				else{	 	    			
-// 	 	    					bootbox.alert(alertStatus.message);	 	    										 	    					
-// 	 	    				}  
-// 				 		}
-// 				 	}},
-// 					formOptions:{
-// 						beforeSubmit: function(){validateAddress()}
-// 					},
-// 				 	validationOptions : {				 		
-				 		
-// 				 		rules: {
-// 				 			address: { required: true},					 		
-// 				 			locality: { required: true},		
-// 				 			administrative_area_level_1: { required: true},		
-// 		 				    title: { required: true, maxlength: 50},				    
-// 		 				    description: { required: true, maxlength: 300}							
-// 		 				  },
-// 		 			    messages: {
-// 		 			    	  address: { required : 'Este campo es requerido.'},			 			    
-// 		 			    	  locality: { required : 'Este campo es requerido.' },	
-// 		 			    	  administrative_area_level_1: { required : 'Este campo es requerido.' },
-// 		 					  title: { required : 'Este campo es requerido.', maxlength: 'El m&aacute;ximo es de 50 caracteres.' },
-// 		 					  description: { required : 'Este campo es requerido.' , maxlength: 'El m&aacute;ximo es de 300 caracteres'}
-		 					
-// 		 				},
-// 		 				highlight: function (element) { 
-// 		 			        $(element).addClass("error"); 
-// 		 			    },
-			 	    	
-// 		 			    unhighlight: function (element) { 
-// 		 			        $(element).removeClass("error"); 
-// 		 			    },
-				
-// 		 		 		errorPlacement: function (error, element) {
-// 		 		            $(element).tooltipster('update', $(error).text());
-// 		 		            $(element).tooltipster('show');				        
-// 		  		        }
-// 				 	}
-// 				});//wizard
 			
-			function initBlokUI(){
-				
+			
+			function initBlokUI(){				
 					
-				$("#issueForm").block({ 
+				$("#issueFormWizard").block({ 
 	                message: '<img src="resources/images/loader5.gif" />', 
 	                css: { 
 	                	border: 'none', 
@@ -437,8 +406,9 @@ alert(v);
 								            		$('.ajax_loading').hide(); 
 								            		
 								            		if (data.loggedIn) {						            			
-									                	 //$('#loginNav').load(location.href + " #loginNav > *");	
-									                	 window.location.reload();
+									                	 $('#loginNav').load(location.href + " #loginNav > *");	
+// 									                	 window.location.reload();
+									                	 return false;
 											          
 		 							                } else {							                
 									                    loginFailed(data);							                    

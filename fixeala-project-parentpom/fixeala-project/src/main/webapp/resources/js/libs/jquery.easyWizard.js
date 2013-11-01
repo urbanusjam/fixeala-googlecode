@@ -69,10 +69,10 @@
 							'height': '1px'
 						}).attr('data-step', step);
 
-						if(!index) {
-							$(this).addClass('active').css('height', '');
+						if(!index) {							
+								$(this).addClass('active').css('height', '');	
 						}
-
+					
 						stepText = thisSettings.stepsText.replace('{n}', '<span>'+step+'</span>');
 						stepText = stepText.replace('{t}', $(this).attr('data-step-title'));
 						$stepsHtml.append('<li'+(!index?' class="current"':'')+' data-step="'+step+'">'+stepText+'</li>');
@@ -138,10 +138,19 @@
 		},
 		goToStep : function(step) {
 			thisSettings = arrSettings[this.index()];
-
+			
 			$activeStep = this.find('.active');
 			$nextStep = this.find('.'+thisSettings.stepClassName+'[data-step="'+step+'"]');
 			currentStep = $activeStep.attr('data-step');
+			
+			
+			var array = this.find('.step');
+			
+			for(i = 0; i < array.length; i++){
+				if(!array[i].hasClass('active'))				
+					arrai[i].addClass('inactive');
+			}
+			
 
 			// Before callBack
 			thisSettings.before(this, $activeStep, $nextStep);
@@ -156,10 +165,10 @@
 			// Slide !
 			$activeStep.animate({
 				height: '1px'
-			}).removeClass('active');
+			}).removeClass('active').addClass('inactive');
 
-			$nextStep.css('height', '').addClass('active');
-
+			$nextStep.css('height', '').addClass('active').removeClass('inactive');
+			
 			this.find('.easyWizardWrapper').animate({
 				'margin-left': thisSettings.width * (step - 1) * -1
 			});
@@ -167,6 +176,8 @@
 			// Defines steps
 			this.find('.easyWizardSteps .current').removeClass('current');
 			this.find('.easyWizardSteps li[data-step="'+step+'"]').addClass('current');
+			
+			
 
 			// Define buttons
 			$paginationBloc = this.find('.easyWizardButtons');
