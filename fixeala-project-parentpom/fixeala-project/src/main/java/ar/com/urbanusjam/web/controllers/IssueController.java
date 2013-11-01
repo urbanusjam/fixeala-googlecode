@@ -138,7 +138,7 @@ public class IssueController {
 	 }
 	
 		
-	@RequestMapping(value="/reportIssue", method = RequestMethod.POST)
+	@RequestMapping(value="/reportIssue", produces = "application/json", method = RequestMethod.POST)
 	public @ResponseBody AlertStatus doReportIssue(@ModelAttribute("issue") IssueDTO issue, HttpServletRequest request){
 		
 		try {			
@@ -154,9 +154,9 @@ public class IssueController {
 					
 					UserDTO userDTO = new UserDTO();
 					userDTO.setUsername(userDB.getUsername());					
-					List<String> authorities = new ArrayList<String>();
-					authorities.add("ROLE_USER");		
-					userDTO.setAuthorities(authorities);										
+//					List<String> authorities = new ArrayList<String>();
+//					authorities.add("ROLE_USER");		
+//					userDTO.setAuthorities(authorities);										
 //					Calendar calendar = Calendar.getInstance();
 //					issue.setDate((GregorianCalendar) calendar);
 					issue.setDate(new Date());
