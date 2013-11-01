@@ -15,7 +15,6 @@ var markers = [];
 
 var placeSearch, autocomplete;
 var component_form = {
-
   'neighborhood': 'short_name',
   'locality': 'long_name',
   'administrative_area_level_1': 'long_name'
@@ -23,8 +22,8 @@ var component_form = {
 
 $(document).ready(function(){	
 	
-	 var geocoder;	 
-		 
+	 var geocoder;	
+	 
 	 function initialize() {
 
         var mapOptions = {
@@ -124,17 +123,13 @@ $(document).ready(function(){
 	    });
 	    
 	   
-		
-        
-            
         //SET MARKER COORDINATES ON MAP CLICK
-        google.maps.event.addListener(map, 'click', function(e) {	 
-        	
+        google.maps.event.addListener(map, 'click', function(e) {	         	
         	if( $("#btnIssue").hasClass('active') ){
         		getAddressOnMapClick(e.latLng);
-        	}
-        
-        });     
+        	}        
+        });         
+       
 	       
 	    //DISPLAY MARKERS FROM DB
         loadMarkers(map);
@@ -380,7 +375,7 @@ function findProvincia (value) {
 
 
 
-function validateAddress(){
+function geocodeAddress(callback){
 	
 	 var address = $("#address").val();
 	 var neighborhood = $("#neighborhood").val();	 
@@ -401,40 +396,46 @@ function validateAddress(){
 			 country: "AR"			
 	 } 
 	
-	 var isValid = false;
-	 
 	 geocoder.geocode(geocoderRequest, function(results, status) { 
-		 
-//		 alert(results[0].geometry.location_type);
-		 
+ 
 		 //OK
 		 if (status == google.maps.GeocoderStatus.OK) {
 		        	
 		        	var location_type = results[0].geometry.location_type;
 		        	
-		        	if(location_type == "RANGE_INTERPOLATED" || location_type == "ROOFTOP"){
-		        	
-		        		 isValid = true;			        	
+		        	if(location_type == "RANGE_INTERPOLATED" || location_type == "ROOFTOP"){		
+//		        		 map.setCenter(results[0].geometry.location);
+//		                 var marker = new google.maps.Marker({
+//		                     map: map,
+//		                     position: results[0].geometry.location
+//		                 });
+		        		callback(true);
 		        	}			        	
 				        	
 		        	if(location_type == "APPROXIMATE"){		        		
-		        		bootbox.alert("No se hall&oacute; un resultado exacto. Espeficique mo&aacute;s datos, por favor.");	
-		        		
+		        		bootbox.alert("No se hall&oacute; un resultado exacto. Espeficique m&aacute;s datos.");
 		        	
 		        	}
 		        	
-//		        	if(location_type == "GEOMETRIC_CENTER"){
-//		        		if(hasAddressTypes(results))	
-//		        			return true;	        		
-//		        	}
+		        	if(location_type == "GEOMETRIC_CENTER"){
+		        		if(hasAddressTypes(results))	
+		        			callback(true);
+		        		else{
+		        			bootbox.alert("No se hall&oacute; un resultado exacto. Espeficique m&aacute;s datos.");	
+		        			
+		        		}
+		        			
+		        	}
 		        		
 		 }
-		//ZERO RESULTS
+		 
+		 //ZERO RESULTS
 		 if (status == google.maps.GeocoderStatus.ZERO_RESULTS) { 
-		        		bootbox.alert("No se encontraron resultados para la direcci&oacute;n sumninistrada.");	
-
-		   
-		 }       
+			 bootbox.alert("No se encontraron resultados para la direcci&oacute;n sumninistrada.");
+			
+		 }   		
+		 
+		 //OTHER
 		 if ( (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) 
 				 || (status == google.maps.GeocoderStatus.REQUEST_DENIED)
 				 || (status == google.maps.GeocoderStatus.INVALID_REQUEST)
@@ -442,23 +443,20 @@ function validateAddress(){
 
 	        	bootbox.alert("Ocurri&oacute; un error al validar la direcci&oacute;n. Intente de nuevo.");
 	        
-	     
 		 }
 		
 	 });//geocoder
-
+ 
 	
 } 
+
+function callback(value){return value;}
+
 
 function hasAddressTypes(results) {	
 	
 	var types = 0;
 	var sameField = 0;
-	
-//	var address = $("#address").val();
-//	var neighborhood = $("#neighborhood").val();	 
-//	var city = $("#locality").val();
-//	var province = $("#administrative_area_level_1").val();	 
 	
 	for (var i = 0; i < results[0].address_components.length; i++) {				
 		
@@ -487,13 +485,13 @@ function hasAddressTypes(results) {
 		 //provincia
          else if (addr.types[0] == ['administrative_area_level_1']){	                	
         	 types++;    
-         }
-		 
+         }		 
 	}    
 	
-	if(types == 4 || types == 5){alert("campos completos!"); return true;}
-	else{alert("faltan datos!"); return false;}
-	//return false;	
+	if(types == 4 || types == 5) 
+		return true;
+	else 
+		return false;
 }
  
  function listenMarker (marker, infowindow){
@@ -580,8 +578,8 @@ function hasAddressTypes(results) {
             			 position: results[0].geometry.location
             		}); 
         		 
-            		 google.maps.event.addListener(initMarker, 'dragend', function(e) {  
-            			 getAddressOnMapClick(e.latLng);             	  	 
+            		 google.maps.event.addListener(initMarker, 'dragend', function(e) {
+            				 getAddressOnMapClick(e.latLng); 
              	  	});  
 				}
 				
