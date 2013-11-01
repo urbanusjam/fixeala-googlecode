@@ -16,6 +16,11 @@
   	<put-attribute name="body" value="/pages/home.jsp" />
   </definition>
   
+   <definition name="home2" extends="base.layout">
+  	<put-attribute name="title" value="Fixeala" /> 
+  	<put-attribute name="body" value="/pages/home2.jsp" />
+  </definition>
+  
   <definition name="template2" extends="base.layout">
   	<put-attribute name="title" value="Fixeala" /> 
   	<put-attribute name="body" value="/pages/template2.jsp" />
