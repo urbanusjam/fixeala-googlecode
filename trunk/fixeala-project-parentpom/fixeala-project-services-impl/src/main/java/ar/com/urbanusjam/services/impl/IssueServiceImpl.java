@@ -66,9 +66,11 @@ public class IssueServiceImpl implements IssueService {
 
 	@Override
 	public void reportIssue(IssueDTO issueDTO) {
-		Area area = areaDAO.getAreaByName("Comuna 1"); //cambiar!!!!
+		Area area = areaDAO.getAreaById("1"); //cambiar!!!!
 		Issue issue = new Issue();
 		issue = this.convertTo(issueDTO);
+		User u = userDAO.loadUserByUsername(issueDTO.getUsername());
+		issue.setReporter(u);
 		issue.setAssignedArea(area);
 		asignarUsuarioDefault(issue);
 		issueDAO.saveIssue(issue);		
@@ -129,7 +131,7 @@ public class IssueServiceImpl implements IssueService {
 		//asignar USUARIO (ADMIN o MANAGER) según AREA
 		//obtener usuarios del area
 		List<User> users = new ArrayList<User>();
-		users = userDAO.findUsersByArea(issue.getAssignedArea().getNombre());
+		users = userDAO.findUsersByArea(String.valueOf(issue.getAssignedArea().getId()));
 				
 			for(User u : users){
 									
