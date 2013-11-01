@@ -41,6 +41,11 @@ public class LoginController {
 		return "home";
 	}
 	
+	@RequestMapping(value="/home2", method = RequestMethod.GET)
+	public String home2(){
+		return "home2";
+	}
+	
 	@RequestMapping(value="/index", method = RequestMethod.GET)
 	public String index(){
 		return "index";
