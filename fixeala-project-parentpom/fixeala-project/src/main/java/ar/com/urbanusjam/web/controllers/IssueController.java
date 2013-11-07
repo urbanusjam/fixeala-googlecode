@@ -28,6 +28,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.IssueService;
@@ -40,6 +42,7 @@ import ar.com.urbanusjam.services.utils.IssueStatus;
 import ar.com.urbanusjam.services.utils.Messages;
 import ar.com.urbanusjam.services.utils.Operation;
 import ar.com.urbanusjam.web.domain.AlertStatus;
+import ar.com.urbanusjam.web.utils.UploadFile;
 
 
 @Controller
@@ -138,8 +141,9 @@ public class IssueController {
 	 }
 	
 		
-	@RequestMapping(value="/reportIssue", produces = "application/json", method = RequestMethod.POST)
-	public @ResponseBody AlertStatus doReportIssue(@ModelAttribute("issue") IssueDTO issue, HttpServletRequest request){
+	@RequestMapping(value="/reportIssue", method = RequestMethod.POST)
+	public @ResponseBody AlertStatus doReportIssue(@ModelAttribute("issueForm") IssueDTO issue,
+			@RequestParam("fileUpload") CommonsMultipartFile uploadFile, HttpServletRequest request){
 		
 		try {			
 				User user =  getCurrentUser(SecurityContextHolder.getContext().getAuthentication());
