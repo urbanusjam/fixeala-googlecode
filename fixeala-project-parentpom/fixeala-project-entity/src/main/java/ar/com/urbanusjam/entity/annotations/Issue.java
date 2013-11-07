@@ -71,6 +71,9 @@ public class Issue implements Serializable  {
 	@Column(name = "DESCRIPTION")
 	private String description;
 	
+	@Column(name = "STATUS")
+	private String status;
+	
 	@OneToOne
 	@JoinColumn(name = "ID_ASSIGNED_OFFICIAL")
 	private User assignedOfficial;
@@ -93,8 +96,9 @@ public class Issue implements Serializable  {
 	)
 	private Collection<Tag> tagsList;
 	
-	@Column(name = "STATUS")
-	private String status;
+	
+	@OneToMany(mappedBy="issue", fetch = FetchType.EAGER, cascade = CascadeType.ALL)  
+	private Set<Contenido> contenidos;
 	
 //	@OneToMany(mappedBy = "issue")  
 //	private Collection<Comment> comments;
