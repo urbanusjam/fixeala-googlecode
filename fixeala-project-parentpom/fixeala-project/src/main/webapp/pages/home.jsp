@@ -152,68 +152,26 @@
 <!-- 					</form> -->
 
 
-						<form id="issueWizard" class="form-issue form-horizontal" style="overflow:hidden;">
+
+	<!-- EASY WIZARD -->
+<!-- 						<form id="issueWizard" enctype="multipart/form-data" method="POST" class="form-issue form-horizontal" style="overflow:hidden;"> -->
 							
-							<section id="issueStep1" class="step" data-step-title="Localización">													
-									<input type="hidden" id="latitude" name="latitude"  />
-									<input type="hidden" id="longitude" name="longitude" />													
-									<input type="text" id="address" name="address" onfocus="geolocate()" autocomplete="off" placeholder="Dirección (calle y altura)" />			
-									<input type="text" id="neighborhood" name="neighborhood" placeholder="Barrio (opcional)"/>										
-									<input type="text" id="locality" name="city" placeholder="Ciudad" />		
-									<input type="text" id="administrative_area_level_1" name="province" placeholder="Provincia"/>							
-							</section>
-							
-							<section id="issueStep2" class="step" data-step-title="Detalles">
-								<input type="text" id="title" name="title" placeholder="T&iacute;tulo"/>
-								<textarea rows="5" id="description" name="description" placeholder="Descripci&oacute;n..."></textarea>	
-							</section>
-							
-							<section id="issueStep3" class="step" data-step-title="Imagen">	
-															<div class="fileupload fileupload-new" data-provides="fileupload">
-									<div class="fileupload-new thumbnail" style="width: 304px; height: 150px;">
-										<img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=no+image" />
-									</div>
-									<div class="fileupload-preview fileupload-exists thumbnail" style="height: 150px;min-width:300px;max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-									<div>
-										<span class="btn btn-file">
-											<span class="fileupload-new"><i class="icon-plus"></i>&nbsp;&nbsp;Seleccionar imagen</span>
-											<span class="fileupload-exists"><i class="icon-refresh"></i>&nbsp;&nbsp;Cambiar</span>
-											<input type="file" />
-										</span>
-										<a href="#" class="btn fileupload-exists" data-dismiss="fileupload"><i class="icon-trash"></i>&nbsp;&nbsp; Quitar</a>
-									</div>
-								</div>						
-								<ul id="eventTags"></ul>
-							</section>
-						
-					</form>
-					
-					
-<!-- 					<form id="issueWizard" method="POST" class="form-issue form-horizontal"> -->
-							
-<!-- 							<div id="bar" class="progress progress-info progress-striped active" style="width:316px; margin-bottom:25px"> -->
-<!-- 	  							<div class="bar"></div> -->
-<!-- 							</div> -->
-					
-<!-- 							<fieldset title="1. Ubicación">	 -->
-<!-- 							<legend></legend>												 -->
+<!-- 							<section id="issueStep1" class="step" data-step-title="Localización">													 -->
 <!-- 									<input type="hidden" id="latitude" name="latitude"  /> -->
 <!-- 									<input type="hidden" id="longitude" name="longitude" />													 -->
 <!-- 									<input type="text" id="address" name="address" onfocus="geolocate()" autocomplete="off" placeholder="Dirección (calle y altura)" />			 -->
 <!-- 									<input type="text" id="neighborhood" name="neighborhood" placeholder="Barrio (opcional)"/>										 -->
 <!-- 									<input type="text" id="locality" name="city" placeholder="Ciudad" />		 -->
 <!-- 									<input type="text" id="administrative_area_level_1" name="province" placeholder="Provincia"/>							 -->
-<!-- 							</fieldset> -->
+<!-- 							</section> -->
 							
-<!-- 							<fieldset title="2. Detalles"> -->
-<!-- 							<legend></legend>				 -->
+<!-- 							<section id="issueStep2" class="step" data-step-title="Detalles"> -->
 <!-- 								<input type="text" id="title" name="title" placeholder="T&iacute;tulo"/> -->
 <!-- 								<textarea rows="5" id="description" name="description" placeholder="Descripci&oacute;n..."></textarea>	 -->
-<!-- 							</fieldset> -->
+<!-- 							</section> -->
 							
-<!-- 							<fieldset title="3. Archivo">	 -->
-<!-- 							<legend></legend>				 -->
-<!-- 									<div class="fileupload fileupload-new" data-provides="fileupload"> -->
+<!-- 							<section id="issueStep3" class="step" data-step-title="Imagen">	 -->
+<!-- 								<div class="fileupload fileupload-new" data-provides="fileupload"> -->
 <!-- 									<div class="fileupload-new thumbnail" style="width: 304px; height: 150px;"> -->
 <!-- 										<img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=no+image" /> -->
 <!-- 									</div> -->
@@ -222,15 +180,64 @@
 <!-- 										<span class="btn btn-file"> -->
 <!-- 											<span class="fileupload-new"><i class="icon-plus"></i>&nbsp;&nbsp;Seleccionar imagen</span> -->
 <!-- 											<span class="fileupload-exists"><i class="icon-refresh"></i>&nbsp;&nbsp;Cambiar</span> -->
-<!-- 											<input type="file" /> -->
+<!-- 											<input type="file" name="file" id="file" /> -->
 <!-- 										</span> -->
 <!-- 										<a href="#" class="btn fileupload-exists" data-dismiss="fileupload"><i class="icon-trash"></i>&nbsp;&nbsp; Quitar</a> -->
 <!-- 									</div> -->
 <!-- 								</div>						 -->
 <!-- 								<ul id="eventTags"></ul> -->
-<!-- 							</fieldset> -->
-<!-- 						<input type="submit" class="finish"/> -->
+<!-- 							</section> -->
+						
 <!-- 					</form> -->
+					
+					
+					
+					
+					
+				<!-- STEPY WIZARD -->	
+					
+					<form id="issueWizard" method="POST" class="form-issue form-horizontal">
+							
+							<div id="bar" class="progress progress-info progress-striped active" style="width:316px; margin-bottom:25px">
+	  							<div class="bar"></div>
+							</div>
+					
+							<fieldset title="1. Ubicación">	
+							<legend></legend>												
+									<input type="hidden" id="latitude" name="latitude"  />
+									<input type="hidden" id="longitude" name="longitude" />													
+									<input type="text" id="address" name="address" onfocus="geolocate()" autocomplete="off" placeholder="Dirección (calle y altura)" />			
+									<input type="text" id="neighborhood" name="neighborhood" placeholder="Barrio (opcional)"/>										
+									<input type="text" id="locality" name="city" placeholder="Ciudad" />		
+									<input type="text" id="administrative_area_level_1" name="province" placeholder="Provincia"/>							
+							</fieldset>
+							
+							<fieldset title="2. Detalles">
+							<legend></legend>				
+								<input type="text" id="title" name="title" placeholder="T&iacute;tulo"/>
+								<textarea rows="5" id="description" name="description" placeholder="Descripci&oacute;n..."></textarea>	
+							</fieldset>
+							
+							<fieldset title="3. Archivo">	
+							<legend></legend>				
+									<div class="fileupload fileupload-new" data-provides="fileupload">
+									<div class="fileupload-new thumbnail" style="width: 304px; height: 150px;">
+										<img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=no+image" />
+									</div>
+									<div class="fileupload-preview fileupload-exists thumbnail" style="height: 150px;min-width:300px;max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+									<div>
+										<span class="btn btn-file">
+											<span class="fileupload-new"><i class="icon-plus"></i>&nbsp;&nbsp;Seleccionar imagen</span>
+											<span class="fileupload-exists"><i class="icon-refresh"></i>&nbsp;&nbsp;Cambiar</span>
+											<input type="file" id="file" name="file" />
+										</span>
+										<a href="#" class="btn fileupload-exists" data-dismiss="fileupload"><i class="icon-trash"></i>&nbsp;&nbsp; Quitar</a>
+									</div>
+								</div>						
+								<ul id="eventTags"></ul>
+							</fieldset>
+						<input type="submit" class="finish"/>
+					</form>
 				
 					
 				

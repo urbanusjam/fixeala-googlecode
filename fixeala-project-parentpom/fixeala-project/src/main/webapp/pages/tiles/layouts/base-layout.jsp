@@ -35,12 +35,13 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/select2.js"></script>
 <%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-sortable.js"></script>  --%>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-rowlink.js"></script>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.fileupload.js"></script> 
   	
   	<!-- Fuel UX CDN link to responsive css -->
         <link href="http://www.fuelcdn.com/fuelux-imh/2.3/css/fuelux-responsive.css" rel="stylesheet" />
        
   	<link rel="stylesheet" href="https://fuelcdn.com/fuelux/2.3/css/fuelux.min.css">
-<script src="https://fuelcdn.com/fuelux/2.3/loader.min.js"></script>
+	<script src="https://fuelcdn.com/fuelux/2.3/loader.min.js"></script>
 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-contextmenu.js"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-fileupload.js"></script>
@@ -149,15 +150,15 @@ path:hover {
 				var $percent = ($current/$total) * 100;
 				$('.bar').css({width:$percent+'%'});
 			}
-		
 			
-// 			$('#issueWizard').stepy({
-// 				ignore: ':hidden ',
-// 				backLabel :  '&laquo; Anterior',
-// 				nextLabel : 'Siguiente &raquo;', 
-// 				legend:       false,
-// 				transition : 'fade',
-// 				next: function(index) {
+			
+			$('#issueWizard').stepy({
+				ignore: ':hidden ',
+				backLabel :  '&laquo; Anterior',
+				nextLabel : 'Siguiente &raquo;', 
+				legend:       false,
+				transition : 'fade',
+				next: function(index) {
 // 				    if (!$('#issueWizard').valid()) {				     
 // 				      return false;
 // 				    }
@@ -169,15 +170,68 @@ path:hover {
 // 				    		return false;
 // 				    	}
 // 				    	else
-// 				    		updateProgressBar(3, index-1);
+				    		updateProgressBar(3, index-1);
 // 				    }
-// 				},
-// 				back: function(index) {
-// 					updateProgressBar(3, index-1);
+				},
+				back: function(index) {
+					updateProgressBar(3, index-1);
 				
-// 				}, finish: function(index) {
+				}, finish: function(index) {
+
+// 		                var formData = new FormData($("#issueWizard")[0]);
+		                var formData = new FormData();
+		                formData.append("issueForm", $("#issueWizard")[0]);
+		                formData.append("fileUpload", $('#file')[0].files[0] );
+		                
+						$.ajax({ 
+						 		url: "http://localhost:8080/fixeala/reportIssue.html", 		
+						 		type: "POST",						 				 	
+						 		data : formData,
+						 		cache: false,
+						 		contentType: false,
+						        processData: false,	
+						        mimeType:"multipart/form-data",
+						 		success : function(alertStatus){
+						 			alert("en el submit");
+						 		},						 		 
+						 		error: function(jqXHR, exception) {
+					                   if (jqXHR.status === 0) {
+					                       alert('Not connect.\n Verify Network.');
+					                   } else if (jqXHR.status == 404) {
+					                       alert('Requested page not found. [404]');
+					                   } else if (jqXHR.status == 500) {
+					                       alert('Internal Server Error [500].');
+					                   } else if (exception === 'parsererror') {
+					                       alert('Requested JSON parse failed.');
+					                   } else if (exception === 'timeout') {
+					                       alert('Time out error.');
+					                   } else if (exception === 'abort') {
+					                       alert('Ajax request aborted.');
+					                   } else {
+					                       alert('Uncaught Error.\n' + jqXHR.responseText);
+					                   }
+					               }
+						 	});
+				
+			  }
+			});
+			
+		
+// 			$('#issueWizard').easyWizard({				
+// 				prevButton: '&laquo; Anterior',
+// 				nextButton: 'Siguiente &raquo;', 
+// 				submitButtonText: 'Enviar',	
+// 				submitButtonClass: 'btn btn-success',
+// 				buttonsClass: 'btn btn-primary',			
+// 				after: function(wizardObj, prevStepObj, currentStepObj) {
+// 					var $total = $("ul.easyWizardSteps ").find('li').length;
+// 					var $index = currentStepObj.attr("data-step");		
+// 					updateProgressBar($total, $index);
 					
-					
+// 					if(currentStepObj == 3){
+						
+// 						alert(currentStepObj);
+						
 // 						$.ajax({ 
 // 						 		url: "./reportIssue.html", 		
 // 						 		type: "POST",
@@ -197,34 +251,22 @@ path:hover {
 // 			 	    				}  
 // 						 		}
 // 						 	});
-				
-// 			  }
-// 			});
-		
-			$('#issueWizard').easyWizard({				
-				prevButton: '&laquo; Anterior',
-				nextButton: 'Siguiente &raquo;', 
-				submitButtonText: 'Enviar',	
-				submitButtonClass: 'btn btn-success',
-				buttonsClass: 'btn btn-primary',			
-				after: function(wizardObj, prevStepObj, currentStepObj) {
-					var $total = $("ul.easyWizardSteps ").find('li').length;
-					var $index = currentStepObj.attr("data-step");		
-					updateProgressBar($total, $index);
-				},
-			 	before: function(wizardObj, currentStepObj, nextStepObj) {
-			 		if( !$("#issueWizard").valid() ){
-			 			return false;
-			 		}
+						
+// 					}
+// 				},
+// 			 	before: function(wizardObj, currentStepObj, nextStepObj) {
+// 			 		if( !$("#issueWizard").valid() ){
+// 			 			return false;
+// 			 		}
 					
-// 			        		geocodeAddress(function(value) { isValid = value; });				    		
-// 				    		setTimeout(2000); //wait for geocoder to return value	
+// // 			        		geocodeAddress(function(value) { isValid = value; });				    		
+// // 				    		setTimeout(2000); //wait for geocoder to return value	
 				    		
-// 				    		if(!isValid)
-// 				    			 easyWizardMethods.goToStep.call(wizardObj, 1);
+// // 				    		if(!isValid)
+// // 				    			 easyWizardMethods.goToStep.call(wizardObj, 1);
 	        	
-			 	}
-			});
+// 			 	}
+// 			});
 
 			
 			$(function(){

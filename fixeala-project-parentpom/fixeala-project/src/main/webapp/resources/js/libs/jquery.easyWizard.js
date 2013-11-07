@@ -142,16 +142,7 @@
 			$activeStep = this.find('.active');
 			$nextStep = this.find('.'+thisSettings.stepClassName+'[data-step="'+step+'"]');
 			currentStep = $activeStep.attr('data-step');
-			
-			
-			var array = this.find('.step');
-			
-			for(i = 0; i < array.length; i++){
-				if(!array[i].hasClass('active'))				
-					arrai[i].addClass('inactive');
-			}
-			
-
+		
 			// Before callBack
 			thisSettings.before(this, $activeStep, $nextStep);
 
