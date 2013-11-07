@@ -20,6 +20,10 @@
 		<property name="tagDAO" ref="tagDAO" />
 	</bean>
 	
+	<bean name="contenidoService" class="ar.com.urbanusjam.services.impl.ContenidoServiceImpl" >
+		<property name="contenidoDAO" ref="contenidoDAO" />		
+	</bean>	
+	
 	<!-- Remember Me Service -->		
 	<bean id="rememberMeServices" class="org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices" >
 		 <property name="key" value="fixealaRememberMeKey" />

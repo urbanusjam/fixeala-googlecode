@@ -24,7 +24,7 @@ import ar.com.urbanusjam.services.UserService;
 import ar.com.urbanusjam.services.dto.UserDTO;
 import ar.com.urbanusjam.web.utils.Message;
 import ar.com.urbanusjam.web.utils.StatusResponse;
-import ar.com.urbanusjam.web.utils.UploadedFile;
+import ar.com.urbanusjam.web.utils.UploadFile;
 
 @Controller
 @RequestMapping(value="/template")
@@ -49,46 +49,6 @@ public class FileUploadController {
 	public @ResponseBody StatusResponse message(@RequestBody Message message) {	
 		return new StatusResponse(true, "Message received");
 	}
-	
-	@RequestMapping(value="/file", method=RequestMethod.POST)
-	public @ResponseBody List<UploadedFile> upload(
-	@RequestParam("file") MultipartFile file, HttpServletRequest request) {
-	
-		List<UploadedFile> uploadedFiles = new ArrayList<UploadedFile>();
-		UploadedFile u = new UploadedFile(file.getOriginalFilename(),
-		Long.valueOf(file.getSize()).intValue(),
-		this.pathImagenesTemporales+file.getOriginalFilename());	
-		   
-		String fileName =this.pathImagenesTemporales+file.getOriginalFilename();
-
-		File dir = new File(this.pathImagenesTemporales+file.getOriginalFilename());
-        if(!dir.exists()) {
-            dir.mkdirs();
-        }
-         File multipartFile = new File(fileName);
-		 try {
-			file.transferTo(multipartFile);
-			User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			
-			UserDTO userDTO = new UserDTO();
-			userDTO.setUsername(user.getUsername());
-			//userDTO.setProfilePic(file.getOriginalFilename());			
-			userDTO.setNeighborhood("Congreso");			
-			userDTO.setEmail("guest@gmail.com");		
-			
-			userService.updateAccount(userDTO);
-			
-		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-		uploadedFiles.add(u);
-		return uploadedFiles;
-	}
-	
 	
 	
     

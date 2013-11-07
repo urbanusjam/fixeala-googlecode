@@ -25,5 +25,7 @@
     <bean id="areaDAO" class="ar.com.urbanusjam.dao.impl.AreaDAOImpl" parent="hibernateParent" />
     
     <bean id="tagDAO" class="ar.com.urbanusjam.dao.impl.TagDAOImpl" parent="hibernateParent" /> 
+    
+    <bean id="contenidoDAO" class="ar.com.urbanusjam.dao.impl.ContenidoDAOImpl" parent="hibernateParent" /> 
               
 </beans>
