@@ -8,6 +8,9 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+
 @XmlRootElement(name = "issue")
 public class IssueDTO implements Serializable {
 
@@ -24,7 +27,6 @@ public class IssueDTO implements Serializable {
 	private String longitude;
 	private String title;
 	private String description;
-	private String file;	
 	private Date date;	
 	private String area;
 	private AreaDTO assignedArea;
@@ -35,6 +37,9 @@ public class IssueDTO implements Serializable {
 	private List<CommentDTO> comentarios = new ArrayList<CommentDTO>();
 	private String status;
 	private String statusCss;
+	private CommonsMultipartFile file;
+
+	
 
 
 	public Long getId() {
@@ -99,15 +104,6 @@ public class IssueDTO implements Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
-	public String getFile() {
-		return file;
-	}
-	
-	public void setFile(String file) {
-		this.file = file;
-	}
-	
 	
 	public String getArea() {
 		return area;
@@ -211,6 +207,14 @@ public class IssueDTO implements Serializable {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+	
+	public CommonsMultipartFile getFile() {
+		return file;
+	}
+
+	public void setFile(CommonsMultipartFile file) {
+		this.file = file;
 	}
 
 	public String getFormattedDate(){		
