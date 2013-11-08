@@ -196,7 +196,7 @@
 					
 				<!-- STEPY WIZARD -->	
 					
-					<form id="issueWizard" method="POST" class="form-issue form-horizontal">
+					<form id="issueWizard" enctype="multipart/form-data" method="POST" class="form-issue form-horizontal">
 							
 							<div id="bar" class="progress progress-info progress-striped active" style="width:316px; margin-bottom:25px">
 	  							<div class="bar"></div>
@@ -236,7 +236,7 @@
 								</div>						
 								<ul id="eventTags"></ul>
 							</fieldset>
-						<input type="submit" class="finish"/>
+						<input id="submitIssue" type="submit" class="finish"/>
 					</form>
 				
 					
@@ -342,5 +342,5 @@
 		 
      </div>
       
-	
+	</div>
 	</div><!-- /CONTENT -->

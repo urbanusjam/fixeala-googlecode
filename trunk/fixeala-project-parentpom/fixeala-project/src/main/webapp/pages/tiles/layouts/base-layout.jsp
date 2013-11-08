@@ -143,6 +143,47 @@ path:hover {
 			$(".finish").addClass("btn btn-success");
 			
 			var isValid = false;
+			
+			$("#submitIssue").click(function(e){
+				
+				e.preventDefault();
+				
+				var form = document.getElementById('issueWizard');
+				var fileInput = document.getElementById('file');
+				var file = fileInput.files[0];
+				var formData = new FormData();
+				formData.append('issueForm', form);
+				formData.append('fileUpload', file);
+	                
+					$.ajax({ 
+					 		url: "http://localhost:8080/fixeala/reportIssue.html", 		
+					 		type: "POST",						 				 	
+					 		data : formData,
+					 		contentType: false,
+					        processData: false,	
+					 		success : function(alertStatus){
+					 			alert(alertStatus.message);
+					 		},						 		 
+					 		error: function(jqXHR, exception) {
+				                   if (jqXHR.status === 0) {
+				                       alert('Not connect.\n Verify Network.');
+				                   } else if (jqXHR.status == 404) {
+				                       alert('Requested page not found. [404]');
+				                   } else if (jqXHR.status == 500) {
+				                       alert('Internal Server Error [500].');
+				                   } else if (exception === 'parsererror') {
+				                       alert('Requested JSON parse failed.');
+				                   } else if (exception === 'timeout') {
+				                       alert('Time out error.');
+				                   } else if (exception === 'abort') {
+				                       alert('Ajax request aborted.');
+				                   } else {
+				                       alert('Uncaught Error.\n' + jqXHR.responseText);
+				                   }
+				               }
+					 	});
+			
+			});
 				
 			function updateProgressBar(navItems, stepIndex){
 				var $total = navItems;		
@@ -177,42 +218,8 @@ path:hover {
 					updateProgressBar(3, index-1);
 				
 				}, finish: function(index) {
-
-// 		                var formData = new FormData($("#issueWizard")[0]);
-		                var formData = new FormData();
-		                formData.append("issueForm", $("#issueWizard")[0]);
-		                formData.append("fileUpload", $('#file')[0].files[0] );
-		                
-						$.ajax({ 
-						 		url: "http://localhost:8080/fixeala/reportIssue.html", 		
-						 		type: "POST",						 				 	
-						 		data : formData,
-						 		cache: false,
-						 		contentType: false,
-						        processData: false,	
-						        mimeType:"multipart/form-data",
-						 		success : function(alertStatus){
-						 			alert("en el submit");
-						 		},						 		 
-						 		error: function(jqXHR, exception) {
-					                   if (jqXHR.status === 0) {
-					                       alert('Not connect.\n Verify Network.');
-					                   } else if (jqXHR.status == 404) {
-					                       alert('Requested page not found. [404]');
-					                   } else if (jqXHR.status == 500) {
-					                       alert('Internal Server Error [500].');
-					                   } else if (exception === 'parsererror') {
-					                       alert('Requested JSON parse failed.');
-					                   } else if (exception === 'timeout') {
-					                       alert('Time out error.');
-					                   } else if (exception === 'abort') {
-					                       alert('Ajax request aborted.');
-					                   } else {
-					                       alert('Uncaught Error.\n' + jqXHR.responseText);
-					                   }
-					               }
-						 	});
 				
+					
 			  }
 			});
 			

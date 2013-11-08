@@ -2,23 +2,24 @@ package ar.com.urbanusjam.web.utils;
 
 import java.io.Serializable;
 
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 public class UploadFile implements Serializable {
 
 	private static final long serialVersionUID = -38331060124340967L;
-	private CommonsMultipartFile fileData;
+	private MultipartFile file;
 	
 	public UploadFile() {
 	
 	}
 
-	public CommonsMultipartFile getFileData() {
-		return fileData;
+	public MultipartFile getFile() {
+		return file;
 	}
 
-	public void setFileData(CommonsMultipartFile fileData) {
-		this.fileData = fileData;
+	public void setFile(MultipartFile file) {
+		this.file = file;
 	}
 	
 	

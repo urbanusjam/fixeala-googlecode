@@ -1,5 +1,10 @@
 package ar.com.urbanusjam.web.controllers;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -140,10 +145,22 @@ public class IssueController {
 		return "issues";
 	 }
 	
+	
+	@RequestMapping(value="/uploadFile", method = RequestMethod.POST)
+	public @ResponseBody String doUpload(@RequestParam("fileUpload") MultipartFile fileUpload, 
+			HttpServletRequest request){
+
+	
+	    String fileName = fileUpload.getOriginalFilename();
+	    
+	    return fileName;
+	
+	}
+	
 		
 	@RequestMapping(value="/reportIssue", method = RequestMethod.POST)
 	public @ResponseBody AlertStatus doReportIssue(@ModelAttribute("issueForm") IssueDTO issue,
-			@RequestParam("fileUpload") CommonsMultipartFile uploadFile, HttpServletRequest request){
+			@RequestParam("fileUpload") MultipartFile file, HttpServletRequest request){
 		
 		try {			
 				User user =  getCurrentUser(SecurityContextHolder.getContext().getAuthentication());
@@ -155,6 +172,24 @@ public class IssueController {
 			
 				//user is logged-in
 				else{
+					
+					   InputStream inputStream = null;
+					   OutputStream outputStream = null;
+					   String fileName = file.getOriginalFilename();
+
+					   inputStream = file.getInputStream();
+
+					   File newFile = new File("/Users/Coripel/Documents/temp/files/" + fileName);
+					   if (!newFile.exists()) {
+					    newFile.createNewFile();
+					   }
+					   outputStream = new FileOutputStream(newFile);
+					   int read = 0;
+					   byte[] bytes = new byte[1024];
+
+					   while ((read = inputStream.read(bytes)) != -1) {
+					    outputStream.write(bytes, 0, read);
+					   }
 					
 					UserDTO userDTO = new UserDTO();
 					userDTO.setUsername(userDB.getUsername());					
@@ -195,16 +230,15 @@ public class IssueController {
 										//- todos resueltos, cerrados o archivados
 								//- tiene la menor cantidad de reclamos asignados
 							
-								
-							
-					
-			
 					
 					issueService.reportIssue(issue);			
 					
 					return new AlertStatus(true, "Su reclamo ha sido registrado.");			
 			}
-		}			
+				
+		} catch (IOException e) {
+			return new AlertStatus(false, "No se pudo cargar el archivo.");
+		  }
 		catch(AccessDeniedException e){
 			return new AlertStatus(false, "Debe estar logueado para ingresar un nuevo reclamo.");
 		}
