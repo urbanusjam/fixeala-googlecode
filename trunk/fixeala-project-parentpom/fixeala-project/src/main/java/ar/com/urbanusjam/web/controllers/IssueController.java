@@ -1,5 +1,7 @@
 package ar.com.urbanusjam.web.controllers;
 
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -15,6 +17,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 
 import org.omg.CORBA.portable.ValueOutputStream;
@@ -37,8 +40,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import ar.com.urbanusjam.entity.annotations.User;
+import ar.com.urbanusjam.services.ContenidoService;
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.UserService;
+import ar.com.urbanusjam.services.dto.ContenidoDTO;
+import ar.com.urbanusjam.services.dto.FileWrapperDTO;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.IssueHistorialRevisionDTO;
 import ar.com.urbanusjam.services.dto.IssueLicitacionDTO;
@@ -61,10 +67,29 @@ public class IssueController {
 	private UserService userService;
 	
 	@Autowired
+	private ContenidoService contenidoService;
+	
+	private static final String UPLOAD_DIRECTORY = "C:\\temp\\fixeala\\uploads\\tmp";
+	private static final long MAX_SIZE = 1024*1024*3;
+	private static final long MAX_WIDTH = 1080;
+	private static final long MAX_HEIGHT = 720;
+	private static final long MIN_WIDTH = 640;
+	private static final long MIN_HEIGHT = 480;
+	private FileWrapperDTO uploadedFile;
+	
+	@Autowired
 	@Qualifier(value = "fixealaAuthenticationManager")
 	protected AuthenticationManager fixealaAuthenticationManager;
-
 	
+	public FileWrapperDTO getUploadedFile() {
+		return uploadedFile;
+	}
+
+	public void setUploadedFile(FileWrapperDTO uploadedFile) {
+		this.uploadedFile = uploadedFile;
+	}
+
+
 	@RequestMapping(value="/issues/{issueToken}", method = RequestMethod.GET)
 	public String showIssuePage(Model model, @PathVariable("issueToken") String issueToken, 
 				HttpServletRequest request){
@@ -94,6 +119,15 @@ public class IssueController {
 				model.addAttribute("longitud", issue.getLongitude());	
 				model.addAttribute("historial", issue.getHistorial());
 				model.addAttribute("tags", issue.getTags());
+				
+				if(issue.getContenidos().size() > 0){
+					ContenidoDTO contenido = issue.getContenidos().get(0);	
+					InputStream stream = contenidoService.abrirContenidoRaw(contenido);
+					
+					model.addAttribute("image", contenido);
+					model.addAttribute("imageUrl", UPLOAD_DIRECTORY + contenido.getPathRelativo());
+					model.addAttribute("imageName", contenido.getNombre());
+				}
 				
 				model.addAttribute("cantidadRevisiones", issue.getHistorial().size());
 				model.addAttribute("cantidadLicitacion", issue.getLicitacion() != null ? 1 : 0);
@@ -145,22 +179,111 @@ public class IssueController {
 		return "issues";
 	 }
 	
+//	private Image getImage(InputStream inputStream) throws IOException
+//	{
+//		BufferedImage bufferedImage;
+//		bufferedImage = ImageIO.read(inputStream);
+//		Image image = new Image();
+//		image.setHeight(bufferedImage.getHeight());
+//		image.setWidth(bufferedImage.getWidth());
+//		
+//		return image;
+//	}
 	
-	@RequestMapping(value="/uploadFile", method = RequestMethod.POST)
-	public @ResponseBody String doUpload(@RequestParam("fileUpload") MultipartFile fileUpload, 
+	
+	@RequestMapping(value="/handleFileUpload", method = RequestMethod.POST)
+	public @ResponseBody AlertStatus doFileUpload(@RequestParam("fileUpload") MultipartFile file, 
 			HttpServletRequest request){
-
-	
-	    String fileName = fileUpload.getOriginalFilename();
+		
+		InputStream inputStream = null;
+	    OutputStream outputStream = null;
+	    ContenidoDTO contenido = new ContenidoDTO();
 	    
-	    return fileName;
+	  
+	    try {		
 	
+			if(file != null){
+				
+				String fileName = file.getOriginalFilename();			
+				inputStream = file.getInputStream();
+				
+				this.setUploadedFile(contenidoService.subirContenido(inputStream, fileName));
+				
+				/**
+			    BufferedImage image = ImageIO.read(file.getInputStream());
+			    Integer width = image.getWidth();
+			    Integer height = image.getHeight();
+				
+				//valido tamaño
+				if( file.getSize() > MAX_SIZE )
+					return new AlertStatus(false, "El archivo seleccionado supera el peso m&aacute;ximo (3 MB).");
+
+				//valido extensión (jpg, jpeg, png)
+				if(! ( extension.equals("jpg") || extension.equals("jpeg") || extension.equals("png") ) )
+					return new AlertStatus(false, "Los formatos de archivo permitidos son JPEG y PNG.");
+							
+				//valido dimensiones minimas
+				if( (width < MIN_WIDTH)
+						|| (height < MIN_HEIGHT)
+						|| (width < MIN_WIDTH && height < MIN_HEIGHT) )
+					return new AlertStatus(false, "La imagen debe tener una resolución mínima de 640 x 480 píxeles.");
+				
+				//valido dimensiones maximas
+				if( (width > MAX_WIDTH)
+						|| (height > MAX_HEIGHT)
+						|| (width > MAX_WIDTH && height > MAX_HEIGHT) )
+					return new AlertStatus(false, "La imagen debe tener una resolución máxima de 1080 x 720 píxeles.");
+			    
+			    File newFile = new File(PATH_UPLOAED_FILES + fileName);
+			    
+			    if (!newFile.exists()) 
+			    	newFile.createNewFile();
+			    
+			    outputStream = new FileOutputStream(newFile);
+			    
+			    int read = 0;
+			    byte[] bytes = new byte[1024];
+			    
+			    //file is saved in local directory
+			    while ((read = inputStream.read(bytes)) != -1) {
+			    	outputStream.write(bytes, 0, read);
+			    }	
+			    **/					    
+			  
+		
+			}
+			
+			return new AlertStatus(true, "Todo bien");
+	    
+	    } catch (IOException e) {
+	    	return new AlertStatus(false, "No se pudo cargar el archivo.");
+	    }
+	  
+	
+	}
+	
+	private String getNombreArchivoSinExtension(String nombreArchivo) {
+		String nombreArchivoSinExtension = "";
+		if (nombreArchivo.lastIndexOf(".") == -1)
+			nombreArchivoSinExtension = nombreArchivo;
+		else
+			nombreArchivoSinExtension = nombreArchivo.substring(0, nombreArchivo.lastIndexOf("."));
+		return nombreArchivoSinExtension;
+	}
+	
+	private String getExtensionArchivo(String fileName) {
+		String extension = "";
+
+		int i = fileName.lastIndexOf('.');
+		if (i > 0) {
+		    extension = fileName.substring(i+1);
+		}
+		return extension;
 	}
 	
 		
 	@RequestMapping(value="/reportIssue", method = RequestMethod.POST)
-	public @ResponseBody AlertStatus doReportIssue(@ModelAttribute("issueForm") IssueDTO issue,
-			@RequestParam("fileUpload") MultipartFile file, HttpServletRequest request){
+	public @ResponseBody AlertStatus doReportIssue(@ModelAttribute("issueForm") IssueDTO issue, HttpServletRequest request){
 		
 		try {			
 				User user =  getCurrentUser(SecurityContextHolder.getContext().getAuthentication());
@@ -172,32 +295,9 @@ public class IssueController {
 			
 				//user is logged-in
 				else{
-					
-					   InputStream inputStream = null;
-					   OutputStream outputStream = null;
-					   String fileName = file.getOriginalFilename();
-
-					   inputStream = file.getInputStream();
-
-					   File newFile = new File("/Users/Coripel/Documents/temp/files/" + fileName);
-					   if (!newFile.exists()) {
-					    newFile.createNewFile();
-					   }
-					   outputStream = new FileOutputStream(newFile);
-					   int read = 0;
-					   byte[] bytes = new byte[1024];
-
-					   while ((read = inputStream.read(bytes)) != -1) {
-					    outputStream.write(bytes, 0, read);
-					   }
-					
+									
 					UserDTO userDTO = new UserDTO();
 					userDTO.setUsername(userDB.getUsername());					
-//					List<String> authorities = new ArrayList<String>();
-//					authorities.add("ROLE_USER");		
-//					userDTO.setAuthorities(authorities);										
-//					Calendar calendar = Calendar.getInstance();
-//					issue.setDate((GregorianCalendar) calendar);
 					issue.setDate(new Date());
 					issue.setStatus(IssueStatus.OPEN);		
 					issue.setUser(userDTO);					
@@ -219,27 +319,27 @@ public class IssueController {
 					issue.setLicitacion(null);
 					issue.getHistorial().add(revision);
 					
-					//asignar AREA segun ubicacion geografica
 					
+				    //ContenidoDTO
+					FileWrapperDTO file = this.getUploadedFile();
+					String fileName = file.getFile().getName();
 					
-					//asignar USUARIO (ADMIN o MANAGER) según AREA
-						//obtener usuarios del area
-							//asignar si el usuario: 
-								//- no tiene reclamos asignados
-										//- lista de reclamos == 0
-										//- todos resueltos, cerrados o archivados
-								//- tiene la menor cantidad de reclamos asignados
-							
+					ContenidoDTO contenido = new ContenidoDTO();
+				    contenido.setNombre(this.getNombreArchivoSinExtension(fileName));
+				    contenido.setNombreFileSystem(fileName);	
+				    contenido.setPathRelativo("/"+ fileName);
+				    contenido.setAncho(file.getAncho());
+				    contenido.setAlto(file.getAlto());
+				    contenido.setTipo(this.getExtensionArchivo(fileName));
+				    contenido.setNroReclamo(String.valueOf(issue.getId()));
+				    issue.getContenidos().add(contenido);
 					
 					issueService.reportIssue(issue);			
 					
 					return new AlertStatus(true, "Su reclamo ha sido registrado.");			
-			}
-				
-		} catch (IOException e) {
-			return new AlertStatus(false, "No se pudo cargar el archivo.");
-		  }
-		catch(AccessDeniedException e){
+			}				
+		
+		}catch(AccessDeniedException e){
 			return new AlertStatus(false, "Debe estar logueado para ingresar un nuevo reclamo.");
 		}
 	

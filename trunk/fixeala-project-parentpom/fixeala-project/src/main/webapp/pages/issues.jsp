@@ -443,22 +443,17 @@
 						       ajaxOptions: {
 						           dataType: 'json' //assuming json response		
 						       },  						      
-						       success: function(data, config) {
-						    	
-						    	   if(data.result){						    		   
-
+						       success: function(data, config) {						    	
+						    	   if(data.result){		
 						    		   bootbox.alert(data.message); 
 						    			setTimeout(function () {	
 						    				var url = getIssueURL(id, newTitle, 'plain');
 							    			window.location.href= url;	
-						    			}, 500);						    			
-
-						    	   }
-						    	   
+						    			}, 500);		
+						    	   }						    	   
 						    	   else{
 						    		   bootbox.alert(data.message);		
-						    	   }
-						    	
+						    	   }						    	
 						       },
 						       error: function(errors) {
 						           var msg = '';
@@ -639,11 +634,18 @@
 	   
 		   <ul class="thumbnails">
 	  	   		<li  style="margin-left:0">
-	    			<a href="#" class="thumbnail">
-	      				<img src="${pageContext.request.contextPath}/resources/images/nopic.png" alt="">	    
-	    			</a>
-	    				<br>
-	    			<div class="caption"><button class="btn btn-info"><i class="icon-camera"></i>&nbsp;&nbsp;&nbsp;más fotos y videos</button>	</div>
+		  	   		<c:if test="${not empty image}">
+			  	   		<a href="#" class="thumbnail">
+		      				<img src="${imageUrl}" alt="${imageName}">	    
+		    			</a>
+		  	   		</c:if>
+		  	   		<c:if test="${empty image}">
+			  	   		<a href="#" class="thumbnail">
+		      				<img src="${pageContext.request.contextPath}/resources/images/nopic.png" alt="">	    
+		    			</a>
+		  	   		</c:if>
+	    			<br>
+	    			<div class="caption"><button class="btn btn-info"><i class="icon-camera"></i>&nbsp;&nbsp;&nbsp;mas fotos y videos</button>	</div>
 	  			</li>	
 		   </ul>
 	 	</div>
@@ -701,9 +703,8 @@
 						    </td>						   
 						 </tr>
 					</table>	 	
-	 	</div>
-	 	
-	 	
+	 		</div>
+	 		
 	 	
 	 	 </div><!-- fluid -->
 	 	 	

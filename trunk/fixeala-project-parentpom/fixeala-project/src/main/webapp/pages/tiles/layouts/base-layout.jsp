@@ -20,6 +20,14 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.mockjax.js"></script> 
   	<script type="text/javascript" src="http://code.jquery.com/jquery-migrate-1.1.0.js"></script>
     
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fileupload/jquery.fileupload.js"></script>	
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fileupload/jquery.fileupload-ui.js"></script>
+<%--     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fileupload/jquery.fileupload-validate.js"></script>	 --%>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fileupload/jquery.fileupload-process.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fileupload/jquery.ui.widget.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fileupload/jquery.iframe-transport.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/formToWizard.js"></script>
+    
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.geocomplete.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/d3.v3.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/d3.jsonp.js"></script>
@@ -29,19 +37,17 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/map.js"></script>
 <%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala-datagrid.js"></script> --%>
   		
-<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap.js"></script> --%>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-editable.js"></script>
 <%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-datetimepicker.js"></script> --%>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/select2.js"></script>
 <%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-sortable.js"></script>  --%>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-rowlink.js"></script>
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.fileupload.js"></script> 
   	
   	<!-- Fuel UX CDN link to responsive css -->
-        <link href="http://www.fuelcdn.com/fuelux-imh/2.3/css/fuelux-responsive.css" rel="stylesheet" />
-       
-  	<link rel="stylesheet" href="https://fuelcdn.com/fuelux/2.3/css/fuelux.min.css">
-	<script src="https://fuelcdn.com/fuelux/2.3/loader.min.js"></script>
+<!--     <link href="http://www.fuelcdn.com/fuelux-imh/2.3/css/fuelux-responsive.css" rel="stylesheet" />        -->
+<!--   	<link rel="stylesheet" href="https://fuelcdn.com/fuelux/2.3/css/fuelux.min.css"> -->
+<!-- 	<script src="https://fuelcdn.com/fuelux/2.3/loader.min.js"></script> -->
 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-contextmenu.js"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-fileupload.js"></script>
@@ -52,12 +58,11 @@
 <%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fuelux/datagrid.js"></script> --%>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fuelux/underscore.js"></script>
   	  	
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.easyWizard.js"></script>
+<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.easyWizard.js"></script> --%>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.stepy.js"></script>
 <%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.bootstrap.wizard.js"></script> --%>
 <%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.form.js"></script>   --%>
 <%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.form.wizard.js"></script>    --%>
-<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bbq.js"></script>    	 --%>
   	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/markerclusterer.js"></script>	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/markermanager.js"></script>	
@@ -80,8 +85,9 @@
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/DT_bootstrap.css" rel="stylesheet">
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.tagit.css" rel="stylesheet">
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/tagit.ui-zendesk.css" rel="stylesheet">	
+	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.fileupload.css" rel="stylesheet">
 	 
-<%-- 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/bootstrap.css" rel="stylesheet">    --%>
+	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/bootstrap.css" rel="stylesheet">   
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/bootstrap-combined.min.css" rel="stylesheet"> 
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/bootstrap-editable.css" rel="stylesheet"> 
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/bootstrap-sortable.css" rel="stylesheet">
@@ -143,26 +149,22 @@ path:hover {
 			$(".finish").addClass("btn btn-success");
 			
 			var isValid = false;
+
+			$("#fileupload").change(function(){				
 			
-			$("#submitIssue").click(function(e){
-				
-				e.preventDefault();
-				
-				var form = document.getElementById('issueWizard');
-				var fileInput = document.getElementById('file');
+				var fileInput = document.getElementById('fileupload');
 				var file = fileInput.files[0];
-				var formData = new FormData();
-				formData.append('issueForm', form);
+				var formData = new FormData();			
 				formData.append('fileUpload', file);
 	                
 					$.ajax({ 
-					 		url: "http://localhost:8080/fixeala/reportIssue.html", 		
+					 		url: "./handleFileUpload.html", 		
 					 		type: "POST",						 				 	
 					 		data : formData,
 					 		contentType: false,
 					        processData: false,	
 					 		success : function(alertStatus){
-					 			alert(alertStatus.message);
+// 					 			alert(alertStatus.message);
 					 		},						 		 
 					 		error: function(jqXHR, exception) {
 				                   if (jqXHR.status === 0) {
@@ -182,8 +184,9 @@ path:hover {
 				                   }
 				               }
 					 	});
-			
+				
 			});
+
 				
 			function updateProgressBar(navItems, stepIndex){
 				var $total = navItems;		
@@ -194,87 +197,64 @@ path:hover {
 			
 			
 			$('#issueWizard').stepy({
-				ignore: ':hidden ',
 				backLabel :  '&laquo; Anterior',
 				nextLabel : 'Siguiente &raquo;', 
 				legend:       false,
 				transition : 'fade',
+				block: true,
+				validate: true,
 				next: function(index) {
-// 				    if (!$('#issueWizard').valid()) {				     
-// 				      return false;
-// 				    }
-// 				    else{
-// 			    		geocodeAddress(function(value) { isValid = value; });				    		
-// 			    		setTimeout(2000); 		    	
-	
-// 				    	if(!isValid){
-// 				    		return false;
-// 				    	}
-// 				    	else
-				    		updateProgressBar(3, index-1);
-// 				    }
+				    updateProgressBar(3, index-1);
 				},
 				back: function(index) {
 					updateProgressBar(3, index-1);
 				
 				}, finish: function(index) {
-				
 					
+					var $form = $("#issueWizard");
+								
+					$.ajax({ 
+					 		url: "./reportIssue.html", 		
+					 		type: "POST",					 	
+					 		data : $form.serialize(),	
+					 		success : function(alertStatus){					 		
+					 			if(alertStatus.result){
+					 				
+					 				bootbox.alert(alertStatus.message, function() {
+					 					setTimeout(function () {
+			 	    						window.location.reload();
+			 	    					}, 400);	
+					 				});		 	    					
+		 	    				}
+		 	    				else{	 	    			
+		 	    					bootbox.alert(alertStatus.message);	 	    										 	    					
+		 	    				}  
+					 			
+					 		},
+					 		error: function(jqXHR, exception) {
+				                   if (jqXHR.status === 0) {
+				                       alert('Not connect.\n Verify Network.');
+				                   } else if (jqXHR.status == 404) {
+				                       alert('Requested page not found. [404]');
+				                   } else if (jqXHR.status == 500) {
+				                       alert('Internal Server Error [500].');
+				                   } else if (exception === 'parsererror') {
+				                       alert('Requested JSON parse failed.');
+				                   } else if (exception === 'timeout') {
+				                       alert('Time out error.');
+				                   } else if (exception === 'abort') {
+				                       alert('Ajax request aborted.');
+				                   } else {
+				                       alert('Uncaught Error.\n' + jqXHR.responseText);
+				                   }
+				               }
+					 	
+					 	});
+					
+					return false;
 			  }
 			});
 			
-		
-// 			$('#issueWizard').easyWizard({				
-// 				prevButton: '&laquo; Anterior',
-// 				nextButton: 'Siguiente &raquo;', 
-// 				submitButtonText: 'Enviar',	
-// 				submitButtonClass: 'btn btn-success',
-// 				buttonsClass: 'btn btn-primary',			
-// 				after: function(wizardObj, prevStepObj, currentStepObj) {
-// 					var $total = $("ul.easyWizardSteps ").find('li').length;
-// 					var $index = currentStepObj.attr("data-step");		
-// 					updateProgressBar($total, $index);
-					
-// 					if(currentStepObj == 3){
-						
-// 						alert(currentStepObj);
-						
-// 						$.ajax({ 
-// 						 		url: "./reportIssue.html", 		
-// 						 		type: "POST",
-// 						 		dataType: 'json',
-// 						 		contentType: 'application/json',
-// 						 		data : $("#issueWizard").serialize(),				 		
-// 						 		beforeSubmit: function(e){e.preventDefault();},
-// 						 		success : function(alertStatus){
-// 						 			alert("en el submit");
-// 						 			if(alertStatus.result){
-// 			 	    					setTimeout(function () {
-// 			 	    						window.location.reload;
-// 			 	    					}, 400);	
-// 			 	    				}
-// 			 	    				else{	 	    			
-// 			 	    					bootbox.alert(alertStatus.message);	 	    										 	    					
-// 			 	    				}  
-// 						 		}
-// 						 	});
-						
-// 					}
-// 				},
-// 			 	before: function(wizardObj, currentStepObj, nextStepObj) {
-// 			 		if( !$("#issueWizard").valid() ){
-// 			 			return false;
-// 			 		}
-					
-// // 			        		geocodeAddress(function(value) { isValid = value; });				    		
-// // 				    		setTimeout(2000); //wait for geocoder to return value	
-				    		
-// // 				    		if(!isValid)
-// // 				    			 easyWizardMethods.goToStep.call(wizardObj, 1);
-	        	
-// 			 	}
-// 			});
-
 			
 			$(function(){
 				function initToolbarBootstrapBindings() {
@@ -333,37 +313,35 @@ path:hover {
 			}  
 	
 
-				$("#issueWizard").validate({
-						ignore: ".inactive",
-						rules: {
-				 			address: { required: true},					 		
-				 			locality: { required: true},		
-				 			administrative_area_level_1: { required: true},		
-		 				    title: { required: true, maxlength: 50},				    
-		 				    description: { required: true, maxlength: 300}							
-		 				  },
-		 			    messages: {
-		 			    	  address: { required : 'Este campo es requerido.'},			 			    
-		 			    	  locality: { required : 'Este campo es requerido.' },	
-		 			    	  administrative_area_level_1: { required : 'Este campo es requerido.' },
-		 					  title: { required : 'Este campo es requerido.', maxlength: 'El m&aacute;ximo es de 50 caracteres.' },
-		 					  description: { required : 'Este campo es requerido.' , maxlength: 'El m&aacute;ximo es de 300 caracteres'}
-		 					
-		 				},
-		 				highlight: function (element) { 
-		 			        $(element).addClass("error"); 
-		 			    },
-			 	    	
-		 			    unhighlight: function (element) { 
-		 			        $(element).removeClass("error"); 
-		 			    },
-				
-		 		 		errorPlacement: function (error, element) {
-		 		            $(element).tooltipster('update', $(error).text());
-		 		            $(element).tooltipster('show');				        
-		  		        }
-
-				});
+			$("#issueWizard").validate({				
+					rules: {
+			 			address: { required: true},					 		
+			 			city: { required: true},		
+			 			province: { required: true},		
+	 				    title: { required: true, maxlength: 50},				    
+	 				    description: { required: true, maxlength: 300}							
+	 				  },
+	 			    messages: {
+	 			    	  address: { required : 'Este campo es requerido.'},			 			    
+	 			    	  city: { required : 'Este campo es requerido.' },	
+	 			    	  province: { required : 'Este campo es requerido.' },
+	 					  title: { required : 'Este campo es requerido.', maxlength: 'El m&aacute;ximo es de 50 caracteres.' },
+	 					  description: { required : 'Este campo es requerido.' , maxlength: 'El m&aacute;ximo es de 300 caracteres'}
+	 					
+	 				},
+	 				highlight: function (element) { 
+	 			        $(element).addClass("error"); 
+	 			    },
+		 	    	
+	 			    unhighlight: function (element) { 
+	 			        $(element).removeClass("error"); 
+	 			    },
+			
+	 		 		errorPlacement: function (error, element) {
+	 		            $(element).tooltipster('update', $(error).text());
+	 		            $(element).tooltipster('show');				        
+	  		        }
+			});
 			
 			
 			
