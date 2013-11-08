@@ -13,7 +13,9 @@ import org.apache.commons.io.FileUtils;
 import javax.imageio.ImageIO;
 
 import ar.com.urbanusjam.dao.ContenidoDAO;
+import ar.com.urbanusjam.dao.IssueDAO;
 import ar.com.urbanusjam.entity.annotations.Contenido;
+import ar.com.urbanusjam.entity.annotations.Issue;
 import ar.com.urbanusjam.services.ContenidoService;
 import ar.com.urbanusjam.services.dto.ContenidoDTO;
 import ar.com.urbanusjam.services.dto.FileWrapperDTO;
@@ -27,22 +29,19 @@ public class ContenidoServiceImpl implements ContenidoService {
     private String pathImagenesTemporales;
     private String pathImagenes;
     private ContenidoDAO contenidoDAO;
+    private IssueDAO issueDAO;
     
 
 	public void setContenidoDAO(ContenidoDAO contenidoDAO) {
 		this.contenidoDAO = contenidoDAO;
 	}
-
-	public String getPathImagenesTemporales() {
-		return pathImagenesTemporales;
+	
+	public void setIssueDAO(IssueDAO issueDAO) {
+		this.issueDAO = issueDAO;
 	}
 
 	public void setPathImagenesTemporales(String pathImagenesTemporales) {
 		this.pathImagenesTemporales = pathImagenesTemporales;
-	}
-
-	public String getPathImagenes() {
-		return pathImagenes;
 	}
 
 	public void setPathImagenes(String pathImagenes) {
@@ -61,9 +60,8 @@ public class ContenidoServiceImpl implements ContenidoService {
         if ( banner.getFile().length() > MAX_SIZE ){
             throw new FileNotFoundException();
         }
-        
-        String tipoContenido =  nombreArchivo.substring(nombreArchivo.lastIndexOf(".") + 1, nombreArchivo.length());
-        banner.setTipoContenido(tipoContenido);
+     
+        banner.setTipoContenido(extensionArchivo);
       
         BufferedImage readImage = null;
         try {
@@ -73,8 +71,7 @@ public class ContenidoServiceImpl implements ContenidoService {
         }
         
         banner.setAlto(readImage.getHeight());
-        banner.setAncho(readImage.getWidth());
-      
+        banner.setAncho(readImage.getWidth());      
 
         return banner;
 	}
@@ -87,36 +84,38 @@ public class ContenidoServiceImpl implements ContenidoService {
 	@Override
 	public File subirContenidoFile(InputStream inputStream,
 			String extensionArchivo) throws FileNotFoundException {
-		 if(inputStream == null){
-	            throw new FileNotFoundException();
-	        }
-	        
-	        /** Archivo random a generar **/
-	        String nombreArchivoHash = UUID.randomUUID().toString();
-	        int inicioCadena = nombreArchivoHash.length() - LONGITUD_MAXIMA_NOMBRE_ARCHIVO_HASH;
-	        File file = new File( this.pathImagenesTemporales + nombreArchivoHash.substring(inicioCadena) + "." + extensionArchivo.toLowerCase());
-	        
-	        try {
-	            FileOutputStream fileOutputStream;
-	            fileOutputStream = new FileOutputStream(file);
-	            byte[] buffer = new byte[BUFFER_SIZE];
-	            int bulk;
-	            while (true) {
-	                bulk = inputStream.read(buffer);
-	                if (bulk < 0) {
-	                    break;
-	                }
-	                fileOutputStream.write(buffer, 0, bulk);
-	                fileOutputStream.flush();
-	            }
+	
+		if(inputStream == null)
+			throw new FileNotFoundException();
+	    
+        /** Archivo random a generar **/
+        String nombreArchivoHash = UUID.randomUUID().toString();
+        int inicioCadena = nombreArchivoHash.length() - LONGITUD_MAXIMA_NOMBRE_ARCHIVO_HASH;
+        File file = new File( this.pathImagenesTemporales + nombreArchivoHash.substring(inicioCadena) + "." + extensionArchivo.toLowerCase());
+        
+        try {
+            FileOutputStream fileOutputStream;
+            fileOutputStream = new FileOutputStream(file);
+            byte[] buffer = new byte[BUFFER_SIZE];
+            int bulk;
+            while (true) {
+                bulk = inputStream.read(buffer);
+                if (bulk < 0) {
+                    break;
+                }
+                fileOutputStream.write(buffer, 0, bulk);
+                fileOutputStream.flush();
+            }
 
-	            fileOutputStream.close();
-	            inputStream.close();
-	          
-	        } catch (FileNotFoundException e) {
-	        } catch (IOException e) {
-	        }
-	        return file;
+            fileOutputStream.close();
+            inputStream.close();
+          
+        }
+        catch (FileNotFoundException e) {
+        } 
+        catch (IOException e) {
+        }
+        return file;
 	}
 
 	@Override
@@ -151,8 +150,9 @@ public class ContenidoServiceImpl implements ContenidoService {
 	            		+ this.getNombreArchivoSinExtension(contenidoDTO.getNombreFileSystem()) + EXTENSION_BANNER);
 	}
 
+	
 	@Override
-	public void grabarContenido(String issueID, ContenidoDTO contenidoDTO) {	
+	public void grabarContenido(ContenidoDTO contenidoDTO) {	
         try {
         	 Contenido contenido = convertirAContenido(contenidoDTO);     
              contenidoDAO.save(contenido);
@@ -162,6 +162,7 @@ public class ContenidoServiceImpl implements ContenidoService {
 			e.printStackTrace();
 		}        
 	}
+	
 
 	@Override
 	public ContenidoDTO obtenerContenido(Long idContenido) throws FileNotFoundException {
@@ -172,6 +173,7 @@ public class ContenidoServiceImpl implements ContenidoService {
         return contenidoDTO;
 	}
 	
+	
 	 private String getNombreArchivoSinExtension(String nombreArchivo) {
         String nombreArchivoSinExtension = "";        
         if (nombreArchivo.lastIndexOf(".") == -1){
@@ -181,6 +183,7 @@ public class ContenidoServiceImpl implements ContenidoService {
         } 
         return nombreArchivoSinExtension;
 	 }
+	 
 	 
 	 private void grabarImagenDisco(Contenido contenido) throws FileNotFoundException {
         try {
@@ -194,8 +197,8 @@ public class ContenidoServiceImpl implements ContenidoService {
 	 }
 	 
 	 
-	 
-    private ContenidoDTO convertirAContenidoDTO(Contenido contenido) {        
+	@Override
+    public ContenidoDTO convertirAContenidoDTO(Contenido contenido) {        
         ContenidoDTO contenidoDTO = new ContenidoDTO();
         contenidoDTO.setId(contenido.getId());
         contenidoDTO.setPathRelativo(contenido.getPathRelativo());
@@ -211,7 +214,8 @@ public class ContenidoServiceImpl implements ContenidoService {
         return contenidoDTO;
     }
     
-    private Contenido convertirAContenido(ContenidoDTO contenidoDTO) {        
+    @Override
+    public Contenido convertirAContenido(ContenidoDTO contenidoDTO) {        
         Contenido contenido = new Contenido();
         contenido.setId(contenidoDTO.getId());
         contenido.setPathRelativo(contenidoDTO.getPathRelativo());
@@ -221,6 +225,11 @@ public class ContenidoServiceImpl implements ContenidoService {
         contenido.setNombre(contenidoDTO.getNombre());
         contenido.setTipo(contenidoDTO.getTipo());
         contenido.setNombreFileSystem(contenidoDTO.getNombreFileSystem());
+        
+        Issue issue = new Issue();
+		issue.setId(Long.valueOf(contenidoDTO.getNroReclamo()));		
+        contenido.setIssue(issue);
+        
         return contenido;
     }
 	

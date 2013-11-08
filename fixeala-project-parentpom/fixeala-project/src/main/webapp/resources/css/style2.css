@@ -513,8 +513,8 @@ legend {
 
 /*********************************************************************************************/
 #content {
-/* 	width: 1180px; */
-	width: 95%;
+	width: 1180px;
+/* 	width: 95%; */
 	min-height: 600px;
 	height: auto;
 	margin: 0 auto;
@@ -577,11 +577,11 @@ legend {
 
 
 
-#map_canvas, #map_d3 {
-/* 	float: left; */
+#map_canvas {
+	float: left;
 	overflow: hidden;
-/* 	width: 1178px; border adds 2 pixels to width */
-	width:95%;
+ 	width: 1178px; /*border adds 2 pixels to width */
+/* 	width:95%; */
 	height: 460px;
 	/* 	background:#CFCFCF url("../images/mapa.png") no-repeat center; */
 	background-color: #CFCFCF;

@@ -107,6 +107,7 @@ public class Issue implements Serializable  {
 	public Issue(){   
 		tagsList = new ArrayList<Tag>(); 
 		revisiones = new HashSet<IssueHistorialRevision>();
+		contenidos = new HashSet<Contenido>();
 	}	
 		
 	
@@ -265,6 +266,14 @@ public class Issue implements Serializable  {
 		this.licitacion = licitacion;
 	}
 	
+	public Set<Contenido> getContenidos() {
+		return contenidos;
+	}
+
+
+	public void setContenidos(Set<Contenido> contenidos) {
+		this.contenidos = contenidos;
+	}
 	
 //
 //	public Collection<Comment> getComments() {
@@ -278,6 +287,9 @@ public class Issue implements Serializable  {
 //	public void setComments(List<Comment> comments) {
 //		this.comments = comments;
 //	}
+
+	
+
 
 	public void addTag(Tag tag) {	
 			if (!getTagsList().contains(tag)) {

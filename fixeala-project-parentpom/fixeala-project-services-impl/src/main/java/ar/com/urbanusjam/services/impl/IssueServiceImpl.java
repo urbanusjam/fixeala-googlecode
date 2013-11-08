@@ -24,13 +24,16 @@ import ar.com.urbanusjam.dao.IssueLicitacionDAO;
 import ar.com.urbanusjam.dao.TagDAO;
 import ar.com.urbanusjam.dao.UserDAO;
 import ar.com.urbanusjam.entity.annotations.Area;
+import ar.com.urbanusjam.entity.annotations.Contenido;
 import ar.com.urbanusjam.entity.annotations.Issue;
 import ar.com.urbanusjam.entity.annotations.IssueHistorialRevision;
 import ar.com.urbanusjam.entity.annotations.IssueLicitacion;
 import ar.com.urbanusjam.entity.annotations.Tag;
 import ar.com.urbanusjam.entity.annotations.User;
+import ar.com.urbanusjam.services.ContenidoService;
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.dto.AreaDTO;
+import ar.com.urbanusjam.services.dto.ContenidoDTO;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.IssueHistorialRevisionDTO;
 import ar.com.urbanusjam.services.dto.IssueLicitacionDTO;
@@ -41,12 +44,18 @@ import ar.com.urbanusjam.services.utils.Operation;
 
 public class IssueServiceImpl implements IssueService {
 	
+	private ContenidoService contenidoService;
 	private IssueDAO issueDAO;
 	private UserDAO userDAO;
 	private AreaDAO areaDAO;
 	private TagDAO tagDAO;
 	
 	
+	
+	public void setContenidoService(ContenidoService contenidoService) {
+		this.contenidoService = contenidoService;
+	}
+
 	public void setIssueDAO(IssueDAO issueDAO) {
 		this.issueDAO = issueDAO;
 	}
@@ -69,7 +78,7 @@ public class IssueServiceImpl implements IssueService {
 		Area area = areaDAO.getAreaById("1"); //cambiar!!!!
 		Issue issue = new Issue();
 		issue = this.convertTo(issueDTO);
-		User u = userDAO.loadUserByUsername(issueDTO.getUsername());
+		User u = userDAO.loadUserByUsername(issueDTO.getUser().getUsername());
 		issue.setReporter(u);
 		issue.setAssignedArea(area);
 		asignarUsuarioDefault(issue);
@@ -355,14 +364,12 @@ public class IssueServiceImpl implements IssueService {
 		IssueHistorialRevision historial = new IssueHistorialRevision();
 		
 		Calendar calendar = new GregorianCalendar();
-		calendar.setTime(historialDTO.getFecha());		
-		User user = new User();
-		user.setUsername(historialDTO.getUsername());		
+		calendar.setTime(historialDTO.getFecha());			
 		Issue issue = new Issue();
 		issue.setId(Long.valueOf(historialDTO.getNroReclamo()));
 		
 		historial.setFecha((GregorianCalendar) calendar);	
-		historial.setUsuario(user);
+		historial.setUsuario(userDAO.loadUserByUsername(historialDTO.getUsername()));
 		historial.setIssue(issue);
 		historial.setOperacion(Operation.UPDATE);
 		historial.setMotivo(historialDTO.getMotivo());
@@ -416,6 +423,10 @@ public class IssueServiceImpl implements IssueService {
 			issue.getRevisiones().add(convertTo(historial));
 		}
 		
+		//contenidos
+		for(ContenidoDTO contenido : issueDTO.getContenidos()){
+			issue.getContenidos().add(contenidoService.convertirAContenido(contenido));
+		}
 		
 		//tags
 		List<String> tagList = issueDTO.getTags();
@@ -441,8 +452,7 @@ public class IssueServiceImpl implements IssueService {
 	
 	public Issue convertForUpdate(IssueDTO issueDTO){
 		
-		Issue issue = new Issue();
-	
+		Issue issue = new Issue();	
 		issue.setId(issueDTO.getId());	
 		issue.setTitle(issueDTO.getTitle());
 		issue.setDescription(issueDTO.getDescription());
@@ -472,7 +482,6 @@ public class IssueServiceImpl implements IssueService {
 		issueDTO.setProvince(issue.getProvince());	
 		issueDTO.setTitle(issue.getTitle());
 		issueDTO.setDescription(issue.getDescription());	
-//		issueDTO.setDate(issue.getDate());
 		issueDTO.setDate(issue.getDate().getTime());		
 		issueDTO.setLatitude(String.valueOf(issue.getLatitude()));
 		issueDTO.setLongitude(String.valueOf(issue.getLongitude()));
@@ -508,6 +517,14 @@ public class IssueServiceImpl implements IssueService {
 		}
 		
 		issueDTO.setHistorial(historialDTO);
+		
+		List<ContenidoDTO> contenidosDTO = new ArrayList<ContenidoDTO>();
+		
+		for(Contenido contenido : issue.getContenidos()){
+			contenidosDTO.add(contenidoService.convertirAContenidoDTO(contenido));
+		}
+		
+		issueDTO.setContenidos(contenidosDTO);
 		
 		return issueDTO;
 	}

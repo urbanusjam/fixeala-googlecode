@@ -34,11 +34,10 @@ public class IssueDTO implements Serializable {
 	private IssueLicitacionDTO licitacion = new IssueLicitacionDTO();
 	private List<String> tags = new ArrayList<String>();
 	private List<IssueHistorialRevisionDTO> historial = new ArrayList<IssueHistorialRevisionDTO>();
-	private List<CommentDTO> comentarios = new ArrayList<CommentDTO>();
+	private List<ContenidoDTO> contenidos = new ArrayList<ContenidoDTO>();
+	private List<CommentDTO> comentarios = new ArrayList<CommentDTO>();	
 	private String status;
 	private String statusCss;
-	private CommonsMultipartFile file;
-
 	
 
 
@@ -152,7 +151,15 @@ public class IssueDTO implements Serializable {
 	public void setHistorial(List<IssueHistorialRevisionDTO> historial) {
 		this.historial = historial;
 	}
-	
+		
+	public List<ContenidoDTO> getContenidos() {
+		return contenidos;
+	}
+
+	public void setContenidos(List<ContenidoDTO> contenidos) {
+		this.contenidos = contenidos;
+	}
+
 	public List<CommentDTO> getComentarios() {
 		return comentarios;
 	}
@@ -208,14 +215,7 @@ public class IssueDTO implements Serializable {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	
-	public CommonsMultipartFile getFile() {
-		return file;
-	}
 
-	public void setFile(CommonsMultipartFile file) {
-		this.file = file;
-	}
 
 	public String getFormattedDate(){		
 		

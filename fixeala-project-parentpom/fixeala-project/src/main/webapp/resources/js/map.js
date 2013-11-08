@@ -392,8 +392,8 @@ function geocodeAddress(callback){
 	 }
 	 
 	 var geocoderRequest = { 
-			 address: searchAddress,
-			 country: "AR"			
+		 address: searchAddress,
+		 country: "AR"			
 	 } 
 	
 	 geocoder.geocode(geocoderRequest, function(results, status) { 
@@ -409,6 +409,9 @@ function geocodeAddress(callback){
 //		                     map: map,
 //		                     position: results[0].geometry.location
 //		                 });
+		        		var latLng = results[0].geometry.location;		        	
+		        		$("#latitude").val(latLng.lat());
+						$("#longitude").val(latLng.lng());
 		        		callback(true);
 		        	}			        	
 				        	
@@ -560,7 +563,7 @@ function hasAddressTypes(results) {
 					
 					$("#latitude").val(latLng.lat());
 					$("#longitude").val(latLng.lng());
-			
+						
 					var formattedAddress;
 					
                     if (results[0].formatted_address != null) {
