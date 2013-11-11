@@ -75,7 +75,7 @@ public class IssueController {
 	private static final long MAX_HEIGHT = 720;
 	private static final long MIN_WIDTH = 640;
 	private static final long MIN_HEIGHT = 480;
-	private FileWrapperDTO uploadedFile;
+	private FileWrapperDTO uploadedFile = null;
 	
 	@Autowired
 	@Qualifier(value = "fixealaAuthenticationManager")
@@ -121,11 +121,9 @@ public class IssueController {
 				model.addAttribute("tags", issue.getTags());
 				
 				if(issue.getContenidos().size() > 0){
-					ContenidoDTO contenido = issue.getContenidos().get(0);	
-					InputStream stream = contenidoService.abrirContenidoRaw(contenido);
-					
+					ContenidoDTO contenido = issue.getContenidos().get(0);						
 					model.addAttribute("image", contenido);
-					model.addAttribute("imageUrl", UPLOAD_DIRECTORY + contenido.getPathRelativo());
+					model.addAttribute("imageUrl", contenido.getPathRelativo());
 					model.addAttribute("imageName", contenido.getNombre());
 				}
 				
@@ -196,24 +194,18 @@ public class IssueController {
 			HttpServletRequest request){
 		
 		InputStream inputStream = null;
-	    OutputStream outputStream = null;
-	    ContenidoDTO contenido = new ContenidoDTO();
-	    
-	  
+		  
 	    try {		
 	
 			if(file != null){
-				
+				 
 				String fileName = file.getOriginalFilename();			
 				inputStream = file.getInputStream();
 				
 				this.setUploadedFile(contenidoService.subirContenido(inputStream, fileName));
 				
 				/**
-			    BufferedImage image = ImageIO.read(file.getInputStream());
-			    Integer width = image.getWidth();
-			    Integer height = image.getHeight();
-				
+						
 				//valido tamaño
 				if( file.getSize() > MAX_SIZE )
 					return new AlertStatus(false, "El archivo seleccionado supera el peso m&aacute;ximo (3 MB).");
@@ -233,21 +225,7 @@ public class IssueController {
 						|| (height > MAX_HEIGHT)
 						|| (width > MAX_WIDTH && height > MAX_HEIGHT) )
 					return new AlertStatus(false, "La imagen debe tener una resolución máxima de 1080 x 720 píxeles.");
-			    
-			    File newFile = new File(PATH_UPLOAED_FILES + fileName);
-			    
-			    if (!newFile.exists()) 
-			    	newFile.createNewFile();
-			    
-			    outputStream = new FileOutputStream(newFile);
-			    
-			    int read = 0;
-			    byte[] bytes = new byte[1024];
-			    
-			    //file is saved in local directory
-			    while ((read = inputStream.read(bytes)) != -1) {
-			    	outputStream.write(bytes, 0, read);
-			    }	
+			    			   
 			    **/					    
 			  
 		
@@ -322,19 +300,21 @@ public class IssueController {
 					
 				    //ContenidoDTO
 					FileWrapperDTO file = this.getUploadedFile();
-					String fileName = file.getFile().getName();
 					
-					ContenidoDTO contenido = new ContenidoDTO();
-				    contenido.setNombre(this.getNombreArchivoSinExtension(fileName));
-				    contenido.setNombreFileSystem(fileName);	
-				    contenido.setPathRelativo("/"+ fileName);
-				    contenido.setAncho(file.getAncho());
-				    contenido.setAlto(file.getAlto());
-				    contenido.setTipo(this.getExtensionArchivo(fileName));
-				    contenido.setNroReclamo(String.valueOf(issue.getId()));
-				    issue.getContenidos().add(contenido);
+					if(file != null){
+						String fileName = file.getFile().getName();						
+						ContenidoDTO contenido = new ContenidoDTO();
+					    contenido.setNombre(this.getNombreArchivoSinExtension(fileName));
+					    contenido.setNombreFileSystem(fileName);	
+					    contenido.setPathRelativo("/"+ fileName);
+					    contenido.setAncho(file.getAncho());
+					    contenido.setAlto(file.getAlto());
+					    contenido.setTipo(this.getExtensionArchivo(fileName));
+					    contenido.setNroReclamo(String.valueOf(issue.getId()));
+					    issue.getContenidos().add(contenido);
+					}					
 					
-					issueService.reportIssue(issue);			
+					issueService.reportIssue(issue);		
 					
 					return new AlertStatus(true, "Su reclamo ha sido registrado.");			
 			}				

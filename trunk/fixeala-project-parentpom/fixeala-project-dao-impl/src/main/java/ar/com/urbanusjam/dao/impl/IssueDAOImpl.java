@@ -3,12 +3,21 @@ package ar.com.urbanusjam.dao.impl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import ar.com.urbanusjam.dao.IssueDAO;
+import ar.com.urbanusjam.dao.TagDAO;
 import ar.com.urbanusjam.dao.impl.utils.GenericDAOImpl;
 import ar.com.urbanusjam.entity.annotations.Issue;
+import ar.com.urbanusjam.entity.annotations.Tag;
 
 public class IssueDAOImpl extends GenericDAOImpl<Issue, Serializable> implements IssueDAO {	
+	
+	private TagDAO tagDAO;
+	
+	public void setTagDAO(TagDAO tagDAO) {
+		this.tagDAO = tagDAO;
+	}
 
 	public IssueDAOImpl() {
 		super(Issue.class);
@@ -16,6 +25,11 @@ public class IssueDAOImpl extends GenericDAOImpl<Issue, Serializable> implements
 
 	@Override
 	public void saveIssue(Issue issue) {
+		List<Tag> tagsDB = new ArrayList<Tag>();
+		for(Tag t : issue.getTagsList()){
+			tagsDB.add(tagDAO.findTagByName(t.getTagname()));
+		}
+		issue.setTagsList((Set<Tag>)tagsDB);			
 		this.save(issue);		
 	}
 	

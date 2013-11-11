@@ -24,8 +24,7 @@
 	<bean name="contenidoService" class="ar.com.urbanusjam.services.impl.ContenidoServiceImpl" >
 		<property name="contenidoDAO" ref="contenidoDAO" />		
 		<property name="issueDAO" ref="issueDAO" />		
-		<property name="pathImagenes" value="${path.imagenes}${file.separator}" />
-        <property name="pathImagenesTemporales" value="${path.imagenes.temporales}${file.separator}" />
+		<property name="pathImagenes" value="${path.imagenes}${file.separator}" />    
 	</bean>	
 	
 	<!-- Remember Me Service -->		

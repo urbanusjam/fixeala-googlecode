@@ -400,7 +400,7 @@ public class IssueServiceImpl implements IssueService {
 	public Issue convertTo(IssueDTO issueDTO){
 				
 		User user = new User();
-		user.setUsername(issueDTO.getUser().getUsername());
+		user = userDAO.loadUserByUsername(issueDTO.getUsername());
 		
 		Issue issue = new Issue();
 		issue.setId(issueDTO.getId());
@@ -433,9 +433,15 @@ public class IssueServiceImpl implements IssueService {
 		
 		if(tagList.size() > 0){
 			for(String t : tagList){
-				Tag newTag = new Tag();
-				newTag.setTagname(t);				
-				issue.addTag(newTag);	
+				
+				Tag tag = new Tag();
+				
+				if(tagDAO.tagExists(t))
+					tag = tagDAO.findTagByName(t);
+				else				
+					tag.setTagname(t);			
+				
+				issue.addTag(tag);	
 			}
 		}
 		
