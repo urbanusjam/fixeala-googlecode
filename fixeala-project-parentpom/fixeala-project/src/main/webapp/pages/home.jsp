@@ -73,8 +73,8 @@
 							<legend></legend>												
 									<input type="hidden" id="latitude" name="latitude"  />
 									<input type="hidden" id="longitude" name="longitude" />													
-<!-- 									<input type="text" id="address" name="address" onfocus="geolocate()" autocomplete="off" placeholder="Dirección (calle y altura)" />	 -->
-									<input type="text" id="address" name="address" placeholder="Dirección (calle y altura)" />			
+									<input type="text" id="address" name="address" onfocus="geolocate()" autocomplete="off" placeholder="Dirección (calle y altura)" />	
+<!-- 									<input type="text" id="address" name="address" placeholder="Dirección (calle y altura)" />			 -->
 									<input type="text" id="neighborhood" name="neighborhood" placeholder="Barrio (opcional)"/>										
 									<input type="text" id="locality" name="city" placeholder="Ciudad" />		
 									<input type="text" id="administrative_area_level_1" name="province" placeholder="Provincia"/>							

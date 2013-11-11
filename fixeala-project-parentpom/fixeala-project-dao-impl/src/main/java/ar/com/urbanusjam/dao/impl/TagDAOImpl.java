@@ -12,20 +12,21 @@ public class TagDAOImpl extends GenericDAOImpl<Tag, Serializable> implements Tag
 	public TagDAOImpl() {
 		super(Tag.class);
 	}
-
-	@Override
-	public void saveTag(Tag tag) {
-		this.saveOrUpdate(tag);
-	}
-
+	
 	@Override
 	public List<Tag> getTags() {
 		return this.findAll();
 	}
 
 	@Override
-	public boolean findTagByName(String tagname) {
+	public boolean tagExists(String tagname) {
 		return (this.findWhere(" tagname = ? ", tagname)).size() > 0 ? true : false ;
+	}
+
+	@Override
+	public Tag findTagByName(String tagname) {
+		List<Tag> tags = this.findWhere(" tagname = ? ", tagname);
+		return tags.get(0);
 	}
 
 }

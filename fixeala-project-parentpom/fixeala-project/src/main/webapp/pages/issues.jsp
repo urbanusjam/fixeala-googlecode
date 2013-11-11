@@ -636,7 +636,7 @@
 	  	   		<li  style="margin-left:0">
 		  	   		<c:if test="${not empty image}">
 			  	   		<a href="#" class="thumbnail">
-		      				<img src="${imageUrl}" alt="${imageName}">	    
+		      				<img src="${pageContext.request.contextPath}/uploads/${imageUrl}" alt="${imageName}">	    
 		    			</a>
 		  	   		</c:if>
 		  	   		<c:if test="${empty image}">

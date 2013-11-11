@@ -3,6 +3,8 @@ package ar.com.urbanusjam.entity.annotations;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -28,13 +30,9 @@ public class Tag implements Serializable {
 	private String tagname;
 	
 	@ManyToMany(cascade = CascadeType.ALL, mappedBy="tagsList")
-//	@JoinTable(name = "ISSUES_TAGS",
-//	         joinColumns = @JoinColumn(name = "ID_TAG"),
-//	         inverseJoinColumns = @JoinColumn(name = "ID_ISSUE")
-//	)
-	private Collection<Issue> issueList;
+	private Set<Issue> issueList;
 	
-	public Tag() { issueList = new ArrayList<Issue>(); }
+	public Tag() { issueList = new HashSet<Issue>(); }
 
 	
 	public Long getId() {
@@ -53,11 +51,11 @@ public class Tag implements Serializable {
 		this.tagname = tagname;
 	}
 
-	public Collection<Issue> getIssueList() {
+	public Set<Issue> getIssueList() {
 		return issueList;
 	}
 
-	public void setIssueList(Collection<Issue> issueList) {
+	public void setIssueList(Set<Issue> issueList) {
 		this.issueList = issueList;
 	}
 			

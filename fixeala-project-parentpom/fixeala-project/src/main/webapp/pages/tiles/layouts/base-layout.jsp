@@ -197,14 +197,34 @@ path:hover {
 			
 			
 			$('#issueWizard').stepy({
-				backLabel :  '&laquo; Anterior',
-				nextLabel : 'Siguiente &raquo;', 
-				legend:       false,
+				backLabel  : '&laquo; Anterior',
+				nextLabel  : 'Siguiente &raquo;', 
+				errorImage :  false,
+				legend     :  false,
 				transition : 'fade',
 				block: true,
 				validate: true,
 				next: function(index) {
-				    updateProgressBar(3, index-1);
+					
+					if($("#issueWizard").valid()){
+						
+						if(index-1 == 1){
+							
+							//valido direccion ingresada a mano
+							geocodeAddress(function(value) { isValid = value; });	
+		
+					    	if(!isValid)
+					    		return false;
+					    	
+					    	else{					    		
+					    		$('#issueWizard').stepy('step', 2);
+					    		updateProgressBar(3, index-1);
+					    	}									    	
+						}
+						
+					}
+					
+				   
 				},
 				back: function(index) {
 					updateProgressBar(3, index-1);

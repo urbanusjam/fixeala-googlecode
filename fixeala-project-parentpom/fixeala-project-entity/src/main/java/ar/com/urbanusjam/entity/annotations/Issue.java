@@ -23,6 +23,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.LazyToOne;
 import org.hibernate.annotations.LazyToOneOption;
 import org.hibernate.bytecode.javassist.FieldHandled;
@@ -89,15 +90,16 @@ public class Issue implements Serializable  {
 	@PrimaryKeyJoinColumn  
 	private IssueLicitacion licitacion;
 	
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
+    @Cascade( org.hibernate.annotations.CascadeType.SAVE_UPDATE )
 	@JoinTable(name = "ISSUE_TAG",
 	         joinColumns = @JoinColumn(name = "ID_ISSUE"),
 	         inverseJoinColumns = @JoinColumn(name = "ID_TAG")
 	)
-	private Collection<Tag> tagsList;
+	private Set<Tag> tagsList;
 	
 	
-	@OneToMany(mappedBy="issue", fetch = FetchType.EAGER, cascade = CascadeType.ALL)  
+	@ManyToMany(mappedBy="issue", fetch = FetchType.EAGER, cascade = CascadeType.ALL)  
 	private Set<Contenido> contenidos;
 	
 //	@OneToMany(mappedBy = "issue")  
@@ -105,7 +107,7 @@ public class Issue implements Serializable  {
 
 	
 	public Issue(){   
-		tagsList = new ArrayList<Tag>(); 
+		tagsList = new HashSet<Tag>(); 
 		revisiones = new HashSet<IssueHistorialRevision>();
 		contenidos = new HashSet<Contenido>();
 	}	
@@ -113,7 +115,7 @@ public class Issue implements Serializable  {
 	
 	public Issue(User reporter, GregorianCalendar date, String address, float latitude,
 			float longitude, String neighborhood, String city, String province, String title,
-			String description, Collection<Tag> tagsList) {
+			String description, Set<Tag> tagsList) {
 		super();
 		this.reporter = reporter;
 		this.date = date;
@@ -242,11 +244,11 @@ public class Issue implements Serializable  {
 		this.assignedArea = assignedArea;
 	}
 
-	public Collection<Tag> getTagsList() {
+	public Set<Tag> getTagsList() {
 		return tagsList;
 	}
 
-	public void setTagsList(Collection<Tag> tagsList) {
+	public void setTagsList(Set<Tag> tagsList) {
 		this.tagsList = tagsList;
 	}
 		

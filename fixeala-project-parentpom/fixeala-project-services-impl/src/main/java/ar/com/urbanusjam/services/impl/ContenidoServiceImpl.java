@@ -26,7 +26,6 @@ public class ContenidoServiceImpl implements ContenidoService {
     private static final String EXTENSION_BANNER = ".data";	 
     private static final long MAX_SIZE = 1024*256;  
     private final int LONGITUD_MAXIMA_NOMBRE_ARCHIVO_HASH = 16;
-    private String pathImagenesTemporales;
     private String pathImagenes;
     private ContenidoDAO contenidoDAO;
     private IssueDAO issueDAO;
@@ -40,58 +39,30 @@ public class ContenidoServiceImpl implements ContenidoService {
 		this.issueDAO = issueDAO;
 	}
 
-	public void setPathImagenesTemporales(String pathImagenesTemporales) {
-		this.pathImagenesTemporales = pathImagenesTemporales;
-	}
-
 	public void setPathImagenes(String pathImagenes) {
 		this.pathImagenes = pathImagenes;
 	}
 
 	
-	@Override
-	public FileWrapperDTO subirContenido(InputStream inputStream,
-			String nombreArchivo) throws FileNotFoundException {
-		
-		FileWrapperDTO banner = new FileWrapperDTO();	        
-        String extensionArchivo = this.getExtensionArchivo(nombreArchivo);        
-        banner.setFile(this.subirContenidoFile(inputStream, extensionArchivo));
-        
-        if ( banner.getFile().length() > MAX_SIZE ){
-            throw new FileNotFoundException();
-        }
-     
-        banner.setTipoContenido(extensionArchivo);
-      
-        BufferedImage readImage = null;
-        try {
-            readImage = ImageIO.read(banner.getFile());
-        } catch (Exception e) {
-            throw new FileNotFoundException();
-        }
-        
-        banner.setAlto(readImage.getHeight());
-        banner.setAncho(readImage.getWidth());      
-
-        return banner;
-	}
 	
-	 private String getExtensionArchivo(String nombreArchivo) {
-	        return nombreArchivo.substring(nombreArchivo.lastIndexOf(".") + 1, nombreArchivo.length());
-	    }
+	private String getExtensionArchivo(String nombreArchivo) {
+		return nombreArchivo.substring(nombreArchivo.lastIndexOf(".") + 1, nombreArchivo.length());
+	}
 	    
 	
 	@Override
-	public File subirContenidoFile(InputStream inputStream,
-			String extensionArchivo) throws FileNotFoundException {
-	
+	public FileWrapperDTO subirContenido(InputStream inputStream,
+			String extensionArchivo) throws FileNotFoundException {		
+		
+		FileWrapperDTO fileWrapper = new FileWrapperDTO();
+		
 		if(inputStream == null)
 			throw new FileNotFoundException();
 	    
         /** Archivo random a generar **/
         String nombreArchivoHash = UUID.randomUUID().toString();
         int inicioCadena = nombreArchivoHash.length() - LONGITUD_MAXIMA_NOMBRE_ARCHIVO_HASH;
-        File file = new File( this.pathImagenesTemporales + nombreArchivoHash.substring(inicioCadena) + "." + extensionArchivo.toLowerCase());
+        File file = new File( this.pathImagenes + nombreArchivoHash.substring(inicioCadena) + "." + extensionArchivo.toLowerCase());
         
         try {
             FileOutputStream fileOutputStream;
@@ -106,6 +77,13 @@ public class ContenidoServiceImpl implements ContenidoService {
                 fileOutputStream.write(buffer, 0, bulk);
                 fileOutputStream.flush();
             }
+            
+            BufferedImage readImage = null;           
+            readImage = ImageIO.read(file);   
+            
+            fileWrapper.setFile(file);
+            fileWrapper.setAlto(readImage.getHeight());
+            fileWrapper.setAncho(readImage.getWidth());
 
             fileOutputStream.close();
             inputStream.close();
@@ -115,39 +93,7 @@ public class ContenidoServiceImpl implements ContenidoService {
         } 
         catch (IOException e) {
         }
-        return file;
-	}
-
-	@Override
-	public InputStream abrirContenidoRaw(ContenidoDTO contenidoDTO) throws Exception {
-		 try {
-	            if ( contenidoDTO == null )
-	                throw new FileNotFoundException();
-	            
-	            /** Existe el contenido, lo busco en la ruta de contenidos reales **/
-	            if ( contenidoDTO.getId() > 0 )
-	                return new FileInputStream(this.pathImagenes + contenidoDTO.getId() + EXTENSION_BANNER);
-	            /** No existe todavia, lo busco en los banners temporales **/
-	            else
-	                return new FileInputStream(this.pathImagenesTemporales 
-	                		+ this.getNombreArchivoSinExtension(contenidoDTO.getNombreFileSystem()) + EXTENSION_BANNER);
-	        } catch (FileNotFoundException e) {
-	            throw new Exception("No se encontro el archivo: " + e.getMessage());
-	        }
-	}
-	
-	@Override
-	public File abrirContenidoFile(ContenidoDTO contenidoDTO) throws Exception {
-		  if ( contenidoDTO == null )
-	            throw new FileNotFoundException();
-	        
-	        /** Existe el contenido, lo busco en la ruta de contenidos reales **/
-	        if ( contenidoDTO.getId() > 0 )
-	            return new File(this.pathImagenesTemporales + contenidoDTO.getNombreFileSystem());
-	        /** No existe todavia, lo busco en los banners temporales **/
-	        else
-	            return new File(this.pathImagenesTemporales 
-	            		+ this.getNombreArchivoSinExtension(contenidoDTO.getNombreFileSystem()) + EXTENSION_BANNER);
+        return fileWrapper;
 	}
 
 	
@@ -188,7 +134,7 @@ public class ContenidoServiceImpl implements ContenidoService {
 	 private void grabarImagenDisco(Contenido contenido) throws FileNotFoundException {
         try {
             /** Copio el archivo del temporal al directorio de las imagenes **/
-            FileUtils.copyFile(new File(this.pathImagenesTemporales
+            FileUtils.copyFile(new File(this.pathImagenes
                     + contenido.getNombreFileSystem()), new File(
                     this.pathImagenes + contenido.getId() + EXTENSION_BANNER));
         } catch (IOException e) {
