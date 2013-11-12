@@ -36,6 +36,8 @@
 	
 		$(function(){	
 			
+		
+			
 			var id = '${id}';
 			var newTitle;
 			
@@ -631,23 +633,50 @@
 	  <div class="row-fluid">
 	   
 		 <div class="span4">  
-	   
-		   <ul class="thumbnails">
-	  	   		<li  style="margin-left:0">
-		  	   		<c:if test="${not empty image}">
-			  	   		<a href="#" class="thumbnail">
-		      				<img src="${pageContext.request.contextPath}/uploads/${imageUrl}" alt="${imageName}">	    
-		    			</a>
-		  	   		</c:if>
-		  	   		<c:if test="${empty image}">
-			  	   		<a href="#" class="thumbnail">
-		      				<img src="${pageContext.request.contextPath}/resources/images/nopic.png" alt="">	    
-		    			</a>
-		  	   		</c:if>
+		 
+		 <!-- Lightbox -->
+		 <div id="demoLightbox" class="lightbox hide fade"  tabindex="-1" role="dialog" aria-hidden="true">
+			<div class='lightbox-content'>
+				<c:if test="${not empty image}">		  	  			  	   		
+	      				<img src="${pageContext.request.contextPath}/uploads/${imageUrl}" alt="${imageName}">	 
+	  	   		</c:if>
+	  	   		<c:if test="${empty image}">			  	   	
+	      				<img src="${pageContext.request.contextPath}/resources/images/nopic.png" alt="">	
+	  	   		</c:if>
+			</div>
+		 </div>
+		 
+		 <ul class="thumbnails">
+	  	   		<li  style="margin-left:0">		  	   		
+			  	   	<a href="#" class="thumbnail" data-toggle="lightbox" data-target="#demoLightbox">	
+			  	   		<c:if test="${not empty image}">		  	  			  	   		
+	      					<img src="${pageContext.request.contextPath}/uploads/${imageUrl}" alt="${imageName}">	 
+	  	   				</c:if>
+		  	   			<c:if test="${empty image}">			  	   	
+		      				<img src="${pageContext.request.contextPath}/resources/images/nopic.png" alt="">	
+		  	   			</c:if>	      			
+		    		</a>
 	    			<br>
 	    			<div class="caption"><button class="btn btn-info"><i class="icon-camera"></i>&nbsp;&nbsp;&nbsp;mas fotos y videos</button>	</div>
 	  			</li>	
 		   </ul>
+	   
+<!-- 		   <ul class="thumbnails"> -->
+<!-- 	  	   		<li  style="margin-left:0"> -->
+<%-- 		  	   		<c:if test="${not empty image}">		  	   --%>
+<!-- 			  	   		<a href="#" class="thumbnail"> -->
+<%-- 		      				<img src="${pageContext.request.contextPath}/uploads/${imageUrl}" alt="${imageName}">	     --%>
+<!-- 		    			</a> -->
+<%-- 		  	   		</c:if> --%>
+<%-- 		  	   		<c:if test="${empty image}"> --%>
+<!-- 			  	   		<a href="#" class="thumbnail"> -->
+<%-- 		      				<img src="${pageContext.request.contextPath}/resources/images/nopic.png" alt="">	     --%>
+<!-- 		    			</a> -->
+<%-- 		  	   		</c:if> --%>
+<!-- 	    			<br> -->
+<!-- 	    			<div class="caption"><button class="btn btn-info"><i class="icon-camera"></i>&nbsp;&nbsp;&nbsp;mas fotos y videos</button>	</div> -->
+<!-- 	  			</li>	 -->
+<!-- 		   </ul> -->
 	 	</div>
 	 
 	 	<div class="span8">  	 	

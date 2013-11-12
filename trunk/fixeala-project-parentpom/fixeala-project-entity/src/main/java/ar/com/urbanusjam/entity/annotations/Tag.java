@@ -9,11 +9,16 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Cascade;
 
 @Entity
 @Table(name="TAG")
@@ -29,7 +34,13 @@ public class Tag implements Serializable {
 	@Column(name = "TAG_NAME")
 	private String tagname;
 	
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy="tagsList")
+//	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="tagsList")
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE )
+	@JoinTable(name = "ISSUE_TAG",
+	         joinColumns = @JoinColumn(name = "ID_TAG"),
+	         inverseJoinColumns = @JoinColumn(name = "ID_ISSUE")
+	)
 	private Set<Issue> issueList;
 	
 	public Tag() { issueList = new HashSet<Issue>(); }
@@ -69,13 +80,13 @@ public class Tag implements Serializable {
 	}
 	    
 	    
-	@Override
-    public int hashCode() {
-        int result;
-        result = getId().hashCode();
-        result = (int) (29 * result + getId());
-        return result;
-    }
+//	@Override
+//    public int hashCode() {
+//        int result;
+//        result = getTagname().hashCode();
+//        result = (int) (29 * result + getId());
+//        return result;
+//    }
 
 
     @Override
@@ -85,7 +96,7 @@ public class Tag implements Serializable {
 
         final Tag t = (Tag) obj;
 
-        return t.getId().equals( this.getId() ) ;
+        return t.getTagname().equals( this.getTagname() ) ;
         
     }
 

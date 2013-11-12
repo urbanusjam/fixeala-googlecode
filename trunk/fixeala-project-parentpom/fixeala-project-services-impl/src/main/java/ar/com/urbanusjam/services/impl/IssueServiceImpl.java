@@ -448,7 +448,6 @@ public class IssueServiceImpl implements IssueService {
 		Calendar calendar = new GregorianCalendar();
 		calendar.setTime(issueDTO.getDate());
 		issue.setDate((GregorianCalendar) calendar);		
-//		issue.setDate(issueDTO.getDate());		
 		issue.setLatitude(Float.parseFloat(issueDTO.getLatitude()));
 		issue.setLongitude(Float.parseFloat(issueDTO.getLongitude()));
 		issue.setStatus(issueDTO.getStatus());
@@ -494,6 +493,7 @@ public class IssueServiceImpl implements IssueService {
 		issueDTO.setStatus(issue.getStatus());
 		issueDTO.setUsername(userDTO.getUsername());
 		
+		//area asignada
 		if(issue.getAssignedArea() != null){
 			issueDTO.setAssignedArea(convertTo(issue.getAssignedArea()));
 			issueDTO.setArea(issue.getAssignedArea().getNombre());
@@ -511,11 +511,13 @@ public class IssueServiceImpl implements IssueService {
 		else
 			issueDTO.setAssignedOfficial(null);
 		
+		//licitacion
 		if(issue.getLicitacion() != null)
 			issueDTO.setLicitacion(convertTo(issue.getLicitacion()));
 		else
 			issueDTO.setLicitacion(null);
 		
+		//historial
 		List<IssueHistorialRevisionDTO> historialDTO = new ArrayList<IssueHistorialRevisionDTO>();
 		
 		for(IssueHistorialRevision revision : issue.getRevisiones()){
@@ -524,6 +526,7 @@ public class IssueServiceImpl implements IssueService {
 		
 		issueDTO.setHistorial(historialDTO);
 		
+		//contenidos
 		List<ContenidoDTO> contenidosDTO = new ArrayList<ContenidoDTO>();
 		
 		for(Contenido contenido : issue.getContenidos()){

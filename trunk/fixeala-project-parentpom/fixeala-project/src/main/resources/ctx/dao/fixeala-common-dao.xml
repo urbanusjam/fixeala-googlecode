@@ -16,9 +16,7 @@
     
     <bean id="activationDAO" class="ar.com.urbanusjam.dao.impl.ActivationDAOImpl" parent="hibernateParent" /> 
     
-    <bean id="issueDAO" class="ar.com.urbanusjam.dao.impl.IssueDAOImpl" parent="hibernateParent" >
-    	<property name="tagDAO" ref="tagDAO" />
-    </bean> 
+    <bean id="issueDAO" class="ar.com.urbanusjam.dao.impl.IssueDAOImpl" parent="hibernateParent" />
     
     <bean id="historialDAO" class="ar.com.urbanusjam.dao.impl.IssueHistorialRevisionDAOImpl" parent="hibernateParent" /> 
     
