@@ -90,16 +90,17 @@ public class Issue implements Serializable  {
 	@PrimaryKeyJoinColumn  
 	private IssueLicitacion licitacion;
 	
-	@ManyToMany(fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
-    @Cascade( org.hibernate.annotations.CascadeType.SAVE_UPDATE )
-	@JoinTable(name = "ISSUE_TAG",
-	         joinColumns = @JoinColumn(name = "ID_ISSUE"),
-	         inverseJoinColumns = @JoinColumn(name = "ID_TAG")
-	)
+//	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+//    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE )
+//	@JoinTable(name = "ISSUE_TAG",
+//	         joinColumns = @JoinColumn(name = "ID_ISSUE"),
+//	         inverseJoinColumns = @JoinColumn(name = "ID_TAG")
+//	)
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="issueList")
 	private Set<Tag> tagsList;
 	
 	
-	@ManyToMany(mappedBy="issue", fetch = FetchType.EAGER, cascade = CascadeType.ALL)  
+	@OneToMany(mappedBy="issue", fetch = FetchType.EAGER, cascade = CascadeType.ALL)  
 	private Set<Contenido> contenidos;
 	
 //	@OneToMany(mappedBy = "issue")  

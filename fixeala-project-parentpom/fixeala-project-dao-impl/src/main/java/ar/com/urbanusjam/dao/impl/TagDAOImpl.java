@@ -20,7 +20,8 @@ public class TagDAOImpl extends GenericDAOImpl<Tag, Serializable> implements Tag
 
 	@Override
 	public boolean tagExists(String tagname) {
-		return (this.findWhere(" tagname = ? ", tagname)).size() > 0 ? true : false ;
+		List<Tag> tags = this.findWhere(" tagname = ? ", tagname);
+		return tags.size() > 0 ? true : false ;
 	}
 
 	@Override
