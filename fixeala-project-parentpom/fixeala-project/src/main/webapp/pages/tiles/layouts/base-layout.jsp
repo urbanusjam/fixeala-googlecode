@@ -20,19 +20,28 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.mockjax.js"></script> 
   	<script type="text/javascript" src="http://code.jquery.com/jquery-migrate-1.1.0.js"></script>
     
+    <script src="http://blueimp.github.io/JavaScript-Templates/js/tmpl.min.js"></script>
+	<script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.min.js"></script>
+	<script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+	
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fileupload/jquery.iframe-transport.js"></script>	
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fileupload/jquery.fileupload.js"></script>	
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fileupload/jquery.fileupload-ui.js"></script>
-<%--     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fileupload/jquery.fileupload-validate.js"></script>	 --%>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fileupload/jquery.fileupload-process.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fileupload/jquery.ui.widget.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fileupload/jquery.iframe-transport.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fileupload/jquery.fileupload-process.js"></script>  
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fileupload/jquery.fileupload-image.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fileupload/jquery.fileupload-video.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fileupload/jquery.fileupload-validate.js"></script>
+<%--     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fileupload/jquery.fileupload-ui.js"></script> --%>
+<%--     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fileupload/jquery.ui.widget.js"></script> --%>
+
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.uploadify.js"></script>
+        
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/formToWizard.js"></script>
     
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.geocomplete.js"></script>
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/d3.v3.js"></script>
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/d3.jsonp.js"></script>
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/togeojson.js"></script>
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/topojson.js"></script>
+<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/d3.v3.js"></script> --%>
+<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/d3.jsonp.js"></script> --%>
+<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/togeojson.js"></script> --%>
+<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/topojson.js"></script> --%>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/json.min.js"></script>	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/map.js"></script>
 <%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala-datagrid.js"></script> --%>
@@ -54,6 +63,7 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-fileupload.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootbox.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-wysiwyg.js"></script> 
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-paginator.js"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.hotkeys.js"></script>	 
 <%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fuelux/require.js"></script> --%>
 <%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fuelux/datagrid.js"></script> --%>
@@ -87,6 +97,7 @@
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.tagit.css" rel="stylesheet">
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/tagit.ui-zendesk.css" rel="stylesheet">	
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.fileupload.css" rel="stylesheet">
+	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.fileupload-ui.css" rel="stylesheet">
 	 
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/bootstrap.css" rel="stylesheet">   
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/bootstrap-combined.min.css" rel="stylesheet"> 
@@ -102,6 +113,7 @@
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/font-awesome.css" rel="stylesheet">
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/fuelux/fuelux.css" rel="stylesheet">
 	
+	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.uploadify.css" rel="stylesheet">		
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/tooltipster.css" rel="stylesheet">		
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/style2.css" rel="stylesheet">
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.stepy.css" rel="stylesheet"> 
@@ -148,46 +160,63 @@ path:hover {
         
 		$(document).ready(function(){
 			
+			var options = {
+	                currentPage: 1
+	                , totalPages: 10
+	                , numberOfPages:3
+	                , size:'normal'
+	                , alignment:'center'
+	              
+
+	            }
+
+	        $('#comments-pag').bootstrapPaginator(options);
+		
+			
 			$(".finish").addClass("btn btn-success");
 			
 			var isValid = false;
 
-			$("#fileupload").change(function(){				
+// 			$("#fileupload").change(function(){				
 			
-				var fileInput = document.getElementById('fileupload');
-				var file = fileInput.files[0];
-				var formData = new FormData();			
-				formData.append('fileUpload', file);
+// 				var fileInput = document.getElementById('fileupload');
+// 				var file = fileInput.files[0];
+// 				var formData = new FormData();			
+// 				formData.append('fileUpload', file);
 	                
-					$.ajax({ 
-					 		url: "./handleFileUpload.html", 		
-					 		type: "POST",						 				 	
-					 		data : formData,
-					 		contentType: false,
-					        processData: false,	
-					 		success : function(alertStatus){
-// 					 			alert(alertStatus.message);
-					 		},						 		 
-					 		error: function(jqXHR, exception) {
-				                   if (jqXHR.status === 0) {
-				                       alert('Not connect.\n Verify Network.');
-				                   } else if (jqXHR.status == 404) {
-				                       alert('Requested page not found. [404]');
-				                   } else if (jqXHR.status == 500) {
-				                       alert('Internal Server Error [500].');
-				                   } else if (exception === 'parsererror') {
-				                       alert('Requested JSON parse failed.');
-				                   } else if (exception === 'timeout') {
-				                       alert('Time out error.');
-				                   } else if (exception === 'abort') {
-				                       alert('Ajax request aborted.');
-				                   } else {
-				                       alert('Uncaught Error.\n' + jqXHR.responseText);
-				                   }
-				               }
-					 	});
+// 					$.ajax({ 
+// 					 		url: "./handleFileUpload.html", 		
+// 					 		type: "POST",						 				 	
+// 					 		data : formData,
+// 					 		contentType: false,
+// 					        processData: false,	
+// 					 		success : function(alertStatus){
+// 					 			var input = $("#fileUpload");
+// 					 			if(!alertStatus.result){
+// 					 				bootbox.alert(alertStatus.message);
+// 					 				input.replaceWith(input.val('').clone(true));
+// 					 			}
+// 					 		},						 		 
+// 					 		error: function(jqXHR, exception) {
+// 				                   if (jqXHR.status === 0) {
+// 				                       alert('Not connect.\n Verify Network.');
+// 				                   } else if (jqXHR.status == 404) {
+// 				                       alert('Requested page not found. [404]');
+// 				                   } else if (jqXHR.status == 500) {
+// 				                       alert('Internal Server Error [500].');
+// 				                   } else if (exception === 'parsererror') {
+// 				                       alert('Requested JSON parse failed.');
+// 				                   } else if (exception === 'timeout') {
+// 				                       alert('Time out error.');
+// 				                   } else if (exception === 'abort') {
+// 				                       alert('Ajax request aborted.');
+// 				                   } else {
+// 				                       alert('Uncaught Error.\n' + jqXHR.responseText);
+// 				                   }
+// 				               }
+// 					 	});
 				
-			});
+// 			});
 
 				
 			function updateProgressBar(navItems, stepIndex){

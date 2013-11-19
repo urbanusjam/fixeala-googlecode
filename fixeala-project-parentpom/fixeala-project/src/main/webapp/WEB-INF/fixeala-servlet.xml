@@ -28,7 +28,7 @@
 	
 	<!-- Configure the multipart resolver -->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
-        p:maxUploadSize="1000000"/>
+        p:maxUploadSize="3000000"/> <!-- the maximum file size in bytes (3MB) -->
 
 	<!-- JSP View Resolver -->	
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">

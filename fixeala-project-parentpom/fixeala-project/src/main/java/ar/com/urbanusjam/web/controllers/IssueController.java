@@ -20,6 +20,7 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.omg.CORBA.portable.ValueOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -202,36 +203,57 @@ public class IssueController {
 				String fileName = file.getOriginalFilename();			
 				inputStream = file.getInputStream();
 				
-				this.setUploadedFile(contenidoService.subirContenido(inputStream, fileName));
+				FileWrapperDTO fileDTO = contenidoService.subirContenido(inputStream, fileName);				
+				int width = fileDTO.getAncho();
+				int height = fileDTO.getAlto();
+				String extension = fileName;
 				
-				/**
-						
-				//valido tamaño
-				if( file.getSize() > MAX_SIZE )
-					return new AlertStatus(false, "El archivo seleccionado supera el peso m&aacute;ximo (3 MB).");
-
-				//valido extensión (jpg, jpeg, png)
-				if(! ( extension.equals("jpg") || extension.equals("jpeg") || extension.equals("png") ) )
-					return new AlertStatus(false, "Los formatos de archivo permitidos son JPEG y PNG.");
+				boolean valid = false;
+				String message = StringUtils.EMPTY;				
+			
+				if( file.getSize() > MAX_SIZE ){
+					valid = false;
+					message = "El archivo seleccionado supera el peso m&aacute;ximo (3 MB).";
+//					return new AlertStatus(false, "El archivo seleccionado supera el peso m&aacute;ximo (3 MB).");
+				}
+				
+				if(! ( extension.equals("jpg") || extension.equals("jpeg") || extension.equals("png") ) ){
+					valid = false;
+					message = "Los formatos de archivo permitidos son JPEG y PNG.";
+					//return new AlertStatus(false, "Los formatos de archivo permitidos son JPEG y PNG.");
+				}
+					
 							
-				//valido dimensiones minimas
+			
 				if( (width < MIN_WIDTH)
 						|| (height < MIN_HEIGHT)
-						|| (width < MIN_WIDTH && height < MIN_HEIGHT) )
-					return new AlertStatus(false, "La imagen debe tener una resolución mínima de 640 x 480 píxeles.");
-				
-				//valido dimensiones maximas
+						|| (width < MIN_WIDTH && height < MIN_HEIGHT) ){
+					valid = false;
+					message = "La foto debe tener una resolución mínima de 640 x 480 píxeles.";
+					//return new AlertStatus(false, "La foto debe tener una resolución mínima de 640 x 480 píxeles.");					
+				}
+					
+			
 				if( (width > MAX_WIDTH)
 						|| (height > MAX_HEIGHT)
-						|| (width > MAX_WIDTH && height > MAX_HEIGHT) )
-					return new AlertStatus(false, "La imagen debe tener una resolución máxima de 1080 x 720 píxeles.");
-			    			   
-			    **/					    
-			  
-		
+						|| (width > MAX_WIDTH && height > MAX_HEIGHT) ){
+					valid = false;
+					message = "La foto debe tener una resolución máxima de 1080 x 720 píxeles.";
+					//return new AlertStatus(false, "La foto debe tener una resolución máxima de 1080 x 720 píxeles.");
+				}
+					
+			    if(!valid){
+			    	fileDTO.getFile().delete();
+			    	return new AlertStatus(false, message);
+			    }				
+				
+			    else{
+			    	this.setUploadedFile(fileDTO);
+			    }
+				
 			}
 			
-			return new AlertStatus(true, "Todo bien");
+			return new AlertStatus(true, "La foto se cargó exitosamente.");
 	    
 	    } catch (IOException e) {
 	    	return new AlertStatus(false, "No se pudo cargar el archivo.");
