@@ -90,7 +90,7 @@
 							<legend></legend>							
 									<div class="fileupload fileupload-new" data-provides="fileupload">
 										<div class="fileupload-new thumbnail" style="width: 304px; height: 150px;">
-											<img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=no+image" />
+											<img src="${pageContext.request.contextPath}/resources/images/nopic.png" />
 										</div>
 										<div class="fileupload-preview fileupload-exists thumbnail" style="height: 150px;min-width:300px;max-width: 200px; max-height: 150px; line-height: 20px;"></div>
 										<div>

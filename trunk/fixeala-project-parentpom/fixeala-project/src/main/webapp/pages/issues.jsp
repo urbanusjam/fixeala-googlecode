@@ -15,6 +15,7 @@
 		<!-- Issue -->
 		<script type="text/javascript">
 		
+		 
 		
 		//--NON-EDITABLE FIELDS
 		
@@ -580,9 +581,9 @@
       
       <div class="row">
       
-	      <div id="btnGroupActions" class="btn-group" data-toggle="buttons-checkbox">
+	      <div id="btnGroupActions" class="btn-group" data-toggle="buttons-checkbox">		
+			  <button type="button" class="btn" title="Vistas">1<i class="icon-eye-open icon-large"></i></button>
 			  <button type="button" class="btn" title="Votos">3<i class="icon-thumbs-up-alt icon-large"></i></button>
-			  <button type="button" class="btn" title="Seguidores">1<i class="icon-eye-open icon-large"></i></button>
 			  <button type="button" class="btn" title="Comentarios">0<i class="icon-comment icon-large"></i></button>
 			  
 			  <button type="button" class="btn" title="Agregar a favoritos"><i class="icon-star icon-large"></i></button>		
@@ -961,10 +962,16 @@
 			      			     
 			    <!-- EDITOR BOX-->   
 			    <div style=" width:660px;margin:20px 0;">
-			    	<div id="commentTextEditor" contenteditable="true"></div>
-			   		<button style="float:right;margin-top:15px;margin-bottom:15px;" class="btn btn-primary">Comentar</button>			
-			
+			   
+		            <form accept-charset="UTF-8" action="" method="POST">
+		                <textarea class="span9" id="commentTextEditor" name="commentTextEditor"
+		                placeholder="Ingrese su comentario" rows="5"></textarea>
+		           
+		               	<button style="float:right;margin-top:15px;margin-bottom:15px;" class="btn btn-info">Publicar</button>	
+		            </form> 
 							
+				
+						
 				<table id="tblComments" class="table table-hover">
 					<tr>
 						<td>
@@ -1000,17 +1007,19 @@
 					</tr>
 				</table>
 				
-				<div class="pagination pagination-centered">
-				  <ul>
-				    <li><a href="#">« Anterior</a></li>
-				    <li><a href="#">1</a></li>
-				    <li><a href="#">2</a></li>
-				    <li><a href="#">3</a></li>
-				    <li><a href="#">4</a></li>
-				    <li><a href="#">5</a></li>
-				    <li><a href="#">Siguiente »</a></li>
-				  </ul>
-				</div>
+				<div id="comments-pag"></div>	
+				
+<!-- 				<div class="pagination pagination-centered"> -->
+<!-- 				  <ul> -->
+<!-- 				    <li><a href="#">« Anterior</a></li> -->
+<!-- 				    <li><a href="#">1</a></li> -->
+<!-- 				    <li><a href="#">2</a></li> -->
+<!-- 				    <li><a href="#">3</a></li> -->
+<!-- 				    <li><a href="#">4</a></li> -->
+<!-- 				    <li><a href="#">5</a></li> -->
+<!-- 				    <li><a href="#">Siguiente »</a></li> -->
+<!-- 				  </ul> -->
+<!-- 				</div> -->
 				
 				
 				

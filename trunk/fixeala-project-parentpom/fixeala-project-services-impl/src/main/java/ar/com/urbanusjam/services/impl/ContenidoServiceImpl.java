@@ -7,9 +7,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
+
 import javax.imageio.ImageIO;
 
 import ar.com.urbanusjam.dao.ContenidoDAO;
@@ -22,10 +26,12 @@ import ar.com.urbanusjam.services.dto.FileWrapperDTO;
 
 public class ContenidoServiceImpl implements ContenidoService {
 	
+    private static final String DATE_FORMAT_NOW = "yyyyMMddHHmm";
  	private static final int BUFFER_SIZE = 6124; 
     private static final String EXTENSION_BANNER = ".data";	 
     private static final long MAX_SIZE = 1024*256;  
     private final int LONGITUD_MAXIMA_NOMBRE_ARCHIVO_HASH = 16;
+
     private String pathImagenes;
     private ContenidoDAO contenidoDAO;
     private IssueDAO issueDAO;
@@ -62,7 +68,7 @@ public class ContenidoServiceImpl implements ContenidoService {
         /** Archivo random a generar **/
         String nombreArchivoHash = UUID.randomUUID().toString();
         int inicioCadena = nombreArchivoHash.length() - LONGITUD_MAXIMA_NOMBRE_ARCHIVO_HASH;
-        File file = new File( this.pathImagenes + nombreArchivoHash.substring(inicioCadena) + "." + extensionArchivo.toLowerCase());
+        File file = new File( this.pathImagenes + "IMG-" + this.generateTimestamp() + "-FX" +  nombreArchivoHash + "." + extensionArchivo.toLowerCase());
         
         try {
             FileOutputStream fileOutputStream;
@@ -177,6 +183,14 @@ public class ContenidoServiceImpl implements ContenidoService {
         contenido.setIssue(issue);
         
         return contenido;
+    }
+    
+    private String generateTimestamp(){
+    	  Calendar cal = Calendar.getInstance();
+          SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);         
+          String timestamp = StringUtils.EMPTY;
+          timestamp = sdf.format(cal.getTime());  
+          return timestamp;
     }
 	
 

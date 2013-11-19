@@ -81,4 +81,9 @@
   	<put-attribute name="body" value="/pages/error.jsp" />
   </definition>
   
+  <definition name="fileupload" extends="base.layout">
+  	<put-attribute name="title" value="Fixeala" /> 
+  	<put-attribute name="body" value="/pages/fileupload.jsp" />
+  </definition>
+  
 </tiles-definitions>

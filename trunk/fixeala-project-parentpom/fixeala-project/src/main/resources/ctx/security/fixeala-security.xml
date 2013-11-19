@@ -21,6 +21,7 @@
      		<security:intercept-url pattern="/usuarios.html" access="permitAll"/>	     		
      		<security:intercept-url pattern="/dataset.html" access="permitAll"/>
      		<security:intercept-url pattern="/widget.html" access="permitAll"/>	
+     		<security:intercept-url pattern="/fileupload.html" access="permitAll"/>	
 <!--      		<security:intercept-url pattern="/issue.html" access="permitAll"/>	    			 -->
      	
 			<security:intercept-url pattern="/account/signup.html" access="permitAll"/>	
