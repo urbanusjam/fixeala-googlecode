@@ -432,6 +432,35 @@
 				});
 			  
 			  /*******************************************/
+			
+			  $('#issue-tags').tags( {
+                  tagData:  ${tags} ,
+                  readOnly: true,
+                  readOnlyEmptyMessage: 'No hay etiquetas definidas',
+                  tagClass: 'tagContainer'
+               });
+			  
+			
+			   $('#btn-comment').click(function() {
+					var message = $("#comment-text").val();
+					var id = ${id};					
+					var data = 'issueID='+ id + '&comment='+ message;		
+				
+					$.ajax({
+        			    url: "./addComment.html",
+				 		type: "POST",	
+				 		data: data,
+				 		dataType: "json",									 
+				        success: function(data){		
+				        	if(data.result){				
+						    	window.location.reload();
+						    }					    	   
+				    	    else{
+				    		    bootbox.alert(data.message);		
+				    	    }
+	            		}
+        			});
+			  });
 			  
 			
 			  $('#btn-update').click(function() {
@@ -444,7 +473,7 @@
 							   
 						       url: './updateIssue.html', 
 						       ajaxOptions: {
-						           dataType: 'json' //assuming json response		
+						           dataType: 'json' 
 						       },  						      
 						       success: function(data, config) {						    	
 						    	   if(data.result){		
@@ -661,23 +690,7 @@
 	    			<div class="caption"><button class="btn btn-info"><i class="icon-camera"></i>&nbsp;&nbsp;&nbsp;mas fotos y videos</button>	</div>
 	  			</li>	
 		   </ul>
-	   
-<!-- 		   <ul class="thumbnails"> -->
-<!-- 	  	   		<li  style="margin-left:0"> -->
-<%-- 		  	   		<c:if test="${not empty image}">		  	   --%>
-<!-- 			  	   		<a href="#" class="thumbnail"> -->
-<%-- 		      				<img src="${pageContext.request.contextPath}/uploads/${imageUrl}" alt="${imageName}">	     --%>
-<!-- 		    			</a> -->
-<%-- 		  	   		</c:if> --%>
-<%-- 		  	   		<c:if test="${empty image}"> --%>
-<!-- 			  	   		<a href="#" class="thumbnail"> -->
-<%-- 		      				<img src="${pageContext.request.contextPath}/resources/images/nopic.png" alt="">	     --%>
-<!-- 		    			</a> -->
-<%-- 		  	   		</c:if> --%>
-<!-- 	    			<br> -->
-<!-- 	    			<div class="caption"><button class="btn btn-info"><i class="icon-camera"></i>&nbsp;&nbsp;&nbsp;mas fotos y videos</button>	</div> -->
-<!-- 	  			</li>	 -->
-<!-- 		   </ul> -->
+	 
 	 	</div>
 	 
 	 	<div class="span8">  	 	
@@ -729,6 +742,10 @@
 						  <tr>
 						    <th>Etiquetas:</th>
 						    <td>
+						    
+						    	  <div id="issue-tags" class="tag-list">
+            <div class="tags"></div>
+         </div>
 <%-- 						    	<a href="#" id="issue-tags" data-type="select2" class="select2-container select2-container-multi select2">${tags}</a> --%>
 						    </td>						   
 						 </tr>
@@ -963,65 +980,34 @@
 			    <!-- EDITOR BOX-->   
 			    <div style=" width:660px;margin:20px 0;">
 			   
-		            <form accept-charset="UTF-8" action="" method="POST">
-		                <textarea class="span9" id="commentTextEditor" name="commentTextEditor"
-		                placeholder="Ingrese su comentario" rows="5"></textarea>
+		                <textarea class="span9" id="comment-text" name="comment-text"
+		                	placeholder="Ingrese su comentario" rows="5"></textarea>
 		           
-		               	<button style="float:right;margin-top:15px;margin-bottom:15px;" class="btn btn-info">Publicar</button>	
-		            </form> 
-							
-				
+		               	<button id="btn-comment" type="submit" style="float:right;margin-top:15px;margin-bottom:15px;" class="btn btn-info">Publicar</button>	
+		        
+				<div class="comment-list">
 						
-				<table id="tblComments" class="table table-hover">
-					<tr>
-						<td>
-							<div class="media">
-								  <a class="pull-left thumbnail" href="#">
-								    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
-								  </a>
-						 		 <div class="media-body">				    	
-							    	<a href="#">jorgeW</a> | 12/05/13
-							    	<p>Donec ante lectus, pharetra vel enim nec, egestas adipiscing eros. 
-							    	Quisque suscipit lorem ac ipsum posuere, vitae interdum libero pellentesque. 
-							    	Fusce faucibus dolor felis, in malesuada mauris dignissim vitae. 
-							    	Pellentesque quis purus ullamcorper, vestibulum elit sit amet, ullamcorper risus. </p>	 
-						  		</div>
-							</div>						
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div class="media">
-								  <a class="pull-left thumbnail" href="#">
-								    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
-								  </a>
-						 		 <div class="media-body">				    	
-							    	<a href="#">002_albert</a> | 11/05/13
-							    	<p>Donec ante lectus, pharetra vel enim nec, egestas adipiscing eros. 
-							    	Quisque suscipit lorem ac ipsum posuere, vitae interdum libero pellentesque. 
-							    	Fusce faucibus dolor felis, in malesuada mauris dignissim vitae. 
-							    	Pellentesque quis purus ullamcorper, vestibulum elit sit amet, ullamcorper risus. </p>	 
-						  		</div>
-							</div>						
-						</td>
-					</tr>
+				<table id="tblComments" class="table table-hover">				        
+				   <c:forEach items="${comentarios}" var="comentario">	
+						<tr>
+							<td>
+								<div class="media">
+									  <a class="pull-left thumbnail" href="#">
+									    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
+									  </a>
+							 		 <div class="media-body">				    	
+								    	<a href="#">${comentario.usuario}</a> | ${comentario.fechaFormateada}
+								    	<p>${comentario.mensaje}</p>	 
+							  		</div>
+								</div>						
+							</td>
+						</tr>
+					</c:forEach>
 				</table>
 				
 				<div id="comments-pag"></div>	
-				
-<!-- 				<div class="pagination pagination-centered"> -->
-<!-- 				  <ul> -->
-<!-- 				    <li><a href="#">« Anterior</a></li> -->
-<!-- 				    <li><a href="#">1</a></li> -->
-<!-- 				    <li><a href="#">2</a></li> -->
-<!-- 				    <li><a href="#">3</a></li> -->
-<!-- 				    <li><a href="#">4</a></li> -->
-<!-- 				    <li><a href="#">5</a></li> -->
-<!-- 				    <li><a href="#">Siguiente »</a></li> -->
-<!-- 				  </ul> -->
-<!-- 				</div> -->
-				
-				
+			
+				</div>
 				
 					</div>
 			       

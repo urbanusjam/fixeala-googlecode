@@ -3,9 +3,8 @@ package ar.com.urbanusjam.services;
 import java.util.List;
 
 import ar.com.urbanusjam.services.dto.AreaDTO;
+import ar.com.urbanusjam.services.dto.CommentDTO;
 import ar.com.urbanusjam.services.dto.IssueDTO;
-import ar.com.urbanusjam.services.dto.IssueHistorialRevisionDTO;
-import ar.com.urbanusjam.services.dto.IssueLicitacionDTO;
 
 public interface IssueService {
 	
@@ -33,6 +32,8 @@ public interface IssueService {
 	
 	public AreaDTO getAreaByName(String areaName);
 	
+	public void postComment(CommentDTO comment);
 	
-
+	public List<CommentDTO> getCommentsByIssue(String issueID);
+	
 }

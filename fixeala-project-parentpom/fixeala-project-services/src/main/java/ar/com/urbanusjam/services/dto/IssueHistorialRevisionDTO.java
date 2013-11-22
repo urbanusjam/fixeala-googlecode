@@ -83,12 +83,13 @@ public class IssueHistorialRevisionDTO implements Serializable {
 		this.camposModificados = camposModificados;
 	}
 	
-	public String getFechaFormateada(){		
+	public String getFechaFormateada(){	
 		
 		String formattedDate = "";	
 		Date d = this.getFecha();		
         SimpleDateFormat df = new SimpleDateFormat();
-        df.applyPattern("dd/MM/yyyy hh:mm a");
+//      df.applyPattern("dd/MM/yyyy hh:mm a");
+        df.applyPattern("dd/MM/yyyy HH:mm");        
         formattedDate = df.format(d.getTime());
         return formattedDate;	
 	}

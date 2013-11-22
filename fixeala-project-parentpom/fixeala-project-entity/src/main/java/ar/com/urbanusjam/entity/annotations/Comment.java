@@ -41,14 +41,16 @@ public class Comment implements Serializable {
 	@Column(name = "FLAG")
 	private boolean denunciado;
 		
+	public Comment() { } 
 
 	public Comment(Issue issue, User usuario, GregorianCalendar fecha,
-			String mensaje) {
+			String mensaje, boolean denunciado) {
 		super();
 		this.issue = issue;
 		this.usuario = usuario;
 		this.fecha = fecha;
 		this.mensaje = mensaje;
+		this.denunciado = denunciado;
 	}
 
 	public Long getId() {

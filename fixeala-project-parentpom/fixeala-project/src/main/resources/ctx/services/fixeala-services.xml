@@ -19,6 +19,7 @@
 		<property name="userDAO" ref="userDAO" />
 		<property name="areaDAO" ref="areaDAO" />
 		<property name="tagDAO" ref="tagDAO" />
+		<property name="commentDAO" ref="commentDAO" />
 	</bean>
 	
 	<bean name="contenidoService" class="ar.com.urbanusjam.services.impl.ContenidoServiceImpl" >

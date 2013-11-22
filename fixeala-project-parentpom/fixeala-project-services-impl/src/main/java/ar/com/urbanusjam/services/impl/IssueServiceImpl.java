@@ -18,12 +18,14 @@ import java.util.TreeSet;
 import org.hibernate.Hibernate;
 
 import ar.com.urbanusjam.dao.AreaDAO;
+import ar.com.urbanusjam.dao.CommentDAO;
 import ar.com.urbanusjam.dao.IssueDAO;
 import ar.com.urbanusjam.dao.IssueHistorialRevisionDAO;
 import ar.com.urbanusjam.dao.IssueLicitacionDAO;
 import ar.com.urbanusjam.dao.TagDAO;
 import ar.com.urbanusjam.dao.UserDAO;
 import ar.com.urbanusjam.entity.annotations.Area;
+import ar.com.urbanusjam.entity.annotations.Comment;
 import ar.com.urbanusjam.entity.annotations.Contenido;
 import ar.com.urbanusjam.entity.annotations.Issue;
 import ar.com.urbanusjam.entity.annotations.IssueHistorialRevision;
@@ -33,6 +35,7 @@ import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.ContenidoService;
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.dto.AreaDTO;
+import ar.com.urbanusjam.services.dto.CommentDTO;
 import ar.com.urbanusjam.services.dto.ContenidoDTO;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.IssueHistorialRevisionDTO;
@@ -49,7 +52,7 @@ public class IssueServiceImpl implements IssueService {
 	private UserDAO userDAO;
 	private AreaDAO areaDAO;
 	private TagDAO tagDAO;
-	
+	private CommentDAO commentDAO;
 	
 	
 	public void setContenidoService(ContenidoService contenidoService) {
@@ -71,7 +74,10 @@ public class IssueServiceImpl implements IssueService {
 	public void setTagDAO(TagDAO tagDAO) {
 		this.tagDAO = tagDAO;
 	}
-
+	
+	public void setCommentDAO(CommentDAO commentDAO) {
+		this.commentDAO = commentDAO;
+	}
 
 	@Override
 	public void reportIssue(IssueDTO issueDTO) {
@@ -282,6 +288,39 @@ public class IssueServiceImpl implements IssueService {
 		return convertTo(areaDAO.getAreaByName(areaName));
 	}
 	
+	@Override
+	public List<String> getTagList() {
+		List<Tag> tagList = new ArrayList<Tag>();
+		List<String> list = new ArrayList<String>();
+		tagList = tagDAO.getTags();	
+		
+		for(Tag t : tagList){			
+			list.add(t.getTagname());
+		}
+		
+		return list;
+				
+	}
+
+	@Override
+	public void postComment(CommentDTO commentDTO) {
+		Issue issue = issueDAO.findIssueById(commentDTO.getNroReclamo());
+		User user = userDAO.loadUserByUsername(commentDTO.getUsuario());
+		Comment comment = new Comment(issue, user, getCurrentCalendar(commentDTO.getFecha()), commentDTO.getMensaje(), false);
+		commentDAO.saveComment(comment);		
+	}
+
+	@Override
+	public List<CommentDTO> getCommentsByIssue(String issueID) {
+		List<Comment> comentarios = new ArrayList<Comment>();
+		List<CommentDTO> comentariosDTO = new ArrayList<CommentDTO>();
+		comentarios = commentDAO.findCommentsByIssueId(Long.valueOf(issueID));
+		for(Comment c : comentarios){
+			comentariosDTO.add(convertTo(c));
+		}		
+		return comentariosDTO;
+	}
+	
 	/********************************************************************************/
 	
 	public Area convertTo(AreaDTO areaDTO){
@@ -361,14 +400,11 @@ public class IssueServiceImpl implements IssueService {
 	
 	public IssueHistorialRevision convertTo(IssueHistorialRevisionDTO historialDTO){
 		
-		IssueHistorialRevision historial = new IssueHistorialRevision();
-		
-		Calendar calendar = new GregorianCalendar();
-		calendar.setTime(historialDTO.getFecha());			
-		Issue issue = new Issue();
+		IssueHistorialRevision historial = new IssueHistorialRevision();	
+		Issue issue = new Issue();		
 		issue.setId(Long.valueOf(historialDTO.getNroReclamo()));
 		
-		historial.setFecha((GregorianCalendar) calendar);	
+		historial.setFecha(this.getCurrentCalendar(historialDTO.getFecha()));	
 		historial.setUsuario(userDAO.loadUserByUsername(historialDTO.getUsername()));
 		historial.setIssue(issue);
 		historial.setOperacion(Operation.UPDATE);
@@ -444,10 +480,8 @@ public class IssueServiceImpl implements IssueService {
 				issue.addTag(tag);	
 			}
 		}
-		
-		Calendar calendar = new GregorianCalendar();
-		calendar.setTime(issueDTO.getDate());
-		issue.setDate((GregorianCalendar) calendar);		
+	
+		issue.setDate(this.getCurrentCalendar(issueDTO.getDate()));		
 		issue.setLatitude(Float.parseFloat(issueDTO.getLatitude()));
 		issue.setLongitude(Float.parseFloat(issueDTO.getLongitude()));
 		issue.setStatus(issueDTO.getStatus());
@@ -493,6 +527,18 @@ public class IssueServiceImpl implements IssueService {
 		issueDTO.setStatus(issue.getStatus());
 		issueDTO.setUsername(userDTO.getUsername());
 		
+		//tags		
+		Set<Tag> tagList = issue.getTagsList();
+		List<String> tagNames = new ArrayList<String>();
+		
+		if(tagList.size() > 0){
+			for(Tag t :  issue.getTagsList()){				
+				tagNames.add(t.getTagname());
+			}
+		}
+		
+		issueDTO.setTags(tagNames);
+		
 		//area asignada
 		if(issue.getAssignedArea() != null){
 			issueDTO.setAssignedArea(convertTo(issue.getAssignedArea()));
@@ -535,28 +581,32 @@ public class IssueServiceImpl implements IssueService {
 		
 		issueDTO.setContenidos(contenidosDTO);
 		
+		//comentarios
+		List<CommentDTO> comentariosDTO = new ArrayList<CommentDTO>();
+		
+		for(Comment comentario : issue.getComentarios()){
+			comentariosDTO.add(convertTo(comentario));
+		}
+		
+		issueDTO.setComentarios(comentariosDTO);
+		
 		return issueDTO;
 	}
 	
-	
-
-	@Override
-	public List<String> getTagList() {
-		List<Tag> tagList = new ArrayList<Tag>();
-		List<String> list = new ArrayList<String>();
-		tagList = tagDAO.getTags();	
-		
-		for(Tag t : tagList){			
-			list.add(t.getTagname());
-		}
-		
-		return list;
-				
+	public CommentDTO convertTo(Comment comment){
+		CommentDTO commentDTO = new CommentDTO();
+		commentDTO.setUsuario(comment.getUsuario().getUsername());
+		commentDTO.setNroReclamo(String.valueOf(comment.getIssue().getId()));
+		commentDTO.setFecha(comment.getFecha().getTime());
+		commentDTO.setMensaje(comment.getMensaje());
+		return commentDTO;
 	}
-
 	
-
 	
-
+	private GregorianCalendar getCurrentCalendar(Date date){		
+		Calendar calendar = new GregorianCalendar();
+		calendar.setTime(date);
+		return (GregorianCalendar) calendar;	
+	} 
 	
 }

@@ -34,7 +34,7 @@
 <%--     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fileupload/jquery.ui.widget.js"></script> --%>
 
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.uploadify.js"></script>
-        
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.bootpag.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/formToWizard.js"></script>
     
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.geocomplete.js"></script>
@@ -58,7 +58,7 @@
 <!--     <link href="http://www.fuelcdn.com/fuelux-imh/2.3/css/fuelux-responsive.css" rel="stylesheet" />        -->
 <!--   	<link rel="stylesheet" href="https://fuelcdn.com/fuelux/2.3/css/fuelux.min.css"> -->
 <!-- 	<script src="https://fuelcdn.com/fuelux/2.3/loader.min.js"></script> -->
-
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-tags.js"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-contextmenu.js"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-fileupload.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootbox.js"></script>
@@ -112,6 +112,7 @@
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/select2-bootstrap.css" rel="stylesheet">   
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/font-awesome.css" rel="stylesheet">
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/fuelux/fuelux.css" rel="stylesheet">
+	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/bootstrap-tags.css" rel="stylesheet">   
 	
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.uploadify.css" rel="stylesheet">		
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/tooltipster.css" rel="stylesheet">		
@@ -166,11 +167,23 @@ path:hover {
 	                , numberOfPages:3
 	                , size:'normal'
 	                , alignment:'center'
+	                , onPageChanged: function(e,oldPage,newPage){
+	                    $('.pag').text("Current page changed, old: "+oldPage+" new: "+newPage);
+	                }
 	              
-
 	            }
 
-	        $('#comments-pag').bootstrapPaginator(options);
+// 	        $('#comments-pag').bootstrapPaginator(options);
+			
+			$('#comments-pag').bootpag({
+			    total: 10
+			    , page: 1
+			    , maxVisible: 3
+			    , next: 'Siguiente &raquo;'
+			    , prev: '&laquo; Anterior'
+			}).on("page", function(event, num){
+			    $(".content").html("Page " + num); // or some ajax content loading...
+			});
 		
 			
 			$(".finish").addClass("btn btn-success");
