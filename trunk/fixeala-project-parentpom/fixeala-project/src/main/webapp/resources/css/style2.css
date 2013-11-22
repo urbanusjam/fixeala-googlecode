@@ -708,6 +708,16 @@ legend {
 	line-height: 30px;
 }
 
+.tagContainer{
+	margin-right: 10px; 
+	font-family: 'Arial';
+	font-size: 14px; 
+	height: 25px; 
+	line-height: 25px; 
+	background-color: #1FBBA6;
+	font-weight: normal;
+	}
+
 .popover {
 	font-size: 12px;
 }
@@ -757,7 +767,7 @@ a.accordion-toggle:hover {
 	margin: 0 8px 0 8px;
 }
 
-#commentTextEditor {
+#comment-text {
 	width: 650px;
 	max-height: 150px;
 	height: 150px;

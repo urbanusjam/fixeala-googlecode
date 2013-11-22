@@ -1,8 +1,6 @@
 package ar.com.urbanusjam.entity.annotations;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,23 +9,14 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.LazyToOne;
-import org.hibernate.annotations.LazyToOneOption;
-import org.hibernate.bytecode.javassist.FieldHandled;
-import org.hibernate.bytecode.javassist.FieldHandler;
 
 
 
@@ -89,28 +78,22 @@ public class Issue implements Serializable  {
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn  
 	private IssueLicitacion licitacion;
-	
-//	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-//    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE )
-//	@JoinTable(name = "ISSUE_TAG",
-//	         joinColumns = @JoinColumn(name = "ID_ISSUE"),
-//	         inverseJoinColumns = @JoinColumn(name = "ID_TAG")
-//	)
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="issueList")
-	private Set<Tag> tagsList;
-	
+
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy="issueList")
+	private Set<Tag> tagsList;	
 	
 	@OneToMany(mappedBy="issue", fetch = FetchType.EAGER, cascade = CascadeType.ALL)  
 	private Set<Contenido> contenidos;
 	
-//	@OneToMany(mappedBy = "issue")  
-//	private Collection<Comment> comments;
+	@OneToMany(mappedBy="issue", fetch = FetchType.EAGER, cascade = CascadeType.ALL)  
+	private Set<Comment> comentarios;
 
 	
 	public Issue(){   
 		tagsList = new HashSet<Tag>(); 
 		revisiones = new HashSet<IssueHistorialRevision>();
 		contenidos = new HashSet<Contenido>();
+		comentarios = new HashSet<Comment>();
 	}	
 		
 	
@@ -278,21 +261,14 @@ public class Issue implements Serializable  {
 		this.contenidos = contenidos;
 	}
 	
-//
-//	public Collection<Comment> getComments() {
-//		return comments;
-//	}
-//
-//	public void setComments(Collection<Comment> comments) {
-//		this.comments = comments;
-//	}
-//
-//	public void setComments(List<Comment> comments) {
-//		this.comments = comments;
-//	}
+	public Set<Comment> getComentarios() {
+		return comentarios;
+	}
 
-	
 
+	public void setComentarios(Set<Comment> comentarios) {
+		this.comentarios = comentarios;
+	}
 
 	public void addTag(Tag tag) {	
 			if (!getTagsList().contains(tag)) {
@@ -301,14 +277,18 @@ public class Issue implements Serializable  {
 		    if (!tag.getIssueList().contains(this)) {
 		        tag.getIssueList().add(this);
 		    }			
-	}
-	
+	}	
 	
 	public void addRevision(IssueHistorialRevision revision) {	
 		if (!getRevisiones().contains(revision)) {
 			getRevisiones().add(revision);
 		}
 	}
-
+	
+	public void addComment(Comment comment) {	
+		if (!getComentarios().contains(comment)) {
+			getComentarios().add(comment);
+		}
+	}
 	
 }

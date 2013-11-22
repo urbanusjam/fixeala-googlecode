@@ -44,6 +44,7 @@ import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.ContenidoService;
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.UserService;
+import ar.com.urbanusjam.services.dto.CommentDTO;
 import ar.com.urbanusjam.services.dto.ContenidoDTO;
 import ar.com.urbanusjam.services.dto.FileWrapperDTO;
 import ar.com.urbanusjam.services.dto.IssueDTO;
@@ -119,7 +120,13 @@ public class IssueController {
 				model.addAttribute("latitud", issue.getLatitude());
 				model.addAttribute("longitud", issue.getLongitude());	
 				model.addAttribute("historial", issue.getHistorial());
-				model.addAttribute("tags", issue.getTags());
+				
+				List<String> tag = new ArrayList<String>();
+				for(int i = 0; i < issue.getTags().size(); i++){
+					tag.add("'" + issue.getTags().get(i) + "'"); 
+				}
+				model.addAttribute("tags", tag);
+				model.addAttribute("comentarios", issue.getComentarios());
 				
 				if(issue.getContenidos().size() > 0){
 					ContenidoDTO contenido = issue.getContenidos().get(0);						
@@ -470,6 +477,40 @@ public class IssueController {
 		return issueService.loadAllIssues();		
 	}
 	
+	@RequestMapping(value="/issues/addComment", method = RequestMethod.POST)
+	public @ResponseBody AlertStatus doAddComent(@RequestParam("issueID") String issueID, 
+			@RequestParam("comment") String mensaje, HttpServletRequest request, Model model) throws ParseException {
+		
+		try {			
+			User user =  getCurrentUser(SecurityContextHolder.getContext().getAuthentication());
+			UserDetails userDB = userService.loadUserByUsername(user.getUsername());		
+			
+			if(userDB == null){
+				return new AlertStatus(false, "Debe estar logueado para publicar un comentario.");
+			}	
+			
+			if(mensaje.isEmpty()){
+				return new AlertStatus(false, "Agregue un mensaje.");
+			}
+		
+			else{
+				CommentDTO comentario = new CommentDTO();
+				comentario.setFecha(new Date());
+				comentario.setNroReclamo(issueID);
+				comentario.setUsuario(userDB.getUsername());
+				comentario.setMensaje(mensaje);
+				issueService.postComment(comentario);
+				List<CommentDTO> comments = issueService.getCommentsByIssue(issueID);
+				model.addAttribute("comentarios", issueService.getCommentsByIssue(issueID));
+				model.addAttribute("cantidadComentarios", comments.size());			
+				return new AlertStatus(true, "El comentario ha sido publicado.");			
+			}
+			
+		}catch(AccessDeniedException e){
+			return new AlertStatus(false, "Debe estar logueado para ingresar un nuevo reclamo.");
+		}		
+	}
+	
 	
 
 	private User getCurrentUser(Authentication auth) {
@@ -493,9 +534,7 @@ public class IssueController {
 	
 		return "";
 	}
-	
-	
-	
+		
 	public static int randomNumber(int min, int max) {
 
 	    // Usually this can be a field rather than a method variable

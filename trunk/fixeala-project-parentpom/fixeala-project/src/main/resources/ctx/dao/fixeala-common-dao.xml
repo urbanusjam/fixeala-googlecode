@@ -27,5 +27,7 @@
     <bean id="tagDAO" class="ar.com.urbanusjam.dao.impl.TagDAOImpl" parent="hibernateParent" /> 
     
     <bean id="contenidoDAO" class="ar.com.urbanusjam.dao.impl.ContenidoDAOImpl" parent="hibernateParent" /> 
+    
+    <bean id="commentDAO" class="ar.com.urbanusjam.dao.impl.CommentDAOImpl" parent="hibernateParent" /> 
               
 </beans>
