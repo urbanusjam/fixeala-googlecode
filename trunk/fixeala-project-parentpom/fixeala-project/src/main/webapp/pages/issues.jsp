@@ -402,7 +402,7 @@
 			      ajaxOptions: {
 				        type: 'put'
 				  }
-			    });
+			  });
 			  
 			  $('#fechaRealInicio').editable({
 				  name:'fechaRealInicio',	
