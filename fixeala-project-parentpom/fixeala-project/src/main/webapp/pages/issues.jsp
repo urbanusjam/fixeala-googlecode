@@ -68,7 +68,17 @@
 			   $('#issue-title').editable('toggleDisabled');
 		       $('#issue-barrio').editable('toggleDisabled');
 		       $('#issue-desc').editable('toggleDisabled');
-// 		       $('#issue-tags').editable('toggleDisabled');
+		       $('.issue-tags').editable('toggleDisabled');
+		       
+		       var iconTags =  $('#edit-tags');
+		       if(iconTags.is(':visible')){
+		    	   $('#edit-tags').hide();
+		       }
+		       else{
+		    	   $('#edit-tags').show();
+		       }
+		       
+		       
 
 			   if(!${isCommonUser})
 		       		$('#tbl-licitacion .editable').editable('toggleDisabled');
@@ -150,21 +160,46 @@
 					}
 			  });
 			  
-// 			  $('#issue-tags').editable({
-// 				  	pk: 4,  
-// 				  	mode: 'popup',	
-// 				  	name: 'tags',
-// 					placement: 'right',
-// 					emptytext:'Vacío',
-// 			        inputclass: 'input-large',
-// 			        select2: {
-// 			        	tags: ['alumbrado', 'asfalto', 'bache', 'pozo'],
-// 			            tokenSeparators: [",", " "]
-// 			        },
-// 					ajaxOptions: {
-// 					    type: 'put'
-// 					}  
-// 			    }); 
+			  $('.issue-tags').editable({
+				    pk: 22,
+				 	name: 'tags',				 
+				    placement: 'top',      
+				    mode: 'popup',					 
+      				emptytext: 'No hay etiquetas definidas',
+			        select2: {			        
+			        	tags: ${tags},
+			            tokenSeparators: [",", " "]
+			        },
+			        display: function(value) {
+			            $.each(value,function(i){
+			               // value[i] needs to have its HTML stripped, as every time it's read, it contains
+			               // the HTML markup. If we don't strip it first, markup will recursively be added
+			               // every time we open the edit widget and submit new values.
+			               value[i] = "<span class='label'>" + $('<p>' + value[i] + '</p>').text() + "</span>";
+			            });
+			            $(this).html(value.join(" "));
+			        },
+	                ajaxOptions: {
+				        type: 'put'
+				       
+				  },
+  			  }); 
+			  
+			  $('.issue-tags').on('shown', function() {
+				    var editable = $(this).data('editable');
+				    value = editable.value;
+				    $.each(value,function(i){
+				       value[i] = $('<p>' + value[i] + '</p>').text();
+				    });
+				    
+			  });
+			    
+	
+			  $('[id^="tags-edit-"]').click(function(e) {
+				    e.stopPropagation();
+				    e.preventDefault();
+				    $('#' + $(this).data('editable') ).editable('toggle');
+			  });
 			  
 			  
 			  
@@ -402,6 +437,7 @@
 			      }
 			    });
 			  
+			  
 			  function resetLicitacionValues(){
 				  	 $('#lic-obra').editable('setValue', null); 
 				     $('#lic-nroLicitacion').editable('setValue', null); 
@@ -433,13 +469,15 @@
 			  
 			  /*******************************************/
 			
-			  $('#issue-tags').tags( {
-                  tagData:  ${tags} ,
-                  readOnly: true,
-                  readOnlyEmptyMessage: 'No hay etiquetas definidas',
-                  tagClass: 'tagContainer'
-               });
+// 			  $('#tags').tags({
+//                   tagData:  ${tags} ,
+//                   readOnly: true,
+//                   readOnlyEmptyMessage: 'No hay etiquetas definidas',
+//                   tagClass: 'tagContainer'
+//                });
 			  
+			      
+			
 			
 			   $('#btn-comment').click(function() {
 					var message = $("#comment-text").val();
@@ -742,11 +780,17 @@
 						  <tr>
 						    <th>Etiquetas:</th>
 						    <td>
-						    
-						    	  <div id="issue-tags" class="tag-list">
-            <div class="tags"></div>
-         </div>
-<%-- 						    	<a href="#" id="issue-tags" data-type="select2" class="select2-container select2-container-multi select2">${tags}</a> --%>
+						        <span class="issue-tags" 
+						        	  id="tags-editable-1"            					
+            						  data-type="select2"
+            						  data-value="${tags}"></span>
+        							<a href="#" id="tags-edit-1" data-editable="tags-editable-1" class="">
+        								<i id="edit-tags" class="icon-pencil" style="display:none"></i>
+        							</a>
+<!-- 						    	<div id="issue-tags" class="tag-list"> -->
+<!-- 	            					<div class="tags"></div> -->
+	            				
+<!--          						</div> -->
 						    </td>						   
 						 </tr>
 					</table>	 	
