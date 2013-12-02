@@ -160,13 +160,14 @@
 					}
 			  });
 			  
+			
 			  $('.issue-tags').editable({
 				    pk: 22,
 				 	name: 'tags',				 
 				    placement: 'top',      
 				    mode: 'popup',					 
       				emptytext: 'No hay etiquetas definidas',
-			        select2: {			        
+			        select2: {						        	
 			        	tags: ${tags},
 			            tokenSeparators: [",", " "]
 			        },
@@ -179,10 +180,11 @@
 			            });
 			            $(this).html(value.join(" "));
 			        },
-	                ajaxOptions: {
+			        ajaxOptions: {
 				        type: 'put'
-				       
-				  },
+				    },
+				    type: 'select',
+				    send : 'always'
   			  }); 
 			  
 			  $('.issue-tags').on('shown', function() {
@@ -499,10 +501,22 @@
 	            		}
         			});
 			  });
+			   
+			   
+			   function getTagArray(){
+				   var tagList = [];				  
+					  
+					  $('.issue-tags').children('span').each(function () {
+						    tagList.push($(this).text());
+					    });
+					  
+					  return tagList;
+			   }
 			  
 			
 			  $('#btn-update').click(function() {
 				  
+				 				  
 				  bootbox.confirm("¿Desea confirmar los cambios?", function(result){
 					  
 					  if(result){
@@ -511,7 +525,7 @@
 							   
 						       url: './updateIssue.html', 
 						       ajaxOptions: {
-						           dataType: 'json' 
+						           dataType: 'json'
 						       },  						      
 						       success: function(data, config) {						    	
 						    	   if(data.result){		
@@ -534,7 +548,7 @@
 						           } 
 						           $('#msg').removeClass('alert-success').addClass('alert-error').html(msg).show();
 						       }
-						   });//editable
+						   });//editable 
 						  
 					  }
 			

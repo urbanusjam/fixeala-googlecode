@@ -354,8 +354,15 @@ public class IssueController {
 	
 	}
 	
+	@RequestMapping(value="/issues/sendTags", method = RequestMethod.POST)
+	public @ResponseBody List<String> sendTags(@RequestParam List<String> tags){
+		int i = tags.size();
+		return tags;
+	}
+	
 	@RequestMapping(value="/issues/updateIssue", method = RequestMethod.POST)
 	public @ResponseBody AlertStatus doUpdatetIssue(@ModelAttribute("issue") IssueDTO issue, 
+//			@RequestParam("tags") List<String> tags,
 			@ModelAttribute("licitacion") IssueLicitacionDTO licitacion, HttpServletRequest request) throws ParseException{
 		
 		try {			
