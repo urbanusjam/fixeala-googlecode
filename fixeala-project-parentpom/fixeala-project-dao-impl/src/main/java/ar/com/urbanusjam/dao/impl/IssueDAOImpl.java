@@ -6,9 +6,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
+
 import ar.com.urbanusjam.dao.IssueDAO;
 import ar.com.urbanusjam.dao.TagDAO;
 import ar.com.urbanusjam.dao.impl.utils.GenericDAOImpl;
+import ar.com.urbanusjam.dao.utils.CriteriaSearch;
 import ar.com.urbanusjam.entity.annotations.Issue;
 import ar.com.urbanusjam.entity.annotations.Tag;
 
@@ -72,7 +77,23 @@ public class IssueDAOImpl extends GenericDAOImpl<Issue, Serializable> implements
 		return issues.get(0);
 	}
 
-	
-	
+	@Override
+	public List<Issue> getIssuesByCriteria(CriteriaSearch issueSearch) {
+		
+		@SuppressWarnings("unchecked")
+		List<Issue> issues = this.getSessionFactory().getCurrentSession().createCriteria(Issue.class)        
+	        .add( Restrictions.eq("provincia", issueSearch.getProvincia()) )
+	        .add( Restrictions.eq("ciudad", issueSearch.getCiudad()) )
+	        .add( Restrictions.eq("barrio", issueSearch.getBarrio()) )	     
+	        .add( Restrictions.gt("fecha", issueSearch.getEstado()) )
+	        .add( Restrictions.lt("fecha", issueSearch.getEstado()) )
+	        .add( Restrictions.in("tags", issueSearch.getTags()) )
+	        .add( Restrictions.in("estado", issueSearch.getEstado()) )
+	        .addOrder(Order.asc("fecha") )
+	        .list();
+		
+		return issues;        
+        
+	}
 
 }
