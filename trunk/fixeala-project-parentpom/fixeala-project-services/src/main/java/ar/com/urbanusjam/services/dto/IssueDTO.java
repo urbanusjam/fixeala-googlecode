@@ -8,8 +8,6 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 @XmlRootElement(name = "issue")
 public class IssueDTO implements Serializable {
@@ -39,6 +37,7 @@ public class IssueDTO implements Serializable {
 	private String status;
 	private String statusCss;
 	
+
 
 
 	public Long getId() {

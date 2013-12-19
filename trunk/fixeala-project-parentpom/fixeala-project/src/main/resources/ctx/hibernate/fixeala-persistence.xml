@@ -9,7 +9,6 @@
   
     <bean id="sessionFactoryFixeala" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
         <property name="dataSource" ref="dataSourceFixeala" />
-<!--         <property name="configLocation" value="classpath:ctx/hibernate/fixeala-common.cfg.xml"/> -->
    		<property name="configLocation" value="classpath:ctx/hibernate/fixeala-common-annot.cfg.xml"/>
         <property name="hibernateProperties">
             <props>
@@ -34,7 +33,7 @@
     <bean id="trxManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactoryFixeala" />
     </bean>
-    
+ 
     <!-- enable the configuration of transactional behavior based on annotations -->
 	<tx:annotation-driven transaction-manager="trxManager"/>
     
