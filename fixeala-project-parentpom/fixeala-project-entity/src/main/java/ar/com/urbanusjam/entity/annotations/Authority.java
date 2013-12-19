@@ -14,7 +14,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.util.Assert;
 /**
  * The persistent class for the AUTHORITIES database table.
  *

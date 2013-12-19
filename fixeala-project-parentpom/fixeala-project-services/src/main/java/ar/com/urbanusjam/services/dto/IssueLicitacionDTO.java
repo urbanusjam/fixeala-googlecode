@@ -3,7 +3,7 @@ package ar.com.urbanusjam.services.dto;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.springframework.format.annotation.DateTimeFormat;
+//import org.springframework.format.annotation.DateTimeFormat;
 
 public class IssueLicitacionDTO implements Serializable {
 
@@ -28,13 +28,13 @@ public class IssueLicitacionDTO implements Serializable {
 	private int plazoEjecucionEnDias;
 	private Float presupuestoAdjudicado;
 	private Float presupuestoFinal;
-	@DateTimeFormat(pattern = "dd-MM-yyyy")
+//	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	private Date fechaEstimadaInicio;	
-	@DateTimeFormat(pattern = "dd-MM-yyyy")
+//	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	private Date fechaEstimadaFin;
-	@DateTimeFormat(pattern = "dd-MM-yyyy")
+//	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	private Date fechaRealInicio;
-	@DateTimeFormat(pattern = "dd-MM-yyyy")
+//	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	private Date fechaRealFin;
 	private String tipoObra;
 	private String estadoObra;

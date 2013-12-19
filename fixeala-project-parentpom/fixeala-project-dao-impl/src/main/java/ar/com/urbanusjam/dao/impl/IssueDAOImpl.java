@@ -2,23 +2,29 @@ package ar.com.urbanusjam.dao.impl;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Set;
 
-import org.hibernate.Criteria;
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Propagation;
 
 import ar.com.urbanusjam.dao.IssueDAO;
-import ar.com.urbanusjam.dao.TagDAO;
 import ar.com.urbanusjam.dao.impl.utils.GenericDAOImpl;
 import ar.com.urbanusjam.dao.utils.CriteriaSearch;
 import ar.com.urbanusjam.entity.annotations.Issue;
-import ar.com.urbanusjam.entity.annotations.Tag;
 
+@Transactional(propagation= Propagation.REQUIRED, readOnly=false)
 public class IssueDAOImpl extends GenericDAOImpl<Issue, Serializable> implements IssueDAO {	
+	@Autowired
+	private SessionFactory sessionFactory;
 	
+	
+	 
 	public IssueDAOImpl() {
 		super(Issue.class);
 	}
@@ -81,15 +87,15 @@ public class IssueDAOImpl extends GenericDAOImpl<Issue, Serializable> implements
 	public List<Issue> getIssuesByCriteria(CriteriaSearch issueSearch) {
 		
 		@SuppressWarnings("unchecked")
-		List<Issue> issues = this.getSessionFactory().getCurrentSession().createCriteria(Issue.class)        
-	        .add( Restrictions.eq("provincia", issueSearch.getProvincia()) )
-	        .add( Restrictions.eq("ciudad", issueSearch.getCiudad()) )
-	        .add( Restrictions.eq("barrio", issueSearch.getBarrio()) )	     
-	        .add( Restrictions.gt("fecha", issueSearch.getEstado()) )
-	        .add( Restrictions.lt("fecha", issueSearch.getEstado()) )
-	        .add( Restrictions.in("tags", issueSearch.getTags()) )
-	        .add( Restrictions.in("estado", issueSearch.getEstado()) )
-	        .addOrder(Order.asc("fecha") )
+		List<Issue> issues = getSessionFactory().getCurrentSession().createCriteria(Issue.class)        
+//	        .add( Restrictions.eq("province", issueSearch.getProvincia()) )
+//	        .add( Restrictions.eq("city", issueSearch.getCiudad()) )
+//	        .add( Restrictions.eq("neighborhood", issueSearch.getBarrio()) )	        
+//	        .add( Restrictions.gt("date", issueSearch.getMinFecha()) )
+//	        .add( Restrictions.lt("date", issueSearch.getMaxFecha()) )
+//	        .add( Restrictions.in("tags", issueSearch.getTags()) )
+	        .add( Restrictions.in("status", issueSearch.getEstado()) )
+//	        .addOrder(Order.asc("date") )
 	        .list();
 		
 		return issues;        
