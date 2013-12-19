@@ -7,6 +7,8 @@ import junit.framework.Assert;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,21 +36,22 @@ public class IssueTest /*extends AbstractTransactionalJUnit4SpringContextTests*/
 
 	@Test
 	public void sampleTest(){
-		
-//		Date demoDate = new Date();		
-		DateTime minDate = new DateTime("2013-12-09");		
-		DateTime maxDate = new DateTime(minDate.plusMonths(3));		
-		
+
+		DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy/MM/dd");
+		DateTime minDate = new DateTime("2013-12-10");		
+		DateTime maxDate = new DateTime("2013-12-19");		
+				
 		String[] estado = new String[]{"RESUELTO"};
 		String[] tags = new String[]{"bache", "vereda"};
 		
+	
 		CriteriaSearch newSearch = new CriteriaSearch();
 //		newSearch.setProvincia("Ciudad Autónoma de Buenos Aires");
 //		newSearch.setCiudad("Buenos Aires");
 //		newSearch.setBarrio("Palermo");
-//		newSearch.setMinFecha(minDate.toDate());
-//		newSearch.setMaxFecha(maxDate.toGregorianCalendar());
-		newSearch.setEstado(estado);
+		newSearch.setMinFecha(minDate.toDate());
+		newSearch.setMaxFecha(maxDate.toDate());
+//		newSearch.setEstado(estado);
 //		newSearch.setTags(tags);
 		
 		
