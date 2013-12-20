@@ -14,10 +14,12 @@
    					   http://www.springframework.org/schema/tx/spring-tx.xsd">
    
  <context:property-placeholder location="classpath:jdbc.properties"/>
+ <context:property-placeholder location="classpath:images.properties"/>
  
  <context:annotation-config/>
  
  <tx:annotation-driven/>
+ 
  
  <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" 
  	   destroy-method="close"
@@ -51,11 +53,17 @@
         <property name="sessionFactory" ref="sessionFactoryTest" />            
     </bean>
 
-	<bean id="hibernateParent" abstract="true">
-        <property name="sessionFactory" ref="sessionFactoryTest" />
-        <property name="hibernateTemplate" ref="hibernateTemplateTest" />    
-	</bean>
+<!-- 	<bean id="hibernateParent" abstract="true"> -->
+<!--         <property name="sessionFactory" ref="sessionFactoryTest" /> -->
+<!--         <property name="hibernateTemplate" ref="hibernateTemplateTest" />     -->
+<!-- 	</bean> -->
+	
+	<import resource="classpath:test-dao.xml" />
+	
+	<import resource="classpath:test-service.xml" />
  
- <bean id="issueDAO" class="ar.com.urbanusjam.dao.impl.IssueDAOImpl" parent="hibernateParent"></bean>
+<!--  <bean id="issueDAO" class="ar.com.urbanusjam.dao.impl.IssueDAOImpl" parent="hibernateParent"></bean> -->
+ 
+ 
  
 </beans>
