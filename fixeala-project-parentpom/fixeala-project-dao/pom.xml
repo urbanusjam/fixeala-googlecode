@@ -17,6 +17,6 @@
 		<groupId>ar.com.urbanusjam</groupId>
 		<artifactId>fixeala-project-entity</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
-	</dependency>
+	</dependency>	
   </dependencies>
 </project>
