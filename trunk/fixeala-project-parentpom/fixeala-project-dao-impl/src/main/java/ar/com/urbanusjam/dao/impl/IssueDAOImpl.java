@@ -3,6 +3,7 @@ package ar.com.urbanusjam.dao.impl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -86,6 +87,8 @@ public class IssueDAOImpl extends GenericDAOImpl<Issue, Serializable> implements
 	@Override
 	public List<Issue> getIssuesByCriteria(CriteriaSearch issueSearch) {
 		
+		
+		
 		@SuppressWarnings("unchecked")
 		List<Issue> issues = getSessionFactory().getCurrentSession().createCriteria(Issue.class)        
 //	        .add( Restrictions.eq("province", issueSearch.getProvincia()) )
@@ -94,12 +97,19 @@ public class IssueDAOImpl extends GenericDAOImpl<Issue, Serializable> implements
 //	        .add( Restrictions.gt("date", issueSearch.getMinFecha()) )
 //	        .add( Restrictions.lt("date", issueSearch.getMaxFecha()) )
 //	        .add( Restrictions.in("tags", issueSearch.getTags()) )
-	        .add( Restrictions.in("status", issueSearch.getEstado()) )
+			.add( Restrictions.between("date", this.toCalendar(issueSearch.getMinFecha()), this.toCalendar(issueSearch.getMaxFecha())) )				
+//	        .add( Restrictions.in("status", issueSearch.getEstado()) )
 //	        .addOrder(Order.asc("date") )
 	        .list();
 		
 		return issues;        
         
+	}
+	
+	private GregorianCalendar toCalendar(Date date){
+		Calendar cal = new GregorianCalendar();
+        cal.setTime(date);
+        return (GregorianCalendar) cal;
 	}
 
 }

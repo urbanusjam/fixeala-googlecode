@@ -143,7 +143,7 @@ public class IssueServiceImpl implements IssueService {
 	
 	private void asignarUsuarioDefault(Issue issue) {
 		
-		//asignar USUARIO (ADMIN o MANAGER) según AREA
+		//asignar USUARIO (ADMIN o MANAGER) segï¿½n AREA
 		//obtener usuarios del area
 		List<User> users = new ArrayList<User>();
 		users = userDAO.findUsersByArea(String.valueOf(issue.getAssignedArea().getId()));
@@ -439,7 +439,7 @@ public class IssueServiceImpl implements IssueService {
 		user = userDAO.loadUserByUsername(issueDTO.getUsername());
 		
 		Issue issue = new Issue();
-		issue.setId(issueDTO.getId());
+		issue.setId(Long.valueOf(issueDTO.getId()));
 		issue.setReporter(user);
 		issue.setAddress(issueDTO.getAddress());
 		issue.setNeighborhood(issueDTO.getNeighborhood());
@@ -492,7 +492,7 @@ public class IssueServiceImpl implements IssueService {
 	public Issue convertForUpdate(IssueDTO issueDTO){
 		
 		Issue issue = new Issue();	
-		issue.setId(issueDTO.getId());	
+		issue.setId(Long.valueOf(issueDTO.getId()));	
 		issue.setTitle(issueDTO.getTitle());
 		issue.setDescription(issueDTO.getDescription());
 
@@ -513,7 +513,7 @@ public class IssueServiceImpl implements IssueService {
 		userDTO.setUsername(issue.getReporter().getUsername());
 		
 		IssueDTO issueDTO = new IssueDTO();
-		issueDTO.setId(issue.getId());
+		issueDTO.setId(String.valueOf(issue.getId()));
 		issueDTO.setUser(userDTO);
 		issueDTO.setAddress(issue.getAddress());
 		issueDTO.setNeighborhood(issue.getNeighborhood());

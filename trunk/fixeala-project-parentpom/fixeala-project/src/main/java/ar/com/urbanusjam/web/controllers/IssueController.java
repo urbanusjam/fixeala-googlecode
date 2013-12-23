@@ -236,8 +236,8 @@ public class IssueController {
 						|| (height < MIN_HEIGHT)
 						|| (width < MIN_WIDTH && height < MIN_HEIGHT) ){
 					valid = false;
-					message = "La foto debe tener una resolución mínima de 640 x 480 píxeles.";
-					//return new AlertStatus(false, "La foto debe tener una resolución mínima de 640 x 480 píxeles.");					
+					message = "La foto debe tener una resoluciï¿½n mï¿½nima de 640 x 480 pï¿½xeles.";
+					//return new AlertStatus(false, "La foto debe tener una resoluciï¿½n mï¿½nima de 640 x 480 pï¿½xeles.");					
 				}
 					
 			
@@ -245,8 +245,8 @@ public class IssueController {
 						|| (height > MAX_HEIGHT)
 						|| (width > MAX_WIDTH && height > MAX_HEIGHT) ){
 					valid = false;
-					message = "La foto debe tener una resolución máxima de 1080 x 720 píxeles.";
-					//return new AlertStatus(false, "La foto debe tener una resolución máxima de 1080 x 720 píxeles.");
+					message = "La foto debe tener una resoluciï¿½n mï¿½xima de 1080 x 720 pï¿½xeles.";
+					//return new AlertStatus(false, "La foto debe tener una resoluciï¿½n mï¿½xima de 1080 x 720 pï¿½xeles.");
 				}
 					
 			    if(!valid){
@@ -260,7 +260,7 @@ public class IssueController {
 				
 			}
 			
-			return new AlertStatus(true, "La foto se cargó exitosamente.");
+			return new AlertStatus(true, "La foto se cargï¿½ exitosamente.");
 	    
 	    } catch (IOException e) {
 	    	return new AlertStatus(false, "No se pudo cargar el archivo.");
@@ -321,8 +321,8 @@ public class IssueController {
 					revision.setEstado(issue.getStatus());
 					
 					//random id
-					issue.setId(Long.valueOf(id));
-					revision.setNroReclamo(issue.getId());	
+					issue.setId(String.valueOf(issue.getId()));
+					revision.setNroReclamo(Long.valueOf(issue.getId()));	
 					issue.setLicitacion(null);
 					issue.getHistorial().add(revision);
 					
@@ -401,7 +401,7 @@ public class IssueController {
 					IssueHistorialRevisionDTO revision = new IssueHistorialRevisionDTO();
 					revision.setFecha(new Date());
 					revision.setUsername(userDTO.getUsername());			
-					revision.setNroReclamo(issue.getId());			
+					revision.setNroReclamo(Long.valueOf(issue.getId()));			
 					revision.setOperacion(Operation.UPDATE);			
 					revision.setMotivo("MODIFICACION");			
 					revision.setEstado(issue.getStatus());
