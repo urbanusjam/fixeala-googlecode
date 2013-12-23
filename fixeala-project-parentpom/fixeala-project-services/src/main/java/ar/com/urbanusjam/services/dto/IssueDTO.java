@@ -16,7 +16,7 @@ public class IssueDTO implements Serializable {
 	
 	private UserDTO user;
 	private String username;
-	private Long id;
+	private String id;
 	private String address;
 	private String neighborhood;
 	private String city;
@@ -40,11 +40,11 @@ public class IssueDTO implements Serializable {
 
 
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

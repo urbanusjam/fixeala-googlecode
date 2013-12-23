@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jasperTemplate
+  PUBLIC "-//JasperReports//DTD Template//EN"
+  "http://jasperreports.sourceforge.net/dtds/jaspertemplate.dtd">
+
+
+<jasperTemplate>
+
+    <style  name="Heading Center" 
+            hAlign="Center"
+            vAlign="Middle"
+            fontName="Arial" 
+            fontSize="12" isBold="true"
+            forecolor="white" 
+            backcolor="#DFE0E2"  mode="Opaque">
+            <box><pen lineColor="black" lineWidth="0.5"/></box>
+    </style>
+    
+    <style  name="Heading Left" 
+            hAlign="Left"
+            vAlign="Middle"
+            fontName="Arial" 
+            fontSize="12" isBold="true"
+            forecolor="white" 
+            backcolor="#DFE0E2"  mode="Opaque">
+            <box><pen lineColor="black" lineWidth="0.5"/></box>
+    </style>
+    
+    <style  name="Heading Right" 
+            hAlign="Right"
+            vAlign="Middle"
+            fontName="Arial" 
+            fontSize="12" isBold="true"
+            forecolor="white" 
+            backcolor="#DFE0E2"  mode="Opaque">
+            <box><pen lineColor="black" lineWidth="0.5"/></box>
+    </style>
+    
+    <style  name="Normal Element Left" 
+            hAlign="Left"
+            vAlign="Middle"
+            isDefault="false" 
+            fontName="arial"
+            fontSize="10" 
+            isBold="false" 
+            >
+            <box><pen lineColor="black" lineWidth="0.5"/></box>
+    </style>
+
+    <style  name="Normal Element Right" 
+            hAlign="Right"
+            vAlign="Middle"
+            isDefault="false" 
+            fontName="arial"
+            fontSize="10" 
+            isBold="false" 
+            >
+            <box><pen lineColor="black" lineWidth="0.5"/></box>
+    </style>
+    
+    <style  name="Normal Double" 
+            isDefault="false" 
+            fontName="Arial" 
+            fontSize="10"
+            isBold="false" 
+            hAlign="Right"
+            vAlign="Middle"
+            pattern="0.00"
+            >
+            <box><pen lineColor="black" lineWidth="0.5"/></box>
+    </style>
+    
+    <style  name="Normal Number" 
+            isDefault="false" 
+            fontName="Arial" 
+            fontSize="10"
+            isBold="false" 
+            hAlign="Right"
+            vAlign="Middle"
+            >
+            <box><pen lineColor="black" lineWidth="0.5"/></box>
+    </style>
+        
+    <style  name="Footer Number"
+            fontName="Arial" 
+            fontSize="10"
+            forecolor="white"
+            backcolor="#426180" mode="Opaque"
+            isBold="true"
+            hAlign="Right"
+            vAlign="Middle"
+            pattern="0.00"
+            >
+            <box><pen lineColor="black" lineWidth="0.5"/></box>
+    </style>
+
+    <style  name="Footer Text"
+            fontName="Arial" 
+            fontSize="10"
+            forecolor="white"
+            backcolor="#426180" mode="Opaque"
+            isBold="false"
+            hAlign="Left"
+            vAlign="Middle"
+            >
+            <box><pen lineColor="black" lineWidth="0.5"/></box>
+    </style>
+
+    
+</jasperTemplate>
