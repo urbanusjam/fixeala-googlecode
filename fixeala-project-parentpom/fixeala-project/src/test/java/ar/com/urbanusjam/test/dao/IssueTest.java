@@ -56,15 +56,15 @@ public class IssueTest /*extends AbstractTransactionalJUnit4SpringContextTests*/
 	public void exportIssuesToPdfTest(){
 		
 		Map<String, Object> parametros = new HashMap<String, Object>();
-		parametros.put("style", "C:\\desarrollo\\style.jrxml");  
+//		parametros.put("style", "C:\\desarrollo\\style.jrxml");  
 						
 		try {		
 			
 			List<IssueDTO> issues = issueService.loadAllIssues();		
-			ReportDTO report = new ReportDTO("issue", parametros, issues);			
+			ReportDTO report = new ReportDTO("issue_ireport", parametros, issues);			
 			boolean success = exportService.exportToPDF(report);
 			
-//			boolean success = exportService.exportToXLS(report);
+			success = exportService.exportToXLS(report);
 			
 			Assert.assertEquals(true, success);
 			
