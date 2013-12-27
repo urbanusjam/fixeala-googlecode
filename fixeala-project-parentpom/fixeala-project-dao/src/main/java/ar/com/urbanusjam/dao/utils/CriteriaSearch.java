@@ -1,5 +1,6 @@
 package ar.com.urbanusjam.dao.utils;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class CriteriaSearch {
@@ -9,10 +10,11 @@ public class CriteriaSearch {
 	private String barrio;
 	private String[] tags;
 	private String[] estado;
-	private Date minFecha;
-	private Date maxFecha;
+	private Calendar minFecha;
+	private Calendar maxFecha;
 	private String orden;
 	private String formatoArchivo;
+	private String searchType;
 	
 	public String getProvincia() {
 		return provincia;
@@ -44,16 +46,16 @@ public class CriteriaSearch {
 	public void setEstado(String[] estado) {
 		this.estado = estado;
 	}
-	public Date getMinFecha() {
+	public Calendar getMinFecha() {
 		return minFecha;
 	}
-	public void setMinFecha(Date minFecha) {
+	public void setMinFecha(Calendar minFecha) {
 		this.minFecha = minFecha;
 	}
-	public Date getMaxFecha() {
+	public Calendar getMaxFecha() {
 		return maxFecha;
 	}
-	public void setMaxFecha(Date maxFecha) {
+	public void setMaxFecha(Calendar maxFecha) {
 		this.maxFecha = maxFecha;
 	}
 	public String getOrden() {
@@ -67,6 +69,12 @@ public class CriteriaSearch {
 	}
 	public void setFormatoArchivo(String formatoArchivo) {
 		this.formatoArchivo = formatoArchivo;
+	}
+	public String getSearchType() {
+		return searchType;
+	}
+	public void setSearchType(String searchType) {
+		this.searchType = searchType;
 	}	
 	
 	
