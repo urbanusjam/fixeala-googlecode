@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.annotation.Propagation;
 
 import ar.com.urbanusjam.dao.IssueDAO;
+import ar.com.urbanusjam.dao.impl.utils.CriteriaType;
 import ar.com.urbanusjam.dao.impl.utils.GenericDAOImpl;
 import ar.com.urbanusjam.dao.utils.CriteriaSearch;
 import ar.com.urbanusjam.entity.annotations.Issue;
@@ -84,32 +86,38 @@ public class IssueDAOImpl extends GenericDAOImpl<Issue, Serializable> implements
 		return issues.get(0);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Issue> getIssuesByCriteria(CriteriaSearch issueSearch) {
 		
+		List<Issue> issues = new ArrayList<Issue>();
 		
+		if(issueSearch.getSearchType().equals(CriteriaType.DEFAULT_SEARCH)){					
+			issues = getSessionFactory().getCurrentSession().createCriteria(Issue.class)  				
+				.add( Restrictions.between("date", issueSearch.getMinFecha(), issueSearch.getMaxFecha()))				
+		        .addOrder(Order.asc("date") )
+		        .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
+		        .list();			
+		}
 		
-		@SuppressWarnings("unchecked")
-		List<Issue> issues = getSessionFactory().getCurrentSession().createCriteria(Issue.class)        
-//	        .add( Restrictions.eq("province", issueSearch.getProvincia()) )
-//	        .add( Restrictions.eq("city", issueSearch.getCiudad()) )
-//	        .add( Restrictions.eq("neighborhood", issueSearch.getBarrio()) )	        
-//	        .add( Restrictions.gt("date", issueSearch.getMinFecha()) )
-//	        .add( Restrictions.lt("date", issueSearch.getMaxFecha()) )
-//	        .add( Restrictions.in("tags", issueSearch.getTags()) )
-			.add( Restrictions.between("date", this.toCalendar(issueSearch.getMinFecha()), this.toCalendar(issueSearch.getMaxFecha())) )				
-//	        .add( Restrictions.in("status", issueSearch.getEstado()) )
-//	        .addOrder(Order.asc("date") )
-	        .list();
+		else if(issueSearch.getSearchType().equals(CriteriaType.CUSTOM_SEARCH)){
+			issues = getSessionFactory().getCurrentSession().createCriteria(Issue.class)  	
+					.add( Restrictions.eq("province", issueSearch.getProvincia()))	
+					.add( Restrictions.eq("city", issueSearch.getCiudad()))	
+					.add( Restrictions.between("date", issueSearch.getMinFecha(), issueSearch.getMaxFecha()))		
+					.add( Restrictions.in("status", issueSearch.getEstado()))						
+					.createAlias("tagsList", "t")
+					.add(Restrictions.in("t.tagname", issueSearch.getTags()))
+			        .addOrder(Order.asc("date") )
+			        .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
+			        .list();			
+		}
+		
 		
 		return issues;        
         
 	}
 	
-	private GregorianCalendar toCalendar(Date date){
-		Calendar cal = new GregorianCalendar();
-        cal.setTime(date);
-        return (GregorianCalendar) cal;
-	}
+	
 
 }
