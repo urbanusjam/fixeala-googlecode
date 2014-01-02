@@ -2,7 +2,7 @@ package ar.com.urbanusjam.dao;
 
 import java.util.List;
 
-import ar.com.urbanusjam.dao.utils.CriteriaSearch;
+import ar.com.urbanusjam.dao.utils.IssueCriteriaSearch;
 import ar.com.urbanusjam.entity.annotations.Issue;
 
 
@@ -20,7 +20,7 @@ public interface IssueDAO {
 	
 	public List<Issue> getIssuesByArea(String areaName);
 	
-	public List<Issue> getIssuesByCriteria(CriteriaSearch fields);
+	public List<Issue> getIssuesByCriteria(IssueCriteriaSearch fields);
 	
 	public List<Issue> getAssignedIssuesByVerifiedOfficial(String username);
 	
