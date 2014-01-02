@@ -23,10 +23,10 @@
  
  <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" 
  	   destroy-method="close"
-       p:driverClassName="com.mysql.jdbc.Driver" 
-       p:url="jdbc:mysql://localhost:3306/fixeala"
-       p:username="root" 
-       p:password="coripel"/>
+       p:driverClassName="${jdbc.driver}" 
+       p:url="${jdbc.url}"
+       p:username="${jdbc.username}" 
+       p:password="${jdbc.password}"/>
        
  <bean id="sessionFactoryTest" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
  	<property name="dataSource" ref="dataSource" />
