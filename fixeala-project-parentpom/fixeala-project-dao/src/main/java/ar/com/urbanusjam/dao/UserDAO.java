@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.UserDetailsManager;
 
+import ar.com.urbanusjam.dao.utils.UserCriteriaSearch;
 import ar.com.urbanusjam.entity.annotations.User;
 
 
@@ -21,6 +22,8 @@ public interface UserDAO extends UserDetailsManager {
 	public List<User> findAllActiveUsers();
 	
 	public List<User> findUsersByArea(String areaID);
+	
+	public List<User> findUsersByCriteria(UserCriteriaSearch criteria);
 	
 	public void createUser(User user);
 	
