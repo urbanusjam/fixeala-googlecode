@@ -308,10 +308,7 @@ public class IssueController {
 					issue.setDate(new Date());
 					issue.setStatus(IssueStatus.OPEN);		
 					issue.setUser(userDTO);					
-					
-					Random generator = new Random(); 
-					int id = generator.nextInt(100000) + 1000;
-					
+										
 					IssueHistorialRevisionDTO revision = new IssueHistorialRevisionDTO();
 					revision.setFecha(new Date());
 					revision.setUsername(userDTO.getUsername());	
