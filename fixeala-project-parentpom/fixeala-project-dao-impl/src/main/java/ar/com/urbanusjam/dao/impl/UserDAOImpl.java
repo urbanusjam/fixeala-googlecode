@@ -5,20 +5,31 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import ar.com.urbanusjam.dao.ActivationDAO;
 import ar.com.urbanusjam.dao.UserDAO;
 import ar.com.urbanusjam.dao.impl.utils.GenericDAOImpl;
+import ar.com.urbanusjam.dao.utils.UserCriteriaSearch;
 import ar.com.urbanusjam.entity.annotations.User;
 
+@Transactional(propagation= Propagation.REQUIRED, readOnly=false)
 public class UserDAOImpl extends GenericDAOImpl<User, Serializable>  implements UserDAO, UserDetailsManager  {
 
+	@Autowired
+	private SessionFactory sessionFactory;	
+	
 	private ActivationDAO activationDAO;
 		
 	public UserDAOImpl() {
@@ -168,6 +179,24 @@ public class UserDAOImpl extends GenericDAOImpl<User, Serializable>  implements 
 			
 		}		
 		activationDAO.deleteTokenByUsername(username);	
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<User> findUsersByCriteria(UserCriteriaSearch criteria) {
+		
+		List<User> users = new ArrayList<User>();
+		
+		users = getSessionFactory().getCurrentSession().createCriteria(User.class)  				
+				.add( Restrictions.in("username", criteria.getUsernames()) )		
+				.createAlias("roles", "r")
+				.add( Restrictions.in("r.authority", criteria.getRoles()) )	
+				.add( Restrictions.eq("enabled", criteria.isEnabled()) )	
+		        .addOrder(Order.asc("username") )
+		        .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
+		        .list();	
+		
+		return users;
 	}
 
 	

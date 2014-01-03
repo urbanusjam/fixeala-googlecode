@@ -2,9 +2,6 @@ package ar.com.urbanusjam.dao.impl;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -18,15 +15,14 @@ import org.springframework.transaction.annotation.Propagation;
 import ar.com.urbanusjam.dao.IssueDAO;
 import ar.com.urbanusjam.dao.impl.utils.CriteriaType;
 import ar.com.urbanusjam.dao.impl.utils.GenericDAOImpl;
-import ar.com.urbanusjam.dao.utils.CriteriaSearch;
+import ar.com.urbanusjam.dao.utils.IssueCriteriaSearch;
 import ar.com.urbanusjam.entity.annotations.Issue;
 
 @Transactional(propagation= Propagation.REQUIRED, readOnly=false)
 public class IssueDAOImpl extends GenericDAOImpl<Issue, Serializable> implements IssueDAO {	
+	
 	@Autowired
-	private SessionFactory sessionFactory;
-	
-	
+	private SessionFactory sessionFactory;	
 	 
 	public IssueDAOImpl() {
 		super(Issue.class);
@@ -88,7 +84,7 @@ public class IssueDAOImpl extends GenericDAOImpl<Issue, Serializable> implements
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Issue> getIssuesByCriteria(CriteriaSearch issueSearch) {
+	public List<Issue> getIssuesByCriteria(IssueCriteriaSearch issueSearch) {
 		
 		List<Issue> issues = new ArrayList<Issue>();
 		
