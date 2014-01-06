@@ -8,13 +8,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.UUID;
+
+import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
-
-import javax.imageio.ImageIO;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import ar.com.urbanusjam.dao.ContenidoDAO;
 import ar.com.urbanusjam.dao.IssueDAO;
@@ -26,7 +32,7 @@ import ar.com.urbanusjam.services.dto.FileWrapperDTO;
 
 public class ContenidoServiceImpl implements ContenidoService {
 	
-    private static final String DATE_FORMAT_NOW = "yyyyMMddHHmm";
+    private static final String DATE_FORMAT_NOW = "yyyyMMddHHmmss";
  	private static final int BUFFER_SIZE = 6124; 
     private static final String EXTENSION_BANNER = ".data";	 
     private static final long MAX_SIZE = 1024*256;  
@@ -54,6 +60,31 @@ public class ContenidoServiceImpl implements ContenidoService {
 	private String getExtensionArchivo(String nombreArchivo) {
 		return nombreArchivo.substring(nombreArchivo.lastIndexOf(".") + 1, nombreArchivo.length());
 	}
+	
+	@Override
+	@Transactional
+	public FileWrapperDTO upload(ContenidoDTO contenido)
+			throws FileNotFoundException {
+		
+		FileWrapperDTO fileWrapper = new FileWrapperDTO();
+		InputStream inputStream = contenido.getInputStream();
+		
+		if(inputStream == null)		
+			throw new FileNotFoundException();	
+		
+		fileWrapper = this.subirContenido(inputStream, contenido.getTipo());
+		 
+		File file = fileWrapper.getFile();		
+		contenido.setAlto(fileWrapper.getAlto());
+		contenido.setAncho(fileWrapper.getAncho());				
+		contenido.setNombre(this.getNombreArchivoSinExtension(file.getName()));
+		contenido.setNombreFileSystem(file.getName());
+		contenido.setPathRelativo("/" + file.getName());
+		
+		this.grabarContenido(contenido);
+		
+		return fileWrapper;
+	}
 	    
 	
 	@Override
@@ -62,13 +93,13 @@ public class ContenidoServiceImpl implements ContenidoService {
 		
 		FileWrapperDTO fileWrapper = new FileWrapperDTO();
 		
-		if(inputStream == null)
-			throw new FileNotFoundException();
+		if(inputStream == null)		
+			throw new FileNotFoundException();			
 	    
         /** Archivo random a generar **/
         String nombreArchivoHash = UUID.randomUUID().toString();
-        int inicioCadena = nombreArchivoHash.length() - LONGITUD_MAXIMA_NOMBRE_ARCHIVO_HASH;
-        File file = new File( this.pathImagenes + "IMG-" + this.generateTimestamp() + "-FX" +  nombreArchivoHash + "." + extensionArchivo.toLowerCase());
+       
+        File file = new File( this.pathImagenes + "IMG-" + this.generateTimestamp() + "-FXL-" +  nombreArchivoHash + "." + extensionArchivo.toLowerCase());
         
         try {
             FileOutputStream fileOutputStream;
@@ -96,10 +127,45 @@ public class ContenidoServiceImpl implements ContenidoService {
           
         }
         catch (FileNotFoundException e) {
+        	//completar
         } 
         catch (IOException e) {
+        	//completar
         }
         return fileWrapper;
+	}
+	
+	@Override
+	public File abrirContenidoFile(ContenidoDTO contenidoDTO) throws FileNotFoundException {
+	 	if ( contenidoDTO == null )		
+			throw new FileNotFoundException();		
+        
+        /** Existe el contenido, lo busco en la ruta de contenidos reales **/
+        if ( contenidoDTO.getId() > 0 )
+            return new File(this.pathImagenes + contenidoDTO.getNombreFileSystem());
+        
+        /** No existe todavia, lo busco en los banners temporales **/
+        else
+            return new File(this.pathImagenes + getNombreArchivoSinExtension(contenidoDTO.getNombreFileSystem()) + EXTENSION_BANNER);
+	}
+
+	@Override
+	public InputStream abrirContenidoRaw(ContenidoDTO contenidoDTO) throws FileNotFoundException {
+		try {
+	            if ( contenidoDTO == null )
+	                throw new FileNotFoundException();
+	            
+	            /** Existe el contenido, lo busco en la ruta de contenidos reales **/
+	            if ( contenidoDTO.getId() > 0 )
+					
+						return new FileInputStream(this.pathImagenes + contenidoDTO.getId() + EXTENSION_BANNER);
+					
+				else
+	                return new FileInputStream(this.pathImagenes + getNombreArchivoSinExtension(contenidoDTO.getNombreFileSystem()) + EXTENSION_BANNER);
+		} catch (FileNotFoundException e) {
+			throw new FileNotFoundException();
+		}
+		
 	}
 
 	
@@ -118,11 +184,27 @@ public class ContenidoServiceImpl implements ContenidoService {
 
 	@Override
 	public ContenidoDTO obtenerContenido(Long idContenido) throws FileNotFoundException {
+
 	    Contenido contenido = contenidoDAO.findContenidoById(idContenido);
-        if ( contenido == null )
-            throw new FileNotFoundException();        
+        if ( contenido == null ){
+		
+				throw new FileNotFoundException();
+			}        
         ContenidoDTO contenidoDTO = convertirAContenidoDTO(contenido);         
         return contenidoDTO;
+	}
+	
+	@Override
+	public List<ContenidoDTO> listarContenidos(Long idIssue) {
+		List<Contenido> contenidos = contenidoDAO.findContenidosByIssue(idIssue);
+		List<ContenidoDTO> contenidosDTO = new ArrayList<ContenidoDTO>();
+		
+		for(Contenido contenido : contenidos){
+			ContenidoDTO contenidoDTO = convertirAContenidoDTO(contenido);
+			contenidosDTO.add(contenidoDTO);
+		}
+		
+		return contenidosDTO;
 	}
 	
 	
@@ -162,7 +244,7 @@ public class ContenidoServiceImpl implements ContenidoService {
         contenidoDTO.setNombreFileSystem(contenido.getNombreFileSystem());
         contenidoDTO.setNombreFileSystemExtension( (contenido.getNombreFileSystem() == null) ? 
         		"" : getExtensionArchivo(contenido.getNombreFileSystem()));
-        
+        contenidoDTO.setNroReclamo(String.valueOf(contenido.getIssue().getId()));
         return contenidoDTO;
     }
     
@@ -192,6 +274,18 @@ public class ContenidoServiceImpl implements ContenidoService {
           timestamp = sdf.format(cal.getTime());  
           return timestamp;
     }
+
+	@Override
+	public void borrarContenido(List<ContenidoDTO> contenidos) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+
+	
+
+	
 	
 
 }
