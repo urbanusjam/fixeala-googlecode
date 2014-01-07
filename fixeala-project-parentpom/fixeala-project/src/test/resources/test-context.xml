@@ -28,6 +28,16 @@
   
  <context:annotation-config/>
  
+ <context:component-scan base-package="ar.com.urbanusjam.services" >
+ 	<context:include-filter type="regex" 
+                       expression="ar.com.urbanusjam.dao.*DAOImpl.*" />
+ 
+	<context:include-filter type="regex" 
+                       expression="ar.com.urbanusjam.services.*ServiceImpl.*" />
+ </context:component-scan>
+  
+
+ 
  <tx:annotation-driven/>
  
  
@@ -48,7 +58,7 @@
   	</property>
   	<property name="hibernateProperties">
    		<props>    		
-    		<prop key="hibernate.show_sql">true</prop>
+    		<prop key="hibernate.show_sql">${jdbc.sql}</prop>
     		<prop key="hibernate.dialect">${jdbc.dialect}</prop>			
    		</props>
   	</property>

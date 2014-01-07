@@ -210,7 +210,12 @@ public class IssueController {
 				String fileName = file.getOriginalFilename();			
 				inputStream = file.getInputStream();
 				
-				FileWrapperDTO fileDTO = contenidoService.subirContenido(inputStream, fileName);				
+				ContenidoDTO nuevoContenido = new ContenidoDTO();			
+				nuevoContenido.setInputStream(inputStream);	
+				nuevoContenido.setExtension(fileName);	
+				
+				FileWrapperDTO fileDTO = contenidoService.subirContenido(nuevoContenido);	
+				
 				int width = fileDTO.getAncho();
 				int height = fileDTO.getAlto();
 				String extension = fileName;
@@ -331,11 +336,11 @@ public class IssueController {
 						String fileName = file.getFile().getName();						
 						ContenidoDTO contenido = new ContenidoDTO();
 					    contenido.setNombre(this.getNombreArchivoSinExtension(fileName));
-					    contenido.setNombreFileSystem(fileName);	
+					    contenido.setNombreConExtension(fileName);	
 					    contenido.setPathRelativo("/"+ fileName);
 					    contenido.setAncho(file.getAncho());
 					    contenido.setAlto(file.getAlto());
-					    contenido.setTipo(this.getExtensionArchivo(fileName));
+					    contenido.setExtension(this.getExtensionArchivo(fileName));
 					    contenido.setNroReclamo(String.valueOf(issue.getId()));
 					    issue.getContenidos().add(contenido);
 					}					

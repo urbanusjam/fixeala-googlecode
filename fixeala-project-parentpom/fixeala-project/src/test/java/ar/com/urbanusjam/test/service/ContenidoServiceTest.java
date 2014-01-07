@@ -29,9 +29,11 @@ public class ContenidoServiceTest {
 	
 	private List<InputStream> inputStreams;
 	
-	private static final String IMAGE_NAME = "image";
+	private static final String FILE_NAME = "image";
 	
 	private static final String SOURCE_DIRECTORY = "C:\\temp\\fixeala\\samples\\";	
+	
+	private static final String UPLOAD_DIRECTORY = "C:\\temp\\fixeala\\uploads\\";	
 
 	
 	@Before
@@ -44,55 +46,153 @@ public class ContenidoServiceTest {
 	        InputStream input;	      
 	        
 			try {
-				String url = SOURCE_DIRECTORY + IMAGE_NAME + i + ".jpg";
+				String url = SOURCE_DIRECTORY + FILE_NAME + i + ".jpg";
 				input = new BufferedInputStream(new FileInputStream(url));
 				inputStreams.add(input);
 					
 			} catch (FileNotFoundException e) {
-				System.out.println("Fallo el init()");
+				System.out.println("Fallo en la inicialización de contenidos.");
 			}	     
 	       
 		}
 		
 	}
 	
+	public void testTimeout() {
+	    try {
+	        Thread.sleep(10);
+	    } catch (InterruptedException ex) {}
+	}
 	
-//	@Test(expected=FileNotFoundException.class)
+	
+	
+	@Test(timeout=3000)
+	public void uploadContenido() throws FileNotFoundException{
+		
+		System.out.println("\n");
+		System.out.println(" ----------------------------------------------------------------------- ");
+        System.out.println("          T E S T ( 1 )  :    U P L O A D     C O N T E N I D O          ");
+        System.out.println(" ----------------------------------------------------------------------- ");
+        System.out.println("\n");
+        
+		ContenidoDTO contenido = new ContenidoDTO();
+		List<FileWrapperDTO> filesToUpload = new ArrayList<FileWrapperDTO>();
+		int uploadedFiles = 0;
+		
+		for(InputStream input : inputStreams){
+			contenido.setInputStream(input);	
+			contenido.setExtension("jpg");	
+			contenido.setNroReclamo("18865");	
+			filesToUpload.add(contenidoService.subirContenido(contenido));	
+			uploadedFiles++;
+		}		
+		
+		for(FileWrapperDTO file : filesToUpload){
+			System.out.println("Uploaded file " + (filesToUpload.indexOf(file) + 1) + ": " + file.getFile().getName() + " (" + getFileSize(file.getFile()) + " Kb)");		
+			Assert.assertNotNull(file.getFile().length());
+		}	
+		
+		System.out.println("\n");
+		System.out.println(uploadedFiles + " ARCHIVOS SUBIDOS.");
+			
+	}
+	
+	@Test(timeout=3000)
+	public void displayContenidoTest() throws FileNotFoundException {
+		
+		System.out.println("\n");
+		System.out.println(" ----------------------------------------------------------------------- ");
+        System.out.println("         T E S T ( 2 )  :    D I S P L A Y     C O N T E N I D O         ");
+        System.out.println(" ----------------------------------------------------------------------- ");
+        System.out.println("\n");
+        
+		Long idIssue = new Long(18865);		
+		
+		List<ContenidoDTO> contenidos = contenidoService.listarContenido(idIssue);
+		
+		Assert.assertNotSame(0, contenidos.size());
+				
+		for(ContenidoDTO contenido : contenidos){
+			System.out.println("Contenido " + (contenidos.indexOf(contenido) + 1) + ": " + contenido.getNombreConExtension());				
+		}
+		
+		System.out.println("\n");
+		System.out.println(contenidos.size() + " ARCHIVOS LISTADOS.");	
+		
+	}
+	
+	@Test
+	public void deleteContenidoTest() throws FileNotFoundException {
+		
+		System.out.println("\n");
+		System.out.println(" ----------------------------------------------------------------------- ");
+        System.out.println("           T E S T ( 3 )  :   D E L E T E     C O N T E N I D O          ");
+        System.out.println(" ----------------------------------------------------------------------- ");
+        System.out.println("\n");
+        
+        Long idIssue = new Long(18865);		
+		List<ContenidoDTO> contenidos = contenidoService.listarContenido(idIssue);
+        
+		int deletedFiles = 0;
+		
+		for(ContenidoDTO contenido : contenidos){
+			System.out.println("Deleting file " + (contenidos.indexOf(contenido) + 1) + ": " + contenido.getNombreConExtension());
+			contenidoService.borrarContenido(contenido);
+			deletedFiles++;
+		}
+		
+		Assert.assertEquals(deletedFiles, contenidos.size());
+		
+		System.out.println("\n");
+		System.out.println(deletedFiles + " ARCHIVOS BORRADOS.");		
+		        
+	}
+	
+	
+	//@Test(expected=FileNotFoundException.class)
 	//@Test
 	public void uploadFilesToFolderTest() throws FileNotFoundException{
 			
 		for(int i = 0; i < inputStreams.size() ; i++){			
-			FileWrapperDTO file = contenidoService.subirContenido(inputStreams.get(i), "jpg");	
+			FileWrapperDTO file = contenidoService.uploadFile(inputStreams.get(i), "jpg");	
 			System.out.println("Archivo " + i + ": " + file.getFile().getName() + " (" + getFileSize(file.getFile()) + " Kb)");				
 		}		
 		
 	}
 	
-	@Test
-	public void uploadFiles() throws FileNotFoundException{
-			
-		ContenidoDTO contenido = new ContenidoDTO();
-		InputStream input = inputStreams.get(0);
-		contenido.setInputStream(input);	
-		contenido.setTipo("jpg");	
-		contenido.setNroReclamo("18865");	
-		FileWrapperDTO file = contenidoService.upload(contenido);	
-		Assert.assertNotNull(file.getFile().length());
-		
-	}
-	
-	
-	public void deleteFilesTest(){}
 	
 	
 	//@Test
-	public void listarContenidosTest() throws FileNotFoundException {
+	public void deleteFileTest() throws FileNotFoundException{
 		
-		Long idIssue = new Long(17324);		
-		List<ContenidoDTO> contenidos = contenidoService.listarContenidos(idIssue);
-		Assert.assertEquals(6, contenidos.size());
-				
+		String[] filenames = { UPLOAD_DIRECTORY + "IMG-20140107104045-FXL-7f8628eb-2fb3-4c6e-88f5-2df370c7f7ff.jpg"};
+		
+		int deletedFiles = contenidoService.deleteMultipleFiles(filenames);		
+		
+		Assert.assertEquals(1, deletedFiles);
 	}
+	
+	
+	//@Test
+	public void deleteMultipleFilesTest() throws FileNotFoundException{
+		
+		Long idIssue = new Long(18865);		
+		List<ContenidoDTO> contenidos = new ArrayList<ContenidoDTO>(); 
+		int deletedFiles = 0;
+		
+		contenidos = contenidoService.listarContenido(idIssue);	
+		String[] filenames = new String[contenidos.size()];
+		
+		for(ContenidoDTO c : contenidos){
+			filenames[contenidos.indexOf(c)] = UPLOAD_DIRECTORY + c.getNombreConExtension();
+		}		
+		
+		deletedFiles = contenidoService.deleteMultipleFiles(filenames);		
+		
+		Assert.assertEquals(deletedFiles, contenidos.size());
+	}
+	
+	
 	
 	private int getFileSize(File file){
 		double bytes = file.length();
@@ -100,8 +200,5 @@ public class ContenidoServiceTest {
 		return kilobytes;
 	}
 	
-	
-	
-	public void valdiateFileTest(){}
 	
 }
