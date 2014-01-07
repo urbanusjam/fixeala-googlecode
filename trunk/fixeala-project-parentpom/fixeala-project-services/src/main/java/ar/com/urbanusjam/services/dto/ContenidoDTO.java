@@ -8,16 +8,14 @@ public class ContenidoDTO implements Serializable {
 
 	private static final long serialVersionUID = 1500359499775427609L;
 
-	private Long id;
-	private String tipo;    
+	private Long id;	
     private Integer alto;
     private Integer ancho;
-    private String pathRelativo;
-    private String url;
+    private String extension;    
     private String nombre;  
-    private String nombreFileSystem;    
-    private String nombreFileSystemExtension;
+    private String nombreConExtension;    
     private String nroReclamo;   
+    private String pathRelativo;
     private InputStream inputStream;
 	
 
@@ -29,12 +27,12 @@ public class ContenidoDTO implements Serializable {
 		this.id = id;
 	}
 
-	public String getTipo() {
-		return tipo;
+	public String getExtension() {
+		return extension;
 	}
 
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
+	public void setExtension(String extension) {
+		this.extension = extension;
 	}
 
 	public Integer getAlto() {
@@ -60,14 +58,7 @@ public class ContenidoDTO implements Serializable {
 	public void setPathRelativo(String pathRelativo) {
 		this.pathRelativo = pathRelativo;
 	}
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
+	
 
 	public String getNombre() {
 		return nombre;
@@ -77,20 +68,12 @@ public class ContenidoDTO implements Serializable {
 		this.nombre = nombre;
 	}
 
-	public String getNombreFileSystem() {
-		return nombreFileSystem;
+	public String getNombreConExtension() {
+		return nombreConExtension;
 	}
 
-	public void setNombreFileSystem(String nombreFileSystem) {
-		this.nombreFileSystem = nombreFileSystem;
-	}
-
-	public String getNombreFileSystemExtension() {
-		return nombreFileSystemExtension;
-	}
-
-	public void setNombreFileSystemExtension(String nombreFileSystemExtension) {
-		this.nombreFileSystemExtension = nombreFileSystemExtension;
+	public void setNombreConExtension(String nombreConExtension) {
+		this.nombreConExtension = nombreConExtension;
 	}
 
 	public String getNroReclamo() {
