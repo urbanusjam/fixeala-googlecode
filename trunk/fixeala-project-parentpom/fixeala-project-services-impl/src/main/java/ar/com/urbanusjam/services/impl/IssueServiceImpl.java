@@ -16,6 +16,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.hibernate.Hibernate;
+import org.springframework.stereotype.Service;
 
 import ar.com.urbanusjam.dao.AreaDAO;
 import ar.com.urbanusjam.dao.CommentDAO;
@@ -45,6 +46,7 @@ import ar.com.urbanusjam.services.mock.MapUtil;
 import ar.com.urbanusjam.services.utils.IssueStatus;
 import ar.com.urbanusjam.services.utils.Operation;
 
+@Service("issueService")
 public class IssueServiceImpl implements IssueService {
 	
 	private ContenidoService contenidoService;

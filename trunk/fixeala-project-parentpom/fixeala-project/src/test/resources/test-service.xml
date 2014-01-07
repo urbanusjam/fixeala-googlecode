@@ -24,11 +24,11 @@
 	
 	<bean name="exportService" class="ar.com.urbanusjam.services.impl.ExportServiceImpl" />
 	
-	<bean name="contenidoService" class="ar.com.urbanusjam.services.impl.ContenidoServiceImpl" >
-		<property name="contenidoDAO" ref="contenidoDAO" />		
-		<property name="issueDAO" ref="issueDAO" />		
-		<property name="pathImagenes" value="${path.imagenes}${file.separator}" />    
-	</bean>	
+<!-- 	<bean name="contenidoService" class="ar.com.urbanusjam.services.impl.ContenidoServiceImpl" > -->
+<!-- 		<property name="contenidoDAO" ref="contenidoDAO" />		 -->
+<!-- 		<property name="issueDAO" ref="issueDAO" />		 -->
+<!-- 		<property name="pathImagenes" value="${path.imagenes}${file.separator}" />     -->
+<!-- 	</bean>	 -->
 	
 	<!-- Remember Me Service -->		
 <!-- 	<bean id="rememberMeServices" class="org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices" > -->
