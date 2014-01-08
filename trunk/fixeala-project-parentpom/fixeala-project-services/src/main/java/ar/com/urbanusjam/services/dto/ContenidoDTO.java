@@ -1,5 +1,6 @@
 package ar.com.urbanusjam.services.dto;
 
+import java.io.File;
 import java.io.InputStream;
 import java.io.Serializable;
 
@@ -17,7 +18,7 @@ public class ContenidoDTO implements Serializable {
     private String nroReclamo;   
     private String pathRelativo;
     private InputStream inputStream;
-	
+    private File file;	
 
 	public Long getId() {
 		return id;
@@ -90,6 +91,14 @@ public class ContenidoDTO implements Serializable {
 
 	public void setInputStream(InputStream inputStream) {
 		this.inputStream = inputStream;
+	}
+	
+	public File getFile() {
+		return file;
+	}
+
+	public void setFile(File file) {
+		this.file = file;
 	}
 
 	@Override
