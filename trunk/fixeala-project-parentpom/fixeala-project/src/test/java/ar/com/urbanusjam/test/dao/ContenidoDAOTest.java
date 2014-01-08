@@ -45,7 +45,7 @@ public class ContenidoDAOTest {
 		contenidoA.setAlto(1024);
 		contenidoA.setAncho(758);			
 		contenidoA.setNombre("archivo01");
-		contenidoA.setNombreFileSystem("archivo01.png");
+		contenidoA.setNombreConExtension("archivo01.png");
 		contenidoA.setPathRelativo("/archivo01.png");
 		contenidoA.setTipo("png");
 		contenidoA.setIssue(issue);
@@ -55,7 +55,7 @@ public class ContenidoDAOTest {
 		contenidoB.setAlto(640);
 		contenidoB.setAncho(480);			
 		contenidoB.setNombre("archivo02");
-		contenidoB.setNombreFileSystem("archivo02.gif");
+		contenidoB.setNombreConExtension("archivo02.gif");
 		contenidoB.setPathRelativo("/archivo02.gif");
 		contenidoB.setTipo("gif");
 		contenidoB.setIssue(issue);
@@ -65,7 +65,7 @@ public class ContenidoDAOTest {
 		contenidoC.setAlto(800);
 		contenidoC.setAncho(600);			
 		contenidoC.setNombre("archivo02");
-		contenidoC.setNombreFileSystem("archivo03.png");
+		contenidoC.setNombreConExtension("archivo03.png");
 		contenidoC.setPathRelativo("/archivo03.jpeg");
 		contenidoC.setTipo("jpeg");
 		contenidoC.setIssue(issue);

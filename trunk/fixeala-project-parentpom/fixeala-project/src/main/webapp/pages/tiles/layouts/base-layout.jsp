@@ -190,46 +190,46 @@ path:hover {
 			
 			var isValid = false;
 
-// 			$("#fileupload").change(function(){				
+			$("#fileupload").change(function(){				
 			
-// 				var fileInput = document.getElementById('fileupload');
-// 				var file = fileInput.files[0];
-// 				var formData = new FormData();			
-// 				formData.append('fileUpload', file);
+				var fileInput = document.getElementById('fileupload');
+				var file = fileInput.files[0];
+				var formData = new FormData();			
+				formData.append('fileUpload', file);
 	                
-// 					$.ajax({ 
-// 					 		url: "./handleFileUpload.html", 		
-// 					 		type: "POST",						 				 	
-// 					 		data : formData,
-// 					 		contentType: false,
-// 					        processData: false,	
-// 					 		success : function(alertStatus){
-// 					 			var input = $("#fileUpload");
-// 					 			if(!alertStatus.result){
-// 					 				bootbox.alert(alertStatus.message);
-// 					 				input.replaceWith(input.val('').clone(true));
-// 					 			}
-// 					 		},						 		 
-// 					 		error: function(jqXHR, exception) {
-// 				                   if (jqXHR.status === 0) {
-// 				                       alert('Not connect.\n Verify Network.');
-// 				                   } else if (jqXHR.status == 404) {
-// 				                       alert('Requested page not found. [404]');
-// 				                   } else if (jqXHR.status == 500) {
-// 				                       alert('Internal Server Error [500].');
-// 				                   } else if (exception === 'parsererror') {
-// 				                       alert('Requested JSON parse failed.');
-// 				                   } else if (exception === 'timeout') {
-// 				                       alert('Time out error.');
-// 				                   } else if (exception === 'abort') {
-// 				                       alert('Ajax request aborted.');
-// 				                   } else {
-// 				                       alert('Uncaught Error.\n' + jqXHR.responseText);
-// 				                   }
-// 				               }
-// 					 	});
+					$.ajax({ 
+					 		url: "./handleFileUpload.html", 		
+					 		type: "POST",						 				 	
+					 		data : formData,
+					 		contentType: false,
+					        processData: false,	
+					 		success : function(alertStatus){
+					 			var input = $("#fileUpload");
+					 			if(!alertStatus.result){
+					 				bootbox.alert(alertStatus.message);
+					 				input.replaceWith(input.val('').clone(true));
+					 			}
+					 		},						 		 
+					 		error: function(jqXHR, exception) {
+				                   if (jqXHR.status === 0) {
+				                       alert('Not connect.\n Verify Network.');
+				                   } else if (jqXHR.status == 404) {
+				                       alert('Requested page not found. [404]');
+				                   } else if (jqXHR.status == 500) {
+				                       alert('Internal Server Error [500].');
+				                   } else if (exception === 'parsererror') {
+				                       alert('Requested JSON parse failed.');
+				                   } else if (exception === 'timeout') {
+				                       alert('Time out error.');
+				                   } else if (exception === 'abort') {
+				                       alert('Ajax request aborted.');
+				                   } else {
+				                       alert('Uncaught Error.\n' + jqXHR.responseText);
+				                   }
+				               }
+					 	});
 				
-// 			});
+			});
 
 				
 			function updateProgressBar(navItems, stepIndex){

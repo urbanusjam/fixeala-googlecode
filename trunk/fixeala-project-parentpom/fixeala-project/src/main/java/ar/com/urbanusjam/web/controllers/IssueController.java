@@ -1,27 +1,18 @@
 package ar.com.urbanusjam.web.controllers;
 
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
 
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
-import org.omg.CORBA.portable.ValueOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.AccessDeniedException;
@@ -38,7 +29,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.ContenidoService;
@@ -51,11 +41,11 @@ import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.IssueHistorialRevisionDTO;
 import ar.com.urbanusjam.services.dto.IssueLicitacionDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
+import ar.com.urbanusjam.services.utils.FileUploadUtils;
 import ar.com.urbanusjam.services.utils.IssueStatus;
 import ar.com.urbanusjam.services.utils.Messages;
 import ar.com.urbanusjam.services.utils.Operation;
 import ar.com.urbanusjam.web.domain.AlertStatus;
-import ar.com.urbanusjam.web.utils.UploadFile;
 
 
 @Controller
@@ -77,17 +67,17 @@ public class IssueController {
 	private static final long MAX_HEIGHT = 720;
 	private static final long MIN_WIDTH = 640;
 	private static final long MIN_HEIGHT = 480;
-	private FileWrapperDTO uploadedFile = null;
+	private ContenidoDTO uploadedFile = null;
 	
 	@Autowired
 	@Qualifier(value = "fixealaAuthenticationManager")
 	protected AuthenticationManager fixealaAuthenticationManager;
 	
-	public FileWrapperDTO getUploadedFile() {
+	public ContenidoDTO getUploadedFile() {
 		return uploadedFile;
 	}
 
-	public void setUploadedFile(FileWrapperDTO uploadedFile) {
+	public void setUploadedFile(ContenidoDTO uploadedFile) {
 		this.uploadedFile = uploadedFile;
 	}
 
@@ -202,22 +192,27 @@ public class IssueController {
 			HttpServletRequest request){
 		
 		InputStream inputStream = null;
-		  
+		String fileName = StringUtils.EMPTY;
+		String extensionArchivo = StringUtils.EMPTY;
+		ContenidoDTO nuevoContenido = new ContenidoDTO();	
+		
 	    try {		
 	
 			if(file != null){
 				 
-				String fileName = file.getOriginalFilename();			
+				fileName = file.getOriginalFilename();			
 				inputStream = file.getInputStream();
-				
-				ContenidoDTO nuevoContenido = new ContenidoDTO();			
-				nuevoContenido.setInputStream(inputStream);	
-				nuevoContenido.setExtension(fileName);	
-				
-				FileWrapperDTO fileDTO = contenidoService.subirContenido(nuevoContenido);	
-				
-				int width = fileDTO.getAncho();
-				int height = fileDTO.getAlto();
+				extensionArchivo =  FileUploadUtils.getExtensionArchivo(fileName);
+							
+				nuevoContenido = contenidoService.uploadFile2(inputStream, extensionArchivo);				
+//				nuevoContenido.setNombre(FileUploadUtils.getNombreArchivoSinExtension(fileName));
+//				nuevoContenido.setNombreConExtension(fileName);
+//				nuevoContenido.setExtension(FileUploadUtils.getExtensionArchivo(fileName));	
+//				nuevoContenido.setPathRelativo("/" + fileName);
+
+				/**
+				int width = nuevoContenido.getAncho();
+				int height = nuevoContenido.getAlto();
 				String extension = fileName;
 				
 				boolean valid = false;
@@ -234,7 +229,6 @@ public class IssueController {
 					message = "Los formatos de archivo permitidos son JPEG y PNG.";
 					//return new AlertStatus(false, "Los formatos de archivo permitidos son JPEG y PNG.");
 				}
-					
 							
 			
 				if( (width < MIN_WIDTH)
@@ -250,22 +244,24 @@ public class IssueController {
 						|| (height > MAX_HEIGHT)
 						|| (width > MAX_WIDTH && height > MAX_HEIGHT) ){
 					valid = false;
-					message = "La foto debe tener una resoluci�n m�xima de 1080 x 720 p�xeles.";
-					//return new AlertStatus(false, "La foto debe tener una resoluci�n m�xima de 1080 x 720 p�xeles.");
+					message = "La foto debe tener una resolucion maxima de 1080 x 720 pixeles.";
+					//return new AlertStatus(false, "La foto debe tener una resolucion maxima de 1080 x 720 pixeles.");
 				}
 					
 			    if(!valid){
-			    	fileDTO.getFile().delete();
+			    	nuevoContenido.getFile().delete();
 			    	return new AlertStatus(false, message);
 			    }				
 				
 			    else{
-			    	this.setUploadedFile(fileDTO);
+			    	this.setUploadedFile(nuevoContenido);
 			    }
+			    **/
 				
+				this.setUploadedFile(nuevoContenido);
 			}
 			
-			return new AlertStatus(true, "La foto se carg� exitosamente.");
+			return new AlertStatus(true, "La foto se cargo exitosamente.");
 	    
 	    } catch (IOException e) {
 	    	return new AlertStatus(false, "No se pudo cargar el archivo.");
@@ -274,7 +270,7 @@ public class IssueController {
 	
 	}
 	
-	private String getNombreArchivoSinExtension(String nombreArchivo) {
+	/**private String getNombreArchivoSinExtension(String nombreArchivo) {
 		String nombreArchivoSinExtension = "";
 		if (nombreArchivo.lastIndexOf(".") == -1)
 			nombreArchivoSinExtension = nombreArchivo;
@@ -291,7 +287,7 @@ public class IssueController {
 		    extension = fileName.substring(i+1);
 		}
 		return extension;
-	}
+	}**/
 	
 		
 	@RequestMapping(value="/reportIssue", method = RequestMethod.POST)
@@ -307,12 +303,16 @@ public class IssueController {
 			
 				//user is logged-in
 				else{
+					
+					Random generator = new Random(); 
+					int idIssue = generator.nextInt(100000) + 1000;
 									
 					UserDTO userDTO = new UserDTO();
 					userDTO.setUsername(userDB.getUsername());					
 					issue.setDate(new Date());
 					issue.setStatus(IssueStatus.OPEN);		
-					issue.setUser(userDTO);					
+					issue.setUser(userDTO);			
+					issue.setId(String.valueOf(idIssue));					
 										
 					IssueHistorialRevisionDTO revision = new IssueHistorialRevisionDTO();
 					revision.setFecha(new Date());
@@ -327,25 +327,18 @@ public class IssueController {
 					revision.setNroReclamo(Long.valueOf(issue.getId()));	
 					issue.setLicitacion(null);
 					issue.getHistorial().add(revision);
+										
+				    //contenido
+					ContenidoDTO contenido = this.getUploadedFile();
 					
-					
-				    //ContenidoDTO
-					FileWrapperDTO file = this.getUploadedFile();
-					
-					if(file != null){
-						String fileName = file.getFile().getName();						
-						ContenidoDTO contenido = new ContenidoDTO();
-					    contenido.setNombre(this.getNombreArchivoSinExtension(fileName));
-					    contenido.setNombreConExtension(fileName);	
-					    contenido.setPathRelativo("/"+ fileName);
-					    contenido.setAncho(file.getAncho());
-					    contenido.setAlto(file.getAlto());
-					    contenido.setExtension(this.getExtensionArchivo(fileName));
-					    contenido.setNroReclamo(String.valueOf(issue.getId()));
+					if(contenido != null){
+						contenido.setNroReclamo(String.valueOf(issue.getId()));
 					    issue.getContenidos().add(contenido);
 					}					
 					
-					issueService.reportIssue(issue);		
+					issueService.reportIssue(issue);	
+					
+					this.setUploadedFile(null);
 					
 					return new AlertStatus(true, "Su reclamo ha sido registrado.");			
 			}				

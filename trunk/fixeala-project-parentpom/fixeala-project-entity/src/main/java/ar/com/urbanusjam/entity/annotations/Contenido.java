@@ -46,8 +46,8 @@ public class Contenido implements Serializable {
     @Column(name = "NOMBRE")
     private String nombre;
     
-    @Column(name = "NOMBRE_FILE_SYSTEM")
-    private String nombreFileSystem;
+    @Column(name = "NOMBRE_CON_EXTENSION")
+    private String nombreConExtension;
     
     @ManyToOne
 	@JoinColumn(name = "ID_ISSUE", updatable = false)	
@@ -127,15 +127,15 @@ public class Contenido implements Serializable {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
+	
 
-
-	public String getNombreFileSystem() {
-		return nombreFileSystem;
+	public String getNombreConExtension() {
+		return nombreConExtension;
 	}
 
 
-	public void setNombreFileSystem(String nombreFileSystem) {
-		this.nombreFileSystem = nombreFileSystem;
+	public void setNombreConExtension(String nombreConExtension) {
+		this.nombreConExtension = nombreConExtension;
 	}
 
 

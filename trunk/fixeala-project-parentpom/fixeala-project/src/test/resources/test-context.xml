@@ -65,13 +65,13 @@
  </bean>
  
   
- <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
- 	<property name="sessionFactory" ref="sessionFactoryTest" />
- </bean>
+ 	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+ 		<property name="sessionFactory" ref="sessionFactoryTest" />
+ 	</bean>
 
- 	<bean id="hibernateTemplateTest" class="org.springframework.orm.hibernate3.HibernateTemplate">
-        <property name="sessionFactory" ref="sessionFactoryTest" />            
-    </bean>
+	<bean id="hibernateTemplateTest" class="org.springframework.orm.hibernate3.HibernateTemplate">
+       <property name="sessionFactory" ref="sessionFactoryTest" />            
+   	</bean>
 
 <!-- 	<bean id="hibernateParent" abstract="true"> -->
 <!--         <property name="sessionFactory" ref="sessionFactoryTest" /> -->

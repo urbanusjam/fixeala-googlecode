@@ -19,6 +19,7 @@
  
 	<!--	Controllers       -->	
 	<context:component-scan base-package="ar.com.urbanusjam.web" />
+	
 
 	<!--	Context           -->	
 	<import resource="classpath:ctx/fixeala-context.xml" />

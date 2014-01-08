@@ -739,7 +739,7 @@
 		  	   			</c:if>	      			
 		    		</a>
 	    			<br>
-	    			<div class="caption"><button class="btn btn-info"><i class="icon-camera"></i>&nbsp;&nbsp;&nbsp;mas fotos y videos</button>	</div>
+	    			<div class="caption"><button class="btn btn-info"><i class="icon-camera"></i>&nbsp;&nbsp;&nbsp;ver mas fotos</button>	</div>
 	  			</li>	
 		   </ul>
 	 
@@ -819,12 +819,13 @@
 		
 		<div class="accordion" id="accordion2">
  
+ 			  <br>
 
 			  <!-- 2 HISTORIAL -->
 			  <div class="accordion-group">
 			    <div class="accordion-heading">
 			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-			       <h4><i class="icon-time icon-large"></i>&nbsp;&nbsp;HISTORIAL Y SEGUIMIENTO (${cantidadRevisiones})</h4>
+			       <h4><i class="icon-time icon-large"></i>&nbsp;&nbsp;HISTORIAL DE ACTUALIZACIONES (${cantidadRevisiones})</h4>
 			      </a>
 			    </div>
 			    <div id="collapseThree" class="accordion-body collapse">
@@ -860,7 +861,7 @@
 			  </div>
 			  
 			  
-			  <!-- 3 LICITACIO¬ìN -->
+			  <!-- 3 LICITACIOìN -->
 			  <div class="accordion-group">
 			    <div class="accordion-heading">
 			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
@@ -868,99 +869,97 @@
 			      </a>			     
 			    </div>
 			    <div id="collapseTwo" class="accordion-body collapse">
-			      <div class="accordion-inner">
+			      <div class="accordion-inner">			      
 			      
-			      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sollicitudin rutrum lectus. 
-			      Ut laoreet lorem dignissim ante tristique cursus. Phasellus ut ipsum malesuada neque tempor iaculis. 
-			      Vestibulum pharetra tellus vitae tristique dapibus. Proin sed tortor rutrum, vulputate dui faucibus, sagittis justo. 
-			      Sed varius non diam a placerat. Fusce vitae velit ac metus tincidunt vehicula. 
-			      In tortor mauris, congue nec luctus vitae, suscipit in metus.
-			      
-			      <br><br>
-			      
-<!-- 			      <button id="reset-btn" class="btn btn-large btn-danger" style="margin-left:595px">Resetear valores</button> -->
+<!-- 			    <button id="reset-btn" class="btn btn-large btn-danger" style="margin-left:595px">Resetear valores</button> -->
+					
+					<c:if test="${cantidadLicitacion eq 0}">
+						Por el momento no hay informaciÛn disponible.		 
+					</c:if>
+					
+					<c:if test="${cantidadLicitacion gt 0}">	
+						<table id="tbl-licitacion" class="table table-hover table-bordered table-striped">							
+							 <tr>
+							    <th>Obra:</th>
+							    <td><a href="#" id="lic-obra" data-type="textarea">${obra}</a></td>						  
+							 </tr>
+							 <tr>
+							    <th>N∞ de LicitaciÛn:</th>
+							    <td><a href="#" id="lic-nroLicitacion" data-type="text">${nroLicitacion}</a>						  
+							 </tr>
+							 <tr>
+							    <th>N∞ de Expediente:</th>
+							    <td><a href="#" id="lic-nroExpediente" data-type="text">${nroExpediente}</a></td>						  
+							 </tr>
+							 <tr>
+							    <th>Estado de la obra:</th>
+							    <td><a href="#" id="lic-estadoObra" data-type="select">${estadoObra}</a></td>						  
+							 </tr>
+							 <tr>
+							    <th>Tipo:</th>
+							    <td><a href="#" id="lic-tipo" data-type="select" >${tipoObra}</a></td>						  
+							 </tr>
+							 <tr>
+							 	<th>Unidad ejecutora:</th>
+							    <td><a href="#" id="lic-unidadEjecutora" data-type="text">${unidadEjecutora}</a></td>
+							 </tr>	
+							 <tr>	
+							    <th>Unidad de financiaciÛn:</th>
+							    <td><a href="#" id="lic-unidadFinanciamiento" data-type="text">${unidadFinanciamiento}</a></td>		
+							 </tr>
+							 <tr>	
+							    <th>Valor del pliego:</th>
+							    <td>$ <a href="#" id="lic-valorPliego" data-type="number">${valorPliego}</a></td>		
+							 </tr>						 <tr>
+							    <th>Empresa constructora:</th>
+							  	<td>
+							    	RazÛn social: <a href="#" id="lic-empresaNombre" data-type="text">${empresaNombre}</a>
+							    	<br>CUIT: <a href="#" id="lic-empresaCuit" data-type="text">${empresaCuit}</a>	
+							    	<br>Email: <a href="#" id="lic-empresaEmail" data-type="email">${empresaEmail}</a>
+							    </td>
+							 </tr>
+							 <tr>
+							    <th>Representante tÈcnico:</th>
+							      <td>
+							    	Nombre y Apellido: <a href="#" id="lic-representanteNombre" data-type="text">${representanteNombre}</a>
+							    	<br>DNI: <a href="#" id="lic-representanteDni" data-type="number">${representanteDni}</a>
+							    	<br>Email: <a href="#" id="lic-representanteEmail" data-type="email">${representanteEmail}</a>	
+							      </td>								   						  
+							 </tr>
+							 <tr>
+							    <th>Presupuesto Adjudicado:</th>
+							    <td>
+							    	$ <a href="#" id="lic-presupuestoAdjudicado" data-type="number">${presupuestoAdjudicado}</a>
+							    </td>
+							 </tr>
+							 <tr>	
+							    <th>Presupuesto Final:</th>
+							    <td>
+							    	$ <a href="#" id="lic-presupuestoFinal" data-type="number">${presupuestoFinal}</a>
+							    </td>					  
+							 </tr>
+							 <tr>
+							    <th>Fechas estimadas:</th>
+							    <td>
+							    	<a href="#" id="fechaEstimadaInicio" data-type="combodate">${fechaEstimadaInicio}</a>
+													&mdash;
+													<a href="#" id="fechaEstimadaFin" data-type="combodate">${fechaEstimadaFinal}</a>
+							    </td>	
+							 </tr>
+							 <tr>
+							    <th>Fechas reales:</th>
+							    <td>
+							    	<a href="#" id="fechaRealInicio" data-type="combodate">${fechaRealInicio}</a>	
+													&mdash;
+													<a href="#" id="fechaRealFin" data-type="combodate">${fechaRealFinal}</a>	
+							    </td>					  
+							 </tr>
+				  		</table>	
+					</c:if>
 							
-					<table id="tbl-licitacion" class="table table-hover table-bordered table-striped">	
 					
-						 <tr>
-						    <th>Obra:</th>
-						    <td><a href="#" id="lic-obra" data-type="textarea">${obra}</a></td>						  
-						 </tr>
-						 <tr>
-						    <th>N∞ de LicitaciÛn:</th>
-						    <td><a href="#" id="lic-nroLicitacion" data-type="text">${nroLicitacion}</a>						  
-						 </tr>
-						 <tr>
-						    <th>N∞ de Expediente:</th>
-						    <td><a href="#" id="lic-nroExpediente" data-type="text">${nroExpediente}</a></td>						  
-						 </tr>
-						 <tr>
-						    <th>Estado de la obra:</th>
-						    <td><a href="#" id="lic-estadoObra" data-type="select">${estadoObra}</a></td>						  
-						 </tr>
-						 <tr>
-						    <th>Tipo:</th>
-						    <td><a href="#" id="lic-tipo" data-type="select" >${tipoObra}</a></td>						  
-						 </tr>
-						 <tr>
-						 	<th>Unidad ejecutora:</th>
-						    <td><a href="#" id="lic-unidadEjecutora" data-type="text">${unidadEjecutora}</a></td>
-						 </tr>	
-						 <tr>	
-						    <th>Unidad de financiaciÛn:</th>
-						    <td><a href="#" id="lic-unidadFinanciamiento" data-type="text">${unidadFinanciamiento}</a></td>		
-						 </tr>
-						 <tr>	
-						    <th>Valor del pliego:</th>
-						    <td>$ <a href="#" id="lic-valorPliego" data-type="number">${valorPliego}</a></td>		
-						 </tr>						 <tr>
-						    <th>Empresa constructora:</th>
-						  	<td>
-						    	RazÛn social: <a href="#" id="lic-empresaNombre" data-type="text">${empresaNombre}</a>
-						    	<br>CUIT: <a href="#" id="lic-empresaCuit" data-type="text">${empresaCuit}</a>	
-						    	<br>Email: <a href="#" id="lic-empresaEmail" data-type="email">${empresaEmail}</a>
-						    </td>
-						 </tr>
-						 <tr>
-						    <th>Representante tÈcnico:</th>
-						      <td>
-						    	Nombre y Apellido: <a href="#" id="lic-representanteNombre" data-type="text">${representanteNombre}</a>
-						    	<br>DNI: <a href="#" id="lic-representanteDni" data-type="number">${representanteDni}</a>
-						    	<br>Email: <a href="#" id="lic-representanteEmail" data-type="email">${representanteEmail}</a>	
-						    </td>	
-						   						  
-						 </tr>
-						 <tr>
-						    <th>Presupuesto Adjudicado:</th>
-						    <td>
-						    	$ <a href="#" id="lic-presupuestoAdjudicado" data-type="number">${presupuestoAdjudicado}</a>
-						    </td>
-						 </tr>
-						 <tr>	
-						    <th>Presupuesto Final:</th>
-						    <td>
-						    	$ <a href="#" id="lic-presupuestoFinal" data-type="number">${presupuestoFinal}</a>
-						    </td>					  
-						 </tr>
-						 <tr>
-						    <th>Fechas estimadas:</th>
-						    <td>
-						    	<a href="#" id="fechaEstimadaInicio" data-type="combodate">${fechaEstimadaInicio}</a>
-												&mdash;
-												<a href="#" id="fechaEstimadaFin" data-type="combodate">${fechaEstimadaFinal}</a>
-						    </td>	
-						 </tr>
-						 <tr>
-						    <th>Fechas reales:</th>
-						    <td>
-						    	<a href="#" id="fechaRealInicio" data-type="combodate">${fechaRealInicio}</a>	
-												&mdash;
-												<a href="#" id="fechaRealFin" data-type="combodate">${fechaRealFinal}</a>	
-						    </td>					  
-						 </tr>
-					
-					  		</table>	
-						</div>
+			  			
+				</div>
 
 			    </div>
 			  </div>			  
@@ -1009,13 +1008,11 @@
 			  
 			  
 			  
-			  
-			  
 			  <!-- 5 IMAGES & VIDEOS -->
 			  <div class="accordion-group">
 			    <div class="accordion-heading">
 			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFive">
-			       <h4><i class="icon-camera icon-large"></i>&nbsp;&nbsp;IM√ÅGENES Y VIDEOS (${cantidadArchivos})</h4>			   
+			       <h4><i class="icon-camera icon-large"></i>&nbsp;&nbsp;IMAÅGENES (${cantidadArchivos})</h4>			   
 			      </a>
 			    </div>
 			    <div id="collapseFive" class="accordion-body collapse">
