@@ -173,14 +173,15 @@ CREATE TABLE ISSUE_TAG (
 -- CONTENIDO
 CREATE TABLE CONTENIDO ( 
 	   ID_CONTENIDO BIGINT(20) NOT NULL AUTO_INCREMENT,
-	   ID_ISSUE BIGINT(20) NOT NULL,
+	   ID_ISSUE BIGINT(20) NULL,
 	   TIPO VARCHAR(255) NOT NULL,
 	   ALTO BIGINT(22) NOT NULL,
 	   ANCHO BIGINT(22) NOT NULL,
 	   PATH_RELATIVO VARCHAR(255) NOT NULL,
 	   URL VARCHAR(1024) NULL,
 	   NOMBRE VARCHAR(255) NOT NULL,
-	   NOMBRE_FILE_SYSTEM VARCHAR(255) NOT NULL,
+	   NOMBRE_CON_EXTENSION VARCHAR(255) NOT NULL,
+	   UPLOAD_DATE DATETIME NULL,
 	   
 	   PRIMARY KEY (ID_CONTENIDO),
 	   FOREIGN KEY (ID_ISSUE) REFERENCES ISSUE (ID_ISSUE)
@@ -254,7 +255,7 @@ VALUES
 ('Comuna 2','C2', 'Buenos Aires', 'BA', 'Ciudad de Buenos Aires', 'CABA'),
 ('Comuna 3','C3', 'Buenos Aires', 'BA', 'Ciudad de Buenos Aires', 'CABA'),
 ('Comuna 4','C4', 'Buenos Aires', 'BA', 'Ciudad de Buenos Aires', 'CABA'),
-('Ministerio de Ambiente y Espacio Pœblico','MAYEPGC', 'Buenos Aires', 'BA', 'Ciudad de Buenos Aires', 'CABA');
+('Ministerio de Ambiente y Espacio Pï¿½blico','MAYEPGC', 'Buenos Aires', 'BA', 'Ciudad de Buenos Aires', 'CABA');
 
 
 INSERT INTO `user` 

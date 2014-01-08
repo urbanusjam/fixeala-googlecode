@@ -88,20 +88,19 @@
 							
 							<fieldset title="3. Archivo">	
 							<legend></legend>							
-									<div class="fileupload fileupload-new" data-provides="fileupload">
-										<div class="fileupload-new thumbnail" style="width: 304px; height: 150px;">
-											<img src="${pageContext.request.contextPath}/resources/images/nopic.png" />
-										</div>
-										<div class="fileupload-preview fileupload-exists thumbnail" style="height: 150px;min-width:300px;max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-										<div>
-										<span class="btn  fileinput-button">
-									        <i class="icon-plus"></i>
-									        <span>Seleccionar</span>
-									        The file input field used as target for the file upload widget
-									           <input type="file" name="files[]" id="fileupload"  multiple="multiple"/>
-									    </span>										
-										</div>
-									</div>						
+								<div class="fileupload fileupload-new" data-provides="fileupload" style="display:block">
+									<div class="fileupload-new thumbnail" style="width: 304px; height: 150px;">
+										<img src="${pageContext.request.contextPath}/resources/images/nopic.png" />
+									</div>
+									<div class="fileupload-preview fileupload-exists thumbnail" style="height: 150px;min-width:300px;max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+									<div>
+									<span class="btn  fileinput-button">
+								        <i class="icon-plus"></i>
+								        <span>Seleccionar</span>									        
+								           <input type="file" name="files[]" id="fileupload"/>
+								    </span>										
+									</div>
+								</div>						
 								<ul id="eventTags"></ul>
 							</fieldset>
 						<input id="submitIssue" type="submit" class="finish"/>

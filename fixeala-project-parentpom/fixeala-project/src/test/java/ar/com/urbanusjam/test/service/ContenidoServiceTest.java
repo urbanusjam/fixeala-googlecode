@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +20,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ar.com.urbanusjam.services.ContenidoService;
 import ar.com.urbanusjam.services.dto.ContenidoDTO;
 import ar.com.urbanusjam.services.dto.FileWrapperDTO;
+import ar.com.urbanusjam.services.exceptions.BusinessException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"classpath:test-context.xml"}) 
@@ -56,17 +58,9 @@ public class ContenidoServiceTest {
 	       
 		}
 		
-	}
+	}	
 	
-	public void testTimeout() {
-	    try {
-	        Thread.sleep(10);
-	    } catch (InterruptedException ex) {}
-	}
-	
-	
-	
-	@Test(timeout=3000)
+	@Test
 	public void uploadContenido() throws FileNotFoundException{
 		
 		System.out.println("\n");
@@ -97,7 +91,8 @@ public class ContenidoServiceTest {
 			
 	}
 	
-	@Test(timeout=3000)
+	
+	@Test
 	public void displayContenidoTest() throws FileNotFoundException {
 		
 		System.out.println("\n");
@@ -120,6 +115,7 @@ public class ContenidoServiceTest {
 		System.out.println(contenidos.size() + " ARCHIVOS LISTADOS.");	
 		
 	}
+	
 	
 	@Test
 	public void deleteContenidoTest() throws FileNotFoundException {
@@ -149,31 +145,27 @@ public class ContenidoServiceTest {
 	}
 	
 	
-	//@Test(expected=FileNotFoundException.class)
-	//@Test
-	public void uploadFilesToFolderTest() throws FileNotFoundException{
-			
-		for(int i = 0; i < inputStreams.size() ; i++){			
-			FileWrapperDTO file = contenidoService.uploadFile(inputStreams.get(i), "jpg");	
-			System.out.println("Archivo " + i + ": " + file.getFile().getName() + " (" + getFileSize(file.getFile()) + " Kb)");				
-		}		
+	/**
+	@Test(expected=BusinessException.class)
+	public void uploadFileTest() throws FileNotFoundException {			
+		
+		FileWrapperDTO file = contenidoService.uploadFile(null, "png");	
+		System.out.println("Archivo :" + file.getFile().getName() + " (" + getFileSize(file.getFile()) + " Kb)");	
 		
 	}
-	
-	
-	
-	//@Test
-	public void deleteFileTest() throws FileNotFoundException{
 		
-		String[] filenames = { UPLOAD_DIRECTORY + "IMG-20140107104045-FXL-7f8628eb-2fb3-4c6e-88f5-2df370c7f7ff.jpg"};
+	
+	@Test
+	public void deleteFileTest() throws FileNotFoundException{		
 		
-		int deletedFiles = contenidoService.deleteMultipleFiles(filenames);		
-		
+		String[] filenames = { UPLOAD_DIRECTORY + "IMG-20140107104045-FXL-7f8628eb-2fb3-4c6e-88f5-2df370c7f7ff.jpg"};		
+		int deletedFiles = contenidoService.deleteMultipleFiles(filenames);				
 		Assert.assertEquals(1, deletedFiles);
+		
 	}
 	
 	
-	//@Test
+	@Test
 	public void deleteMultipleFilesTest() throws FileNotFoundException{
 		
 		Long idIssue = new Long(18865);		
@@ -190,15 +182,15 @@ public class ContenidoServiceTest {
 		deletedFiles = contenidoService.deleteMultipleFiles(filenames);		
 		
 		Assert.assertEquals(deletedFiles, contenidos.size());
+		
 	}
-	
-	
+	**/
+			
 	
 	private int getFileSize(File file){
 		double bytes = file.length();
 		int kilobytes = (int) (bytes / 1024);
 		return kilobytes;
-	}
-	
+	}	
 	
 }
