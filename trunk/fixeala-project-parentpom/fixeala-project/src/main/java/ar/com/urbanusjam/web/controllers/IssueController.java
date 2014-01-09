@@ -118,13 +118,18 @@ public class IssueController {
 				model.addAttribute("tags", tag);
 				model.addAttribute("comentarios", issue.getComentarios());
 				
-				if(issue.getContenidos().size() > 0){
-					ContenidoDTO contenido = issue.getContenidos().get(0);						
+				List<ContenidoDTO> contenidos = new ArrayList<ContenidoDTO>();
+				contenidos = issue.getContenidos();
+				
+				if(contenidos.size() > 0){
+					model.addAttribute("contenidos", contenidos);
+					ContenidoDTO contenido = contenidos.get(0);						
 					model.addAttribute("image", contenido);
 					model.addAttribute("imageUrl", contenido.getPathRelativo());
 					model.addAttribute("imageName", contenido.getNombre());
 				}
 				
+				model.addAttribute("cantidadContenidos", contenidos.size());
 				model.addAttribute("cantidadRevisiones", issue.getHistorial().size());
 				model.addAttribute("cantidadLicitacion", issue.getLicitacion() != null ? 1 : 0);
 				model.addAttribute("cantidadReclamosSimilares", 0);
