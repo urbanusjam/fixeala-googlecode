@@ -36,9 +36,7 @@
 		
 	
 		$(function(){	
-			
-		
-			
+						
 			var id = '${id}';
 			var newTitle;
 			
@@ -728,20 +726,33 @@
 			</div>
 		 </div>
 		 
+		 
 		 <ul class="thumbnails">
-	  	   		<li  style="margin-left:0">		  	   		
-			  	   	<a href="#" class="thumbnail" data-toggle="lightbox" data-target="#demoLightbox">	
-			  	   		<c:if test="${not empty image}">		  	  			  	   		
-	      					<img src="${pageContext.request.contextPath}/uploads/${imageUrl}" alt="${imageName}">	 
-	  	   				</c:if>
-		  	   			<c:if test="${empty image}">			  	   	
-		      				<img src="${pageContext.request.contextPath}/resources/images/nopic.png" alt="">	
-		  	   			</c:if>	      			
-		    		</a>
+	  	   		<li style="margin-left:0">		  	   		
+<!-- 			  	   	<a href="#" class="thumbnail" data-toggle="lightbox" data-target="#demoLightbox">	 -->
+<%-- 			  	   		<c:if test="${not empty image}">		  	  			  	   		 --%>
+<%-- 	      					<img src="${pageContext.request.contextPath}/uploads/${imageUrl}" alt="${imageName}">	  --%>
+<%-- 	  	   				</c:if> --%>
+<%-- 		  	   			<c:if test="${empty image}">			  	   	 --%>
+<%-- 		      				<img src="${pageContext.request.contextPath}/resources/images/nopic.png" alt="">	 --%>
+<%-- 		  	   			</c:if>	      			 --%>
+<!-- 		    		</a> -->
+		    		
+		    		<c:if test="${not empty image}">
+		    			<a data-lightbox="issue-lightbox2" class="thumbnail" href="${pageContext.request.contextPath}/uploads/${imageUrl}">							  	  			  	   		
+							<img src="${pageContext.request.contextPath}/uploads/${imageUrl}" alt="${imageName}">	 
+						</a>		
+		    		</c:if>
+		    		<c:if test="${empty image}">
+		    			<a data-lightbox="issue-lightbox2" class="thumbnail" href="${pageContext.request.contextPath}/resources/images/nopic.png" >							  	  			  	   		
+							<img src="${pageContext.request.contextPath}/resources/images/nopic.png" alt="">	
+						</a>
+		    		</c:if>
+		    	
 	    			<br>
 	    			<div class="caption"><button class="btn btn-info"><i class="icon-camera"></i>&nbsp;&nbsp;&nbsp;ver mas fotos</button>	</div>
 	  			</li>	
-		   </ul>
+	      </ul>
 	 
 	 	</div>
 	 
@@ -1008,16 +1019,35 @@
 			  
 			  
 			  
+		 
+			  
 			  <!-- 5 IMAGES & VIDEOS -->
 			  <div class="accordion-group">
 			    <div class="accordion-heading">
 			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFive">
-			       <h4><i class="icon-camera icon-large"></i>&nbsp;&nbsp;IMAÅGENES (${cantidadArchivos})</h4>			   
+			       <h4><i class="icon-camera icon-large"></i>&nbsp;&nbsp;IMAÅGENES (${cantidadContenidos})</h4>			   
 			      </a>
 			    </div>
 			    <div id="collapseFive" class="accordion-body collapse">
 			      <div class="accordion-inner">
-			        Anim pariatur cliche...
+			        <div class="row-fluid">
+			        
+				        <ul class="thumbnails">
+				        	<c:forEach items="${contenidos}" var="contenido">	
+				        		<li style="margin-right:30px;">
+					                <div class="thumbnail">
+					                	<a style="width:150px; height:150px; max-width:150%; max-height:150px;" data-lightbox="issue-lightbox" href="${pageContext.request.contextPath}/uploads/${contenido.nombreConExtension}" >							  	  			  	   		
+						      				<img width="150" height="150" src="${pageContext.request.contextPath}/uploads/${contenido.nombreConExtension}" > 
+						    			</a>				                 
+					                </div>
+			                	</li>
+				        	</c:forEach>
+		      			</ul>
+			        
+			        </div>
+					
+
+
 			      </div>
 			    </div>
 			  </div>
