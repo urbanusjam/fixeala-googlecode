@@ -37,7 +37,7 @@ import ar.com.urbanusjam.services.utils.FileUploadUtils;
 @Transactional(propagation=Propagation.REQUIRED, readOnly=false, rollbackFor=Exception.class)
 public class ContenidoServiceImpl implements ContenidoService {
 	
-    private static final String DATE_FORMAT_NOW = "yyyyMMddHHmmss";
+    private static final String DATE_FORMAT_NOW = "yyyyMMddHHmmssSSS";
  	private static final int BUFFER_SIZE = 6124; 
     private static final String EXTENSION_BANNER = ".data";	 
     private static final long MAX_SIZE = 1024*256;  
@@ -68,26 +68,19 @@ public class ContenidoServiceImpl implements ContenidoService {
 
 	
 	@Override	
-	public FileWrapperDTO subirContenido(ContenidoDTO contenido) throws BusinessException {
+	public ContenidoDTO subirContenido(ContenidoDTO contenido) throws BusinessException {
 		
-		FileWrapperDTO fileWrapper = new FileWrapperDTO();
+		ContenidoDTO fileWrapper = new ContenidoDTO();
 		InputStream inputStream = contenido.getInputStream();
 		
 		if(inputStream == null)		
 			throw new BusinessException("archivo no encontrado");	
 			
 		//file is CREATED and saved in external folder
-		fileWrapper = this.uploadFile(inputStream, contenido.getExtension());
-		 
-//		File file = fileWrapper.getFile();		
-		contenido.setAlto(fileWrapper.getAlto());
-		contenido.setAncho(fileWrapper.getAncho());				
-//		contenido.setNombre(FileUploadUtils.getNombreArchivoSinExtension(file.getName()));
-//		contenido.setNombreConExtension(file.getName());
-//		contenido.setPathRelativo("/" + file.getName());
+		fileWrapper = this.uploadFile2(inputStream, contenido.getExtension());
 		
 		//file reference is PERSISTED in database
-		this.grabarContenido(contenido);
+		this.grabarContenido(fileWrapper);
 				
 		return fileWrapper;
 	}
@@ -100,7 +93,9 @@ public class ContenidoServiceImpl implements ContenidoService {
 		
 		for(Contenido contenido : contenidos){
 			ContenidoDTO contenidoDTO = convertirAContenidoDTO(contenido);
-			contenidosDTO.add(contenidoDTO);
+			File file = this.abrirContenidoFile(contenidoDTO);
+			contenidoDTO.setFile(file);
+			contenidosDTO.add(contenidoDTO);			
 		}
 		
 		return contenidosDTO;
@@ -203,8 +198,10 @@ public class ContenidoServiceImpl implements ContenidoService {
 	    
        /** Archivo random a generar **/
        String nombreArchivoHash = UUID.randomUUID().toString();
+       
+       int inicioCadena = nombreArchivoHash.length() - LONGITUD_MAXIMA_NOMBRE_ARCHIVO_HASH;
       
-       File file = new File( this.pathImagenes + "IMG-" + this.generateTimestamp() + "-FXL-" +  nombreArchivoHash + "." + extensionArchivo.toLowerCase());
+       File file = new File( this.pathImagenes + "IMG-" + this.generateTimestamp() + "-FXL-" +  nombreArchivoHash.substring(inicioCadena) + "." + extensionArchivo.toLowerCase());
        
        try {
            FileOutputStream fileOutputStream;
@@ -248,7 +245,7 @@ public class ContenidoServiceImpl implements ContenidoService {
    
    private void grabarContenido(ContenidoDTO contenidoDTO) {	
        try {
-       	 Contenido contenido = convertirAContenido(contenidoDTO);     
+       	 	Contenido contenido = convertirAContenido(contenidoDTO);     
             contenidoDAO.save(contenido);
             contenidoDTO.setId(contenido.getId());   
 		} catch (BusinessException e) {		
@@ -285,10 +282,10 @@ public class ContenidoServiceImpl implements ContenidoService {
 
    /**************************************/
    
-	
-   private ContenidoDTO obtenerContenido(Long idContenido) throws BusinessException {
+   @Override
+   public ContenidoDTO obtenerContenido(String idContenido, String idIssue) throws BusinessException {
 
-	    Contenido contenido = contenidoDAO.findContenidoById(idContenido);
+	    Contenido contenido = contenidoDAO.findContenidoByContenidoAndIssue(Long.valueOf(idContenido), Long.valueOf(idIssue));
         if ( contenido == null ){		
         	throw new BusinessException("archivo no encontrado");	
 		}        
@@ -296,17 +293,20 @@ public class ContenidoServiceImpl implements ContenidoService {
         return contenidoDTO;
    }
 	
-   private File abrirContenidoFile(ContenidoDTO contenidoDTO) throws BusinessException {
+   @Override
+   public File abrirContenidoFile(ContenidoDTO contenidoDTO) throws BusinessException {
+	   
+	    File file = null;
+	    
 	 	if ( contenidoDTO == null )		
 	 		throw new BusinessException("archivo no encontrado");	
         
         /** Existe el contenido, lo busco en la ruta de contenidos reales **/
         if ( contenidoDTO.getId() > 0 )
-            return new File(this.pathImagenes + contenidoDTO.getNombreConExtension());
+        	file = new File(this.pathImagenes + contenidoDTO.getNombreConExtension());
         
-        /** No existe todavia, lo busco en los banners temporales **/
-        else
-            return new File(this.pathImagenes + FileUploadUtils.getNombreArchivoSinExtension(contenidoDTO.getNombreConExtension()) + EXTENSION_BANNER);
+        return file;
+      
    }
 	
    private InputStream abrirContenidoRaw(ContenidoDTO contenidoDTO) throws BusinessException {

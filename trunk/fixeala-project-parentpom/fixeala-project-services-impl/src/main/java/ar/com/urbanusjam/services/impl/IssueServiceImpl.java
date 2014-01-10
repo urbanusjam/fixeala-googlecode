@@ -462,7 +462,7 @@ public class IssueServiceImpl implements IssueService {
 		}
 		
 		//contenidos
-		for(ContenidoDTO contenido : issueDTO.getContenidos()){
+		for(ContenidoDTO contenido : issueDTO.getContenidos()){			
 			issue.getContenidos().add(contenidoService.convertirAContenido(contenido));
 		}
 		
@@ -577,8 +577,10 @@ public class IssueServiceImpl implements IssueService {
 		//contenidos
 		List<ContenidoDTO> contenidosDTO = new ArrayList<ContenidoDTO>();
 		
-		for(Contenido contenido : issue.getContenidos()){
-			contenidosDTO.add(contenidoService.convertirAContenidoDTO(contenido));
+		for(Contenido contenido : issue.getContenidos()){			
+			ContenidoDTO contenidoDTO = contenidoService.convertirAContenidoDTO(contenido);
+			contenidoDTO.setFile(contenidoService.abrirContenidoFile(contenidoDTO));
+			contenidosDTO.add(contenidoDTO);
 		}
 		
 		issueDTO.setContenidos(contenidosDTO);

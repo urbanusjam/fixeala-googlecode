@@ -77,5 +77,11 @@ public class ContenidoDAOImpl extends GenericDAOImpl<Contenido, Serializable> im
     	return contenidos.size() > 0 ? true : false; 
 	}
 
+	@Override
+	public Contenido findContenidoByContenidoAndIssue(Long idContenido, Long idIssue) {
+		List<Contenido> contenidos = this.findWhere( " id = ? AND issue.id = ? ", new Object[]{idContenido, idIssue});    	
+    	return contenidos.size() > 0 ? contenidos.get(0) : null; 
+	}
+
 		
 }

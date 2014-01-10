@@ -180,18 +180,7 @@ public class IssueController {
 		return "issues";
 	 }
 	
-//	private Image getImage(InputStream inputStream) throws IOException
-//	{
-//		BufferedImage bufferedImage;
-//		bufferedImage = ImageIO.read(inputStream);
-//		Image image = new Image();
-//		image.setHeight(bufferedImage.getHeight());
-//		image.setWidth(bufferedImage.getWidth());
-//		
-//		return image;
-//	}
-	
-	
+
 	@RequestMapping(value="/handleFileUpload", method = RequestMethod.POST)
 	public @ResponseBody AlertStatus doFileUpload(@RequestParam("fileUpload") MultipartFile file, 
 			HttpServletRequest request){
@@ -207,13 +196,8 @@ public class IssueController {
 				 
 				fileName = file.getOriginalFilename();			
 				inputStream = file.getInputStream();
-				extensionArchivo =  FileUploadUtils.getExtensionArchivo(fileName);
-							
+				extensionArchivo =  FileUploadUtils.getExtensionArchivo(fileName);							
 				nuevoContenido = contenidoService.uploadFile2(inputStream, extensionArchivo);				
-//				nuevoContenido.setNombre(FileUploadUtils.getNombreArchivoSinExtension(fileName));
-//				nuevoContenido.setNombreConExtension(fileName);
-//				nuevoContenido.setExtension(FileUploadUtils.getExtensionArchivo(fileName));	
-//				nuevoContenido.setPathRelativo("/" + fileName);
 
 				/**
 				int width = nuevoContenido.getAncho();
@@ -271,8 +255,29 @@ public class IssueController {
 	    } catch (IOException e) {
 	    	return new AlertStatus(false, "No se pudo cargar el archivo.");
 	    }
-	  
+	}
 	
+	@RequestMapping(value="/issues/deleteFile", method = RequestMethod.POST)
+	public @ResponseBody AlertStatus doDeleteFile(@RequestParam("issueID") String issueID, 
+			@RequestParam("fileID") String fileID, Model model, HttpServletRequest request) throws ParseException {
+		
+		try {	
+			ContenidoDTO contenidoABorrar = contenidoService.obtenerContenido(fileID, issueID);				
+			contenidoService.borrarContenido(contenidoABorrar);	
+			
+			IssueDTO issue = issueService.getIssueById(issueID);
+			List<ContenidoDTO> contenidos = new ArrayList<ContenidoDTO>();
+			contenidos = issue.getContenidos();
+			
+			model.addAttribute("contenidos", contenidos);
+			model.addAttribute("cantidadContenidos", contenidos.size());
+			
+			return new AlertStatus(true, "El archivo ha sido eliminado.");		
+			
+		}catch(Exception e){
+			return new AlertStatus(false, "Ha ocurrido un error al intentar eliminar el archivo.");		
+		}				
+		
 	}
 	
 	/**private String getNombreArchivoSinExtension(String nombreArchivo) {
