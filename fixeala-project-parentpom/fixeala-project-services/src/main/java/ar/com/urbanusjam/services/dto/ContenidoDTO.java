@@ -3,6 +3,7 @@ package ar.com.urbanusjam.services.dto;
 import java.io.File;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.text.DecimalFormat;
 
 
 public class ContenidoDTO implements Serializable {
@@ -17,7 +18,8 @@ public class ContenidoDTO implements Serializable {
     private String nombreConExtension;    
     private String nroReclamo;   
     private String pathRelativo;
-    private InputStream inputStream;
+    private String fileSize;
+    private InputStream inputStream;    
     private File file;	
 
 	public Long getId() {
@@ -100,6 +102,14 @@ public class ContenidoDTO implements Serializable {
 	public void setFile(File file) {
 		this.file = file;
 	}
+	
+	public String getFileSize() {
+		return this.calculateFileSize();
+	}
+
+	public void setFileSize(String fileSize) {
+		this.fileSize = fileSize; 
+	}
 
 	@Override
 	public boolean equals(Object other) {
@@ -111,5 +121,24 @@ public class ContenidoDTO implements Serializable {
 		
 	    return otherMyClass.getId().equals(this.getId()); 
 	}
+	
+	private String calculateFileSize(){
+		
+		DecimalFormat df = new DecimalFormat("#.00"); 
+		File file = this.getFile();
+		
+		double bytes = file.length();		
+		double kilobytes = (double) (bytes / 1024);
+		double megabytes = (double) (kilobytes / 1024);
+						
+		if(kilobytes < 1024){
+			return df.format(kilobytes) + "KB";
+		}
+		
+		else{
+			return df.format(megabytes) + "MB";
+		}
+	
+	}	
 
 }

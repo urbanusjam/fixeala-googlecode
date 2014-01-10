@@ -1,5 +1,6 @@
 package ar.com.urbanusjam.services;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import ar.com.urbanusjam.services.exceptions.BusinessException;
 public interface ContenidoService {
 	   
   
-    public FileWrapperDTO subirContenido(ContenidoDTO contenido) throws BusinessException; 
+    public ContenidoDTO subirContenido(ContenidoDTO contenido) throws BusinessException; 
     
     public FileWrapperDTO uploadFile(InputStream inputStream, String extensionArchivo) throws BusinessException; 
     
@@ -24,13 +25,12 @@ public interface ContenidoService {
     public Contenido convertirAContenido(ContenidoDTO contenidoDTO);
     
     public ContenidoDTO convertirAContenidoDTO(Contenido contenido);
-    
-//    
-//    public File abrirContenidoFile(ContenidoDTO contenidoDTO) throws BusinessException;
+        
+    public File abrirContenidoFile(ContenidoDTO contenidoDTO) throws BusinessException;
 //    
 //    public InputStream abrirContenidoRaw(ContenidoDTO contenidoDTO) throws BusinessException;
 //    
-//    public ContenidoDTO obtenerContenido(Long idContenido) throws BusinessException;
+    public ContenidoDTO obtenerContenido(String filename, String idIssue) throws BusinessException;
 //        
 //    public boolean deleteFile(String filePath) throws BusinessException; 
 //    
