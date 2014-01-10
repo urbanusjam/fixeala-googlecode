@@ -591,9 +591,50 @@
 					    		   bootbox.alert(data.message);		
 					    	   }
 	            		}
-        		});
+        			});
 						  
-						 
+				});
+			  	
+			  	
+				$('.btn-file-delete').click(function() {
+					
+					var issueID = ${id};
+					var contenidoID = $(this).closest('tr').attr('id');					
+					var data = 'issueID='+ issueID + '&fileID='+ contenidoID;
+				
+// 					alert(issueID + "-- " + contenidoID);
+						
+					  bootbox.confirm("øConfirma que desea eliminar el archivo?", "Cancelar", "Eliminar", function(result){
+						  
+						  if(result){
+							  
+							  $.ajax({
+			        			    url: "./deleteFile.html",
+							 		type: "POST",	
+							 		data: data,							 
+							        success: function(data){		
+							        	if(data.result){				
+							        		
+							        		 $('#fileUploadForm').load(location.href + "#fileUploadForm");	
+// 							        		 $('#lst-file-thumnails').load(location.href + "#lst-file-thumnails");	
+							        		
+// 							        		$('#result').load('ajax/test.html #container');
+// 							        			bootbox.alert(data.message); 
+							        			
+								    							    			
+
+								    	   }
+								    	   
+								    	   else{
+								    		   bootbox.alert(data.message);		
+								    	   }
+				            		}
+			        			});
+							  
+						  }
+				
+						   
+					  });//bootbox   
 				});
 			  
 			  
@@ -616,31 +657,6 @@
 		</script>
 		
 		
-		<div class="row-fluid">
-		
-		  <div class="span9">
-				<div class="input-append">	
-				
-		       		<input type="search" id="search" placeholder="Buscar reclamos o usuarios..." />
-			        <button id="btnSearch" class='btn add-on' style="width:70px;">
-			            <i class="icon-search"></i>
-			        </button>
-			        
-			        <button id="btnAdvancedSearch" class='btn add-on'>
-			            <i class="icon-angle-down"></i>
-			        </button>  
-				</div>
-			</div>
-		
-			<div class="span3">	
-				<button id="btnIssue" class="btn btn-warning"> 
-					<i class="icon-map-marker icon-large"></i>&nbsp;&nbsp;&nbsp;NUEVO RECLAMO
-				</button>
-			</div>
-		
-		</div>		
-		
-	
 	
 	<div class="container-fluid">
 	  	<div class="row-fluid">
@@ -715,16 +731,16 @@
 		 <div class="span4">  
 		 
 		 <!-- Lightbox -->
-		 <div id="demoLightbox" class="lightbox hide fade"  tabindex="-1" role="dialog" aria-hidden="true">
-			<div class='lightbox-content'>
-				<c:if test="${not empty image}">		  	  			  	   		
-	      				<img src="${pageContext.request.contextPath}/uploads/${imageUrl}" alt="${imageName}">	 
-	  	   		</c:if>
-	  	   		<c:if test="${empty image}">			  	   	
-	      				<img src="${pageContext.request.contextPath}/resources/images/nopic.png" alt="">	
-	  	   		</c:if>
-			</div>
-		 </div>
+<!-- 		 <div id="demoLightbox" class="lightbox hide fade"  tabindex="-1" role="dialog" aria-hidden="true"> -->
+<!-- 			<div class='lightbox-content'> -->
+<%-- 				<c:if test="${not empty image}">		  	  			  	   		 --%>
+<%-- 	      				<img src="${pageContext.request.contextPath}/uploads/${imageUrl}" alt="${imageName}">	  --%>
+<%-- 	  	   		</c:if> --%>
+<%-- 	  	   		<c:if test="${empty image}">			  	   	 --%>
+<%-- 	      				<img src="${pageContext.request.contextPath}/resources/images/nopic.png" alt="">	 --%>
+<%-- 	  	   		</c:if> --%>
+<!-- 			</div> -->
+<!-- 		 </div> -->
 		 
 		 
 		 <ul class="thumbnails">
@@ -750,7 +766,12 @@
 		    		</c:if>
 		    	
 	    			<br>
-	    			<div class="caption"><button class="btn btn-info"><i class="icon-camera"></i>&nbsp;&nbsp;&nbsp;ver mas fotos</button>	</div>
+	    			<div class="caption">
+	    				<a href="#mdl-fileupload" data-toggle="modal" class="btn btn-info">
+	    				<i class="icon-upload-alt"></i>&nbsp;&nbsp;&nbsp;Agregar imagenes
+	    				</a>
+<!-- 	    				<button class="btn btn-info"><i class="icon-camera"></i>&nbsp;&nbsp;&nbsp;ver mas fotos</button> -->
+	    			</div>
 	  			</li>	
 	      </ul>
 	 
@@ -1025,33 +1046,28 @@
 			  <div class="accordion-group">
 			    <div class="accordion-heading">
 			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFive">
-			       <h4><i class="icon-camera icon-large"></i>&nbsp;&nbsp;IMAÅGENES (${cantidadContenidos})</h4>			   
+			       <h4><i class="icon-camera icon-large"></i>&nbsp;&nbsp;IMAÅGENES (${cantidadContenidos})</h4>			        
 			      </a>
 			    </div>
 			    <div id="collapseFive" class="accordion-body collapse">
 			      <div class="accordion-inner">
-			        <div class="row-fluid">
-			        
-				        <ul class="thumbnails">
+			        <div class="row-fluid">			        
+				        <ul id="lst-file-thumnails" class="thumbnails">
 				        	<c:forEach items="${contenidos}" var="contenido">	
-				        		<li style="margin-right:30px;">
+				        		<li style="margin-right:20px;">
 					                <div class="thumbnail">
-					                	<a style="width:150px; height:150px; max-width:150%; max-height:150px;" data-lightbox="issue-lightbox" href="${pageContext.request.contextPath}/uploads/${contenido.nombreConExtension}" >							  	  			  	   		
-						      				<img width="150" height="150" src="${pageContext.request.contextPath}/uploads/${contenido.nombreConExtension}" > 
+					                	<a style="width:100px; height:100px; max-width:100px; max-height:100px;" data-lightbox="issue-lightbox" href="${pageContext.request.contextPath}/uploads/${contenido.nombreConExtension}" >							  	  			  	   		
+						      				<img style="width:100px; height:100px;" src="${pageContext.request.contextPath}/uploads/${contenido.nombreConExtension}" > 
 						    			</a>				                 
 					                </div>
 			                	</li>
 				        	</c:forEach>
 		      			</ul>
-			        
 			        </div>
-					
-
-
 			      </div>
 			    </div>
 			  </div>
-			  
+				  
 			  <!-- 6 COMENTARIOS -->
 			  <div class="accordion-group">
 			    <div class="accordion-heading ">
@@ -1175,6 +1191,139 @@
   		</div><!-- ROW FLUID -->
 	</div><!-- CONTAINER FLUID -->
 	
+	
+	
+	<div id="mdl-fileupload" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="fileUploadLabel" aria-hidden="true">
+	  	<div class="modal-header">
+<!-- 		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">◊</button> -->
+		    	
+		    	<h4 id="fileUploadLabel"> 
+			    	GestiÛn de archivos
+		    	</h4>
+	  	</div>
+  		<div class="modal-body">
+  		
+    		<form id="fileUploadForm">
+    		
+    			<c:if test="${cantidadContenidos eq 0}">No hay archivos cargados.</c:if>
+    			
+    			<c:if test="${cantidadContenidos gt 0}">
+    		
+    			<table id="tbl-fileupload" class="table table-hover">    			
+   	   		  	   	<tbody>   	   		  	   	
+   	   		  	   		<c:forEach items="${contenidos}" var="contenido">	
+							<tr id="${contenido.id}">
+			    	   			<td width="100">			    	   			
+				                	<a class="pull-left thumbnail" href="#" style="width:45px; height:45px; max-width:45px; max-height:45px;" >							  	  			  	   		
+					      				<img style="width:45px; height:45px;"  src="${pageContext.request.contextPath}/uploads/${contenido.nombreConExtension}" > 
+					    			</a>
+								</td>										
+								<td width="400">
+									${contenido.nombreConExtension}<br>(${contenido.fileSize})
+							 	</td>
+							 	<td align="center">
+								 	<a href="#" class="btn btn-small btn-file-delete">
+								 		<i class="icon-trash icon-large" title="Eliminar archivo"></i>
+								 	</a>							 		
+							 	</td>						
+		    	   			</tr>
+						</c:forEach>
+   	   		  	   	
+<!-- 	    	   			<tr style="border-bottom:1px solid #ddd; height:80px"> -->
+<!-- 		    	   			<td width="100"> -->
+<!-- 				    	   		<a class="pull-left thumbnail" href="#"> -->
+<%-- 						    		<img width="45" height="45" class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png"> --%>
+<!-- 						  		</a> -->
+<!-- 							</td>										 -->
+<!-- 							<td width="400"> -->
+<!-- 								marito.jpg<br>9 KB -->
+<!-- 						 	</td> -->
+<!-- 						 	<td width="70" align="center"> -->
+<!-- 						 		<i class="icon-trash icon-large" title="Eliminar archivo"></i> -->
+<!-- 						 	</td>						 -->
+<!-- 		    	   		</tr> -->
+<!-- 		    	   		<tr style="border-bottom:1px solid #ddd; height:80px"> -->
+<!-- 		    	   			<td width="100"> -->
+<!-- 				    	   		<a class="pull-left thumbnail" href="#"> -->
+<%-- 						    		<img width="45" height="45" class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png"> --%>
+<!-- 						  		</a> -->
+<!-- 							</td>										 -->
+<!-- 							<td width="400"> -->
+<!-- 								mi_archivo_222.jpg<br>37 KB -->
+<!-- 						 	</td> -->
+<!-- 						 	<td width="70" align="center"> -->
+<!-- 						 		<i class="icon-trash icon-large" title="Eliminar archivo"></i> -->
+<!-- 						 	</td>						 -->
+<!-- 		    	   		</tr> -->
+<!-- 		    	   		<tr style="border-bottom:1px solid #ddd; height:80px"> -->
+<!-- 		    	   			<td width="100"> -->
+<!-- 				    	   		<a class="pull-left thumbnail" href="#"> -->
+<%-- 						    		<img width="45" height="45" class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png"> --%>
+<!-- 						  		</a> -->
+<!-- 							</td>										  -->
+<!-- 							<td width="400"> -->
+<!-- 								mr_pacman.png<br>1.1 MB -->
+<!-- 						 	</td> -->
+<!-- 						 	<td width="70" align="center"> -->
+<!-- 						 		<i class="icon-trash icon-large" title="Eliminar archivo"></i> -->
+<!-- 						 	</td>						 -->
+<!-- 		    	   		</tr> -->
+<!-- 		    	   		<tr style="border-bottom:1px solid #ddd; height:80px"> -->
+<!-- 		    	   			<td width="100"> -->
+<!-- 				    	   		<a class="pull-left thumbnail" href="#"> -->
+<%-- 						    		<img width="45" height="45" class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png"> --%>
+<!-- 						  		</a> -->
+<!-- 							</td>										 -->
+<!-- 							<td width="400"> -->
+<!-- 								newfile.jpg <span style="float:right">4.1 MB de 4.7 MB (177 KB/s)</span>								 -->
+<!-- 								<div class="progress progress-warning progress-striped active"> -->
+<!-- 								  <div class="bar" style="width: 76%;"></div> -->
+<!-- 								</div> -->
+<!-- 						 	</td> -->
+<!-- 						 	<td width="70" align="center"> -->
+<!-- 						 		<i class="icon-ban-circle icon-large"></i> -->
+<!-- 						 	</td>						 -->
+<!-- 		    	   		</tr> -->
+<!-- 		    	   		<tr class="noborder" style="height:80px"> -->
+<!-- 		    	   			<td width="100"> -->
+<!-- 				    	   		<a class="pull-left thumbnail" href="#"> -->
+<%-- 						    		<img width="45" height="45" class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png"> --%>
+<!-- 						  		</a> -->
+<!-- 							</td>										 -->
+<!-- 							<td width="400"> -->
+<!-- 								fullmetal.png <span style="float:right">185 KB de 662 KB (123 KB/s)</span> -->
+<!-- 								<div class="progress progress-warning progress-striped active"> -->
+<!-- 								  <div class="bar" style="width: 30%;"></div> -->
+<!-- 								</div> -->
+<!-- 						 	</td> -->
+<!-- 						 	<td width="70" align="center"> -->
+<!-- 						 		<i class="icon-ban-circle icon-large"></i> -->
+<!-- 						 	</td>						 -->
+<!-- 		    	   		</tr> -->		    	   		
+		    	   	</tbody>
+				</table> 
+				
+				</c:if>    	   
+	    	   		    	   	
+	    	</form>
+		</div>
+	  	<div class="modal-footer">  
+	  		
+			<center>
+<!-- 			<button class="btn btn-success" data-dismiss="modal" aria-hidden="true"> -->
+<!-- 	    		<i class="icon-ok icon-large"></i>&nbsp;&nbsp;&nbsp;Finalizar -->
+<!-- 	    	</button> -->
+	    	
+	    	<button class="btn btn-danger" id="btnFileUpload" > 
+				<i class="icon-upload icon-large"></i>&nbsp;&nbsp;&nbsp;Seleccionar archivos 
+			</button>
+			
+	    	<button class="btn" data-dismiss="modal" aria-hidden="true">
+	    		<i class="icon-remove icon-large"></i>&nbsp;&nbsp;&nbsp;Cerrar
+	    	</button>
+	    	</center>
+	  	</div>
+	</div>
 	
 	
 		

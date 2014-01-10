@@ -852,6 +852,38 @@ div[data-role="editor-toolbar"] {
 	overflow:hidden;
 }
 
+
+
+#mdl-fileupload	.modal-header {
+	background-color: #00B5FA;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	color: #fff;
+	
+	-webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+     border-top-left-radius: 5px;
+     border-top-right-radius: 5px;
+	
+}
+
+#mdl-fileupload	.modal-body {
+	max-height:auto;
+	overflow: hidden;
+	font-size: 12px;
+	text-align: justify;
+}
+
+#tbl-fileupload table { margin: 20px 0; color: #000;}
+#tbl-fileupload thead th { text-align: left; }
+#tbl-fileupload tbody tr { height: 80px; }
+#tbl-fileupload tbody tr.noborder { border-bottom:none;}
+#tbl-fileupload tbody tr td .progress { height: 15px; margin-bottom: 10px;}
+#tbl-fileupload { font-size:12px; }
+
+
 #userModal{margin-top:-20px;}	
 #userModal	.modal-body {
 	max-height: 480px; 
@@ -889,6 +921,8 @@ div[data-role="editor-toolbar"] {
 #dahsboard-nav li, #dahsboard-nav li a  {font-size:13px;}
 
 #dahsboard-nav li a{margin:5px 0;}
+
+
 
 
 /* Autocomplete
