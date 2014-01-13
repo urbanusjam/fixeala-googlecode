@@ -68,16 +68,15 @@ public class ContenidoServiceImpl implements ContenidoService {
 
 	
 	@Override	
-	public ContenidoDTO subirContenido(ContenidoDTO contenido) throws BusinessException {
-		
-		ContenidoDTO fileWrapper = new ContenidoDTO();
-		InputStream inputStream = contenido.getInputStream();
+	public ContenidoDTO subirContenido(ContenidoDTO fileWrapper) throws BusinessException {
+			
+		InputStream inputStream = fileWrapper.getInputStream();
 		
 		if(inputStream == null)		
 			throw new BusinessException("archivo no encontrado");	
 			
 		//file is CREATED and saved in external folder
-		fileWrapper = this.uploadFile2(inputStream, contenido.getExtension());
+		fileWrapper = this.uploadFile2(inputStream, fileWrapper);
 		
 		//file reference is PERSISTED in database
 		this.grabarContenido(fileWrapper);
@@ -87,7 +86,7 @@ public class ContenidoServiceImpl implements ContenidoService {
 	
 	
 	@Override
-	public List<ContenidoDTO> listarContenido(Long idIssue) throws BusinessException {
+	public List<ContenidoDTO> listarContenidos(Long idIssue) throws BusinessException {
 		List<Contenido> contenidos = contenidoDAO.findContenidosByIssue(idIssue);
 		List<ContenidoDTO> contenidosDTO = new ArrayList<ContenidoDTO>();
 		
@@ -119,6 +118,7 @@ public class ContenidoServiceImpl implements ContenidoService {
        contenidoDTO.setExtension(contenido.getTipo());
        contenidoDTO.setNombreConExtension(contenido.getNombreConExtension());      
        contenidoDTO.setNroReclamo(String.valueOf(contenido.getIssue().getId()));
+       contenidoDTO.setOrden(String.valueOf(contenido.getOrden()));
        return contenidoDTO;
    }
       
@@ -132,6 +132,7 @@ public class ContenidoServiceImpl implements ContenidoService {
        contenido.setNombre(contenidoDTO.getNombre());
        contenido.setTipo(contenidoDTO.getExtension());
        contenido.setNombreConExtension(contenidoDTO.getNombreConExtension());
+       contenido.setOrden(Integer.valueOf(contenidoDTO.getOrden()));
        
        Issue issue = new Issue();
 	   issue.setId(contenidoDTO.getNroReclamo() == null ? null : Long.valueOf(contenidoDTO.getNroReclamo()));		
@@ -189,9 +190,7 @@ public class ContenidoServiceImpl implements ContenidoService {
    }   
    
    @Override
-   public ContenidoDTO uploadFile2(InputStream inputStream, String extensionArchivo) {		
-		
-	   ContenidoDTO fileWrapper = new ContenidoDTO();
+   public ContenidoDTO uploadFile2(InputStream inputStream, ContenidoDTO fileWrapper) {		
 		
 		if(inputStream == null)		
 			throw new BusinessException("archivo no encontrado");			
@@ -201,7 +200,7 @@ public class ContenidoServiceImpl implements ContenidoService {
        
        int inicioCadena = nombreArchivoHash.length() - LONGITUD_MAXIMA_NOMBRE_ARCHIVO_HASH;
       
-       File file = new File( this.pathImagenes + "IMG-" + this.generateTimestamp() + "-FXL-" +  nombreArchivoHash.substring(inicioCadena) + "." + extensionArchivo.toLowerCase());
+       File file = new File( this.pathImagenes + "IMG-" + this.generateTimestamp() + "-FXL-" +  nombreArchivoHash.substring(inicioCadena) + "." + fileWrapper.getExtension().toLowerCase());
        
        try {
            FileOutputStream fileOutputStream;
@@ -363,6 +362,15 @@ public class ContenidoServiceImpl implements ContenidoService {
 		
 		return deletedFilesCounter++;
    }
+
+
+	@Override
+	public int obtenerUltimoOrden(String issueID)
+			throws BusinessException {
+		List<Contenido> contenidos = contenidoDAO.findContenidosByIssue(Long.valueOf(issueID));		
+		int cantidadContenidos = contenidos.size();
+		return cantidadContenidos;		
+	}
 	 
 	
    

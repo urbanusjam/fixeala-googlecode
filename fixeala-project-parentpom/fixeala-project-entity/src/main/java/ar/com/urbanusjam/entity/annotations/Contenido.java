@@ -49,6 +49,9 @@ public class Contenido implements Serializable {
     @Column(name = "NOMBRE_CON_EXTENSION")
     private String nombreConExtension;
     
+    @Column(name = "ORDEN")
+    private int orden;
+    
     @ManyToOne
 	@JoinColumn(name = "ID_ISSUE", updatable = false)	
 	private Issue issue;
@@ -58,97 +61,84 @@ public class Contenido implements Serializable {
         
     }
 
-
 	public Long getId() {
 		return id;
 	}
-
 
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-
 	public String getTipo() {
 		return tipo;
 	}
-
 
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
 
-
 	public Integer getAlto() {
 		return alto;
 	}
-
 
 	public void setAlto(Integer alto) {
 		this.alto = alto;
 	}
 
-
 	public Integer getAncho() {
 		return ancho;
 	}
-
 
 	public void setAncho(Integer ancho) {
 		this.ancho = ancho;
 	}
 
-
 	public String getPathRelativo() {
 		return pathRelativo;
 	}
-
 
 	public void setPathRelativo(String pathRelativo) {
 		this.pathRelativo = pathRelativo;
 	}
 
-
 	public String getUrl() {
 		return url;
 	}
-
 
 	public void setUrl(String url) {
 		this.url = url;
 	}
 
-
 	public String getNombre() {
 		return nombre;
 	}
-
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
 	
-
 	public String getNombreConExtension() {
 		return nombreConExtension;
 	}
 
-
 	public void setNombreConExtension(String nombreConExtension) {
 		this.nombreConExtension = nombreConExtension;
 	}
+	
+	public int getOrden() {
+		return orden;
+	}
 
+	public void setOrden(int orden) {
+		this.orden = orden;
+	}
 
 	public Issue getIssue() {
 		return issue;
 	}
 
-
 	public void setIssue(Issue issue) {
 		this.issue = issue;
 	}
-
-	
-	
 
 }

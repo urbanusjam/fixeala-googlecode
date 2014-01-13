@@ -18,6 +18,7 @@ public class ContenidoDTO implements Serializable {
     private String nombreConExtension;    
     private String nroReclamo;   
     private String pathRelativo;
+    private String orden;
     private String fileSize;
     private InputStream inputStream;    
     private File file;	
@@ -103,6 +104,14 @@ public class ContenidoDTO implements Serializable {
 		this.file = file;
 	}
 	
+	public String getOrden() {
+		return orden;
+	}
+
+	public void setOrden(String orden) {
+		this.orden = orden;
+	}
+
 	public String getFileSize() {
 		return this.calculateFileSize();
 	}

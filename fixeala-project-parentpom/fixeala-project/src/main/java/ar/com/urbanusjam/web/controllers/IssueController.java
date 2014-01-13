@@ -7,12 +7,16 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.AccessDeniedException;
@@ -46,6 +50,7 @@ import ar.com.urbanusjam.services.utils.IssueStatus;
 import ar.com.urbanusjam.services.utils.Messages;
 import ar.com.urbanusjam.services.utils.Operation;
 import ar.com.urbanusjam.web.domain.AlertStatus;
+import ar.com.urbanusjam.web.domain.ContenidoResponse;
 
 
 @Controller
@@ -180,6 +185,67 @@ public class IssueController {
 		return "issues";
 	 }
 	
+	@RequestMapping(value="/issues/handleMultipleFileUpload", method = RequestMethod.POST)
+	public @ResponseBody ContenidoResponse processMultipleUpload(@RequestParam("issueID") String issueID, 
+			@RequestParam("files") List<MultipartFile> files, HttpServletRequest request, Model model) throws JSONException{
+		
+		InputStream inputStream = null;
+		String fileName = StringUtils.EMPTY;
+		String extensionArchivo = StringUtils.EMPTY;	
+		ContenidoDTO contenido = new ContenidoDTO();
+		List<ContenidoDTO> uploadedFiles = new ArrayList<ContenidoDTO>();
+		ContenidoResponse response = new ContenidoResponse();
+	    
+		try {		
+	    	
+	    	if(issueID.isEmpty()){
+	    		return new ContenidoResponse(false, "No se pudo cargar el archivo.");
+	    	}
+	
+			if(files.size() > 0){				
+			
+				for(MultipartFile file : files){
+					fileName = file.getOriginalFilename();			
+					inputStream = file.getInputStream();
+					extensionArchivo =  FileUploadUtils.getExtensionArchivo(fileName);		
+					contenido.setInputStream(inputStream);
+					contenido.setExtension(extensionArchivo);	
+					contenido.setNroReclamo(issueID);		
+					
+					contenido.setOrden(String.valueOf(0));
+					
+//					int orden = contenidoService.obtenerUltimoOrden(issueID);
+//					int nuevoOrden = files.indexOf(file);
+//					
+//					if(orden == 0)
+//						contenido.setOrden(String.valueOf(nuevoOrden));
+//					else
+//						contenido.setOrden(String.valueOf(nuevoOrden++));
+							
+					uploadedFiles.add(contenidoService.subirContenido(contenido));
+				}
+//				return new ContenidoStatus(true, "Todo ok");
+				model.addAttribute("contenidos", contenidoService.listarContenidos(Long.valueOf(issueID)));
+//				return new ContenidoResponse(true, "Se han cargado archivos.", uploadedFiles);
+				response.setResult(true);
+				response.setMessage("Se han cargado archivos.");
+//				response.setFiles(uploadedFiles);
+				
+				return response;
+				
+			}
+			
+			else{
+				return new ContenidoResponse(false, "No se pudo cargar el archivo.");
+			}
+			
+	    
+	    } catch (IOException e) {
+	    	return new ContenidoResponse(false, "No se pudo cargar el archivo.");
+	    }
+				
+	}
+	
 
 	@RequestMapping(value="/handleFileUpload", method = RequestMethod.POST)
 	public @ResponseBody AlertStatus doFileUpload(@RequestParam("fileUpload") MultipartFile file, 
@@ -196,8 +262,11 @@ public class IssueController {
 				 
 				fileName = file.getOriginalFilename();			
 				inputStream = file.getInputStream();
-				extensionArchivo =  FileUploadUtils.getExtensionArchivo(fileName);							
-				nuevoContenido = contenidoService.uploadFile2(inputStream, extensionArchivo);				
+				extensionArchivo =  FileUploadUtils.getExtensionArchivo(fileName);				
+				nuevoContenido.setInputStream(inputStream);
+				nuevoContenido.setExtension(extensionArchivo);	
+				nuevoContenido.setOrden("0");	
+				nuevoContenido = contenidoService.uploadFile2(inputStream, nuevoContenido);				
 
 				/**
 				int width = nuevoContenido.getAncho();
