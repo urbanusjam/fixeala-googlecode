@@ -16,9 +16,9 @@ public interface ContenidoService {
     
     public FileWrapperDTO uploadFile(InputStream inputStream, String extensionArchivo) throws BusinessException; 
     
-    public ContenidoDTO uploadFile2(InputStream inputStream, String extensionArchivo) throws BusinessException;
+    public ContenidoDTO uploadFile2(InputStream inputStream, ContenidoDTO fileWrapper) throws BusinessException;
     
-    public List<ContenidoDTO> listarContenido(Long idIssue) throws BusinessException;
+    public List<ContenidoDTO> listarContenidos(Long idIssue) throws BusinessException;
        
     public void borrarContenido(ContenidoDTO contenido) throws BusinessException;       
     
@@ -27,6 +27,8 @@ public interface ContenidoService {
     public ContenidoDTO convertirAContenidoDTO(Contenido contenido);
         
     public File abrirContenidoFile(ContenidoDTO contenidoDTO) throws BusinessException;
+    
+    public int obtenerUltimoOrden(String issueID) throws BusinessException;
 //    
 //    public InputStream abrirContenidoRaw(ContenidoDTO contenidoDTO) throws BusinessException;
 //    
