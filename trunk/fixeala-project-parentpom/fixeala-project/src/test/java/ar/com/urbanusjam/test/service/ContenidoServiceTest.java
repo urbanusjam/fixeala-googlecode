@@ -74,6 +74,7 @@ public class ContenidoServiceTest {
 			contenido.setInputStream(input);	
 			contenido.setExtension("jpg");	
 			contenido.setNroReclamo("18865");	
+			contenido.setOrden(String.valueOf(inputStreams.indexOf(input)));	
 			filesToUpload.add(contenidoService.subirContenido(contenido));	
 			uploadedFiles++;
 		}		
