@@ -596,14 +596,12 @@
 				});
 			  	
 			  	
-				$('.btn-file-delete').click(function() {
+				$('#tbl-fileupload').on('click', '.btn-file-delete', function() {
 					
 					var issueID = ${id};
 					var contenidoID = $(this).closest('tr').attr('id');					
 					var data = 'issueID='+ issueID + '&fileID='+ contenidoID;
-				
-// 					alert(issueID + "-- " + contenidoID);
-						
+
 					  bootbox.confirm("¿Confirma que desea eliminar el archivo?", "Cancelar", "Eliminar", function(result){
 						  
 						  if(result){
@@ -612,23 +610,29 @@
 			        			    url: "./deleteFile.html",
 							 		type: "POST",	
 							 		data: data,							 
-							        success: function(data){		
-							        	if(data.result){				
+							        success: function(data){	
+							        	
+							        	if(data.result){
 							        		
-							        		 $('#fileUploadForm').load(location.href + "#fileUploadForm");	
-// 							        		 $('#lst-file-thumnails').load(location.href + "#lst-file-thumnails");	
+							        		var deleteRow = $("#tbl-fileupload tr[id^='" + contenidoID +"']");	 
+											
+								        	deleteRow.fadeOut('slow',function() {								        		
+								        		deleteRow.remove();	
+								        	});									        	
+								        	
+								        	$('.resumenContenidos').fadeOut('slow', function(){ 
+//	 							        		$('.resumenContenidos').load(location.href + " .cantidadContenidos");								        	
+								        		$(this).html(data.totalFiles + " / 5").fadeIn('slow'); 
+								        	});								        
 							        		
-// 							        		$('#result').load('ajax/test.html #container');
-// 							        			bootbox.alert(data.message); 
-							        			
-								    							    			
-
-								    	   }
-								    	   
-								    	   else{
-								    		   bootbox.alert(data.message);		
-								    	   }
+							        	}
+							        	
+							        	else{
+							        		bootbox.alert(data.message);	
+							        	}							        	
+							    	
 				            		}
+							  
 			        			});
 							  
 						  }
@@ -636,6 +640,195 @@
 						   
 					  });//bootbox   
 				});
+
+				function getFormData(){
+					var fileInput = document.getElementById('multipleFileupload');
+					var files = fileInput.files;
+					var formData = new FormData();	
+					
+					for (var i = 0; i < files.length; i++) { 
+						formData.append("files", files[i]);
+					}
+					
+					var issueID = ${id};			
+					formData.append('issueID', issueID);
+
+					return formData;
+					
+				}
+				
+				var url = "./handleMultipleFileUpload.html";
+				
+			
+				    $('#multiplefileupload').fileupload({
+				    	 url: url,
+				    	 type: "POST",
+				    	 contentType: false,
+					     processData: false,
+					     acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+						 maxFileSize: 5000000, // 5 MB
+						 singleFileUploads: false,
+						 autoupload: false,					
+					     formData: [{ name: 'issueID', value: ${id} }] ,
+					     
+// 					     add: function(e, data) {
+					    	 
+// 					    	 $.each(data.files, function (index, file) {					    		
+
+// 						    	 var fileName = getFilenameWithoutExtension(file.name);						    	 
+// 						    	 var newRow = $('<tr>'+
+// 								    	   			'<td width="100">'+			    	   			
+// 								                	'<a class="pull-left thumbnail" href="#" style="width:45px; height:45px; max-width:45px; max-height:45px;" >'+							  	  			  	   		
+// 									      				'<img style="width:45px; height:45px;"  src="${pageContext.request.contextPath}/resources/images/nopic.png">'+ 
+// 									    			'</a>'+
+// 													'</td>'+										
+// 													'<td width="400">'+
+// 															file.name + '<br>'+ getFileSizeInMB(file.size) + 'KB' +
+// 														  '<br>'+
+// 														  '<div id="progress-'+fileName+'" class="progress progress-warning progress-striped">'+ 												
+// 													        	'<div class="bar" style="width: 0%;"></div>'+
+// 													      '</div>'+
+// 													      '<div id="info-'+fileName+'">'+ 												
+												        	
+// 												      	  '</div>'+
+// 												 	'</td>'+
+// 												 	'<td align="center">'+
+// 													 	'<a href="#" class="btn btn-small btn-file-delete">'+
+// 													 		'<i class="icon-trash icon-large" title="Eliminar archivo"></i>'+
+// 													 	'</a>'+							 		
+// 												 	'</td>'+						
+// 		    	   								'</tr>');						    	 
+// 	    	   					 newRow.hide();
+// 						    	 $('#tbl-fileupload tr:last').after(newRow);
+// 						    	 newRow.fadeIn("slow");
+// 						         data.submit();					                
+// 					         });  	 
+// 					     },
+					     progress: function (e, data) {
+					    	 
+					    	    var file = data.files[0];
+					    	    var fileName = getFilenameWithoutExtension(file.name);
+					    	    var progress = parseInt(data.loaded / data.total * 100, 10);
+					    	    
+					    	    $('.progress-bar' ).css('width', progress + '%');
+					    
+// 					    	    $('#progress-'+fileName+ '> .bar' ).css('width', progress + '%');
+					    	    
+// 		 				    	var loaded = data.loaded;	
+// 		 				    	var total = data.total;
+// 		 				    	var bitrate = data.bitrate;
+						    
+// 		 				    	$('#info-'+fileName).html(parseBitrate(bitrate));
+					    	 
+// 					     },					  
+// 					     done: function (e, data) {
+// 					    	 if (data.context) {
+					    		 
+// 					    		  var file = data.files[0];
+// 						    	  var fileName = getFilenameWithoutExtension(file.name);
+						    	  
+// 						    	  var $progressBar = $('#progress-'+fileName);
+					   
+// 				    			  setTimeout((function() { $progressBar.fadeOut('slow'); }), 2000);
+// 					           }
+					     }
+				    }).bind('fileuploadprogress', function (e, data) {
+
+				    });
+			
+				    
+				    function parseBitrate(bits){
+				    
+				    	        if (typeof bits !== 'number') {
+				    	            return '';
+				    	        }
+				    	        if (bits >= 1000000000) {
+				    	            return (bits / 1000000000).toFixed(2) + ' Gbit/s';
+				    	        }
+				    	        if (bits >= 1000000) {
+				    	            return (bits / 1000000).toFixed(2) + ' Mbit/s';
+				    	        }
+				    	        if (bits >= 1000) {
+				    	            return (bits / 1000).toFixed(2) + ' kbit/s';
+				    	        }
+				    	        return bits + ' bit/s';
+				    	  
+				    }
+				    
+				    function getFilesArray(){
+				    	
+	 					var fileInput = document.getElementById('multipleFileupload');
+	 					var files = fileInput.files;
+	 					var formData = new FormData();	
+						
+	 					for (var i = 0; i < files.length; i++) { 
+	 						formData.append("files[]", files[i]);
+	 					}
+						
+	 					var issueID = ${id};			
+	 					formData.append('issueID', issueID);
+	 					
+	 					return formData;
+				    	
+				    }
+				    
+				    function getFilenameWithoutExtension(input){				    	
+				    	return input.substr(0, input.lastIndexOf('.'));				    	
+				    }
+				    
+				    function getFileSizeInMB(fileSize){
+				    	return Math.round(fileSize / 1024);				    	
+				    }
+				
+				
+// 				$("#multipleFileupload").change(function(){				
+					
+// 					var fileInput = document.getElementById('multipleFileupload');
+// 					var files = fileInput.files;
+// 					var formData = new FormData();	
+					
+// 					for (var i = 0; i < files.length; i++) { 
+// 						formData.append("files", files[i]);
+// 					}
+					
+// 					var issueID = ${id};			
+// 					formData.append('issueID', issueID);
+					
+// 					$.ajax({ 
+// 					 		url: "./handleMultipleFileUpload.html", 		
+// 					 		type: "POST",
+// 					 		data : formData,
+// 					 		contentType: false,
+// 					      	processData: false,
+// 					 		success : function(data){
+					 				
+// 					 			if(data.result)
+// 					 				$('#tbl-fileupload').load(location.href + " #tbl-fileupload > *");	
+
+// 					 			else
+// 					 				bootbox.alert(data.message);		
+					        
+// 					 		},						 		 
+// 					 		error: function(jqXHR, exception) {
+// 				                   if (jqXHR.status === 0) {
+// 				                       alert('Not connect.\n Verify Network.');
+// 				                   } else if (jqXHR.status == 404) {
+// 				                       alert('Requested page not found. [404]');
+// 				                   } else if (jqXHR.status == 500) {
+// 				                       alert('Internal Server Error [500].');
+// 				                   } else if (exception === 'parsererror') {
+// 				                       alert('Requested JSON parse failed.');
+// 				                   } else if (exception === 'timeout') {
+// 				                       alert('Time out error.');
+// 				                   } else if (exception === 'abort') {
+// 				                       alert('Ajax request aborted.');
+// 				                   } else {
+// 				                       alert('Uncaught Error.\n' + jqXHR.responseText);
+// 				                   }
+// 				               }
+// 					 });
+					
+// 				});
 			  
 			  
 			  
@@ -729,31 +922,9 @@
 	  <div class="row-fluid">
 	   
 		 <div class="span4">  
-		 
-		 <!-- Lightbox -->
-<!-- 		 <div id="demoLightbox" class="lightbox hide fade"  tabindex="-1" role="dialog" aria-hidden="true"> -->
-<!-- 			<div class='lightbox-content'> -->
-<%-- 				<c:if test="${not empty image}">		  	  			  	   		 --%>
-<%-- 	      				<img src="${pageContext.request.contextPath}/uploads/${imageUrl}" alt="${imageName}">	  --%>
-<%-- 	  	   		</c:if> --%>
-<%-- 	  	   		<c:if test="${empty image}">			  	   	 --%>
-<%-- 	      				<img src="${pageContext.request.contextPath}/resources/images/nopic.png" alt="">	 --%>
-<%-- 	  	   		</c:if> --%>
-<!-- 			</div> -->
-<!-- 		 </div> -->
-		 
-		 
+
 		 <ul class="thumbnails">
-	  	   		<li style="margin-left:0">		  	   		
-<!-- 			  	   	<a href="#" class="thumbnail" data-toggle="lightbox" data-target="#demoLightbox">	 -->
-<%-- 			  	   		<c:if test="${not empty image}">		  	  			  	   		 --%>
-<%-- 	      					<img src="${pageContext.request.contextPath}/uploads/${imageUrl}" alt="${imageName}">	  --%>
-<%-- 	  	   				</c:if> --%>
-<%-- 		  	   			<c:if test="${empty image}">			  	   	 --%>
-<%-- 		      				<img src="${pageContext.request.contextPath}/resources/images/nopic.png" alt="">	 --%>
-<%-- 		  	   			</c:if>	      			 --%>
-<!-- 		    		</a> -->
-		    		
+	  	   		<li style="margin-left:0">		
 		    		<c:if test="${not empty image}">
 		    			<a data-lightbox="issue-lightbox2" class="thumbnail" href="${pageContext.request.contextPath}/uploads/${imageUrl}">							  	  			  	   		
 							<img src="${pageContext.request.contextPath}/uploads/${imageUrl}" alt="${imageName}">	 
@@ -770,7 +941,6 @@
 	    				<a href="#mdl-fileupload" data-toggle="modal" class="btn btn-info">
 	    				<i class="icon-upload-alt"></i>&nbsp;&nbsp;&nbsp;Agregar imagenes
 	    				</a>
-<!-- 	    				<button class="btn btn-info"><i class="icon-camera"></i>&nbsp;&nbsp;&nbsp;ver mas fotos</button> -->
 	    			</div>
 	  			</li>	
 	      </ul>
@@ -1201,131 +1371,140 @@
 			    	Gestión de archivos
 		    	</h4>
 	  	</div>
-  		<div class="modal-body">
+	  	<form id="multiplefileupload" method="POST" enctype="multipart/form-data" >
+  				<div class="modal-body">
   		
-    		<form id="fileUploadForm">
     		
-    			<c:if test="${cantidadContenidos eq 0}">No hay archivos cargados.</c:if>
+    		
+    			<c:if test="${cantidadContenidos eq 0}">
+    				No hay archivos cargados.
+    			</c:if>
     			
-    			<c:if test="${cantidadContenidos gt 0}">
+    			<c:if test="${cantidadContenidos gt 0}">   
+    			
+    			 <table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
     		
-    			<table id="tbl-fileupload" class="table table-hover">    			
-   	   		  	   	<tbody>   	   		  	   	
-   	   		  	   		<c:forEach items="${contenidos}" var="contenido">	
-							<tr id="${contenido.id}">
-			    	   			<td width="100">			    	   			
-				                	<a class="pull-left thumbnail" href="#" style="width:45px; height:45px; max-width:45px; max-height:45px;" >							  	  			  	   		
-					      				<img style="width:45px; height:45px;"  src="${pageContext.request.contextPath}/uploads/${contenido.nombreConExtension}" > 
-					    			</a>
-								</td>										
-								<td width="400">
-									${contenido.nombreConExtension}<br>(${contenido.fileSize})
-							 	</td>
-							 	<td align="center">
-								 	<a href="#" class="btn btn-small btn-file-delete">
-								 		<i class="icon-trash icon-large" title="Eliminar archivo"></i>
-								 	</a>							 		
-							 	</td>						
-		    	   			</tr>
-						</c:forEach>
-   	   		  	   	
-<!-- 	    	   			<tr style="border-bottom:1px solid #ddd; height:80px"> -->
-<!-- 		    	   			<td width="100"> -->
-<!-- 				    	   		<a class="pull-left thumbnail" href="#"> -->
-<%-- 						    		<img width="45" height="45" class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png"> --%>
-<!-- 						  		</a> -->
-<!-- 							</td>										 -->
-<!-- 							<td width="400"> -->
-<!-- 								marito.jpg<br>9 KB -->
-<!-- 						 	</td> -->
-<!-- 						 	<td width="70" align="center"> -->
-<!-- 						 		<i class="icon-trash icon-large" title="Eliminar archivo"></i> -->
-<!-- 						 	</td>						 -->
-<!-- 		    	   		</tr> -->
-<!-- 		    	   		<tr style="border-bottom:1px solid #ddd; height:80px"> -->
-<!-- 		    	   			<td width="100"> -->
-<!-- 				    	   		<a class="pull-left thumbnail" href="#"> -->
-<%-- 						    		<img width="45" height="45" class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png"> --%>
-<!-- 						  		</a> -->
-<!-- 							</td>										 -->
-<!-- 							<td width="400"> -->
-<!-- 								mi_archivo_222.jpg<br>37 KB -->
-<!-- 						 	</td> -->
-<!-- 						 	<td width="70" align="center"> -->
-<!-- 						 		<i class="icon-trash icon-large" title="Eliminar archivo"></i> -->
-<!-- 						 	</td>						 -->
-<!-- 		    	   		</tr> -->
-<!-- 		    	   		<tr style="border-bottom:1px solid #ddd; height:80px"> -->
-<!-- 		    	   			<td width="100"> -->
-<!-- 				    	   		<a class="pull-left thumbnail" href="#"> -->
-<%-- 						    		<img width="45" height="45" class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png"> --%>
-<!-- 						  		</a> -->
-<!-- 							</td>										  -->
-<!-- 							<td width="400"> -->
-<!-- 								mr_pacman.png<br>1.1 MB -->
-<!-- 						 	</td> -->
-<!-- 						 	<td width="70" align="center"> -->
-<!-- 						 		<i class="icon-trash icon-large" title="Eliminar archivo"></i> -->
-<!-- 						 	</td>						 -->
-<!-- 		    	   		</tr> -->
-<!-- 		    	   		<tr style="border-bottom:1px solid #ddd; height:80px"> -->
-<!-- 		    	   			<td width="100"> -->
-<!-- 				    	   		<a class="pull-left thumbnail" href="#"> -->
-<%-- 						    		<img width="45" height="45" class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png"> --%>
-<!-- 						  		</a> -->
-<!-- 							</td>										 -->
-<!-- 							<td width="400"> -->
-<!-- 								newfile.jpg <span style="float:right">4.1 MB de 4.7 MB (177 KB/s)</span>								 -->
-<!-- 								<div class="progress progress-warning progress-striped active"> -->
-<!-- 								  <div class="bar" style="width: 76%;"></div> -->
-<!-- 								</div> -->
-<!-- 						 	</td> -->
-<!-- 						 	<td width="70" align="center"> -->
-<!-- 						 		<i class="icon-ban-circle icon-large"></i> -->
-<!-- 						 	</td>						 -->
-<!-- 		    	   		</tr> -->
-<!-- 		    	   		<tr class="noborder" style="height:80px"> -->
-<!-- 		    	   			<td width="100"> -->
-<!-- 				    	   		<a class="pull-left thumbnail" href="#"> -->
-<%-- 						    		<img width="45" height="45" class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png"> --%>
-<!-- 						  		</a> -->
-<!-- 							</td>										 -->
-<!-- 							<td width="400"> -->
-<!-- 								fullmetal.png <span style="float:right">185 KB de 662 KB (123 KB/s)</span> -->
-<!-- 								<div class="progress progress-warning progress-striped active"> -->
-<!-- 								  <div class="bar" style="width: 30%;"></div> -->
-<!-- 								</div> -->
-<!-- 						 	</td> -->
-<!-- 						 	<td width="70" align="center"> -->
-<!-- 						 		<i class="icon-ban-circle icon-large"></i> -->
-<!-- 						 	</td>						 -->
-<!-- 		    	   		</tr> -->		    	   		
-		    	   	</tbody>
-				</table> 
+	    			<table id="tbl-fileupload" class="table table-hover">    			
+	   	   		  	   	<tbody>   	   		  	   	
+	   	   		  	   		<c:forEach items="${contenidos}" var="contenido">	
+								<tr id="${contenido.id}">
+				    	   			<td width="100">			    	   			
+					                	<a class="pull-left thumbnail" href="#" style="width:45px; height:45px; max-width:45px; max-height:45px;" >							  	  			  	   		
+						      				<img style="width:45px; height:45px;"  src="${pageContext.request.contextPath}/uploads/${contenido.nombreConExtension}" > 
+						    			</a>
+									</td>										
+									<td width="400">
+										${contenido.nombreConExtension}<br>(${contenido.fileSize})
+								 	</td>
+								 	<td align="center">
+									 	<a href="#" class="btn btn-small btn-file-delete">
+									 		<i class="icon-trash icon-large" title="Eliminar archivo"></i>
+									 	</a>							 		
+								 	</td>						
+			    	   			</tr>
+							</c:forEach>
+			    	   	</tbody>
+					</table> 				
+				</c:if> 
 				
-				</c:if>    	   
-	    	   		    	   	
-	    	</form>
-		</div>
-	  	<div class="modal-footer">  
-	  		
-			<center>
-<!-- 			<button class="btn btn-success" data-dismiss="modal" aria-hidden="true"> -->
-<!-- 	    		<i class="icon-ok icon-large"></i>&nbsp;&nbsp;&nbsp;Finalizar -->
-<!-- 	    	</button> -->
+					   
 	    	
-	    	<button class="btn btn-danger" id="btnFileUpload" > 
-				<i class="icon-upload icon-large"></i>&nbsp;&nbsp;&nbsp;Seleccionar archivos 
-			</button>
-			
-	    	<button class="btn" data-dismiss="modal" aria-hidden="true">
-	    		<i class="icon-remove icon-large"></i>&nbsp;&nbsp;&nbsp;Cerrar
-	    	</button>
-	    	</center>
+	    	
+	    	
+	    	
+		</div>
+	  	<div class="modal-footer">  			
+			<span class="btn btn-danger fileinput-button">
+                   <i class="icon-plus"></i>
+                   <span>Seleccionar archivos</span>
+                   <input type="file" name="files[]"  multiple>
+            </span>
+		      
+		    <span class="resumenContenidos" style=" float:left; margin-left: 10px;  height: 30px; line-height:30px; width:35px; border:0px solid #000; text-align:center"> 
+		    	${cantidadContenidos} / 5 
+		    </span> 	
+	  	
+	  		<button class="btn" data-dismiss="modal" aria-hidden="true">
+		    		<i class="icon-remove icon-large"></i>&nbsp;&nbsp;&nbsp;Cerrar
+		    </button>	 
 	  	</div>
+	  	</form>
 	</div>
 	
-	
-		
+
+<script id="template-upload" type="text/x-tmpl">
+{% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-upload fade">
+        <td>
+            <span class="preview"></span>
+        </td>
+        <td>
+            <p class="name">{%=file.name%}</p>
+            <strong class="error text-danger"></strong>
+        </td>
+        <td>
+            <p class="size">Processing...</p>
+            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
+        </td>
+        <td>
+            {% if (!i && !o.options.autoUpload) { %}
+                <button class="btn btn-primary start" disabled>
+                    <i class="glyphicon glyphicon-upload"></i>
+                    <span>Start</span>
+                </button>
+            {% } %}
+            {% if (!i) { %}
+                <button class="btn btn-warning cancel">
+                    <i class="glyphicon glyphicon-ban-circle"></i>
+                    <span>Cancel</span>
+                </button>
+            {% } %}
+        </td>
+    </tr>
+{% } %}
+</script>
+
+<script id="template-download" type="text/x-tmpl">
+{% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-download fade">
+        <td>
+            <span class="preview">
+                {% if (file.thumbnailUrl) { %}
+                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img src="{%=file.thumbnailUrl%}"></a>
+                {% } %}
+            </span>
+        </td>
+        <td>
+            <p class="name">
+                {% if (file.url) { %}
+                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
+                {% } else { %}
+                    <span>{%=file.name%}</span>
+                {% } %}
+            </p>
+            {% if (file.error) { %}
+                <div><span class="label label-danger">Error</span> {%=file.error%}</div>
+            {% } %}
+        </td>
+        <td>
+            <span class="size">{%=o.formatFileSize(file.size)%}</span>
+        </td>
+        <td>
+            {% if (file.deleteUrl) { %}
+                <button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+                    <i class="glyphicon glyphicon-trash"></i>
+                    <span>Delete</span>
+                </button>
+                <input type="checkbox" name="delete" value="1" class="toggle">
+            {% } else { %}
+                <button class="btn btn-warning cancel">
+                    <i class="glyphicon glyphicon-ban-circle"></i>
+                    <span>Cancel</span>
+                </button>
+            {% } %}
+        </td>
+    </tr>
+{% } %}
+</script>
 	
 </div><!-- CONTENT -->

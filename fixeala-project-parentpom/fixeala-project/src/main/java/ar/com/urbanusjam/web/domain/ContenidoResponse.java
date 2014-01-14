@@ -1,11 +1,11 @@
 package ar.com.urbanusjam.web.domain;
 
-import java.util.List;
 
 public class ContenidoResponse {
 
 	private boolean result;
 	private String message;
+	private int totalFiles;
 	private Object files;
 
 
@@ -17,10 +17,18 @@ public class ContenidoResponse {
 		this.message = message;
 	}
 
-	public ContenidoResponse(boolean result, String message, Object files) {
+	public ContenidoResponse(boolean result, String message, int totalFiles) {
 		super();
 		this.result = result;
 		this.message = message;
+		this.totalFiles = totalFiles;
+	}
+	
+	public ContenidoResponse(boolean result, String message, int totalFiles, Object files) {
+		super();
+		this.result = result;
+		this.message = message;
+		this.totalFiles = totalFiles; 
 		this.files = files;
 	}
 	
@@ -41,6 +49,16 @@ public class ContenidoResponse {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+	
+	
+
+	public int getTotalFiles() {
+		return totalFiles;
+	}
+
+	public void setTotalFiles(int totalFiles) {
+		this.totalFiles = totalFiles;
 	}
 
 	public Object getFiles() {

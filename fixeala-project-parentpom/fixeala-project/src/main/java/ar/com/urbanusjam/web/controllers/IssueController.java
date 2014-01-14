@@ -187,7 +187,7 @@ public class IssueController {
 	
 	@RequestMapping(value="/issues/handleMultipleFileUpload", method = RequestMethod.POST)
 	public @ResponseBody ContenidoResponse processMultipleUpload(@RequestParam("issueID") String issueID, 
-			@RequestParam("files") List<MultipartFile> files, HttpServletRequest request, Model model) throws JSONException{
+			@RequestParam("files[]") List<MultipartFile> files, HttpServletRequest request, Model model) throws JSONException{
 		
 		InputStream inputStream = null;
 		String fileName = StringUtils.EMPTY;
@@ -225,10 +225,13 @@ public class IssueController {
 					uploadedFiles.add(contenidoService.subirContenido(contenido));
 				}
 //				return new ContenidoStatus(true, "Todo ok");
-				model.addAttribute("contenidos", contenidoService.listarContenidos(Long.valueOf(issueID)));
+				List<ContenidoDTO> contenidos = contenidoService.listarContenidos(Long.valueOf(issueID));
+				model.addAttribute("contenidos", contenidos);
+				model.addAttribute("cantidadContenidos", contenidos.size());
 //				return new ContenidoResponse(true, "Se han cargado archivos.", uploadedFiles);
 				response.setResult(true);
 				response.setMessage("Se han cargado archivos.");
+				response.setTotalFiles(contenidos.size());
 //				response.setFiles(uploadedFiles);
 				
 				return response;
@@ -327,7 +330,7 @@ public class IssueController {
 	}
 	
 	@RequestMapping(value="/issues/deleteFile", method = RequestMethod.POST)
-	public @ResponseBody AlertStatus doDeleteFile(@RequestParam("issueID") String issueID, 
+	public @ResponseBody ContenidoResponse doDeleteFile(@RequestParam("issueID") String issueID, 
 			@RequestParam("fileID") String fileID, Model model, HttpServletRequest request) throws ParseException {
 		
 		try {	
@@ -341,10 +344,10 @@ public class IssueController {
 			model.addAttribute("contenidos", contenidos);
 			model.addAttribute("cantidadContenidos", contenidos.size());
 			
-			return new AlertStatus(true, "El archivo ha sido eliminado.");		
+			return new ContenidoResponse(true, "El archivo ha sido eliminado.", contenidos.size());		
 			
 		}catch(Exception e){
-			return new AlertStatus(false, "Ha ocurrido un error al intentar eliminar el archivo.");		
+			return new ContenidoResponse(false, "Ha ocurrido un error al intentar eliminar el archivo.");		
 		}				
 		
 	}

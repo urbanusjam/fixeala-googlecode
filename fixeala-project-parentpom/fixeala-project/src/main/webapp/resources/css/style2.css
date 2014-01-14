@@ -879,6 +879,7 @@ div[data-role="editor-toolbar"] {
 #tbl-fileupload table { margin: 20px 0; color: #000;}
 #tbl-fileupload thead th { text-align: left; }
 #tbl-fileupload tbody tr { height: 80px; }
+#tbl-fileupload tbody tr td { border: none; }
 #tbl-fileupload tbody tr.noborder { border-bottom:none;}
 #tbl-fileupload tbody tr td .progress { height: 15px; margin-bottom: 10px;}
 #tbl-fileupload { font-size:12px; }
