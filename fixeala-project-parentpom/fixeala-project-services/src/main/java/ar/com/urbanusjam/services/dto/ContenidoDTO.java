@@ -131,7 +131,7 @@ public class ContenidoDTO implements Serializable {
 	    return otherMyClass.getId().equals(this.getId()); 
 	}
 	
-	private String calculateFileSize(){
+	public String calculateFileSize(){
 		
 		DecimalFormat df = new DecimalFormat("#.00"); 
 		File file = this.getFile();
@@ -149,5 +149,6 @@ public class ContenidoDTO implements Serializable {
 		}
 	
 	}	
+	
 
 }
