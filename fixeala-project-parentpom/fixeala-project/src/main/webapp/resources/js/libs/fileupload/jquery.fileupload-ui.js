@@ -72,10 +72,16 @@
 
             // Callback to retrieve the list of files from the server response:
             getFilesFromResponse: function (data) {
-                if (data.result && $.isArray(data.result.files)) {
-                    return data.result.files;
-                }
-                return [];
+            	
+            // if (data.result && $.isArray(data.result.files)) {  
+            //      return data.result.files;							
+            // } 
+              
+               if ($.isArray(data.files)) {
+                     return data.files;			//  << == FIXES "Empty file upload result" error
+               }
+               
+               return [];
             },
 
             // The add callback is invoked as soon as files are added to the fileupload

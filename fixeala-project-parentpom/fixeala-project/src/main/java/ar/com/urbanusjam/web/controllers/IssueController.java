@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.AccessDeniedException;
@@ -66,7 +67,7 @@ public class IssueController {
 	@Autowired
 	private ContenidoService contenidoService;
 	
-	private static final String UPLOAD_DIRECTORY = "C:\\temp\\fixeala\\uploads\\tmp";
+	private static final String UPLOAD_DIRECTORY = "C:\\temp\\fixeala\\uploads\\";
 	private static final long MAX_SIZE = 1024*1024*3;
 	private static final long MAX_WIDTH = 1080;
 	private static final long MAX_HEIGHT = 720;
@@ -192,9 +193,11 @@ public class IssueController {
 		InputStream inputStream = null;
 		String fileName = StringUtils.EMPTY;
 		String extensionArchivo = StringUtils.EMPTY;	
-		ContenidoDTO contenido = new ContenidoDTO();
+		ContenidoDTO newContenido = new ContenidoDTO();
 		List<ContenidoDTO> uploadedFiles = new ArrayList<ContenidoDTO>();
 		ContenidoResponse response = new ContenidoResponse();
+		
+		JSONArray jsonArray = new JSONArray();
 	    
 		try {		
 	    	
@@ -208,11 +211,11 @@ public class IssueController {
 					fileName = file.getOriginalFilename();			
 					inputStream = file.getInputStream();
 					extensionArchivo =  FileUploadUtils.getExtensionArchivo(fileName);		
-					contenido.setInputStream(inputStream);
-					contenido.setExtension(extensionArchivo);	
-					contenido.setNroReclamo(issueID);		
+					newContenido.setInputStream(inputStream);
+					newContenido.setExtension(extensionArchivo);	
+					newContenido.setNroReclamo(issueID);		
 					
-					contenido.setOrden(String.valueOf(0));
+					newContenido.setOrden(String.valueOf(0));
 					
 //					int orden = contenidoService.obtenerUltimoOrden(issueID);
 //					int nuevoOrden = files.indexOf(file);
@@ -221,19 +224,29 @@ public class IssueController {
 //						contenido.setOrden(String.valueOf(nuevoOrden));
 //					else
 //						contenido.setOrden(String.valueOf(nuevoOrden++));
-							
-					uploadedFiles.add(contenidoService.subirContenido(contenido));
+					
+					newContenido = contenidoService.subirContenido(newContenido);							
+					uploadedFiles.add(newContenido);
+					
+					JSONObject jsonObject = new JSONObject();
+					jsonObject.put("id", newContenido.getId().toString());
+					jsonObject.put("name", newContenido.getNombreConExtension());
+					jsonObject.put("format", newContenido.getExtension());
+					jsonObject.put("url", UPLOAD_DIRECTORY);
+					jsonObject.put("thumbnailUrl", "UPLOAD_DIRECTORY");
+					jsonObject.put("size", Double.valueOf(newContenido.getFile().length()));
+					jsonObject.put("error", StringUtils.EMPTY);
+					
+					jsonArray.put(jsonObject);
 				}
-//				return new ContenidoStatus(true, "Todo ok");
+
 				List<ContenidoDTO> contenidos = contenidoService.listarContenidos(Long.valueOf(issueID));
 				model.addAttribute("contenidos", contenidos);
 				model.addAttribute("cantidadContenidos", contenidos.size());
-//				return new ContenidoResponse(true, "Se han cargado archivos.", uploadedFiles);
-				response.setResult(true);
-				response.setMessage("Se han cargado archivos.");
-				response.setTotalFiles(contenidos.size());
-//				response.setFiles(uploadedFiles);
-				
+
+				response.setStatus(true);
+				response.setTotalUploadedFiles(contenidos.size());
+				response.setUploadedFiles(jsonArray.toString());
 				return response;
 				
 			}

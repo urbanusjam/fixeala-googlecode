@@ -1,77 +1,60 @@
 package ar.com.urbanusjam.web.domain;
 
 
+
 public class ContenidoResponse {
 
-	private boolean result;
+	private boolean status;
 	private String message;
-	private int totalFiles;
-	private Object files;
+	private int totalUploadedFiles;
+	private String uploadedFiles; 
 
 
 	public ContenidoResponse(){}
 
-	public ContenidoResponse(boolean result, String message) {
+	public ContenidoResponse(boolean status, String message) {
 		super();
-		this.result = result;
+		this.status = status;
 		this.message = message;
-	}
-
-	public ContenidoResponse(boolean result, String message, int totalFiles) {
-		super();
-		this.result = result;
-		this.message = message;
-		this.totalFiles = totalFiles;
 	}
 	
-	public ContenidoResponse(boolean result, String message, int totalFiles, Object files) {
+	public ContenidoResponse(boolean status, String message, int totalUploadedFiles) {
 		super();
-		this.result = result;
+		this.status = status;
 		this.message = message;
-		this.totalFiles = totalFiles; 
-		this.files = files;
+		this.totalUploadedFiles = totalUploadedFiles;
 	}
 	
-	public boolean isResult() {
-		return result;
+	public boolean isStatus() {
+		return status;
 	}
 
-
-	public void setResult(boolean result) {
-		this.result = result;
+	public void setStatus(boolean status) {
+		this.status = status;
 	}
-
 
 	public String getMessage() {
 		return message;
 	}
 
-
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
-	
 
-	public int getTotalFiles() {
-		return totalFiles;
+	public int getTotalUploadedFiles() {
+		return totalUploadedFiles;
 	}
 
-	public void setTotalFiles(int totalFiles) {
-		this.totalFiles = totalFiles;
+	public void setTotalUploadedFiles(int totalUploadedFiles) {
+		this.totalUploadedFiles = totalUploadedFiles;
 	}
 
-	public Object getFiles() {
-		return files;
+	public String getUploadedFiles() {
+		return uploadedFiles;
 	}
 
-	public void setFiles(Object files) {
-		this.files = files;
+	public void setUploadedFiles(String uploadedFiles) {
+		this.uploadedFiles = uploadedFiles;
 	}
-
-
-
 	
-	
-
 }

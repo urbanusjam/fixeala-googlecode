@@ -612,7 +612,7 @@
 							 		data: data,							 
 							        success: function(data){	
 							        	
-							        	if(data.result){
+							        	if(data.status){
 							        		
 							        		var deleteRow = $("#tbl-fileupload tr[id^='" + contenidoID +"']");	 
 											
@@ -621,8 +621,12 @@
 								        	});									        	
 								        	
 								        	$('.resumenContenidos').fadeOut('slow', function(){ 
-//	 							        		$('.resumenContenidos').load(location.href + " .cantidadContenidos");								        	
-								        		$(this).html(data.totalFiles + " / 5").fadeIn('slow'); 
+//	 							        		$('.resumenContenidos').load(location.href + " .cantidadContenidos");	
+												if(data.totalUploadedFiles < 5){
+													$(".modal-footer .fileinput-button").removeClass("disabled");
+													$(".modal-footer .fileinput-button > input").attr("disabled", false);
+												}
+								        		$(this).html(data.totalUploadedFiles + " / 5").fadeIn('slow'); 
 								        	});								        
 							        		
 							        	}
@@ -663,14 +667,25 @@
 				    $('#multiplefileupload').fileupload({
 				    	 url: url,
 				    	 type: "POST",
+				    	 dataType: 'json',
 				    	 contentType: false,
 					     processData: false,
-					     acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+					     maxNumberOfFiles: 5,
 						 maxFileSize: 5000000, // 5 MB
-						 maxNumberOfFiles: 3,
+						 maxFileSizeError: "El tamaño del archivo excede el máximo permitido de 5 MB.",
+						 acceptFileTypes: /(\.|\/)(jpe?g|png)$/i,
+						 acceptFileTypesError: "Formato de archivo inválido. Sólo se permiten JPEG y PNG.",
 						 singleFileUploads: false,
-						 autoUpload: true,					
-					     formData: [{ name: 'issueID', value: ${id} }] ,
+						 autoUpload: true,	
+						 disableImageResize: /Android(?!.*Chrome)|Opera/
+						        .test(window.navigator && navigator.userAgent),
+					
+				         previewMaxWidth : 45,
+				         previewMaxHeight : 45,					
+						 imageCrop: true,
+					     formData: [{ name: 'issueID', value: ${id} }],
+					  
+				   
 // 					     add: function(e, data) {
 					    	 
 // 					    	 $.each(data.files, function (index, file) {					    		
@@ -720,35 +735,55 @@
 						    
  		 				    	//$('#info-'+fileName).html(data.bitrate);
 					    	 
-// 					     },					  
-// 					     done: function (e, data) {
-// 					    	 if (data.context) {
-					    		 
-// 					    		  var file = data.files[0];
-// 						    	  var fileName = getFilenameWithoutExtension(file.name);
-						    	  
-// 						    	  var $progressBar = $('#progress-'+fileName);
-					   
-// 				    			  setTimeout((function() { $progressBar.fadeOut('slow'); }), 2000);
-// 					           }
-					    // }
+// 					     },						
+					    
+				  
 				    }).bind('fileuploaddone', function(e, data){
 				    	
-				    	 if (data.jqXHR.responseText || data.result) {
-				             var fu = $('#fileupload').data('fileupload');
-				             var JSONjQueryObject = (data.jqXHR.responseText) ? jQuery.parseJSON(data.jqXHR.responseText) : data.result;
-				             fu._adjustMaxNumberOfFiles(JSONjQueryObject.files.length);
-				             //                debugger;
-				             fu._renderDownload(JSONjQueryObject.files)
-				                 .appendTo($('#fileupload .files'))
-				                 .fadeIn(function () {
-				                     // Fix for IE7 and lower:
-				                     $(this).show();
-				                 });
-				         }
+				    	  var parsedResult = $.parseJSON(data.result.uploadedFiles);
+				    	  
+				    	  
+				    	  
+					    	 console.log(data);
+					    	 
+					    	 for(var i = 0; i < data.files.length ; i++ ){
+					    		 parsedResult[i].error = data.meesages[i].error;
+					    	 }
+					    	 
+					    	 data.files = parsedResult;
+
+// 				    	data.result = $.parseJSON(data.files);
+				    	
+
+// 				    	 if (data.jqXHR.responseText || data.result) {
+// 				             var fu = $('#fileupload').data('fileupload');
+// 				             var JSONjQueryObject = (data.jqXHR.responseText) ? jQuery.parseJSON(data.jqXHR.responseText) : data.result;
+// 				             fu._adjustMaxNumberOfFiles(JSONjQueryObject.files.length);
+// 				             //                debugger;
+// 				             fu._renderDownload(JSONjQueryObject.files)
+// 				                 .appendTo($('#fileupload .files'))
+// 				                 .fadeIn(function () {
+// 				                     // Fix for IE7 and lower:
+// 				                     $(this).show();
+// 				                 });
+// 				         }
+// 					}).bind('fileuploadadded', function (e, data) {
+// 					        alert(data.files.valid);
+
+				    
+				    	
+// 				    }).bind('fileuploadprocessfail', function(e, data){ 	
+// 				    	   $.each(data.messages, function (index, error) {
+// 				    		   console.log("ERROR: " + error);
+				    		  
+// 				            });
 				    });
+				    
+				 
 				  
-			
+				    function getRowCount(){
+				    	return $('#tbl-fileupload tbody tr').length;
+				    }
 				    
 				    function parseBitrate(bits){
 				    
@@ -1384,7 +1419,7 @@
 			    	Gestión de archivos
 		    	</h4>
 	  	</div>
-	  	<form id="multiplefileupload" method="POST" enctype="multipart/form-data" >
+	  	<form id="multiplefileupload" enctype="multipart/form-data" >
   				<div class="modal-body">
   		
     		
@@ -1394,11 +1429,8 @@
     			</c:if>
     			
     			<c:if test="${cantidadContenidos gt 0}">   
-    			
-    			 <table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
-    		
-	    			<table id="tbl-fileupload" class="table table-hover">    			
-	   	   		  	   	<tbody>   	   		  	   	
+	    			<table id="tbl-fileupload" role="presentation" class="table table-hover">    			
+	   	   		  	   	<tbody class="files">   	   		  	   	
 	   	   		  	   		<c:forEach items="${contenidos}" var="contenido">	
 								<tr id="${contenido.id}">
 				    	   			<td width="100">			    	   			
@@ -1406,10 +1438,10 @@
 						      				<img style="width:45px; height:45px;"  src="${pageContext.request.contextPath}/uploads/${contenido.nombreConExtension}" > 
 						    			</a>
 									</td>										
-									<td width="400">
-										${contenido.nombreConExtension}<br>(${contenido.fileSize})
+									<td>
+										${contenido.fileSize}
 								 	</td>
-								 	<td align="center">
+								 	<td width="100" class="centered">
 									 	<a href="#" class="btn btn-small btn-file-delete">
 									 		<i class="icon-trash icon-large" title="Eliminar archivo"></i>
 									 	</a>							 		
@@ -1418,20 +1450,25 @@
 							</c:forEach>
 			    	   	</tbody>
 					</table> 				
-				</c:if> 
-				
-					   
-	    	
-	    	
-	    	
-	    	
+				</c:if>				
 		</div>
-	  	<div class="modal-footer">  			
-			<span class="btn btn-danger fileinput-button">
-                   <i class="icon-plus"></i>
-                   <span>Seleccionar archivos</span>
-                   <input type="file" name="files[]"  multiple>
-            </span>
+	  	<div class="modal-footer">  
+	  	
+	  		<c:if test="${cantidadContenidos eq 5}">
+		  		<span class="btn btn-danger fileinput-button disabled">
+	                   <i class="icon-plus"></i>
+	                   <span>Seleccionar archivos</span>
+	                   <input type="file" name="files[]" multiple disabled>
+	            </span>
+	  		</c:if>
+	  		
+	  		<c:if test="${cantidadContenidos lt 5}">
+		  		<span class="btn btn-danger fileinput-button">
+	                   <i class="icon-plus"></i>
+	                   <span>Seleccionar archivos</span>
+	                   <input type="file" name="files[]" multiple>
+	            </span>
+	  		</c:if>		
 		      
 		    <span class="resumenContenidos" style=" float:left; margin-left: 10px;  height: 30px; line-height:30px; width:35px; border:0px solid #000; text-align:center"> 
 		    	${cantidadContenidos} / 5 
@@ -1448,31 +1485,38 @@
 <script id="template-upload" type="text/x-tmpl">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-upload fade">
-        <td>
-            <span class="preview"></span>
-        </td>
-        <td>
-            <p class="name">{%=file.name%}</p>
-			<div><span class="label label-important">Error</span>
-        </td>
-        <td>
-            <p class="size">Procesando...</p>
-            <div class="progress progress-success progress-striped"><div class="bar" style="width:0%;"></div></div>
-        </td>
-        <td>
-            {% if (!i && !o.options.autoUpload) { %}
-                <button class="btn btn-primary start" disabled>
-                    <i class="icon-upload"></i>
-                    <span>Start</span>
-                </button>
-            {% } %}
-            {% if (!i) { %}
-                <button class="btn btn-warning cancel">
-                    <i class="icon-ban-circle"></i>
-                    <span>Cancelar</span>
-                </button>
-            {% } %}
-        </td>
+		<td width="100">								  	  			  	   		
+				<span class="preview thumbnail"></span>		    
+		</td>
+		
+			<td>
+            	<p class="size">Procesando...</p> 
+				
+            	<div class="progress progress-success progress-striped"><div class="bar" style="width:0%;"></div></div>			
+            	<div class="progress-extended">&nbsp;</div>	
+				
+				{% if (file.error) { %}
+                	<strong><span class="error error-important">Error</span> {%=file.error%}</strong>  
+            	{% } %}
+				
+        	</td>
+
+        	<td width="100" class="centered">				
+            	{% if (!i && !o.options.autoUpload) { %}
+                	<button class="btn btn-primary start" disabled>
+                    	<i class="icon-upload"></i>
+                	</button>
+            	{% } %}
+
+				
+            	{% if (!i) { %}
+				
+                		<button class="btn btn-warning cancel">
+                    		<i class="icon-ban-circle"></i>                    		
+                		</button>
+            	
+				{% } %}   
+        	</td>
     </tr>
 {% } %}
 </script>
@@ -1480,41 +1524,40 @@
 <script id="template-download" type="text/x-tmpl">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-download fade">
-        <td>
-            <span class="preview">
+
+        <td width="100">
+							  	   		
+				 <span class="preview thumbnail">
                 {% if (file.thumbnailUrl) { %}
-                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img src="{%=file.thumbnailUrl%}"></a>
+                    <a href="${pageContext.request.contextPath}/uploads/{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img src="${pageContext.request.contextPath}/uploads/{%=file.name%}"></a>
                 {% } %}
-            </span>
-        </td>
+            	</span>
+
+		 
+		</td>
+
         <td>
-            <p class="name">
-                {% if (file.url) { %}
-                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
-                {% } else { %}
-                    <span>{%=file.name%}</span>
-                {% } %}
-            </p>
+            
+ 			<span class="size">{%=o.formatFileSize(file.size)%}</span>
             {% if (file.error) { %}
-                <div><span class="label label-danger">Error</span> {%=file.error%}</div>
+                <strong><span class="error error-important">Error</span> {%=file.error%}</strong>  
             {% } %}
         </td>
-        <td>
-            <span class="size">{%=o.formatFileSize(file.size)%}</span>
-        </td>
-        <td>
-            {% if (file.deleteUrl) { %}
-                <button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
-                    <i class="icon-trash"></i>
-                    <span>Delete</span>
-                </button>
-                <input type="checkbox" name="delete" value="1" class="toggle">
-            {% } else { %}
-                <button class="btn btn-warning cancel">
-                    <i class="icon-ban-circle"></i>
-                    <span>Cancel</span>
-                </button>
-            {% } %}
+       
+        <td width="100" class="centered">
+			 {% if (file.error) { %}
+                		<button class="btn btn-warning cancel">
+                    		<i class="icon-ban-circle"></i>                    		
+                		</button>
+             {% } else { %}
+
+                                        <a href="#" class="btn btn-small btn-file-delete">
+									 		<i class="icon-trash icon-large" title="Eliminar archivo"></i>
+									 	</a>
+
+  			{% } %}
+										
+           
         </td>
     </tr>
 {% } %}
