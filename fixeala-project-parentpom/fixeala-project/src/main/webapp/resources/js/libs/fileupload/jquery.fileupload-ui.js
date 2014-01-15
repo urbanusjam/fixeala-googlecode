@@ -162,8 +162,10 @@
                     files = getFilesFromResponse(data),
                     template,
                     deferred;
+               
                 if (data.context) {
                     data.context.each(function (index) {
+                    	//if (!$(data.context[index]).hasClass(that.options.uploadTemplateId)) { return true; } //ADDED LINE
                         var file = files[index] ||
                                 {error: 'Empty file upload result'};
                         deferred = that._addFinishedDeferreds();
