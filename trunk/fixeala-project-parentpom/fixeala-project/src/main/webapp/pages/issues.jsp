@@ -667,10 +667,10 @@
 					     processData: false,
 					     acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
 						 maxFileSize: 5000000, // 5 MB
+						 maxNumberOfFiles: 3,
 						 singleFileUploads: false,
-						 autoupload: false,					
+						 autoUpload: true,					
 					     formData: [{ name: 'issueID', value: ${id} }] ,
-					     
 // 					     add: function(e, data) {
 					    	 
 // 					    	 $.each(data.files, function (index, file) {					    		
@@ -704,13 +704,13 @@
 // 						         data.submit();					                
 // 					         });  	 
 // 					     },
-					     progress: function (e, data) {
-					    	 
-					    	    var file = data.files[0];
-					    	    var fileName = getFilenameWithoutExtension(file.name);
-					    	    var progress = parseInt(data.loaded / data.total * 100, 10);
+// 					     progress: function (e, data) {
+					    	
+// 					    	    var file = data.files[0];
+// 					    	    var fileName = getFilenameWithoutExtension(file.name);
+// 					    	    var progress = parseInt(data.loaded / data.total * 100, 10);
 					    	    
-					    	    $('.progress-bar' ).css('width', progress + '%');
+// 					    	    $('.bar' ).css('width', progress + '%');
 					    
 // 					    	    $('#progress-'+fileName+ '> .bar' ).css('width', progress + '%');
 					    	    
@@ -718,7 +718,7 @@
 // 		 				    	var total = data.total;
 // 		 				    	var bitrate = data.bitrate;
 						    
-// 		 				    	$('#info-'+fileName).html(parseBitrate(bitrate));
+ 		 				    	//$('#info-'+fileName).html(data.bitrate);
 					    	 
 // 					     },					  
 // 					     done: function (e, data) {
@@ -731,10 +731,23 @@
 					   
 // 				    			  setTimeout((function() { $progressBar.fadeOut('slow'); }), 2000);
 // 					           }
-					     }
-				    }).bind('fileuploadprogress', function (e, data) {
-
+					    // }
+				    }).bind('fileuploaddone', function(e, data){
+				    	
+				    	 if (data.jqXHR.responseText || data.result) {
+				             var fu = $('#fileupload').data('fileupload');
+				             var JSONjQueryObject = (data.jqXHR.responseText) ? jQuery.parseJSON(data.jqXHR.responseText) : data.result;
+				             fu._adjustMaxNumberOfFiles(JSONjQueryObject.files.length);
+				             //                debugger;
+				             fu._renderDownload(JSONjQueryObject.files)
+				                 .appendTo($('#fileupload .files'))
+				                 .fadeIn(function () {
+				                     // Fix for IE7 and lower:
+				                     $(this).show();
+				                 });
+				         }
 				    });
+				  
 			
 				    
 				    function parseBitrate(bits){
@@ -1440,23 +1453,23 @@
         </td>
         <td>
             <p class="name">{%=file.name%}</p>
-            <strong class="error text-danger"></strong>
+			<div><span class="label label-important">Error</span>
         </td>
         <td>
-            <p class="size">Processing...</p>
-            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
+            <p class="size">Procesando...</p>
+            <div class="progress progress-success progress-striped"><div class="bar" style="width:0%;"></div></div>
         </td>
         <td>
             {% if (!i && !o.options.autoUpload) { %}
                 <button class="btn btn-primary start" disabled>
-                    <i class="glyphicon glyphicon-upload"></i>
+                    <i class="icon-upload"></i>
                     <span>Start</span>
                 </button>
             {% } %}
             {% if (!i) { %}
                 <button class="btn btn-warning cancel">
-                    <i class="glyphicon glyphicon-ban-circle"></i>
-                    <span>Cancel</span>
+                    <i class="icon-ban-circle"></i>
+                    <span>Cancelar</span>
                 </button>
             {% } %}
         </td>
@@ -1492,13 +1505,13 @@
         <td>
             {% if (file.deleteUrl) { %}
                 <button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
-                    <i class="glyphicon glyphicon-trash"></i>
+                    <i class="icon-trash"></i>
                     <span>Delete</span>
                 </button>
                 <input type="checkbox" name="delete" value="1" class="toggle">
             {% } else { %}
                 <button class="btn btn-warning cancel">
-                    <i class="glyphicon glyphicon-ban-circle"></i>
+                    <i class="icon-ban-circle"></i>
                     <span>Cancel</span>
                 </button>
             {% } %}
