@@ -846,20 +846,20 @@ div[data-role="editor-toolbar"] {
 	margin: -25px 0 0 -500px;
 }
 	
-	
+
 #mdl-licitacion	.modal-body {
 	max-height: 550px; 
 	overflow:hidden;
 }
 
+#mdl-fileupload { 	height: auto; margin-top: -30px;}
 
 
 #mdl-fileupload	.modal-header {
 	background-color: #00B5FA;
 	text-transform: uppercase;
 	letter-spacing: 1px;
-	color: #fff;
-	
+	color: #fff;	
 	-webkit-border-top-left-radius: 5px;
     -webkit-border-top-right-radius: 5px;
     -moz-border-radius-topleft: 5px;
@@ -870,11 +870,17 @@ div[data-role="editor-toolbar"] {
 }
 
 #mdl-fileupload	.modal-body {
-	max-height:auto;
+   
+    max-height: 700px;  
 	overflow: hidden;
 	font-size: 12px;
 	text-align: justify;
+	padding-bottom: 0; 
+	margin-bottom: 0; 
 }
+
+
+    
 
 #tbl-fileupload table { margin: 20px 0; color: #000; }
 #tbl-fileupload thead th { text-align: left; }
