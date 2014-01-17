@@ -9,10 +9,11 @@
     	<table id="tblUsers" cellpadding="0" cellspacing="0" border="0" 
     					class="table table-striped table-bordered dataTable" aria-describedby="users-info" >
 			<thead>
-				<tr>
-				
-					<th width="20%">username</th>
-					<th width="20%">neighborhood</th>
+				<tr>				
+<!-- 					<th width="20%">Usuario</th> -->
+<!-- 					<th width="20%">Barrio</th> -->
+					<th width="20%"></th>
+					<th width="20%"></th>				
 				</tr>
 			</thead>
 			<tbody>			

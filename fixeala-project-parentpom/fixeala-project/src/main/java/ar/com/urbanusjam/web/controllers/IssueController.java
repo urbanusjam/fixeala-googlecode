@@ -105,7 +105,7 @@ public class IssueController {
 				model.addAttribute("estado", issue.getStatus());
 				model.addAttribute("direccion", issue.getFormattedAddress());					
 				model.addAttribute("id", issue.getId());
-				model.addAttribute("fecha", issue.getFormattedDate());
+				model.addAttribute("fecha", issue.getFormattedDate(issue.getDate()));
 				model.addAttribute("calle", issue.getAddress());		
 				model.addAttribute("barrio", issue.getNeighborhood());
 				model.addAttribute("ciudad", issue.getCity());

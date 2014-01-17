@@ -43,7 +43,7 @@ public class Area implements Serializable {
 	@Column(name = "CITY_ACRONYM")
 	private String ciudadSigla;
 	
-	@OneToMany(mappedBy="assignedArea", fetch = FetchType.EAGER, cascade = CascadeType.ALL)  
+	@OneToMany(mappedBy="assignedArea", fetch = FetchType.LAZY, cascade = CascadeType.ALL)  
 	private Set<Issue> issues = new HashSet<Issue>();
 	
 	//private Set<User> officials = new HashSet<User>();

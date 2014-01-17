@@ -49,7 +49,7 @@ public class UserDAOImpl extends GenericDAOImpl<User, Serializable>  implements 
 	@Override
 	public List<User> findAllActiveUsers() {
 		List<User> users = new ArrayList<User>();		
-		users = this.findWhere(" enabled = true ORDER BY username, neighborhood");			
+		users = this.findWhere(" enabled = true ");			
 		return users;
 	}
 	
@@ -183,20 +183,25 @@ public class UserDAOImpl extends GenericDAOImpl<User, Serializable>  implements 
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<User> findUsersByCriteria(UserCriteriaSearch criteria) {
+	public List<User> findUsersByCriteria(UserCriteriaSearch searchParam) {
 		
-		List<User> users = new ArrayList<User>();
+		List<User> result = new ArrayList<User>();
 		
-		users = getSessionFactory().getCurrentSession().createCriteria(User.class)  				
-				.add( Restrictions.in("username", criteria.getUsernames()) )		
-				.createAlias("roles", "r")
-				.add( Restrictions.in("r.authority", criteria.getRoles()) )	
-				.add( Restrictions.eq("enabled", criteria.isEnabled()) )	
-		        .addOrder(Order.asc("username") )
-		        .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
-		        .list();	
+		Criteria criteria = sessionFactory.getCurrentSession()
+			                .createCriteria(User.class)
+							.createAlias("roles", "r")
+							.add( Restrictions.in("r.authority", searchParam.getRoles()) )	
+							.add( Restrictions.eq("enabled", searchParam.isEnabled()) )	
+					        .addOrder(Order.asc("username") )
+					        .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		
-		return users;
+		if( searchParam.getUsernames() != null && searchParam.getUsernames().length > 0){
+			criteria.add(Restrictions.in("username", searchParam.getUsernames()));	
+		}			
+				
+		result = criteria.list();	
+		
+		return result;
 	}
 
 	

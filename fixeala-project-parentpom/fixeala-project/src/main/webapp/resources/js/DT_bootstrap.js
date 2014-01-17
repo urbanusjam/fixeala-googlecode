@@ -10,13 +10,14 @@ $.extend( true, $.fn.dataTable.defaults, {
    	    "sInfoFiltered": "(filtrado de un total de _MAX_ resultados)",
    	    "sSearch": "Filtrar:",
    	    "sProcessing": "Procesando...",
-   	    "sZeroRecords": "No hay registros coincidentes encontrados",
+   	    "sZeroRecords": "No se encontraron coincidencias",
    				"sEmptyTable": "No hay datos disponibles en la tabla",
    				"sLoadingRecords": "Cargando...",
    		"oPaginate": {
    			"sPrevious": "Anterior",
    			"sNext": "Siguiente"
    		},
+   		"bSort": true
    		
 	}
 
@@ -161,18 +162,62 @@ if ( $.fn.DataTable.TableTools ) {
 	} );
 }
 
+jQuery.fn.dataTableExt.oSort['string-num-asc']  = function(x1,y1) {
+    var x=x1;
+    var y=y1;
+    var pattern = /[0-9]+/g;
+        var matches;
+    if(x1.length !== 0) {
+        matches = x1.match(pattern);
+        x=matches[0];
+    }
+    if(y1.length !== 0) {
+        matches = y1.match(pattern);
+        y=matches[0];
+    }  
+    return ((x < y) ? -1 : ((x > y) ?  1 : 0));
+     
+};
+ 
+jQuery.fn.dataTableExt.oSort['string-num-desc'] = function(x1,y1) {
+     
+    var x=x1;
+    var y=y1;
+    var pattern = /[0-9]+/g;
+        var matches;
+    if(x1.length !== 0) {
+        matches = x1.match(pattern);
+        x=matches[0];
+    }
+    if(y1.length !== 0) {
+        matches = y1.match(pattern);
+        y=matches[0];
+    }
+    $("#debug").html('x='+x+' y='+y);
+    return ((x < y) ?  1 : ((x > y) ? -1 : 0));
+     
+};
+
 
 /* Table initialisation */
 $(document).ready(function() {
 	
+	
+	
+	
+	//TBL USERS
 	$('#tblUsers').dataTable({
 		"bProcessing": true,
-		"bServerSide": true,
+		"bServerSide": true,	
 		"aoColumns" : [	 
 		               	 { "sTitle" : "USUARIO", "mData" : "username"     },
-		                 { "sTitle" : "BARRIO" , "mData" : "neighborhood" }
-	                  ],		  		
-		"sAjaxSource": "http://localhost:8080/fixeala/usuarios/loadActiveUsers.html",
+		                 { "sTitle" : "BARRIO" , "mData" : "neighborhood", "sDefaultContent": ""  }
+	                  ],
+//		"aoColumns" : [	 
+//		               	 { "mDataProp" : "username" },
+//		                 { "mDataProp" : "neighborhood", "sDefaultContent": "" }
+//					  ],
+		"sAjaxSource": "http://localhost:8080/fixeala/usuarios/loadUsers.html",
 		"fnServerData": function ( sSource, aoData, fnCallback ) {
 	            $.ajax( {
 	                "dataType": 'json',
@@ -181,21 +226,29 @@ $(document).ready(function() {
 	                "data": aoData,
 	                "success": fnCallback
 	            } );
+	            
+	            console.log(aoData);
 	        }	  
-	});//TBL USERS
+	});
 	
+	
+	//TBL ISSUES
 	$('#tblIssues').dataTable({
 		"bProcessing": true,
 		"bServerSide": true,
 		"aoColumns" : [	 
-		               	 { "sTitle" : "#", "mData" : "id"     },
-		             	 { "sTitle" : "TÍTULO" , "mData" : "title" },
-		                 { "sTitle" : "DIRECCIÓN" , "mData" : "address" },
-		               	 { "sTitle" : "BARRIO" , "mData" : "neighborhood" },
+		               	 { "sTitle" : "#", "mData" : "id" , "sType": "string-num" 
+//		               		 , "mRender": function ( data, type, full ) {
+//		               			 return '#' + data + ' in';
+//		               		 } 
+		               	 },
+		             	 { "sTitle" : "TITULO" , "mData" : "title" },
+		                 { "sTitle" : "DIRECCION" , "mData" : "address" },
+		               	 { "sTitle" : "BARRIO" , "mData" : "neighborhood", "sDefaultContent": "" },
 		               	 { "sTitle" : "CIUDAD" , "mData" : "city" },
 		               	 { "sTitle" : "PROVINCIA" , "mData" : "province" },
-		               	 { "sTitle" : "FECHA" , "mData" : "date" },
-		               	 { "sTitle" : "USUARIO" , "mData" : "user.username" },
+		               	 { "sTitle" : "FECHA" , "mData" : "fechaFormateada" },
+		               	 { "sTitle" : "USUARIO" , "mData" : "username" },
 		               	 { "sTitle" : "ESTADO" , "mData" : "status" }
 		            	
 	                  ],		  		
@@ -208,8 +261,9 @@ $(document).ready(function() {
 	                "data": aoData,
 	                "success": fnCallback
 	            } );
-	        }	  
-	});//TBL ISSUES
+	        },
+	    "aaSorting": [[ 0, "desc" ]] 
+	});
 	
 
 } );
