@@ -42,10 +42,7 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-rowlink.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-lightbox.js"></script>
   	  	
-  	<!-- Fuel UX CDN link to responsive css -->
-<!--     <link href="http://www.fuelcdn.com/fuelux-imh/2.3/css/fuelux-responsive.css" rel="stylesheet" />        -->
-<!--   	<link rel="stylesheet" href="https://fuelcdn.com/fuelux/2.3/css/fuelux.min.css"> -->
-<!-- 	<script src="https://fuelcdn.com/fuelux/2.3/loader.min.js"></script> -->
+
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-tags.js"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-contextmenu.js"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-fileupload.js"></script>
@@ -53,9 +50,19 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-wysiwyg.js"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-paginator.js"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.hotkeys.js"></script>	 
+  	
+  	<!-- Fuel UX CDN link to responsive css -->
+<!--     <link href="http://www.fuelcdn.com/fuelux-imh/2.3/css/fuelux-responsive.css" rel="stylesheet" />        -->
+<!--   	<link rel="stylesheet" href="https://fuelcdn.com/fuelux/2.3/css/fuelux.min.css"> -->
+<!-- 	<script src="https://fuelcdn.com/fuelux/2.3/loader.min.js"></script>  	 -->
 <%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fuelux/require.js"></script> --%>
 <%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fuelux/datagrid.js"></script> --%>
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fuelux/underscore.js"></script>
+<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fuelux/underscore.js"></script> --%>
+  	
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.dataTables.columnFilter.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.dataTables.rowReordering.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/DT_bootstrap.js"></script>
   	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fileupload/jquery.ui.widget.js"></script>
 	<script src="http://blueimp.github.io/JavaScript-Templates/js/tmpl.min.js"></script>
@@ -82,9 +89,6 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/markerclusterer.js"></script>	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/markermanager.js"></script>	
     
-<%--     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.dataTables.js"></script> --%>
-<%--     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/DT_bootstrap.js"></script> --%>
-    	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.validate.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.blockUI.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.tagit.js"></script>
@@ -114,7 +118,7 @@
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/select2.css" rel="stylesheet">   
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/select2-bootstrap.css" rel="stylesheet">   
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/font-awesome.css" rel="stylesheet">
-	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/fuelux/fuelux.css" rel="stylesheet">
+<%-- 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/fuelux/fuelux.css" rel="stylesheet"> --%>
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/bootstrap-tags.css" rel="stylesheet">  
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/lightbox.css" rel="stylesheet"> 
 	
@@ -127,7 +131,7 @@
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/style2.css" rel="stylesheet">
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.stepy.css" rel="stylesheet"> 
 <%-- <link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery-ui-1.10.0.custom.css" rel="stylesheet">	 --%>	
-<%-- <link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.dataTables.css" rel="stylesheet"> --%>	
+	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.dataTables.css" rel="stylesheet">	
 <!-- <link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css " rel="stylesheet"> -->
 <!-- <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" /> -->
 

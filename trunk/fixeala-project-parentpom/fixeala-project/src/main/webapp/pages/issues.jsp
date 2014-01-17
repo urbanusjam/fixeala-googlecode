@@ -1179,11 +1179,7 @@
 			      </div>
 			    </div>
 			  </div>
-			  
-			  
-			  
-		 
-			  
+			  			  
 			  <!-- 5 IMAGES & VIDEOS -->
 			  <div class="accordion-group">
 			    <div class="accordion-heading">

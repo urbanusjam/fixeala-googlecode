@@ -528,6 +528,7 @@ public class IssueServiceImpl implements IssueService {
 		issueDTO.setLongitude(String.valueOf(issue.getLongitude()));
 		issueDTO.setStatus(issue.getStatus());
 		issueDTO.setUsername(userDTO.getUsername());
+		issueDTO.setFechaFormateada(issue.getDate().getTime());
 		
 		//tags		
 		Set<Tag> tagList = issue.getTagsList();

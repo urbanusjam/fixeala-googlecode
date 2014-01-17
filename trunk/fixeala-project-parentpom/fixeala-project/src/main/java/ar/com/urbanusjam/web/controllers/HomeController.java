@@ -3,14 +3,20 @@ package ar.com.urbanusjam.web.controllers;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.util.JSONWrappedObject;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -25,6 +31,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonObject;
+
 import ar.com.restba.json.JsonArray;
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.IssueService;
@@ -33,6 +43,8 @@ import ar.com.urbanusjam.services.dto.AreaDTO;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
 import ar.com.urbanusjam.services.utils.IssueStatus;
+import ar.com.urbanusjam.web.domain.DataTablesParamUtility;
+import ar.com.urbanusjam.web.domain.JQueryDataTableParamModel;
 import ar.com.urbanusjam.web.utils.DataTableResultSet;
 
 
@@ -50,22 +62,71 @@ public class HomeController {
 	public String showUsersPage() { 	
 		return "usuarios";			
 	}	
-	
-	@RequestMapping(value="/usuarios/loadActiveUsers", produces={"application/json; charset=ISO-8859-1"}, method = RequestMethod.GET)
-	public @ResponseBody String getActiveUsersJSON(
-											
-											@RequestParam int iDisplayStart,
-								            @RequestParam int iDisplayLength, 
-								            @RequestParam int sEcho) throws IOException { 
-		DataTableResultSet<UserDTO> dt = new DataTableResultSet<UserDTO>();
-		List<UserDTO> users = userService.loadAllActiveUsers();
 		
-		
-	    dt.setAaData(users);  // this is the dataset reponse to client
-	    dt.setiTotalDisplayRecords(users.size());  // // the total data in db for datatables to calculate page no. and position
-	    dt.setiTotalRecords(users.size());   // the total data in db for datatables to calculate page no.
-	    dt.setsEcho(sEcho);		  
-		return toJson(dt);		
+	@RequestMapping(value="/usuarios/loadUsers", produces={"application/json; charset=ISO-8859-1"}, method = RequestMethod.GET)
+	public @ResponseBody void getUsersJSON(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException { 
+				   
+		JQueryDataTableParamModel param = DataTablesParamUtility.getParam(request);
+		           
+		String sEcho = param.sEcho;
+        int iTotalRecords; // total number of records (unfiltered)
+        int iTotalDisplayRecords; //value will be set when code filters companies by keyword
+           
+        List<UserDTO> dbUsers = userService.loadAllActiveUsers();  
+        List<UserDTO> users = new ArrayList<UserDTO>();
+        
+        iTotalRecords = dbUsers.size();        
+        
+        for(UserDTO c : dbUsers){
+        	if( c.getUsername().toLowerCase().contains(param.sSearch.toLowerCase()) 
+               ||
+	          ( c.getNeighborhood() != null && c.getNeighborhood().toLowerCase().contains(param.sSearch.toLowerCase())) )            
+              {
+        		users.add(c); // add users that matches given search criterion
+              }
+        }
+        
+        iTotalDisplayRecords = users.size();// number of companies that match search criterion should be returned
+       
+        final int sortColumnIndex = param.iSortColumnIndex;
+        final int sortDirection = param.sSortDirection.equals("asc") ? -1 : 1;
+       
+        Collections.sort(users, new Comparator<UserDTO>(){
+        	@Override
+            public int compare(UserDTO c1, UserDTO c2) {    
+        		switch(sortColumnIndex){
+                case 0:
+                	return c1.getUsername().compareTo(c2.getUsername()) * sortDirection;
+                case 1:
+            	    if(c1.getNeighborhood() != null && c2.getNeighborhood() != null)
+            		    return c1.getNeighborhood().compareTo(c2.getNeighborhood()) * sortDirection;		         
+                }
+                return 0;
+           }
+        });
+       
+        if(users.size()< param.iDisplayStart + param.iDisplayLength) {
+    	    users = users.subList(param.iDisplayStart, users.size());
+        } else {
+    	    users = users.subList(param.iDisplayStart, param.iDisplayStart + param.iDisplayLength);
+        }
+   
+        try {   
+    	    JsonObject jsonResponse = new JsonObject();     
+            jsonResponse.addProperty("sEcho", sEcho);
+            jsonResponse.addProperty("iTotalRecords", iTotalRecords);
+            jsonResponse.addProperty("iTotalDisplayRecords", iTotalDisplayRecords);           
+            Gson gson = new Gson();
+            jsonResponse.add("aaData", gson.toJsonTree(users));
+           
+            response.setContentType("application/Json");
+            response.getWriter().print(jsonResponse.toString());
+           
+        } catch (JsonIOException e) {
+            e.printStackTrace();
+            response.setContentType("text/html");
+            response.getWriter().print(e.getMessage());
+       }  	
 	}
 	
 	@RequestMapping(value="/reclamos", method = RequestMethod.GET)
@@ -73,18 +134,108 @@ public class HomeController {
 		return "reclamos";			
 	}	
 	
+//	@RequestMapping(value="/reclamos/loadIssues", produces={"application/json; charset=ISO-8859-1"}, method = RequestMethod.GET)
+//	public @ResponseBody String getIssuesJSON(	@RequestParam int iDisplayStart,
+//								            	@RequestParam int iDisplayLength, 
+//								            	@RequestParam int sEcho) throws IOException {
+//		
+//		DataTableResultSet<IssueDTO> dt = new DataTableResultSet<IssueDTO>();
+//		List<IssueDTO> issues = issueService.loadAllIssues();		
+//	    dt.setAaData(issues);  
+//	    dt.setiTotalDisplayRecords(issues.size()); 
+//	    dt.setiTotalRecords(issues.size());   
+//	    dt.setsEcho(sEcho);		  
+//		return toJson(dt);		
+//	}
+	
 	@RequestMapping(value="/reclamos/loadIssues", produces={"application/json; charset=ISO-8859-1"}, method = RequestMethod.GET)
-	public @ResponseBody String getIssuesJSON(	@RequestParam int iDisplayStart,
-								            	@RequestParam int iDisplayLength, 
-								            	@RequestParam int sEcho) throws IOException {
-		
-		DataTableResultSet<IssueDTO> dt = new DataTableResultSet<IssueDTO>();
-		List<IssueDTO> issues = issueService.loadAllIssues();		
-	    dt.setAaData(issues);  
-	    dt.setiTotalDisplayRecords(issues.size()); 
-	    dt.setiTotalRecords(issues.size());   
-	    dt.setsEcho(sEcho);		  
-		return toJson(dt);		
+	public @ResponseBody void getIssuesJSON(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException { 
+				   
+		JQueryDataTableParamModel param = DataTablesParamUtility.getParam(request);
+		           
+		String sEcho = param.sEcho;
+        int iTotalRecords; // total number of records (unfiltered)
+        int iTotalDisplayRecords; //value will be set when code filters companies by keyword
+           
+        List<IssueDTO> dbIssues = issueService.loadAllIssues();
+        List<IssueDTO> issues = new ArrayList<IssueDTO>();
+        
+        iTotalRecords = dbIssues.size();        
+        
+        for(IssueDTO c : dbIssues){
+        	if( c.getId().toLowerCase().contains(param.sSearch.toLowerCase()) 
+               ||
+	           c.getTitle().toLowerCase().contains(param.sSearch.toLowerCase())    
+	           ||
+	           c.getAddress().toLowerCase().contains(param.sSearch.toLowerCase())     
+	           ||
+	           ( c.getNeighborhood() != null && c.getNeighborhood().toLowerCase().contains(param.sSearch.toLowerCase()))    
+	           ||
+	           c.getCity().toLowerCase().contains(param.sSearch.toLowerCase())     
+	           ||
+	           c.getProvince().toLowerCase().contains(param.sSearch.toLowerCase())     
+	           ||
+	           c.getUsername().toLowerCase().contains(param.sSearch.toLowerCase())     
+	           ||
+	           c.getStatus().toLowerCase().contains(param.sSearch.toLowerCase()) )   
+              {
+        		issues.add(c); 
+              }
+        }
+        
+        iTotalDisplayRecords = issues.size();// number of companies that match search criterion should be returned
+       
+        final int sortColumnIndex = param.iSortColumnIndex;
+        final int sortDirection = param.sSortDirection.equals("asc") ? -1 : 1;
+       
+        Collections.sort(issues, new Comparator<IssueDTO>(){
+        	@Override
+            public int compare(IssueDTO c1, IssueDTO c2) {    
+        		switch(sortColumnIndex){
+                case 0:
+                	return c1.getId().compareTo(c2.getId()) * sortDirection;
+                case 1:
+                	return c1.getTitle().compareTo(c2.getTitle()) * sortDirection;
+                case 2:
+                	return c1.getAddress().compareTo(c2.getAddress()) * sortDirection;
+                case 3:
+            	    if(c1.getNeighborhood() != null && c2.getNeighborhood() != null)
+            		    return c1.getNeighborhood().compareTo(c2.getNeighborhood()) * sortDirection;   
+                case 4:
+                	return c1.getCity().compareTo(c2.getCity()) * sortDirection;
+                case 5:
+                	return c1.getProvince().compareTo(c2.getProvince()) * sortDirection;
+                case 6:
+                	return c1.getUsername().compareTo(c2.getUsername()) * sortDirection;
+                case 7:
+                	return c1.getStatus().compareTo(c2.getStatus()) * sortDirection;
+        		}
+                return 0;
+           }
+        });
+       
+        if(issues.size()< param.iDisplayStart + param.iDisplayLength) {
+        	issues = issues.subList(param.iDisplayStart, issues.size());
+        } else {
+        	issues = issues.subList(param.iDisplayStart, param.iDisplayStart + param.iDisplayLength);
+        }
+   
+        try {   
+    	    JsonObject jsonResponse = new JsonObject();     
+            jsonResponse.addProperty("sEcho", sEcho);
+            jsonResponse.addProperty("iTotalRecords", iTotalRecords);
+            jsonResponse.addProperty("iTotalDisplayRecords", iTotalDisplayRecords);           
+            Gson gson = new Gson();
+            jsonResponse.add("aaData", gson.toJsonTree(issues));
+           
+            response.setContentType("application/Json");
+            response.getWriter().print(jsonResponse.toString());
+           
+        } catch (JsonIOException e) {
+            e.printStackTrace();
+            response.setContentType("text/html");
+            response.getWriter().print(e.getMessage());
+       }  	
 	}
 	
 	
@@ -275,7 +426,7 @@ public class HomeController {
 	@RequestMapping(value="/error")
 	public String showErrorPage(Map<String, Object> model) {
 		model.put("error-message-title", "Lo sentimos");
-		model.put("error-message", "La página solicitada no existe.");
+		model.put("error-message", "La pï¿½gina solicitada no existe.");
 		
 		return "error";			
 	}	

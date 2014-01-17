@@ -136,7 +136,7 @@ public class AccountController {
 	 			//send activation email
 	 			emailUtils.sendActivationEmail(user.getUsername(), token, user.getEmail());		
 	 			
-	 			message = "¡Felicitaciones! Se ha enviado un link de activación de cuenta a su casilla de correo. ";
+	 			message = "Se ha enviado un link de activacion de cuenta a su casilla de correo. ";
 	        }
 	        
 	        user.setVerifiedOfficial(true);	   
@@ -150,7 +150,7 @@ public class AccountController {
 		} catch (Exception e) {
 			if(e instanceof MessagingException){
 				userService.deleteAccountAndToken(user.getUsername());
-				return new AlertStatus(false, "Ha ocurrido un error y no se ha podido mandar el link de activación. Intente de nuevo. ");		
+				return new AlertStatus(false, "Ha ocurrido un error y no se ha podido mandar el link de activaciï¿½n. Intente de nuevo. ");		
 			}	
 			else{
 				return new AlertStatus(false, "Ha ocurrido un error al crear su cuenta. Intente de nuevo. ");		
@@ -193,13 +193,13 @@ public class AccountController {
     		}
 
     		model.addAttribute("message", "Su cuenta ha sido activada.");
-    		model.addAttribute("messageTitle", "¡Felicitaciones!");
+    		model.addAttribute("messageTitle", "ï¿½Felicitaciones!");
     		model.addAttribute("alertType", "success");
     		return "result";
 		}
 		else{
-			model.addAttribute("message", "El link de activación ya ha sido usado o ha expirado.");
-			model.addAttribute("messageTitle", "¡Atención!");
+			model.addAttribute("message", "El link de activaciï¿½n ya ha sido usado o ha expirado.");
+			model.addAttribute("messageTitle", "ï¿½Atenciï¿½n!");
 			model.addAttribute("alertType", "error");
 			return "result";
 		}    	
