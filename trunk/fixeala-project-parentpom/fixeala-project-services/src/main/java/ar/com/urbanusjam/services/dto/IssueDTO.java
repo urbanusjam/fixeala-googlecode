@@ -36,7 +36,7 @@ public class IssueDTO implements Serializable {
 	private List<CommentDTO> comentarios = new ArrayList<CommentDTO>();	
 	private String status;
 	private String statusCss;
-	
+	private String fechaFormateada;
 
 
 
@@ -215,13 +215,18 @@ public class IssueDTO implements Serializable {
 		this.username = username;
 	}
 
+	public String getFechaFormateada() {
+		return fechaFormateada;
+	}
 
-	public String getFormattedDate(){		
+	public void setFechaFormateada(Date date) {
+		this.fechaFormateada = this.getFormattedDate(date);
+	}
+
+	public String getFormattedDate(Date date){		
 		
 		String formattedDate = "";
-		
-//		Date d = this.getDate().getTime();		
-		Date d = this.getDate();		
+		Date d = date;		
         SimpleDateFormat df = new SimpleDateFormat();
         df.applyPattern("dd/MM/yyyy");
         formattedDate = df.format(d.getTime());
@@ -229,6 +234,8 @@ public class IssueDTO implements Serializable {
 	}
 	
 		
+	
+
 	public String getFormattedAddress(){
 		
 		String formattedAddress = "";
