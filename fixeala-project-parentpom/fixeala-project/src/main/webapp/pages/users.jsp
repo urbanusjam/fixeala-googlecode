@@ -10,15 +10,13 @@
 
 <div id="content">
 
-
-
-
 	<script type="text/javascript">
 	
 	var rowId;
 	var rowTitle;
 	var selectedUser;
 	var currentArea = '${current_areaID}';
+	var currentUser = '${profileUser}';
 	
 	function errorHandler (jqXHR, exception) {
         if (jqXHR.status === 0) {
@@ -281,242 +279,6 @@
 					rowTitle = $(this).find("td").eq(2).html().trim(); 
 				});
 			});
- 
-			
-			//-------------------------------------------------------------------------------------------------------------------------------------//
-			//------------------------------------------------------------- DATAGRIDS -------------------------------------------------------------//
-			
-			//--- 01 DATAGRID ISSUES PER USER ---//
-			
-			var UserIssuesDataSource = function (options) {
-				 this._formatter = options.formatter;
-			     this._columns = options.columns;
-			     this._data = options.data;
-			 	 this._delay = options.delay || 0;
-			};
-
-			UserIssuesDataSource.prototype = {
-
-			        columns: function () {
-			                return this._columns;
-			        },
-
-			        data: function (options, callback) {
-			        	
-			        	var self = this;
-		                var url = "http://localhost:8080/fixeala/users/" + '${profileUser}' + "/loadUserIssues.html";
-
-		                $.ajax({
-							url: url,
-						 	dataType: 'json',
-                         	type: 'GET', 
-				            success: function(response) { 
-				            	
-                                var data = response;
-                                var count = data.length;	
-                                
-                                // here we give all data a 'flat' property
-                                $.each(data, function (index, row) {
-                                	$("#tblUserIssues tbody tr").attr('id', data[0].id);
-                                });
-                                
-                             	// SEARCHING
-								if (options.search) {
-									data = _.filter(data, function (item) {
-										for (var prop in item) {
-											if (!item.hasOwnProperty(prop)) continue;
-											if (~item[prop].toString().toLowerCase().indexOf(options.search.toLowerCase())) return true;
-										}
-										return false;
-									});
-								}
-                              
-								var count = data.length;
-								
-								// SORTING
-								if (options.sortProperty) {
-									data = _.sortBy(data, options.sortProperty);
-									if (options.sortDirection === 'desc') data.reverse();
-								}
-				                
-				                // PAGING
-								var startIndex = options.pageIndex * options.pageSize;
-								var endIndex = startIndex + options.pageSize;
-								var end = (endIndex > count) ? count : endIndex;
-								var pages = Math.ceil(count / options.pageSize);
-								var page = options.pageIndex + 1;
-								var start = startIndex + 1;
-				
-								data = data.slice(startIndex, endIndex);
-				
-								if (self._formatter) self._formatter(data);
-				
-								callback({ data: data, start: start, end: end, count: count, pages: pages, page: page });
-								
-	                          
-
-								//callback({ data: data, start: 0, end: 0, count: count, pages: 0, page: 0 });
-				            		
-				            },
-			            						           
-				            error: function(jqXHR, exception){
-				            	errorHandler (jqXHR, exception);
-				            }
-	        			});	 
-			        }
-			};
-						
-			$('#tblUserIssues').datagrid({ 
-				
-				dataSource: new UserIssuesDataSource({
-
-                    columns: [{
-                    		label: '#',
-                            property: 'id',
-                            sortable: true,
-                            sortProperty: 'id'
-                    },{
-                    	 	label: 'Fecha',
-                            property: 'date',
-                            sortable: true,
-                            sortProperty: 'date'
-                    },{
-	                	 	label: 'Título',
-	                        property: 'title',
-	                        sortable: true,
-	                        sortProperty: 'title'
-                    },{
-	                	 	label: 'Dirección',
-	                        property: 'address',
-	                        sortable: true,
-	                        sortProperty: 'address'
-                	},{
-	                	 	label: 'Barrio',
-	                        property: 'neighborhood',
-	                        sortable: true,
-	                        sortProperty: 'neighborhood'
-                	},{
-	                	 	label: 'Ciudad',
-	                        property: 'city',
-	                        sortable: true,
-	                        sortProperty: 'city'
-                	},{
-	                	 	label: 'Provincia',
-	                        property: 'province',
-	                        sortable: true,
-	                        sortProperty: 'province'
-                	},{
-	                	 	label: 'Usuario',
-	                        property: 'username',
-	                        sortable: true,
-	                        sortProperty: 'username'
-                     
-                	},{
-	                	 	label: 'Estado',
-	                        property: 'status',
-	                        sortable: true,
-	                        sortProperty: 'status'
-                	}]
-
-            	})
-			});
-			
-			//--- 02 DATAGRID BACKEND USERS PER AREA ---//
-			
-			var BackendUsersDataSource = function (options) {
-				 this._formatter = options.formatter;
-			     this._columns = options.columns;
-			     this._data = options.data;
-			 	 this._delay = options.delay || 0;
-			 	 
-			 	 var self = this;			 	 
-			};
-
-			BackendUsersDataSource.prototype = {
-
-			        columns: function () {
-			                return this._columns;
-			        },
-
-			        data: function (options, callback) {
-			        	
-			        	   var url = "http://localhost:8080/fixeala/users/" + '${profileUser}' + "/loadBackendUsers.html";
-					 	 
-					 	   $.ajax({
-								url: url,
-							 	dataType: 'json',
-		                  		type: 'POST', 
-		                  		data: "areaID=" + currentArea,
-					            success: function(response) { 
-		                            
-					            	var self = this;
-					            	var data = response;
-					            	var count = data.length;
-					            
-		                              // here we give all data a 'flat' property
-		                              $.each(data, function (index, row) {
-		                              	$("#tblBackendUsers tbody tr").attr('id', data[0].id);
-		                              });
-		                              
-					            	 // SORTING
-					                if (options.sortProperty) {
-					                    data = _.sortBy(data, options.sortProperty);
-					                    if (options.sortDirection === 'desc') data.reverse();
-					                }
-						            	 
-									callback({ data: data, start: 0, end: 0, count: count, pages: 0, page: 0 });
-		                             						            	 
-					            },				           
-					            error: function(jqXHR, exception){
-					            	errorHandler (jqXHR, exception);
-					            }
-		           		});
-			               
-			        
-		     
-			        }
-			};
-			
-			$('#tblBackendUsers').datagrid({ 
-				
-				dataSource: new BackendUsersDataSource({
-
-                   columns: [{                   				
-		                	 	label: 'Usuario',
-		                        property: 'user.username',
-		                        sortable: true,
-		                        sortProperty: 'username'
-	                   	},{    
-								label: 'Rol',
-		                        property: 'roles',
-		                        sortable: true,
-		                        sortProperty: 'rol.authority'  
-               			},{		                	 	
-		                	 	label: 'Nombre',
-		                        property: 'nombre',
-		                        sortable: true,
-		                        sortProperty: 'nombre'
-               			},{	
-		                        label: 'Apellido',
-		                        property: 'apellido',
-		                        sortable: true,
-		                        sortProperty: 'apellido' 
-               			},{	
-		                        label: 'Último acceso',
-		                        property: 'lastLogin',
-		                        sortable: true,
-		                        sortProperty: 'lastLogin'            				         		
-           				},{
-	           					label: 'Estado',
-		                        property: 'status',
-		                        sortable: true,
-		                        sortProperty: 'status'
-           				},{
-               		}]
-
-           		})
-			});
-
 		
 		});
 	
@@ -647,29 +409,15 @@
     								class="table table-striped table-bordered table-hover datagrid datagrid-stretch-header">
 									<thead>
 									<tr>
-										<th>
-<!-- 											<span class="datagrid-header-title">Listado de reclamos</span> -->
-							
-											<div class="datagrid-header-left">
-												<div class="input-append search datagrid-search">
-													<input type="text" class="input-small" placeholder="Buscar...">
-													<button class="btn"><i class="icon-search"></i></button>
-												</div>
-											</div>
-<!-- 											<div class="datagrid-header-right"> -->
-<!-- 												<div class="select filter" data-resize="auto"> -->
-<!-- 													<button data-toggle="dropdown" class="btn dropdown-toggle"> -->
-<!-- 														<span class="dropdown-label"></span> -->
-<!-- 														<span class="caret"></span> -->
-<!-- 													</button> -->
-<!-- 													<ul class="dropdown-menu"> -->
-<!-- 														<li data-value="all" data-selected="true"><a href="#">All</a></li> -->
-<!-- 														<li data-value="lt5m"><a href="#">Population &lt; 5M</a></li> -->
-<!-- 														<li data-value="gte5m"><a href="#">Population &gt;= 5M</a></li> -->
-<!-- 													</ul> -->
-<!-- 												</div> -->
-<!-- 											</div> -->
-										</th>
+										<th>#</th>
+										<th>FECHA</th>
+										<th>TITULO</th>
+										<th>DIRECCION</th>
+										<th>BARRIO</th>
+										<th>CIUDAD</th>
+										<th>PROVINCIA</th>
+										<th>USUARIO</th>
+										<th>ESTADO</th>
 									</tr>
 									</thead>
 							
@@ -846,6 +594,15 @@
 					    	
 					    	<table id="tblBackendUsers" class="table table-striped table-bordered table-hover datagrid datagrid-stretch-header">
 						    	<thead>  
+						    		<tr>
+						    			<th></th>
+							    		<th>USUARIO</th>
+							    		<th>ROL</th>
+							    		<th>NOMBRE</th>
+							    		<th>APELLIDO</th>
+							    		<th>ULTIMO ACCESO</th>
+							    		<th>ESTADO</th>
+						    		</tr>
 						    	</thead>
 					    	</table>
 					    	
@@ -874,7 +631,7 @@
 						    		  
 						    		  var $contextMenu = $("#contextmenu-user");
 						    		  
-						    		  $("body").on("contextmenu", "table.user-table tr", function(e) {
+						    		  $("body").on("contextmenu", "#tblBackendUsers tr", function(e) {
 						    		    $contextMenu.css({
 						    		      display: "block",
 						    		      left: e.pageX,
@@ -922,13 +679,13 @@
 							    	<td><i class="icon-time icon-grey"></i> hace 2 horas</td>
 							    <tr>
 							    <tr>
-						    		<td><i class="icon-realod"></i></td>
-							    	<td>El reclamo <a href="#">#64256</a>fue <span class="label label-warning">reasignado</span> a <a href="#">fakeuser</a></td>
+						    		<td><i class="icon-map-marker"></i></td>
+							    	<td>El reclamo <a href="#">#64256</a> fue <span class="label label-warning">reasignado</span> a <a href="#">fakeuser</a></td>
 							    	<td><i class="icon-time icon-grey"></i> ayer</td>
 							    <tr>
 							    <tr>
-						    		<td><i class="icon-ok"></i></td>
-							    	<td>El reclamo <a href="#">#78657</a>fue <span class="label label-success">resuelto</span> por <a href="#">fulanito_11</a></td>
+						    		<td><i class="icon-map-marker"></i></td>
+							    	<td>El reclamo <a href="#">#78657</a> fue <span class="label label-success">resuelto</span> por <a href="#">fulanito_11</a></td>
 							    	<td><i class="icon-time icon-grey"></i> ayer</td>
 							    <tr>
 							    <tr>
