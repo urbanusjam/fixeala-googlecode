@@ -596,6 +596,43 @@
 				});
 			  	
 			  	
+				
+				
+				$(function () {
+				    'use strict';
+
+				    $('#multiplefileupload').fileupload();
+				
+				    $('#multiplefileupload').fileupload({
+				    	 url: './handleMultipleFileUpload.html',
+					     type: "POST",
+					     dataType: 'json',
+					     contentType: false,
+						 processData: false,
+						 formData: [{ name: 'issueID', value: ${id} }],
+					     maxNumberOfFiles: 5,
+						 maxFileSize: 5000000, // 5 MB		
+						 acceptFileTypes: /(\.|\/)(jpe?g|png)$/i,
+						 singleFileUploads: false,
+						 autoUpload: true,	
+						 disableImageResize: /Android(?!.*Chrome)|Opera/
+						        .test(window.navigator && navigator.userAgent),				
+				         previewMinWidth : 100,
+				         previewMaxHeight : 60,	
+						 imageCrop: false,	
+					
+				    }).bind('fileuploaddone', function(e, data){
+				    	
+				    	console.log(data);		
+				    	var parsedResult = $.parseJSON(data.result.uploadedFiles);	
+					    data.files = parsedResult;					    
+					    updateFilesInfo(data.result.totalUploadedFiles);
+
+ 					});
+				    
+				});
+				
+				
 				$('#tbl-fileupload').on('click', '.btn-file-delete', function() {
 					
 					var issueID = ${id};
@@ -672,59 +709,6 @@
 					return formData;
 					
 				}
-				
-				$(function () {
-				    'use strict';
-
-				    $('#multiplefileupload').fileupload();
-				
-				    $('#multiplefileupload').fileupload({
-				    	 url: './handleMultipleFileUpload.html',
-					     type: "POST",
-					     dataType: 'json',
-					     contentType: false,
-						 processData: false,
-						 formData: [{ name: 'issueID', value: ${id} }],
-					     maxNumberOfFiles: 5,
-						 maxFileSize: 5000000, // 5 MB		
-						 acceptFileTypes: /(\.|\/)(jpe?g|png)$/i,
-						 singleFileUploads: false,
-						 autoUpload: true,	
-						 disableImageResize: /Android(?!.*Chrome)|Opera/
-						        .test(window.navigator && navigator.userAgent),				
-				         previewMinWidth : 100,
-				         previewMaxHeight : 60,	
-						 imageCrop: false,	
-					
-				    }).bind('fileuploaddone', function(e, data){
-				    	
-				    	console.log(data);		
-				    	var parsedResult = $.parseJSON(data.result.uploadedFiles);	
-					    data.files = parsedResult;					    
-					    updateFilesInfo(data.result.totalUploadedFiles);
-
-
-// 					}).bind('fileuploadadded', function (e, data) {
-// 					        alert(data.files.valid);				    	
-				   
- 					}).bind('fileuploadprocessfail', function(e, data){
-//  						var uploadErrors = [];
-//  		                var acceptFileTypes = /^image\/(gif|jpe?g|png)$/i;
-//  		                if(data.originalFiles[0]['type'].length && !acceptFileTypes.test(data.originalFiles[0]['type'])) {
-//  		                    uploadErrors.push('Formato inválido. Sólo se admiten JPEG y PNG.');
-//  		                }
-//  		                if(data.originalFiles[0]['size'].length && data.originalFiles[0]['size'] > 5000000) {
-//  		                    uploadErrors.push('El tamaño del archivo excede los 5MB.');
-//  		                }
- 		                
-//  		               data.messages = uploadErrors;
-// 			            $.each(data.messages, function (index, error) {
-// 			                $('#upload-error').text(error);
-// 							console.log(error);
-// 			            });
- 					});
-				    
-				});
 			
 				    
 				    function getFilesArray(){
@@ -753,59 +737,6 @@
 				    }
 				
 				
-// 				$("#multipleFileupload").change(function(){				
-					
-// 					var fileInput = document.getElementById('multipleFileupload');
-// 					var files = fileInput.files;
-// 					var formData = new FormData();	
-					
-// 					for (var i = 0; i < files.length; i++) { 
-// 						formData.append("files", files[i]);
-// 					}
-					
-// 					var issueID = ${id};			
-// 					formData.append('issueID', issueID);
-					
-// 					$.ajax({ 
-// 					 		url: "./handleMultipleFileUpload.html", 		
-// 					 		type: "POST",
-// 					 		data : formData,
-// 					 		contentType: false,
-// 					      	processData: false,
-// 					 		success : function(data){
-					 				
-// 					 			if(data.result)
-// 					 				$('#tbl-fileupload').load(location.href + " #tbl-fileupload > *");	
-
-// 					 			else
-// 					 				bootbox.alert(data.message);		
-					        
-// 					 		},						 		 
-// 					 		error: function(jqXHR, exception) {
-// 				                   if (jqXHR.status === 0) {
-// 				                       alert('Not connect.\n Verify Network.');
-// 				                   } else if (jqXHR.status == 404) {
-// 				                       alert('Requested page not found. [404]');
-// 				                   } else if (jqXHR.status == 500) {
-// 				                       alert('Internal Server Error [500].');
-// 				                   } else if (exception === 'parsererror') {
-// 				                       alert('Requested JSON parse failed.');
-// 				                   } else if (exception === 'timeout') {
-// 				                       alert('Time out error.');
-// 				                   } else if (exception === 'abort') {
-// 				                       alert('Ajax request aborted.');
-// 				                   } else {
-// 				                       alert('Uncaught Error.\n' + jqXHR.responseText);
-// 				                   }
-// 				               }
-// 					 });
-					
-// 				});
-			  
-			  
-			  
-			  
-			  
 			//ajax mocks
 			    $.mockjaxSettings.responseTime = 500; 
 			    

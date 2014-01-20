@@ -80,6 +80,12 @@ public class User implements UserDetails {
     @Column(name="ENABLED")
     private boolean enabled;
     
+    @Column(name="REGISTRATION_DATE")
+    private Date registrationDate;
+    
+    @Column(name="LAST_LOGIN_DATE")
+    private Date lastLoginDate;
+    
     @Column(name="CLOSED_ACCOUNT_DATE")
     private Date closedAccountDate;
     
@@ -250,6 +256,22 @@ public class User implements UserDetails {
 	
 	public void setRoles(Collection<Authority> roles) {
 		this.roles = roles;
+	}	
+
+	public Date getRegistrationDate() {
+		return registrationDate;
+	}
+
+	public void setRegistrationDate(Date registrationDate) {
+		this.registrationDate = registrationDate;
+	}
+
+	public Date getLastLoginDate() {
+		return lastLoginDate;
+	}
+
+	public void setLastLoginDate(Date lastLoginDate) {
+		this.lastLoginDate = lastLoginDate;
 	}
 
 	public Date getClosedAccountDate() {

@@ -234,15 +234,17 @@ public class UserServiceImpl implements UserService {
 	public UserDTO convertToDTO(User user){
 		UserDTO userDTO = new UserDTO();
 		userDTO.setUsername(user.getUsername());		
-		userDTO.setEmail(user.getEmail());		
-		
-		userDTO.setId(user.getUsername());
+		userDTO.setEmail(user.getEmail());			
+		userDTO.setId(String.valueOf(user.getId()));
 		
 		List<String> roles = new ArrayList<String>();
 		for(GrantedAuthority auth : user.getRoles()){
 			roles.add(auth.getAuthority());
 		}
 		userDTO.setAuthorities(roles);
+		
+		userDTO.setRegistrationDate(user.getRegistrationDate());		
+		userDTO.setLastLoginDate(user.getLastLoginDate());		
 		
 		if(user.isVerifiedOfficial()){
 			userDTO.setVerifiedOfficial(user.isVerifiedOfficial());
@@ -258,6 +260,11 @@ public class UserServiceImpl implements UserService {
 		else{
 			userDTO.setNeighborhood(user.getNeighborhood());
 		}
+		
+		if(user.isEnabled())
+			userDTO.setAccountStatus("ACTIVO");
+		else
+			userDTO.setAccountStatus("DESHABILITADO");
 		
 		return userDTO;
 	}

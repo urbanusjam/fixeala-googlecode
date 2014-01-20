@@ -265,5 +265,69 @@ $(document).ready(function() {
 	    "aaSorting": [[ 0, "desc" ]] 
 	});
 	
+	
+	//TBL BACKEND USERS
+	$('#tblBackendUsers').dataTable({
+		"bProcessing": true,
+		"bServerSide": true,
+		"aoColumns" : [	 						
+		               	 { "mData" : "id", "bVisible" : false },
+		             	 { "sTitle" : "USUARIO" , "mData" : "username" },
+		                 { "sTitle" : "ROL" , "mData" : "authorities" },
+		               	 { "sTitle" : "NOMBRE" , "mData" : "nombre" },
+		               	 { "sTitle" : "APELLIDO" , "mData" : "apellido" }, 	
+		               	 { "sTitle" : "ULTIMO ACCESO" , "mData" : "lastLoginDate", "sType" : "date" },
+		               	 { "sTitle" : "ESTADO" , "mData" : "accountStatus" }			            	
+	                  ],		  		
+		"sAjaxSource": "http://localhost:8080/fixeala/users/coripel/loadBackendUsers.html",
+		"fnServerData": function ( sSource, aoData, fnCallback ) {				
+			 	aoData.push({"name": "areaID", "value": "5"});				 	
+	            $.ajax( {
+	                "dataType": 'json',
+	                "type": "POST",
+	                "url": sSource,
+	                "data": aoData,
+	                "success": fnCallback      	              
+	            } );
+	        },
+	        "fnRowCallback": function( nRow, aData, iDataIndex, iDisplayIndexFull  ) {
+	            $(nRow).attr('id', aData.id);
+	        },
+	    "aaSorting": [[ 0, "desc" ]] 
+	});
+	
+	
+	//TBL ISSUES BY USER
+	$('#tblUserIssues').dataTable({
+		"bProcessing": true,
+		"bServerSide": true,
+		"aoColumns" : [	 						
+		               	 { "sTitle" : "#" , "mData" : "id" },
+		               	 { "sTitle" : "FECHA" , "mData" : "fechaFormateada" },
+		               	 { "sTitle" : "TITULO" , "mData" : "title" },
+		                 { "sTitle" : "DIRECCION" , "mData" : "address" },
+		               	 { "sTitle" : "BARRIO" , "mData" : "neighborhood", "sDefaultContent": "" },
+		               	 { "sTitle" : "CIUDAD" , "mData" : "city" },
+		               	 { "sTitle" : "PROVINCIA" , "mData" : "province" },		   
+		               	 { "sTitle" : "USUARIO" , "mData" : "username" },
+		               	 { "sTitle" : "ESTADO" , "mData" : "status" }		            	
+	                  ],		  		
+		"sAjaxSource": "http://localhost:8080/fixeala/users/coripel/loadUserIssues.html",
+		"fnServerData": function ( sSource, aoData, fnCallback ) {				
+			 	aoData.push({"name": "areaID", "value": "5"});				 	
+	            $.ajax( {
+	                "dataType": 'json',
+	                "type": "POST",
+	                "url": sSource,
+	                "data": aoData,
+	                "success": fnCallback      	              
+	            } );
+	        },
+	        "fnRowCallback": function( nRow, aData, iDataIndex, iDisplayIndexFull  ) {
+	            $(nRow).attr('id', aData.id);
+	        },
+	    "aaSorting": [[ 0, "desc" ]] 
+	});
+	
 
 } );
