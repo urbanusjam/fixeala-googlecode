@@ -24,6 +24,7 @@ public class UserDTO implements Serializable {
 	private String subarea;
 	private String neighborhood;
 	private Date registrationDate;
+	private Date lastLoginDate;
 	private List<String> authorities;	
 	private boolean verifiedOfficial;
 	private String accountStatus;
@@ -184,6 +185,14 @@ public class UserDTO implements Serializable {
 		this.registrationDate = registrationDate;
 	}
 	
+	public Date getLastLoginDate() {
+		return lastLoginDate;
+	}
+
+	public void setLastLoginDate(Date lastLoginDate) {
+		this.lastLoginDate = lastLoginDate;
+	}
+
 	public int getCantidadIssues() {
 		return cantidadIssues;
 	}
