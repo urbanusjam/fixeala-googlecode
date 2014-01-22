@@ -15,6 +15,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 
@@ -527,6 +528,7 @@ public class IssueServiceImpl implements IssueService {
 		issueDTO.setLatitude(String.valueOf(issue.getLatitude()));
 		issueDTO.setLongitude(String.valueOf(issue.getLongitude()));
 		issueDTO.setStatus(issue.getStatus());
+		issueDTO.setStatusCss(this.assignCSSbyStatus(issue.getStatus()));
 		issueDTO.setUsername(userDTO.getUsername());
 		issueDTO.setFechaFormateada(issue.getDate().getTime());
 		
@@ -536,7 +538,7 @@ public class IssueServiceImpl implements IssueService {
 		
 		if(tagList.size() > 0){
 			for(Tag t :  issue.getTagsList()){				
-				tagNames.add(t.getTagname());
+				tagNames.add(t.getTagname().trim());
 			}
 		}
 		
@@ -613,5 +615,40 @@ public class IssueServiceImpl implements IssueService {
 		calendar.setTime(date);
 		return (GregorianCalendar) calendar;	
 	} 
+	
+	private String assignCSSbyStatus(String status){
+		
+		String css = StringUtils.EMPTY;
+		
+		if(status.equals(IssueStatus.OPEN)){
+			css = "label label-important";
+		}
+		
+		if(status.equals(IssueStatus.ACKNOWLEDGED)){
+			css = "label label-info";
+		}
+		
+		if(status.equals(IssueStatus.IN_PROGRESS)){
+			css = "label label-warning";
+		}
+		
+		if(status.equals(IssueStatus.SOLVED)){
+			css = "label label-success";
+		}
+		
+		if(status.equals(IssueStatus.REOPENED)){
+			css = "label label-important";
+		}
+		
+		if(status.equals(IssueStatus.CLOSED)){
+			css = "label label-inverse";
+		}
+		
+		if(status.equals(IssueStatus.ARCHIVED)){
+			css = "label";
+		}
+		
+		return css;
+	}
 	
 }

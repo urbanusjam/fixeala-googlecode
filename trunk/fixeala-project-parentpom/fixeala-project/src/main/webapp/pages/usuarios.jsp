@@ -6,7 +6,7 @@
     	 	<h4><i class="icon-group"></i>&nbsp;&nbsp;<i class="icon-angle-right"></i>&nbsp;&nbsp;Lista de Usuarios</h4>    	 	
     	</div> 
     	
-    	<table id="tblUsers" cellpadding="0" cellspacing="0" border="0" 
+    	<table id="tblUsers" cellpadding="0" cellspacing="0" border="0" data-provides="rowlink"
     					class="table table-striped table-bordered dataTable" aria-describedby="users-info" >
 			<thead>
 				<tr>				

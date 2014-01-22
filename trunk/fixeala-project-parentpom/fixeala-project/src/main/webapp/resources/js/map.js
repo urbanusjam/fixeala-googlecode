@@ -267,29 +267,34 @@ function loadMarkers(map){
 	        	var markerArray = data;	        
 	        	var tempMarker;
 	        	var infowindow;
-	        	
+	        	var textLimit = 500;	 
 //	        	var iconDefault = 'resources/images/markers/blue_MarkerR.png';
 //        		var iconHover = 'resources/images/markers/yellow_MarkerR.png';
-	        
+	        		        
 	        	for (var i = 0; i < markerArray.length; i++) {         		
 	        			        		
 	        		var latlng = new google.maps.LatLng(markerArray[i].latitude, markerArray[i].longitude);
+	        		var description = markerArray[i].description;
+	        		var shortDescription = description.substr(0, textLimit);
 	        	
 	        		var markerInfo = '<table border="0" cellpadding="0" cellspacing="0" width="380px" height="90px" style="background-color:white;font-family:Arial;">'
 						 +'   <tr>'
-						 +'	 	<td style="text-align:left; font-size:18px;"><b><div style="color:BlueViolet;display:inline">'+getIssueURL(markerArray[i].id, markerArray[i].title, 'link')+'</div><div style="color:#ccc;display:inline;"> &nbsp;&nbsp; <i class="icon-chevron-right"></i> &nbsp;&nbsp; </div><div style="color:orange;display:inline;">'+ markerArray[i].status +'</div></b></td>'				
+						 +'	 	<td style="text-align:left;"><b><div style="color:#000;display:inline">'+getIssueURL(markerArray[i].id, markerArray[i].title, 'link')+'</div>' 
+						 +'                                     <div style="color:#ccc;display:inline;"> &nbsp;&nbsp; <i class="icon-chevron-right"></i> &nbsp;&nbsp; </div>'  
+						 +'										<span class="'+markerArray[i].statusCss+'">'+ markerArray[i].status +'</span></b></td>'				           
+					
 						 +'	 </tr>'	
 						 +'  <tr style="font-size:11px">'
 						 +'	 	<td style="text-align:left;color:grey">'+markerArray[i].formattedAddress+'</td>'				
 						 +'	 </tr><tr><td>&nbsp;</td></tr>'	
 						 +'   <tr style="font-size:12px">'
-						 +'	 	<td style="text-align:justify;color:black">'+markerArray[i].description+'<a href="#" class="readMore"> (leer m&aacute;s)</a></td>'				
+						 +'	 	<td style="text-align:justify;color:black">'+shortDescription+' ...</td>'				
 						 +'	 </tr>'	
 						 +'   <tr style="height:3px">'
 						 +'	 	<td>&nbsp;</td>'				
 						 +'	 </tr>'			
 						 +'	 <tr style="font-size:11px;padding-top:1px">'
-						 +'		<td style="text-align:left;color:grey;border-top:1px solid grey">Posteado por:'+getUserURL(markerArray[i].user.username)+' &nbsp; | &nbsp; <a href="#" class="user">7 reclamos</a> <div style="margin:0;padding:0;float:right;clear;both;display:inline">'+ markerArray[i].formattedDate +'</div></td>'
+						 +'		<td style="text-align:left;color:grey;border-top:1px solid grey">Reportado por: '+getUserURL(markerArray[i].user.username)+' &nbsp; <div style="margin:0;padding:0;float:right;clear:both;display:inline">'+ markerArray[i].fechaFormateada +'</div></td>'
 						 +'	 </tr>'				
 						 +'	 </table>';					 
 	        	

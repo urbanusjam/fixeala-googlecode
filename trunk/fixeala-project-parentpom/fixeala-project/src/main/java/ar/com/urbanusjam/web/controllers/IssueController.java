@@ -7,9 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,7 +39,6 @@ import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.UserService;
 import ar.com.urbanusjam.services.dto.CommentDTO;
 import ar.com.urbanusjam.services.dto.ContenidoDTO;
-import ar.com.urbanusjam.services.dto.FileWrapperDTO;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.IssueHistorialRevisionDTO;
 import ar.com.urbanusjam.services.dto.IssueLicitacionDTO;
@@ -264,7 +261,7 @@ public class IssueController {
 	
 
 	@RequestMapping(value="/handleFileUpload", method = RequestMethod.POST)
-	public @ResponseBody AlertStatus doFileUpload(@RequestParam("fileUpload") MultipartFile file, 
+	public @ResponseBody ContenidoResponse doFileUpload(@RequestParam("file") MultipartFile file, 
 			HttpServletRequest request){
 		
 		InputStream inputStream = null;
@@ -274,71 +271,21 @@ public class IssueController {
 		
 	    try {		
 	
-			if(file != null){
-				 
+			if(file != null){				 
 				fileName = file.getOriginalFilename();			
 				inputStream = file.getInputStream();
 				extensionArchivo =  FileUploadUtils.getExtensionArchivo(fileName);				
 				nuevoContenido.setInputStream(inputStream);
 				nuevoContenido.setExtension(extensionArchivo);	
 				nuevoContenido.setOrden("0");	
-				nuevoContenido = contenidoService.uploadFile2(inputStream, nuevoContenido);				
-
-				/**
-				int width = nuevoContenido.getAncho();
-				int height = nuevoContenido.getAlto();
-				String extension = fileName;
-				
-				boolean valid = false;
-				String message = StringUtils.EMPTY;				
-			
-				if( file.getSize() > MAX_SIZE ){
-					valid = false;
-					message = "El archivo seleccionado supera el peso m&aacute;ximo (3 MB).";
-//					return new AlertStatus(false, "El archivo seleccionado supera el peso m&aacute;ximo (3 MB).");
-				}
-				
-				if(! ( extension.equals("jpg") || extension.equals("jpeg") || extension.equals("png") ) ){
-					valid = false;
-					message = "Los formatos de archivo permitidos son JPEG y PNG.";
-					//return new AlertStatus(false, "Los formatos de archivo permitidos son JPEG y PNG.");
-				}
-							
-			
-				if( (width < MIN_WIDTH)
-						|| (height < MIN_HEIGHT)
-						|| (width < MIN_WIDTH && height < MIN_HEIGHT) ){
-					valid = false;
-					message = "La foto debe tener una resoluci�n m�nima de 640 x 480 p�xeles.";
-					//return new AlertStatus(false, "La foto debe tener una resoluci�n m�nima de 640 x 480 p�xeles.");					
-				}
-					
-			
-				if( (width > MAX_WIDTH)
-						|| (height > MAX_HEIGHT)
-						|| (width > MAX_WIDTH && height > MAX_HEIGHT) ){
-					valid = false;
-					message = "La foto debe tener una resolucion maxima de 1080 x 720 pixeles.";
-					//return new AlertStatus(false, "La foto debe tener una resolucion maxima de 1080 x 720 pixeles.");
-				}
-					
-			    if(!valid){
-			    	nuevoContenido.getFile().delete();
-			    	return new AlertStatus(false, message);
-			    }				
-				
-			    else{
-			    	this.setUploadedFile(nuevoContenido);
-			    }
-			    **/
-				
+				nuevoContenido = contenidoService.uploadFile2(inputStream, nuevoContenido);	
 				this.setUploadedFile(nuevoContenido);
 			}
 			
-			return new AlertStatus(true, "La foto se cargo exitosamente.");
+			return new ContenidoResponse(true, "La foto se cargo exitosamente.");
 	    
 	    } catch (IOException e) {
-	    	return new AlertStatus(false, "No se pudo cargar el archivo.");
+	    	return new ContenidoResponse(false, "No se pudo cargar el archivo.");
 	    }
 	}
 	
@@ -570,8 +517,10 @@ public class IssueController {
 
 	
 	@RequestMapping(value="/loadMapMarkers", method = RequestMethod.GET)
-	public @ResponseBody List<IssueDTO> loadMapMarkers(@ModelAttribute("issue") IssueDTO issue, HttpServletRequest request){			
-		return issueService.loadAllIssues();		
+	public @ResponseBody List<IssueDTO> loadMapMarkers(@ModelAttribute("issue") IssueDTO issue, HttpServletRequest request){
+		
+		List<IssueDTO> issues = issueService.loadAllIssues();	
+		return issues;		
 	}
 	
 	@RequestMapping(value="/issues/addComment", method = RequestMethod.POST)

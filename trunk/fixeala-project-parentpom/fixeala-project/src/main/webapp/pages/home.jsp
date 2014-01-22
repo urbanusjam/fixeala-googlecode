@@ -3,7 +3,8 @@
 		<div id="searchBar" class="row-fluid">
 		  	<div class="span9">
 				<div class="input-append">					
-		       		<input type="search" id="search" placeholder="Buscar reclamos o usuarios..." />
+		       		<input type="text" id="search" class="typeahead" data-provide="typeahead" autocomplete="off" placeholder="Buscar reclamos o usuarios..." />
+		
 			        <button id="btnSearch" class='btn add-on' style="width:70px;">
 			            <i class="icon-search"></i>
 			        </button>			        
@@ -21,7 +22,7 @@
 		
 		<!-- ROW 1 -->
 		
-		<div class="container" style="margin:0;padding:0;height:450px">
+		<div class="container" style="margin:0;padding:0;height:450px;border:0px solid #000; width:1180px">
 		
 		
 	
@@ -86,21 +87,20 @@
 								<textarea rows="5" id="description" name="description" placeholder="Descripci&oacute;n..."></textarea>	
 							</fieldset>
 							
-							<fieldset title="3. Archivo">	
-							<legend></legend>							
-								<div class="fileupload fileupload-new" data-provides="fileupload" style="display:block">
+							<fieldset title="3. Imagen">	
+							<legend></legend>	
+								<div class="fileupload fileupload-new" data-provides="fileupload" style="display:inline-block">
 									<div class="fileupload-new thumbnail" style="width: 304px; height: 150px;">
 										<img src="${pageContext.request.contextPath}/resources/images/nopic.png" />
 									</div>
 									<div class="fileupload-preview fileupload-exists thumbnail" style="height: 150px;min-width:300px;max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-									<div>
-									<span class="btn  fileinput-button">
-								        <i class="icon-plus"></i>
-								        <span>Seleccionar</span>									        
-								           <input type="file" name="files[]" id="fileupload"/>
-								    </span>										
-									</div>
-								</div>						
+									
+									<span class="btn fileinput-button" style="line-height:30px; width:auto; font-size:12px">
+								        <i class="icon-plus"></i>&nbsp;&nbsp;
+								        <span>Seleccionar archivo</span>									        
+								           <input type="file" name="files[]" id="fileupload">
+								    </span>									  
+								</div>	
 								<ul id="eventTags"></ul>
 							</fieldset>
 						<input id="submitIssue" type="submit" class="finish"/>

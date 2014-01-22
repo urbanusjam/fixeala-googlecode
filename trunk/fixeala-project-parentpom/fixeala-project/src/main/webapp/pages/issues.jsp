@@ -45,6 +45,7 @@
 			//default config
 			$.fn.editable.defaults.mode = 'popup';	
 			$.fn.editable.defaults.disabled = true;
+			$.mockjaxSettings.responseTime = 300; 
 			
 			//modify buttons style
 			$.fn.editableform.buttons = 
@@ -134,7 +135,7 @@
 					        return 'Este campo es requerido.';
 					    }
 					    if($.trim(value).length > 600) {
-					        return 'La longitud máxima del campo es de 600 caracteres.';
+					        return 'La longitud maxima del campo es de 600 caracteres.';
 					    }
 				  }
 			  	
@@ -148,12 +149,9 @@
 				  ajaxOptions: {
 				        type: 'put'
 				  },
-				  validate: function(value) {
-					    if($.trim(value) == '') {
-					        return 'Este campo es requerido.';
-					    }
+				  validate: function(value) {					   
 					    if($.trim(value).length > 50) {
-					        return 'La longitud máxima del campo es de 50 caracteres.';
+					        return 'La longitud maxima del campo es de 50 caracteres.';
 					    }
 					}
 			  });
@@ -165,9 +163,10 @@
 				    placement: 'top',      
 				    mode: 'popup',					 
       				emptytext: 'No hay etiquetas definidas',
+      				inputclass: 'input-large',
 			        select2: {						        	
 			        	tags: ${tags},
-			            tokenSeparators: [",", " "]
+			            tokenSeparators: [","]
 			        },
 			        display: function(value) {
 			            $.each(value,function(i){
@@ -181,8 +180,12 @@
 			        ajaxOptions: {
 				        type: 'put'
 				    },
-				    type: 'select',
-				    send : 'always'
+				    success: function(response, newValue) {
+		                console.log(response, newValue);
+		            },
+		            type: "select2"
+				   
+				
   			  }); 
 			  
 			  $('.issue-tags').on('shown', function() {
@@ -501,19 +504,16 @@
 			  });
 			   
 			   
-			   function getTagArray(){
-				   var tagList = [];				  
-					  
-					  $('.issue-tags').children('span').each(function () {
-						    tagList.push($(this).text());
-					    });
-					  
-					  return tagList;
+			  function getTagArray(){
+			  		var tagList = [];					  
+					$('.issue-tags').children('span').each(function () {
+						tagList.push($(this).text());
+					});  
+					return tagList;
 			   }
 			  
 			
-			  $('#btn-update').click(function() {
-				  
+			  $('#btn-update').click(function() {				  
 				 				  
 				  bootbox.confirm("�Desea confirmar los cambios?", function(result){
 					  
@@ -524,23 +524,28 @@
 						       url: './updateIssue.html', 
 						       ajaxOptions: {
 						           dataType: 'json'
-						       },  						      
-						       success: function(data, config) {						    	
-						    	   if(data.result){		
-						    		   bootbox.alert(data.message); 
-						    			setTimeout(function () {	
-						    				var url = getIssueURL(id, newTitle, 'plain');
-							    			window.location.href= url;	
-						    			}, 500);		
-						    	   }						    	   
-						    	   else{
-						    		   bootbox.alert(data.message);		
-						    	   }						    	
+						       },  
+						       display: function(data){console.log(data)},
+						       
+						       success: function(data, config) {	
+						    	
+// 						    	   if(data.result){		
+// 						    		   bootbox.alert(data.message); 
+// 						    			setTimeout(function () {	
+// 						    				var url = getIssueURL(id, newTitle, 'plain');
+// 							    			window.location.href= url;	
+// 						    			}, 500);		
+// 						    	   }						    	   
+// 						    	   else{
+// 						    		   bootbox.alert(data.message);		
+// 						    	   }						    	
 						       },
 						       error: function(errors) {
+						    	  
 						           var msg = '';
 						           if(errors && errors.responseText) { //ajax error, errors = xhr object
 						               msg = errors.responseText;
+						          
 						           } else { //validation error (client-side or server-side)
 						               $.each(errors, function(k, v) { msg += k+": "+v+"<br>"; });
 						           } 
@@ -619,15 +624,12 @@
 						        .test(window.navigator && navigator.userAgent),				
 				         previewMinWidth : 100,
 				         previewMaxHeight : 60,	
-						 imageCrop: false,	
-					
-				    }).bind('fileuploaddone', function(e, data){
-				    	
+						 imageCrop: false						
+				    }).bind('fileuploaddone', function(e, data){				    	
 				    	console.log(data);		
 				    	var parsedResult = $.parseJSON(data.result.uploadedFiles);	
 					    data.files = parsedResult;					    
 					    updateFilesInfo(data.result.totalUploadedFiles);
-
  					});
 				    
 				});
@@ -735,18 +737,7 @@
 				    function getFileSizeInMB(fileSize){
 				    	return Math.round(fileSize / 1024);				    	
 				    }
-				
-				
-			//ajax mocks
-			    $.mockjaxSettings.responseTime = 500; 
-			    
-			    $.mockjax({
-			        url: '/post',
-			        response: function(settings) {
-			            log(settings, this);
-			        }
-			    });
-
+			
 
 		});
 		
@@ -903,7 +894,7 @@
 						        	  id="tags-editable-1"            					
             						  data-type="select2"
             						  data-value="${tags}"></span>
-        							<a href="#" id="tags-edit-1" data-editable="tags-editable-1" class="">
+        							<a href="#" id="tags-edit-1" data-editable="tags-editable-1">
         								<i id="edit-tags" class="icon-pencil" style="display:none"></i>
         							</a>
 <!-- 						    	<div id="issue-tags" class="tag-list"> -->
