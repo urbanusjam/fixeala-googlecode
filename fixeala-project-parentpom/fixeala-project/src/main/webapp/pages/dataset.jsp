@@ -94,15 +94,15 @@
 				 <table class="table" style="margin-top:50px;">
 				 
 				 	<tr >
-				 	<td style="text-align:center; border:none">
-					 	<a href="#myModal" class="btn btn-primary btn-large" data-toggle="modal" style="width:230px;height:50px;line-height:50px">
-							<i class="icon-magic icon-2x"></i>&nbsp;&nbsp;&nbsp;PERSONALIZÁ TU DATASET
+				 	<td style="border:none">
+					 	<a href="#myModal" class="btn btn-primary btn-large" data-toggle="modal" style="width:300px;height:50px;line-height:50px">
+							<i class="icon-magic icon-2x"></i>&nbsp;&nbsp;&nbsp;TU DATASET
 						</a>
 					<tr>						
 					<tr>
-						<td style="text-align:center; border:none">
-							<a href="#" class="btn btn-inverse btn-large" style="width:230px; height:50px;line-height:50px">
-								<i class="icon-file-alt icon-2x"></i>&nbsp;&nbsp;&nbsp; TUTORIAL SOBRE DATASETS
+						<td style="border:none">
+							<a href="#" class="btn btn-inverse btn-large" style="width:300px; height:50px;line-height:50px">
+								<i class="icon-file-alt icon-2x"></i>&nbsp;&nbsp;&nbsp; TUTORIAL
 							</a>
 						</td>
 				 	</tr>
@@ -128,7 +128,7 @@
 	<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	  	<div class="modal-header">
 		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		    <h4 id="myModalLabel">Personalizá tu dataset dataset</h4>
+		    <h4 id="myModalLabel">Personalizá tu dataset</h4>
 	  	</div>
 	  	<div class="modal-body">
 	    	<form id="customDatasetForm" >     	   

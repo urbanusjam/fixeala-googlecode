@@ -12,10 +12,8 @@
 	 
 <!--   	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&sensor=false"></script> -->
   	
-  	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&components=country:ar&libraries=places&language=ES"></script> 
-  	  	  	
-<%--     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery-1.9.1.js"></script> --%>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery-1.10.2.min.js"></script>
+<!--   	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&components=country:ar&libraries=places&language=ES"></script>  -->
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.jsonp-2.4.0.min.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery-ui-1.10.3.custom.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.mockjax.js"></script> 
@@ -49,26 +47,18 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootbox.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-wysiwyg.js"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-paginator.js"></script> 
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.hotkeys.js"></script>	 
-  	
-  	<!-- Fuel UX CDN link to responsive css -->
-<!--     <link href="http://www.fuelcdn.com/fuelux-imh/2.3/css/fuelux-responsive.css" rel="stylesheet" />        -->
-<!--   	<link rel="stylesheet" href="https://fuelcdn.com/fuelux/2.3/css/fuelux.min.css"> -->
-<!-- 	<script src="https://fuelcdn.com/fuelux/2.3/loader.min.js"></script>  	 -->
-<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fuelux/require.js"></script> --%>
-<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fuelux/datagrid.js"></script> --%>
-<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fuelux/underscore.js"></script> --%>
-  	
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.hotkeys.js"></script>
+
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.dataTables.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.dataTables.columnFilter.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.dataTables.rowReordering.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/DT_bootstrap.js"></script>
   	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fileupload/jquery.ui.widget.js"></script>
-	<script src="http://blueimp.github.io/JavaScript-Templates/js/tmpl.min.js"></script>
-	<script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.min.js"></script>
-	<script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
-	<script src="http://blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js"></script>
+<!-- 	<script src="http://blueimp.github.io/JavaScript-Templates/js/tmpl.min.js"></script> -->
+<!-- 	<script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.min.js"></script> -->
+<!-- 	<script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script> -->
+<!-- 	<script src="http://blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js"></script> -->
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fileupload/jquery.iframe-transport.js"></script>	
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fileupload/jquery.fileupload.js"></script>	
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fileupload/jquery.fileupload-process.js"></script>  
@@ -118,7 +108,6 @@
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/select2.css" rel="stylesheet">   
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/select2-bootstrap.css" rel="stylesheet">   
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/font-awesome.css" rel="stylesheet">
-<%-- 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/fuelux/fuelux.css" rel="stylesheet"> --%>
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/bootstrap-tags.css" rel="stylesheet">  
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/lightbox.css" rel="stylesheet"> 
 	
@@ -170,8 +159,33 @@ path:hover {
 
   	<script type="text/javascript">
     //<![CDATA[
+               
+              
         
 		$(document).ready(function(){
+			
+			var colors = ["red", "blue", "green", "yellow", "brown", "black"];
+			
+			 $('input#search').typeahead({				 
+				 	 items: 5,
+					 source: function (query, process) {
+
+
+							  $.ajax({
+						              url: './autocomplete.html',
+						              type: 'POST',
+						              dataType: 'json',
+						              data: 'query=' + query,
+						              success: function(data) {
+						              		console.log(data);
+						                	process(data);
+						              }
+							  });
+
+					 }
+					
+					});
+			
 			
 			var options = {
 	                currentPage: 1
@@ -207,18 +221,18 @@ path:hover {
 				var fileInput = document.getElementById('fileupload');
 				var file = fileInput.files;
 				var formData = new FormData();			
-				formData.append('fileUpload', file);
-	                
+				formData.append('file', file[0]);
+					                
 					$.ajax({ 
 					 		url: "./handleFileUpload.html", 		
 					 		type: "POST",						 				 	
 					 		data : formData,
 					 		contentType: false,
 					        processData: false,	
-					 		success : function(alertStatus){
+					 		success : function(response){				 		
 					 			var input = $("#fileUpload");
-					 			if(!alertStatus.result){
-					 				bootbox.alert(alertStatus.message);
+					 			if(!response.result){
+// 					 				bootbox.alert(alertStatus.message);
 					 				input.replaceWith(input.val('').clone(true));
 					 			}
 					 		},						 		 
@@ -243,6 +257,8 @@ path:hover {
 				
 			});
 
+			
+		
 				
 			function updateProgressBar(navItems, stepIndex){
 				var $total = navItems;		
@@ -252,6 +268,8 @@ path:hover {
 			}
 			
 			
+// 			$("#issueWizard").validate({ignore:".ignore"});
+			
 			$('#issueWizard').stepy({
 				backLabel  : '&laquo; Anterior',
 				nextLabel  : 'Siguiente &raquo;', 
@@ -260,8 +278,8 @@ path:hover {
 				transition : 'fade',
 				block: true,
 				validate: true,
-				next: function(index) {
-					
+				/*next: function(index) {
+						
 					if($("#issueWizard").valid()){
 						
 						if(index-1 == 1){
@@ -281,7 +299,10 @@ path:hover {
 					}
 					
 				   
-				},
+				},*/
+				select: function(index){
+					updateProgressBar(3, index-1);
+				},       
 				back: function(index) {
 					updateProgressBar(3, index-1);
 				
@@ -455,7 +476,7 @@ path:hover {
 			
 			var loginFailed = function(data, status) {
 		        $(".alert").remove();
-		        $('#username').before('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times;</a>El usuario y/o la contraseña <br>son incorrectos.</div>');
+		        $('#username').before('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times;</a>El usuario y/o la contraseÃ±a <br>son incorrectos.</div>');
 		        $('.ajax_loading').hide();
 		        $('#btnLogin').show();	
 		        $('#loginForm').each(function(){
@@ -535,7 +556,7 @@ path:hover {
             // Tag events
             //-------------------------------
             
-            //var sampleTags = ['luminaria apagada', 'acera rota', 'bache', 'vehÃ­culo abandonado', 'residuos'];
+            //var sampleTags = ['luminaria apagada', 'acera rota', 'bache', 'vehÃÂ­culo abandonado', 'residuos'];
             var eventTags = $('#eventTags');
 
             var addEvent = function(text) {
@@ -603,28 +624,26 @@ path:hover {
 	      	   	});  
 				
 			}
-            
-         
-            
+                       
             
             $('#btnIssue').click(function(){ 
             	
-            	var $issueBox = $("#issueForm");            	
+            	var $issueBox = $("#issueFormWizard");            	
             	            	
             	 $issueBox.animate({
                      width: "toggle",
-                     right:'306px',
+                     right:"338px",
                      opacity: "toggle"                   
                  }, 'slow');
-            	 
-            	 $("#map_canvas").animate({            		 
-            		  width : parseInt($issueBox.css('width'), 10) == 316 ? 1178 : 826                       		
+  
+ 				 $("#map_canvas").animate({            		 
+            		  width : parseInt($issueBox.css('width')) == 316 ?  1178 :  842                   		
                  }, 'slow');
             	 
-            	  $("#cbxProvincias").animate({
-            		    marginRight : parseInt($issueBox.css('width')) == 316 ? 115 : 468        
-            	  }, 'slow');
-            	
+            	 $("#cbxProvincias").animate({
+            	      marginRight : parseInt($issueBox.css('width')) == 316 ? 115 : 451        
+            	 }, 'slow');
+            	             	
             });
             
             

@@ -12,6 +12,8 @@ body {
 	height: 100%;
 }
 
+input#search { z-index:2; } /* evita que el tooltip quede tapado por el campo de busqueda */
+
 /* input,textarea,label,select,.btn { */
 /* 	font-size: 12px; */
 /* } */
@@ -133,7 +135,7 @@ ul#loginNav {
 	/*background-color: #166898; */
 	background-color: #333;
 	text-transform:uppercase; 
-	letter-spacing:1px; 
+	letter-spacing:1px; 	
 	}
 	
 .tooltip-bottom, .tooltip-arrow  {  
@@ -557,7 +559,7 @@ legend {
 }
 
 .search{
-	top: 200px;
+	 top: 200px;
 	 background-color:#428bca;
 	 border:1px solid #357ebd;
 }
@@ -580,7 +582,7 @@ legend {
 #map_canvas {
 	float: left;
 	overflow: hidden;
- 	width: 1178px; /*border adds 2 pixels to width */
+ 	width: 1178px; /* border adds 2 pixels to width */
 /* 	width:95%; */
 	height: 460px;
 	/* 	background:#CFCFCF url("../images/mapa.png") no-repeat center; */
@@ -604,28 +606,32 @@ legend {
 #issueFormWizard {
 	width: 316px;
 	height: 450px;		
+		display: none;		
 	overflow: hidden;
 	position: relative;	
-	padding: 0 10px 10px 10px;	
-	margin-right: -316px;
-	margin-bottom: 0;
-	background: #fff;
-	border: 1px solid #CFCFCF;
-}
-
-#issueForm {
-	width: 316px;
-	height: 450px;
-	display: none;			
-	overflow: hidden;
-	position: relative;
 	float: right;	
 	padding: 0 10px 10px 10px;	
-	margin-right: -316px;
+	margin-right: -338px;
 	margin-bottom: 0;
 	background: #fff;
 	border: 1px solid #CFCFCF;
+
+
 }
+
+/* #issueForm { */
+/* 	width: 316px; */
+/* 	height: 450px; */
+/* 	display: none;			 */
+/* 	overflow: hidden; */
+/* 	position: relative; */
+/* 	float: right;	 */
+/* 	padding: 0 10px 10px 10px;	 */
+/* 	margin-right: -316px; */
+/* 	margin-bottom: 0; */
+/* 	background: #fff; */
+/* 	border: 1px solid #CFCFCF; */
+/* } */
 
 #issueForm #fieldWrapper {
 	height: 280px;
@@ -925,9 +931,7 @@ div[data-role="editor-toolbar"] {
 #tblUserIssues thead th:hover{background-color: #f1f1f1;}
 #tblUserIssues thead th i{float:right;margin-top: 4px;}
 #dahsboard-nav li a i{width: 25px; height:25px; margin-right:10px; text-align:center;}
-
 #dahsboard-nav li, #dahsboard-nav li a  {font-size:13px;}
-
 #dahsboard-nav li a{margin:5px 0;}
 
 

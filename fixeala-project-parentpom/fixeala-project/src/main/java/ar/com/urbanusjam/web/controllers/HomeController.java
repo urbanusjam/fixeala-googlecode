@@ -2,7 +2,6 @@ package ar.com.urbanusjam.web.controllers;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -13,39 +12,32 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.util.JSONWrappedObject;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonObject;
-
-import ar.com.restba.json.JsonArray;
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.UserService;
-import ar.com.urbanusjam.services.dto.AreaDTO;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
 import ar.com.urbanusjam.services.utils.IssueStatus;
 import ar.com.urbanusjam.web.domain.DataTablesParamUtility;
 import ar.com.urbanusjam.web.domain.JQueryDataTableParamModel;
 import ar.com.urbanusjam.web.utils.DataTableResultSet;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonObject;
 
 
 @Controller
@@ -62,6 +54,39 @@ public class HomeController {
 	public String showUsersPage() { 	
 		return "usuarios";			
 	}	
+	
+	@RequestMapping(value="/reclamos", method = RequestMethod.GET)
+	public String showIssuesPage() { 	
+		return "reclamos";			
+	}	
+	
+	@RequestMapping(value="/autocomplete", produces="application/json", method = RequestMethod.POST)
+	public @ResponseBody String getCountries(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException { 
+		
+		
+		JSONObject obj1 = new JSONObject();
+		obj1.put("name", "typeahead.js");
+		obj1.put("description", "A fast and fully-featured autocomplete library");
+		obj1.put("language", "JavaScript");
+		
+		JSONObject obj2 = new JSONObject();
+		obj2.put("name", "cassandra");
+		obj2.put("description", "A Ruby client for the Cassandra distributed database");
+		obj2.put("language", "Ruby");
+		
+		JSONObject obj3 = new JSONObject();
+		obj3.put("name", "hadoop-lzo");
+		obj3.put("description", "Refactored version of code.google.com/hadoop-gpl-compression for hadoop 0.20");
+		obj3.put("language", "Shell");
+		
+		JSONArray array = new JSONArray();
+		array.put(obj1);
+		array.put(obj2);
+		array.put(obj3);
+		
+		return array.toString();
+		
+	}
 		
 	@RequestMapping(value="/usuarios/loadUsers", produces={"application/json; charset=ISO-8859-1"}, method = RequestMethod.GET)
 	public @ResponseBody void getUsersJSON(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException { 
@@ -129,24 +154,9 @@ public class HomeController {
        }  	
 	}
 	
-	@RequestMapping(value="/reclamos", method = RequestMethod.GET)
-	public String showIssuesPage() { 	
-		return "reclamos";			
-	}	
 	
-//	@RequestMapping(value="/reclamos/loadIssues", produces={"application/json; charset=ISO-8859-1"}, method = RequestMethod.GET)
-//	public @ResponseBody String getIssuesJSON(	@RequestParam int iDisplayStart,
-//								            	@RequestParam int iDisplayLength, 
-//								            	@RequestParam int sEcho) throws IOException {
-//		
-//		DataTableResultSet<IssueDTO> dt = new DataTableResultSet<IssueDTO>();
-//		List<IssueDTO> issues = issueService.loadAllIssues();		
-//	    dt.setAaData(issues);  
-//	    dt.setiTotalDisplayRecords(issues.size()); 
-//	    dt.setiTotalRecords(issues.size());   
-//	    dt.setsEcho(sEcho);		  
-//		return toJson(dt);		
-//	}
+	
+
 	
 	@RequestMapping(value="/reclamos/loadIssues", produces={"application/json; charset=ISO-8859-1"}, method = RequestMethod.GET)
 	public @ResponseBody void getIssuesJSON(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException { 
@@ -256,34 +266,6 @@ public class HomeController {
 		
 		else
 			dbIssues = issueService.loadIssuesByUser(userID);		
-		
-		for(IssueDTO i : dbIssues){
-			String status = i.getStatus();
-			
-			if(status.equals(IssueStatus.OPEN)){
-				i.setStatusCss("label label-important");
-			}
-			
-			if(status.equals(IssueStatus.ACKNOWLEDGED)){
-				i.setStatusCss("label label-info");
-			}
-			
-			if(status.equals(IssueStatus.SOLVED)){
-				i.setStatusCss("label label-success");
-			}
-			
-			if(status.equals(IssueStatus.REOPENED)){
-				i.setStatusCss("label label-warning");
-			}
-			
-			if(status.equals(IssueStatus.CLOSED)){
-				i.setStatusCss("label label-inverse");
-			}
-			
-			if(status.equals(IssueStatus.ARCHIVED)){
-				i.setStatusCss("label");
-			}
-		}
 		
 		JQueryDataTableParamModel param = DataTablesParamUtility.getParam(request);
         
