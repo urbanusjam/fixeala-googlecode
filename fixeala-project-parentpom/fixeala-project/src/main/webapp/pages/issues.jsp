@@ -67,9 +67,10 @@
 			   $('#issue-title').editable('toggleDisabled');
 		       $('#issue-barrio').editable('toggleDisabled');
 		       $('#issue-desc').editable('toggleDisabled');
-		       $('.issue-tags').editable('toggleDisabled');
+		       $('#issue-tags').editable('toggleDisabled');
 		       
 		       var iconTags =  $('#edit-tags');
+		       
 		       if(iconTags.is(':visible')){
 		    	   $('#edit-tags').hide();
 		       }
@@ -77,8 +78,6 @@
 		    	   $('#edit-tags').show();
 		       }
 		       
-		       
-
 			   if(!${isCommonUser})
 		       		$('#tbl-licitacion .editable').editable('toggleDisabled');
 		    }
@@ -153,59 +152,57 @@
 					    if($.trim(value).length > 50) {
 					        return 'La longitud maxima del campo es de 50 caracteres.';
 					    }
-					}
+				  },
+				  success: function(response, newValue) {
+		                console.log(response, newValue);
+		          }
 			  });
 			  
 			
-			  $('.issue-tags').editable({
+			  $('#issue-tags').editable({
 				    pk: 22,
-				 	name: 'tags',				 
+				 	name: 'tagsA',				 
 				    placement: 'top',      
 				    mode: 'popup',					 
       				emptytext: 'No hay etiquetas definidas',
       				inputclass: 'input-large',
-			        select2: {						        	
-			        	tags: ${tags},
-			            tokenSeparators: [","]
+			        select2: {				
+			        	tags: ${allTags},
+			            tokenSeparators: [",", " "],
+			            id: function (item) {
+			                return item.text;
+			            }
 			        },
-			        display: function(value) {
-			            $.each(value,function(i){
-			               // value[i] needs to have its HTML stripped, as every time it's read, it contains
-			               // the HTML markup. If we don't strip it first, markup will recursively be added
-			               // every time we open the edit widget and submit new values.
-			               value[i] = "<span class='label'>" + $('<p>' + value[i] + '</p>').text() + "</span>";
-			            });
-			            $(this).html(value.join(" "));
-			        },
+// 			        display: function(value) {
+// 			            $.each(value,function(i){			           
+// 			               value[i] = "<span class='label'>" + $('<p>' + value[i] + '</p>').text() + "</span>";
+// 			            });
+// 			            $(this).html(value.join(" "));
+// 			        },						
 			        ajaxOptions: {
 				        type: 'put'
-				    },
-				    success: function(response, newValue) {
-		                console.log(response, newValue);
-		            },
-		            type: "select2"
-				   
-				
+				    }			 
+// 				    success: function(response, newValue) {
+// 		                console.log(response, newValue);
+// 		            },
+		                    
   			  }); 
-			  
-			  $('.issue-tags').on('shown', function() {
-				    var editable = $(this).data('editable');
-				    value = editable.value;
-				    $.each(value,function(i){
-				       value[i] = $('<p>' + value[i] + '</p>').text();
-				    });
-				    
-			  });
-			    
+
+// 			  $('.issue-tags').on('shown', function() {
+// 				    var editable = $(this).data('editable');
+// 				    value = editable.value;
+// 				    $.each(value,function(i){
+// 				       value[i] = $('<p>' + value[i] + '</p>').text();
+// 				    });				    
+// 			  });
 	
-			  $('[id^="tags-edit-"]').click(function(e) {
-				    e.stopPropagation();
-				    e.preventDefault();
-				    $('#' + $(this).data('editable') ).editable('toggle');
-			  });
+// 			  $('[id^="tags-edit-"]').click(function(e) {
+// 				    e.stopPropagation();
+// 				    e.preventDefault();
+// 				    $('#' + $(this).data('editable') ).editable('toggle');
+// 			  });
 			  
-			  
-			  
+			 
 			  
 			//---- CAMPOS LICITACION
 			 
@@ -472,16 +469,6 @@
 			  
 			  /*******************************************/
 			
-// 			  $('#tags').tags({
-//                   tagData:  ${tags} ,
-//                   readOnly: true,
-//                   readOnlyEmptyMessage: 'No hay etiquetas definidas',
-//                   tagClass: 'tagContainer'
-//                });
-			  
-			      
-			
-			
 			   $('#btn-comment').click(function() {
 					var message = $("#comment-text").val();
 					var id = ${id};					
@@ -504,13 +491,7 @@
 			  });
 			   
 			   
-			  function getTagArray(){
-			  		var tagList = [];					  
-					$('.issue-tags').children('span').each(function () {
-						tagList.push($(this).text());
-					});  
-					return tagList;
-			   }
+			  
 			  
 			
 			  $('#btn-update').click(function() {				  
@@ -519,38 +500,30 @@
 					  
 					  if(result){
 						  
-						  $('.editable').editable('submit', { 					   
-							   
+						  $('.editable').editable('submit', {
+							  
 						       url: './updateIssue.html', 
 						       ajaxOptions: {
 						           dataType: 'json'
-						       },  
-						       display: function(data){console.log(data)},
-						       
+						       },  				       
 						       success: function(data, config) {	
-						    	
-// 						    	   if(data.result){		
-// 						    		   bootbox.alert(data.message); 
-// 						    			setTimeout(function () {	
-// 						    				var url = getIssueURL(id, newTitle, 'plain');
-// 							    			window.location.href= url;	
-// 						    			}, 500);		
-// 						    	   }						    	   
-// 						    	   else{
-// 						    		   bootbox.alert(data.message);		
-// 						    	   }						    	
+						    	   
+						    	   if(data.result){		
+						    		   bootbox.alert(data.message); 
+						    			setTimeout(function () {	
+						    				var url = getIssueURL(id, newTitle, 'plain');
+						    				alert(url);
+							    			window.location.href= url;	
+						    			}, 500);		
+						    	   }						    	   
+						    	   else{
+						    		   bootbox.alert(data.message);		
+						    	   }						    	
 						       },
-						       error: function(errors) {
-						    	  
-						           var msg = '';
-						           if(errors && errors.responseText) { //ajax error, errors = xhr object
-						               msg = errors.responseText;
-						          
-						           } else { //validation error (client-side or server-side)
-						               $.each(errors, function(k, v) { msg += k+": "+v+"<br>"; });
-						           } 
-						           $('#msg').removeClass('alert-success').addClass('alert-error').html(msg).show();
+						       error: function (response) {
+						           console.log(response);
 						       }
+
 						   });//editable 
 						  
 					  }
@@ -890,17 +863,15 @@
 						  <tr>
 						    <th>Etiquetas:</th>
 						    <td>
-						        <span class="issue-tags" 
-						        	  id="tags-editable-1"            					
-            						  data-type="select2"
-            						  data-value="${tags}"></span>
-        							<a href="#" id="tags-edit-1" data-editable="tags-editable-1">
-        								<i id="edit-tags" class="icon-pencil" style="display:none"></i>
-        							</a>
-<!-- 						    	<div id="issue-tags" class="tag-list"> -->
-<!-- 	            					<div class="tags"></div> -->
-	            				
-<!--          						</div> -->
+<!-- 						        <span class="issue-tags"  -->
+<!-- 						        	  id="tags-editable-1"            					 -->
+<!--             						  data-type="select2" -->
+<%--             						  data-value="${tagsByIssue}"> --%>
+<!--             					</span> -->
+<!--        							<a href="#" id="tags-edit-1" data-editable="tags-editable-1">        							 -->
+<!--        								<i id="edit-tags" class="icon-pencil" style="display:none"></i> -->
+<!--        							</a> -->
+       							<a id="issue-tags" href="#" data-type="select2">${tagsByIssue}</a>
 						    </td>						   
 						 </tr>
 					</table>	 	

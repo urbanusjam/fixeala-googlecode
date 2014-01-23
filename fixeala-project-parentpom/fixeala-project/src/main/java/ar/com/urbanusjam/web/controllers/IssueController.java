@@ -6,9 +6,14 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -65,11 +70,6 @@ public class IssueController {
 	private ContenidoService contenidoService;
 	
 	private static final String UPLOAD_DIRECTORY = "C:\\temp\\fixeala\\uploads\\";
-	private static final long MAX_SIZE = 1024*1024*3;
-	private static final long MAX_WIDTH = 1080;
-	private static final long MAX_HEIGHT = 720;
-	private static final long MIN_WIDTH = 640;
-	private static final long MIN_HEIGHT = 480;
 	private ContenidoDTO uploadedFile = null;
 	
 	@Autowired
@@ -114,11 +114,26 @@ public class IssueController {
 				model.addAttribute("longitud", issue.getLongitude());	
 				model.addAttribute("historial", issue.getHistorial());
 				
-				List<String> tag = new ArrayList<String>();
-				for(int i = 0; i < issue.getTags().size(); i++){
-					tag.add("'" + issue.getTags().get(i) + "'"); 
+				List<String> issueTags = issue.getTags();
+				String issueTagsByComma = StringUtils.EMPTY;
+				for(int i = 0; i < issueTags.size(); i++){
+					issueTagsByComma += issueTags.get(i) + ", ";
+				}				
+				issueTagsByComma = issueTagsByComma.substring(0, issueTagsByComma.length() -2);
+				
+				List<String> dbTags = issueService.getTagList();
+				JSONArray array = new JSONArray();
+				for(String s : dbTags){
+					JSONObject obj = new JSONObject();
+					obj.put("id", dbTags.indexOf(s));
+					obj.put("text", s);
+					array.put(obj);
 				}
-				model.addAttribute("tags", tag);
+				
+				String allTags = array.toString();
+								
+				model.addAttribute("tagsByIssue", issueTagsByComma);
+				model.addAttribute("allTags", allTags);
 				model.addAttribute("comentarios", issue.getComentarios());
 				
 				List<ContenidoDTO> contenidos = new ArrayList<ContenidoDTO>();
@@ -399,7 +414,6 @@ public class IssueController {
 	
 	@RequestMapping(value="/issues/updateIssue", method = RequestMethod.POST)
 	public @ResponseBody AlertStatus doUpdatetIssue(@ModelAttribute("issue") IssueDTO issue, 
-//			@RequestParam("tags") List<String> tags,
 			@ModelAttribute("licitacion") IssueLicitacionDTO licitacion, HttpServletRequest request) throws ParseException{
 		
 		try {			
@@ -425,6 +439,10 @@ public class IssueController {
 					authorities.add("ROLE_USER");		
 					userDTO.setAuthorities(authorities);	
 					issue.setUser(userDTO);	
+					
+					Object[] tagMapValues = (Object[]) issue.getTagsMap().values().toArray();
+					String[] tagsArray = (String[])tagMapValues[0];
+					issue.setTags(Arrays.asList(tagsArray)); 
 					
 					if(licitacion.getNroLicitacion() == null || licitacion.getNroLicitacion() == "")
 						licitacion = null;
@@ -512,6 +530,22 @@ public class IssueController {
 	@RequestMapping(value="/loadTags", method = RequestMethod.GET)
 	public @ResponseBody List<String> loadTagList(HttpServletRequest request){
 		return issueService.getTagList();
+		
+	}
+	
+	@RequestMapping(value="/loadTags2", method = RequestMethod.GET)
+	public @ResponseBody String loadTagListJson(HttpServletRequest request) throws JSONException{
+		List<String> dbTags = issueService.getTagList();
+		
+		JSONArray array = new JSONArray();
+		for(String s : dbTags){
+			JSONObject obj = new JSONObject();
+			obj.put("id", dbTags.indexOf(s));
+			obj.put("text", s);
+			array.put(obj);
+		}
+		
+		return array.toString();
 		
 	}
 
