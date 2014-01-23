@@ -471,15 +471,12 @@ public class IssueServiceImpl implements IssueService {
 		List<String> tagList = issueDTO.getTags();
 		
 		if(tagList.size() > 0){
-			for(String t : tagList){
-				
-				Tag tag = new Tag();
-				
+			for(String t : tagList){				
+				Tag tag = new Tag();				
 				if(tagDAO.tagExists(t))
 					tag = tagDAO.findTagByName(t);
 				else				
-					tag.setTagname(t);			
-				
+					tag.setTagname(t);	
 				issue.addTag(tag);	
 			}
 		}

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -35,7 +36,8 @@ public class IssueDAOImpl extends GenericDAOImpl<Issue, Serializable> implements
 	
 	@Override
 	public void updateIssue(Issue issue) {
-		this.update(issue);		
+		Issue mergedIssue = (Issue) getSessionFactory().getCurrentSession().merge(issue);
+		this.update(mergedIssue);		
 	}
 
 	@Override

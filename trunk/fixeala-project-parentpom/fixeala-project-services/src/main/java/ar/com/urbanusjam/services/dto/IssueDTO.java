@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -31,6 +33,7 @@ public class IssueDTO implements Serializable {
 	private UserDTO assignedOfficial;
 	private IssueLicitacionDTO licitacion = new IssueLicitacionDTO();
 	private List<String> tags = new ArrayList<String>();
+	private Map<String, Object> tagsMap = new HashMap<String, Object>();
 	private List<IssueHistorialRevisionDTO> historial = new ArrayList<IssueHistorialRevisionDTO>();
 	private List<ContenidoDTO> contenidos = new ArrayList<ContenidoDTO>();
 	private List<CommentDTO> comentarios = new ArrayList<CommentDTO>();	
@@ -38,8 +41,7 @@ public class IssueDTO implements Serializable {
 	private String statusCss;
 	private String fechaFormateada;
 
-
-
+	
 	public String getId() {
 		return id;
 	}
@@ -141,6 +143,14 @@ public class IssueDTO implements Serializable {
 	
 	public void setTags(List<String> tags) {
 		this.tags = tags;
+	}
+	
+	public Map<String, Object> getTagsMap() {
+		return tagsMap;
+	}
+
+	public void setTagsMap(Map<String, Object> tagsMap) {
+		this.tagsMap = tagsMap;
 	}
 
 	public List<IssueHistorialRevisionDTO> getHistorial() {
