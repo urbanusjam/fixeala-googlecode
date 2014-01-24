@@ -1,9 +1,11 @@
 package ar.com.urbanusjam.dao;
 
 import java.util.List;
+import java.util.Set;
 
 import ar.com.urbanusjam.dao.utils.IssueCriteriaSearch;
 import ar.com.urbanusjam.entity.annotations.Issue;
+import ar.com.urbanusjam.entity.annotations.Tag;
 
 
 public interface IssueDAO {
@@ -25,5 +27,7 @@ public interface IssueDAO {
 	public List<Issue> getAssignedIssuesByVerifiedOfficial(String username);
 	
 	public Issue findIssueById(String id);
+	
+	public Set<Tag> findIssueTagsById(String id);
 
 }

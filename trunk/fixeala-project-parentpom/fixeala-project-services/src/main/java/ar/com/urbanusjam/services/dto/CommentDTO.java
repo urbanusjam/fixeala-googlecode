@@ -63,7 +63,8 @@ public class CommentDTO implements Serializable {
 		Date d = this.getFecha();		
         SimpleDateFormat df = new SimpleDateFormat();
 //      df.applyPattern("dd/MM/yyyy hh:mm a");
-        df.applyPattern("dd/MM/yyyy HH:mm");
+//        df.applyPattern("dd/MM/yyyy HH:mm");
+        df.applyPattern("dd/MM/yyyy");
         formattedDate = df.format(d.getTime());
         return formattedDate;	
 	}

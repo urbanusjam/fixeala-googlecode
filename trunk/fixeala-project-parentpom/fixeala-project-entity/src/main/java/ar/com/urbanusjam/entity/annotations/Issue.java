@@ -11,12 +11,17 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 
 
@@ -79,7 +84,15 @@ public class Issue implements Serializable  {
 	@PrimaryKeyJoinColumn  
 	private IssueLicitacion licitacion;
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy="issueList")
+//	@ManyToMany(fetch = FetchType.EAGER, mappedBy="issueList") //inverse side
+//	private Set<Tag> tagsList;	
+	
+	@ManyToMany(fetch = FetchType.EAGER) //owner side
+    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.ALL})	
+	@JoinTable(name = "ISSUE_TAG", 
+	         joinColumns = @JoinColumn(name = "ID_ISSUE"),
+	         inverseJoinColumns = @JoinColumn(name = "ID_TAG") 
+	)
 	private Set<Tag> tagsList;	
 	
 	@OneToMany(mappedBy="issue", fetch = FetchType.EAGER, cascade = CascadeType.ALL)  
@@ -279,6 +292,15 @@ public class Issue implements Serializable  {
 		    }			
 	}	
 	
+	public void removeTag(Tag tag) {	
+		if (getTagsList().contains(tag)) {
+			getTagsList().remove(tag);
+		}
+	    if (tag.getIssueList().contains(this)) {
+	        tag.getIssueList().remove(this);
+	    }			
+	}	
+	
 	public void addRevision(IssueHistorialRevision revision) {	
 		if (!getRevisiones().contains(revision)) {
 			getRevisiones().add(revision);
@@ -290,5 +312,22 @@ public class Issue implements Serializable  {
 			getComentarios().add(comment);
 		}
 	}
+	
+	@Override
+    public int hashCode() {
+        int result;
+        result = getId().hashCode();
+        result = (int) (29 * result + getId());
+        return result;
+    }
+	
+	@Override
+    public boolean equals(Object obj) {
+    	if (obj == this) return true;
+    	if (obj == null) return false;            
+    	if ( !(obj instanceof Tag) ) return false;
+        Tag t = (Tag) obj;
+        return t.getId().equals(this.getId());        
+    }
 	
 }

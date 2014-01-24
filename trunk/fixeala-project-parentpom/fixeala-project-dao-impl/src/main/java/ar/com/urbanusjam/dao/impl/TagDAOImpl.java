@@ -3,10 +3,14 @@ package ar.com.urbanusjam.dao.impl;
 import java.io.Serializable;
 import java.util.List;
 
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import ar.com.urbanusjam.dao.TagDAO;
 import ar.com.urbanusjam.dao.impl.utils.GenericDAOImpl;
 import ar.com.urbanusjam.entity.annotations.Tag;
 
+@Transactional(propagation= Propagation.REQUIRED, readOnly=false)
 public class TagDAOImpl extends GenericDAOImpl<Tag, Serializable> implements TagDAO {
 
 	public TagDAOImpl() {
@@ -29,5 +33,13 @@ public class TagDAOImpl extends GenericDAOImpl<Tag, Serializable> implements Tag
 		List<Tag> tags = this.findWhere(" tagname = ? ", tagname);
 		return tags.get(0);
 	}
+
+	@Override
+	public void deleteTag(Tag tag) {
+		this.delete(tag);		
+	}
+	
+	
+
 
 }

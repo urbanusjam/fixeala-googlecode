@@ -3,21 +3,22 @@ package ar.com.urbanusjam.dao.impl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.Criteria;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import ar.com.urbanusjam.dao.IssueDAO;
 import ar.com.urbanusjam.dao.impl.utils.CriteriaType;
 import ar.com.urbanusjam.dao.impl.utils.GenericDAOImpl;
 import ar.com.urbanusjam.dao.utils.IssueCriteriaSearch;
 import ar.com.urbanusjam.entity.annotations.Issue;
+import ar.com.urbanusjam.entity.annotations.Tag;
 
 @Transactional(propagation= Propagation.REQUIRED, readOnly=false)
 public class IssueDAOImpl extends GenericDAOImpl<Issue, Serializable> implements IssueDAO {	
@@ -36,8 +37,8 @@ public class IssueDAOImpl extends GenericDAOImpl<Issue, Serializable> implements
 	
 	@Override
 	public void updateIssue(Issue issue) {
-		Issue mergedIssue = (Issue) getSessionFactory().getCurrentSession().merge(issue);
-		this.update(mergedIssue);		
+		issue = (Issue) getSessionFactory().getCurrentSession().merge(issue);	
+		this.update(issue);		
 	}
 
 	@Override
@@ -114,6 +115,13 @@ public class IssueDAOImpl extends GenericDAOImpl<Issue, Serializable> implements
 		
 		return issues;        
         
+	}
+
+	@Override
+	public Set<Tag> findIssueTagsById(String issueID) {
+		List<Issue> issues = new ArrayList<Issue>();
+		issues = this.findWhere(" id = ? ", new Object[]{  Long.parseLong(issueID) });
+		return issues.get(0).getTagsList();
 	}
 	
 	
