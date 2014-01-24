@@ -9,5 +9,6 @@ public interface TagDAO {
 	public List<Tag> getTags();
 	public boolean tagExists(String tagname);	
 	public Tag findTagByName(String tagname);
+	public void deleteTag(Tag tag);
 
 }

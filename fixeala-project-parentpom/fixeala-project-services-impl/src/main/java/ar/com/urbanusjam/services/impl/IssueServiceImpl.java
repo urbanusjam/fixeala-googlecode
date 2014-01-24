@@ -2,9 +2,11 @@ package ar.com.urbanusjam.services.impl;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -98,6 +100,23 @@ public class IssueServiceImpl implements IssueService {
 	public void updateIssue(IssueDTO issueDTO) {
 		Issue issue = new Issue();
 		issue = this.convertTo(issueDTO);
+				
+		Collection<Tag> newTags = new ArrayList<Tag>(); 
+		Collection<Tag> currentTags = new ArrayList<Tag>();
+		Collection<Tag> removeTags = new ArrayList<Tag>();
+
+		newTags = issue.getTagsList();
+		currentTags = issueDAO.findIssueTagsById(issueDTO.getId());
+		currentTags.removeAll(newTags);	
+		removeTags = currentTags;
+		
+		if(removeTags.size() < currentTags.size()){
+			for(Tag tag : removeTags){	
+				issue.getTagsList().removeAll(removeTags);	
+				tag.getIssueList().remove(issue);
+			}
+		}			
+		
 		issueDAO.updateIssue(issue);
 	}
 	
@@ -301,8 +320,7 @@ public class IssueServiceImpl implements IssueService {
 			list.add(t.getTagname());
 		}
 		
-		return list;
-				
+		return list;				
 	}
 
 	@Override
@@ -480,7 +498,7 @@ public class IssueServiceImpl implements IssueService {
 				issue.addTag(tag);	
 			}
 		}
-	
+		
 		issue.setDate(this.getCurrentCalendar(issueDTO.getDate()));		
 		issue.setLatitude(Float.parseFloat(issueDTO.getLatitude()));
 		issue.setLongitude(Float.parseFloat(issueDTO.getLongitude()));

@@ -19,6 +19,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name="TAG")
@@ -34,13 +36,17 @@ public class Tag implements Serializable {
 	@Column(name = "TAG_NAME")
 	private String tagname;
 	
-//	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy="tagsList")
-	@ManyToMany(fetch = FetchType.EAGER)
-    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-	@JoinTable(name = "ISSUE_TAG",
-	         joinColumns = @JoinColumn(name = "ID_TAG"),
-	         inverseJoinColumns = @JoinColumn(name = "ID_ISSUE")
-	)
+//	@ManyToMany(fetch = FetchType.EAGER) //owner side
+//    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.ALL})	
+//	@JoinTable(name = "ISSUE_TAG", 
+//	         joinColumns = @JoinColumn(name = "ID_TAG"),
+//	         inverseJoinColumns = @JoinColumn(name = "ID_ISSUE") 
+//	)
+//	private Set<Issue> issueList;
+	
+	
+	@ManyToMany(fetch = FetchType.EAGER, mappedBy="tagsList") //inverse side
+	@Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
 	private Set<Issue> issueList;
 	
 	public Tag() { issueList = new HashSet<Issue>(); }
@@ -78,26 +84,32 @@ public class Tag implements Serializable {
 	    	issue.getTagsList().add(this);
 	    }	
 	}
+	
+	public void removeIssue(Issue issue) {	
+		if (getIssueList().contains(issue)) {
+			getIssueList().remove(issue);
+		}
+	    if (issue.getTagsList().contains(this)) {
+	    	issue.getTagsList().remove(this);
+	    }	
+	}
 	    
 	    
 //	@Override
 //    public int hashCode() {
-//        int result;
-//        result = getTagname().hashCode();
-//        result = (int) (29 * result + getId());
+//        int result;     
+//        result = (int) (29 * (this.getTagname().hashCode()) + this.getId());
 //        return result;
 //    }
 
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if ( !(obj instanceof Tag) ) return false;
-
-        final Tag t = (Tag) obj;
-
-        return t.getTagname().equals( this.getTagname() ) ;
-        
+    	if (obj == this) return true;
+    	if (obj == null) return false;            
+    	if ( !(obj instanceof Tag) ) return false;
+        Tag t = (Tag) obj;
+        return t.getTagname().equals(this.getTagname());        
     }
 
 

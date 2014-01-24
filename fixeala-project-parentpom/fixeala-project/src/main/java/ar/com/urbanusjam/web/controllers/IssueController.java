@@ -100,6 +100,7 @@ public class IssueController {
 			 	
 			 	model.addAttribute("titulo", issue.getTitle());
 				model.addAttribute("estado", issue.getStatus());
+				model.addAttribute("estadoCss", issue.getStatusCss());
 				model.addAttribute("direccion", issue.getFormattedAddress());					
 				model.addAttribute("id", issue.getId());
 				model.addAttribute("fecha", issue.getFormattedDate(issue.getDate()));
@@ -116,10 +117,14 @@ public class IssueController {
 				
 				List<String> issueTags = issue.getTags();
 				String issueTagsByComma = StringUtils.EMPTY;
-				for(int i = 0; i < issueTags.size(); i++){
-					issueTagsByComma += issueTags.get(i) + ", ";
-				}				
-				issueTagsByComma = issueTagsByComma.substring(0, issueTagsByComma.length() -2);
+				String allTags = StringUtils.EMPTY;
+				
+				if(!issueTags.isEmpty()){
+					for(int i = 0; i < issueTags.size(); i++){
+						issueTagsByComma += issueTags.get(i) + ", ";
+					}				
+					issueTagsByComma = issueTagsByComma.substring(0, issueTagsByComma.length() -2);
+				}
 				
 				List<String> dbTags = issueService.getTagList();
 				JSONArray array = new JSONArray();
@@ -130,10 +135,11 @@ public class IssueController {
 					array.put(obj);
 				}
 				
-				String allTags = array.toString();
-								
+				allTags = array.toString();
+				
+				
 				model.addAttribute("tagsByIssue", issueTagsByComma);
-				model.addAttribute("allTags", allTags);
+				model.addAttribute("allTags", allTags.length() == 0 ? "[{}]" : allTags);
 				model.addAttribute("comentarios", issue.getComentarios());
 				
 				List<ContenidoDTO> contenidos = new ArrayList<ContenidoDTO>();
@@ -441,7 +447,20 @@ public class IssueController {
 					issue.setUser(userDTO);	
 					
 					Object[] tagMapValues = (Object[]) issue.getTagsMap().values().toArray();
-					String[] tagsArray = (String[])tagMapValues[0];
+					String[] tagsArray = new String[tagMapValues.length];
+					
+					if(tagMapValues.length > 0){
+						
+						if(tagMapValues[0] instanceof String){
+							for(int i = 0 ; i < tagMapValues.length ; i++)
+								tagsArray[i] = (String)tagMapValues[i];
+						}
+						else					
+							tagsArray = (String[]) tagMapValues[0];
+						
+					}
+				
+					
 					issue.setTags(Arrays.asList(tagsArray)); 
 					
 					if(licitacion.getNroLicitacion() == null || licitacion.getNroLicitacion() == "")

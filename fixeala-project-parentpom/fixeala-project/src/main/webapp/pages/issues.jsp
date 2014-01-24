@@ -1,5 +1,6 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <!-- Boolean isCommonUser -->
 <!-- needed for creating the boolean: !isUser -->
@@ -15,7 +16,6 @@
 		<!-- Issue -->
 		<script type="text/javascript">
 		
-		 
 		
 		//--NON-EDITABLE FIELDS
 		
@@ -158,10 +158,13 @@
 		          }
 			  });
 			  
+			  
+			
+		  
 			
 			  $('#issue-tags').editable({
 				    pk: 22,
-				 	name: 'tagsA',				 
+				 	name: 'tagsMap',				 
 				    placement: 'top',      
 				    mode: 'popup',					 
       				emptytext: 'No hay etiquetas definidas',
@@ -728,7 +731,7 @@
         <h3 style="display:inline">
         	<a href="#" id="issue-title">${titulo}</a>
         	&nbsp;&nbsp;
-        	<i class="icon-chevron-right icon-large"></i>&nbsp;&nbsp;<span style="color:red">${estado}</span></h3>
+        	<i class="icon-chevron-right icon-large"></i>&nbsp;&nbsp;<span style="color:green">${estado}</span></h3>
         <p>${direccion}</p>       
       </div>
       
@@ -858,7 +861,7 @@
 						 </tr>
 						 <tr>
 						    <th>Estado:</th>
-						    <td><a href="#" id="issue-status" data-type="text">${estado}</a></td>						   
+						    <td><a href="#" id="issue-status" data-type="text"><span class="${estadoCss}">${estado}</span></a></td>						   
 						 </tr>
 						  <tr>
 						    <th>Etiquetas:</th>
@@ -1118,16 +1121,22 @@
 				<div class="comment-list">
 						
 				<table id="tblComments" class="table table-hover">				        
-				   <c:forEach items="${comentarios}" var="comentario">	
+				   <c:forEach items="${comentarios}" var="comentario"  varStatus="i">	
 						<tr>
 							<td>
 								<div class="media">
-									  <a class="pull-left thumbnail" href="#">
-									    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
-									  </a>
-							 		 <div class="media-body">				    	
-								    	<a href="#">${comentario.usuario}</a> | ${comentario.fechaFormateada}
-								    	<p>${comentario.mensaje}</p>	 
+
+									  <span class="pull-left">
+									  <img class="media-object thumbnail" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
+									 	<center><strong>${i.index + 1}</strong></center>
+									 </span>
+									  <div style="font-size:12px;margin-bottom:10px">
+									  	<a href="#"><strong>${comentario.usuario}</strong></a> &nbsp; &raquo;  &nbsp; 
+								    	${comentario.fechaFormateada}
+								      </div>
+							 		  <div class="media-body" style="display:block">				    	
+								    	
+								    	<p style="font-size:13px">${comentario.mensaje}</p>	 
 							  		</div>
 								</div>						
 							</td>
