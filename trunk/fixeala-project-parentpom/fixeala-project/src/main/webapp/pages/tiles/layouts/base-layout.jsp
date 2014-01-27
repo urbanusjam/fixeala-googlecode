@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<!-- <meta http-equiv="content-type" content="text/html; charset=UTF8"> -->
+<meta http-equiv="content-type" content="text/html; charset=UTF8">
 <!--  	<meta name="viewport" content="initial-scale=1.0, user-scalable=no"> -->
 	<title><tiles:insertAttribute name="title" ignore="true" /></title>	
 	 
@@ -45,6 +45,11 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-wysiwyg.js"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-paginator.js"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.hotkeys.js"></script>
+<!--   	<script type="text/javascript" src="http://twitter.github.io/typeahead.js/releases/latest/typeahead.js"></script>  -->
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/typeahead.js"></script> 
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/hogan-2.0.0.js"></script> 
+<!-- <link href="//raw.github.com/jharding/typeahead.js-bootstrap.css/master/typeahead.js-bootstrap.css" rel="stylesheet" media="screen"> -->
+
 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.dataTables.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.dataTables.columnFilter.js"></script>
@@ -151,47 +156,72 @@ path:hover {
               
         
 		$(document).ready(function(){
-		
-	
-			$('input#search').typeahead({
-				 source: function (query, process) {
-				        return $.getJSON(
-				            './autocomplete.html',
-				            { query: query },
-				            function (result) {
-				            
-				            		var resultList = result.map(function (item) {
-				                     var aItem = { id: item.id, name: item.name };
-				                     return JSON.stringify(aItem);
-				                 });
-				                 
-				               
-				                 return process(resultList);
-				  
-				            });
-				    },
-				  
-				    items:3,
-				 
-				    matcher: function (obj) {
-				        var item = JSON.parse(obj);
-				        return item.name.toLowerCase().indexOf(this.query.toLowerCase())
-				    },
-				    highlighter: function(obj){
-				    	  var item = JSON.parse(obj);
-				          var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&')
-				          return item.name.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
-				              return '<h2><strong>' + match + '</strong></h2>'
-				          })
-				    
-				    },
-				    updater: function (obj) {
-				        var item = JSON.parse(obj);
-// 				        $('#IdControl').attr('value', item.id);
-				        return item.name;
-				    }
-			});
 			
+			 var query = "?issue=%QUERY";
+			
+			 window.localStorage.clear()
+			
+			 $('#search').typeahead({                               
+		          name: "issues",   
+		          limit: 5,
+		          minLength: 2,
+		          cache: false,
+// 		          remote: {		        	
+// 		              url: './autocomplete.html?search=%QUERY',
+// 		              dataType: 'json',
+// 		              filter: typeaheadFilterResponse
+// 		          },
+		          prefetch: {
+		        	  url: './autocomplete.html',
+		        	  ttl_ms: 0,
+		              filter: typeaheadFilterResponse		             
+		          },		        
+		          template: [
+		                  	 	 '<p class="repo-status">',
+		                  	 		'<span class="{{issueCss}}">{{issueStatus}}</span>',
+		                  	 	 '</p>',
+		                  	 	 '<p class="repo-id">&#35;{{issueId}}&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;{{issueDate}}</p>',
+		                  	 	 '<span class="repo-title">{{issueTitle}}</span>',
+			                     '<p class="repo-address">{{issueAddress}}</p>'                  
+		                   ].join(''),
+		                   engine: Hogan
+		     }).on('typeahead:selected', function(evt, item) {
+		    	 	console.log(item);
+		    	 	window.location.href = item.issueUrl;		    	    
+		     
+		     }).on('typeahead:remoteRequestSentOff', function(evt, item) {
+		    		$(".tt-hint").addClass("loading");    	    
+		     
+		     }).on('typeahead:rendered', function(evt, item) {
+		    	 $(".tt-hint").removeClass("loading");    		    	    
+		     
+		     });
+			 
+			 function typeaheadFilterResponse(data){
+				 
+				 var dataset = [];
+				 
+				 for (var i = 0;  i < data.length;  i++) {	
+					 
+						 dataset.push({
+	                         value: data[i].title,
+	                         tokens: [data[i].id, data[i].title, 
+	                                  data[i].status, data[i].address, 
+	                                  data[i].barrio, data[i].city, 
+	                                  data[i].province],
+	                         issueId: data[i].id,
+	                         issueDate: data[i].date,
+	                         issueTitle: data[i].title,
+	                         issueStatus: data[i].status,	
+	                         issueCss: data[i].css,	
+	                         issueUrl: data[i].url,
+	                         issueAddress: data[i].address		  
+	                     });	
+                 }				 
+				 console.log(dataset);
+                 return dataset;
+			 }
+
 			
 			var options = {
 	                currentPage: 1
@@ -650,6 +680,13 @@ path:hover {
             	      marginRight : parseInt($issueBox.css('width')) == 316 ? 115 : 451        
             	 }, 'slow');
             	             	
+            });
+            
+			$('#btnAdvancedSearch').click(function(){ 
+                        	
+            	 $("#searchFilters").slideToggle('slow');
+  
+            	
             });
             
             

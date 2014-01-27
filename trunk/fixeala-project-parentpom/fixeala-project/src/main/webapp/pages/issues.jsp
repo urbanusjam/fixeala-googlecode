@@ -213,7 +213,7 @@
 			  $("#lic-obra").editable({	
 				  pk: 5,  
 				  name: 'obra',
-				  emptytext:'VacÌo',
+				  emptytext:'Vac&iacute;o',
 				  placement:'bottom',
 				  inputclass: 'licitacion-textarea',
 				  ajaxOptions: {
@@ -232,7 +232,7 @@
 			  $("#lic-nroLicitacion").editable({
 				  pk: 6,  
 				  name: 'nroLicitacion',
-				  emptytext:'VacÌo',
+				  emptytext:'Vac&iacute;o',
 				  ajaxOptions: {
 				        type: 'put'
 				  }
@@ -246,7 +246,7 @@
 			  $("#lic-nroExpediente").editable({	
 				  pk: 7, 
 				  name: 'nroExpediente',
-				  emptytext:'VacÌo',
+				  emptytext:'Vac&iacute;o',
 				  ajaxOptions: {
 				        type: 'put'
 				  }
@@ -262,9 +262,9 @@
 				  value: 'Indefinido',
 			      source: [
 						{value: 'Indefinido', text: 'Indefinido'},
-						{value: 'P˙blica', text: 'P˙blica'},
+						{value: 'P&uacute;blica', text: 'P&uacute;blica'},
 			            {value: 'Privada', text: 'Privada'},
-			            {value: 'ContrataciÛn directa', text: 'ContrataciÛn directa'}
+			            {value: 'Contrataci&oacute;n directa', text: 'Contrataci&oacute;n directa'}
 			        ]
 			    });    
 			  
@@ -289,7 +289,7 @@
 			  
 			  $("#lic-unidadEjecutora").editable({
 				  name: 'unidadEjecutora',
-				  emptytext:'VacÌo',
+				  emptytext:'Vac&iacute;o',
 				  ajaxOptions: {
 				        type: 'put'
 				  }
@@ -297,7 +297,7 @@
 			  
 			  $("#lic-unidadFinanciamiento").editable({				
 				  name: 'unidadFinanciamiento',
-				  emptytext:'VacÌo',
+				  emptytext:'Vac&iacute;o',
 				  ajaxOptions: {
 				        type: 'put'
 				  }		 
@@ -305,7 +305,7 @@
 			  
 			  $("#lic-empresaNombre").editable({	
 				  name: 'empresaNombre',
-				  emptytext:'VacÌo',
+				  emptytext:'Vac&iacute;o',
 				  ajaxOptions: {
 				        type: 'put'
 				  }
@@ -313,7 +313,7 @@
 			  
 			  $("#lic-empresaCuit").editable({		
 				  name: 'empresaCuit',
-				  emptytext:'VacÌo',
+				  emptytext:'Vac&iacute;o',
 				  ajaxOptions: {
 				        type: 'put'
 				  }
@@ -321,7 +321,7 @@
 			  
 			  $("#lic-empresaEmail").editable({	
 				  name: 'empresaEmail',
-				  emptytext:'VacÌo',
+				  emptytext:'Vac&iacute;o',
 				  ajaxOptions: {
 				        type: 'put'
 				  }
@@ -329,7 +329,7 @@
 			  
 			  $("#lic-representanteNombre").editable({			
 				  name: 'representanteNombre',
-				  emptytext:'VacÌo',
+				  emptytext:'Vac&iacute;o',
 				  ajaxOptions: {
 				        type: 'put'
 				  }
@@ -337,7 +337,7 @@
 			  
 			  $("#lic-representanteDni").editable({			
 				  name: 'representanteDni',
-				  emptytext:'VacÌo',
+				  emptytext:'Vac&iacute;o',
 				  ajaxOptions: {
 				        type: 'put'
 				  }
@@ -345,7 +345,7 @@
 			  
 			  $("#lic-representanteEmail").editable({		
 				  name: 'representanteEmail',
-				  emptytext:'VacÌo',
+				  emptytext:'Vac&iacute;o',
 				  ajaxOptions: {
 				        type: 'put'
 				  }
@@ -374,7 +374,7 @@
 				  name:'fechaEstimadaInicio',
 				  mode: 'popup',
 				  placement: 'top',
-				  emptytext:'VacÌo',
+				  emptytext:'Vac&iacute;o',
 				  format: 'DD-MM-YYYY',    
 			      viewformat: 'DD/MM/YYYY',    
 			      combodate: {
@@ -393,7 +393,7 @@
 				  name:'fechaEstimadaFin',
 				  mode: 'popup',
 				  placement: 'right',
-				  emptytext:'VacÌo',
+				  emptytext:'Vac&iacute;o',
 				  format: 'DD-MM-YYYY', 
 				  viewformat: 'DD/MM/YYYY',    
 			      combodate: {
@@ -411,7 +411,7 @@
 				  name:'fechaRealInicio',	
 				  mode: 'popup',
 				  placement: 'top',
-				  emptytext:'VacÌo',
+				  emptytext:'Vac&iacute;o',
 				  format: 'DD-MM-YYYY',    
 			      viewformat: 'DD/MM/YYYY',    
 			      combodate: {
@@ -429,7 +429,7 @@
 				  name:'fechaRealFin',	
 				  mode: 'popup',
 				  placement: 'right',
-				  emptytext:'VacÌo',
+				  emptytext:'Vac&iacute;o',
 				  format: 'DD-MM-YYYY',    
 			      viewformat: 'DD/MM/YYYY',   
 			      combodate: {
@@ -499,7 +499,7 @@
 			
 			  $('#btn-update').click(function() {				  
 				 				  
-				  bootbox.confirm("øDesea confirmar los cambios?", function(result){
+				  bootbox.confirm("ÔøΩDesea confirmar los cambios?", function(result){
 					  
 					  if(result){
 						  
@@ -617,7 +617,7 @@
 					var contenidoID = $(this).closest('tr').attr('id');					
 					var data = 'issueID='+ issueID + '&fileID='+ contenidoID;
 
-					  bootbox.confirm("øConfirma que desea eliminar el archivo?", "Cancelar", "Eliminar", function(result){
+					  bootbox.confirm("ÔøΩConfirma que desea eliminar el archivo?", "Cancelar", "Eliminar", function(result){
 						  
 						  if(result){
 							  
@@ -828,7 +828,7 @@
 						    <td><a href="#" id="issue-date">${fecha}</a></td>						   
 						 </tr>
 						 <tr>
-						    <th>Direcci√≥n:</th>
+						    <th>Direcci&oacute;n:</th>
 						    <td><a href="#" id="issue-street">${calle}</a></td>						   
 						 </tr>
 						 <tr>
@@ -856,7 +856,7 @@
 						    <td><a href="#" id="issue-area">${area}</a></td>						   
 						 </tr>
 						  <tr>
-						    <th>Descripci√≥n:</th>
+						    <th>Descripci&oacute;n:</th>
 						    <td><a href="#" id="issue-desc">${descripcion}</a></td>						   
 						 </tr>
 						 <tr>
@@ -931,11 +931,11 @@
 			  </div>
 			  
 			  
-			  <!-- 3 LICITACIOìN -->
+			  <!-- 3 LICITACION -->
 			  <div class="accordion-group">
 			    <div class="accordion-heading">
 			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-			        <h4><i class="icon-wrench icon-large"></i>&nbsp;&nbsp;LICITACI”N (${cantidadLicitacion})</h4>
+			        <h4><i class="icon-wrench icon-large"></i>&nbsp;&nbsp;LICITACI&Oacute;N (${cantidadLicitacion})</h4>
 			      </a>			     
 			    </div>
 			    <div id="collapseTwo" class="accordion-body collapse">
@@ -944,7 +944,7 @@
 <!-- 			    <button id="reset-btn" class="btn btn-large btn-danger" style="margin-left:595px">Resetear valores</button> -->
 					
 					<c:if test="${cantidadLicitacion eq 0}">
-						Por el momento no hay informaciÛn disponible.		 
+						Por el momento no hay informaci&oacute;n disponible.		 
 					</c:if>
 					
 					<c:if test="${cantidadLicitacion gt 0}">	
@@ -954,11 +954,11 @@
 							    <td><a href="#" id="lic-obra" data-type="textarea">${obra}</a></td>						  
 							 </tr>
 							 <tr>
-							    <th>N∞ de LicitaciÛn:</th>
+							    <th>N&ordm de Licitaci&oacute;n:</th>
 							    <td><a href="#" id="lic-nroLicitacion" data-type="text">${nroLicitacion}</a>						  
 							 </tr>
 							 <tr>
-							    <th>N∞ de Expediente:</th>
+							    <th>N&ordm de Expediente:</th>
 							    <td><a href="#" id="lic-nroExpediente" data-type="text">${nroExpediente}</a></td>						  
 							 </tr>
 							 <tr>
@@ -974,7 +974,7 @@
 							    <td><a href="#" id="lic-unidadEjecutora" data-type="text">${unidadEjecutora}</a></td>
 							 </tr>	
 							 <tr>	
-							    <th>Unidad de financiaciÛn:</th>
+							    <th>Unidad de financiaci&oacute;n:</th>
 							    <td><a href="#" id="lic-unidadFinanciamiento" data-type="text">${unidadFinanciamiento}</a></td>		
 							 </tr>
 							 <tr>	
@@ -983,13 +983,13 @@
 							 </tr>						 <tr>
 							    <th>Empresa constructora:</th>
 							  	<td>
-							    	RazÛn social: <a href="#" id="lic-empresaNombre" data-type="text">${empresaNombre}</a>
+							    	Raz&oacute;n social: <a href="#" id="lic-empresaNombre" data-type="text">${empresaNombre}</a>
 							    	<br>CUIT: <a href="#" id="lic-empresaCuit" data-type="text">${empresaCuit}</a>	
 							    	<br>Email: <a href="#" id="lic-empresaEmail" data-type="email">${empresaEmail}</a>
 							    </td>
 							 </tr>
 							 <tr>
-							    <th>Representante tÈcnico:</th>
+							    <th>Representante t&eacute;cnico:</th>
 							      <td>
 							    	Nombre y Apellido: <a href="#" id="lic-representanteNombre" data-type="text">${representanteNombre}</a>
 							    	<br>DNI: <a href="#" id="lic-representanteDni" data-type="number">${representanteDni}</a>
@@ -1080,7 +1080,7 @@
 			  <div class="accordion-group">
 			    <div class="accordion-heading">
 			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFive">
-			       <h4><i class="icon-camera icon-large"></i>&nbsp;&nbsp;IMAÅGENES (<span class="cantidadContenidos">${cantidadContenidos}</span>)</h4>			        
+			       <h4><i class="icon-camera icon-large"></i>&nbsp;&nbsp;IM&Aacute;GENES (<span class="cantidadContenidos">${cantidadContenidos}</span>)</h4>			        
 			      </a>
 			    </div>
 			    <div id="collapseFive" class="accordion-body collapse">
@@ -1233,17 +1233,17 @@
 	
 	<div id="mdl-fileupload" class="modal hide fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="fileUploadLabel" aria-hidden="true">
 	  	<div class="modal-header">
-		    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">◊</button>
+		    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
 		    	
 		    	<h4 id="fileUploadLabel"> 
-			    	GestiÛn de archivos
+			    	Gesti&oacute;n de archivos
 		    	</h4>
 	  	</div>
 	  	<form id="multiplefileupload" enctype="multipart/form-data" >
   				<div class="modal-body">
     		
     			<div class="alert alert-success" style="height:30px; line-height:30px; font-size:13px;"> 
-  					<i class="icon-info-sign"></i>&nbsp; Hay <b><span class="cantidadContenidos">${cantidadContenidos}</span></b> archivo(s) subido(s). M·ximo: 5 archivos.
+  					<i class="icon-info-sign"></i>&nbsp; Hay <b><span class="cantidadContenidos">${cantidadContenidos}</span></b> archivo(s) subido(s). M&aacute;ximo: 5 archivos.
 				</div>
     			
 		    			<table id="tbl-fileupload" role="presentation" class="table table-hover">    			

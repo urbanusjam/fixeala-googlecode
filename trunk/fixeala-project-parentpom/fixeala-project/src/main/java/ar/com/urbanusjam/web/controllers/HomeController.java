@@ -34,6 +34,7 @@ import ar.com.urbanusjam.services.utils.IssueStatus;
 import ar.com.urbanusjam.web.domain.DataTablesParamUtility;
 import ar.com.urbanusjam.web.domain.JQueryDataTableParamModel;
 import ar.com.urbanusjam.web.utils.DataTableResultSet;
+import ar.com.urbanusjam.web.utils.URISchemeUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
@@ -63,30 +64,25 @@ public class HomeController {
 	@RequestMapping(value="/autocomplete", produces="application/json", method = RequestMethod.GET)
 	public @ResponseBody String getCountries(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException { 
 		
-		
-		JSONObject obj1 = new JSONObject();
-		obj1.put("id", "1");
-		obj1.put("name", "typeahead.js");
-		obj1.put("description", "A fast and fully-featured autocomplete library");
-		obj1.put("language", "JavaScript");
-		
-		JSONObject obj2 = new JSONObject();
-		obj1.put("id", "2");
-		obj2.put("name", "cassandra");
-		obj2.put("description", "A Ruby client for the Cassandra distributed database");
-		obj2.put("language", "Ruby");
-		
-		JSONObject obj3 = new JSONObject();
-		obj1.put("id", "3");
-		obj3.put("name", "hadoop-lzo");
-		obj3.put("description", "Refactored version of code.google.com/hadoop-gpl-compression for hadoop 0.20");
-		obj3.put("language", "Shell");
-		
+		List<IssueDTO> issues = issueService.loadAllIssues();
 		JSONArray array = new JSONArray();
-		array.put(obj1);
-		array.put(obj2);
-		array.put(obj3);
 		
+		for(IssueDTO issue : issues){
+			JSONObject obj = new JSONObject();
+			obj.put("id", issue.getId());
+			obj.put("title", issue.getTitle());
+			obj.put("description", issue.getDescription());		
+			obj.put("address", issue.getFormattedAddress());	
+			obj.put("barrio", issue.getNeighborhood());	
+			obj.put("city", issue.getCity());	
+			obj.put("province", issue.getProvince());	
+			obj.put("date", issue.getFechaFormateada());
+			obj.put("status", issue.getStatus());
+			obj.put("css", issue.getStatusCss());
+			obj.put("url", URISchemeUtils.CONN_RELATIVE_URL + "/" + issue.getId() + "-" + issue.getParsedTitle() + ".html");
+			array.put(obj);
+		}		
+	
 		return array.toString();
 		
 	}
