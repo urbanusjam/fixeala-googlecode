@@ -60,21 +60,24 @@ public class HomeController {
 		return "reclamos";			
 	}	
 	
-	@RequestMapping(value="/autocomplete", produces="application/json", method = RequestMethod.POST)
+	@RequestMapping(value="/autocomplete", produces="application/json", method = RequestMethod.GET)
 	public @ResponseBody String getCountries(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException { 
 		
 		
 		JSONObject obj1 = new JSONObject();
+		obj1.put("id", "1");
 		obj1.put("name", "typeahead.js");
 		obj1.put("description", "A fast and fully-featured autocomplete library");
 		obj1.put("language", "JavaScript");
 		
 		JSONObject obj2 = new JSONObject();
+		obj1.put("id", "2");
 		obj2.put("name", "cassandra");
 		obj2.put("description", "A Ruby client for the Cassandra distributed database");
 		obj2.put("language", "Ruby");
 		
 		JSONObject obj3 = new JSONObject();
+		obj1.put("id", "3");
 		obj3.put("name", "hadoop-lzo");
 		obj3.put("description", "Refactored version of code.google.com/hadoop-gpl-compression for hadoop 0.20");
 		obj3.put("language", "Shell");
