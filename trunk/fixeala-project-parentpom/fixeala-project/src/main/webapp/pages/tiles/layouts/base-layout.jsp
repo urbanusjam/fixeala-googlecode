@@ -151,28 +151,46 @@ path:hover {
               
         
 		$(document).ready(function(){
-			
-			var colors = ["red", "blue", "green", "yellow", "brown", "black"];
-			
-			 $('input#search').typeahead({				 
-				 	 items: 5,
-					 source: function (query, process) {
-
-
-							  $.ajax({
-						              url: './autocomplete.html',
-						              type: 'POST',
-						              dataType: 'json',
-						              data: 'query=' + query,
-						              success: function(data) {
-						              		console.log(data);
-						                	process(data);
-						              }
-							  });
-
-					 }
-					
-					});
+		
+	
+			$('input#search').typeahead({
+				 source: function (query, process) {
+				        return $.getJSON(
+				            './autocomplete.html',
+				            { query: query },
+				            function (result) {
+				            
+				            		var resultList = result.map(function (item) {
+				                     var aItem = { id: item.id, name: item.name };
+				                     return JSON.stringify(aItem);
+				                 });
+				                 
+				               
+				                 return process(resultList);
+				  
+				            });
+				    },
+				  
+				    items:3,
+				 
+				    matcher: function (obj) {
+				        var item = JSON.parse(obj);
+				        return item.name.toLowerCase().indexOf(this.query.toLowerCase())
+				    },
+				    highlighter: function(obj){
+				    	  var item = JSON.parse(obj);
+				          var query = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&')
+				          return item.name.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+				              return '<h2><strong>' + match + '</strong></h2>'
+				          })
+				    
+				    },
+				    updater: function (obj) {
+				        var item = JSON.parse(obj);
+// 				        $('#IdControl').attr('value', item.id);
+				        return item.name;
+				    }
+			});
 			
 			
 			var options = {
