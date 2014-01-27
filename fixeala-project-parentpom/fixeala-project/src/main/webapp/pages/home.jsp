@@ -73,7 +73,7 @@
 	  							<div class="bar"></div>
 							</div>
 					
-							<fieldset title="1. Ubicaci�n">	
+							<fieldset title="1. Ubicaci&oacute;n">	
 							<legend></legend>												
 									<input type="hidden" id="latitude" name="latitude"  />
 									<input type="hidden" id="longitude" name="longitude" />													
@@ -121,7 +121,7 @@
 		
 		 <div class="span3">
 			<div class="page-header">
-    	   		<h4><i class="icon-user icon-large"></i>&nbsp;&nbsp;Usuarios m�s activos</h4>    	 	
+    	   		<h4><i class="icon-user icon-large"></i>&nbsp;&nbsp;Usuarios m&aacute;s activos</h4>    	 	
     	   </div>    
 		      
 	      	<table class="table table-hover">
@@ -155,12 +155,12 @@
 					</td>				
 				</tr>	
 			</table>		
-			<p style="text-align:center;"><a href="#" >ver m�s</a>	</p>	
+			<p style="text-align:center;"><a href="#" >ver m&aacute;s</a>	</p>	
 		</div>
 		
-		<div class="span4">
+		<div class="span5">
 		   <div class="page-header">
-    	   		<h4><i class="icon-map-marker icon-large"></i>&nbsp;&nbsp;�ltimos reclamos</h4>    	 	
+    	   		<h4><i class="icon-map-marker icon-large"></i>&nbsp;&nbsp;&Uacute;ltimos reclamos</h4>    	 	
     	   </div>    
 		      
 	      	<table class="table table-hover">
@@ -195,8 +195,9 @@
 					</td>				
 				</tr>
 			</table>
-			<p style="text-align:center;"><a href="#" >ver m�s</a>	</p>	
+			<p style="text-align:center;"><a href="#" >ver m&aacute;s</a>	</p>	
 		</div>
+		
 		
 		 
      </div>

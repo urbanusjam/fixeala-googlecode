@@ -512,7 +512,7 @@ path:hover {
 			
 			var loginFailed = function(data, status) {
 		        $(".alert").remove();
-		        $('#username').before('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times;</a>El usuario y/o la contraseÃ±a <br>son incorrectos.</div>');
+		        $('#username').before('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times;</a>El usuario y/o la contrase&ntildea <br>son incorrectos.</div>');
 		        $('.ajax_loading').hide();
 		        $('#btnLogin').show();	
 		        $('#loginForm').each(function(){
