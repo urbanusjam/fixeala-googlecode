@@ -2,13 +2,12 @@
 	
 		<div id="searchBar" class="row-fluid">
 		  	<div class="span9">
-				<div class="input-append">					
-		       		<input type="text" id="search" class="typeahead" data-provide="typeahead" autocomplete="off" placeholder="Buscar reclamos o usuarios..." />
-		
-			        <button id="btnSearch" class='btn add-on' style="width:70px;">
-			            <i class="icon-search"></i>
-			        </button>			        
-			        <button id="btnAdvancedSearch" class='btn add-on'>
+				<div class="input-append">
+					<input id="search" type="text" placeholder="Buscar reclamos (ID, Estado, T&iacute;tulo, Direcci&oacute;n, Barrio, Ciudad o Provincia)" autocomplete="off">					
+<!-- 			        <button id="btnSearch" class='btn add-on' style="width:70px;"> -->
+<!-- 			            <i class="icon-search"></i> -->
+<!-- 			        </button>			         -->
+			        <button id="btnAdvancedSearch" class='btn add-on' title="B&uacute;squeda avanzada">
 			            <i class="icon-angle-down"></i>
 			        </button>  
 				</div>
@@ -18,7 +17,11 @@
 					<i class="icon-map-marker icon-large"></i>&nbsp;&nbsp;&nbsp;NUEVO RECLAMO
 				</button>
 			</div>		
-		</div>		
+		</div>	
+		
+		<div id="searchFilters">
+		Completar filtros de busqueda.
+		</div>	
 		
 		<!-- ROW 1 -->
 		
@@ -34,17 +37,17 @@
 					<option value="CT">Catamarca</option>
 					<option value="CC">Chaco</option>
 					<option value="CH">Chubut</option>
-					<option value="CD">Córdoba</option>					
+					<option value="CD">Cï¿½rdoba</option>					
 					<option value="CR">Corrientes</option>
-					<option value="ER">Entre Ríos</option>
+					<option value="ER">Entre Rï¿½os</option>
 					<option value="FO">Formosa</option>
 					<option value="JY">Jujuy</option>
 					<option value="LP">La Pampa</option>				
 					<option value="LR">La Rioja</option>		
 					<option value="MZ">Mendoza</option>
 					<option value="MN">Misiones</option>
-					<option value="NQ">Neuquén</option>					
-					<option value="RN">Río Negro</option>
+					<option value="NQ">Neuquï¿½n</option>					
+					<option value="RN">Rï¿½o Negro</option>
 					<option value="SA">Salta</option>					
 					<option value="SJ">San Juan</option>
 					<option value="SL">San Luis</option>				
@@ -52,7 +55,7 @@
 					<option value="SF">Santa Fe</option>					
 					<option value="SE">Santiago del Estero</option>
 					<option value="TF">Tierra del Fuego</option>
-					<option value="TM">Tucumán</option>					
+					<option value="TM">Tucumï¿½n</option>					
 		  		</select>
 		  		
 		  		<div id="map_canvas"></div>	
@@ -70,12 +73,12 @@
 	  							<div class="bar"></div>
 							</div>
 					
-							<fieldset title="1. Ubicación">	
+							<fieldset title="1. Ubicaciï¿½n">	
 							<legend></legend>												
 									<input type="hidden" id="latitude" name="latitude"  />
 									<input type="hidden" id="longitude" name="longitude" />													
-									<input type="text" id="address" name="address" onfocus="geolocate()" autocomplete="off" placeholder="Dirección (calle y altura)" />	
-<!-- 									<input type="text" id="address" name="address" placeholder="Dirección (calle y altura)" />			 -->
+									<input type="text" id="address" name="address" onfocus="geolocate()" autocomplete="off" placeholder="Direcciï¿½n (calle y altura)" />	
+<!-- 									<input type="text" id="address" name="address" placeholder="Direcciï¿½n (calle y altura)" />			 -->
 									<input type="text" id="neighborhood" name="neighborhood" placeholder="Barrio (opcional)"/>										
 									<input type="text" id="locality" name="city" placeholder="Ciudad" />		
 									<input type="text" id="administrative_area_level_1" name="province" placeholder="Provincia"/>							
@@ -118,7 +121,7 @@
 		
 		 <div class="span3">
 			<div class="page-header">
-    	   		<h4><i class="icon-user icon-large"></i>&nbsp;&nbsp;Usuarios más activos</h4>    	 	
+    	   		<h4><i class="icon-user icon-large"></i>&nbsp;&nbsp;Usuarios mï¿½s activos</h4>    	 	
     	   </div>    
 		      
 	      	<table class="table table-hover">
@@ -152,12 +155,12 @@
 					</td>				
 				</tr>	
 			</table>		
-			<p style="text-align:center;"><a href="#" >ver más</a>	</p>	
+			<p style="text-align:center;"><a href="#" >ver mï¿½s</a>	</p>	
 		</div>
 		
 		<div class="span4">
 		   <div class="page-header">
-    	   		<h4><i class="icon-map-marker icon-large"></i>&nbsp;&nbsp;Últimos reclamos</h4>    	 	
+    	   		<h4><i class="icon-map-marker icon-large"></i>&nbsp;&nbsp;ï¿½ltimos reclamos</h4>    	 	
     	   </div>    
 		      
 	      	<table class="table table-hover">
@@ -168,7 +171,7 @@
 						    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
 						  </a>				
 						  <div class="media-body">
-						    <a href="#"><h5 class="media-heading">Ramas de árbol tapan semáforo</h5></a>		
+						    <a href="#"><h5 class="media-heading">Ramas de ï¿½rbol tapan semï¿½foro</h5></a>		
 						    <p style="font-size:11px">10/06/13 en <a href="#">Mendoza</a><br>
 						    Reportado por: <a href="#">el_user_22</a>
 						     </p>	
@@ -183,7 +186,7 @@
 						    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
 						  </a>				
 						  <div class="media-body">
-						    <a href="#"><h5 class="media-heading">Mampostería de edificio deteriorada</h5></a>		
+						    <a href="#"><h5 class="media-heading">Mamposterï¿½a de edificio deteriorada</h5></a>		
 						    <p style="font-size:11px">10/06/13 en <a href="#">Buenos Aires</a><br>
 						    Reportado por: <a href="#">pablivo-clavo-un-clavito</a>
 						     </p>	
@@ -192,7 +195,7 @@
 					</td>				
 				</tr>
 			</table>
-			<p style="text-align:center;"><a href="#" >ver más</a>	</p>	
+			<p style="text-align:center;"><a href="#" >ver mï¿½s</a>	</p>	
 		</div>
 		
 		 

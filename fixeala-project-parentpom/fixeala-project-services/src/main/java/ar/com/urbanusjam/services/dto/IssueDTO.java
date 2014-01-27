@@ -26,6 +26,7 @@ public class IssueDTO implements Serializable {
 	private String latitude;
 	private String longitude;
 	private String title;
+	private String parsedTitle;
 	private String description;
 	private Date date;	
 	private String area;
@@ -245,6 +246,14 @@ public class IssueDTO implements Serializable {
 	
 		
 	
+
+	public String getParsedTitle() {	
+		return 	title.replaceAll("\\s", "-").toLowerCase();	
+	}
+
+	public void setParsedTitle(String parsedTitle) {
+		this.parsedTitle = parsedTitle;
+	}
 
 	public String getFormattedAddress(){
 		

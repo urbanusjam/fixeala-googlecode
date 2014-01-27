@@ -601,7 +601,7 @@ legend {
 
 
 
-#searchBar .span9, #searchBar .span3{height:42px;}
+
 
 #issueFormWizard {
 	width: 316px;
@@ -1084,3 +1084,129 @@ a.editable-click.editable-disabled {
 }
 
 
+
+/***********************************************************************************************/
+/* TWITTER TYPEAHEAD */
+#searchBar .span9, #searchBar .span3{ height: 42px; }
+
+#searchFilters { width: 755px;  border: 1px solid #000; display:none; margin-top:10px; }
+
+
+#search{font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 18px;
+  line-height: 1.2;
+  color: #333;}
+
+.tt-dropdown-menu,
+.gist {
+  text-align: left;
+}
+
+/* base styles */
+/* ----------- */
+
+.typeahead,
+.tt-query,
+.tt-hint {
+  width: 396px;
+  height: 30px;
+  padding: 8px 12px;
+  font-size: 20px !important;
+  line-height: 30px;
+  border: 2px solid #ccc;
+  -webkit-border-radius: 8px;
+     -moz-border-radius: 8px;
+          border-radius: 8px;
+  outline: none;
+  color: #000;
+}
+
+.typeahead {
+  background-color: #fff;
+}
+
+.typeahead:focus {
+  border: 2px solid #0097cf;
+}
+
+.tt-query {
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.tt-hint {
+  color: #999
+}
+
+/* added ! important because typeahead adding some styles to tt-hint that overrides background property.*/
+.tt-hint.loading {
+    background: transparent url('/images/loader5.gif') no-repeat scroll right center content-box !important;
+}
+
+.tt-dropdown-menu {
+  width: 708px;
+  margin-top: 12px;
+  padding: 8px 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  -webkit-border-radius: 8px;
+     -moz-border-radius: 8px;
+          border-radius: 8px;
+  -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+     -moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+          box-shadow: 0 5px 10px rgba(0,0,0,.2);
+}
+
+.tt-suggestion {
+  padding: 3px 20px;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.tt-suggestion.tt-is-under-cursor {
+  color: #fff;
+  background-color: #0097cf;
+
+}
+
+.tt-suggestion p {
+  margin: 0;
+}
+
+.gist {
+  font-size: 14px;
+}
+
+/* example specific styles */
+/* ----------------------- */
+
+.tt-suggestion {
+  padding: 8px 20px;
+}
+
+ .tt-suggestion + .tt-suggestion {
+  border-top: 1px solid #ccc;
+}
+
+.repo-status {
+  float: right;
+  font-style: italic;
+  vertical-align: middle;
+}
+
+.repo-id {
+  font-size: 11px;  
+}
+
+.repo-title {
+  font-weight: bold;
+}
+
+.repo-address {
+  font-size: 12px;
+}
+
+
+a.no-hover { text-decoration: none; color: #000;} 

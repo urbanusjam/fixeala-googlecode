@@ -226,6 +226,17 @@ function refreshMap(newLatLng){
 }
  
 
+function getIssuePlainURL(issueID, issueTitle){
+	var protocol = window.location.protocol;
+	var host = window.location.host;
+	var context = "fixeala";
+	var subcontext = "issues/" + issueID;		
+	var parsedTitle = issueTitle.replace(/\s/g, '-').toLowerCase();	
+	var url = protocol + "//" + host + "/" + context + "/" + subcontext + "-" + parsedTitle + ".html";	
+	
+	return url;
+}
+
 function getIssueURL(issueID, issueTitle, type){
 	var protocol = window.location.protocol;
 	var host = window.location.host;
