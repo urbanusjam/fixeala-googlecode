@@ -131,20 +131,6 @@ ul#loginNav {
 	outline: none;
 }
 
-.tooltip-inner{ 
-	/*background-color: #166898; */
-	background-color: #333;
-	text-transform:uppercase; 
-	letter-spacing:1px; 	
-	}
-	
-.tooltip-bottom, .tooltip-arrow  {  
-  top: 0;
-  left: 50%;
-  margin-left: -5px;
-  border-bottom-color: #166898;
-  border-width: 0 5px 5px; }
-
 .navbar .nav > li> a i {
 	margin-top: 10px;
 }
@@ -249,20 +235,24 @@ ul#loginNav li.signupLink a:hover {
 	margin-top: 5px;
 }
 
-.navbar .nav li a.tooltip-inner {
-	width: 70px;
-	padding-left: 5px;
-	padding-right: 5px;
-	line-height: 30px;
-	text-transform: uppercase;
-}
 
 .tooltip-inner {
-	width: 100px;
+	width:120px; 
 	padding-left: 5px;
 	padding-right: 5px;
 	line-height: 30px;
+	background-color: #333;
+	text-transform:uppercase; 
+	letter-spacing:1px; 
 }
+	
+.tooltip-bottom, .tooltip-arrow  {  
+  top: 0;
+  left: 50%;
+  margin-left: -5px;
+  border-bottom-color: #166898;
+  border-width: 0 5px 5px; 
+  }
 
 .form-signin {
 	color: #000;
