@@ -23,7 +23,7 @@
 				<li><a href="${pageContext.request.contextPath}/widget.html" title="Tu widget"><i class="icon-cogs icon-2x"></i></a></li>	
 				<li><a href="#" title="Mobile App"><i class="icon-mobile-phone icon-2x"></i></a></li>			
 				<li><a href="#" title="Indicadores"><i class="icon-signal icon-2x"></i></a></li>		
-<!-- 				<li><a href="#" title="Acerca de"><i class="icon-question icon-2x"></i></a></li>			 -->
+				<li><a href="#" title="Acerca del sitio"><i class="icon-question icon-2x"></i></a></li>			
         	</ul>
         	<!-- /MAIN NAV -->
         	
@@ -81,7 +81,7 @@
 						 
 						  <ul class="dropdown-menu user-menu dropdown-yellow dropdown-caret dropdown-close">
 						  	<li><a href="${pageContext.request.contextPath}/users/<sec:authentication property="principal.username"/>.html"><i class="icon-user"></i>Perfil</a></li>
-						   	<li><a href="${pageContext.request.contextPath}/users.html"><i class="icon-cog"></i>Cuenta</a></li>
+						   	<li><a href="${pageContext.request.contextPath}/users.html"><i class="icon-cog"></i>Mi cuenta</a></li>
 <%-- 						   	<li><a href="${pageContext.request.contextPath}/users.html"><i class="icon-map-marker"></i>Reclamos</a></li> --%>
 <%-- 						   	<li><a href="${pageContext.request.contextPath}/users.html"><i class="icon-envelope"></i>Mensajes</a></li> --%>
 						    <li class="divider"></li>
