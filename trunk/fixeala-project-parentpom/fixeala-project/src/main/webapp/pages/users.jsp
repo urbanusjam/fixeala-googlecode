@@ -324,9 +324,9 @@
 			  <div class="row-fluid">
 			  
 			    <!--Sidebar content-->
-			    <div class="span2">
-			      	<div class="span2" style="border-left:1px solid #ccc; margin-left:0;">
-			              <ul id="dahsboard-nav" class="nav nav-list" style="width:170px;">
+			    <div id="dashboard-box" class="span3">
+
+			              <ul id="dashboard-nav" class="nav nav-list">
 			              		<c:if test="${ loggedMatchesProfile }">
 			              			<!-- MENU ADMIN -->
 					              	<sec:authorize access="hasRole('ROLE_ADMIN')">
@@ -351,16 +351,26 @@
 					              	
 					              	<!-- MENU USER -->
 					              	<sec:authorize access="hasRole('ROLE_USER')">
-						              		<li class="nav-header">DASHBOARD</li>
-							                <li class="active"><a href="#">Inicio</a></li>
-							                <li><a href="#notifications" data-toggle="tab">Notificaciones</a></li>
-							                <li><a href="#issues" data-toggle="tab">Reclamos</a></li>
-							                <li><a href="#comments" data-toggle="tab">Comentarios</a></li>
-							                <li class="divider"></li>
-							                <li class="nav-header">CUENTA</li>
-							                <li><a href="#">Perfil</a></li>
-							                <li><a href="#">Seguridad</a></li>
-							                <li><a href="#">Desactivacion</a></li>
+						              		<li class="nav-header active">
+						              			<a  href="#profile" data-toggle="tab">
+						              				<i class="icon-caret-right"></i>PERFIL
+						              			</a>
+						              		</li>
+						              		<li class="nav-header">
+						              			<a  href="#dashboard" data-toggle="tab">
+						              				<i class="icon-caret-right"></i>DASHBOARD
+						              			</a>
+						              		</li>
+						              		<li class="nav-header"><i class="icon-caret-right"></i>CONTENIDO</li>
+							                <li><a href="#notifications" data-toggle="tab"><i class="icon-bell"></i>Notificaciones</a></li>
+							                <li><a href="#activity" data-toggle="tab"><i class="icon-check"></i>Actividad</a></li>
+							                <li><a href="#issues" data-toggle="tab"><i class="icon-pushpin"></i>Reclamos</a></li>
+							                <li><a href="#comments" data-toggle="tab"><i class="icon-comments-alt"></i>Comentarios</a></li>
+
+							                <li class="nav-header"><i class="icon-caret-right"></i>CUENTA</li>
+							                <li><a href="#editAccount" data-toggle="tab"><i class="icon-edit-sign"></i>Datos personales</a></li>
+							                <li><a href="#changePassword" data-toggle="tab"><i class="icon-unlock"></i>Cambio de clave</a></li>
+							                <li><a href="#closeAccount" data-toggle="tab"><i class="icon-ban-circle"></i>Desactivaci�n</a></li>
 					              	</sec:authorize>
 			              		</c:if>
 			              		
@@ -382,24 +392,65 @@
 					              	</sec:authorize>
 				              	</c:if>
 			              </ul>
-		            </div>
+
 			    </div>
 			    
 			    <!--Body content-->
-			    <div class="span10">
+			    <div class="span9" style="float:right; width:940px;">
 			    
 			    <!-- TAB CONTENT -->
 			    <div class="tab-content">
+			    
+			    
+			    	<!-- TAB PROFILE -->
+	         			<div class="tab-pane fade in active" id="profile"> 
+	         			
+	         			<blockquote>
+							        <h3>helloworld</h3>
+							        <small><cite title="Source Title">San Nicol�s, Ciudad Aut�noma de Buenos Aires <i class="icon-map-marker"></i></cite></small>
+							      </blockquote>
+<!-- 							      <p> -->
+<!-- 							        <i class="icon-angle-right"></i> Registrado el 15 de Septiembre, 2013</string> -->
+<!-- 							      </p>	 -->
+<!-- 			         		<div class="page-header"> -->
+<!-- 					    		<h3>Perfil</h3> -->
+<!-- 					    	</div> -->
+					    	
+					    	<div class="row" style="margin: 0 auto; ">
+							    <div class="span4">		
+							    	<span class="thumbnail" style="width:200px; height:200px">				     
+										<img src="${pageContext.request.contextPath}/resources/images/01-mario.jpg" />
+									</span>									
+							    </div>
+							    <div class="span5">
+							      
+							
+    							</div>
+    							</div>
+					    	
+				    	</div>
+					<!-- fin TAB PROFILE -->
+					
+					<!-- TAB DASHBOARD -->
+	         			<div class="tab-pane fade in" id="dashboard"> 	
+			         		<div class="page-header">
+					    		<h3>Dashboard</h3>
+					    	</div>
+				    	</div>
+					<!-- fin TAB PROFILE -->
 					
 					
 					<!-- TAB RECLAMOS -->
-					<div class="tab-pane fade in active" id="issues">
+					<div class="tab-pane fade in" id="issues">
 					    	<div class="page-header">
-					    	<h3>Reclamos</h3>
+					    		<h3>Reclamos</h3>
 					    	</div>
 					    	
 					    	<ul class="nav nav-tabs">
-						    	<li class="active"><a href="#issuesAsignados" data-toggle="tab">Asignados</a></li>
+<!-- 						    	<li class="active"><a href="#issuesAsignados" data-toggle="tab">Asignados</a></li> -->
+									<li class="active"><a href="#issuesPublished" data-toggle="tab">Publicados (3)</a></li>
+									<li><a href="#issuesFollowing" data-toggle="tab">Siguiendo (7)</a></li>
+									<li><a href="#issuesVoted" data-toggle="tab">Votados (1)</a></li>
 							</ul>
 							
 							
@@ -584,7 +635,124 @@
 							</div>
 					    </div>
 					    <!-- fin TAB COMENTARIOS -->
+					    
+					    
+					    <!-- TAB DATOS PERSONALES -->
+						<div class="tab-pane fade in" id="editAccount">						
+							<div class="page-header">
+					    		<h3>Datos personales</h3>
+					    	</div>	
+ 								
+ 							<div class="row-fluid">
+					            <div class="span9">
+					                <div class="span5">
+						                <div class="logowrapper">
+						                    <a href="#" class="thumbnail" style="width: 150px; height: 150px;">
+										    	<img src="${pageContext.request.contextPath}/resources/images/01-mario.jpg" />
+										    </a>
+										    <br>
+									        <span class="btn" style="line-height:30px; width:135px; font-size:12px;">
+												<i class="icon-plus"></i>&nbsp;&nbsp;Seleccionar archivo
+											</span>		
+						                </div>
+					                </div>
+				                	<div class="span7">
+				                		<form class="form-horizontal" id="uploadForm">					              
+										    <label for="inputEmail">Email</label>
+										    <input type="text" id="inputEmail" class="input-large" value="${email}" placeholder="usuario@gmail.com">
+										  									
+										    <label for="inputEmail">Barrio</label>
+										    <input type="text" id="inputEmail" class="input-large" placeholder="Villa Urquiza"> 
+										  										
+										    <label for="inputEmail">Ciudad</label>
+										    <input type="text" id="inputEmail" class="input-large" placeholder="Ciudad Aut�noma de Buenos Aires">
+										 										
+										    <label for="inputEmail">Provincia</label>
+										    <input type="text" id="inputEmail" class="input-large" placeholder="Buenos Aires"> 
+										    
+										    <hr>
+										    <button id="btnUpdateAccount" class="btn btn-success"><i class="icon-ok"></i>&nbsp;&nbsp; Guardar datos</button>								 
+									  	</form>
+									</div>
+								</div>
+							</div>		
+						</div> 
+						<!-- fin TAB DATOS PERSONALES --> 
+						
+						
+						<!-- TAB CAMBIO DE CLAVE -->
+						<div class="tab-pane fade in" id="changePassword">
+							<div class="page-header">
+					    		<h3>Cambio de clave</h3>
+					    	</div>
 					    	
+					    	<div class="row-fluid">					    	
+						    	<div class="span5">
+			                		<form class="form-horizontal" id="changePasswordForm">
+			                							              
+									    <label for="inputEmail">Clave actual</label>
+									    <input type="password" id="currentPassword">	
+									  									
+									    <label for="inputEmail">Nueva clave</label>
+										<input type="password" id="newPassword">
+									  										
+									    <label for="inputEmail">Confirme nueva clave</label>
+									    <input type="password" id="newPasswordConfirmation">		  			
+									 		
+									    <hr>
+									    
+									    <div style="width:275px; border:0px solid #000">
+									    	<button id="btnChangePassword" class="btn btn-success"><i class="icon-ok"></i>&nbsp;&nbsp;Cambiar clave</button>
+											<span class="pull-right">
+												<button type="reset" class="btn"><i class="icon-remove"></i>&nbsp;&nbsp;Cancelar</button>
+											</span>
+										</div>
+																		 
+								  	</form>
+								</div>							
+							</div>	
+			   			</div>
+						<!-- fin TAB CAMBIO DE CLAVE --> 
+						
+						
+						<!-- TAB DESACTIVACION -->  
+						<div class="tab-pane fade in" id="closeAccount">
+						
+							<div class="page-header">
+					    		<h3>Desactivaci&oacute;n de cuenta</h3>
+					    	</div>	
+						
+							<div class="row-fluid">			
+						
+								<div class="span7">			
+									<form id="closeAccountForm" class="form-horizontal">
+										
+										<p>
+										   Lorem ipsum dolor sit amet, id nec conceptam conclusionemque. Et eam tation option. 
+										   Utinam salutatus ex eum. Ne mea dicit tibique facilisi, ea mei omittam explicari conclusionemque, 
+										   ad nobis propriae quaerendum sea.
+										</p>
+										
+											<br>
+										
+										<label for="currentPassword"><strong>Ingrese su clave actual:</strong></label>
+										<input type="password" id="currentPassword" class="input-xlarge">		  			
+										
+										
+										<hr>	
+										
+										 <div style="width:275px; border:0px solid #000">
+									    	<button id="btnCloseAccount" class="btn btn-danger"><i class="icon-minus-sign"></i>&nbsp;&nbsp;Cerrar cuenta</button>
+											<span class="pull-right">
+												<button type="reset" class="btn"><i class="icon-remove"></i>&nbsp;&nbsp;Cancelar</button>
+											</span>
+										</div>																	
+						  				
+									</form>
+								</div>	  
+							</div>				   				
+			   			</div> 	
+					    <!-- fin TAB DESACTIVACION -->
 					    	
 					    <!-- TAB USUARIOS -->
 					    <div class="tab-pane fade" id="users"> 	
@@ -696,6 +864,15 @@
 					    	</table>
 				    	</div>
 				    	<!-- end TAB NOTIFICACIONES -->
+				    	
+				    	
+				    	<!-- ACTIVIDAD -->
+	         			<div class="tab-pane fade" id="activity"> 	
+			         		<div class="page-header">
+					    		<h3>Actividad</h3>
+					    	</div>
+				    	</div>
+						<!-- fin tab ACTIVIDAD -->
 					   			         		
 		         	</div>	
 		         	<!-- fin tab content -->
@@ -1167,9 +1344,7 @@
 		         	</div>
 		         	<!-- tab END USUARIOS -->
 		         		
-		         		
-		         		
-		         		<!-- ESTADI�STICAS -->
+		         	
 		         		
 		         		
 	         		<!-- NOTIFICACIONES -->
@@ -1201,19 +1376,11 @@
 						    <tr>
 				    	</table>
 			    	</div>
-				    	<!-- end TAB NOTIFICACIONES -->
-					    	
-			         		
-			         		<!-- ACTIVIDAD -->
-			         
-							
-							<!-- PERFIL -->
-							
-							
-							<!-- CONTRASEÑA -->
-							
-							
-							<!-- DESACTIVACION -->      		
+				    <!-- end TAB NOTIFICACIONES -->
+				    
+				    
+				    
+			
 			         		
 		         	</div>	
 		         	<!-- fin tab content -->
@@ -1232,103 +1399,8 @@
 	<!-- /content -->  
 	   
 	  
-<!-- 		<div id="dashboardTabContent" class="tab-content"> -->
-
-<!-- 			<div class="tab-pane fade in active" id="profile"> -->
-			
-<!-- 			<div id="profileBox" class="span6 well">	 -->
-
-<!-- 				Profile... -->
 		
-<!-- 			</div> -->
-
-<!-- 			</div> -->
 			
-<!-- 			<div class="tab-pane fade in" id="account"> -->
-			
-<!-- 				<div id="accountBox" class="span6 well"> -->
-										
-<!--    						<div class="row" > -->
-    					
-<!--    								<div class="span6">    								 -->
-<!--    									<form class="form-horizontal" id="uploadForm"> -->
-<!--    										<fieldset>   									  									 -->
-<!-- 		   									<legend><i class="icon-angle-right"></i>&nbsp;&nbsp;Edición de cuenta</legend> -->
-<!-- 		   									<div class="thumbnail"> -->
-<%-- 												<img id="profilePic" src="${pageContext.request.contextPath}/resources/images/01-mario.jpg" alt=""  > --%>
-<!-- 											</div> -->
-		   								
-<!-- 			   								<span class="btn fileinput-button"> -->
-<!-- 					                   			<i class="icon-plus icon-white"></i>&nbsp;&nbsp; -->
-<!-- 					                   			<span>Seleccionar archivo</span> -->
-<!-- 			               					</span> -->
-<!-- 										</fieldset> -->
-								
-<!-- 								  	 	<fieldset>								  	 					 -->
-<!-- 											 <div class="input-prepend"> -->
-<!-- 											 	<span class="add-on"><i class="icon-envelope"></i></span> -->
-<%-- 											 	<input type="text" id="email" value="${email}" placeholder="Dirección de email" class="input-xlarge" >		 --%>
-<!-- 											 	<label class="control-label" style="width:auto;float:right; text-align:left;margin-left:10px;line-height:30px;">(no será publicado)</label>												  -->
-<!-- 											 </div>											 	 -->
-<!-- 											 <div class="input-prepend"> -->
-<!-- 											 	<span class="add-on"><i class="icon-home"></i></span> -->
-<%-- 											 	<input type="text" id="barrio" value="${barrio}" placeholder="Barrio / Localidad" class="input-xlarge" > --%>
-<!-- 											 	<label class="control-label" style="width:auto;float:right; text-align:left;margin-left:10px;line-height:30px;">(opcional)</label>			 -->
-<!-- 											 </div>		 -->
-<!-- 										 </fieldset> -->
-<!-- 										 <fieldset>										 	 					  -->
-<!-- 											 <button id="btnUpdateAccount" class="btn btn-primary">Actualizar datos</button>&nbsp;&nbsp; -->
-<!-- 											 <button type="reset" class="btn">Cancelar</button> -->
-<!-- 										</fieldset>								 -->
-<!-- 									</form>									 -->
-<!-- 								</div> -->
-<!-- 								<div class="span6"> 			 -->
-<!-- 									<form class="form-horizontal"> -->
-<!-- 										<fieldset>	 -->
-<!-- 										     <legend><i class="icon-angle-right"></i>&nbsp;&nbsp;Cambio de contraseña</legend>	 		 -->
-<!-- 											 <div class="input-prepend"> -->
-<!-- 												 <span class="add-on"><i class="icon-lock"></i></span> -->
-<!-- 												 <input type="password" id="currentPassword" placeholder="Contraseña actual" class="input-xlarge">		  			 -->
-<!-- 											 </div> -->
-											 
-<!-- 											 <div class="input-prepend"> -->
-<!-- 												 <span class="add-on"><i class="icon-lock"></i></span> -->
-<!-- 												 <input type="password" id="newPassword" placeholder="Nueva contraseña" class="input-xlarge">		  			 -->
-<!-- 											 </div> -->
-											 
-<!-- 											  <div class="input-prepend"> -->
-<!-- 												 <span class="add-on"><i class="icon-lock"></i></span> -->
-<!-- 												 <input type="password" id="newPasswordConfirmation" placeholder="Confirme nueva contraseña" class="input-xlarge">		  			 -->
-<!-- 											 </div>								  								  			 -->
-<!-- 							  			</fieldset> -->
-<!-- 							  			<fieldset>										 	 					  -->
-<!-- 											 <button id="btnUpdateAccount" class="btn btn-primary">Actualizar contraseña</button>&nbsp;&nbsp; -->
-<!-- 											 <button type="reset" class="btn">Cancelar</button> -->
-<!-- 										</fieldset> -->
-<!-- 									</form> -->
-<!-- 								</div> -->
-							
-<!-- 								<div class="span6"> 			 -->
-<!-- 									<form id="closeAccountForm" class="form-horizontal"> -->
-<!-- 										<fieldset>	 -->
-<!-- 										     <legend><i class="icon-angle-right"></i>&nbsp;&nbsp;Desactivación de cuenta</legend>	 		 -->
-<!-- 											 <div class="input-prepend"> -->
-<!-- 												 <span class="add-on"><i class="icon-lock"></i></span> -->
-<!-- 												 <input type="password" id="currentPassword" placeholder="Contraseña actual" class="input-xlarge">		  			 -->
-<!-- 											 </div>																				 -->
-<!-- 							  			</fieldset> -->
-<!-- 							  			<fieldset>										 				  -->
-<!-- 											 <button id="btnCloseAccount" class="btn btn-primary">Cerrar cuenta</button>&nbsp;&nbsp; -->
-<!-- 											 <button type="reset" class="btn">Cancelar</button> -->
-<!-- 										</fieldset> -->
-<!-- 									</form> -->
-<!-- 								</div>							 -->
-<!-- 						</div> -->
-			
-<!-- 			 </div> -->
-				
-<!-- 			</div> -->
-<!-- 		</div> -->
-		<!-- /dashboardTabContent -->
+	
 		    
 	

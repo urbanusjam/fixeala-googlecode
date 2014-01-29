@@ -12,6 +12,8 @@ body {
 	height: 100%;
 }
 
+
+
 input#search { z-index:2; } /* evita que el tooltip quede tapado por el campo de busqueda */
 
 /* input,textarea,label,select,.btn { */
@@ -68,10 +70,10 @@ h7 {
 	border-bottom: 1px solid #CFCFCF;
 }
 
-.input-prepend .add-on {
-	line-height: 30px;
-	height: 30px;
-}
+/* .input-prepend .add-on { */
+/* 	line-height: 30px; */
+/* 	height: 30px; */
+/* } */
 
 .navbar-inner {
 	/*background: #5095BE url("../images/header_bg.jpg") repeat-x;*/
@@ -375,7 +377,7 @@ ul.thumbnails {
 	margin-top: 30px;
 }
 
-#signupForm,#changePasswordForm,#uploadForm,#resetCredentialsForm {
+#signupForm,#changePasswordForm,#resetCredentialsForm {
 	margin: 0 auto;
 	float: none;
 }
@@ -388,7 +390,7 @@ ul.thumbnails {
 	width: 30px;
 }
 
-#signupForm input,#changePasswordForm input,#resetCredentialsForm input
+#signupForm input,#resetCredentialsForm input
 	{
 	width: 350px;
 	height: 30px;
@@ -404,12 +406,6 @@ ul.thumbnails {
 	height: 30px;
 }
 
-#changePasswordForm  .btn {
-	font: inherit;
-	height: 30px;
-	width: 200px;
-	margin: 0 0 20px 60px;
-}
 
 #captchadiv {
 	width: 450px;
@@ -431,68 +427,24 @@ ul.thumbnails {
 	vertical-align: top;
 }
 
-#accountBox {
-	margin: 0 auto;
-	float: none;
-}
 
-#accountBox  .row {
-	margin: 10px auto;
-}
 
-#accountBox  .span6 {
-	float: none;
-	margin: 0 auto;
-	margin-top: 10px;
-	margin-bottom: 30px;
-}
+#uploadForm label, 
+#changePasswordForm label, 
+#closeAccountForm label { margin-bottom: 10px; }
 
-#accountBox .thumbnail {
-	width: 120px;
-	height: 120px;
-	line-height: 120px;
-	vertical-align: middle;
-	display: inline-block;
-	*display: inline; /* ie7 fix */
-	float: none;
-	margin-right: 27px;
-	margin-left: 30px;
-	text-align: center;
-	background-color: #fff;
-}
+#uploadForm input, 
+#changePasswordForm input, 
+#closeAccountForm input { height: 30px; line-height: 30px; width: 270px;  margin-bottom: 20px; }
 
-#accountBox a {
-	line-height: 100%;
-	text-align: center;
-}
+#uploadForm .btn, 
+#changePasswordForm .btn, 
+#closeAccountForm .btn { height: 30px; }
 
-#accountBox input {
-	margin: 0 0 20px 0;
-	height: 30px;
-}
 
-#accountBox .input-prepend {
-	margin-left: 30px;
-}
-
-#accountBox  .add-on {
-	width: 30px;
-}
-
-#accountBox span.btn {
-	float: none;
-	line-height: 25px;
-	height: 25px;
-	width: 150px;
-}
-
-#accountBox fieldset {
-	padding: 30px 0 0 0;
-}
-
-#btnUpdateAccount,#btnCloseAccount {
-	margin-left: 30px;
-}
+/* #btnUpdateAccount,#btnCloseAccount { */
+/* 	margin-left: 30px; */
+/* } */
 
 legend {
 	font-size: 16px;
@@ -920,11 +872,32 @@ div[data-role="editor-toolbar"] {
 #tblUserIssues thead th{cursor:pointer; }
 #tblUserIssues thead th:hover{background-color: #f1f1f1;}
 #tblUserIssues thead th i{float:right;margin-top: 4px;}
-#dahsboard-nav li a i{width: 25px; height:25px; margin-right:10px; text-align:center;}
-#dahsboard-nav li, #dahsboard-nav li a  {font-size:13px;}
-#dahsboard-nav li a{margin:5px 0;}
 
+#dashboard-box { border-right:1px solid #ccc;margin-left:0; width:200px; height: 470px; }
+#dashboard-nav { padding-left:0; }
+#dashboard-nav li.nav-header  {font-size:12px; color:#333; }
+#dashboard-nav li.nav-header a { margin-left: 0; padding-left: 0; color: #333; }
+#dashboard-nav li.nav-header.active a { color: #fff; }
+#dashboard-nav li.nav-header a:active { color: #fff; }
+#dashboard-nav li, #dahsboard-nav li a  {font-size:13px; height:30px; line-height: 30px;}
+#dashboard-nav li a {margin:5px 0px 5px 30px;}
+#dashboard-nav li a:active {color: #fff;}
 
+#dashboard-nav li [class^="icon-"]:before, [class*=" icon-"], 
+#dashboard-nav li a [class^="icon-"]:before, [class*=" icon-"] { width:13px;  text-align:center; dispaly:inline-block; margin-right:10px; }
+#dashboard-nav { width: 200px; }
+
+#profile.tab-pane .page-header, 
+#dashboard.tab-pane .page-header, 
+#issues.tab-pane .page-header, 
+#comments.tab-pane .page-header,
+#notifications.tab-pane .page-header, 
+#activity.tab-pane .page-header, 
+#editAccount.tab-pane .page-header,
+#changePassword.tab-pane .page-header,
+#closeAccount.tab-pane .page-header {margin-top:0; border:none;}
+
+#profile p { font-size: 12px; margin: 5px 0;  }
 
 
 /* Autocomplete
