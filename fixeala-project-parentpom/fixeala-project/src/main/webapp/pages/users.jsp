@@ -639,13 +639,13 @@
 								    	<td style="border-top:none;"><i class="icon-time icon-grey"></i>hace 11 minutos</td>
 								    <tr>
 								     <tr>
-							    		<td><i class="icon-comment"></i></td>
-								    	<td><a href="#">fulanito_11</a> comentó en el reclamo <a href="#">Hay un bache gigante en la calle... (#1100)</a></td>
+							    		<td><i class="icon-quote-right"></i></td>
+								    	<td><a href="#">fulanito_11</a> comentó el reclamo <i><a href="#">Hay un bache gigante en la calle... (#1100)</a></i></td>
 								    	<td class="time"><i class="icon-time icon-grey"></i>hace 1 hora</td>
 								    <tr>
 								    <tr>
 							    		<td><i class="icon-pencil"></i></td>
-								    	<td><a href="#">Roberto A.</a> agregó archivos en el reclamo <i><a href="#">Semáforo a punto de caerse... (#9568)</a></i></td>
+								    	<td><a href="#">Roberto A.</a> agregó archivos al reclamo <i><a href="#">Semáforo a punto de caerse... (#9568)</a></i></td>
 								    	<td class="time"><i class="icon-time icon-grey"></i>hace 5 horas</td>
 								    <tr>
 								    <tr>
@@ -654,8 +654,8 @@
 								    	<td class="time"><i class="icon-time icon-grey"></i>hace 13 horas</td>
 								    <tr>							   
 								    <tr>
-							    		<td><i class="icon-comment"></i></td>
-								    	<td><a href="#">COMUNA 7</a> comentó en el reclamo <i><a href="#">Hay residuos olorosos tirados por toda la vereda... (#7574)</a></i></td>
+							    		<td><i class="icon-quote-right"></i></td>
+								    	<td><a href="#">COMUNA 7</a> comentó el reclamo <i><a href="#">Hay residuos olorosos tirados por toda la vereda... (#7574)</a></i></td>
 								    	<td class="time"><i class="icon-time icon-grey"></i>hace 14 horas</td>
 								    <tr>
 								    <tr>
