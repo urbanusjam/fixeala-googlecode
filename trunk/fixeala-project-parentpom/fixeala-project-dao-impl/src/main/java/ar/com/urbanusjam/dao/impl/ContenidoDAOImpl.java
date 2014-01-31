@@ -93,8 +93,14 @@ public class ContenidoDAOImpl extends GenericDAOImpl<Contenido, Serializable> im
 
 	@Override
 	public Contenido findContenidoByContenidoAndIssue(Long idContenido, Long idIssue) {
-		List<Contenido> contenidos = this.findWhere( " id = ? AND issue.id = ? ", new Object[]{idContenido, idIssue});    	
+		List<Contenido> contenidos = this.findWhere( " id = ? AND issue.id = ? AND profilePic = false ", new Object[]{idContenido, idIssue});    	
     	return contenidos.size() > 0 ? contenidos.get(0) : null; 
+	}
+
+	@Override
+	public Contenido findUserProfilePic(Long idUser) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 		

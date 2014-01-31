@@ -19,6 +19,7 @@ public class ContenidoDTO implements Serializable {
     private String nroReclamo;   
     private String pathRelativo;
     private String orden;
+    private boolean profilePic;
     private String fileSize;
     private InputStream inputStream;    
     private File file;	
@@ -110,6 +111,14 @@ public class ContenidoDTO implements Serializable {
 
 	public void setOrden(String orden) {
 		this.orden = orden;
+	}
+	
+	public boolean isProfilePic() {
+		return profilePic;
+	}
+
+	public void setProfilePic(boolean profilePic) {
+		this.profilePic = profilePic;
 	}
 
 	public String getFileSize() {

@@ -11,6 +11,8 @@ public interface ContenidoDAO extends GenericDAO<Contenido, Serializable> {
 	
 	public Contenido findContenidoById(Long idContenido);   
 	
+	public Contenido findUserProfilePic(Long idUser); 
+	
 	public Contenido findContenidoByContenidoAndIssue(Long idContenido, Long idIssue);   
 	
 	public List<Contenido> findContenidosByIssue(Long idIssue);	

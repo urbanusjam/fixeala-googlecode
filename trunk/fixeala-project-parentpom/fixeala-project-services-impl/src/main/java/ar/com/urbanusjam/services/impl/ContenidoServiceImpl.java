@@ -53,18 +53,12 @@ public class ContenidoServiceImpl implements ContenidoService {
     @Autowired
     private IssueDAO issueDAO;
     
-
-//	public void setContenidoDAO(ContenidoDAO contenidoDAO) {
-//		this.contenidoDAO = contenidoDAO;
-//	}
-//	
-//	public void setIssueDAO(IssueDAO issueDAO) {
-//		this.issueDAO = issueDAO;
-//	}
-//
-//	public void setPathImagenes(String pathImagenes) {
-//		this.pathImagenes = pathImagenes;
-//	}
+    
+	@Override
+	public ContenidoDTO obtenerAvatarUsuario(String username)
+			throws BusinessException {
+		return null;
+	}
 
 	
 	@Override	
@@ -119,6 +113,7 @@ public class ContenidoServiceImpl implements ContenidoService {
        contenidoDTO.setNombreConExtension(contenido.getNombreConExtension());      
        contenidoDTO.setNroReclamo(String.valueOf(contenido.getIssue().getId()));
        contenidoDTO.setOrden(String.valueOf(contenido.getOrden()));
+       contenidoDTO.setProfilePic(contenido.isProfilePic());
        return contenidoDTO;
    }
       
@@ -133,6 +128,7 @@ public class ContenidoServiceImpl implements ContenidoService {
        contenido.setTipo(contenidoDTO.getExtension());
        contenido.setNombreConExtension(contenidoDTO.getNombreConExtension());
        contenido.setOrden(Integer.valueOf(contenidoDTO.getOrden()));
+       contenido.setProfilePic(contenidoDTO.isProfilePic());
        
        Issue issue = new Issue();
 	   issue.setId(contenidoDTO.getNroReclamo() == null ? null : Long.valueOf(contenidoDTO.getNroReclamo()));		
@@ -371,8 +367,5 @@ public class ContenidoServiceImpl implements ContenidoService {
 		int cantidadContenidos = contenidos.size();
 		return cantidadContenidos;		
 	}
-	 
-	
-   
-	
+
 }
