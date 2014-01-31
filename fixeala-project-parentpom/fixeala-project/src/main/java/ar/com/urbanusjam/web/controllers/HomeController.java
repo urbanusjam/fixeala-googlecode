@@ -28,12 +28,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.UserService;
+import ar.com.urbanusjam.services.dto.CommentDTO;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
 import ar.com.urbanusjam.services.utils.IssueStatus;
 import ar.com.urbanusjam.web.domain.DataTablesParamUtility;
 import ar.com.urbanusjam.web.domain.JQueryDataTableParamModel;
 import ar.com.urbanusjam.web.utils.DataTableResultSet;
+import ar.com.urbanusjam.web.utils.DateUtils;
 import ar.com.urbanusjam.web.utils.URISchemeUtils;
 
 import com.google.gson.Gson;
@@ -248,7 +250,7 @@ public class HomeController {
 	}
 	
 	
-	@RequestMapping(value="/users/{userID}/loadUserIssues",  produces = "application/json", method = RequestMethod.POST)
+	@RequestMapping(value="/users/{userID}/loadUserIssues",  produces = "application/json", method = RequestMethod.GET)
 	public @ResponseBody void getUserIssuesJSON(Model model, @PathVariable("userID") String userID,
 			HttpServletRequest request, HttpServletResponse response) throws IOException {
 				
@@ -350,6 +352,85 @@ public class HomeController {
        }  	
 	
 	}
+	
+	
+	@RequestMapping(value="/users/{userID}/loadUserComments",  produces = "application/json", method = RequestMethod.GET)
+	public @ResponseBody void getUserCommentsJSON(Model model, @PathVariable("userID") String userID,
+			HttpServletRequest request, HttpServletResponse response) throws IOException {
+		
+		List<IssueDTO> userIssues = new ArrayList<IssueDTO>();
+		List<CommentDTO> dbComments = new ArrayList<CommentDTO>();
+		List<CommentDTO> comments = new ArrayList<CommentDTO>();
+		
+		userIssues = issueService.loadAllIssues();
+		
+		for(IssueDTO issue : userIssues){
+			for(CommentDTO c : issue.getComentarios())
+				if(c.getUsuario().equals(userID))
+					dbComments.add(c);
+		}
+			
+		JQueryDataTableParamModel param = DataTablesParamUtility.getParam(request);
+        
+		String sEcho = param.sEcho;
+        int iTotalRecords; // total number of records (unfiltered)
+        int iTotalDisplayRecords; //value will be set when code filters companies by keyword
+               
+        iTotalRecords = dbComments.size();        
+        
+        for(CommentDTO c : dbComments){
+        	if(c.getMensaje().toLowerCase().contains(param.sSearch.toLowerCase())    
+	           ||
+	           c.getNroReclamo().toLowerCase().contains(param.sSearch.toLowerCase()))   	          
+              {
+        		comments.add(c); 
+              }
+        }
+        
+        iTotalDisplayRecords = comments.size();// number of companies that match search criterion should be returned
+       
+        final int sortColumnIndex = param.iSortColumnIndex;
+        final int sortDirection = param.sSortDirection.equals("asc") ? -1 : 1;
+       
+        Collections.sort(comments, new Comparator<CommentDTO>(){
+        	@Override
+            public int compare(CommentDTO c1, CommentDTO c2) {    
+        		switch(sortColumnIndex){
+                case 0:                	
+                	return c1.getMensaje().compareTo(c2.getMensaje()) * sortDirection;   
+                case 1:
+                	return c1.getNroReclamo().compareTo(c2.getNroReclamo()) * sortDirection;   
+              
+        		}
+                return 0;
+           }
+        });
+       
+        if(comments.size()< param.iDisplayStart + param.iDisplayLength) {
+        	comments = comments.subList(param.iDisplayStart, comments.size());
+        } else {
+        	comments = comments.subList(param.iDisplayStart, param.iDisplayStart + param.iDisplayLength);
+        }
+   
+        try {   
+    	    JsonObject jsonResponse = new JsonObject();     
+            jsonResponse.addProperty("sEcho", sEcho);
+            jsonResponse.addProperty("iTotalRecords", iTotalRecords);
+            jsonResponse.addProperty("iTotalDisplayRecords", iTotalDisplayRecords);           
+            Gson gson = new Gson();
+            jsonResponse.add("aaData", gson.toJsonTree(comments));
+           
+            response.setContentType("application/Json");
+            response.getWriter().print(jsonResponse.toString());
+           
+        } catch (JsonIOException e) {
+            e.printStackTrace();
+            response.setContentType("text/html");
+            response.getWriter().print(e.getMessage());
+       }  	
+	
+	}
+	
 	
 	@RequestMapping(value="/users/{userID}/loadBackendUsers", produces={"application/json; charset=ISO-8859-1"}, method = RequestMethod.POST)
 	public @ResponseBody void getBackendUsers(@PathVariable("userID") String userID,  
@@ -514,11 +595,37 @@ public class HomeController {
 				}
 				
 				model.addAttribute("loggedUser", loggedUser);
+				model.addAttribute("loggedMatchesProfile", isSameUser);			
+				model.addAttribute("isActiveUser", user.isEnabled());
 				model.addAttribute("profileUser", user.getUsername());
-				model.addAttribute("profileRole", user.getAuthorities().get(0));
-				model.addAttribute("barrio", user.getNeighborhood());
-				model.addAttribute("loggedMatchesProfile", isSameUser);
+				model.addAttribute("profileRole", user.getAuthorities().get(0));				
+				model.addAttribute("email", user.getEmail());
+				model.addAttribute("neighborhood", user.getNeighborhood());			
 				
+				List<IssueDTO> userIssues = issueService.loadIssuesByUser(userID);
+				List<IssueDTO> allIssues = issueService.loadAllIssues();
+				int solvedIssues = 0;
+				int comments = 0;
+				
+				for(IssueDTO issue : userIssues){
+					if(issue.getStatus().equals(IssueStatus.SOLVED))
+						solvedIssues++;
+				}
+				
+				for(IssueDTO issue : allIssues){
+					for(CommentDTO c : issue.getComentarios())
+						if(c.getUsuario().equals(userID))
+							comments++;
+				}
+													
+				model.addAttribute("registrationDate", DateUtils.getFechaFormateada(user.getRegistrationDate()));
+				model.addAttribute("total_issues", userIssues.size());
+				model.addAttribute("total_solved", solvedIssues);
+				model.addAttribute("total_voted", "0");
+				model.addAttribute("total_following", "0");
+				model.addAttribute("total_flagged", "0");
+				model.addAttribute("total_comments", comments);
+				model.addAttribute("total_widgets", "0");				
 								
 				if(user.isVerifiedOfficial()){
 					model.addAttribute("current_nombre", user.getNombre());
@@ -538,11 +645,13 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value="/error")
-	public String showErrorPage(Map<String, Object> model) {
-		model.put("error-message-title", "Lo sentimos");
-		model.put("error-message", "La p�gina solicitada no existe.");
-		
+	public String showErrorPage(Map<String, Object> model) {		
 		return "error";			
+	}	
+	
+	@RequestMapping(value="/closedAccount", method = RequestMethod.GET)
+	public String showMessagePage(Map<String, Object> model) {		
+		return "closedAccount";			
 	}	
 	
 	private <T> String toJson(DataTableResultSet<T> dt) throws IOException{

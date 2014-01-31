@@ -77,7 +77,7 @@
 							<legend></legend>												
 									<input type="hidden" id="latitude" name="latitude"  />
 									<input type="hidden" id="longitude" name="longitude" />													
-									<input type="text" id="address" name="address" onfocus="geolocate()" autocomplete="off" placeholder="Direcci�n (calle y altura)" />	
+									<input type="text" id="address" name="address" onfocus="geolocate()" autocomplete="off" placeholder="Direcci&oacute;n (calle y altura)" />	
 <!-- 									<input type="text" id="address" name="address" placeholder="Direcci�n (calle y altura)" />			 -->
 									<input type="text" id="neighborhood" name="neighborhood" placeholder="Barrio (opcional)"/>										
 									<input type="text" id="locality" name="city" placeholder="Ciudad" />		

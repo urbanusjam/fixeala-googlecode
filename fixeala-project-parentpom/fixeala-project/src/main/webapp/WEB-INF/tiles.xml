@@ -70,20 +70,15 @@
   	<put-attribute name="title" value="Fixeala" /> 
   	<put-attribute name="body" value="/pages/widget.jsp" />
   </definition>
-  
-  <definition name="result" extends="base.layout">
+ 
+  <definition name="closedAccount" extends="base.layout">
   	<put-attribute name="title" value="Fixeala" /> 
-  	<put-attribute name="body" value="/pages/result.jsp" />
+  	<put-attribute name="body" value="/pages/closedAccount.jsp" />
   </definition>
   
   <definition name="error" extends="base.layout">
   	<put-attribute name="title" value="Fixeala" /> 
   	<put-attribute name="body" value="/pages/error.jsp" />
-  </definition>
-  
-  <definition name="fileupload" extends="base.layout">
-  	<put-attribute name="title" value="Fixeala" /> 
-  	<put-attribute name="body" value="/pages/fileupload.jsp" />
   </definition>
   
 </tiles-definitions>

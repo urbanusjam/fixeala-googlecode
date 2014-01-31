@@ -1,4 +1,5 @@
-	
+<header>
+
 	<!-- NAVBAR -->
 	<div class="navbar navbar-fixed-top">
 
@@ -144,3 +145,5 @@
         </div>
     </div>
     <!-- /NAVBAR -->
+    
+</header>

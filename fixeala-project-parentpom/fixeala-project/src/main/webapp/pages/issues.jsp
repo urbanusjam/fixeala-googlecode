@@ -499,7 +499,7 @@
 			
 			  $('#btn-update').click(function() {				  
 				 				  
-				  bootbox.confirm("�Desea confirmar los cambios?", function(result){
+				  bootbox.confirm("&iquest;Desea confirmar los cambios?", function(result){
 					  
 					  if(result){
 						  
