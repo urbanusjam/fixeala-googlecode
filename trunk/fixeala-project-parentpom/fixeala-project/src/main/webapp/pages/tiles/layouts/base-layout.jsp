@@ -258,6 +258,7 @@ path:hover {
 				var file = fileInput.files;
 				var formData = new FormData();			
 				formData.append('file', file[0]);
+				formData.append('isProfilePic', false);
 					                
 					$.ajax({ 
 					 		url: "./handleFileUpload.html", 		
@@ -418,7 +419,7 @@ path:hover {
 			});
 		
 			
-			 // initialize tooltipster on form input elements
+			// initialize tooltipster on form input elements
 		    $('#issueWizard input[type="text"], #issueWizard textarea').tooltipster({ 		    
 		    	animation: 'fade',		
 		    	delay: 200,
@@ -737,11 +738,17 @@ path:hover {
 
 <body>
 
+<section class="wrapper">
+ 
   <tiles:insertAttribute name="header" />
   
-  <tiles:insertAttribute name="body" />
- 
+  <tiles:insertAttribute name="body" />  
+  
   <tiles:insertAttribute name="footer" />
+  
+ </section> 
+ 
+  
   
 </body>
 

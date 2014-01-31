@@ -14,7 +14,6 @@
 	var rowId;
 	var rowTitle;
 	var selectedUser;
-	var currentArea = '${current_areaID}';
 	var currentUser = '${profileUser}';
 	
 	function errorHandler (jqXHR, exception) {
@@ -41,245 +40,7 @@
 		return window.location.href = url;
 	}
 	
-	function assignUser(){
-		var url = "http://localhost:8080/fixeala/issues/assignUser.html";
-	    var data = 'selectedUser='+ selectedUser + '&issueID='+ rowId;
-  
-		$.ajax({
-				url: url,
-			 	dataType: 'text',
-			 	data: data,
-         		type: 'POST', 
-	            success: function(response) { 
-	            	$("#assignUserModal").modal('hide');
-	            	
-	            	setTimeout(function(){
-	            		$("#tblUserIssues").datagrid('reload');
-	            	}, 1000);
-	            	
-	            },
-	            error: function(jqXHR, exception){
-	            	errorHandler (jqXHR, exception);
-	            }
-	            
-		});
-	}
-	
-	function updateStatus(status){
-		    var url = "http://localhost:8080/fixeala/issues/updateIssueStatus.html";
-		    var data = 'newStatus='+ status + '&issueID='+ rowId;
-	     
-			$.ajax({
-					url: url,
-				 	dataType: 'text',
-				 	data: data,
-             		type: 'POST', 
-		            success: function(response) { 
-		            	$("#tblUserIssues").datagrid('reload');
-		            },
-		            error: function(jqXHR, exception){
-		            	errorHandler (jqXHR, exception);
-		            }
-			});
-	}
-	
 
-	
-	$(function(){
-		
-		 $('#backendUserForm input[type="text"], #backendUserForm input[type="password"]').tooltipster({ 		    
-		    	animation: 'fade',		
-		    	delay: 200,
-		    	interactive: true,
-		    	timer: 2500,
-		    	maxWidth: 230,
-		        trigger: 'custom', 
-		        onlyOne: false,    
-		        position: 'right'  
-		    });
-		
-		$("#backendUserForm").validate({		
-			
-			rules: 
-			{	 
-				 onfocusin: false,	
-				 
-				 apellido: {  required : true },
-				 
-				 nombre: {  required : true },
-			
-				 username: { 
-					 required : true, 
-					 minlength: 4,
-					 maxlength: 20,
-					 remote: {
-			 	    		url: "http://localhost:8080/fixeala/account/signup/checkUsernameAvailability.html", 
-							type: "POST", 
-							data: {
-						        username: function(){ return $("#backendUserForm #username").val(); }
-						    }		
-		 	    	 }					 	    	
-				 },								
-		 	     email: { 
-		 	    	 required : true,
-		 	    	 email : true,
-		 	    	 remote: {
-			 	    		url: "http://localhost:8080/fixeala/account/signup/checkEmailAvailability.html", 
-							type: "POST", 
-							data: {
-						        email: function(){ return $("#backendUserForm #email").val(); }
-						      }		
-		 	    	 }
-		 	     },
-				 password: {  
-					 required : true, 
-					 minlength: 6,
-					 maxlength: 30
-				 } ,
-	   	    	 confirmPassword: {		
-	   	    		 required : true, 
-	   	      		 equalTo: "#password"				   	      		 
-	   	    	 },
-	   	    	
-		 	}, 	 
-		 	
-			 	messages: 
-			 	{ 	 	 
-			 			apellido: {	required: "Este campo es requerido." },
-			 			
-			 			nombre: { required: "Este campo es requerido." },
-			 		    
-		     			username: 
-		     			{		
-		     					required: "Este campo es requerido.",	 	     			 	
-		     			 		minlength: "El nombre de usuario debe tener por lo menos 4 caracteres.",
-		     			 		maxlength: "El m&aacute;ximo es de 20 caracteres.",
-		     			 		remote: "El nombre de usuario ya ha sido registrado."
-		     		 	},
-		     			email: 
-		     			{
-		     					required: "Este campo es requerido.",	 	
-		     					email: "Ingrese una direcci&oacute;n de email v&aacute;lida.",
-		     					remote: "La direcci&oacute;n de email ya ha sido registrada."
-		     			},
-		     			password: 
-		     			{		
-		     					required: "Este campo es requerido.",	 	
-		     			 		minlength: "La contrase&ntilde;a debe tener por lo menos 6 caracteres.",
-		     			 		maxlength: "El m&aacute;ximo es de 30 caracteres."
-		     		 	},			     				
-	 				confirmPassword: 
-	 				{			     				
-	 						equalTo:  "La contrase&ntilde;a y la confirmaci&oacute;n no coinciden.",
-	 						required: "Este campo es requerido."
-	 				}
-	 				
-		     	},
-		    	
-		    	highlight: function (element) { 
-		    		$(element).closest('.control-group').removeClass('success').addClass('error');
-			},
-		    	
-		    unhighlight: function (element) { 
-		    	$(element).closest('.control-group').removeClass('error');
-		    },
-
-	 		errorPlacement: function (error, element) {
-	 			$(element).closest('.control-group').tooltipster('update', $(error).text());
-	 			$(element).closest('.control-group').tooltipster('show');				        
-	        }
-		    	
-			});
-		
-		
-		$("#btn-saveBackendUser").click(function(){
-			
-			$backendUserForm = $("#backendUserForm");
-			
-			if( $backendUserForm.valid() ){	
-				
-				alert("valid");
-		
-				var url = "http://localhost:8080/fixeala/account/signup.html";
-				var backendUser = true;
-				 
-				$.ajax({
-						url: url,
-						data: 'user='+ $("#backendUserForm").serialize() + '&userArea=' + currentArea + '&backendUser=' + backendUser,
-					 	dataType: 'json',
-	             		type: 'POST', 
-			            success: function(alertStatus) { 
-			            	$("#userModal").modal('hide');
-			            	
-			            	setTimeout(function(){		
-			            		bootbox.alert(alertStatus.message);
-	// 		            		setTimeout(function(){		
-	// 		            			$("#tblUsers").datagrid('reload');
-	// 		            		}, 600);
-			            	}, 600);
-			            },
-			            error: function(jqXHR, exception){
-			            	errorHandler (jqXHR, exception);
-			            }
-				});
-			}
-			
-		});
-		
-		$("#combo-users").select2({
-	        placeholder: "Buscar usuario...",
-	        minimumInputLength: 1,
-	        multiple: true,
-	        ajax: { 
-	            url: "http://localhost:8080/fixeala/issues/getAvailableUsers/" +currentArea+ ".html",
-	        	dataType: 'json',
-	        	quietMillis: 100,
-	            data: function (term) {
-	                return {
-	                    term: term
-	                };
-	            },
-	            results: function (data) {
-	              var results = [];
-	              $.each(data, function(index, item){
-	                results.push({
-	                  id: item.id,
-	                  text: item.nombre + " " + item.apellido + " (" + item.username + ")"
-	                });
-	              });
-	              return {
-	                  results: results
-	              };
-	            },
-	            formatResult: function (item) { return item.nombre; },
-                formatSelection: function (item) { return item.email; }
-
-	   
-	        } 
-	    });
-		
-		$("#combo-users")
-//         .on("change", function(e) { 
-//         	alert("change "+JSON.stringify({val:e.val, added:e.added, removed:e.removed})); 
-//         	})
-        .on("select2-selecting", function(e) { 
-        	selectedUser = e.val;
-        	//alert("selecting val="+ e.val+" choice="+ JSON.stringify(e.choice));
-        	})
-					
-			$('#tblUserIssues').on('click', 'tbody tr', function(event) {
-			    $(this).addClass('highlight').siblings().removeClass('highlight');
-			});
-			
-			
-			$("#tblUserIssues").delegate("tr", "contextmenu", function(e) {
-				$(this).each(function(){
-					rowId = $(this).find("td").eq(0).html().trim(); 
-					rowTitle = $(this).find("td").eq(2).html().trim(); 
-				});
-			});
-		
-		});
 	
 	</script>
 
@@ -295,8 +56,13 @@
 			  <div class="row">
 	    	   	<div class="span4 pull-left" style="padding:0;text-align:left;margin:0; border:0px solid #000">
     	   				<blockquote>
-					        <h3>${profileUser}</h3>
-					        <small><cite>Vecino de <i>San Nicol·s, Ciudad AutÛnoma de Buenos Aires</i>&nbsp;&nbsp;<i class="icon-map-marker"></i></cite></small>						      
+    	   				
+					        <h3>${profileUser}</h3> &nbsp;&nbsp;					        
+					        <c:if test="${ !isActiveUser }">
+					        	<span class="label" style="vertical-align:super;">Usuario eliminado</span>
+					        </c:if> 
+					        <small><cite>Vecino de <i>${neighborhood}</i>&nbsp;&nbsp;<i class="icon-map-marker"></i></cite></small>						      
+					    
 					    </blockquote>
 				</div>
 			</div>
@@ -378,45 +144,45 @@
 									<img src="${pageContext.request.contextPath}/resources/images/nopic.png" />
 								</span>										
 								<div class="thumbnail" style="text-align:center; width:200px;">
-              						<small style="text-align:center">Registrado el 15/01/13</small>		
+              						<small style="text-align:center">Registrado el ${registrationDate}</small>		
     							</div>	    																
 								 <div class="thumbnail" style="text-align:center; width:200px;">	              						
-              						<small style="text-align:center">Vistas: 33</small>	
+              						<small style="text-align:center">33 visitas</small>	
     							</div>			
 						    </div>
 							<div class="span2 thumbnail" style="text-align:center" title="Reclamos publicados">
              						<i class="icon-pushpin icon-4x"></i>
-             						<h2>5</h2>
+             						<h2>${total_issues}</h2>
              						<strong>PUBLICADOS</strong>
    							</div>   							
    							<div class="span2 thumbnail" style="text-align:center" title="Reclamos resueltos">
              						<i class="icon-ok icon-4x"></i>
-             						<h2>2</h2>
+             						<h2>${total_solved}</h2>
              						<strong>RESUELTOS</strong>
    							</div> 
    							<div class="span2 thumbnail" style="text-align:center" title="Reclamos votados">
              						<i class="icon-thumbs-up icon-4x"></i>
-             						<h2>11</h2>
+             						<h2>${total_voted}</h2>
              						<strong>VOTADOS</strong>
    							</div>   							
    							<div class="span2 thumbnail" style="text-align:center" title="Reclamos en seguimiento">
              						<i class="icon-screenshot icon-4x"></i>
-             						<h2>7</h2>
+             						<h2>${total_following}</h2>
              						<strong>SIGUIENDO</strong>
    							</div>   							
    							<div class="span2 thumbnail" style="text-align:center" title="Comentarios realizados">
              						<i class="icon-warning-sign icon-4x"></i>
-             						<h2>0</h2>
+             						<h2>${total_flagged}</h2>
              						<strong>DENUNCIADOS</strong>
    							</div>   							
    							<div class="span2 thumbnail" style="text-align:center" title="Comentarios realizados">
              						<i class="icon-comments icon-4x"></i>
-             						<h2>11</h2>
+             						<h2>${total_comments}</h2>
              						<strong>COMENTARIOS</strong>
    							</div> 
    							<div class="span2 thumbnail" style="text-align:center">
              						<i class="icon-cogs icon-4x"></i>
-             						<h2>0</h2>
+             						<h2>${total_widgets}</h2>
              						<strong>WIDGETS</strong>
    							</div>   						
    						</div>				    	
@@ -431,86 +197,47 @@
 					    	</div>
 					    	
 					    	<ul class="nav nav-tabs">
-								<li class="active"><a href="#issuesPublished" data-toggle="tab">Publicados (3)</a></li>
-								<li><a href="#issuesFollowing" data-toggle="tab">Siguiendo (7)</a></li>
-								<li><a href="#issuesVoted" data-toggle="tab">Votados (1)</a></li>
+								<li class="active"><a href="#issuesPublished" data-toggle="tab">Publicados (${total_issues})</a></li>
+								<li><a href="#issuesFollowing" data-toggle="tab">Siguiendo (0)</a></li>
+								<li><a href="#issuesVoted" data-toggle="tab">Votados (0)</a></li>
 							</ul>							
-							
-							<div class="tab-content">
-								<div class="tab-pane fade in active" id="issuesAsignados">
-								   	<table id="tblUserIssues" cellpadding="0" cellspacing="0" border="0"  data-toggle="context" data-target="#contextmenu-issue"
-    								class="table table-striped table-bordered table-hover datagrid datagrid-stretch-header">
-									<thead>
-									<tr>
-										<th>#</th>
-										<th>FECHA</th>
-										<th>TITULO</th>
-										<th>DIRECCION</th>
-										<th>BARRIO</th>
-										<th>CIUDAD</th>
-										<th>PROVINCIA</th>
-										<th>USUARIO</th>
-										<th>ESTADO</th>
-									</tr>
-									</thead>
-							
-									<tfoot>
-									<tr>
-										<th>
-											<div class="datagrid-footer-left" style="display:none;">
-												<div class="grid-controls">
-													<span>
-														<span class="grid-start"></span> -
-														<span class="grid-end"></span> de
-														<span class="grid-count"></span>
-													</span>
-													<div class="select grid-pagesize" data-resize="auto">
-														<button data-toggle="dropdown" class="btn dropdown-toggle">
-															<span class="dropdown-label"></span>
-															<span class="caret"></span>
-														</button>
-														<ul class="dropdown-menu">
-															<li data-value="5" data-selected="true"><a href="#">5</a></li>
-															<li data-value="10"><a href="#">10</a></li>
-															<li data-value="20"><a href="#">20</a></li>
-															<li data-value="50"><a href="#">50</a></li>
-															<li data-value="100"><a href="#">100</a></li>
-														</ul>
-													</div>
-													<span>Por P·gina</span>
-												</div>
-											</div>
-											<div class="datagrid-footer-right" style="display:none;">
-												<div class="grid-pager">
-													<button type="button" class="btn grid-prevpage"><i class="icon-chevron-left"></i></button>
-													<span>P·gina</span>
-							
-													<div class="input-append dropdown combobox">
-														<input class="span1" type="text">
-														<button class="btn" data-toggle="dropdown"><i class="caret"></i></button>
-														<ul class="dropdown-menu"></ul>
-													</div>
-													<span>de <span class="grid-pages"></span></span>
-													<button type="button" class="btn grid-nextpage"><i class="icon-chevron-right"></i></button>
-												</div>
-											</div>
-										</th>
-									</tr>
-									</tfoot>
-								</table>
+														
+							<div class="tab-content">							
+								<!-- Publicados -->
+								<div class="tab-pane fade in active" id="issuesPublished">								
+									<table id="tblUserIssues" cellpadding="0" cellspacing="0" border="0" 
+    											class="table table-striped table-bordered table-hover dataTable" aria-describedby="users-info" >
+										<thead>
+											<tr>				
+												<th width="50">id</th>
+												<th width="70">date</th>		
+												<th width="200">title</th>			
+												<th width="170">address</th>												
+												<th width="120">city</th>
+												<th width="120">province</th>																					
+												<th width="70">status</th>		
+											</tr>
+										</thead>
+										<tbody>			
+										</tbody>	
+									</table>								   	
 								</div>
-													
-							</div>
+									
+								<!-- Siguiendo -->							
+								<div class="tab-pane fade" id="issuesFollowing">							
+								</div>								
 							
+								<!-- Votados -->							
+								<div class="tab-pane fade" id="issuesVoted">								
+								</div>														
+							</div>
+														
 							<!-- Context Menu -->
 					    	<div id="contextmenu-issue" class="dropdown clearfix">
 							    <ul id="ctxMenu" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" style="display:block;position:static;margin-bottom:5px;">
 							      <li><a tabindex="-1" href="javascript:redirect();"><i class="icon-paper-clip"></i>&nbsp;&nbsp;Ver detalles</a></li>
-							      <li><a tabindex="-1" href="#"><i class="icon-globe"></i>&nbsp;&nbsp;Ver en mapa</a></li>
-							      <li class="divider"></li>
-							      <li><a tabindex="-1" href="#assignUserModal" data-toggle="modal"><i class="icon-user"></i>&nbsp;&nbsp;Asignar a usuario</a></li>
-							      <li class="divider" id="actionsDivider"></li>
-						      	  <li><a tabindex="-1" href="#" onclick="updateStatus('ADMITIDO');"><i class="icon-thumbs-up-alt"></i>&nbsp;&nbsp;Admitir</a></li>
+							      <li><a tabindex="-1" href="#"><i class="icon-globe"></i>&nbsp;&nbsp;Ver en mapa</a></li>							    
+							      <li class="divider" id="actionsDivider"></li>						      	
 						      	  <li><a tabindex="-1" href="#" onclick="updateStatus('RESUELTO');"><i class="icon-ok"></i>&nbsp;&nbsp;Resolver</a></li>
 						      	  <li><a tabindex="-1" href="#" onclick="updateStatus('CERRADO');"><i class="icon-lock"></i>&nbsp;&nbsp;Cerrar</a></li>
 						      	  <li><a tabindex="-1" href="#" onclick="updateStatus('REABIERTO');"><i class="icon-folder-open-alt"></i>&nbsp;&nbsp;Reabrir</a></li>  
@@ -554,57 +281,26 @@
 					    	</div>
 					    	
 					    	<ul class="nav nav-tabs">
-						    	<li class="active"><a href="#commentsPublicados" data-toggle="tab">Publicados (1)</a></li>
-							  	<li><a href="#commentsRecibidos" data-toggle="tab">Recibidos (1)</a></li>
+						    	<li class="active"><a href="#commentsPublicados" data-toggle="tab">Publicados (${total_comments})</a></li>
+							  	<li><a href="#commentsRecibidos" data-toggle="tab">Recibidos (0)</a></li>
 							</ul>
 							
 							<div class="tab-content">
-								<div class="tab-pane fade in active" id="commentsPublicados">
-									<table class="table table-striped table-hover">
-								    	<thead>
-								    		<tr>
-									   			<th>Fecha</th>
-									   			<th>Descripci√≥n</th>
-									   			<th>Nro. Reclamo</th>
-								   			</tr>
-								   		<tbody>
-								   			<tr>
-								   				<td>13/03/13 15:44</td>
-								   				<td>El reclamo ha sido admitido. Se le ha asignado el N¬∫ de tr√°mite 98993/2.</td>
-								   				<td><a href="#">2345</a></td>
-								   			</tr>
-								   		</tbody>
-								   	</table>
-								   	<div class="pagination pagination-right">
-									  <ul>
-									    <li><a href="#">&laquo; Anterior</a></li>
-									    <li><a href="#">1</a></li>
-									    <li><a href="#">2</a></li>
-									    <li><a href="#">3</a></li>
-									    <li><a href="#">4</a></li>
-									    <li><a href="#">5</a></li>
-									    <li><a href="#">Siguiente &raquo;</a></li>
-									  </ul>
-									</div>
+								<div class="tab-pane fade in active" id="commentsPublicados">								
+									<table id="tblUserComments" cellpadding="0" cellspacing="0" border="0" 
+    											class="table table-striped table-hover dataTable" aria-describedby="users-info" >
+										<thead>
+											<tr>	
+												<th width="70">fechaFormateada</th>		
+												<th width="200">mensaje</th>												
+												<th width="70">nroReclamo</th>		
+											</tr>
+										</thead>
+										<tbody>			
+										</tbody>	
+									</table>
 								 </div>
-								 <div class="tab-pane fade" id="commentsRecibidos">
-									<table class="table table-striped table-hover">
-								    	<thead>
-								    		<tr>
-									   			<th>Fecha</th>
-									   			<th>Descripci√≥n</th>
-									   			<th>Nro. Reclamo</th>
-									   			<th>Usuario</th>
-								   			</tr>
-								   		<tbody>
-								   			<tr>
-								   				<td>14/05/13 09:33</td>
-								   				<td>La vereda todav√≠a no fue reparada.</td>
-								   				<td><a href="#">7856</a></td>
-								   				<td><a href="#">pedro77</a></td>
-								   			</tr>
-								   		</tbody>
-								   	</table>
+								 <div class="tab-pane fade" id="commentsRecibidos">	
 								 </div>
 							</div>
 					    </div>
@@ -711,28 +407,38 @@
 						            <div class="span9">
 						                <div class="span5">
 							                <div class="logowrapper">
-							                    <a href="#" class="thumbnail" style="width: 150px; height: 150px;">
-											    	<img src="${pageContext.request.contextPath}/resources/images/01-mario.jpg" />
-											    </a>
-											    <br>
-										        <span class="btn" style="line-height:30px; width:135px; font-size:12px;">
-													<i class="icon-plus"></i>&nbsp;&nbsp;Seleccionar archivo
-												</span>		
+							                    <div class="fileupload fileupload-new" data-provides="fileupload" style="display:inline-block">
+													<div class="fileupload-new thumbnail">
+														<c:if test="${not empty image}">											    								  	  			  	   		
+															<img src="${pageContext.request.contextPath}/uploads/${imageUrl}" alt="${imageName}">	
+											    		</c:if>
+											    		<c:if test="${empty image}">											    		
+															<img src="${pageContext.request.contextPath}/resources/images/nopic.png" alt="">
+											    		</c:if>
+													</div>
+													<div class="fileupload-preview fileupload-exists thumbnail" style="height: 100px;min-width:100px;max-width: 100px; max-height: 100px; line-height: 20px;"></div>
+													
+													<span class="btn fileinput-button" style="line-height:30px; width:auto; font-size:12px">
+												        <i class="icon-plus"></i>&nbsp;&nbsp;
+												        <span>Seleccionar archivo</span>									        
+												           <input type="file" name="files[]" id="fileupload-profile">
+												    </span>									  
+												</div>		
 							                </div>
 						                </div>
 					                	<div class="span7">
-					                		<form class="form-horizontal" id="uploadForm">					              
-											    <label for="inputEmail">Email</label>
-											    <input type="text" id="inputEmail" class="input-large" value="${email}" placeholder="usuario@gmail.com">
+					                		<form class="form-horizontal" id="updateAccountForm">					              
+											    <label for="email">Email</label>
+											    <input type="text" id="email" name="email" class="input-large" value="${email}">
 											  									
-											    <label for="inputEmail">Barrio</label>
-											    <input type="text" id="inputEmail" class="input-large" placeholder="Villa Urquiza"> 
+											    <label for="neighborhood">Barrio</label>
+											    <input type="text" id="neighborhood" name="neighborhood" value="${neighborhood}" class="input-large"> 
 											  										
-											    <label for="inputEmail">Ciudad</label>
-											    <input type="text" id="inputEmail" class="input-large" placeholder="Ciudad AutÛnoma de Buenos Aires">
+<!-- 											    <label for="city">Ciudad</label> -->
+<%-- 											    <input type="text" id="city" name="city" class="input-large" value="${city}"> --%>
 											 										
-											    <label for="inputEmail">Provincia</label>
-											    <input type="text" id="inputEmail" class="input-large" placeholder="Buenos Aires"> 
+<!-- 											    <label for="province">Provincia</label> -->
+<%-- 											    <input type="text" id="province" name="province" class="input-large" value="${province}">  --%>
 											    
 											    <hr>
 											    <button id="btnUpdateAccount" class="btn btn-success"><i class="icon-ok"></i>&nbsp;&nbsp; Guardar datos</button>								 
@@ -752,16 +458,16 @@
 						    	
 						    	<div class="row-fluid">					    	
 							    	<div class="span5">
-				                		<form class="form-horizontal" id="changePasswordForm">
+				                		<form class="form-horizontal" id="changePasswordForm" method="POST">
 				                							              
-										    <label for="inputEmail">Clave actual</label>
-										    <input type="password" id="currentPassword">	
+										    <label for="currentPassword">Clave actual</label>
+										    <input type="password" id="currentPassword" name="currentPassword">	
 										  									
-										    <label for="inputEmail">Nueva clave</label>
-											<input type="password" id="newPassword">
+										    <label for="newPassword">Nueva clave</label>
+											<input type="password" id="newPassword" id="newPassword" name="newPassword">
 										  										
-										    <label for="inputEmail">Confirme nueva clave</label>
-										    <input type="password" id="newPasswordConfirmation">		  			
+										    <label for="newPasswordConfirmation">Confirme nueva clave</label>
+										    <input type="password" id="newPasswordConfirmation" name="newPasswordConfirmation">		  			
 										 		
 										    <hr>
 										    
@@ -770,9 +476,11 @@
 												<span class="pull-right">
 													<button type="reset" class="btn"><i class="icon-remove"></i>&nbsp;&nbsp;Cancelar</button>
 												</span>
-											</div>
-																			 
+											</div>																			 
 									  	</form>
+									  	
+									  	<div class="alert-box" style="display:none"></div>
+									  	
 									</div>							
 								</div>	
 				   			</div>
@@ -789,7 +497,7 @@
 								<div class="row-fluid">			
 							
 									<div class="span7">			
-										<form id="closeAccountForm" class="form-horizontal">
+										<form id="closeAccountForm" class="form-horizontal" method="POST">
 											
 											<p>
 											   Lorem ipsum dolor sit amet, id nec conceptam conclusionemque. Et eam tation option. 
@@ -799,8 +507,8 @@
 											
 												<br>
 											
-											<label for="currentPassword"><strong>Ingrese su clave actual:</strong></label>
-											<input type="password" id="currentPassword" class="input-xlarge">		  			
+											<label for="currentPassword"><strong>Ingrese su clave:</strong></label>
+											<input type="password" id="currentPassword" name="currentPassword" class="input-xlarge">		  			
 											
 											
 											<hr>	

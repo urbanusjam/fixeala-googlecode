@@ -305,19 +305,41 @@ $(document).ready(function() {
 		               	 { "sTitle" : "#" , "mData" : "id" },
 		               	 { "sTitle" : "FECHA" , "mData" : "fechaFormateada" },
 		               	 { "sTitle" : "TITULO" , "mData" : "title" },
-		                 { "sTitle" : "DIRECCION" , "mData" : "address" },
-		               	 { "sTitle" : "BARRIO" , "mData" : "neighborhood", "sDefaultContent": "" },
+		                 { "sTitle" : "DIRECCION" , "mData" : "address" },		             
 		               	 { "sTitle" : "CIUDAD" , "mData" : "city" },
-		               	 { "sTitle" : "PROVINCIA" , "mData" : "province" },		   
-		               	 { "sTitle" : "USUARIO" , "mData" : "username" },
+		               	 { "sTitle" : "PROVINCIA" , "mData" : "province" },		   		            
 		               	 { "sTitle" : "ESTADO" , "mData" : "status" }		            	
 	                  ],		  		
-		"sAjaxSource": "http://localhost:8080/fixeala/users/coripel/loadUserIssues.html",
-		"fnServerData": function ( sSource, aoData, fnCallback ) {				
-			 	aoData.push({"name": "areaID", "value": "5"});				 	
+		"sAjaxSource": "http://localhost:8080/fixeala/users/" +currentUser+"/loadUserIssues.html",
+		"fnServerData": function ( sSource, aoData, fnCallback ) {							 	
 	            $.ajax( {
 	                "dataType": 'json',
-	                "type": "POST",
+	                "type": "GET",
+	                "url": sSource,
+	                "data": aoData,
+	                "success": fnCallback      	              
+	            } );
+	        },
+	        "fnRowCallback": function( nRow, aData, iDataIndex, iDisplayIndexFull  ) {
+	            $(nRow).attr('id', aData.id);
+	        },
+	    "aaSorting": [[ 0, "desc" ]] 
+	});
+	
+	//TBL COMMENTS BY USER
+	$('#tblUserComments').dataTable({
+		"bProcessing": true,
+		"bServerSide": true,
+		"aoColumns" : [	 
+		          	 	 { "sTitle" : "FECHA" , "mData" : "fechaFormateada" },
+		                 { "sTitle" : "MENSAJE" , "mData" : "mensaje" },		    
+		               	 { "sTitle" : "NRO. DE RECLAMO" , "mData" : "nroReclamo" }		               	
+	                  ],		  		
+		"sAjaxSource": "http://localhost:8080/fixeala/users/" +currentUser+"/loadUserComments.html",
+		"fnServerData": function ( sSource, aoData, fnCallback ) {		
+	            $.ajax( {
+	                "dataType": 'json',
+	                "type": "GET",
 	                "url": sSource,
 	                "data": aoData,
 	                "success": fnCallback      	              

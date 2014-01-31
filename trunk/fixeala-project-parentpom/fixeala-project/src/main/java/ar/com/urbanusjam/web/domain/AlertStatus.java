@@ -4,11 +4,19 @@ public class AlertStatus {
 	
 	private boolean result;
 	private String message;
-			
+	private String pageRedirect;
+	
 	public AlertStatus(boolean result, String message) {
 		super();
 		this.result = result;
+		this.message = message;	
+	}
+			
+	public AlertStatus(boolean result, String message, String pageRedirect) {
+		super();
+		this.result = result;
 		this.message = message;
+		this.pageRedirect = pageRedirect;
 	}
 		
 	public boolean isResult() {
@@ -26,8 +34,13 @@ public class AlertStatus {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
-	
-	
+
+	public String getPageRedirect() {
+		return pageRedirect;
+	}
+
+	public void setPageRedirect(String pageRedirect) {
+		this.pageRedirect = pageRedirect;
+	}
 
 }

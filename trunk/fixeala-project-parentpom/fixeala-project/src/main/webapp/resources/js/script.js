@@ -185,7 +185,7 @@ $(document).ready(function(){
 				
 				if( $signupForm.valid() ){	
 							 					
-							if (confirm('¿Confirma que desea crear la cuenta?')) {
+							if (confirm('Confirma que desea crear la cuenta?')) {
 							
 			            		$.ajax({
 			            			    url: "./signup/doCreateAccount",
@@ -196,7 +196,7 @@ $(document).ready(function(){
 								        	alert(data.result);
 					 	    			/**	if(alertStatus.result){	 					
 					 	    					
-					 	    					bootbox.alert("Se ha enviado un link de activación de cuenta a su casilla de correo.");
+					 	    					bootbox.alert("Se ha enviado un link de activaciï¿½n de cuenta a su casilla de correo.");
 //					 	    					bootbox.alert(alertStatus.message, function() {
 //						 	    					$("#signupForm").formwizard({ 
 //					 	    							formOptions: {resetForm:true}
@@ -206,7 +206,7 @@ $(document).ready(function(){
 					 	    					
 					 	    				}
 					 	    				else{
-//					 	    					bootbox.alert("Ha ocurrido un error y no se ha podido mandar el link de activación. Intente de nuevo.");
+//					 	    					bootbox.alert("Ha ocurrido un error y no se ha podido mandar el link de activaciï¿½n. Intente de nuevo.");
 //					 	    					bootbox.alert(alertStatus.message, function() {
 //					 	    						$("#signupForm").formwizard({ 
 //					 	    							formOptions: {resetForm:true}
@@ -230,8 +230,22 @@ $(document).ready(function(){
 			$.validator.addMethod("notEqualTo", function(value, element, param) {
 				 return this.optional(element) || value != $(param).val();
 			});
+			
+			// initialize tooltipster on form input elements
+		    $('#changePasswordForm input[type="password"], #closeAccountForm input[type="password"], #updateAccountForm input#email').tooltipster({ 		    
+		    	animation: 'fade',		
+		    	delay: 200,
+		    	interactive: true,
+		    	timer: 2500,
+		    	maxWidth: 230,
+		        trigger: 'custom', // default is 'hover' which is no good here
+		        onlyOne: false,    // allow multiple tips to be open at a time
+		        position: 'right'  // display the tips to the right of the element
+		    });
+		    
+		    var $changePasswordForm = $( "#changePasswordForm" );
 				
-			$( "#changepasswordform" ).validate({				
+		    $changePasswordForm.validate({				
 				
 				rules: 
 				{								 
@@ -262,6 +276,19 @@ $(document).ready(function(){
 						}
 			  	},
 			  	
+			  	highlight: function (element) { 
+ 			        $(element).addClass("error"); 
+ 			    },
+	 	    	
+ 			    unhighlight: function (element) { 
+ 			        $(element).removeClass("error"); 
+ 			    },
+		
+ 		 		errorPlacement: function (error, element) {
+ 		            $(element).tooltipster('update', $(error).text());
+ 		            $(element).tooltipster('show');				        
+  		        },
+			  	
 			  	submitHandler: function() {
 			  		
 			  		 var currentPassword = $('#currentPassword').val();
@@ -269,18 +296,20 @@ $(document).ready(function(){
 			  	    
 			         $.ajax({
 			        	  type: "POST",
-			              url: "./changePassword/doChange",
+			              url: "../account/changePassword/doChange.html",
 			              data: "password=" + currentPassword + "&newPassword=" + newPassword,      
-			              success: function(response){  
+			              success: function(data){  
 			            	
-			              	  if(response){
-			              		//  alert("La clave ha sido modificada.");
-			              	      var newUrl = window.location.protocol + "//" + window.location.host + "/fixeala";	
-			              	      alert(newUrl);
-			              	      window.location.href = newUrl;
+			              	  if(data.result){
+				              		$changePasswordForm.fadeOut('slow');				              		
+								    setTimeout(function() { 
+								    	$(".alert-box")
+											.fadeIn('slow')
+											.append('<div id="alertdiv" style="text-align:center;height:45px;line-height:45px;border:2px solid" class="alert alert-success"><span>'+data.message+'</span></div>');
+								    }, 1500);							    
 			              	  }
 			              	  else
-			              		  alert("La clave ingresada es incorrecta.");
+			              		  bootbox.alert(data.message); 
 					  	      
 			               },
 			               error: function(jqXHR, exception) {
@@ -301,6 +330,220 @@ $(document).ready(function(){
 			                   }
 			               }
 			         });
+			     }
+			});
+		    
+		    
+		    var $closeAccountForm = $( "#closeAccountForm" );
+			
+		    $closeAccountForm.validate({				
+				
+				rules: 
+				{								 
+					 currentPassword: "required"	
+			 	}, 	 		
+				
+			 	messages: 
+				{ 	 	  			 	     			
+			  			currentPassword: 
+			  			{
+			  			 		required: "Este campo es requerido."			 	
+			  		 	}			  		 	
+			  	},
+			  	
+			  	highlight: function (element) { 
+ 			        $(element).addClass("error"); 
+ 			    },
+	 	    	
+ 			    unhighlight: function (element) { 
+ 			        $(element).removeClass("error"); 
+ 			    },
+		
+ 		 		errorPlacement: function (error, element) {
+ 		            $(element).tooltipster('update', $(error).text());
+ 		            $(element).tooltipster('show');				        
+  		        },
+			  	
+			  	submitHandler: function() {
+			  		
+			  		bootbox.confirm("&iquest;Confirma que desea cerrar su cuenta?", function(result){
+						  
+						  if(result){
+							  
+							  var currentPassword = $('#closeAccountForm input#currentPassword').val();
+							    
+						         $.ajax({
+						        	  type: "POST",
+						              url: "../account/closeAccount.html",
+						              data: "password=" + currentPassword,      
+						              success: function(data){  
+						            	
+						              	  if(data.result){						              		  
+						              		 setTimeout(function() { 
+						              			window.location.href = "http://localhost:8080/fixeala/" + data.pageRedirect;
+											 }, 1500);		
+						              	  }
+						              	  else
+						              		  bootbox.alert(data.message); 
+								  	      
+						               },
+						               error: function(jqXHR, exception) {
+						                   if (jqXHR.status === 0) {
+						                       alert('Not connect.\n Verify Network.');
+						                   } else if (jqXHR.status == 404) {
+						                       alert('Requested page not found. [404]');
+						                   } else if (jqXHR.status == 500) {
+						                       alert('Internal Server Error [500].');
+						                   } else if (exception === 'parsererror') {
+						                       alert('Requested JSON parse failed.');
+						                   } else if (exception === 'timeout') {
+						                       alert('Time out error.');
+						                   } else if (exception === 'abort') {
+						                       alert('Ajax request aborted.');
+						                   } else {
+						                       alert('Uncaught Error.\n' + jqXHR.responseText);
+						                   }
+						               }
+						         });
+							  
+						  }
+			  		});
+			  		
+			  		 
+			     }
+			});
+		    
+		    
+		    /**
+		    $("#fileupload-profile").change(function(){				
+				
+				var fileInput = document.getElementById('fileupload-profile');
+				var file = fileInput.files;
+				var formData = new FormData();			
+				formData.append('file', file[0]);
+				formData.append('isProfilePic', true);
+				
+				console.log(formData);
+					                
+					$.ajax({ 
+					 		url: "../handleFileUpload.html", 		
+					 		type: "POST",						 				 	
+					 		data : formData,
+					 		contentType: false,
+					        processData: false,	
+					 		success : function(response){				 		
+					 			var input = $("#fileupload-profile");
+					 			if(!response.result){
+// 					 				bootbox.alert(alertStatus.message);
+					 				input.replaceWith(input.val('').clone(true));
+					 			}
+					 		},						 		 
+					 		error: function(jqXHR, exception) {
+				                   if (jqXHR.status === 0) {
+				                       alert('Not connect.\n Verify Network.');
+				                   } else if (jqXHR.status == 404) {
+				                       alert('Requested page not found. [404]');
+				                   } else if (jqXHR.status == 500) {
+				                       alert('Internal Server Error [500].');
+				                   } else if (exception === 'parsererror') {
+				                       alert('Requested JSON parse failed.');
+				                   } else if (exception === 'timeout') {
+				                       alert('Time out error.');
+				                   } else if (exception === 'abort') {
+				                       alert('Ajax request aborted.');
+				                   } else {
+				                       alert('Uncaught Error.\n' + jqXHR.responseText);
+				                   }
+				               }
+					 	});
+				
+			});
+		    **/
+		    
+		    var $updateAccountForm = $( "#updateAccountForm" );
+			
+		    $updateAccountForm.validate({				
+				
+				rules: 
+				{								 
+					 email: { 
+			 	    	 required : true,
+			 	    	 email : true			 	    	
+			 	     }
+			 	     
+			 	}, 	 		
+				
+			 	messages: 
+				{ 	 	  			 	     			
+			 		email: 
+ 	     			{
+ 	     					required: "Este campo es requerido.",	 	
+ 	     					email: "Ingrese una direcci&oacute;n de email v&aacute;lida."
+ 	     				
+ 	     			}	  		 	
+			  	},
+			  	
+			  	highlight: function (element) { 
+ 			        $(element).addClass("error"); 
+ 			    },
+	 	    	
+ 			    unhighlight: function (element) { 
+ 			        $(element).removeClass("error"); 
+ 			    },
+		
+ 		 		errorPlacement: function (error, element) {
+ 		            $(element).tooltipster('update', $(error).text());
+ 		            $(element).tooltipster('show');				        
+  		        },
+			  	
+			  	submitHandler: function() {
+			  		
+			  		bootbox.confirm("&iquest;Confirma que desea actualizar los datos?", function(result){
+						  
+						  if(result){
+							  
+						  	 var newEmail = $('#updateAccountForm input#email').val();
+						  	 var newBarrio = $('#updateAccountForm input#neighborhood').val();
+						    
+					         $.ajax({
+					        	  type: "POST",
+					              url: "../account/updateAccount.html",
+					              data: "newEmail=" + newEmail + "&newBarrio=" + newBarrio,      
+					              success: function(data){  
+					            	
+					              	  if(data.result){
+					              		  
+					              		 bootbox.alert(data.message);
+					              		
+					              		
+					              	  }
+					              	  else
+					              		  bootbox.alert(data.message); 
+							  	      
+					               },
+					               error: function(jqXHR, exception) {
+					                   if (jqXHR.status === 0) {
+					                       alert('Not connect.\n Verify Network.');
+					                   } else if (jqXHR.status == 404) {
+					                       alert('Requested page not found. [404]');
+					                   } else if (jqXHR.status == 500) {
+					                       alert('Internal Server Error [500].');
+					                   } else if (exception === 'parsererror') {
+					                       alert('Requested JSON parse failed.');
+					                   } else if (exception === 'timeout') {
+					                       alert('Time out error.');
+					                   } else if (exception === 'abort') {
+					                       alert('Ajax request aborted.');
+					                   } else {
+					                       alert('Uncaught Error.\n' + jqXHR.responseText);
+					                   }
+					               }
+					         });
+							  
+						  }
+			  		});
+			  		
+			  		 
 			     }
 			});
 			
@@ -335,7 +578,7 @@ $(document).ready(function(){
 				          success: function(result){   
 				        	
 				        	  if(result){	        		  
-				        		  showAlert("¡Felicitaciones! El reclamo ha sido registrado con éxito.", "alert-success");
+				        		  showAlert("ï¿½Felicitaciones! El reclamo ha sido registrado con ï¿½xito.", "alert-success");
 				        		
 				        	  }else{
 				        		  showAlert("La direcci&oacute;n de correo no est&aacute; registrada en el sitio.", "alert-error");	        		  

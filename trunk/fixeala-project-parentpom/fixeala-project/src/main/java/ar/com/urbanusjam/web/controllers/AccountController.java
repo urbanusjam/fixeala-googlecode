@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.mail.MessagingException;
+import javax.naming.AuthenticationException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
@@ -32,11 +33,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.com.urbanusjam.entity.annotations.User;
+import ar.com.urbanusjam.services.ContenidoService;
 import ar.com.urbanusjam.services.UserService;
 import ar.com.urbanusjam.services.dto.ActivationDTO;
 import ar.com.urbanusjam.services.dto.PasswordResetTokenDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
 import ar.com.urbanusjam.web.domain.AlertStatus;
+import ar.com.urbanusjam.web.domain.ContenidoResponse;
 import ar.com.urbanusjam.web.security.CustomAuthenticationProvider;
 import ar.com.urbanusjam.web.utils.EmailUtils;
 
@@ -47,6 +50,10 @@ public class AccountController {
 	@Autowired
 	@Qualifier(value = "userService")
 	private UserService userService;
+	
+	@Autowired
+	@Qualifier(value = "contenidoService")
+	private ContenidoService contenidoService;
 	
 	@Autowired
 	@Qualifier(value = "passwordEncoder")
@@ -193,13 +200,13 @@ public class AccountController {
     		}
 
     		model.addAttribute("message", "Su cuenta ha sido activada.");
-    		model.addAttribute("messageTitle", "�Felicitaciones!");
+    		model.addAttribute("messageTitle", "&iexcl;Felicitaciones!");
     		model.addAttribute("alertType", "success");
     		return "result";
 		}
 		else{
-			model.addAttribute("message", "El link de activaci�n ya ha sido usado o ha expirado.");
-			model.addAttribute("messageTitle", "�Atenci�n!");
+			model.addAttribute("message", "El link de activaci&oacute;n ya ha sido usado o ha expirado.");
+			model.addAttribute("messageTitle", "&iexcl;Atenci&oacute;n!");
 			model.addAttribute("alertType", "error");
 			return "result";
 		}    	
@@ -221,11 +228,11 @@ public class AccountController {
     
 	
 	@RequestMapping(value = "/changePassword/doChange", method = RequestMethod.POST)
-	public @ResponseBody boolean doChangePassword(@ModelAttribute(value="user") UserDTO user, 
+	public @ResponseBody AlertStatus doChangePassword(@ModelAttribute(value="user") UserDTO user, 
 			HttpServletRequest request){
 				
 		User loggedUser = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		final String plainPass = user.getNewPassword();
+		final String newPlainPass = user.getNewPassword();
 		
 		String currentEncodedPass = passwordEncoder.encodePassword(user.getPassword(), loggedUser.getUsername());	
 		user.setPassword(currentEncodedPass);
@@ -235,33 +242,31 @@ public class AccountController {
 		String newEncodedPass = passwordEncoder.encodePassword(user.getNewPassword(), loggedUser.getUsername());
 		user.setNewPassword(newEncodedPass);
 		
-		if(currentDBPass != null){
-			//valido clave actual
-			if(currentEncodedPass.equals(currentDBPass)){		
-					userService.changePassword(loggedUser.getUsername(), user.getNewPassword());		
-						
-					//auto-login con nueva clave
-					try{
-						loggedUser.setPassword(newEncodedPass);
-						UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-								user.getUsername(), plainPass);
-					    request.getSession();
-						token.setDetails(new WebAuthenticationDetails(request));
-						Authentication authenticatedUser = fixealaAuthenticationManager.authenticate(token);
-						SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
-					} catch(Exception e){
-		    	        e.printStackTrace();
-					}
-					return true;
-			}
-			else{
-				return false;		
-			}
+		//valido clave actual
+		if(currentEncodedPass.equals(currentDBPass)){
+				//auto-login con nueva clave
+				try{
+					userService.changePassword(loggedUser.getUsername(), newEncodedPass);		
+					UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+							loggedUser.getUsername(), newPlainPass);
+				    request.getSession();
+					token.setDetails(new WebAuthenticationDetails(request));
+					Authentication authenticatedUser = fixealaAuthenticationManager.authenticate(token);
+					SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+				} catch(Exception e){
+					if(e instanceof AuthenticationException)
+						return new AlertStatus(false, "Ha ocurrido un error al intentar iniciar sesión con la nueva clave.");
+					else
+						return new AlertStatus(false, "Ha ocurrido un error al intentar modificar la clave.");
+				}
+				return new AlertStatus(true, "La clave ha sido modificada.");
 		}
 		else{
-			return false;
-		}				
+			return new AlertStatus(false, "La clave actual ingresada es incorrecta.");		
+		}
 	}
+							
+	
 	
 	
 	
@@ -271,7 +276,7 @@ public class AccountController {
 	}
 	
 	@RequestMapping(value="/forgotPassword/sendEmailToken", method = RequestMethod.POST)
-	public @ResponseBody boolean doSendForgotPasswordToken(@RequestParam ("email")String email) { 		
+	public @ResponseBody boolean doSendForgotPasswordToken(@RequestParam ("email") String email) { 		
 		
 		String username = userService.findUsernameByEmail(email);
 		
@@ -378,9 +383,33 @@ public class AccountController {
 		
 	}
 	
+	@RequestMapping(value="/updateAccount", method = RequestMethod.POST)
+	public @ResponseBody ContenidoResponse doUpdateAccount(@RequestParam ("newEmail") String newEmail, @RequestParam ("newBarrio") String newBarrio, HttpServletRequest request) {
+		
+		User loggedUser = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();	
+		
+		try {		
+		
+			if( !newEmail.equals(loggedUser.getEmail()) 
+					&& userService.emailExists(newEmail))
+				return new ContenidoResponse(false, "La direcci&oacute;n de email ya ha sido registrada por otro usuario.");
+			
+			UserDTO userDTO = userService.getUserByUsername(loggedUser.getUsername());		
+			userDTO.setEmail(newEmail);
+			userDTO.setNeighborhood(newBarrio);
+			userService.updateAccount(userDTO);
+			
+		    return new ContenidoResponse(true, "Los datos de la cuenta han sido actualizados.");
+			
+		}catch(Exception e){
+			return new ContenidoResponse(false, "Hubo un error al intentar actualizar los datos de la cuenta.");
+		}
+				
+	}
+	
 	
 	@RequestMapping(value="/closeAccount", method = RequestMethod.POST)
-	public @ResponseBody String doCloseAccount(@ModelAttribute(value="user") UserDTO user, HttpServletRequest request) { 	
+	public @ResponseBody AlertStatus doCloseAccount(@RequestParam ("password") String password, HttpServletRequest request) { 	
 					
 		User loggedUser = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();		
 		UserDetails userDB = userService.loadUserByUsername(loggedUser.getUsername());
@@ -389,23 +418,23 @@ public class AccountController {
 		String encodedDBPass = userDB.getPassword();
 		
 		//Password provided by user through form input
-		String encodedInputPass = passwordEncoder.encodePassword(user.getPassword(), loggedUser.getUsername());	
+		String encodedInputPass = passwordEncoder.encodePassword(password, loggedUser.getUsername());	
 		
-		if(encodedDBPass != null){
-		
-			if(encodedInputPass.equals(encodedDBPass)){		
+		if(encodedInputPass.equals(encodedDBPass)){				
+			try{
 				userService.closeAccount(loggedUser.getUsername());
+				SecurityContextHolder.getContext().setAuthentication(null);
 				
-				return "La cuenta ha sido desactivada.";
+				return new AlertStatus(true, "La cuenta ha sido desactivada.", "closedAccount.html");
 			}
-			
-			else{
-				return "La contraseña ingresada es incorrecta.";
-			}
+			catch(Exception e){
+				return new AlertStatus(false, "Ha ocurrido un error al intentar desactivar su cuenta.");
+			}								
 		}
 		
-		return "";
-		
+		else{
+			return new AlertStatus(false, "La clave ingresada es incorrecta.");	
+		}		
 	}
 	
 	
