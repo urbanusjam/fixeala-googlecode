@@ -14,6 +14,8 @@ public interface ContenidoService {
   
     public ContenidoDTO subirContenido(ContenidoDTO contenido) throws BusinessException; 
     
+    public ContenidoDTO obtenerAvatarUsuario(String username) throws BusinessException; 
+    
     public FileWrapperDTO uploadFile(InputStream inputStream, String extensionArchivo) throws BusinessException; 
     
     public ContenidoDTO uploadFile2(InputStream inputStream, ContenidoDTO fileWrapper) throws BusinessException;

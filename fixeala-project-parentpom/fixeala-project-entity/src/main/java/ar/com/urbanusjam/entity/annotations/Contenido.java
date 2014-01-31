@@ -52,6 +52,9 @@ public class Contenido implements Serializable {
     @Column(name = "ORDEN")
     private int orden;
     
+    @Column(name = "IS_PROFILE_PIC")
+    private boolean profilePic;
+    
     @ManyToOne
 	@JoinColumn(name = "ID_ISSUE", updatable = false)	
 	private Issue issue;
@@ -132,6 +135,14 @@ public class Contenido implements Serializable {
 	public void setOrden(int orden) {
 		this.orden = orden;
 	}
+	
+	public boolean isProfilePic() {
+		return profilePic;
+	}
+
+	public void setProfilePic(boolean profilePic) {
+		this.profilePic = profilePic;
+	}
 
 	public Issue getIssue() {
 		return issue;
@@ -140,5 +151,7 @@ public class Contenido implements Serializable {
 	public void setIssue(Issue issue) {
 		this.issue = issue;
 	}
+	
+	
 
 }

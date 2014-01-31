@@ -620,6 +620,7 @@ public class IssueServiceImpl implements IssueService {
 		commentDTO.setUsuario(comment.getUsuario().getUsername());
 		commentDTO.setNroReclamo(String.valueOf(comment.getIssue().getId()));
 		commentDTO.setFecha(comment.getFecha().getTime());
+		commentDTO.setFechaFormateada(comment.getFecha().getTime());
 		commentDTO.setMensaje(comment.getMensaje());
 		return commentDTO;
 	}

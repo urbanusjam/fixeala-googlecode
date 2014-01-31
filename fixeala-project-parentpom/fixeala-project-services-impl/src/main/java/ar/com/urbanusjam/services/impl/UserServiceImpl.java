@@ -242,7 +242,7 @@ public class UserServiceImpl implements UserService {
 			roles.add(auth.getAuthority());
 		}
 		userDTO.setAuthorities(roles);
-		
+		userDTO.setEnabled(user.isEnabled());				
 		userDTO.setRegistrationDate(user.getRegistrationDate());		
 		userDTO.setLastLoginDate(user.getLastLoginDate());		
 		

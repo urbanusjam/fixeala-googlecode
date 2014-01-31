@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-//import org.springframework.format.annotation.DateTimeFormat;
-
 public class CommentDTO implements Serializable {
 
 	private static final long serialVersionUID = 1573529409509170425L;
@@ -14,7 +12,7 @@ public class CommentDTO implements Serializable {
 	private String usuario;
 	private String mensaje;	
 	private Date fecha;
-	private String fechaFormateada;	
+	private String fechaFormateada;
 	private boolean denunciado;
 	
 	public String getNroReclamo() {
@@ -48,7 +46,15 @@ public class CommentDTO implements Serializable {
 	public void setFecha(Date fecha) {
 		this.fecha = fecha;
 	}
-	
+		
+	public String getFechaFormateada() {
+		return fechaFormateada;
+	}
+
+	public void setFechaFormateada(Date fecha) {
+		this.fechaFormateada = this.getFormattedDate(fecha);
+	}
+
 	public boolean isDenunciado() {
 		return denunciado;
 	}
@@ -57,17 +63,16 @@ public class CommentDTO implements Serializable {
 		this.denunciado = denunciado;
 	}
 	
-	public String getFechaFormateada(){	
-		
-		String formattedDate = "";	
-		Date d = this.getFecha();		
+	public String getFormattedDate(Date date){				
+		String formattedDate = "";
+		Date d = date;		
         SimpleDateFormat df = new SimpleDateFormat();
-//      df.applyPattern("dd/MM/yyyy hh:mm a");
-//        df.applyPattern("dd/MM/yyyy HH:mm");
         df.applyPattern("dd/MM/yyyy");
         formattedDate = df.format(d.getTime());
         return formattedDate;	
 	}
+
+	
 	
 		
 }

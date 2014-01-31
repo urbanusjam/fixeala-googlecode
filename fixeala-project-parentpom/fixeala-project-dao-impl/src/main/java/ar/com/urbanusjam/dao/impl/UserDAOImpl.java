@@ -150,7 +150,7 @@ public class UserDAOImpl extends GenericDAOImpl<User, Serializable>  implements 
 	public void updateAccount(User user) {
 		User userDB = (User) this.loadUserByUsername(user.getUsername());
 		userDB.setNeighborhood(user.getNeighborhood());
-		userDB.setEmail(userDB.getEmail());
+		userDB.setEmail(user.getEmail());
 		this.update(userDB);		
 	}
 	
