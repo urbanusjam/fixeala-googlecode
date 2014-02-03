@@ -35,20 +35,6 @@ $(document).ready(function(){
         };
         
         map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
-        
-        // Layer
-//        var kmlLayer = new google.maps.KmlLayer({
-//            url: 'http://fixeala.googlecode.com/svn/trunk/fixeala-project-parentpom/fixeala-project/src/main/webapp/resources/data/barrios_caba.kml',
-//            preserveViewport: true
-//        });      
-//          
-//        kmlLayer.setMap(map);
-//        
-//        google.maps.event.addListener(kmlLayer, 'click', function(kmlEvent) {     
-//        	showInContentWindow(kmlEvent.latLng, kmlEvent.featureData.description);
-//        });
-        
-       
        
 
 		//AUTOCOMPLETE
@@ -107,6 +93,8 @@ $(document).ready(function(){
 		    
 
 	    autocomplete = new google.maps.places.Autocomplete(pac_input, options);
+	    
+	    
 //	    $('#address').keypress(function(e) {
 //	    	  if (e.which == 13) {
 //	    		  $(".pac-container").show();
@@ -246,7 +234,7 @@ function getIssueURL(issueID, issueTitle, type){
 	var url = protocol + "//" + host + "/" + context + "/" + subcontext + "-" + parsedTitle + ".html";	
 	
 	if(type == 'link')
-		return '<a href="'+ url +'">' + issueTitle + '</a>';		
+		return '<a href="'+ url +'">#' + issueID + " " + issueTitle + '</a>';		
 	
 	if(type == 'plain')
 		return url;
@@ -261,6 +249,13 @@ function getUserURL(userID){
 	var urlLink = '<a style="cursor:pointer" id="issue-user" href="'+ url +'">' + userID + '</a>';	
 	return urlLink;
 }
+
+
+
+
+
+
+
 
 
 
@@ -281,6 +276,8 @@ function loadMarkers(map){
 	        	var textLimit = 500;	 
 //	        	var iconDefault = 'resources/images/markers/blue_MarkerR.png';
 //        		var iconHover = 'resources/images/markers/yellow_MarkerR.png';
+	        	
+	        	console.info(markerArray);
 	        		        
 	        	for (var i = 0; i < markerArray.length; i++) {         		
 	        			        		
@@ -341,12 +338,93 @@ function loadMarkers(map){
 	    		 }       
 	    		 var clusterOptions = {gridSize:10, maxZoom: 15};
 	        	 var markerclusterer = new MarkerClusterer(map, markers, clusterOptions);
-	        }//success
-	       
+	        }//success	       
 	    });
-	
 }
  
+
+
+function callback(value){ return value; }
+
+
+
+function getClosestMarkersByIssue(location){
+	
+	var markers, closestMarkers = [] ; 
+	var maxDistance = 3.00; //km
+	
+	$.ajax({
+		  type: "GET",
+		  url: "../loadMapMarkers.html",
+		  dataType: "json",  	        
+		  success: function(data){
+			  
+			   markers = data;
+			  
+			    var centerPosition = new google.maps.LatLng(location.latitude, location.longitude);
+				
+			    $.each(markers, function(i, marker) {
+			    	
+			       marker.position = new google.maps.LatLng(marker.latitude, marker.longitude);	
+			       marker.distance = calculateDistanceKM(marker.position, centerPosition); 
+			       console.log(marker);
+	               if(marker.id != location.id 
+	            		   && marker.distance <= maxDistance)               
+	            	   closestMarkers.push(marker);
+			       
+			    });
+			 
+			    closestMarkers.sort(function(a,b){
+			    	return a.distance - b.distance
+			    }); //ordeno distancias de menor a mayor
+			    
+			 
+			    var $table = $("#tblNearbyIssues tbody");
+			   
+			    
+			    
+			    $.each(closestMarkers, function(i, marker){
+			    	console.log(marker);
+			    	var imageSrc = '';
+			    	
+			    	if(marker.contenidos.length > 0)
+			    		imageSrc = '../uploads/'+marker.contenidos[0].nombreConExtension;	
+			    	else
+			    		imageSrc = '../resources/images/nopic64.png';	
+			    
+			    	var tr = "";
+			    	tr += '<tr><td style="border-top:none">';
+			    	tr += '<div class="media">';
+			    	tr += '<img class="media-object pull-left thumbnail" style="width:64px; height:64px" src="'+imageSrc+'">';
+			    	tr += '<div class="media-body">';
+			    	tr += '<a href="'+getIssuePlainURL(marker.id, marker.title)+'"><h5 class="media-heading">'+marker.title+'</h5></a>';
+			    	tr += '<p style="font-size:11px">Reportado por: <a href="#">'+marker.username+'</a></p>';
+			    	tr += '<span class="label '+marker.statusCss+'">'+marker.status+'</span>';
+			    	tr += '</div>';	
+			    	tr += '</div>';
+			    	tr += '</td></tr>';
+						   
+				    $table.append(tr);
+				 
+			    
+			    });
+			    
+			   
+			  //  closestMarkers.slice(1, 6); //obtengo los 5 markers más cercanos al punto   
+			    console.info(closestMarkers);
+			  
+		  }		  
+	});	
+	
+	
+	
+		    
+}
+
+function calculateDistanceKM(p1, p2){
+	return (google.maps.geometry.spherical.computeDistanceBetween(p1, p2) / 1000).toFixed(2);
+}
+
 
 
 function findProvincia (value) {
@@ -469,7 +547,6 @@ function geocodeAddress(callback){
 	
 } 
 
-function callback(value){return value;}
 
 
 function hasAddressTypes(results) {	

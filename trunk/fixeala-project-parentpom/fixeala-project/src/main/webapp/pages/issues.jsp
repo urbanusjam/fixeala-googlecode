@@ -14,31 +14,25 @@
 
 
 		<!-- Issue -->
-		<script type="text/javascript">
-		
-		
-		//--NON-EDITABLE FIELDS
-		
-// 			var id = '${id}';
-//    		var usuario = '${usuario}';   	
-//    		var fecha = '${fecha}';
-//    		var calle = '${direccion}';
-//    		var barrio = '${barrio}';
-//    		var ciudad = '${ciudad}';
-//    		var provincia = '${provincia}';
-//    		var latitud = '${latitud}';
-//    		var longitud = '${longitud}';
-//    		var estado = '${estado}';
-   		
-		</script>
 		
 		<script type="text/javascript">
 		
-	
+		var reclamosCercanos = []; 		
+		
 		$(function(){	
-						
-			var id = '${id}';
-			var newTitle;
+			
+			
+			var idIssue = '${id}';
+	   		var latitud = '${latitud}';
+	   		var longitud = '${longitud}';
+			var newTitle;			
+		
+			var issueLocation = [];		
+			issueLocation.id = idIssue;
+			issueLocation.latitude = latitud;
+			issueLocation.longitude = longitud;		
+			
+			getClosestMarkersByIssue(issueLocation);
 			
 			$('#btn-update').attr('disabled', true);
 			
@@ -718,8 +712,7 @@
 		});
 		
 		</script>
-		
-		
+	
 	
 	<div class="container-fluid">
 	  	<div class="row-fluid">
@@ -1121,7 +1114,7 @@
 				<div class="comment-list">
 						
 				<table id="tblComments" class="table table-hover">				        
-				   <c:forEach items="${comentarios}" var="comentario"  varStatus="i">	
+				   <c:forEach items="${comentarios}" var="comentario" varStatus="i">	
 						<tr>
 							<td>
 								<div class="media">
@@ -1181,48 +1174,7 @@
     	   </div>    
 		      
 	      	<table id="tblNearbyIssues" class="table table-hover">
-				<tr>
-					<td style="border-top:none">
-						<div class="media">
-						  <a class="pull-left thumbnail" href="#">
-						    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
-						  </a>				
-						  <div class="media-body">
-						    <a href="#"><h5 class="media-heading">Semáforo no anda</h5></a>				    
-						    <p style="font-size:11px">Reportado por: <a href="#">juan2013</a></p>
-						     <span class="label label-warning">Abierto</span>
-						  </div>
-						</div>
-					</td>				
-				</tr>
-				<tr>
-					<td style="border-top:1px dashed #dddddd">
-						<div class="media">
-						  <a class="pull-left thumbnail" href="#">
-						    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
-						  </a>
-						  	<div class="media-body">
-						    	<a href="#"><h5 class="media-heading">Hay basura tirada...</h5></a>			 
-						    	<p style="font-size:11px">Reportado por: <a href="#">el_user_22</a></p>
-						    	<span class="label label-important">Pendiente</span>
-						  	</div>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td style="border-top:1px dashed #dddddd">
-						<div class="media">
-						  <a class="pull-left thumbnail" href="#">
-						    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
-						  </a>
-						  	<div class="media-body">
-						    	<a href="#"><h5 class="media-heading">El alumbrado no...</h5></a>				    
-						    	<p style="font-size:11px">Reportado por: <a href="#">MeitanteiConan</a></p>
-						    	<span class="label label-important">Pendiente</span>
-						  	</div>
-						</div>
-					</td>
-				</tr>
+	      		<tbody></tbody>
 			</table>		
 		</div>
 		  		

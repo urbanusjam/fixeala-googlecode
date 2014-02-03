@@ -12,7 +12,7 @@
 	 
 <!--   	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&sensor=false"></script> -->
   	
-  	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&components=country:ar&libraries=places&language=ES"></script> 
+  	<script type="text/javascript" src="http://maps.google.com/maps/api/js?libraries=geometry,places&components=country:ar&language=ES&sensor=false"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.jsonp-2.4.0.min.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery-ui-1.10.3.custom.js"></script>
