@@ -573,11 +573,12 @@ public class IssueController {
 
 	
 	@RequestMapping(value="/loadMapMarkers", method = RequestMethod.GET)
-	public @ResponseBody List<IssueDTO> loadMapMarkers(@ModelAttribute("issue") IssueDTO issue, HttpServletRequest request){
-		
+	public @ResponseBody List<IssueDTO> loadMapMarkers(@ModelAttribute("issue") IssueDTO issue, HttpServletRequest request){		
 		List<IssueDTO> issues = issueService.loadAllIssues();	
 		return issues;		
 	}
+	
+
 	
 	@RequestMapping(value="/issues/addComment", method = RequestMethod.POST)
 	public @ResponseBody AlertStatus doAddComent(@RequestParam("issueID") String issueID, 

@@ -266,6 +266,8 @@ $(document).ready(function() {
 	});
 	
 	
+	
+	
 	//TBL BACKEND USERS
 	$('#tblBackendUsers').dataTable({
 		"bProcessing": true,
@@ -297,6 +299,13 @@ $(document).ready(function() {
 	});
 	
 	
+	
+	var userID = "";	
+	
+	if(typeof currentUser != 'undefined')
+		userID = currentUser;
+	
+	
 	//TBL ISSUES BY USER
 	$('#tblUserIssues').dataTable({
 		"bProcessing": true,
@@ -310,7 +319,7 @@ $(document).ready(function() {
 		               	 { "sTitle" : "PROVINCIA" , "mData" : "province" },		   		            
 		               	 { "sTitle" : "ESTADO" , "mData" : "status" }		            	
 	                  ],		  		
-		"sAjaxSource": "http://localhost:8080/fixeala/users/" +currentUser+"/loadUserIssues.html",
+		"sAjaxSource": "http://localhost:8080/fixeala/users/"+userID+"/loadUserIssues.html",
 		"fnServerData": function ( sSource, aoData, fnCallback ) {							 	
 	            $.ajax( {
 	                "dataType": 'json',
@@ -326,6 +335,8 @@ $(document).ready(function() {
 	    "aaSorting": [[ 0, "desc" ]] 
 	});
 	
+	
+	
 	//TBL COMMENTS BY USER
 	$('#tblUserComments').dataTable({
 		"bProcessing": true,
@@ -335,7 +346,7 @@ $(document).ready(function() {
 		                 { "sTitle" : "MENSAJE" , "mData" : "mensaje" },		    
 		               	 { "sTitle" : "NRO. DE RECLAMO" , "mData" : "nroReclamo" }		               	
 	                  ],		  		
-		"sAjaxSource": "http://localhost:8080/fixeala/users/" +currentUser+"/loadUserComments.html",
+		"sAjaxSource": "http://localhost:8080/fixeala/users/"+userID+"/loadUserComments.html",
 		"fnServerData": function ( sSource, aoData, fnCallback ) {		
 	            $.ajax( {
 	                "dataType": 'json',
