@@ -711,6 +711,28 @@
 
 		});
 		
+		
+		
+		 //Add to Favorites
+		 $(function() {			 
+
+			    
+		        $('#bookmarkme').click(function() {
+		            if (window.sidebar && window.sidebar.addPanel) { // Mozilla Firefox Bookmark
+		                window.sidebar.addPanel(document.title,window.location.href,'');
+		            } else if(window.external && ('AddFavorite' in window.external)) { // IE Favorite
+		                window.external.AddFavorite(location.href,document.title); 
+		            } else if(window.opera && window.print) { // Opera Hotlist
+		                this.title=document.title;
+		                return true;
+		            } else { // webkit - safari/chrome
+		            	bootbox.alert('Esta funci&oacute;n no est&aacute; disponible para los navegadores Chrome y Safari.<br>' + 
+		            					'Presione las teclas <b>' + (navigator.userAgent.toLowerCase().indexOf('mac') != - 1 ? 'Command/Cmd' : 'CTRL') + ' + D</b> para agregar la p&aacute;gina a Favoritos.');
+		                
+		            }
+		        });
+		    });
+		
 		</script>
 	
 	
@@ -732,15 +754,17 @@
       
       <div class="row">
       
-	      <div id="btnGroupActions" class="btn-group" data-toggle="buttons-checkbox">		
-			  <button type="button" class="btn" title="Vistas">1<i class="icon-eye-open icon-large"></i></button>
-			  <button type="button" class="btn" title="Votos">3<i class="icon-thumbs-up-alt icon-large"></i></button>
-			  <button type="button" class="btn" title="Comentarios">0<i class="icon-comment icon-large"></i></button>
-			  
-			  <button type="button" class="btn" title="Agregar a favoritos"><i class="icon-star icon-large"></i></button>		
-			  <button type="button" class="btn" title="Imprimir"><i class="icon-print icon-large"></i></button>
-			  <button type="button" class="btn" title="Denunciar"><i class="icon-warning-sign icon-large"></i></button>
-		  </div>
+      
+      	   <ul id="btnGroupActions" class="nav nav-pills">  			 
+  			  <li><a href="#" title="Vistas"><h4>Vistas (0)</h4></a></li>
+  			   <li><a href="#" title="Votos"><h4>Votar (0)</h4></a></li>
+  			    <li><a href="#" title="Observadores"><h4>Observar (0)</h4></a></li>
+  			    <li><a href="#" title="Comentarios"><h4>Comentarios (${cantidadComentarios})</h4></a></li>
+  			    <li><a id="bookmarkme" href="#" rel="sidebar" title="Agregar a favoritos"><h4><i class="icon-star"></i></h4></a></li>
+  			     <li><a href="#" title="Imprimir"><h4><i class="icon-print"></i></h4></a></li>
+  			     <li><a href="#" title="Denunciar"><h4><i class="icon-warning-sign"></i></h4></a></li>  			    
+		  </ul>
+
 		  		  		
 <!-- 	 	  <div id="btnGroupSocial" class="btn-group"> -->
 <!-- 	 			<button class="btn"><i class="icon-share icon-large"></i>&nbsp;&nbsp;Compartir</button> -->
