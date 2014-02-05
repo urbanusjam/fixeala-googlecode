@@ -38,6 +38,7 @@ public class IssueDTO implements Serializable {
 	private List<IssueHistorialRevisionDTO> historial = new ArrayList<IssueHistorialRevisionDTO>();
 	private List<ContenidoDTO> contenidos = new ArrayList<ContenidoDTO>();
 	private List<CommentDTO> comentarios = new ArrayList<CommentDTO>();	
+	private List<IssueFollowDTO> followers = new ArrayList<IssueFollowDTO>();
 	private String status;
 	private String statusCss;
 	private String fechaFormateada;
@@ -234,6 +235,14 @@ public class IssueDTO implements Serializable {
 		this.fechaFormateada = this.getFormattedDate(date);
 	}
 
+	public List<IssueFollowDTO> getFollowers() {
+		return followers;
+	}
+
+	public void setFollowers(List<IssueFollowDTO> followers) {
+		this.followers = followers;
+	}
+
 	public String getFormattedDate(Date date){		
 		
 		String formattedDate = "";
@@ -244,9 +253,6 @@ public class IssueDTO implements Serializable {
         return formattedDate;	
 	}
 	
-		
-	
-
 	public String getParsedTitle() {	
 		return 	title.replaceAll("\\s", "-").toLowerCase();	
 	}

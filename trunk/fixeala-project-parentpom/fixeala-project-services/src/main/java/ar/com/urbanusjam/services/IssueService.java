@@ -5,6 +5,7 @@ import java.util.List;
 import ar.com.urbanusjam.services.dto.AreaDTO;
 import ar.com.urbanusjam.services.dto.CommentDTO;
 import ar.com.urbanusjam.services.dto.IssueDTO;
+import ar.com.urbanusjam.services.dto.IssueFollowDTO;
 
 public interface IssueService {
 	
@@ -25,5 +26,12 @@ public interface IssueService {
 	public List<String> getTagList();
 	public IssueDTO getIssueById(String issueID);	
 	public AreaDTO getAreaByName(String areaName);
+	
+//	public void voteIssue();
+//	public void unVoteIssue();
+	
+	public void followIssue(IssueFollowDTO followDTO);
+	public void unFollowIssue(IssueFollowDTO followDTO);
+	public boolean isUserFollowingIssue(IssueFollowDTO followDTO);
 		
 }
