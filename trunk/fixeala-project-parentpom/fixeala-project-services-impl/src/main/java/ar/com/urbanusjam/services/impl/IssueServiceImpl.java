@@ -6,42 +6,39 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.SortedMap;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 
 import ar.com.urbanusjam.dao.AreaDAO;
 import ar.com.urbanusjam.dao.CommentDAO;
 import ar.com.urbanusjam.dao.IssueDAO;
-import ar.com.urbanusjam.dao.IssueHistorialRevisionDAO;
-import ar.com.urbanusjam.dao.IssueLicitacionDAO;
+import ar.com.urbanusjam.dao.IssueFollowDAO;
 import ar.com.urbanusjam.dao.TagDAO;
 import ar.com.urbanusjam.dao.UserDAO;
 import ar.com.urbanusjam.entity.annotations.Area;
 import ar.com.urbanusjam.entity.annotations.Comment;
 import ar.com.urbanusjam.entity.annotations.Contenido;
 import ar.com.urbanusjam.entity.annotations.Issue;
+import ar.com.urbanusjam.entity.annotations.IssueFollow;
+import ar.com.urbanusjam.entity.annotations.IssueFollowPK;
 import ar.com.urbanusjam.entity.annotations.IssueHistorialRevision;
 import ar.com.urbanusjam.entity.annotations.IssueLicitacion;
 import ar.com.urbanusjam.entity.annotations.Tag;
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.ContenidoService;
 import ar.com.urbanusjam.services.IssueService;
+import ar.com.urbanusjam.services.UserService;
 import ar.com.urbanusjam.services.dto.AreaDTO;
 import ar.com.urbanusjam.services.dto.CommentDTO;
 import ar.com.urbanusjam.services.dto.ContenidoDTO;
 import ar.com.urbanusjam.services.dto.IssueDTO;
+import ar.com.urbanusjam.services.dto.IssueFollowDTO;
 import ar.com.urbanusjam.services.dto.IssueHistorialRevisionDTO;
 import ar.com.urbanusjam.services.dto.IssueLicitacionDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
@@ -52,18 +49,25 @@ import ar.com.urbanusjam.services.utils.Operation;
 @Service("issueService")
 public class IssueServiceImpl implements IssueService {
 	
+	private UserService userService;
 	private ContenidoService contenidoService;
 	private IssueDAO issueDAO;
 	private UserDAO userDAO;
 	private AreaDAO areaDAO;
 	private TagDAO tagDAO;
 	private CommentDAO commentDAO;
+	private IssueFollowDAO followDAO;
 	
 	
+	
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+
 	public void setContenidoService(ContenidoService contenidoService) {
 		this.contenidoService = contenidoService;
 	}
-
+	
 	public void setIssueDAO(IssueDAO issueDAO) {
 		this.issueDAO = issueDAO;
 	}
@@ -82,6 +86,10 @@ public class IssueServiceImpl implements IssueService {
 	
 	public void setCommentDAO(CommentDAO commentDAO) {
 		this.commentDAO = commentDAO;
+	}
+	
+	public void setFollowDAO(IssueFollowDAO followDAO) {
+		this.followDAO = followDAO;
 	}
 
 	@Override
@@ -625,6 +633,16 @@ public class IssueServiceImpl implements IssueService {
 		return commentDTO;
 	}
 	
+	public IssueFollow convertTo(IssueFollowDTO followingDTO){
+		IssueFollow following = new IssueFollow();
+		IssueFollowPK followingId = new IssueFollowPK();		
+		followingId.setIssue(issueDAO.findIssueById(followingDTO.getIdIssue()));
+		followingId.setFollower(userDAO.loadUserByUsername(followingDTO.getUsername()));		
+		following.setId(followingId);
+		following.setDate(this.getCurrentCalendar(followingDTO.getDate()));
+		return following;
+	}
+	
 	
 	private GregorianCalendar getCurrentCalendar(Date date){		
 		Calendar calendar = new GregorianCalendar();
@@ -665,6 +683,25 @@ public class IssueServiceImpl implements IssueService {
 		}
 		
 		return css;
+	}
+
+	@Override
+	public void followIssue(IssueFollowDTO followingDTO) {
+//		IssueDTO issue = this.getIssueById(followingDTO.getIdIssue());
+//		issue.getFollowers().add(followingDTO);
+//		this.updateIssue(issue);				
+		followDAO.saveFollowing(convertTo(followingDTO));
+	}
+
+	@Override
+	public void unFollowIssue(IssueFollowDTO followingDTO) {
+		followDAO.deleteFollowing(convertTo(followingDTO));		
+	}
+
+	@Override
+	public boolean isUserFollowingIssue(IssueFollowDTO followingDTO) {
+		IssueFollow following = followDAO.findFollowing(convertTo(followingDTO));
+		return following != null;
 	}
 	
 }

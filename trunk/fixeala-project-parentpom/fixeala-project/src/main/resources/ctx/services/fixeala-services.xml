@@ -14,12 +14,14 @@
 	</bean>
 		
 	<bean name="issueService" class="ar.com.urbanusjam.services.impl.IssueServiceImpl" >
+		<property name="userService" ref="userService" />
 		<property name="contenidoService" ref="contenidoService" />
 		<property name="issueDAO" ref="issueDAO" />
 		<property name="userDAO" ref="userDAO" />
 		<property name="areaDAO" ref="areaDAO" />
 		<property name="tagDAO" ref="tagDAO" />
 		<property name="commentDAO" ref="commentDAO" />
+		<property name="followDAO" ref="followDAO" />
 	</bean>
 	
 <!-- 	<bean name="contenidoService" class="ar.com.urbanusjam.services.impl.ContenidoServiceImpl" > -->

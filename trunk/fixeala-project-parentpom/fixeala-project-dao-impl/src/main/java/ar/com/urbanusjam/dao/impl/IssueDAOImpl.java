@@ -81,7 +81,7 @@ public class IssueDAOImpl extends GenericDAOImpl<Issue, Serializable> implements
 	@Override
 	public Issue findIssueById(String issueID) {
 		List<Issue> issues = new ArrayList<Issue>();
-		issues = this.findWhere(" id = ? ", new Object[]{  Long.parseLong(issueID) });
+		issues = this.findWhere(" id = ? ", new Object[]{  Long.valueOf(issueID) });
 		return issues.get(0);
 	}
 

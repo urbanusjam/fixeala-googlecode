@@ -1,6 +1,7 @@
 package ar.com.urbanusjam.test.service;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ar.com.urbanusjam.services.ExportService;
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.dto.IssueDTO;
+import ar.com.urbanusjam.services.dto.IssueFollowDTO;
 import ar.com.urbanusjam.services.dto.ReportDTO;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -36,15 +38,58 @@ public class IssueServiceTest {
 	
 	ReportDTO report;
 	
-	@Before
+	//@Before
 	public void init(){		
 		parametros = new HashMap<String, Object>();	
 		issues = issueService.loadAllIssues();		
 		report = new ReportDTO("issue_ireport_eclipse", parametros, issues);			
 	}
 	
+	//@Test
+	public void addFollower(){
+		IssueFollowDTO following = new IssueFollowDTO();
+		following.setIdIssue("17324");
+		following.setUsername("helloworld");
+		following.setDate(new Date());
+		
+		issueService.followIssue(following);
+		boolean isFollowing = issueService.isUserFollowingIssue(following);
+	
+		Assert.assertTrue("Follower added to issue #" + following.getIdIssue(), isFollowing);
+		
+		
+	}
+	
+	//@Test
+	public void removeFollower(){
+		IssueFollowDTO following = new IssueFollowDTO();
+		following.setIdIssue("1011");
+		following.setUsername("helloworld");
+		following.setDate(new Date());
+		
+		issueService.unFollowIssue(following);
+		boolean isFollowing = issueService.isUserFollowingIssue(following);
+		
+		Assert.assertFalse("Follower removed from issue #" + following.getIdIssue() , isFollowing);		
+		
+	}
 	
 	@Test
+	public void isUserFollowing(){
+		IssueFollowDTO following = new IssueFollowDTO();
+		following.setIdIssue("1011");
+		following.setUsername("helloworld");
+		following.setDate(new Date());
+		
+		boolean isFollowing = issueService.isUserFollowingIssue(following);
+		
+		Assert.assertTrue("User @" + following.getUsername().toUpperCase() , isFollowing);	
+	}
+	
+	
+	
+	
+	//@Test
 	public void exportIssuesToPdfTest(){
 			
 		try {						
