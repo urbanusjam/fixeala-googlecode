@@ -587,7 +587,7 @@ public class HomeController {
 					isSameUser = ((User) loggedUser).getUsername().equals(user.getUsername());
 				}
 				
-				if( user.hasRole("ROLE_ADMIN", user.getAuthorities()) 
+				if(user.hasRole("ROLE_ADMIN", user.getAuthorities()) 
 						|| user.hasRole("ROLE_MANAGER", user.getAuthorities()) ){
 					if(!isSameUser){
 						return "redirect:/" + "error.html";
@@ -605,7 +605,7 @@ public class HomeController {
 				List<IssueDTO> userIssues = issueService.loadIssuesByUser(userID);
 				List<IssueDTO> allIssues = issueService.loadAllIssues();
 				int solvedIssues = 0;
-				int comments = 0;
+				int commentsCounter = 0;
 				
 				for(IssueDTO issue : userIssues){
 					if(issue.getStatus().equals(IssueStatus.SOLVED))
@@ -615,16 +615,16 @@ public class HomeController {
 				for(IssueDTO issue : allIssues){
 					for(CommentDTO c : issue.getComentarios())
 						if(c.getUsuario().equals(userID))
-							comments++;
+							commentsCounter++;
 				}
 													
 				model.addAttribute("registrationDate", DateUtils.getFechaFormateada(user.getRegistrationDate()));
 				model.addAttribute("total_issues", userIssues.size());
 				model.addAttribute("total_solved", solvedIssues);
 				model.addAttribute("total_voted", "0");
-				model.addAttribute("total_following", "0");
+				model.addAttribute("total_followings", issueService.getUserFollowings(user.getUsername()).size());
 				model.addAttribute("total_flagged", "0");
-				model.addAttribute("total_comments", comments);
+				model.addAttribute("total_comments", commentsCounter);
 				model.addAttribute("total_widgets", "0");				
 								
 				if(user.isVerifiedOfficial()){

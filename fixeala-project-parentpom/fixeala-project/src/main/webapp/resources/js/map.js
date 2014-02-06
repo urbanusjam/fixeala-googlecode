@@ -379,9 +379,7 @@ function getClosestMarkersByIssue(location){
 			    }); //ordeno distancias de menor a mayor
 			    
 			 
-			    var $table = $("#tblNearbyIssues tbody");
-			   
-			    
+			    var $table = $("#tblNearbyIssues tbody");		    
 			    
 			    $.each(closestMarkers, function(i, marker){
 			    	console.log(marker);
@@ -404,8 +402,7 @@ function getClosestMarkersByIssue(location){
 			    	tr += '</div>';
 			    	tr += '</td></tr>';
 						   
-				    $table.append(tr);
-				 
+				    $table.append(tr);				 
 			    
 			    });
 			    

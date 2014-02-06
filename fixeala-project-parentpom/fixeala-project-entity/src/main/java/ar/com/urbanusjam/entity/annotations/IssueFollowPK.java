@@ -14,37 +14,25 @@ public class IssueFollowPK implements Serializable {
 	@Column(name="ID_FOLLOWER")
 	private Long followerID;
 
+	
 	public IssueFollowPK(){}
-	
-	
 	
 
 	public Long getIssueID() {
 		return issueID;
 	}
 
-
-
-
 	public void setIssueID(Long issueID) {
 		this.issueID = issueID;
 	}
-
-
-
 
 	public Long getFollowerID() {
 		return followerID;
 	}
 
-
-
-
 	public void setFollowerID(Long followerID) {
 		this.followerID = followerID;
 	}
-
-
 
 
 	@Override

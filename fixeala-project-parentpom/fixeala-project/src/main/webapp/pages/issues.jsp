@@ -17,12 +17,24 @@
 		
 		<script type="text/javascript">
 		
-		var reclamosCercanos = []; 		
+		$('[data-toggle="popover"]').popover();
+
+		$('body').on('click', function (e) {
+		    $('[data-toggle="popover"]').each(function () {
+		        //the 'is' for buttons that trigger popups
+		        //the 'has' for icons within a button that triggers a popup
+		        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+		            $(this).popover('hide');
+		        }
+		    });
+		});
 		
-		$(function(){	
+		$(function(e){	
+		
 			
 			
 			var idIssue = '${id}';
+			var loggedUser = '${loggedUser}';
 	   		var latitud = '${latitud}';
 	   		var longitud = '${longitud}';
 			var newTitle;			
@@ -611,7 +623,7 @@
 					var contenidoID = $(this).closest('tr').attr('id');					
 					var data = 'issueID='+ issueID + '&fileID='+ contenidoID;
 
-					  bootbox.confirm("�Confirma que desea eliminar el archivo?", "Cancelar", "Eliminar", function(result){
+					  bootbox.confirm("&iquest;Confirma que desea eliminar el archivo?", "Cancelar", "Eliminar", function(result){
 						  
 						  if(result){
 							  
@@ -707,31 +719,190 @@
 				    function getFileSizeInMB(fileSize){
 				    	return Math.round(fileSize / 1024);				    	
 				    }
+				    
+				    
+				    
+				    
+				    
+				  //Add to Favorites
+					
+			        $('#bookmarkme').click(function() {
+			            if (window.sidebar && window.sidebar.addPanel) { // Mozilla Firefox Bookmark
+			                window.sidebar.addPanel(document.title,window.location.href,'');
+			            } else if(window.external && ('AddFavorite' in window.external)) { // IE Favorite
+			                window.external.AddFavorite(location.href,document.title); 
+			            } else if(window.opera && window.print) { // Opera Hotlist
+			                this.title=document.title;
+			                return true;
+			            } else { // webkit - safari/chrome
+			            	bootbox.alert('Esta funci&oacute;n no est&aacute; disponible para los navegadores Chrome y Safari.<br>' + 
+			            					'Presione las teclas <b>' + (navigator.userAgent.toLowerCase().indexOf('mac') != - 1 ? 'Command/Cmd' : 'CTRL') + ' + D</b> para agregar la p&aacute;gina a Favoritos.');
+			                
+			            }
+			        });
+			        
+			        
+			        ///*******/////
+			        
+			        var isWatching = '${isUserWatching}';
+			         
+			        var $watcherDiv = $('#watchers');
+		        	var $watchingLink = $('#watching-toggle');
+		        	var $watcherList = $('#view-watcher-list');	       
+			    	var iconUnWatch = '<i class="icon-eye-close" id="icon-unwatch" style="margin-right:5px;"></i>';
+		        	var iconWatch = '<i class="icon-eye-open" id="icon-watch" style="margin-right:5px;"></i>';
+		        	
+		        	var numberOfWatchers = '${cantidadObservadores}';
+		        	
+		        	var data = "issueID=" + idIssue;
+		        	
+		        	var loader = '<span class="loader"><img src="${pageContext.request.contextPath}/resources/images/loader.gif" style="margin-right:5px; alt="Loading"/></span>';	  
+		        		        	
+			        if(isWatching == 'true'){	
+			        	$watchingLink.addClass('watching');
+			        	$(iconUnWatch).insertBefore($watchingLink);
+			        	$watchingLink.text('Observando');
+			        	$watchingLink.attr('title', 'Dejar de observar este reclamo');
+			        	$watcherList.html(numberOfWatchers); 
+			        }
+			        
+			        else {
+			        	$watchingLink.addClass('unwatch');
+			        	$(iconWatch).insertBefore($watchingLink);
+			        	$watchingLink.text('Observar');
+			        	$watchingLink.attr('title', 'Observar este reclamo');
+			        	$watcherList.html(numberOfWatchers); 
+			        }			        
+			       
+			   
+			        
+			       $watcherList.click(function(){
+			    	   
+			    	   $watcherList.popover({
+		        		   title: '',
+		        		   content : function (){return get_popover_content()}, //triggers ajax request every ty
+		        		   html : true
+		        		  
+		        	   });
+			    	   
+			       });
+	        	
+			    
+			   	
+			     
+			     function get_popover_content() {
+			    	 
+			    	        var content = $.ajax({
+			    	        	url: './displayIssueFollowers.html',
+			    	            type: "POST",
+			    	            data: data,
+			    	            dataType: "json",
+			    	            async: false,
+			    	            success: function(followers) {
+			    	            	
+			    	            },
+			    	            error: function() {
+			    	                // nothing
+			    	            }
+			    	        }).responseText;
+			    	        var container = $(this).attr('data-rel');
+			    	     
+			    	        if (typeof container !== 'undefined') {
+			    	            // show a specific element such as "#mydetails"
+			    	            return $(content).find(container);
+			    	        }
+			    	        // show the whole page
+			    	        
+			    	        var followersArray = $.parseJSON(content);
+			    	        
+			    	        var f = '';				             
+						    $.each(followersArray, function(i, follower){	
+						    	f += '<i class="icon-angle-right"></i>&nbsp;';
+						    	f += getUserURL(follower);
+						    	f += '<br>';
+						    });
+			            	console.info(f);
+						  
+			    	      
+			    	        return f;
+			    	 
+				 
+				       
+				}
+			     
+			        
+			        $('#watching-toggle').click(function() {
+			        	
+				 		if($watchingLink.hasClass('watching')){
+				 			
+				 			$.ajax({
+		        			    url: "./unwatchIssue.html",
+						 		type: "POST",	
+						 		data: data,							 
+						        success: function(data){							        	
+						        	if(data.result){
+						        		
+						        		$watchingLink.removeClass('watching');
+						 				$watchingLink.addClass('unwatch');
+						 				
+						 			    $('#icon-unwatch').replaceWith(loader);
+						 										 				
+						 				setTimeout(function(){
+						 					$('.loader').replaceWith(iconWatch);
+						 					$watchingLink.text('Observar');
+							 				$watchingLink.attr('title', 'Observar este reclamo');							 		
+							 				$('#view-watcher-list').html(data.message);							 					 						      
+						 				}, 1000);
+						        	}
+						        	
+						        	else{
+						        		bootbox.alert(data.message);	
+						        	}	
+			            		}						  
+		        			});				 				
+				 		}
+				 		
+				 		else{
+				 			
+				 			$.ajax({
+		        			    url: "./watchIssue.html",
+						 		type: "POST",	
+						 		data: data,							 
+						        success: function(data){						        	
+						        	if(data.result){	
+						        		
+						        		$('#icon-watch').replaceWith(loader);
+						        		
+						        		$watchingLink.removeClass('unwatch');
+					 					$watchingLink.addClass('watching');
+						        		
+						        		setTimeout(function(){							 					
+						 					$('.loader').replaceWith(iconUnWatch);
+						 					$watchingLink.text('Observando');
+							 				$watchingLink.attr('title', 'Dejar de observar este reclamo');
+							 				$('#view-watcher-list').html(data.message);
+							 			
+						 				}, 1000);	
+						        	}
+						        	
+						        	else{
+						        		bootbox.alert(data.message);	
+						        	}	
+			            		}						  
+		        			});				 			
+				 		}
+				});//watching click
+				
 			
 
 		});
 		
 		
 		
-		 //Add to Favorites
-		 $(function() {			 
-
-			    
-		        $('#bookmarkme').click(function() {
-		            if (window.sidebar && window.sidebar.addPanel) { // Mozilla Firefox Bookmark
-		                window.sidebar.addPanel(document.title,window.location.href,'');
-		            } else if(window.external && ('AddFavorite' in window.external)) { // IE Favorite
-		                window.external.AddFavorite(location.href,document.title); 
-		            } else if(window.opera && window.print) { // Opera Hotlist
-		                this.title=document.title;
-		                return true;
-		            } else { // webkit - safari/chrome
-		            	bootbox.alert('Esta funci&oacute;n no est&aacute; disponible para los navegadores Chrome y Safari.<br>' + 
-		            					'Presione las teclas <b>' + (navigator.userAgent.toLowerCase().indexOf('mac') != - 1 ? 'Command/Cmd' : 'CTRL') + ' + D</b> para agregar la p&aacute;gina a Favoritos.');
-		                
-		            }
-		        });
-		    });
+		 
+		        
+		        
+		   
 		
 		</script>
 	
@@ -755,15 +926,23 @@
       <div class="row">
       
       
-      	   <ul id="btnGroupActions" class="nav nav-pills">  			 
-  			  <li><a href="#" title="Vistas"><h4>Vistas (0)</h4></a></li>
-  			   <li><a href="#" title="Votos"><h4>Votar (0)</h4></a></li>
-  			    <li><a href="#" title="Observadores"><h4>Observar (0)</h4></a></li>
-  			    <li><a href="#" title="Comentarios"><h4>Comentarios (${cantidadComentarios})</h4></a></li>
-  			    <li><a id="bookmarkme" href="#" rel="sidebar" title="Agregar a favoritos"><h4><i class="icon-star"></i></h4></a></li>
-  			     <li><a href="#" title="Imprimir"><h4><i class="icon-print"></i></h4></a></li>
-  			     <li><a href="#" title="Denunciar"><h4><i class="icon-warning-sign"></i></h4></a></li>  			    
-		  </ul>
+      	
+<!--   			  <li><a href="#" title="Vistas"><h4>Vistas (0)</h4></a></li> -->
+<!--   			   <li><a href="#" title="Votos"><h4>Votar (0)</h4></a></li> -->
+  			
+  			<div id="watchers">		  	
+	    		<a href="#" id="watching-toggle"></a>
+ 			    (<a href="#" id="view-watcher-list" data-toggle="popover"></a>)
+ 			  
+  			</div>
+  			    	
+  			    	
+  			  
+<%--   			    <a href="#" title="Comentarios">Comentarios (${cantidadComentarios})</a> --%>
+<!--   			    <a id="bookmarkme" href="#" rel="sidebar" title="Agregar a favoritos"><h4><i class="icon-star"></i></h4></a> -->
+<!--   			     <li><a href="#" title="Imprimir"><h4><i class="icon-print"></i></h4></a></li> -->
+<!--   			     <li><a href="#" title="Denunciar"><h4><i class="icon-warning-sign"></i></h4></a></li>  			     -->
+		  
 
 		  		  		
 <!-- 	 	  <div id="btnGroupSocial" class="btn-group"> -->

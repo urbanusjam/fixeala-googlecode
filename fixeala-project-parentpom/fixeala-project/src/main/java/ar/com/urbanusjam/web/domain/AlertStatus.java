@@ -18,7 +18,7 @@ public class AlertStatus {
 		this.message = message;
 		this.pageRedirect = pageRedirect;
 	}
-		
+			
 	public boolean isResult() {
 		return result;
 	}
@@ -42,5 +42,7 @@ public class AlertStatus {
 	public void setPageRedirect(String pageRedirect) {
 		this.pageRedirect = pageRedirect;
 	}
+
+	
 
 }

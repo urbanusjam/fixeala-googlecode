@@ -167,8 +167,8 @@
    							</div>   							
    							<div class="span2 thumbnail" style="text-align:center" title="Reclamos en seguimiento">
              						<i class="icon-screenshot icon-4x"></i>
-             						<h2>${total_following}</h2>
-             						<strong>SIGUIENDO</strong>
+             						<h2>${total_followings}</h2>
+             						<strong>OBSERVANDO</strong>
    							</div>   							
    							<div class="span2 thumbnail" style="text-align:center" title="Comentarios realizados">
              						<i class="icon-warning-sign icon-4x"></i>

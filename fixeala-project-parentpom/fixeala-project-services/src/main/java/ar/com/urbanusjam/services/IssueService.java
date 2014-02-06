@@ -6,6 +6,7 @@ import ar.com.urbanusjam.services.dto.AreaDTO;
 import ar.com.urbanusjam.services.dto.CommentDTO;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.IssueFollowDTO;
+import ar.com.urbanusjam.services.dto.UserDTO;
 
 public interface IssueService {
 	
@@ -33,5 +34,7 @@ public interface IssueService {
 	public void followIssue(IssueFollowDTO followDTO);
 	public void unFollowIssue(IssueFollowDTO followDTO);
 	public boolean isUserFollowingIssue(IssueFollowDTO followDTO);
+	public List<String> getIssueFollowers(String issueID);
+	public List<String> getUserFollowings(String username);
 		
 }

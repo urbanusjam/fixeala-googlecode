@@ -24,6 +24,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -45,6 +46,7 @@ import ar.com.urbanusjam.services.UserService;
 import ar.com.urbanusjam.services.dto.CommentDTO;
 import ar.com.urbanusjam.services.dto.ContenidoDTO;
 import ar.com.urbanusjam.services.dto.IssueDTO;
+import ar.com.urbanusjam.services.dto.IssueFollowDTO;
 import ar.com.urbanusjam.services.dto.IssueHistorialRevisionDTO;
 import ar.com.urbanusjam.services.dto.IssueLicitacionDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
@@ -158,7 +160,28 @@ public class IssueController {
 				model.addAttribute("cantidadLicitacion", issue.getLicitacion() != null ? 1 : 0);
 				model.addAttribute("cantidadReclamosSimilares", 0);
 				model.addAttribute("cantidadArchivos", 0);
-				model.addAttribute("cantidadComentarios", issue.getComentarios().size());				
+				model.addAttribute("cantidadComentarios", issue.getComentarios().size());	
+				
+				IssueFollowDTO follow = new IssueFollowDTO();
+				boolean isUserWatching = false;
+				String loggedUser = ""; 
+			
+					Authentication auth = (Authentication) SecurityContextHolder.getContext().getAuthentication();		
+					
+					if(!(auth instanceof AnonymousAuthenticationToken)){
+						UserDetails userDB = userService.loadUserByUsername(((User)auth.getPrincipal()).getUsername());
+						if(userDB != null){
+							follow.setUsername(userDB.getUsername());
+							follow.setIdIssue(issueID);
+							isUserWatching = issueService.isUserFollowingIssue(follow);
+							loggedUser = userDB.getUsername();
+						}
+						
+					}
+						
+				model.addAttribute("loggedUser", loggedUser);				
+				model.addAttribute("cantidadObservadores", issueService.getIssueFollowers(issueID).size());				
+				model.addAttribute("isUserWatching", isUserWatching);				
 				
 				IssueLicitacionDTO licitacion = new IssueLicitacionDTO();
 				
@@ -613,6 +636,76 @@ public class IssueController {
 			return new AlertStatus(false, "Debe estar logueado para ingresar un nuevo reclamo.");
 		}		
 	}
+	
+	
+	@RequestMapping(value="/issues/watchIssue", method = RequestMethod.POST)
+	public @ResponseBody AlertStatus watchIssue(@RequestParam("issueID") String issueID, Model model){
+		
+		IssueFollowDTO follow = new IssueFollowDTO();
+		
+		try {			
+			User user =  getCurrentUser(SecurityContextHolder.getContext().getAuthentication());
+			UserDetails userDB = userService.loadUserByUsername(user.getUsername());		
+			
+			if(userDB == null){
+				return new AlertStatus(false, "Debe estar logueado para observar el reclamo.");
+			}	
+			
+			follow.setIdIssue(issueID);
+			follow.setUsername(userDB.getUsername());
+			follow.setDate(new Date());
+			
+			issueService.followIssue(follow);
+			List<String> observadores = issueService.getIssueFollowers(issueID);
+			model.addAttribute("cantidadObservadores", observadores.size());		
+			
+			return new AlertStatus(true, String.valueOf(observadores.size()));
+			
+		}catch(AccessDeniedException e){
+			return new AlertStatus(false, "Debe estar logueado para observar el reclamo.");
+		
+		}catch(Exception e){
+			return new AlertStatus(false, "Ha ocurrido un error al intentar observar el reclamo.");
+		}					
+		
+	}
+	
+	@RequestMapping(value="/issues/unwatchIssue", method = RequestMethod.POST)
+	public @ResponseBody AlertStatus unWatchIssue(@RequestParam("issueID") String issueID, Model model){
+		
+		IssueFollowDTO follow = new IssueFollowDTO();
+		
+		try {			
+			User user =  getCurrentUser(SecurityContextHolder.getContext().getAuthentication());
+			UserDetails userDB = userService.loadUserByUsername(user.getUsername());		
+			
+			if(userDB == null){
+				return new AlertStatus(false, "Debe estar logueado para observar el reclamo.");
+			}	
+			
+			follow.setIdIssue(issueID);
+			follow.setUsername(userDB.getUsername());
+			
+			issueService.unFollowIssue(follow);
+			List<String> observadores = issueService.getIssueFollowers(issueID);
+			model.addAttribute("cantidadObservadores", observadores.size());	
+			
+			return new AlertStatus(true, String.valueOf(observadores.size()));
+			
+		}catch(AccessDeniedException e){
+			return new AlertStatus(false, "Debe estar logueado para observar el reclamo.");
+			
+		}catch(Exception e){
+			return new AlertStatus(false, "Ha ocurrido un error al intentar observar el reclamo.");
+		}	
+		
+	}
+	
+	@RequestMapping(value="/issues/displayIssueFollowers", method = RequestMethod.POST)
+	public @ResponseBody List<String> displayIssueFollowers(@RequestParam("issueID") String issueID){
+		return issueService.getIssueFollowers(issueID);		
+	}
+
 	
 	
 	

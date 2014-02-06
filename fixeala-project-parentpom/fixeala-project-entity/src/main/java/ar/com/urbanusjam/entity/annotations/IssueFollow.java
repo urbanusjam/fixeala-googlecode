@@ -37,52 +37,29 @@ public class IssueFollow implements Serializable {
 	public IssueFollow(){}
 
 
-	
-
-
 	public IssueFollowPK getId() {
 		return id;
 	}
-
-
-
-
 
 	public void setId(IssueFollowPK id) {
 		this.id = id;
 	}
 
-
-
-
-
 	public Issue getIssue() {
 		return issue;
 	}
-
-
-
 
 	public void setIssue(Issue issue) {
 		this.issue = issue;
 	}
 
-
-
-
 	public User getFollower() {
 		return follower;
 	}
 
-
-
-
 	public void setFollower(User follower) {
 		this.follower = follower;
 	}
-
-
-
 
 	public GregorianCalendar getDate() {
 		return date;
