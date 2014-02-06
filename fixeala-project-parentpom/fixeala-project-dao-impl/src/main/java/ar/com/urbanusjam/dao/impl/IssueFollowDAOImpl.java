@@ -3,8 +3,6 @@ package ar.com.urbanusjam.dao.impl;
 import java.io.Serializable;
 import java.util.List;
 
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,30 +24,29 @@ public class IssueFollowDAOImpl extends GenericDAOImpl<IssueFollow, Serializable
 
 	@Override
 	public void deleteFollowing(IssueFollow following) {
-		List<IssueFollow> followings = this.findWhere(" id.issue.id = ? AND id.follower.username = ? ", 
+		List<IssueFollow> followings = this.findWhere(" id.issueID = ? AND id.followerID = ? ", 
 				new Object[]{
-					following.getId().getIssue().getId(), 
-					following.getId().getFollower().getUsername()
+				following.getId().getIssueID(), 
+				following.getId().getFollowerID()
 					});
 		this.delete(followings.get(0));		
 	}
 
 	@Override
 	public IssueFollow findFollowing(IssueFollow following) {
-//		List<IssueFollow> followings = this.findWhere(" id.issue.id = ? AND id.follower.username = ? ", 
-//				new Object[]{
-//					following.getId().getIssue().getId(), 
-//					following.getId().getFollower().getUsername()
-//					});
+		List<IssueFollow> followings = this.findWhere(" id.issueID = ? AND id.followerID = ? ", 
+				new Object[]{
+					following.getId().getIssueID(), 
+					following.getId().getFollowerID()
+					});
 		
-			List<IssueFollow> followings = getSessionFactory().getCurrentSession().createCriteria(IssueFollow.class)
-				 .createAlias("id", "pk")
-				 .createAlias("pk.issue", "i")
-				 	.add( Restrictions.eq("i.issue.id", following.getId().getIssue().getId()) ) 
-				 .createAlias("pk.follower", "f")			
-				 	.add( Restrictions.eq("f.follower.username", following.getId().getFollower().getUsername()) )
-				 .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
-				 .list();
+//			List<IssueFollow> followings = getSessionFactory().getCurrentSession().createCriteria(IssueFollow.class)
+//				 .createAlias("id.idIssue", "i")
+//				 	.add( Restrictions.eq("i", following.getIssue().getId()) )
+//				 .createAlias("id.idFollower", "f")			
+//				 	.add( Restrictions.eq("f", following.getIssue().getIdFollower()) ) 
+//				 .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
+//				 .list();
 		return followings.size() > 0 ? followings.get(0) : null; 		
 	}
 

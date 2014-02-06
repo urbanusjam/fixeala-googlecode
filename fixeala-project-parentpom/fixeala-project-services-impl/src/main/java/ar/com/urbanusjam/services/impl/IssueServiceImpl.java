@@ -636,8 +636,9 @@ public class IssueServiceImpl implements IssueService {
 	public IssueFollow convertTo(IssueFollowDTO followingDTO){
 		IssueFollow following = new IssueFollow();
 		IssueFollowPK followingId = new IssueFollowPK();		
-		followingId.setIssue(issueDAO.findIssueById(followingDTO.getIdIssue()));
-		followingId.setFollower(userDAO.loadUserByUsername(followingDTO.getUsername()));		
+		followingId.setIssueID(Long.valueOf(followingDTO.getIdIssue()));
+		User u = userDAO.loadUserByUsername(followingDTO.getUsername());
+		followingId.setFollowerID(u.getId());
 		following.setId(followingId);
 		following.setDate(this.getCurrentCalendar(followingDTO.getDate()));
 		return following;
