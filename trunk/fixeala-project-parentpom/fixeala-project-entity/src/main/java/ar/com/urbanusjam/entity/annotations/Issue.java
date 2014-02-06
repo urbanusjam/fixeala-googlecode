@@ -20,8 +20,6 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 
 
@@ -101,10 +99,10 @@ public class Issue implements Serializable  {
 	@OneToMany(mappedBy="issue", fetch = FetchType.EAGER, cascade = CascadeType.ALL)  
 	private Set<Comment> comentarios;
 	
-	@OneToMany(mappedBy="id.issue", fetch = FetchType.LAZY, cascade = CascadeType.ALL) 
-	private Set<IssueVote> votes;
+//	@OneToMany(mappedBy="issue", fetch = FetchType.LAZY, cascade = CascadeType.ALL) 
+//	private Set<IssueVote> votes;
 	
-	@OneToMany(mappedBy="id.issue", fetch = FetchType.LAZY, cascade = CascadeType.ALL) 
+	@OneToMany(mappedBy="issue", fetch = FetchType.LAZY) 
 	private Set<IssueFollow> followers;
 
 	
@@ -113,7 +111,7 @@ public class Issue implements Serializable  {
 		revisiones = new HashSet<IssueHistorialRevision>();
 		contenidos = new HashSet<Contenido>();
 		comentarios = new HashSet<Comment>();
-		votes = new HashSet<IssueVote>();
+//		votes = new HashSet<IssueVote>();
 		followers = new HashSet<IssueFollow>();
 	}	
 		

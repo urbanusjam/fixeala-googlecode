@@ -3,44 +3,56 @@ package ar.com.urbanusjam.entity.annotations;
 import java.io.Serializable;
 
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
 
-@Embeddable
 public class IssueFollowPK implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	//@ManyToOne
-	@Column(name = "ID_ISSUE")
-	private Issue issue;
+	@Column(name="ID_ISSUE")
+	private Long issueID;
 	
-	//@OneToOne
-	@Column(name = "ID_FOLLOWER")
-	private User follower;
+	@Column(name="ID_FOLLOWER")
+	private Long followerID;
 
+	public IssueFollowPK(){}
 	
-	public Issue getIssue() {
-		return issue;
-	}
-
-	public void setIssue(Issue issue) {
-		this.issue = issue;
-	}
-
-	public User getFollower() {
-		return follower;
-	}
-
-	public void setFollower(User follower) {
-		this.follower = follower;
-	}
 	
+	
+
+	public Long getIssueID() {
+		return issueID;
+	}
+
+
+
+
+	public void setIssueID(Long issueID) {
+		this.issueID = issueID;
+	}
+
+
+
+
+	public Long getFollowerID() {
+		return followerID;
+	}
+
+
+
+
+	public void setFollowerID(Long followerID) {
+		this.followerID = followerID;
+	}
+
+
+
+
 	@Override
     public int hashCode() {
 		final int prime = 31;		
 		int result = 1;		
-		result = prime * result + ((issue == null) ? 0 : issue.hashCode());		
-		result = prime * result + ((follower == null) ? 0 : follower.hashCode());
+		result = prime * result + ((issueID == null) ? 0 : issueID.hashCode());		
+		result = prime * result + ((followerID == null) ? 0 : followerID.hashCode());
         return result;
     }
 	
@@ -56,15 +68,15 @@ public class IssueFollowPK implements Serializable {
 	 
 	 IssueFollowPK other = (IssueFollowPK) obj;
 	 
-	 if (issue == null) {
-		 if (other.issue != null)
+	 if (issueID == null) {
+		 if (other.issueID != null)
 	         return false;
-	 } else if (!issue.getId().equals(other.issue.getId()))
+	 } else if (!issueID.equals(other.issueID))
 	         return false;
-	 if (follower == null) {
-		 if (other.follower != null)
+	 if (followerID == null) {
+		 if (other.followerID != null)
 	         return false;
-	 } else if (!follower.getId().equals(other.follower.getId()))
+	 } else if (!followerID.equals(other.followerID))
 	         return false;
 
 	 return true;
