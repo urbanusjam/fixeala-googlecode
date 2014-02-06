@@ -640,7 +640,7 @@ public class IssueServiceImpl implements IssueService {
 		User u = userDAO.loadUserByUsername(followingDTO.getUsername());
 		followingId.setFollowerID(u.getId());
 		following.setId(followingId);
-		following.setDate(this.getCurrentCalendar(followingDTO.getDate()));
+		following.setDate(followingDTO.getDate() != null ? this.getCurrentCalendar(followingDTO.getDate()) : null);
 		return following;
 	}
 	
@@ -703,6 +703,33 @@ public class IssueServiceImpl implements IssueService {
 	public boolean isUserFollowingIssue(IssueFollowDTO followingDTO) {
 		IssueFollow following = followDAO.findFollowing(convertTo(followingDTO));
 		return following != null;
+	}
+
+	@Override
+	public List<String> getIssueFollowers(String issueID) {
+		List<IssueFollow> followings = new ArrayList<IssueFollow>();
+		List<String> followers = new ArrayList<String>();
+		followings = followDAO.findFollowingsByIssue(Long.valueOf(issueID));
+		
+		for(IssueFollow f : followings){
+			followers.add(f.getFollower().getUsername());
+		}
+		
+		return followers;			
+	}
+
+	@Override
+	public List<String> getUserFollowings(String username) {
+		List<IssueFollow> followings = new ArrayList<IssueFollow>();
+		List<String> issuesFollowed = new ArrayList<String>();		
+		User follower = userService.loadUserByUsername(username);
+		
+		followings = followDAO.findFollowingsByUser(follower.getId());
+		for(IssueFollow f : followings){
+			issuesFollowed.add(String.valueOf(f.getIssue().getId()));
+		}
+		
+		return issuesFollowed;
 	}
 	
 }

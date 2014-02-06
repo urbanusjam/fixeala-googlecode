@@ -40,14 +40,19 @@ public class IssueFollowDAOImpl extends GenericDAOImpl<IssueFollow, Serializable
 					following.getId().getFollowerID()
 					});
 		
-//			List<IssueFollow> followings = getSessionFactory().getCurrentSession().createCriteria(IssueFollow.class)
-//				 .createAlias("id.idIssue", "i")
-//				 	.add( Restrictions.eq("i", following.getIssue().getId()) )
-//				 .createAlias("id.idFollower", "f")			
-//				 	.add( Restrictions.eq("f", following.getIssue().getIdFollower()) ) 
-//				 .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
-//				 .list();
 		return followings.size() > 0 ? followings.get(0) : null; 		
+	}
+
+	@Override
+	public List<IssueFollow> findFollowingsByIssue(Long issueID) {
+		List<IssueFollow> followers = this.findWhere(" id.issueID = ? ", new Object[]{ issueID });
+		return followers;
+	}
+
+	@Override
+	public List<IssueFollow> findFollowingsByUser(Long userID) {
+		List<IssueFollow> followings = this.findWhere(" id.followerID = ? ", new Object[]{ userID });
+		return followings;
 	}
 
 }
