@@ -45,7 +45,8 @@ public class ExportServiceImpl implements ExportService {
 			
 			final JRPdfExporter  pdfExporter = new JRPdfExporter();
 			pdfExporter.setParameter(JRExporterParameter.JASPER_PRINT, print);
-			pdfExporter.setParameter(JRExporterParameter.OUTPUT_FILE, new File("C:\\desarrollo\\issue.pdf"));
+			pdfExporter.setParameter(JRExporterParameter.OUTPUT_FILE, new File("/Users/coripel/Documents/dev/jasperreports/issue.pdf"));
+		//	pdfExporter.setParameter(JRExporterParameter.OUTPUT_FILE, new File("C:\\desarrollo\\issue.pdf"));
 			pdfExporter.setParameter(JRPdfExporterParameter.CHARACTER_ENCODING, CharEncoding.UTF_8);
 			pdfExporter.exportReport();
 			

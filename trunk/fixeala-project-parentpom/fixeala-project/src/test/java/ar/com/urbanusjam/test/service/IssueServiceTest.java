@@ -45,7 +45,7 @@ public class IssueServiceTest {
 		report = new ReportDTO("issue_ireport_eclipse", parametros, issues);			
 	}
 	
-	//@Test
+	@Test
 	public void addFollower(){
 		IssueFollowDTO following = new IssueFollowDTO();
 		following.setIdIssue("17324");
@@ -74,7 +74,7 @@ public class IssueServiceTest {
 		
 	}
 	
-	@Test
+	//@Test
 	public void isUserFollowing(){
 		IssueFollowDTO following = new IssueFollowDTO();
 		following.setIdIssue("1011");
