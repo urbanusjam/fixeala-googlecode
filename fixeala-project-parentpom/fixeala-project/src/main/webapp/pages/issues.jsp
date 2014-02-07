@@ -860,6 +860,107 @@
 				 		}
 				});//watching click
 				
+				
+			    var isVoted = '${isCurrentlyVoted}';
+			    var isVoteUp = '${isVoteUp}';
+			    
+			    var $voteUp = $('.vote-up');
+			    var $voteDown = $('.vote-down');
+			    
+			    var iconUp = '<i id="icon-up" class="icon-thumbs-up"></i>';
+			    var iconDown = '<i id="icon-up" class="icon-thumbs-up"></i>';
+			    
+			    console.log(isVoted);
+			    
+			    if(isVoted == 'true'){
+			    	if(isVoteUp == 'true'){
+			    		$voteUp.addClass('btn btn-success');
+				    	$voteDown.addClass('btn disabled');				    	
+			    	}
+			    	else{
+			    		$voteDown.addClass('btn btn-success');
+				    	$voteUp.addClass('btn disabled');			    	
+			    	}
+			    	
+			    }
+			    else{
+			    	$voteUp.addClass('btn btn-info');
+			    	$voteDown.addClass('btn btn-danger');
+			    }
+			    
+			 
+			    $('#votes a').click(function(e) {
+			    	
+			    	var thumb = $(this);
+			    	
+			    	if(thumb.hasClass('btn disabled'))
+			    		e.preventDefault();
+			    	
+			    	else{
+			    		
+			    		
+				    	var voteValue;
+				    	var voteUp = false;
+				    	
+				    	if(thumb.hasClass('vote-up')){
+				    		voteValue = 1;
+					    	voteUp = true;
+				    	}			    		
+				    	else if(thumb.hasClass('vote-down'))
+				    		voteValue =  -1;
+				    	
+				    	if(isVoted == 'true'){
+				    		bootbox.alert("Ya ha votado por este reclamo.");	
+				    	}
+				    	
+				    	else{ 	
+				    	
+					    	
+					    	$.ajax({
+		        			    url: "./voteIssue.html",
+						 		type: "POST",	
+						 		data: "issueID=" + idIssue + "&vote=" + voteValue,							 
+						        success: function(data){						        	
+						        	if(data.result){	
+						        		
+						        		if(voteUp){						        			
+						        			$voteUp.removeClass('btn btn-info');
+						 					$voteUp.addClass('btn btn-success');
+					        				$voteDown.removeClass('btn btn-danger');
+									    	$voteDown.addClass('btn disabled');	
+						        		}
+						        		
+						        		else{						        			
+						        			$voteDown.removeClass('btn btn-danger');
+						 					$voteDown.addClass('btn btn-success');	
+					        				$voteUp.removeClass('btn btn-info');
+									    	$voteUp.addClass('btn disabled');	
+						        		}
+						        		
+						        		$('#voteCount').html(data.message); 
+						        				
+						        	}
+						        	
+						        	else{
+						        		bootbox.alert(data.message);	
+						        	}	
+			            		}						  
+		        			});
+				    	
+				    	}
+			    		
+			    	}
+			    	
+			    	
+			    	
+			    });
+			    
+ 				$voteDown.click(function() {
+			    	
+			    });
+			    
+			
+			  
 			
 
 		});
@@ -893,39 +994,55 @@
 <!--   			   <li><a href="#" title="Votos"><h4>Votar (0)</h4></a></li> -->
   			<div style="display:inline-block">	
   			  	<i class="icon-ok"></i>
-  			  	Visto ${cantidadVisitas} veces
+  			  	${cantidadVisitas}   			  
+  			  	<c:if test="${cantidadVisitas == 1}">visita</c:if>
+  			  	<c:if test="${cantidadVisitas != 1}">visitas</c:if>
+  			</div>
+  			||	
+  			<div id="votes" style="display:inline-block">	
+  				<span id="voteCount">${cantidadVotos}</span>
+  				<c:if test="${cantidadVotos == 1}">voto</c:if>
+  			  	<c:if test="${cantidadVotos != 1}">votos</c:if>
+  				&nbsp;  				
+  				<a class="vote-up" href="#" title="Voto positivo"><i id="icon-up" class="icon-thumbs-up"></i></a>  	  				
+  				&nbsp;
+  				<a class="vote-down" href="#" title="Voto negativo"><i id="icon-down" class="icon-thumbs-down"></i></a>
+  				&nbsp;
   			</div>
   			||
   			<div id="watchers" style="display:inline-block">		  	
 	    		<a href="#" id="watching-toggle"></a>
  			    (<a href="#" id="view-watcher-list" data-toggle="popover"></a>)
+  			</div>  			
+  			||	
+  			<div style="display:inline-block">	
+  				${cantidadComentarios} comentarios  			
   			</div>
-  			||
+  			||	
   			<div style="display:inline-block">	
   			  	<i class="icon-star"></i>
   			  	<a id="bookmarkme" href="#" rel="sidebar" title="Agregar a favoritos">Agregar a Favoritos</a>
-  			</div>  	
-  			    	
-  			  
-<%--   			    <a href="#" title="Comentarios">Comentarios (${cantidadComentarios})</a> --%>
-<!--   			    <a id="bookmarkme" href="#" rel="sidebar" title="Agregar a favoritos"><h4><i class="icon-star"></i></h4></a> -->
-<!--   			     <li><a href="#" title="Imprimir"><h4><i class="icon-print"></i></h4></a></li> -->
-<!--   			     <li><a href="#" title="Denunciar"><h4><i class="icon-warning-sign"></i></h4></a></li>  			     -->
+  			</div>  
+				<i class="icon-print"></i>&nbsp;
+  			    <a href="#" title="Imprimir">Imprimir</a>
+  			    
+  			    <i class="icon-warning-sign"></i>&nbsp;
+  			    <a href="#" title="Denunciar">Denunciar</a>  			    
 		  
 
 		  		  		
-<!-- 	 	  <div id="btnGroupSocial" class="btn-group"> -->
-<!-- 	 			<button class="btn"><i class="icon-share icon-large"></i>&nbsp;&nbsp;Compartir</button> -->
-<!-- 	 			<button class="btn dropdown-toggle" data-toggle="dropdown"> -->
-<!-- 	   			<span class="caret"></span> -->
-<!-- 	 			</button>	  	 -->
-<!-- 	 			<ul class="dropdown-menu"> -->
-<!-- 		    	<li><a href="#" title=""><i class="icon-envelope-alt icon-large"></i>&nbsp;&nbsp;&nbsp;Email</a></li> -->
-<!-- 		    	<li><a href="#" title=""><i class="icon-facebook-sign icon-large"></i>&nbsp;&nbsp;&nbsp;Facebook</a></li> -->
-<!-- 		    	<li><a href="#" title=""><i class="icon-google-plus icon-large"></i>&nbsp;&nbsp;&nbsp;Google+</a></li> -->
-<!-- 		    	<li><a href="#" title=""><i class="icon-twitter icon-large"></i>&nbsp;&nbsp;&nbsp;Twitter</a></li> -->
-<!-- 	 			</ul> -->
-<!-- 		   </div> -->
+	 	  <div id="btnGroupSocial" class="btn-group">
+	 			<button class="btn"><i class="icon-share icon-large"></i>&nbsp;&nbsp;Compartir</button>
+	 			<button class="btn dropdown-toggle" data-toggle="dropdown">
+	   			<span class="caret"></span>
+	 			</button>	  	
+	 			<ul class="dropdown-menu">
+		    	<li><a href="#" title=""><i class="icon-envelope-alt icon-large"></i>&nbsp;&nbsp;&nbsp;Email</a></li>
+		    	<li><a href="#" title=""><i class="icon-facebook-sign icon-large"></i>&nbsp;&nbsp;&nbsp;Facebook</a></li>
+		    	<li><a href="#" title=""><i class="icon-google-plus icon-large"></i>&nbsp;&nbsp;&nbsp;Google+</a></li>
+		    	<li><a href="#" title=""><i class="icon-twitter icon-large"></i>&nbsp;&nbsp;&nbsp;Twitter</a></li>
+	 			</ul>
+		   </div>
 
 			<sec:authorize access="hasAnyRole('ROLE_USER','ROLE_ADMIN', 'ROLE_MANAGER')">
 				<c:if test="${estado eq 'ABIERTO' || estado eq 'REABIERTO'}">
@@ -943,8 +1060,7 @@
 				</div>
 				<div class="btn-group" style="float:right;">
 					<button id="btn-edit" class="btn btn-info"><i class="icon-pencil icon-large"></i>&nbsp;&nbsp;Editar</button>			
-				</div>		
-				
+				</div>						
 			</sec:authorize>
 	
 	   </div>
