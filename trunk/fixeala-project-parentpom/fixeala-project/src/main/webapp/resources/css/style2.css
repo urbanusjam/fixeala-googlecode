@@ -824,8 +824,7 @@ div[data-role="editor-toolbar"] {
 	
 }
 
-#mdl-fileupload	.modal-body {
-   
+#mdl-fileupload	.modal-body {   
     max-height: 700px;  
 	overflow: hidden;
 	font-size: 12px;
@@ -834,8 +833,16 @@ div[data-role="editor-toolbar"] {
 	margin-bottom: 0; 
 }
 
+#mdl-dataset { 
+	width: 900px; 	
+	top: 50%;
+    left: 50%;
+    margin-top: -325px;
+    margin-left: -450px;
+}
 
-    
+#mdl-dataset .modal-body {max-height: 500px; }
+
 
 #tbl-fileupload table { margin: 20px 0; color: #000; }
 #tbl-fileupload thead th { text-align: left; }

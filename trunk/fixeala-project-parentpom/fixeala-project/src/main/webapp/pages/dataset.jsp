@@ -95,7 +95,7 @@
 				 
 				 	<tr >
 				 	<td style="border:none">
-					 	<a href="#myModal" class="btn btn-primary btn-large" data-toggle="modal" style="width:300px;height:50px;line-height:50px">
+					 	<a href="#mdl-dataset" class="btn btn-primary btn-large" data-toggle="modal" style="width:300px;height:50px;line-height:50px">
 							<i class="icon-magic icon-2x"></i>&nbsp;&nbsp;&nbsp;TU DATASET
 						</a>
 					<tr>						
@@ -125,19 +125,19 @@
 	
  
 	<!-- Modal -->
-	<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div id="mdl-dataset" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	  	<div class="modal-header">
 		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 		    <h4 id="myModalLabel">Personalizá tu dataset</h4>
 	  	</div>
 	  	<div class="modal-body">
 	    	<form id="customDatasetForm" >     	   
-		    	   		<table id="tblCustomDataset">
-		    	   		  	
+		    	   		<table id="tblCustomDataset">		    	   		  	
 		    	   		  	   	<tbody>
 				    	   			<tr>
 					    	   			<td>
-							    	   		<label for="province">Provincia</label>
+							    	   		<label for="province"><i class="icon-double-angle-right"></i>&nbsp;Provincia</label>
+							    	   		<br>
 							    	   		<select id="province" name="province">								
 													<option>Buenos Aires</option>
 													<option>Santa F&eacute;</option>	
@@ -146,61 +146,76 @@
 											</select>
 										</td>										
 										<td>
-						    	   			<label for="city">Ciudad</label>
+						    	   			<label for="city"><i class="icon-double-angle-right"></i>&nbsp;Ciudad</label>
+						    	   			<br>
 						    	   			<select id="city" name="city">						
 												<option>Ciudad Aut&oacute;noma de Buenos Aires</option>	
 												<option>Rosario</option>								
 									 		</select>		
 									 	</td>
-																		
-					    	   		</tr>
-					    	   		
-					    	   		<tr>
-					    	   			<td><label>Barrio / Localidad</label>			    	   		
-											<input type="text" id="neighborhood" name="neighborhood"/>
-										</td>
+									 	<td>
+						    	   			<label for="neighborhood"><i class="icon-double-angle-right"></i>&nbsp;Barrio / Localidad</label>
+						    	   			<br>
+							    	   		<input type="text" id="neighborhood" name="neighborhood"/>	
+									 	</td>
+															
+					    	   		</tr>   
+					    	   						    	   		
+					    	   		<tr>		
 										<td>
-							    	   		<label for="tags">Categorías</label>
+							    	   		<label for="tags"><i class="icon-double-angle-right"></i>&nbsp;Categorías</label>
+							    	   		<br>	
 							    	   		<input type="text" id="tags" name="tags"/>
-					    	   			</td>						    	   		
-									 
-					    	   		</tr>
-					    	   		
-					    	   		<tr>
+							    	   		<br>
+							    	   		<small><i class="icon-info-sign"></i>&nbsp; Si no especifica ninguna categoría, se considerarán todas.</small>
+					    	   			</td>					    	   			
 					    	   			<td>
-											<label for="status">Estado del reclamo</label>		
+					    	   				<label><i class="icon-double-angle-right"></i>&nbsp;Rango de fechas</label>
+					    	   				<br>	
+						    	   			<input type="text" id="dateFrom" name="dateFrom" class="input-small" value="06/02/14"/>	
+											&nbsp;-&nbsp;
+						    	   			<input type="text" id="dateTo" name="dateTo" class="input-small" value="07/02/14"/>
+					    	   			</td>						    	   			
+					    	   			<td>
+											<label for="status"><i class="icon-double-angle-right"></i>&nbsp;Estado del reclamo</label>	
+											<br>	
 						    	   			<div class="controls span2">
-						    	   			<label class="checkbox">
-											    <input id="status" type="checkbox" value="">Abierto										    
-											  </label>
-											  <label class="checkbox">
-											    <input id="status" type="checkbox" value="">Pendiente										    
-											  </label>
-											   <label class="checkbox">
-											    <input id="status" type="checkbox" value="">Resuelto										    
-											  </label>
+						    	   			  	  <label class="checkbox">
+												    <input id="status" type="checkbox" value="checked" checked>Todos										    
+												  </label>
+							    	   			  <label class="checkbox">
+												    <input id="status" type="checkbox" value="">Abierto										    
+												  </label>
+												  <label class="checkbox">
+												    <input id="status" type="checkbox" value="">Admitido										    
+												  </label>
+												  <label class="checkbox">
+												    <input id="status" type="checkbox" value="">En Progreso										    
+												  </label>
+												  <label class="checkbox">
+												    <input id="status" type="checkbox" value="">Resuelto										    
+												  </label>
+												  <label class="checkbox">
+												    <input id="status" type="checkbox" value="">Cerrado								    
+												  </label>											 
 						    	   			</div>											  
-										</td>	
-						    	   		<td>
-					    	   				<label>Fecha</label>					    	   	
-							    	   		<input type="text" id="dateFrom" name="dateFrom" style="width:90px;" placeholder="Desde"/>	
-							    	   		&nbsp;- &nbsp;		    	   		
-							    	   		<input type="text" id="dateTo" name="dateTo" style="width:90px;" placeholder="Hasta"/>
-					    	   			</td>										
+										</td>							    	   										
 					    	   		</tr>
-					    	   		
+					    	   	
 					    	   		<tr>					    	   			
 					    	   			<td>
-					    	   				<label for="order">Ordenar por</label>
+					    	   				<label for="order"><i class="icon-double-angle-right"></i>&nbsp;Ordenar por</label>
+					    	   				<br>
 					    	   				<select id="order" name="order">						
-													<option>Fecha (más recientes)</option>	
-													<option>Fecha (más antiguos)</option>	
-													<option>Tipo de reclamo (en orden alfabético)</option>
-													<option>Estado (en orden alfabético)</option>															
+													<option>fecha (más recientes)</option>	
+													<option>fecha (más viejos)</option>	
+													<option>estado</option>			
+													<option>categoría</option>																									
 											</select>	
 					    	   			</td>
 					    	   			<td>
-							    	   		<label>Formato del archivo</label>
+							    	   		<label><i class="icon-double-angle-right"></i>&nbsp;Formato del archivo</label>
+							    	   		<br>
 							    	   		<select id="fileFormat" name="fileFormat">						
 													<option>XML</option>	
 													<option>XLS</option>
@@ -215,9 +230,11 @@
 	  	</div>
 	  	<div class="modal-footer">    
 	  		<button class="btn btn-primary" id="btnExportDataset"> 
-				<i class="icon-save icon-large"></i>&nbsp;&nbsp;&nbsp;Exportar 
+				<i class="icon-save icon-large"></i>Exportar dataset 
 			</button>
-	    	<button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+	    	<button class="btn" data-dismiss="modal" aria-hidden="true">
+	    		<i class="icon-remove icon-large"></i>Cancelar
+	    	</button>
 	  	</div>
 	</div>
         
