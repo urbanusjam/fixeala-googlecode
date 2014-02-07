@@ -774,63 +774,30 @@
 			        	$watcherList.html(numberOfWatchers); 
 			        }			        
 			       
-			   
-			        
-			       $watcherList.click(function(){
-			    	   
-			    	   $watcherList.popover({
-		        		   title: '',
-		        		   content : function (){return get_popover_content()}, //triggers ajax request every ty
-		        		   html : true
-		        		  
-		        	   });
-			    	   
-			       });
+			       
+			       $watcherList.popover({trigger: 'manual', title: '', html : true})
+						       .click(function(e){
+						           var element = $(this);
+						           $.ajax({
+						        	   url: './displayIssueFollowers.html',
+						               type: 'POST',
+						               dataType: 'json',
+						               data: data,
+						               success: function(response){
+						            	   
+							    	        var f = '';				             
+										    $.each(response, function(i, follower){	
+										    	f += '<i class="icon-angle-right"></i>&nbsp;';
+										    	f += getUserURL(follower);
+										    	f += '<br>';
+										    });
+						                   $(element).attr('data-content',f).popover('show');
+						               }
+						           });
+						           e.preventDefault();
+						       });
 	        	
 			    
-			   	
-			     
-			     function get_popover_content() {
-			    	 
-			    	        var content = $.ajax({
-			    	        	url: './displayIssueFollowers.html',
-			    	            type: "POST",
-			    	            data: data,
-			    	            dataType: "json",
-			    	            async: false,
-			    	            success: function(followers) {
-			    	            	
-			    	            },
-			    	            error: function() {
-			    	                // nothing
-			    	            }
-			    	        }).responseText;
-			    	        var container = $(this).attr('data-rel');
-			    	     
-			    	        if (typeof container !== 'undefined') {
-			    	            // show a specific element such as "#mydetails"
-			    	            return $(content).find(container);
-			    	        }
-			    	        // show the whole page
-			    	        
-			    	        var followersArray = $.parseJSON(content);
-			    	        
-			    	        var f = '';				             
-						    $.each(followersArray, function(i, follower){	
-						    	f += '<i class="icon-angle-right"></i>&nbsp;';
-						    	f += getUserURL(follower);
-						    	f += '<br>';
-						    });
-			            	console.info(f);
-						  
-			    	      
-			    	        return f;
-			    	 
-				 
-				       
-				}
-			     
-			        
 			        $('#watching-toggle').click(function() {
 			        	
 				 		if($watchingLink.hasClass('watching')){
@@ -898,14 +865,9 @@
 		});
 		
 		
-		
-		 
-		        
-		        
-		   
-		
-		</script>
 	
+		</script>
+
 	
 	<div class="container-fluid">
 	  	<div class="row-fluid">
@@ -930,12 +892,15 @@
 <!--   			  <li><a href="#" title="Vistas"><h4>Vistas (0)</h4></a></li> -->
 <!--   			   <li><a href="#" title="Votos"><h4>Votar (0)</h4></a></li> -->
   			
-  			<div id="watchers">		  	
+  			<div id="watchers" style="display:inline-block">		  	
 	    		<a href="#" id="watching-toggle"></a>
  			    (<a href="#" id="view-watcher-list" data-toggle="popover"></a>)
- 			  
   			</div>
-  			    	
+  			||
+  			<div style="display:inline-block">	
+  			  	<i class="icon-star"></i>
+  			  	<a id="bookmarkme" href="#" rel="sidebar" title="Agregar a favoritos">Agregar a Favoritos</a>
+  			</div>  	
   			    	
   			  
 <%--   			    <a href="#" title="Comentarios">Comentarios (${cantidadComentarios})</a> --%>
