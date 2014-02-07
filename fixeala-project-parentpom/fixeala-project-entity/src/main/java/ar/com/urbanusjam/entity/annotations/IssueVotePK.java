@@ -2,47 +2,46 @@ package ar.com.urbanusjam.entity.annotations;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
 @Embeddable
 public class IssueVotePK implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@ManyToOne
-	@JoinColumn(name = "ID_ISSUE")
-	private Issue issue;
+	@Column(name="ID_ISSUE")
+	private Long issueID;
 	
-	@OneToOne
-	@JoinColumn(name = "ID_VOTER")
-	private User voter;
+	@Column(name="ID_VOTER")
+	private Long voterID;
 	
-
-	public Issue getIssue() {
-		return issue;
-	}
-
-	public void setIssue(Issue issue) {
-		this.issue = issue;
-	}
-
-	public User getVoter() {
-		return voter;
-	}
-
-	public void setVoter(User voter) {
-		this.voter = voter;
-	}
 	
+	public IssueVotePK(){}
+
+	
+	public Long getIssueID() {
+		return issueID;
+	}
+
+	public void setIssueID(Long issueID) {
+		this.issueID = issueID;
+	}
+
+	public Long getVoterID() {
+		return voterID;
+	}
+
+	public void setVoterID(Long voterID) {
+		this.voterID = voterID;
+	}
+
 	@Override
     public int hashCode() {
 		final int prime = 31;		
 		int result = 1;		
-		result = prime * result + ((issue == null) ? 0 : issue.hashCode());		
-		result = prime * result + ((voter == null) ? 0 : voter.hashCode());
+		result = prime * result + ((issueID == null) ? 0 : issueID.hashCode());		
+		result = prime * result + ((voterID == null) ? 0 : voterID.hashCode());
         return result;
     }
 	
@@ -58,15 +57,15 @@ public class IssueVotePK implements Serializable {
 	 
 	 IssueVotePK other = (IssueVotePK) obj;
 	 
-	 if (issue == null) {
-		 if (other.issue != null)
+	 if (voterID == null) {
+		 if (other.voterID != null)
 	         return false;
-	 } else if (!issue.equals(other.issue))
+	 } else if (!issueID.equals(other.voterID))
 	         return false;
-	 if (voter == null) {
-		 if (other.voter != null)
+	 if (voterID == null) {
+		 if (other.voterID != null)
 	         return false;
-	 } else if (!voter.equals(other.voter))
+	 } else if (!voterID.equals(other.voterID))
 	         return false;
 
 	 return true;

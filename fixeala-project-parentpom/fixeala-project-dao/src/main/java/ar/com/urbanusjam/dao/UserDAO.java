@@ -18,6 +18,8 @@ public interface UserDAO extends UserDetailsManager {
 	public UserDetails loadUserByName(String name);
 	
 	public User loadUserByUsername(String username) throws UsernameNotFoundException;
+	
+	public Long findUserIDbyUsername(String username);
 
 	public List<User> findAllActiveUsers();
 	

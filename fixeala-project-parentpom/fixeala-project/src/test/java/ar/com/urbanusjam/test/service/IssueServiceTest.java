@@ -1,6 +1,7 @@
 package ar.com.urbanusjam.test.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +21,9 @@ import ar.com.urbanusjam.services.ExportService;
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.IssueFollowDTO;
+import ar.com.urbanusjam.services.dto.IssueVoteDTO;
 import ar.com.urbanusjam.services.dto.ReportDTO;
+import ar.com.urbanusjam.services.utils.Vote;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"classpath:test-context.xml"}) 
@@ -98,7 +101,7 @@ public class IssueServiceTest {
 		Assert.assertTrue("User @" + following.getUsername().toUpperCase() , isFollowing);	
 	}
 	
-	@Test
+	//@Test
 	public void getIssueFollowers(){
 		String issueID = "67059";
 		List<String> followers = issueService.getIssueFollowers(issueID);
@@ -110,7 +113,7 @@ public class IssueServiceTest {
 			System.out.println("-" + s);
 	}
 	
-	@Test
+	//@Test
 	public void getUserFollowings(){
 		String userID = "helloworld";
 		List<String> followings = issueService.getUserFollowings(userID);
@@ -120,6 +123,41 @@ public class IssueServiceTest {
 		System.out.println("El usuario @" + userID + " está observando los siguientes reclamos:" );
 		for(String s : followings)			
 			System.out.println("#" + s);
+	}
+	
+	@Test
+	public void voteIssue(){
+		
+		IssueVoteDTO vote = new IssueVoteDTO();
+		vote.setIdIssue("1011");
+		vote.setUsername("helloworld");
+		vote.setVote(Vote.THUMBS_UP);
+		vote.setDate(new Date());
+		
+		IssueVoteDTO vote2 = new IssueVoteDTO();
+		vote2.setIdIssue("1011");
+		vote2.setUsername("dummy");
+		vote2.setVote(Vote.THUMBS_UP);
+		vote2.setDate(new Date());
+		
+		IssueVoteDTO vote3 = new IssueVoteDTO();
+		vote3.setIdIssue("2568");
+		vote3.setUsername("dummy");
+		vote3.setVote(Vote.THUMBS_DOWN);
+		vote3.setDate(new Date());
+		
+		List<IssueVoteDTO> votes = new ArrayList<IssueVoteDTO>();
+		votes.add(vote);
+		votes.add(vote2);
+		votes.add(vote3);
+		
+		for(IssueVoteDTO v : votes){
+			issueService.voteIssue(v);
+		}
+		
+		Assert.assertNotNull(issueService.getCurrentVote("1011", "helloworld"));
+		Assert.assertNotNull(issueService.getCurrentVote("1011", "dummy"));
+		Assert.assertNotNull(issueService.getCurrentVote("2568", "dummy"));
 	}
 	
 	

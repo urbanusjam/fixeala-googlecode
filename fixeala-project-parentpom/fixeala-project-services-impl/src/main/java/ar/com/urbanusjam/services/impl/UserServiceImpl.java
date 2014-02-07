@@ -316,5 +316,10 @@ public class UserServiceImpl implements UserService {
 		return authorities;
 	}
 
+	@Override
+	public Long getUserId(String username) throws UsernameNotFoundException {
+		return userDAO.findUserIDbyUsername(username);
+	}
+
 	
 }

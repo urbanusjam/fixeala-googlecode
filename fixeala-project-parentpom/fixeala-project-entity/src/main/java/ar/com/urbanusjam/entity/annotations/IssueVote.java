@@ -6,6 +6,8 @@ import java.util.GregorianCalendar;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -16,6 +18,14 @@ public class IssueVote implements Serializable {
 	
 	@EmbeddedId
     private IssueVotePK id;
+	
+	@ManyToOne
+	@JoinColumn(name="ID_ISSUE", insertable=false, updatable=false)
+	private Issue issue;
+	
+	@ManyToOne
+	@JoinColumn(name="ID_VOTER", insertable=false, updatable=false)
+	private User voter;
 	
 	@Column(name = "VOTE")
 	private int vote;
@@ -34,7 +44,23 @@ public class IssueVote implements Serializable {
 	public void setId(IssueVotePK id) {
 		this.id = id;
 	}
-	
+		
+	public Issue getIssue() {
+		return issue;
+	}
+
+	public void setIssue(Issue issue) {
+		this.issue = issue;
+	}
+
+	public User getVoter() {
+		return voter;
+	}
+
+	public void setVoter(User voter) {
+		this.voter = voter;
+	}
+
 	public int getVote() {
 		return vote;
 	}

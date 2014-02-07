@@ -30,8 +30,10 @@
     
     <bean id="commentDAO" class="ar.com.urbanusjam.dao.impl.CommentDAOImpl" parent="hibernateParent" /> 
     
-    <bean id="followDAO" class="ar.com.urbanusjam.dao.impl.IssueFollowDAOImpl" parent="hibernateParent" /> 
+    <bean id="issueFollowDAO" class="ar.com.urbanusjam.dao.impl.IssueFollowDAOImpl" parent="hibernateParent" /> 
     
     <bean id="issuePageViewDAO" class="ar.com.urbanusjam.dao.impl.IssuePageViewDAOImpl" parent="hibernateParent" /> 
+    
+    <bean id="issueVoteDAO" class="ar.com.urbanusjam.dao.impl.IssueVoteDAOImpl" parent="hibernateParent" /> 
               
 </beans>

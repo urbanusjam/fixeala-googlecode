@@ -50,11 +50,13 @@ import ar.com.urbanusjam.services.dto.IssueFollowDTO;
 import ar.com.urbanusjam.services.dto.IssueHistorialRevisionDTO;
 import ar.com.urbanusjam.services.dto.IssueLicitacionDTO;
 import ar.com.urbanusjam.services.dto.IssuePageViewDTO;
+import ar.com.urbanusjam.services.dto.IssueVoteDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
 import ar.com.urbanusjam.services.utils.FileUploadUtils;
 import ar.com.urbanusjam.services.utils.IssueStatus;
 import ar.com.urbanusjam.services.utils.Messages;
 import ar.com.urbanusjam.services.utils.Operation;
+import ar.com.urbanusjam.services.utils.Vote;
 import ar.com.urbanusjam.web.domain.AlertStatus;
 import ar.com.urbanusjam.web.domain.ContenidoResponse;
 
@@ -163,7 +165,8 @@ public class IssueController {
 				model.addAttribute("cantidadComentarios", issue.getComentarios().size());	
 				
 				IssueFollowDTO follow = new IssueFollowDTO();
-				boolean isUserWatching = false;
+				IssueVoteDTO currentVote = new IssueVoteDTO();
+				boolean isUserWatching = false;			
 				String loggedUser = ""; 
 			
 				Authentication auth = (Authentication) SecurityContextHolder.getContext().getAuthentication();		
@@ -181,6 +184,7 @@ public class IssueController {
 						pageviewDTO.setUsername(loggedUser);
 						pageviewDTO.setDate(new Date());
 						issueService.trackIssuePageView(pageviewDTO);
+						currentVote = issueService.getCurrentVote(issueID, loggedUser);						
 					}
 					
 				}
@@ -188,7 +192,10 @@ public class IssueController {
 				model.addAttribute("loggedUser", loggedUser);	
 				model.addAttribute("cantidadVisitas", issueService.getIssuePageViews(issueID));
 				model.addAttribute("cantidadObservadores", issueService.getIssueFollowers(issueID).size());				
-				model.addAttribute("isUserWatching", isUserWatching);				
+				model.addAttribute("isUserWatching", isUserWatching);					
+				model.addAttribute("cantidadVotos", issueService.countIssueVotes(issueID));
+				model.addAttribute("isCurrentlyVoted", currentVote.isCurrentlyVoteByUser());	
+				model.addAttribute("isVoteUp", currentVote.getVote() == 1 ? true : false);	
 				
 				IssueLicitacionDTO licitacion = new IssueLicitacionDTO();
 				
@@ -713,6 +720,41 @@ public class IssueController {
 		return issueService.getIssueFollowers(issueID);		
 	}
 
+	
+	@RequestMapping(value="/issues/voteIssue", method = RequestMethod.POST)
+	public @ResponseBody AlertStatus voteIssue(@RequestParam("issueID") String issueID, 
+			@RequestParam("vote") int voteUpOrDown, Model model){
+		
+		IssueVoteDTO vote = new IssueVoteDTO();
+		
+		try {			
+			User user =  getCurrentUser(SecurityContextHolder.getContext().getAuthentication());
+			UserDetails userDB = userService.loadUserByUsername(user.getUsername());		
+			
+			if(userDB == null){
+				return new AlertStatus(false, "Debe estar logueado para observar el reclamo.");
+			}	
+			
+			if( (issueService.getCurrentVote(issueID, userDB.getUsername()).isCurrentlyVoteByUser()) )
+				return new AlertStatus(false, "Ya ha votado por este reclamo.");
+			
+			vote.setIdIssue(issueID);		
+			vote.setUsername(userDB.getUsername());
+			vote.setVote(voteUpOrDown);
+			vote.setDate(new Date());
+			
+			issueService.voteIssue(vote);
+					
+			return new AlertStatus(true, String.valueOf(issueService.countIssueVotes(issueID)));
+			
+		}catch(AccessDeniedException e){
+			return new AlertStatus(false, "Debe estar logueado para observar el reclamo.");
+		
+		}catch(Exception e){
+			return new AlertStatus(false, "Ha ocurrido un error al intentar votar el reclamo.");
+		}					
+		
+	}
 	
 	
 	
