@@ -289,13 +289,13 @@ CREATE TABLE issue_follow (
 
 -- ISSUE_VIEW
 CREATE TABLE issue_pageview (	
-	   id_issue_view BIGINT(20) NOT NULL AUTO_INCREMENT,    
+	   id_issue_pageview BIGINT(20) NOT NULL AUTO_INCREMENT,    
 	   id_issue BIGINT(20) NOT NULL,
-	   id_user BIGINT(20) NULL,	 
-	   ip_address INT(11) UNSIGNED NOT NULL,
-	   view_date DATETIME NOT NULL,
+	   id_user BIGINT(20) NOT NULL,	 
+	   ip_address INT(11) UNSIGNED NULL,
+	   pageview_date DATETIME NOT NULL,
 	   
-	   PRIMARY KEY (id_issue_view),
+	   PRIMARY KEY (id_issue_pageview),
 	   FOREIGN KEY (id_issue) REFERENCES issue (id_issue),
 	   FOREIGN KEY (id_user) REFERENCES user (id_user)	  
 	   

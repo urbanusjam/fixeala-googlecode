@@ -104,6 +104,9 @@ public class Issue implements Serializable  {
 	
 	@OneToMany(mappedBy="issue", fetch = FetchType.LAZY) 
 	private Set<IssueFollow> followers;
+	
+	@OneToMany(mappedBy="issue", fetch = FetchType.LAZY) 
+	private Set<IssuePageView> pageviews;
 
 	
 	public Issue(){   

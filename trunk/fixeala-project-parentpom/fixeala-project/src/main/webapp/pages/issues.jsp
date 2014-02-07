@@ -891,7 +891,11 @@
       	
 <!--   			  <li><a href="#" title="Vistas"><h4>Vistas (0)</h4></a></li> -->
 <!--   			   <li><a href="#" title="Votos"><h4>Votar (0)</h4></a></li> -->
-  			
+  			<div style="display:inline-block">	
+  			  	<i class="icon-ok"></i>
+  			  	Visto ${cantidadVisitas} veces
+  			</div>
+  			||
   			<div id="watchers" style="display:inline-block">		  	
 	    		<a href="#" id="watching-toggle"></a>
  			    (<a href="#" id="view-watcher-list" data-toggle="popover"></a>)
