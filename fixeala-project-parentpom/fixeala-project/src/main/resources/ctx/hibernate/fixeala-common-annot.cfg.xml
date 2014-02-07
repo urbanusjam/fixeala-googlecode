@@ -14,6 +14,7 @@
         <mapping class="ar.com.urbanusjam.entity.annotations.IssueFollow" />  
         <mapping class="ar.com.urbanusjam.entity.annotations.IssueHistorialRevision" />     
         <mapping class="ar.com.urbanusjam.entity.annotations.IssueLicitacion" />
+        <mapping class="ar.com.urbanusjam.entity.annotations.IssuePageView" />
         <mapping class="ar.com.urbanusjam.entity.annotations.IssueVote" />  
         <mapping class="ar.com.urbanusjam.entity.annotations.PasswordResetToken" />    
         <mapping class="ar.com.urbanusjam.entity.annotations.Tag" />   

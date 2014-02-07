@@ -49,6 +49,7 @@ import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.IssueFollowDTO;
 import ar.com.urbanusjam.services.dto.IssueHistorialRevisionDTO;
 import ar.com.urbanusjam.services.dto.IssueLicitacionDTO;
+import ar.com.urbanusjam.services.dto.IssuePageViewDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
 import ar.com.urbanusjam.services.utils.FileUploadUtils;
 import ar.com.urbanusjam.services.utils.IssueStatus;
@@ -165,20 +166,27 @@ public class IssueController {
 				boolean isUserWatching = false;
 				String loggedUser = ""; 
 			
-					Authentication auth = (Authentication) SecurityContextHolder.getContext().getAuthentication();		
-					
-					if(!(auth instanceof AnonymousAuthenticationToken)){
-						UserDetails userDB = userService.loadUserByUsername(((User)auth.getPrincipal()).getUsername());
-						if(userDB != null){
-							follow.setUsername(userDB.getUsername());
-							follow.setIdIssue(issueID);
-							isUserWatching = issueService.isUserFollowingIssue(follow);
-							loggedUser = userDB.getUsername();
-						}
+				Authentication auth = (Authentication) SecurityContextHolder.getContext().getAuthentication();		
+				
+				if(!(auth instanceof AnonymousAuthenticationToken)){
+					UserDetails userDB = userService.loadUserByUsername(((User)auth.getPrincipal()).getUsername());
+					if(userDB != null){
+						follow.setUsername(userDB.getUsername());
+						follow.setIdIssue(issueID);
+						isUserWatching = issueService.isUserFollowingIssue(follow);
+						loggedUser = userDB.getUsername();
 						
+						IssuePageViewDTO pageviewDTO = new IssuePageViewDTO();
+						pageviewDTO.setIssueID(issueID);
+						pageviewDTO.setUsername(loggedUser);
+						pageviewDTO.setDate(new Date());
+						issueService.trackIssuePageView(pageviewDTO);
 					}
+					
+				}
 						
-				model.addAttribute("loggedUser", loggedUser);				
+				model.addAttribute("loggedUser", loggedUser);	
+				model.addAttribute("cantidadVisitas", issueService.getIssuePageViews(issueID));
 				model.addAttribute("cantidadObservadores", issueService.getIssueFollowers(issueID).size());				
 				model.addAttribute("isUserWatching", isUserWatching);				
 				

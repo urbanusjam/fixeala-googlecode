@@ -19,6 +19,7 @@ import ar.com.urbanusjam.dao.AreaDAO;
 import ar.com.urbanusjam.dao.CommentDAO;
 import ar.com.urbanusjam.dao.IssueDAO;
 import ar.com.urbanusjam.dao.IssueFollowDAO;
+import ar.com.urbanusjam.dao.IssuePageViewDAO;
 import ar.com.urbanusjam.dao.TagDAO;
 import ar.com.urbanusjam.dao.UserDAO;
 import ar.com.urbanusjam.entity.annotations.Area;
@@ -29,6 +30,7 @@ import ar.com.urbanusjam.entity.annotations.IssueFollow;
 import ar.com.urbanusjam.entity.annotations.IssueFollowPK;
 import ar.com.urbanusjam.entity.annotations.IssueHistorialRevision;
 import ar.com.urbanusjam.entity.annotations.IssueLicitacion;
+import ar.com.urbanusjam.entity.annotations.IssuePageView;
 import ar.com.urbanusjam.entity.annotations.Tag;
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.ContenidoService;
@@ -41,6 +43,7 @@ import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.IssueFollowDTO;
 import ar.com.urbanusjam.services.dto.IssueHistorialRevisionDTO;
 import ar.com.urbanusjam.services.dto.IssueLicitacionDTO;
+import ar.com.urbanusjam.services.dto.IssuePageViewDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
 import ar.com.urbanusjam.services.mock.MapUtil;
 import ar.com.urbanusjam.services.utils.IssueStatus;
@@ -57,7 +60,7 @@ public class IssueServiceImpl implements IssueService {
 	private TagDAO tagDAO;
 	private CommentDAO commentDAO;
 	private IssueFollowDAO followDAO;
-	
+	private IssuePageViewDAO issuePageViewDAO;
 	
 	
 	public void setUserService(UserService userService) {
@@ -90,6 +93,10 @@ public class IssueServiceImpl implements IssueService {
 	
 	public void setFollowDAO(IssueFollowDAO followDAO) {
 		this.followDAO = followDAO;
+	}
+	
+	public void setIssuePageViewDAO(IssuePageViewDAO issuePageViewDAO) {
+		this.issuePageViewDAO = issuePageViewDAO;
 	}
 
 	@Override
@@ -730,6 +737,33 @@ public class IssueServiceImpl implements IssueService {
 		}
 		
 		return issuesFollowed;
+	}
+
+	@Override
+	public boolean trackIssuePageView(IssuePageViewDTO pageviewDTO) {
+		
+		boolean pageviewExists = false;
+		pageviewExists = issuePageViewDAO.existsIssuePageView(Long.valueOf(pageviewDTO.getIssueID()), pageviewDTO.getUsername());
+		
+		if(!pageviewExists){
+			IssuePageView pageview = new IssuePageView();
+			Issue issue = new Issue();
+			issue.setId(Long.valueOf(pageviewDTO.getIssueID()));
+			pageview.setIssue(issue);
+			User user = userDAO.loadUserByUsername(pageviewDTO.getUsername());
+			pageview.setUser(user);
+			pageview.setDate(this.getCurrentCalendar(pageviewDTO.getDate()));
+			issuePageViewDAO.saveIssuePageView(pageview);
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
+	@Override
+	public int getIssuePageViews(String issueID) {
+		return issuePageViewDAO.getIssuePageViews(Long.valueOf(issueID));
 	}
 	
 }

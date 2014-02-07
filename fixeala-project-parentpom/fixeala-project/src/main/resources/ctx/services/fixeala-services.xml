@@ -22,6 +22,7 @@
 		<property name="tagDAO" ref="tagDAO" />
 		<property name="commentDAO" ref="commentDAO" />
 		<property name="followDAO" ref="followDAO" />
+		<property name="issuePageViewDAO" ref="issuePageViewDAO" />
 	</bean>
 	
 <!-- 	<bean name="contenidoService" class="ar.com.urbanusjam.services.impl.ContenidoServiceImpl" > -->
