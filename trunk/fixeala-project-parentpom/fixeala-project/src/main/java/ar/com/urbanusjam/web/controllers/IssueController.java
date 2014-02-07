@@ -95,7 +95,6 @@ public class IssueController {
 		
 		String[] parts = issueToken.split("-");
 		String issueID = parts[0];
-	
 		
 		try{
 			 	issue = issueService.getIssueById(issueID);	
