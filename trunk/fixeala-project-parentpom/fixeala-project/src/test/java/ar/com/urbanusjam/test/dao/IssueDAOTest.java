@@ -16,6 +16,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import ar.com.urbanusjam.dao.IssueDAO;
+import ar.com.urbanusjam.dao.IssueVoteDAO;
 import ar.com.urbanusjam.dao.impl.utils.CriteriaType;
 import ar.com.urbanusjam.dao.utils.IssueCriteriaSearch;
 import ar.com.urbanusjam.entity.annotations.Issue;
@@ -28,6 +29,9 @@ public class IssueDAOTest  {
 			
 	@Autowired
 	private IssueDAO issueDAO;	
+	
+	@Autowired
+	private IssueVoteDAO issueVoteDAO;	
 		
 	//@Test
 	public void findIssuesByDefaultCriteriaTest(){
@@ -55,8 +59,8 @@ public class IssueDAOTest  {
 	
 	}	
 	
-	@Test
-	public void findIssuesByCustomCriteriaTest() throws ParseException{
+	//@Test
+	public void findIssuesByCustomCriteriaTest() throws ParseException {
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date date1 = sdf.parse("2013-11-01");
@@ -77,6 +81,11 @@ public class IssueDAOTest  {
 		
 		Assert.assertEquals(1, issues.size());	
 		
+	}
+	
+	@Test
+	public void sumarizeVotesByIssue() {
+		Assert.assertEquals(new Long(2), issueVoteDAO.getTotalVotesCount(Long.valueOf("1011")));
 	}
 	
 	private GregorianCalendar toCalendar(Date date){

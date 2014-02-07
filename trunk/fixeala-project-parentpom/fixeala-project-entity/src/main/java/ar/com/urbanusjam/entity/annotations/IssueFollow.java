@@ -24,7 +24,6 @@ public class IssueFollow implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="ID_ISSUE", insertable=false, updatable=false)
 	private Issue issue;
-
 	
 	@ManyToOne
 	@JoinColumn(name="ID_FOLLOWER", insertable=false, updatable=false)

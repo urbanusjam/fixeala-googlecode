@@ -260,13 +260,13 @@ CREATE TABLE COMMENT (
 -- ISSUE_VOTE
 CREATE TABLE issue_vote (	
        id_issue BIGINT(20) NOT NULL,
-	   id_user BIGINT(20) NOT NULL,	 
+	   id_voter BIGINT(20) NOT NULL,	 
 	   vote SMALLINT NOT NULL CHECK ("VOTE" = 1 OR "VOTE" = -1),
 	   vote_date DATETIME NOT NULL,
 	   	   
-	   PRIMARY KEY (id_issue, id_user),
+	   PRIMARY KEY (id_issue, id_voter),
 	   FOREIGN KEY (id_issue) REFERENCES issue (id_issue),
-	   FOREIGN KEY (id_user) REFERENCES user (id_user)	  
+	   FOREIGN KEY (id_voter) REFERENCES user (id_user)	  
 	   
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

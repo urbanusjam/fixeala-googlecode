@@ -21,7 +21,9 @@
 		<property name="areaDAO" ref="areaDAO" />
 		<property name="tagDAO" ref="tagDAO" />
 		<property name="commentDAO" ref="commentDAO" />
-		<property name="followDAO" ref="followDAO" />
+		<property name="issueFollowDAO" ref="issueFollowDAO" />
+		<property name="issuePageViewDAO" ref="issuePageViewDAO" />
+		<property name="issueVoteDAO" ref="issueVoteDAO" />
 	</bean>
 	
 	<bean name="exportService" class="ar.com.urbanusjam.services.impl.ExportServiceImpl" />

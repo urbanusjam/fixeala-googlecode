@@ -204,6 +204,12 @@ public class UserDAOImpl extends GenericDAOImpl<User, Serializable>  implements 
 		return result;
 	}
 
+	@Override
+	public Long findUserIDbyUsername(String username) {
+		List<User> users = this.findWhere(" username = ? ",  new Object[]{username});		
+		return users.size() > 0 ? users.get(0).getId() : null;	
+	}
+
 	
 
 }

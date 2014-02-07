@@ -20,6 +20,7 @@ import ar.com.urbanusjam.dao.CommentDAO;
 import ar.com.urbanusjam.dao.IssueDAO;
 import ar.com.urbanusjam.dao.IssueFollowDAO;
 import ar.com.urbanusjam.dao.IssuePageViewDAO;
+import ar.com.urbanusjam.dao.IssueVoteDAO;
 import ar.com.urbanusjam.dao.TagDAO;
 import ar.com.urbanusjam.dao.UserDAO;
 import ar.com.urbanusjam.entity.annotations.Area;
@@ -31,6 +32,8 @@ import ar.com.urbanusjam.entity.annotations.IssueFollowPK;
 import ar.com.urbanusjam.entity.annotations.IssueHistorialRevision;
 import ar.com.urbanusjam.entity.annotations.IssueLicitacion;
 import ar.com.urbanusjam.entity.annotations.IssuePageView;
+import ar.com.urbanusjam.entity.annotations.IssueVote;
+import ar.com.urbanusjam.entity.annotations.IssueVotePK;
 import ar.com.urbanusjam.entity.annotations.Tag;
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.ContenidoService;
@@ -44,6 +47,7 @@ import ar.com.urbanusjam.services.dto.IssueFollowDTO;
 import ar.com.urbanusjam.services.dto.IssueHistorialRevisionDTO;
 import ar.com.urbanusjam.services.dto.IssueLicitacionDTO;
 import ar.com.urbanusjam.services.dto.IssuePageViewDTO;
+import ar.com.urbanusjam.services.dto.IssueVoteDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
 import ar.com.urbanusjam.services.mock.MapUtil;
 import ar.com.urbanusjam.services.utils.IssueStatus;
@@ -59,8 +63,9 @@ public class IssueServiceImpl implements IssueService {
 	private AreaDAO areaDAO;
 	private TagDAO tagDAO;
 	private CommentDAO commentDAO;
-	private IssueFollowDAO followDAO;
+	private IssueFollowDAO issueFollowDAO;
 	private IssuePageViewDAO issuePageViewDAO;
+	private IssueVoteDAO issueVoteDAO;
 	
 	
 	public void setUserService(UserService userService) {
@@ -91,10 +96,14 @@ public class IssueServiceImpl implements IssueService {
 		this.commentDAO = commentDAO;
 	}
 	
-	public void setFollowDAO(IssueFollowDAO followDAO) {
-		this.followDAO = followDAO;
+	public void setIssueFollowDAO(IssueFollowDAO issueFollowDAO) {
+		this.issueFollowDAO = issueFollowDAO;
 	}
-	
+
+	public void setIssueVoteDAO(IssueVoteDAO issueVoteDAO) {
+		this.issueVoteDAO = issueVoteDAO;
+	}
+
 	public void setIssuePageViewDAO(IssuePageViewDAO issuePageViewDAO) {
 		this.issuePageViewDAO = issuePageViewDAO;
 	}
@@ -694,21 +703,18 @@ public class IssueServiceImpl implements IssueService {
 	}
 
 	@Override
-	public void followIssue(IssueFollowDTO followingDTO) {
-//		IssueDTO issue = this.getIssueById(followingDTO.getIdIssue());
-//		issue.getFollowers().add(followingDTO);
-//		this.updateIssue(issue);				
-		followDAO.saveFollowing(convertTo(followingDTO));
+	public void followIssue(IssueFollowDTO followingDTO) {	
+		issueFollowDAO.saveFollowing(convertTo(followingDTO));
 	}
 
 	@Override
 	public void unFollowIssue(IssueFollowDTO followingDTO) {
-		followDAO.deleteFollowing(convertTo(followingDTO));		
+		issueFollowDAO.deleteFollowing(convertTo(followingDTO));		
 	}
 
 	@Override
 	public boolean isUserFollowingIssue(IssueFollowDTO followingDTO) {
-		IssueFollow following = followDAO.findFollowing(convertTo(followingDTO));
+		IssueFollow following = issueFollowDAO.findFollowing(convertTo(followingDTO));
 		return following != null;
 	}
 
@@ -716,7 +722,7 @@ public class IssueServiceImpl implements IssueService {
 	public List<String> getIssueFollowers(String issueID) {
 		List<IssueFollow> followings = new ArrayList<IssueFollow>();
 		List<String> followers = new ArrayList<String>();
-		followings = followDAO.findFollowingsByIssue(Long.valueOf(issueID));
+		followings = issueFollowDAO.findFollowingsByIssue(Long.valueOf(issueID));
 		
 		for(IssueFollow f : followings){
 			followers.add(f.getFollower().getUsername());
@@ -731,7 +737,7 @@ public class IssueServiceImpl implements IssueService {
 		List<String> issuesFollowed = new ArrayList<String>();		
 		User follower = userService.loadUserByUsername(username);
 		
-		followings = followDAO.findFollowingsByUser(follower.getId());
+		followings = issueFollowDAO.findFollowingsByUser(follower.getId());
 		for(IssueFollow f : followings){
 			issuesFollowed.add(String.valueOf(f.getIssue().getId()));
 		}
@@ -764,6 +770,43 @@ public class IssueServiceImpl implements IssueService {
 	@Override
 	public int getIssuePageViews(String issueID) {
 		return issuePageViewDAO.getIssuePageViews(Long.valueOf(issueID));
+	}
+
+	@Override
+	public void voteIssue(IssueVoteDTO voteDTO) {
+		IssueVote vote = new IssueVote();		
+		IssueVotePK voteId = new IssueVotePK();		
+		voteId.setIssueID(Long.valueOf(voteDTO.getIdIssue()));	
+		voteId.setVoterID(userService.getUserId(voteDTO.getUsername()));
+		vote.setId(voteId);
+		vote.setVote(voteDTO.getVote());
+		vote.setDate(voteDTO.getDate() != null ? this.getCurrentCalendar(voteDTO.getDate()) : null);				
+		issueVoteDAO.saveIssueVote(vote);
+	}
+
+	@Override
+	public IssueVoteDTO getCurrentVote(String issueID, String username) {
+		IssueVoteDTO voteDTO = new IssueVoteDTO();
+		User user = new User();		
+		user.setId(userService.getUserId(username));
+		IssueVote vote = issueVoteDAO.getVoteByUser(Long.valueOf(issueID), user.getId());
+		
+		if(vote != null){
+			voteDTO.setIdIssue(String.valueOf(vote.getId().getIssueID()));
+			voteDTO.setUsername(user.getUsername());
+			voteDTO.setVote(vote.getVote());
+			voteDTO.setDate(vote.getDate().getTime());
+			voteDTO.setCurrentlyVoteByUser(true);
+		}
+		else
+			voteDTO.setCurrentlyVoteByUser(false);
+			
+		return voteDTO;				
+	}
+
+	@Override
+	public Long countIssueVotes(String issueID) {
+		return issueVoteDAO.getTotalVotesCount(Long.valueOf(issueID));
 	}
 	
 }
