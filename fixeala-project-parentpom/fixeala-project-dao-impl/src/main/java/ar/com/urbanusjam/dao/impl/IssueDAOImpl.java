@@ -14,9 +14,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import ar.com.urbanusjam.dao.IssueDAO;
-import ar.com.urbanusjam.dao.impl.utils.CriteriaType;
 import ar.com.urbanusjam.dao.impl.utils.GenericDAOImpl;
-import ar.com.urbanusjam.dao.utils.IssueCriteriaSearch;
+import ar.com.urbanusjam.dao.utils.IssueCriteriaSearchRaw;
 import ar.com.urbanusjam.entity.annotations.Issue;
 import ar.com.urbanusjam.entity.annotations.Tag;
 
@@ -87,30 +86,20 @@ public class IssueDAOImpl extends GenericDAOImpl<Issue, Serializable> implements
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Issue> getIssuesByCriteria(IssueCriteriaSearch issueSearch) {
+	public List<Issue> getIssuesByCriteria(IssueCriteriaSearchRaw issueSearch) {
 		
 		List<Issue> issues = new ArrayList<Issue>();
 		
-		if(issueSearch.getSearchType().equals(CriteriaType.DEFAULT_SEARCH)){					
-			issues = getSessionFactory().getCurrentSession().createCriteria(Issue.class)  				
-				.add( Restrictions.between("date", issueSearch.getMinFecha(), issueSearch.getMaxFecha()))				
-		        .addOrder(Order.asc("date") )
-		        .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
-		        .list();			
-		}
-		
-		else if(issueSearch.getSearchType().equals(CriteriaType.CUSTOM_SEARCH)){
 			issues = getSessionFactory().getCurrentSession().createCriteria(Issue.class)  	
 					.add( Restrictions.eq("province", issueSearch.getProvincia()))	
 					.add( Restrictions.eq("city", issueSearch.getCiudad()))	
-					.add( Restrictions.between("date", issueSearch.getMinFecha(), issueSearch.getMaxFecha()))		
-					.add( Restrictions.in("status", issueSearch.getEstado()))						
+					.add( Restrictions.between("date", issueSearch.getMinFechaFormateada(), issueSearch.getMaxFechaFormateada()))		
+					.add( Restrictions.in("status", issueSearch.getEstadosArray()))						
 					.createAlias("tagsList", "t")
-					.add(Restrictions.in("t.tagname", issueSearch.getTags()))
-			        .addOrder(Order.asc("date") )
+					.add(Restrictions.in("t.tagname", issueSearch.getTagsArray()))
+			        .addOrder(Order.desc(issueSearch.getSortField()))
 			        .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
 			        .list();			
-		}
 		
 		
 		return issues;        
