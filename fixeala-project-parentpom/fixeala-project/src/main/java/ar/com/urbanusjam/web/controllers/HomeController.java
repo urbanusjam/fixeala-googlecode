@@ -31,11 +31,11 @@ import ar.com.urbanusjam.services.UserService;
 import ar.com.urbanusjam.services.dto.CommentDTO;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
+import ar.com.urbanusjam.services.utils.DateUtils;
 import ar.com.urbanusjam.services.utils.IssueStatus;
 import ar.com.urbanusjam.web.domain.DataTablesParamUtility;
 import ar.com.urbanusjam.web.domain.JQueryDataTableParamModel;
 import ar.com.urbanusjam.web.utils.DataTableResultSet;
-import ar.com.urbanusjam.web.utils.DateUtils;
 import ar.com.urbanusjam.web.utils.URISchemeUtils;
 
 import com.google.gson.Gson;

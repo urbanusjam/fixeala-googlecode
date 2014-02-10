@@ -1,3 +1,79 @@
+<script type="text/javascript">
+  $(function() {
+	 
+	  var date = new Date();
+	  var today = date;
+	  var dateThreeMonthLater = date.setMonth(date.getMonth() + 3);
+
+	  
+	  $('#from-datepicker').datetimepicker({		  
+		  format: 'dd/MM/yyyy',
+		  language: 'es',
+		  date: today,
+		
+	      pickTime: false
+	  });
+	  
+	  $('#to-datepicker').datetimepicker({
+		  format: 'dd/MM/yyyy',
+		  language: 'es',	
+		  endDate: today,
+	      pickTime: false
+	  });
+	  
+	  $('#tags').select2({		
+		  width: '220',		
+		  tags: ${allTags},
+	      tokenSeparators: [","],
+		  maximumSelectionSize: 5,
+		  id: function(item){ 
+			  	return item.text;
+		  },		 
+		  formatSelectionTooBig: function(){ 
+			  return "Sólo se permiten 5 etiquetas como máximo.";
+		  },		  
+		  formatNoMatches: function(){ 
+			  return "No se encontraron resultados.";
+		  },	  
+		  createSearchChoice: function() { return null; }
+	  }); 
+	  
+	  
+	  
+	  $('#btnExportDataset').click(function(){
+		  
+		  var dataForm = $('#datasetForm').serialize();
+		
+// 		  var statusArray = [];
+	      
+// 		  $(':checkbox:checked').each(function(i){	       
+// 			  statusArray.push($(this).val());
+// 	      });
+	      
+		  		  
+		  $.ajax({
+	  			url: './exportDataset.html',
+	      		type: "POST",		   
+	            data: dataForm,       
+	            success: function(data, status) { 
+		            	
+		            	alert("todo bien.");
+		            		
+		        }
+		            						           
+		          			           
+	  	  });	    	
+		  
+	  });
+	  
+	 
+	  
+	  
+
+  });
+</script>
+
+
 <div id="content">
 		
 		<!-- Dataset -->
@@ -131,72 +207,82 @@
 		    <h4 id="myModalLabel">Personalizá tu dataset</h4>
 	  	</div>
 	  	<div class="modal-body">
-	    	<form id="customDatasetForm" >     	   
+	    	<form id="datasetForm" method="POST">     	   
 		    	   		<table id="tblCustomDataset">		    	   		  	
 		    	   		  	   	<tbody>
 				    	   			<tr>
 					    	   			<td>
-							    	   		<label for="province"><i class="icon-double-angle-right"></i>&nbsp;Provincia</label>
-							    	   		<br>
-							    	   		<select id="province" name="province">								
-													<option>Buenos Aires</option>
-													<option>Santa F&eacute;</option>	
-													<option>Mendoza</option>		
-													<option>Neuqu&eacute;n</option>														
-											</select>
-										</td>										
-										<td>
-						    	   			<label for="city"><i class="icon-double-angle-right"></i>&nbsp;Ciudad</label>
+						    	   			<label><i class="icon-double-angle-right"></i>&nbsp;Provincia</label>
 						    	   			<br>
-						    	   			<select id="city" name="city">						
-												<option>Ciudad Aut&oacute;noma de Buenos Aires</option>	
+						    	   			<select id="provincia" name="provincia">	
+						    	   				<option selected="selected">Buenos Aires</option>	
+												<option>Santa Fé</option>								
+									 		</select>		
+									 	</td>								
+										<td>
+						    	   			<label><i class="icon-double-angle-right"></i>&nbsp;Ciudad</label>
+						    	   			<br>
+						    	   			<select id="ciudad" name="ciudad">	
+						    	   				<option selected="selected">Ciudad Autónoma de Buenos Aires</option>							    	   				
 												<option>Rosario</option>								
 									 		</select>		
 									 	</td>
 									 	<td>
-						    	   			<label for="neighborhood"><i class="icon-double-angle-right"></i>&nbsp;Barrio / Localidad</label>
+						    	   			<label><i class="icon-double-angle-right"></i>&nbsp;Barrio / Localidad</label>
 						    	   			<br>
-							    	   		<input type="text" id="neighborhood" name="neighborhood"/>	
-									 	</td>
-															
+							    	   		<input type="text" id="barrio" name="barrio"/>	
+									 	</td>															
 					    	   		</tr>   
 					    	   						    	   		
 					    	   		<tr>		
 										<td>
-							    	   		<label for="tags"><i class="icon-double-angle-right"></i>&nbsp;Categorías</label>
+							    	   		<label><i class="icon-double-angle-right"></i>&nbsp;Categorías</label>
 							    	   		<br>	
-							    	   		<input type="text" id="tags" name="tags"/>
-							    	   		<br>
+							    	   		<input type="text" id="tags" name="tags" data-type="select2"/>
+							    	   		<br><br>
 							    	   		<small><i class="icon-info-sign"></i>&nbsp; Si no especifica ninguna categoría, se considerarán todas.</small>
 					    	   			</td>					    	   			
 					    	   			<td>
 					    	   				<label><i class="icon-double-angle-right"></i>&nbsp;Rango de fechas</label>
 					    	   				<br>	
-						    	   			<input type="text" id="dateFrom" name="dateFrom" class="input-small" value="06/02/14"/>	
+					    	   				
+					    	   				<div id="from-datepicker" class="input-append">
+											    <input name="minFecha" style="width:90px; height: 20px" type="text"></input>
+											    <span class="add-on">
+											      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+											      </i>
+											    </span>
+  											</div>
+						    	   			
 											&nbsp;-&nbsp;
-						    	   			<input type="text" id="dateTo" name="dateTo" class="input-small" value="07/02/14"/>
+											
+											<div id="to-datepicker" class="input-append">
+											    <input name="maxFecha" style="width:90px; height: 20px" type="text"></input>
+											    <span class="add-on">
+											      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+											      </i>
+											    </span>
+  											</div>
+										
 					    	   			</td>						    	   			
 					    	   			<td>
 											<label for="status"><i class="icon-double-angle-right"></i>&nbsp;Estado del reclamo</label>	
 											<br>	
-						    	   			<div class="controls span2">
-						    	   			  	  <label class="checkbox">
-												    <input id="status" type="checkbox" value="checked" checked>Todos										    
-												  </label>
+						    	   			<div class="controls span2">						    	   			  	 
 							    	   			  <label class="checkbox">
-												    <input id="status" type="checkbox" value="">Abierto										    
+												    <input name="estados" type="checkbox" value="ABIERTO" checked>Abierto										    
 												  </label>
 												  <label class="checkbox">
-												    <input id="status" type="checkbox" value="">Admitido										    
+												    <input name="estados" type="checkbox" value="ADMITIDO">Admitido										    
 												  </label>
 												  <label class="checkbox">
-												    <input id="status" type="checkbox" value="">En Progreso										    
+												    <input name="estados" type="checkbox" value="EN PROGRESO">En Progreso										    
 												  </label>
 												  <label class="checkbox">
-												    <input id="status" type="checkbox" value="">Resuelto										    
+												    <input name="estados" type="checkbox" value="RESUELTO">Resuelto										    
 												  </label>
 												  <label class="checkbox">
-												    <input id="status" type="checkbox" value="">Cerrado								    
+												    <input name="estados" type="checkbox" value="CERRADO">Cerrado								    
 												  </label>											 
 						    	   			</div>											  
 										</td>							    	   										
@@ -204,29 +290,33 @@
 					    	   	
 					    	   		<tr>					    	   			
 					    	   			<td>
-					    	   				<label for="order"><i class="icon-double-angle-right"></i>&nbsp;Ordenar por</label>
+					    	   				<label><i class="icon-double-angle-right"></i>&nbsp;Ordenar por</label>
 					    	   				<br>
-					    	   				<select id="order" name="order">						
-													<option>fecha (más recientes)</option>	
-													<option>fecha (más viejos)</option>	
-													<option>estado</option>			
-													<option>categoría</option>																									
+					    	   				<select id="orden" name="orden">						
+													<option value="newest">fecha (más recientes)</option>	
+													<option value="oldest">fecha (más viejos)</option>	
+													<option value="status">estado</option>			
+													<option value="tag">categoría</option>																									
 											</select>	
 					    	   			</td>
 					    	   			<td>
 							    	   		<label><i class="icon-double-angle-right"></i>&nbsp;Formato del archivo</label>
 							    	   		<br>
-							    	   		<select id="fileFormat" name="fileFormat">						
-													<option>XML</option>	
-													<option>XLS</option>
-													<option>CSV</option>	
-													<option>PDF</option>							
+							    	   		<select id="formatoArchivo" name="formatoArchivo">						
+													<option value="xml">XML</option>	
+													<option value="xls">XLS</option>
+													<option value="csv">CSV</option>	
+													<option value="pdf">PDF</option>							
 											</select>	
 										</td>						    	   		
 					    	   		</tr>	  			    	   		
 				    	   		</tbody>			    	   		
 		    	   		</table>		    	   	
 		    	   </form>
+		    	  
+											  
+											
+		    	   
 	  	</div>
 	  	<div class="modal-footer">    
 	  		<button class="btn btn-primary" id="btnExportDataset"> 
