@@ -7,13 +7,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -56,7 +52,6 @@ import ar.com.urbanusjam.services.utils.FileUploadUtils;
 import ar.com.urbanusjam.services.utils.IssueStatus;
 import ar.com.urbanusjam.services.utils.Messages;
 import ar.com.urbanusjam.services.utils.Operation;
-import ar.com.urbanusjam.services.utils.Vote;
 import ar.com.urbanusjam.web.domain.AlertStatus;
 import ar.com.urbanusjam.web.domain.ContenidoResponse;
 
@@ -415,7 +410,13 @@ public class IssueController {
 					issue.setDate(new Date());
 					issue.setStatus(IssueStatus.OPEN);		
 					issue.setUser(userDTO);			
-					issue.setId(String.valueOf(idIssue));					
+					issue.setId(String.valueOf(idIssue));	
+					
+					
+					if(issue.getProvince().equals("Ciudad Autónoma de Buenos Aires")){
+						issue.setCity("Ciudad Autónoma de Buenos Aires");
+						issue.setProvince("Buenos Aires");
+					}
 										
 					IssueHistorialRevisionDTO revision = new IssueHistorialRevisionDTO();
 					revision.setFecha(new Date());
