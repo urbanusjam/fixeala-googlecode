@@ -18,7 +18,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ar.com.urbanusjam.dao.IssueDAO;
 import ar.com.urbanusjam.dao.IssueVoteDAO;
 import ar.com.urbanusjam.dao.impl.utils.CriteriaType;
-import ar.com.urbanusjam.dao.utils.IssueCriteriaSearch;
+import ar.com.urbanusjam.dao.utils.IssueCriteriaSearchRaw;
 import ar.com.urbanusjam.entity.annotations.Issue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -48,10 +48,9 @@ public class IssueDAOTest  {
 		minDate.add(Calendar.MONTH, -1);		
 		Calendar maxDate = Calendar.getInstance();
 		
-		IssueCriteriaSearch newSearch = new IssueCriteriaSearch();	
-		newSearch.setSearchType(CriteriaType.DEFAULT_SEARCH);
-		newSearch.setMinFecha(minDate);
-		newSearch.setMaxFecha(maxDate);
+		IssueCriteriaSearchRaw newSearch = new IssueCriteriaSearchRaw();			
+		newSearch.setMinFechaFormateada(minDate);
+		newSearch.setMaxFechaFormateada(maxDate);
 		
    		List<Issue> issues = issueDAO.getIssuesByCriteria(newSearch);
 			
@@ -59,31 +58,31 @@ public class IssueDAOTest  {
 	
 	}	
 	
-	//@Test
+	@Test
 	public void findIssuesByCustomCriteriaTest() throws ParseException {
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Date date1 = sdf.parse("2013-11-01");
-		Date date2 = sdf.parse("2013-11-10");		
+		Date date1 = sdf.parse("2013-01-01");
+		Date date2 = sdf.parse("2014-01-10");		
 		String[] estados = new String[]{"RESUELTO", "ABIERTO"};
 		String[] tags = new String[]{"bache", "alumbrado"};
 		
-		IssueCriteriaSearch newSearch = new IssueCriteriaSearch();	
+		IssueCriteriaSearchRaw newSearch = new IssueCriteriaSearchRaw();	
 		newSearch.setProvincia("Buenos Aires");
-		newSearch.setCiudad("Gerli");
-		newSearch.setMinFecha(this.toCalendar(date1));
-		newSearch.setMaxFecha(this.toCalendar(date2));
-		newSearch.setEstado(estados);
-		newSearch.setTags(tags);
-		newSearch.setSearchType(CriteriaType.CUSTOM_SEARCH);
-		
+		newSearch.setCiudad("Buenos Aires");
+		newSearch.setMinFechaFormateada(this.toCalendar(date1));
+		newSearch.setMaxFechaFormateada(this.toCalendar(date2));
+		newSearch.setEstadosArray(estados);
+		newSearch.setTagsArray(tags);
+		newSearch.setSortField("date");
+	
 		List<Issue> issues = issueDAO.getIssuesByCriteria(newSearch);
 		
 		Assert.assertEquals(1, issues.size());	
 		
 	}
 	
-	@Test
+	//@Test
 	public void sumarizeVotesByIssue() {
 		Assert.assertEquals(new Long(2), issueVoteDAO.getTotalVotesCount(Long.valueOf("1011")));
 	}
