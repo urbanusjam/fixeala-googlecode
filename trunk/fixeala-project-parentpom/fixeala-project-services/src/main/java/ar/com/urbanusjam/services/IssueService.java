@@ -4,6 +4,7 @@ import java.util.List;
 
 import ar.com.urbanusjam.services.dto.AreaDTO;
 import ar.com.urbanusjam.services.dto.CommentDTO;
+import ar.com.urbanusjam.services.dto.IssueCriteriaSearch;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.IssueFollowDTO;
 import ar.com.urbanusjam.services.dto.IssuePageViewDTO;
@@ -42,5 +43,7 @@ public interface IssueService {
 	public void voteIssue(IssueVoteDTO voteDTO);
 	public IssueVoteDTO getCurrentVote(String issueID, String username);
 	public Long countIssueVotes(String issueID);
+	
+	public void generateDataset(IssueCriteriaSearch search);
 		
 }

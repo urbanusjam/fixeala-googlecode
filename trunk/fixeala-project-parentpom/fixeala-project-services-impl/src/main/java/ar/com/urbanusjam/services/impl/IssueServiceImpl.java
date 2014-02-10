@@ -1,5 +1,7 @@
 package ar.com.urbanusjam.services.impl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -23,6 +25,7 @@ import ar.com.urbanusjam.dao.IssuePageViewDAO;
 import ar.com.urbanusjam.dao.IssueVoteDAO;
 import ar.com.urbanusjam.dao.TagDAO;
 import ar.com.urbanusjam.dao.UserDAO;
+import ar.com.urbanusjam.dao.utils.IssueCriteriaSearchRaw;
 import ar.com.urbanusjam.entity.annotations.Area;
 import ar.com.urbanusjam.entity.annotations.Comment;
 import ar.com.urbanusjam.entity.annotations.Contenido;
@@ -42,6 +45,7 @@ import ar.com.urbanusjam.services.UserService;
 import ar.com.urbanusjam.services.dto.AreaDTO;
 import ar.com.urbanusjam.services.dto.CommentDTO;
 import ar.com.urbanusjam.services.dto.ContenidoDTO;
+import ar.com.urbanusjam.services.dto.IssueCriteriaSearch;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.IssueFollowDTO;
 import ar.com.urbanusjam.services.dto.IssueHistorialRevisionDTO;
@@ -50,8 +54,11 @@ import ar.com.urbanusjam.services.dto.IssuePageViewDTO;
 import ar.com.urbanusjam.services.dto.IssueVoteDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
 import ar.com.urbanusjam.services.mock.MapUtil;
+import ar.com.urbanusjam.services.utils.DateUtils;
 import ar.com.urbanusjam.services.utils.IssueStatus;
 import ar.com.urbanusjam.services.utils.Operation;
+import ar.com.urbanusjam.services.utils.SortingDataUtils;
+
 
 @Service("issueService")
 public class IssueServiceImpl implements IssueService {
@@ -807,6 +814,76 @@ public class IssueServiceImpl implements IssueService {
 	@Override
 	public Long countIssueVotes(String issueID) {
 		return issueVoteDAO.getTotalVotesCount(Long.valueOf(issueID));
+	}
+
+	@Override
+	public void generateDataset(IssueCriteriaSearch search) {
+		
+		IssueCriteriaSearchRaw rawSearch =  new IssueCriteriaSearchRaw();
+		
+		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat reFormat = new SimpleDateFormat("yyyy-MM-dd");
+		 
+		 try {
+//			 	Calendar minDate = DateUtils.toCalendar(dateFormat.parse(search.getMinFecha()));
+//			 	Calendar maxDate = DateUtils.toCalendar(dateFormat.parse(search.getMaxFecha()));	
+			 
+			 	Date minDate = format.parse(search.getMinFecha());
+			 	Date maxDate = format.parse(search.getMaxFecha());	
+			 				 	
+			 	String aux1 = reFormat.format(minDate.getTime());
+			 	String aux2 = reFormat.format(maxDate.getTime());
+			 	
+			 	Calendar minDate2 = DateUtils.toCalendar(reFormat.parse(aux1));
+				Calendar maxDate2 = DateUtils.toCalendar(reFormat.parse(aux2));	
+			 	
+			 	
+			 	rawSearch.setEstadosArray(search.getEstados().split(","));
+			 	rawSearch.setTagsArray(search.getTags().split(","));			 	
+			 	rawSearch.setMinFechaFormateada(minDate2);
+			 	rawSearch.setMaxFechaFormateada(maxDate2);
+			 	
+			 	rawSearch.setProvincia(search.getProvincia());
+			 	rawSearch.setCiudad(search.getCiudad());
+			 	rawSearch.setBarrio(search.getBarrio());
+			 	
+			 	String orden = search.getOrden();
+			 	String sortField = "";
+			 	String sortDirection = "";
+			 	
+			 	if(orden.equals("newest")){
+			 		sortField =  "date";
+			 		sortDirection = SortingDataUtils.SORT_DESC;
+			 		
+			 	}
+			 	else if(orden.equals("oldest")){
+			 		sortField =  "date";
+			 		sortDirection = SortingDataUtils.SORT_ASC;
+							 		
+				}
+			 	else if(orden.equals("status")){
+			 		sortField =  "status";
+			 		sortDirection = SortingDataUtils.SORT_DESC;
+						
+				}
+			 	else if(orden.equals("tag")){
+			 		sortField =  "tag";
+			 		sortDirection = SortingDataUtils.SORT_DESC;						
+				}
+			 	
+			 	rawSearch.setSortField(sortField);
+			 	rawSearch.setSortDirection(sortDirection);			 	
+			 	rawSearch.setFormatoArchivo(search.getFormatoArchivo());
+			 	
+			 	List<Issue> issues = issueDAO.getIssuesByCriteria(rawSearch);
+			
+			 	
+		 } catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		 }
+		
+		
 	}
 	
 }
