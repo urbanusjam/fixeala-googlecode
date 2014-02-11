@@ -4,12 +4,6 @@ google.maps.visualRefresh = true;
 var map;
 var init_coord = new google.maps.LatLng(-34.599722, -58.381944);
 
-var provinces = ["Buenos Aires", "Catamarca", "Chaco", "Chubut", "Córdoba","Corrientes",
-                       "Entre Ríos", "Formosa", "Jujuy", "La Pampa", "La Rioja", "Mendoza",
-                       "Misiones", "Neuquén", "Río Negro", "Salta", "San Juan", "San Luis",
-                       "Santa Cruz", "Santa Fe", "Santiago del Estero", "Tierra del Fuego", "Tucumán" 
-                       ];
-
 var initMarker;
 var markers = [];
 
