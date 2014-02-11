@@ -24,6 +24,7 @@ public interface IssueService {
 	public List<IssueDTO> loadIssuesByStatus(String[] status);	
 	public List<IssueDTO> loadIssuesByUser(String username);	
 	public List<IssueDTO> loadIssuesByArea(String areaName);
+	public List<IssueDTO> findIssuesByCriteria(IssueCriteriaSearch search);
 	
 	public List<IssueDTO> getIssuesAsignados(String username);	
 	public List<CommentDTO> getCommentsByIssue(String issueID);
@@ -42,8 +43,6 @@ public interface IssueService {
 	
 	public void voteIssue(IssueVoteDTO voteDTO);
 	public IssueVoteDTO getCurrentVote(String issueID, String username);
-	public Long countIssueVotes(String issueID);
-	
-	public void generateDataset(IssueCriteriaSearch search);
+	public Long countIssueVotes(String issueID);	
 		
 }

@@ -26,6 +26,11 @@
 		<property name="issueVoteDAO" ref="issueVoteDAO" />
 	</bean>
 	
+<!-- 	<bean name="exportService" class="ar.com.urbanusjam.services.impl.ExportServiceImpl" > -->
+<!-- 		<property name="pathJasperTemplate" value="${path.jasper.template}${file.separator}" /> -->
+<!-- 		<property name="pathJasperOutputFolder" value="${path.jasper.output.folder}${file.separator}" /> -->
+<!-- 	</bean> -->
+	
 <!-- 	<bean name="contenidoService" class="ar.com.urbanusjam.services.impl.ContenidoServiceImpl" > -->
 <!-- 		<property name="contenidoDAO" ref="contenidoDAO" />		 -->
 <!-- 		<property name="issueDAO" ref="issueDAO" />		 -->

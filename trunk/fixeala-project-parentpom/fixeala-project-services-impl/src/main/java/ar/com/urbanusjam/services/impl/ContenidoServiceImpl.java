@@ -7,16 +7,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -31,16 +28,15 @@ import ar.com.urbanusjam.services.ContenidoService;
 import ar.com.urbanusjam.services.dto.ContenidoDTO;
 import ar.com.urbanusjam.services.dto.FileWrapperDTO;
 import ar.com.urbanusjam.services.exceptions.BusinessException;
+import ar.com.urbanusjam.services.utils.DateUtils;
 import ar.com.urbanusjam.services.utils.FileUploadUtils;
 
 @Service("contenidoService")
 @Transactional(propagation=Propagation.REQUIRED, readOnly=false, rollbackFor=Exception.class)
 public class ContenidoServiceImpl implements ContenidoService {
-	
-    private static final String DATE_FORMAT_NOW = "yyyyMMddHHmmssSSS";
+	 
  	private static final int BUFFER_SIZE = 6124; 
     private static final String EXTENSION_BANNER = ".data";	 
-    private static final long MAX_SIZE = 1024*256;  
     private final int LONGITUD_MAXIMA_NOMBRE_ARCHIVO_HASH = 16;
 
 
@@ -148,7 +144,7 @@ public class ContenidoServiceImpl implements ContenidoService {
        /** Archivo random a generar **/
        String nombreArchivoHash = UUID.randomUUID().toString();
       
-       File file = new File( this.pathImagenes + "IMG-" + this.generateTimestamp() + "-FXL-" +  nombreArchivoHash + "." + extensionArchivo.toLowerCase());
+       File file = new File( this.pathImagenes + "IMG-" + DateUtils.generateTimestamp() + "-FXL-" +  nombreArchivoHash + "." + extensionArchivo.toLowerCase());
        
        try {
            FileOutputStream fileOutputStream;
@@ -196,7 +192,7 @@ public class ContenidoServiceImpl implements ContenidoService {
        
        int inicioCadena = nombreArchivoHash.length() - LONGITUD_MAXIMA_NOMBRE_ARCHIVO_HASH;
       
-       File file = new File( this.pathImagenes + "IMG-" + this.generateTimestamp() + "-FXL-" +  nombreArchivoHash.substring(inicioCadena) + "." + fileWrapper.getExtension().toLowerCase());
+       File file = new File( this.pathImagenes + "IMG-" + DateUtils.generateTimestamp() + "-FXL-" +  nombreArchivoHash.substring(inicioCadena) + "." + fileWrapper.getExtension().toLowerCase());
        
        try {
            FileOutputStream fileOutputStream;
@@ -265,14 +261,6 @@ public class ContenidoServiceImpl implements ContenidoService {
    }	
    
    
-   
-   private String generateTimestamp(){
-   	  Calendar cal = Calendar.getInstance();
-         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);         
-         String timestamp = StringUtils.EMPTY;
-         timestamp = sdf.format(cal.getTime());  
-         return timestamp;
-   }
 	
 
    /**************************************/

@@ -88,19 +88,35 @@ public class IssueDAOImpl extends GenericDAOImpl<Issue, Serializable> implements
 	@Override
 	public List<Issue> getIssuesByCriteria(IssueCriteriaSearchRaw issueSearch) {
 		
-		List<Issue> issues = new ArrayList<Issue>();
+		List<Issue> issues = new ArrayList<Issue>();		
+		Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Issue.class);
+				
+		if(!issueSearch.getProvincia().equals("Todas"))		
+			criteria.add(Restrictions.eq("province", issueSearch.getProvincia()));
 		
-			issues = getSessionFactory().getCurrentSession().createCriteria(Issue.class)  	
-					.add( Restrictions.eq("province", issueSearch.getProvincia()))	
-					.add( Restrictions.eq("city", issueSearch.getCiudad()))	
-					.add( Restrictions.between("date", issueSearch.getMinFechaFormateada(), issueSearch.getMaxFechaFormateada()))		
-					.add( Restrictions.in("status", issueSearch.getEstadosArray()))						
-					.createAlias("tagsList", "t")
-					.add(Restrictions.in("t.tagname", issueSearch.getTagsArray()))
-			        .addOrder(Order.desc(issueSearch.getSortField()))
-			        .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
-			        .list();			
+		if(!issueSearch.getCiudad().equals("Todas"))		
+			criteria.add(Restrictions.eq("city", issueSearch.getCiudad()));
 		
+		if(!issueSearch.getBarrio().equals("") && issueSearch.getBarrio() != null)	
+			criteria.add(Restrictions.eq("neighborhood", issueSearch.getBarrio()));
+		
+		if(issueSearch.getTagsArray() != null)
+			criteria.createAlias("tagsList", "t")
+					.add(Restrictions.in("t.tagname", issueSearch.getTagsArray()));
+		
+		if(issueSearch.getEstadosArray() != null)
+			criteria.add( Restrictions.in("status", issueSearch.getEstadosArray()));	
+		
+		if(issueSearch.getSortDirection().equals("asc"))
+			criteria.addOrder(Order.asc(issueSearch.getSortField()));
+		
+		else if(issueSearch.getSortDirection().equals("desc"))
+			criteria.addOrder(Order.desc(issueSearch.getSortField()) );
+				
+		criteria.add(Restrictions.between("date", issueSearch.getMinFechaFormateada(), issueSearch.getMaxFechaFormateada()))
+		        .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+			        		
+		issues = criteria.list();	
 		
 		return issues;        
         
