@@ -816,13 +816,16 @@ public class IssueServiceImpl implements IssueService {
 		return issueVoteDAO.getTotalVotesCount(Long.valueOf(issueID));
 	}
 
+
 	@Override
-	public void generateDataset(IssueCriteriaSearch search) {
+	public List<IssueDTO> findIssuesByCriteria(IssueCriteriaSearch search) {
 		
 		IssueCriteriaSearchRaw rawSearch =  new IssueCriteriaSearchRaw();
+		List<Issue> issues = new ArrayList<Issue>();
+		List<IssueDTO> issuesDTO = new ArrayList<IssueDTO>();
 		
 		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-		SimpleDateFormat reFormat = new SimpleDateFormat("yyyy-MM-dd"); //mySQL date format
+		SimpleDateFormat reFormat = new SimpleDateFormat("yyyy-MM-dd");
 		 
 		 try {
 //			 	Calendar minDate = DateUtils.toCalendar(dateFormat.parse(search.getMinFecha()));
@@ -836,11 +839,9 @@ public class IssueServiceImpl implements IssueService {
 			 	
 			 	Calendar minDate2 = DateUtils.toCalendar(reFormat.parse(aux1));
 				Calendar maxDate2 = DateUtils.toCalendar(reFormat.parse(aux2));	
-			 	
-				
-			 	
-			 	rawSearch.setEstadosArray(search.getEstados().length() > 0 ? search.getEstados().split(",") : new String[0]);
-			 	rawSearch.setTagsArray(search.getTags().length() > 0 ? search.getTags().split(",") : new String[0]);			 	
+			 				 	
+			 	rawSearch.setEstadosArray(search.getEstados().isEmpty() ? null : search.getEstados().split(","));
+			 	rawSearch.setTagsArray(search.getTags().isEmpty() ? null : search.getTags().split(","));			 	
 			 	rawSearch.setMinFechaFormateada(minDate2);
 			 	rawSearch.setMaxFechaFormateada(maxDate2);
 			 	
@@ -874,17 +875,20 @@ public class IssueServiceImpl implements IssueService {
 			 	
 			 	rawSearch.setSortField(sortField);
 			 	rawSearch.setSortDirection(sortDirection);			 	
-			 	rawSearch.setFormatoArchivo(search.getFormatoArchivo());
 			 	
-			 	List<Issue> issues = issueDAO.getIssuesByCriteria(rawSearch);
-			
+			 	issues = issueDAO.getIssuesByCriteria(rawSearch);
 			 	
+			 	for(Issue i : issues)
+			 		issuesDTO.add(convertToDTO(i));
+			 		
+			 				 	
 		 } catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		 }
-		
-		
+		 
+		 return issuesDTO;
 	}
+
 	
 }

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="issue_ireport" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d2a8c8ab-1b77-4261-930d-c1f2b59354ab">
+	<property name="ireport.zoom" value="1.0000000000000007"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/> 
+   
+	<field name="id" class="java.lang.String"/>	
+	<field name="title" class="java.lang.String"/>
+	<field name="address" class="java.lang.String"/>
+	<field name="city" class="java.lang.String"/>
+	<field name="province" class="java.lang.String"/>
+	<field name="username" class="java.lang.String"/>
+	<field name="status" class="java.lang.String"/>
+	
+	<title>
+		<band height="78" splitType="Stretch">
+			<staticText>
+				<reportElement x="650" y="13" width="152" height="43" uuid="9331fe23-8363-4ef0-b5f3-3a33438f9dd0"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="36"/>
+				</textElement>
+				<text><![CDATA[FIXEALA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="26" width="514" height="30" uuid="1af3fdf4-3d84-411c-8ced-4ee8b769ee2f"/>
+				<textElement>
+					<font fontName="Arial" size="20" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Listado de incidencias barriales de la República Argentina]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="62" width="802" height="1" uuid="0745a67e-9312-48c2-8cf0-fe9460c29328"/>
+				<graphicElement>
+					<pen lineWidth="2.0"/>
+				</graphicElement>
+			</line>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	
+	<columnHeader>
+		<band height="35" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="50" height="20"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["ID"]]></textFieldExpression>
+			</textField>
+            <textField>
+                <reportElement x="50" y="0" width="200" height="20"/>
+                <textFieldExpression class="java.lang.String"><![CDATA["Asunto"]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="200" y="0" width="150" height="20"/>
+                <textFieldExpression class="java.lang.String"><![CDATA["Direccion"]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="350" y="0" width="100" height="20"/>
+                <textFieldExpression class="java.lang.String"><![CDATA["Ciudad"]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="450" y="0" width="100" height="20"/>
+                <textFieldExpression class="java.lang.String"><![CDATA["Provincia"]]></textFieldExpression>
+            </textField>   
+            <textField>
+                <reportElement x="550" y="0" width="100" height="20"/>
+                <textFieldExpression class="java.lang.String"><![CDATA["Usuario"]]></textFieldExpression>
+            </textField>   
+            <textField>
+                <reportElement x="650" y="0" width="100" height="20"/>
+                <textFieldExpression class="java.lang.String"><![CDATA["Estado"]]></textFieldExpression>
+            </textField>                                    			
+		</band>
+	</columnHeader>
+
+	<detail>
+		<band height="20">
+			<textField>
+				<reportElement x="0" y="0" width="50" height="20"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{id}]]></textFieldExpression>
+			</textField>		
+            <textField>
+                <reportElement x="50" y="0" width="200" height="20"/>
+                <textFieldExpression class="java.lang.String"><![CDATA[$F{title}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="200" y="0" width="150" height="20"/>
+                <textFieldExpression class="java.lang.String"><![CDATA[$F{address}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="350" y="0" width="100" height="20"/>
+                <textFieldExpression class="java.lang.String"><![CDATA[$F{city}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="450" y="0" width="100" height="20"/>
+                <textFieldExpression class="java.lang.String"><![CDATA[$F{province}]]></textFieldExpression>
+            </textField> 
+            <textField>
+                <reportElement x="550" y="0" width="100" height="20"/>
+                <textFieldExpression class="java.lang.String"><![CDATA[$F{username}]]></textFieldExpression>
+            </textField> 
+            <textField>
+                <reportElement x="650" y="0" width="100" height="20"/>
+                <textFieldExpression class="java.lang.String"><![CDATA[$F{status}]]></textFieldExpression>
+            </textField>            			
+		</band>
+	</detail>
+
+</jasperReport>

@@ -13,6 +13,7 @@
 				<value>classpath:/properties/fixeala.database.properties</value>
 				<value>classpath:/properties/fixeala.email.properties</value>
 				<value>classpath:/properties/fixeala.images.properties</value>
+				<value>classpath:/properties/fixeala.jasper.properties</value>
 				<value>classpath:/properties/fixeala.log4j.properties</value>
 			</list>
 		</property>

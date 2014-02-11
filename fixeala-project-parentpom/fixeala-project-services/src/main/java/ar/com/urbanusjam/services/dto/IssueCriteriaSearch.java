@@ -1,7 +1,6 @@
 package ar.com.urbanusjam.services.dto;
 
 import java.io.Serializable;
-import java.util.Calendar;
 
 import antlr.StringUtils;
 
@@ -29,24 +28,31 @@ public class IssueCriteriaSearch implements Serializable {
 	public String getProvincia() {
 		return provincia;
 	}
+	
 	public void setProvincia(String provincia) {
 		this.provincia = provincia;
 	}
+	
 	public String getCiudad() {
 		return ciudad;
 	}
+	
 	public void setCiudad(String ciudad) {
 		this.ciudad = ciudad;
 	}
+	
 	public String getBarrio() {
 		return barrio;
 	}
+	
 	public void setBarrio(String barrio) {
 		this.barrio = barrio;
 	}
+	
 	public String getTags() {
 		return tags;
 	}
+	
 	public void setTags(String tags) {
 		this.tags = tags;
 	}
@@ -54,6 +60,7 @@ public class IssueCriteriaSearch implements Serializable {
 	public String getEstados() {
 		return estados;
 	}
+	
 	public void setEstados(String estados) {
 		this.estados = estados;
 	}
@@ -68,6 +75,7 @@ public class IssueCriteriaSearch implements Serializable {
 	public String getMaxFecha() {
 		return maxFecha;
 	}
+	
 	public void setMaxFecha(String maxFecha) {
 		this.maxFecha = maxFecha;
 	}
@@ -75,17 +83,17 @@ public class IssueCriteriaSearch implements Serializable {
 	public String getOrden() {
 		return orden;
 	}
+	
 	public void setOrden(String orden) {
 		this.orden = orden;
 	}
+
 	public String getFormatoArchivo() {
 		return formatoArchivo;
 	}
+
 	public void setFormatoArchivo(String formatoArchivo) {
 		this.formatoArchivo = formatoArchivo;
 	}
 	
-	
-
-
 }

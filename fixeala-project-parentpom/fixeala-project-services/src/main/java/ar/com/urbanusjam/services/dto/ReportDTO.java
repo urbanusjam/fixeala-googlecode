@@ -4,28 +4,34 @@ import java.util.List;
 import java.util.Map;
 
 public class ReportDTO {
-
-	private String reportName;
+	
+	private String templateName;
 	private List<?> beans;
 	private Map<String, Object> parameters;
 	
-	public ReportDTO(String reportName, List<?> beans) {
-		super();
-		this.reportName = reportName;
+	public ReportDTO(List<?> beans, Map<String, Object> parameters) {
+		super();		
 		this.beans = beans;
-	}
-	
-	public ReportDTO(String reportName, Map<String, Object> parameters, List<?> beans) {
-		this(reportName, beans);
 		this.parameters = parameters;
 	}
 	
-	public String getReportName() {
-		return reportName;
+	public ReportDTO(String templateName, List<?> beans) {
+		super();
+		this.templateName = templateName;
+		this.beans = beans;
 	}
 	
-	public void setReportName(String reportName) {
-		this.reportName = reportName;
+	public ReportDTO(String templateName, Map<String, Object> parameters, List<?> beans) {
+		this(templateName, beans);
+		this.parameters = parameters;
+	}
+	
+	public String getTemplateName() {
+		return templateName;
+	}
+
+	public void setTemplateName(String templateName) {
+		this.templateName = templateName;
 	}
 	
 	public Map<String, Object> getParameters() {
