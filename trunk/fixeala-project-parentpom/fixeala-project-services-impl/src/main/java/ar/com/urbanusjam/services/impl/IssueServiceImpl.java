@@ -822,7 +822,7 @@ public class IssueServiceImpl implements IssueService {
 		IssueCriteriaSearchRaw rawSearch =  new IssueCriteriaSearchRaw();
 		
 		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-		SimpleDateFormat reFormat = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat reFormat = new SimpleDateFormat("yyyy-MM-dd"); //mySQL date format
 		 
 		 try {
 //			 	Calendar minDate = DateUtils.toCalendar(dateFormat.parse(search.getMinFecha()));
@@ -837,9 +837,10 @@ public class IssueServiceImpl implements IssueService {
 			 	Calendar minDate2 = DateUtils.toCalendar(reFormat.parse(aux1));
 				Calendar maxDate2 = DateUtils.toCalendar(reFormat.parse(aux2));	
 			 	
+				
 			 	
-			 	rawSearch.setEstadosArray(search.getEstados().split(","));
-			 	rawSearch.setTagsArray(search.getTags().split(","));			 	
+			 	rawSearch.setEstadosArray(search.getEstados().length() > 0 ? search.getEstados().split(",") : new String[0]);
+			 	rawSearch.setTagsArray(search.getTags().length() > 0 ? search.getTags().split(",") : new String[0]);			 	
 			 	rawSearch.setMinFechaFormateada(minDate2);
 			 	rawSearch.setMaxFechaFormateada(maxDate2);
 			 	
