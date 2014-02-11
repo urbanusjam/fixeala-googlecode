@@ -33,7 +33,7 @@
   		
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-editable.js"></script>
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-datetimepicker.min.js"></script>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-datetimepicker.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-datetimepicker.es.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/select2.js"></script>
 <%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-sortable.js"></script>  --%>
@@ -98,7 +98,6 @@
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/bootstrap-responsive.css" rel="stylesheet">
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/bootstrap-fileupload.css" rel="stylesheet">
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/bootstrap-lightbox.css" rel="stylesheet">   
-<%-- 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/bootstrap-datepicker.css" rel="stylesheet">    --%>
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/bootstrap-datetimepicker.min.css" rel="stylesheet">  
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/select2.css" rel="stylesheet">   
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/select2-bootstrap.css" rel="stylesheet">   

@@ -1,25 +1,64 @@
 <script type="text/javascript">
   $(function() {
-	 
-	  var date = new Date();
-	  var today = date;
-	  var dateThreeMonthLater = date.setMonth(date.getMonth() + 3);
+	  
+	  //keep at least one checkbox checked
+	  $("input[type='checkbox'][name='estados']").click(function() {
+		  if( $("input:checked").length == 0 )
+			  $(this).attr('checked','checked');			
+	  });  
+	  
+	  var provincias = ["Todas","Buenos Aires", "Catamarca", "Chaco", "Chubut", "Córdoba","Corrientes",
+                       "Entre Ríos", "Formosa", "Jujuy", "La Pampa", "La Rioja", "Mendoza",
+                       "Misiones", "Neuquén", "Río Negro", "Salta", "San Juan", "San Luis",
+                       "Santa Cruz", "Santa Fe", "Santiago del Estero", "Tierra del Fuego", "Tucumán" 
+                       ];
+	  
+	  var provinciaSelect = document.getElementById("provincia");
 
+	  for(var i = 0; i < provincias.length; i++) {
+	      var opt = provincias[i];
+	      var el = document.createElement("option");
+	      el.textContent = opt;
+	      el.value = opt;
+	      provinciaSelect.appendChild(el);
+	  }
+	
 	  
 	  $('#from-datepicker').datetimepicker({		  
 		  format: 'dd/MM/yyyy',
 		  language: 'es',
-		  date: today,
 		
 	      pickTime: false
 	  });
-	  
+	  	 	  
 	  $('#to-datepicker').datetimepicker({
 		  format: 'dd/MM/yyyy',
 		  language: 'es',	
 		  endDate: today,
 	      pickTime: false
 	  });
+	  
+	  
+	  
+	  //set default date values
+	  var year = "2014";
+	  var month = "01";
+	  var day = "11";
+	  
+	
+	  var today = new Date();
+	  
+	  var date = new Date();	 
+	  date.setMonth(date.getMonth() - 3);
+	  
+	  var lastThreeMonths = date;
+	  
+	 
+	  var pickerFrom = $('#from-datepicker').data('datetimepicker');
+	  var pickerTo = $('#to-datepicker').data('datetimepicker');
+	  pickerFrom.setLocalDate(lastThreeMonths);
+	  pickerTo.setLocalDate(today);
+	  
 	  
 	  $('#tags').select2({		
 		  width: '220',		
@@ -53,11 +92,14 @@
 		  		  
 		  $.ajax({
 	  			url: './exportDataset.html',
-	      		type: "POST",		   
+	      		type: "POST",	
+	      		dataType: "json",
 	            data: dataForm,       
-	            success: function(data, status) { 
+	            success: function(data) { 
 		            	
-		            	alert("todo bien.");
+		            	
+		            		bootbox.alert(data.message);		
+		            	
 		            		
 		        }
 		            						           
@@ -214,21 +256,19 @@
 					    	   			<td>
 						    	   			<label><i class="icon-double-angle-right"></i>&nbsp;Provincia</label>
 						    	   			<br>
-						    	   			<select id="provincia" name="provincia">	
-						    	   				<option selected="selected">Buenos Aires</option>	
-												<option>Santa Fé</option>								
+						    	   			<select id="provincia" name="provincia">							    	   										
 									 		</select>		
 									 	</td>								
 										<td>
 						    	   			<label><i class="icon-double-angle-right"></i>&nbsp;Ciudad</label>
 						    	   			<br>
 						    	   			<select id="ciudad" name="ciudad">	
-						    	   				<option selected="selected">Ciudad Autónoma de Buenos Aires</option>							    	   				
-												<option>Rosario</option>								
+						    	   				<option selected="selected">Todas</option>		
+						    	   				<option>Ciudad Autónoma de Buenos Aires</option>
 									 		</select>		
 									 	</td>
 									 	<td>
-						    	   			<label><i class="icon-double-angle-right"></i>&nbsp;Barrio / Localidad</label>
+						    	   			<label><i class="icon-double-angle-right"></i>&nbsp;Barrio / Localidad (opcional)</label>
 						    	   			<br>
 							    	   		<input type="text" id="barrio" name="barrio"/>	
 									 	</td>															
@@ -240,30 +280,32 @@
 							    	   		<br>	
 							    	   		<input type="text" id="tags" name="tags" data-type="select2"/>
 							    	   		<br><br>
-							    	   		<small><i class="icon-info-sign"></i>&nbsp; Si no especifica ninguna categoría, se considerarán todas.</small>
+							    	   		<small><i class="icon-info-sign"></i>&nbsp; Si no especifica ninguna categoría, se considerarán <strong>todas</strong>.</small>
 					    	   			</td>					    	   			
 					    	   			<td>
 					    	   				<label><i class="icon-double-angle-right"></i>&nbsp;Rango de fechas</label>
-					    	   				<br>	
-					    	   				
-					    	   				<div id="from-datepicker" class="input-append">
-											    <input name="minFecha" style="width:90px; height: 20px" type="text"></input>
-											    <span class="add-on">
-											      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
-											      </i>
-											    </span>
-  											</div>
-						    	   			
-											&nbsp;-&nbsp;
-											
-											<div id="to-datepicker" class="input-append">
-											    <input name="maxFecha" style="width:90px; height: 20px" type="text"></input>
-											    <span class="add-on">
-											      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
-											      </i>
-											    </span>
-  											</div>
-										
+					    	   				<br>						    	   				
+					    	   				<div style="margin: 0 auto; border: 0px solid #000; width:210px;">					    	   				
+						    	   				<span class="span" style="margin-left:0; margin-right:10px; width:50px; border:0px solid #000; height:30px; line-height:30px; font-size:12px;text-align:right">Desde:</span>
+						    	   				<div id="from-datepicker" class="input-append">											   
+												    <input name="minFecha" class="datepicker" type="text" readonly></input>
+												    <span class="add-on">
+												      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+												      </i>
+												    </span>
+	  											</div>  											
+  											</div>		
+											<div style="margin: 0 auto; border: 0px solid #000; width:210px;">					
+												<span class="span" style="margin-left:0; margin-right:10px; width:50px; border:0px solid #000; height:30px; line-height:30px; font-size:12px;text-align:right">Hasta:</span>
+												<div id="to-datepicker" class="input-append">
+												   <input name="maxFecha" class="datepicker" type="text" readonly></input>
+												    <span class="add-on">
+												      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+												      </i>
+												    </span>
+	  											</div>
+  											</div>	
+  											<small><i class="icon-info-sign"></i>&nbsp; Haga clic sobre el ícono del Calendario para seleccionar las fechas.</small>									
 					    	   			</td>						    	   			
 					    	   			<td>
 											<label for="status"><i class="icon-double-angle-right"></i>&nbsp;Estado del reclamo</label>	
@@ -302,11 +344,13 @@
 					    	   			<td>
 							    	   		<label><i class="icon-double-angle-right"></i>&nbsp;Formato del archivo</label>
 							    	   		<br>
-							    	   		<select id="formatoArchivo" name="formatoArchivo">						
-													<option value="xml">XML</option>	
-													<option value="xls">XLS</option>
-													<option value="csv">CSV</option>	
-													<option value="pdf">PDF</option>							
+							    	   		<select id="formatoArchivo" name="formatoArchivo">	
+							    	   				<option value="csv">CSV</option>		
+							    	   				<option value="html">HTML</option>	
+							    	   				<option value="odf">ODF</option>																							
+													<option value="pdf" selected="selected">PDF</option>					
+							    	   				<option value="xls">XLS</option>					
+													<option value="xml">XML</option>																				
 											</select>	
 										</td>						    	   		
 					    	   		</tr>	  			    	   		
