@@ -3,6 +3,8 @@ package ar.com.urbanusjam.services.dto;
 import java.io.Serializable;
 import java.util.Calendar;
 
+import antlr.StringUtils;
+
 
 
 public class IssueCriteriaSearch implements Serializable {
@@ -18,7 +20,10 @@ public class IssueCriteriaSearch implements Serializable {
 	private String orden;
 	private String formatoArchivo;
 	
-	public IssueCriteriaSearch(){}
+	public IssueCriteriaSearch(){
+		this.tags = "";
+		this.estados = "";
+	}
 	
 	
 	public String getProvincia() {
