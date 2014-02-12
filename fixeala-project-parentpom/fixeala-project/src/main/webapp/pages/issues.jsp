@@ -31,8 +31,6 @@
 		
 		$(function(e){	
 		
-			
-			
 			var idIssue = '${id}';
 			var loggedUser = '${loggedUser}';
 	   		var latitud = '${latitud}';

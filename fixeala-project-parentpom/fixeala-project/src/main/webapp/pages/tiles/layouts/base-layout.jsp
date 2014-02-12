@@ -6,12 +6,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="content-type" content="text/html; charset=UTF8">
-<!--  	<meta name="viewport" content="initial-scale=1.0, user-scalable=no"> -->
+	<meta http-equiv="content-type" content="text/html; charset=UTF8">
 	<title><tiles:insertAttribute name="title" ignore="true" /></title>	
-	 
-<!--   	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&sensor=false"></script> -->
-  	
+
   	<script type="text/javascript" src="http://maps.google.com/maps/api/js?libraries=geometry,places&components=country:ar&language=ES&sensor=false"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.jsonp-2.4.0.min.js"></script>
@@ -24,10 +21,6 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/formToWizard.js"></script>
     
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.geocomplete.js"></script>
-<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/d3.v3.js"></script> --%>
-<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/d3.jsonp.js"></script> --%>
-<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/togeojson.js"></script> --%>
-<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/topojson.js"></script> --%>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/json.min.js"></script>	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/map.js"></script>
   		
@@ -36,7 +29,6 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-datetimepicker.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-datetimepicker.es.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/select2.js"></script>
-<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-sortable.js"></script>  --%>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-rowlink.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-lightbox.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-tags.js"></script> 
@@ -114,7 +106,6 @@
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/style2.css" rel="stylesheet">
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.stepy.css" rel="stylesheet"> 	
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.dataTables.css" rel="stylesheet">	
-
 
 <style>
 

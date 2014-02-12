@@ -284,9 +284,6 @@ CREATE TABLE issue_follow (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-
-
-
 -- ISSUE_VIEW
 CREATE TABLE issue_pageview (	
 	   id_issue_pageview BIGINT(20) NOT NULL AUTO_INCREMENT,    
@@ -319,12 +316,10 @@ CREATE TABLE COMMENT_VOTE (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-
-
 -- NOTIFICATION
 CREATE TABLE notification (
        id_notification BIGINT(20) NOT NULL AUTO_INCREMENT,   
-       id_notification _type BIGINT(20) NOT NULL,
+       id_notification_type BIGINT(20) NOT NULL,
        id_action_type BIGINT(20) NOT NULL,
        id_sender BIGINT(20) NOT NULL,           
        created_date TIMESTAMP NOT NULL,
@@ -370,8 +365,6 @@ CREATE TABLE action_type (
        PRIMARY KEY (id_action_type) 
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8; 
-
-
 
 
 ------------------------------------------------------------------------------------------------------
