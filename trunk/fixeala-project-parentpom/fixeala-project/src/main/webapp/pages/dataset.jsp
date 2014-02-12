@@ -1,6 +1,7 @@
 <script type="text/javascript">
+
   $(function() {
-	  
+	  	  
 	  //keep at least one checkbox checked
 	  $("input[type='checkbox'][name='estados']").click(function() {
 		  if( $("input:checked").length == 0 )
@@ -21,8 +22,7 @@
 	      el.textContent = opt;
 	      el.value = opt;
 	      provinciaSelect.appendChild(el);
-	  }
-	
+	  }	
 	  
 	  $('#from-datepicker').datetimepicker({		  
 		  format: 'dd/MM/yyyy',
@@ -37,29 +37,18 @@
 		  endDate: today,
 	      pickTime: false
 	  });
-	  
-	  
-	  
-	  //set default date values
-	  var year = "2014";
-	  var month = "01";
-	  var day = "11";
-	  
-	
-	  var today = new Date();
-	  
+	  	  
+	 	
+	  var today = new Date();	  
 	  var date = new Date();	 
-	  date.setMonth(date.getMonth() - 3);
-	  
+	  date.setMonth(date.getMonth() - 3);	  
 	  var lastThreeMonths = date;
-	  
-	 
+	  	 
 	  var pickerFrom = $('#from-datepicker').data('datetimepicker');
 	  var pickerTo = $('#to-datepicker').data('datetimepicker');
 	  pickerFrom.setLocalDate(lastThreeMonths);
 	  pickerTo.setLocalDate(today);
-	  
-	  
+	  	  
 	  $('#tags').select2({		
 		  width: '220',		
 		  tags: ${allTags},
@@ -76,42 +65,22 @@
 		  },	  
 		  createSearchChoice: function() { return null; }
 	  }); 
+	    
 	  
-	  
-	  
-	  $('#btnExportDataset').click(function(){
-		  
-		  var dataForm = $('#datasetForm').serialize();
-		
-// 		  var statusArray = [];
-	      
-// 		  $(':checkbox:checked').each(function(i){	       
-// 			  statusArray.push($(this).val());
-// 	      });
-	      
-		  		  
-		  $.ajax({
-	  			url: './exportDataset.html',
-	      		type: "POST",	
-	      		dataType: "json",
-	            data: dataForm,       
-	            success: function(data) { 
-		            	
-		            	
-		            		bootbox.alert(data.message);		
-		            	
-		            		
-		        }
-		            						           
-		          			           
-	  	  });	    	
-		  
+	  $('#btnExportDataset').click(function(){		  
+	  	  var $form = $('#datasetForm');	  	  
+	  	  $form.submit(function(e){		  		  
+	  		  $.ajax({			
+		            data: $form.serialize(),       
+		            success: function(data) { 
+		            	if(data.result)
+			        		bootbox.alert(data.message);
+			        }			           
+		  	  });
+	  	  });		  
 	  });
 	  
 	 
-	  
-	  
-
   });
 </script>
 
@@ -228,12 +197,7 @@
 				 </table>
 				
 				<br>
-				
-				
-				
-				
-			
-	
+					
 	   </div> 
 	   
 	  
@@ -244,134 +208,130 @@
  
 	<!-- Modal -->
 	<div id="mdl-dataset" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	  	<div class="modal-header">
-		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		    <h4 id="myModalLabel">Personalizá tu dataset</h4>
-	  	</div>
-	  	<div class="modal-body">
-	    	<form id="datasetForm" method="POST">     	   
-		    	   		<table id="tblCustomDataset">		    	   		  	
-		    	   		  	   	<tbody>
-				    	   			<tr>
-					    	   			<td>
-						    	   			<label><i class="icon-double-angle-right"></i>&nbsp;Provincia</label>
-						    	   			<br>
-						    	   			<select id="provincia" name="provincia">							    	   										
-									 		</select>		
-									 	</td>								
-										<td>
-						    	   			<label><i class="icon-double-angle-right"></i>&nbsp;Ciudad</label>
-						    	   			<br>
-						    	   			<select id="ciudad" name="ciudad">	
-						    	   				<option selected="selected">Todas</option>		
-						    	   				<option>Ciudad Autónoma de Buenos Aires</option>
-									 		</select>		
-									 	</td>
-									 	<td>
-						    	   			<label><i class="icon-double-angle-right"></i>&nbsp;Barrio / Localidad (opcional)</label>
-						    	   			<br>
-							    	   		<input type="text" id="barrio" name="barrio"/>	
-									 	</td>															
-					    	   		</tr>   
-					    	   						    	   		
-					    	   		<tr>		
-										<td>
-							    	   		<label><i class="icon-double-angle-right"></i>&nbsp;Categorías</label>
-							    	   		<br>	
-							    	   		<input type="text" id="tags" name="tags" data-type="select2"/>
-							    	   		<br><br>
-							    	   		<small><i class="icon-info-sign"></i>&nbsp; Si no especifica ninguna categoría, se considerarán <strong>todas</strong>.</small>
-					    	   			</td>					    	   			
-					    	   			<td>
-					    	   				<label><i class="icon-double-angle-right"></i>&nbsp;Rango de fechas</label>
-					    	   				<br>						    	   				
-					    	   				<div style="margin: 0 auto; border: 0px solid #000; width:210px;">					    	   				
-						    	   				<span class="span" style="margin-left:0; margin-right:10px; width:50px; border:0px solid #000; height:30px; line-height:30px; font-size:12px;text-align:right">Desde:</span>
-						    	   				<div id="from-datepicker" class="input-append">											   
-												    <input name="minFecha" class="datepicker" type="text" readonly></input>
-												    <span class="add-on">
-												      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
-												      </i>
-												    </span>
-	  											</div>  											
-  											</div>		
-											<div style="margin: 0 auto; border: 0px solid #000; width:210px;">					
-												<span class="span" style="margin-left:0; margin-right:10px; width:50px; border:0px solid #000; height:30px; line-height:30px; font-size:12px;text-align:right">Hasta:</span>
-												<div id="to-datepicker" class="input-append">
-												   <input name="maxFecha" class="datepicker" type="text" readonly></input>
-												    <span class="add-on">
-												      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
-												      </i>
-												    </span>
-	  											</div>
-  											</div>	
-  											<small><i class="icon-info-sign"></i>&nbsp; Haga clic sobre el ícono del Calendario para seleccionar las fechas.</small>									
-					    	   			</td>						    	   			
-					    	   			<td>
-											<label for="status"><i class="icon-double-angle-right"></i>&nbsp;Estado del reclamo</label>	
-											<br>	
-						    	   			<div class="controls span2">						    	   			  	 
-							    	   			  <label class="checkbox">
-												    <input name="estados" type="checkbox" value="ABIERTO" checked>Abierto										    
-												  </label>
-												  <label class="checkbox">
-												    <input name="estados" type="checkbox" value="ADMITIDO">Admitido										    
-												  </label>
-												  <label class="checkbox">
-												    <input name="estados" type="checkbox" value="EN PROGRESO">En Progreso										    
-												  </label>
-												  <label class="checkbox">
-												    <input name="estados" type="checkbox" value="RESUELTO">Resuelto										    
-												  </label>
-												  <label class="checkbox">
-												    <input name="estados" type="checkbox" value="CERRADO">Cerrado								    
-												  </label>											 
-						    	   			</div>											  
-										</td>							    	   										
-					    	   		</tr>
-					    	   	
-					    	   		<tr>					    	   			
-					    	   			<td>
-					    	   				<label><i class="icon-double-angle-right"></i>&nbsp;Ordenar por</label>
-					    	   				<br>
-					    	   				<select id="orden" name="orden">						
-													<option value="newest">fecha (más recientes)</option>	
-													<option value="oldest">fecha (más viejos)</option>	
-													<option value="status">estado</option>			
-													<option value="tag">categoría</option>																									
-											</select>	
-					    	   			</td>
-					    	   			<td>
-							    	   		<label><i class="icon-double-angle-right"></i>&nbsp;Formato del archivo</label>
-							    	   		<br>
-							    	   		<select id="formatoArchivo" name="formatoArchivo">	
-							    	   				<option value="csv">CSV</option>		
-							    	   				<option value="html">HTML</option>	
-							    	   				<option value="odf">ODF</option>																							
-													<option value="pdf" selected="selected">PDF</option>					
-							    	   				<option value="xls">XLS</option>					
-													<option value="xml">XML</option>																				
-											</select>	
-										</td>						    	   		
-					    	   		</tr>	  			    	   		
-				    	   		</tbody>			    	   		
-		    	   		</table>		    	   	
-		    	   </form>
-		    	  
-											  
-											
-		    	   
-	  	</div>
-	  	<div class="modal-footer">    
-	  		<button class="btn btn-primary" id="btnExportDataset"> 
-				<i class="icon-save icon-large"></i>Exportar dataset 
-			</button>
-	    	<button class="btn" data-dismiss="modal" aria-hidden="true">
-	    		<i class="icon-remove icon-large"></i>Cancelar
-	    	</button>
-	  	</div>
+		<form id="datasetForm" action="./exportDataset.html" method="POST">     	   
+		  	<div class="modal-header">
+			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			    <h4 id="myModalLabel">Personalizá tu dataset</h4>
+		  	</div>
+		  	<div class="modal-body">	    	
+	   	   		<table id="tblCustomDataset">		    	   		  	
+	   	   		  	   	<tbody>
+		    	   			<tr>
+			    	   			<td>
+				    	   			<label><i class="icon-double-angle-right"></i>&nbsp;Provincia</label>
+				    	   			<br>
+				    	   			<select id="provincia" name="provincia">							    	   										
+							 		</select>		
+							 	</td>								
+								<td>
+				    	   			<label><i class="icon-double-angle-right"></i>&nbsp;Ciudad</label>
+				    	   			<br>
+				    	   			<select id="ciudad" name="ciudad">	
+				    	   				<option selected="selected">Todas</option>		
+				    	   				<option>Ciudad Autónoma de Buenos Aires</option>
+							 		</select>		
+							 	</td>
+							 	<td>
+				    	   			<label><i class="icon-double-angle-right"></i>&nbsp;Barrio / Localidad (opcional)</label>
+				    	   			<br>
+					    	   		<input type="text" id="barrio" name="barrio"/>	
+							 	</td>															
+			    	   		</tr>   
+			    	   						    	   		
+			    	   		<tr>		
+								<td>
+					    	   		<label><i class="icon-double-angle-right"></i>&nbsp;Categorías</label>
+					    	   		<br>	
+					    	   		<input type="text" id="tags" name="tags" data-type="select2"/>
+					    	   		<br><br>
+					    	   		<small><i class="icon-info-sign"></i>&nbsp; Si no especifica ninguna categoría, se considerarán <strong>todas</strong>.</small>
+			    	   			</td>					    	   			
+			    	   			<td>
+			    	   				<label><i class="icon-double-angle-right"></i>&nbsp;Rango de fechas</label>
+			    	   				<br>						    	   				
+			    	   				<div style="margin: 0 auto; border: 0px solid #000; width:210px;">					    	   				
+				    	   				<span class="span" style="margin-left:0; margin-right:10px; width:50px; border:0px solid #000; height:30px; line-height:30px; font-size:12px;text-align:right">Desde:</span>
+				    	   				<div id="from-datepicker" class="input-append">											   
+										    <input name="minFecha" class="datepicker" type="text" readonly></input>
+										    <span class="add-on">
+										      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+										      </i>
+										    </span>
+												</div>  											
+											</div>		
+									<div style="margin: 0 auto; border: 0px solid #000; width:210px;">					
+										<span class="span" style="margin-left:0; margin-right:10px; width:50px; border:0px solid #000; height:30px; line-height:30px; font-size:12px;text-align:right">Hasta:</span>
+										<div id="to-datepicker" class="input-append">
+										   <input name="maxFecha" class="datepicker" type="text" readonly></input>
+										    <span class="add-on">
+										      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+										      </i>
+										    </span>
+												</div>
+											</div>	
+											<small><i class="icon-info-sign"></i>&nbsp; Haga clic sobre el ícono del Calendario para seleccionar las fechas.</small>									
+			    	   			</td>						    	   			
+			    	   			<td>
+									<label for="status"><i class="icon-double-angle-right"></i>&nbsp;Estado del reclamo</label>	
+									<br>	
+				    	   			<div class="controls span2">						    	   			  	 
+					    	   			  <label class="checkbox">
+										    <input name="estados" type="checkbox" value="ABIERTO" checked>Abierto										    
+										  </label>
+										  <label class="checkbox">
+										    <input name="estados" type="checkbox" value="ADMITIDO">Admitido										    
+										  </label>
+										  <label class="checkbox">
+										    <input name="estados" type="checkbox" value="EN PROGRESO">En Progreso										    
+										  </label>
+										  <label class="checkbox">
+										    <input name="estados" type="checkbox" value="RESUELTO">Resuelto										    
+										  </label>
+										  <label class="checkbox">
+										    <input name="estados" type="checkbox" value="CERRADO">Cerrado								    
+										  </label>											 
+				    	   			</div>											  
+								</td>							    	   										
+			    	   		</tr>		    	   	
+			    	   		<tr>					    	   			
+			    	   			<td>
+			    	   				<label><i class="icon-double-angle-right"></i>&nbsp;Ordenar por</label>
+			    	   				<br>
+			    	   				<select id="orden" name="orden">						
+											<option value="newest">fecha (más recientes)</option>	
+											<option value="oldest">fecha (más viejos)</option>	
+											<option value="status">estado</option>			
+											<option value="tag">categoría</option>																									
+									</select>	
+			    	   			</td>
+			    	   			<td>
+					    	   		<label><i class="icon-double-angle-right"></i>&nbsp;Formato del archivo</label>
+					    	   		<br>
+					    	   		<select id="formatoArchivo" name="formatoArchivo">	
+					    	   				<option value="csv">CSV</option>		
+					    	   				<option value="html">HTML</option>	
+					    	   				<option value="odf">ODF</option>																							
+											<option value="pdf" selected="selected">PDF</option>					
+					    	   				<option value="xls">XLS</option>					
+											<option value="xml">XML</option>																				
+									</select>	
+								</td>						    	   		
+			    	   		</tr>	  			    	   		
+		    	   		</tbody>			    	   		
+	   	   		</table>		
+		  	</div>
+		  	<div class="modal-footer">    
+		  		<button class="btn btn-primary" id="btnExportDataset"> 
+					<i class="icon-save icon-large"></i>Exportar dataset 
+				</button>
+							
+		    	<button class="btn" data-dismiss="modal" aria-hidden="true">
+		    		<i class="icon-remove icon-large"></i>Cancelar
+		    	</button>
+		  	</div>
+  	  </form>
 	</div>
         
-   	    
+    
    		<!-- /Dataset -->
 </div>
