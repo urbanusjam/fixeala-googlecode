@@ -1,13 +1,21 @@
 package ar.com.urbanusjam.services.dto;
 
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
 
 public class ReportDTO {
 	
 	private String templateName;
+	private String fileFormat;
 	private List<?> beans;
 	private Map<String, Object> parameters;
+	private HttpServletResponse reponse;
+	private OutputStream outputStream;	
+	
+	public ReportDTO(){}
 	
 	public ReportDTO(List<?> beans, Map<String, Object> parameters) {
 		super();		
@@ -34,6 +42,14 @@ public class ReportDTO {
 		this.templateName = templateName;
 	}
 	
+	public String getFileFormat() {
+		return fileFormat;
+	}
+
+	public void setFileFormat(String fileFormat) {
+		this.fileFormat = fileFormat;
+	}
+
 	public Map<String, Object> getParameters() {
 		return parameters;
 	}
@@ -48,6 +64,25 @@ public class ReportDTO {
 	
 	public void setBeans(List<?> beans) {
 		this.beans = beans;
-	}	
+	}
+
+	public HttpServletResponse getReponse() {
+		return reponse;
+	}
+
+	public void setReponse(HttpServletResponse reponse) {
+		this.reponse = reponse;
+	}
+
+	public OutputStream getOutputStream() {
+		return outputStream;
+	}
+
+	public void setOutputStream(OutputStream outputStream) {
+		this.outputStream = outputStream;
+	}
+
+	
+	
 	
 }
