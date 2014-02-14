@@ -10,6 +10,8 @@ import java.util.GregorianCalendar;
 public class DateUtils {
 	
 	private static final String FORMAT_TIMESTAMP = "yyyyMMddHHmmssSSS";
+	private static final String FORMAT_TIMESTAMP_DATE = "yyyyMMdd";
+	private static final String FORMAT_TIMESTAMP_TIME = "HHmmss";
 	private static final String FORMAT_DATE_DEFAULT = "dd/MM/yyyy";
 	private static final String FORMAT_DATETIME_SECONDS = "dd/MM/yyyy hh:mm a";
 
@@ -38,6 +40,21 @@ public class DateUtils {
 	public static String generateTimestamp(){
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_TIMESTAMP);         
+		String timestamp = "";
+		timestamp = sdf.format(cal.getTime());  
+		return timestamp;
+	}
+	
+	public static String generateTimestampDate(){
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_TIMESTAMP_DATE);         
+		String timestamp = "";
+		timestamp = sdf.format(cal.getTime());  
+		return timestamp;
+	}
+	public static String generateTimestampTime(){
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_TIMESTAMP_TIME);         
 		String timestamp = "";
 		timestamp = sdf.format(cal.getTime());  
 		return timestamp;
