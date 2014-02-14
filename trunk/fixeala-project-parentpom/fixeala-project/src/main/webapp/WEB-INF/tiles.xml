@@ -10,13 +10,20 @@
     <put-attribute name="body" value="" />
     <put-attribute name="footer" value="/pages/tiles/footer.jsp" />
   </definition>
-    
+  
+  <definition name="d3.layout" template="/pages/tiles/layouts/d3-layout.jsp">  
+    <put-attribute name="body" value="" /> 
+  </definition>
+  
+  
+  
+      
   <definition name="home" extends="base.layout">
   	<put-attribute name="title" value="Fixeala" /> 
   	<put-attribute name="body" value="/pages/home.jsp" />
   </definition>
   
-   <definition name="home2" extends="base.layout">
+  <definition name="home2" extends="d3.layout">
   	<put-attribute name="title" value="Fixeala" /> 
   	<put-attribute name="body" value="/pages/home2.jsp" />
   </definition>

@@ -2,6 +2,7 @@ package ar.com.urbanusjam.web.controllers;
 
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.UserService;
 import ar.com.urbanusjam.web.domain.LoginStatus;
  
@@ -41,8 +41,12 @@ public class LoginController {
 		return "home";
 	}
 	
-	@RequestMapping(value="/home2", method = RequestMethod.GET)
-	public String home2(){
+	@RequestMapping(value="/home2", method = RequestMethod.GET, produces = "application/json")
+	public String home2(HttpServletRequest request, HttpServletResponse response){				
+//		response.addHeader("Access-Control-Allow-Origin", "*");
+//		response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+//        response.addHeader("Access-Control-Allow-Headers", "Content-Type");
+//        response.addHeader("Access-Control-Max-Age", "1800");
 		return "home2";
 	}
 	
