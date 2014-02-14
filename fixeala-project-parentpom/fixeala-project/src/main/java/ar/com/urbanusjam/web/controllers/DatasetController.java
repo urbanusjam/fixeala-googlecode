@@ -1,10 +1,8 @@
 package ar.com.urbanusjam.web.controllers;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +21,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import ar.com.urbanusjam.services.ExportService;
 import ar.com.urbanusjam.services.IssueService;
@@ -118,7 +115,7 @@ public class DatasetController {
 	}
 	
 	private String generateJaspeFilename(String fileFormat){		
-		return "fixeala-dataset-" + DateUtils.generateTimestamp() + "." + fileFormat;	 	
+		return "fixeala_dataset_" + DateUtils.generateTimestampDate() + "_" + DateUtils.generateTimestampTime() + "." + fileFormat;	 	
 	}
 
 }
