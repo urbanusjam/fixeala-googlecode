@@ -1,27 +1,17 @@
 $(document).ready(function(){
 	
 	var myData = [];
+	var width =  500;
 	
 	d3.text("resources/data/lanacion-censo.csv", function(datasetText) {
 		myData = d3.csv.parseRows(datasetText);
 	});
-//			  console.log(myData);
-		  
 
-	generateMap('map-canvas',500,myData);
-	
-	
-	
-	
+	generateMap('map-svg-canvas', width, myData);
+		
 });
 
-
-
-
-
-
-
-function generateMap(containerId,width,data) {
+function generateMap(containerId, width, data) {
 	
 	//Init vars
 	var height=700,
@@ -51,57 +41,81 @@ function generateMap(containerId,width,data) {
 	    .domain([0, d3.max(data, function(d){ return Math.round(d[17]);})])
 	    .range(d3.range(9)),
 	  color = d3.scale.category20(),
-	  pad = d3.format("0ed");
+	  pad = d3.format("0ed"),
+	  zoom;
   
 
-  function _init() {
-    _createMap();
-    _createTooltip();
-    _createPath();
-  };
+	function _init() {
+		_createMap();
+		_createTooltip();
+		_createPath();
+	};
+	
 
-  function _createTooltip() {
-	    //Crea el tooltip            
-	    tooltip = d3.select("body").append("div")   
-	                .attr("id", "tooltip")               
-	                .style("opacity", 0);
+  	function _createTooltip() {
+	
+		tooltip = d3.select("body").append("div")   
+		            .attr("id", "tooltip")               
+		            .style("opacity", 0);
+		
+		svg.on("mousemove", mousemove);
+		mini_svg.on("mousemove", mousemove);
+		
+		function mousemove() {
+			tooltip.style("left", (d3.event.pageX + 20) + "px").style("top", (d3.event.pageY - 30) + "px");
+		}
+		
+	}
+  	
 
-	    svg.on("mousemove", mousemove);
-	    mini_svg.on("mousemove", mousemove);
+  	function _createMap() {
 
-	    function mousemove() {
-	      tooltip.style("left", (d3.event.pageX + 20) + "px").style("top", (d3.event.pageY - 30) + "px");
-	    }
-	  }
+		svg = d3.select('#container #' + containerId).append("svg")
+		  .attr("width", width)
+		  .attr("height", height)
+		  .attr("class", "poblacion");
 
-	  function _createMap() {
+		mini_svg = d3.select('#container #' + containerId).append("svg")
+		  .attr("width", 200)
+		  .attr("height", 200)
+		  .attr("class", "poblacion-mini");
 
-	    svg = d3.select('#'+containerId).append("svg")
-	      .attr("width", width)
-	      .attr("height", height)
-	      .attr("class", "poblacion");
+  	};
+  	
 
-	    mini_svg = d3.select('#'+containerId).append("svg")
-	      .attr("width", 200)
-	      .attr("height", 200)
-	      .attr("class", "poblacion-mini");
+  	function _getName(e) {
+  		return e.replace(/\s+/g, "-").toLowerCase()
+	};
+	
+	  
+	function zoomed() {
+		mapa_svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");		 
+	};
 
-	  };
-
-	  function _getName(e) {
-	    return e.replace(/\s+/g, "-").toLowerCase()
-	  };
-
-	  function _createPath() {
-	    var scale = d3.geo.mercator().scale(900).center([-65, -35]).translate([width / 2 - 30, height / 2 - 125]);
+	
+	function _createPath() {
+		
+	    var scale = d3.geo.mercator().scale(900)
+	    							 .center([-65, -35])
+	    							 .translate([width / 2 - 30, height / 2 - 125]);
 	    projection = scale;
 	    path = d3.geo.path().projection(scale);
 
-	    var mini_scale = d3.geo.mercator().scale(6600).center([-57.5, -35.6]).translate([width / 2 - 30, height / 2 - 125]);
+	    var mini_scale = d3.geo.mercator().scale(6600)
+	    								  .center([-57.5, -35.6])
+	    								  .translate([width / 2 - 30, height / 2 - 125]);
 	    mini_projection = mini_scale;
 	    mini_path = d3.geo.path().projection(mini_scale);
 
 	    d3.json("resources/data/argentina.json", function(error, e) {
+	    	
+	    	zoom = d3.behavior.zoom()
+					          .translate([0, 0])
+					          .scale(1)
+					          .scaleExtent([1, 8])
+					          .on("zoom", zoomed);
+
+	        svg.call(zoom).on("zoom", zoomed);
 
 	        //mini mapa
 	        mini_mapa_svg = mini_svg.append("g").classed("mini-mapa Blues", !0);
@@ -211,10 +225,7 @@ function generateMap(containerId,width,data) {
 
 	        function addTooltipListener(s) {
 	          s.on("mouseover", function(d) {
-	         
-//	        	  console.log(d);
-
-
+	
               var innerHTML =  d.properties.c + '<br/><strong>' + d.properties.p + '</strong>';        
               
 	       
@@ -249,52 +260,53 @@ function generateMap(containerId,width,data) {
 
 	    });
 
-	  };
+	};
 
 
-  _init();
+	_init();
+	
 
-  return {
+	return {
     
-    update: function(areas){
-      
-      departamentos
-        .selectAll('path')
-        .attr('class',function (d){
-          $(this)[0].classList.remove("selected");
-          return $(this)[0].classList.toString();
-        });
+	    update: function(areas){
+	      
+	      departamentos
+	        .selectAll('path')
+	        .attr('class',function (d){
+	          $(this)[0].classList.remove("selected");
+	          return $(this)[0].classList.toString();
+	        });
+	
+	      departamentos
+	        .selectAll('path')
+	        .attr('class', function (d){
+	          if(areas.indexOf(d.id)>-1){
+	            $(this)[0].classList.add("selected");
+	          } else {
+	            $(this)[0].classList.remove("selected");
+	          }
+	        });
+	
+	      amba
+	        .selectAll('path')
+	        .attr('class',function (d){
+	          $(this)[0].classList.remove("selected");
+	          return $(this)[0].classList.toString();
+	        });
+	
+	      amba
+	        .selectAll('path')
+	        .attr('class', function (d){
+	          if(areas.indexOf(d.id)>-1){
+	            $(this)[0].classList.add("selected");
+	          } else {
+	            $(this)[0].classList.remove("selected");
+	          }
+	          return $(this)[0].classList.toString();
+	        });
+	
+	    }
 
-      departamentos
-        .selectAll('path')
-        .attr('class', function (d){
-          if(areas.indexOf(d.id)>-1){
-            $(this)[0].classList.add("selected");
-          } else {
-            $(this)[0].classList.remove("selected");
-          }
-        });
-
-      amba
-        .selectAll('path')
-        .attr('class',function (d){
-          $(this)[0].classList.remove("selected");
-          return $(this)[0].classList.toString();
-        });
-
-      amba
-        .selectAll('path')
-        .attr('class', function (d){
-          if(areas.indexOf(d.id)>-1){
-            $(this)[0].classList.add("selected");
-          } else {
-            $(this)[0].classList.remove("selected");
-          }
-          return $(this)[0].classList.toString();
-        });
-
-    }
-
-  }
+	}
 
 }
