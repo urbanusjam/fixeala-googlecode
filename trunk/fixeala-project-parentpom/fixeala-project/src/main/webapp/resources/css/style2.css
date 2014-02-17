@@ -463,8 +463,7 @@ legend {
 
 #content { 
 	width: 1180px;	
-	min-height: 100%;
-	
+	min-height: 100%;	
 	height: auto;
 	margin: 0 auto 50px;
 	margin-top: 80px;
@@ -485,46 +484,6 @@ footer {
 	clear: both;
 
 }
-
-.floating-tab{
-	 padding:10px;
-	 position: fixed;
-     right: 0;
-   	 top: 0;
-     display: block;
-     width: 30px;
-     line-height:70px;
-     height:50px;     
-     font-size:10px;
-     text-transform:uppercase;
-     text-align: center; 
-     background-color:#ccc;   
-     overflow: hidden;
-     color:#fff;
-     -webkit-border-radius: 4px 0 0 4px;
-	 -moz-border-radius: 4px 0 0 4px;
-	 border-radius: 4px 0 0 4px;
-	
-}
-
-.search{
-	 top: 200px;
-	 background-color:#428bca;
-	 border:1px solid #357ebd;
-}
-.search:hover{background-color: #3276b1; border: 1px solid #285e8e;color:#fff; text-decoration: none; }
-
-
-.marker{ top: 115px;
-	 
-	 background-color:#d43f3a;
-	 border:1px solid #d43f3a;	 
-}
-.marker:hover{background-color: #d2322d; border: 1px solid #ac2925;color:#fff; text-decoration: none; }
-
-
-
-.floating-tab i{height:50px;}
 
 
 
