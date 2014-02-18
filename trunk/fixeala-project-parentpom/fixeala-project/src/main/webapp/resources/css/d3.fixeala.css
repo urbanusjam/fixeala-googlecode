@@ -189,6 +189,12 @@ g.amba path.free {
 
 g.departamentos path.hover, 
 g.amba path.hover {
+	fill:#37A1D5 !important;	
+	stroke:#37A1D5 !important;
+	cursor:help;
+}
+
+g.provincias path.hover {
 /* 	fill:#A3C725 !important; */
 	fill:#37A1D5 !important;
 	
@@ -196,7 +202,6 @@ g.amba path.hover {
 	stroke:#37A1D5 !important;
 	cursor:help;
 }
-
 
 
 #tooltip {   
