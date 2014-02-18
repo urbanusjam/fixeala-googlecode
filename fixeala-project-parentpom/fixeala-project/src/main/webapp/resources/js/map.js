@@ -262,8 +262,8 @@ function loadMarkers(map){
 	        type: "GET",
 	        url: "./loadMapMarkers.html",
 	        dataType: "json",  	        
-	        success: function(data){        			 	    	        	
-	        	
+	        success: function(data){     
+	        
 	        	var markerArray = data;	        
 	        	var tempMarker;
 	        	var infowindow;

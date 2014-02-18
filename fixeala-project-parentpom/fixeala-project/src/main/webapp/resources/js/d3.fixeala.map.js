@@ -1,15 +1,61 @@
+var map;
+//var coord_ba = new google.maps.LatLng(-34.599722, -58.381944);
+//var coord_center = new google.maps.LatLng(-35,-65); 
+var svg; 
+var coords = [
+-40.446947,-65.529327
+		]; 
+
 $(document).ready(function(){
-	
+		
 	var myData = [];
-	var width =  500;
+	var width =  500;	
 	
 	d3.text("resources/data/lanacion-censo.csv", function(datasetText) {
 		myData = d3.csv.parseRows(datasetText);
 	});
 
 	generateMap('map-svg-canvas', width, myData);
+	
+//	init_map();	
+	
+	
+	$( "a.floating-tab" ).hover(function() {
+		  $( this ).animate({
+		        'margin-right': parseInt($(this).css('margin-right')) == -110 ?  0 :  -110 		      
+		                
+		    }, 400);
+		});
+	
+
 		
 });
+
+function init_map(){
+	
+	var po = org.polymaps;
+
+	var map = po.map()
+	    .container(d3.select("#map_canvas").node().appendChild(po.svg("svg")))
+	    .center({ lat: coords[0], lon:coords[1] }) 
+	    .zoomRange([3, 20])
+	    .zoom(5)
+	    .add(po.interact());	    
+
+	map.add(po.image()
+	    .url(po.url("http://{S}tile.cloudmade.com"
+	    + "/1a1b06b230af4efdbb989ea99e9841af" // http://cloudmade.com/register
+	    + "/998/256/{Z}/{X}/{Y}.png")
+	    .hosts(["a.", "b.", "c.", ""])));
+
+	map.add(po.compass()
+	    .pan("none"));
+		
+}
+
+
+
+
 
 function generateMap(containerId, width, data) {
 	
@@ -222,19 +268,21 @@ function generateMap(containerId, width, data) {
 	        //Tooltip
 	        var m = mapa_svg.selectAll("path.departamento");
 	        var mm = mini_mapa_svg.selectAll("path.departamento");
+	        var mmm = mapa_svg.selectAll("path.provincia");
 
 	        function addTooltipListener(s) {
-	          s.on("mouseover", function(d) {
-	
-              var innerHTML =  d.properties.c + '<br/><strong>' + d.properties.p + '</strong>';        
-              
-	       
+	          s.on("mouseover", function(d) {	        	  
+	        	
+	        	  var innerHTML =  d.properties.c + '<br/><strong>' + d.properties.p + '</strong>'; 
+	        	  
 	              tooltip.transition()        
 	                     .duration(100)      
 	                     .style("opacity", .9)
-
+	                     
 	              tooltip.html(innerHTML);
+	              
 	              $(this)[0].classList.add("hover");
+	              
 	          })
 	          .on("mouseout", function(d) {
 	              $(this)[0].classList.remove("hover");
@@ -243,6 +291,28 @@ function generateMap(containerId, width, data) {
 	                      .style("opacity", 0);   
 	          });
 	        };
+	        
+	        function addTooltipListenerProvincia(s) {
+		          s.on("mouseover", function(d) {
+		        	  console.log(d);
+		        	  var innerHTML =  d.properties.PROVINCIA; 
+		        	  
+		              tooltip.transition()        
+		                     .duration(100)      
+		                     .style("opacity", .9)
+		                     
+		              tooltip.html(innerHTML);
+		              
+		              $(this)[0].classList.add("hover");
+		              
+		          })
+		          .on("mouseout", function(d) {
+		              $(this)[0].classList.remove("hover");
+		              tooltip.transition()        
+		                      .duration(200)      
+		                      .style("opacity", 0);   
+		          });
+		        };
 
 
 
@@ -257,6 +327,8 @@ function generateMap(containerId, width, data) {
 	        addTooltipListener(m);
 
 	        addTooltipListener(mm);
+	        
+//	        addTooltipListenerProvincia(mmm);
 
 	    });
 
@@ -269,7 +341,24 @@ function generateMap(containerId, width, data) {
 	return {
     
 	    update: function(areas){
-	      
+	    	
+//	    	provincias
+//	        .selectAll('path')
+//	        .attr('class',function (d){
+//	          $(this)[0].classList.remove("selected");
+//	          return $(this)[0].classList.toString();
+//	        });
+//	
+//	    	provincias
+//	        .selectAll('path')
+//	        .attr('class', function (d){
+//	          if(areas.indexOf(d.id)>-1){
+//	            $(this)[0].classList.add("selected");
+//	          } else {
+//	            $(this)[0].classList.remove("selected");
+//	          }
+//	        });
+	    	
 	      departamentos
 	        .selectAll('path')
 	        .attr('class',function (d){

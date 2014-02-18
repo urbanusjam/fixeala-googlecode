@@ -611,8 +611,19 @@ public class IssueController {
 
 	
 	@RequestMapping(value="/loadMapMarkers", method = RequestMethod.GET)
-	public @ResponseBody List<IssueDTO> loadMapMarkers(@ModelAttribute("issue") IssueDTO issue, HttpServletRequest request){		
+	public @ResponseBody List<IssueDTO> loadMapMarkers(@ModelAttribute("issue") IssueDTO issue, HttpServletRequest request) throws JSONException{		
 		List<IssueDTO> issues = issueService.loadAllIssues();	
+		
+		JSONArray array = new JSONArray();
+		for(IssueDTO s : issues){
+			JSONObject obj = new JSONObject();
+			obj.put("id", s.getId());
+			obj.put("title", s.getTitle());
+			array.put(obj);
+		}
+		
+		System.out.println(array.toString());
+		
 		return issues;		
 	}
 	
