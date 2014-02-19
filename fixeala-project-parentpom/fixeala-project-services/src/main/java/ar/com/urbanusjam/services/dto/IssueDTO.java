@@ -265,17 +265,17 @@ public class IssueDTO implements Serializable {
 		
 		String formattedAddress = "";
 		
-		if( !neighborhood.isEmpty() && !city.isEmpty() ) {		
-			formattedAddress = address + ", " + neighborhood + ", " + city + ", " + province;		
-		}
+//		if( !neighborhood.isEmpty() && !city.isEmpty() ) {		
+//			formattedAddress = address + ", " + neighborhood + ", " + city + ", " + province;		
+//		}
 		
-		else if( neighborhood.isEmpty() && city.isEmpty() ) {
-			formattedAddress = address + ", " + province;		
-		}	
+//		if( neighborhood.isEmpty() && city.isEmpty() ) {
+//			formattedAddress = address + ", " + province;		
+//		}	
 		
-		else if ( neighborhood.isEmpty() && !city.isEmpty() ) {		
+//		if ( neighborhood.isEmpty() && !city.isEmpty() ) {		
 			formattedAddress = address + ", " + city + ", " + province;	
-		}	
+//		}	
 		
 		return formattedAddress;
 	}

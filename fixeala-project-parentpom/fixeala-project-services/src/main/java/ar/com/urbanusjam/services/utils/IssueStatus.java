@@ -8,6 +8,6 @@ public final class IssueStatus {
 	public static final String IN_PROGRESS = "EN PROGRESO";
 	public static final String SOLVED = "RESUELTO";	
 	public static final String CLOSED = "CERRADO";	
-	public static final String ARCHIVED = "ARCHIVADO"; //NO VA
+	//public static final String ARCHIVED = "ARCHIVADO"; 
 	
 }
