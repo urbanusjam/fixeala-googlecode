@@ -146,7 +146,7 @@ footer a:hover { color: #43DAAD; text-decoration: underline; }
 	border:0px solid #fff;	 
 }
 
-#map_canvas { width: 500px; height: 710px;}
+#map_canvas, #map_leaflet { width: 500px; height: 710px;}
 
 
 
@@ -222,3 +222,20 @@ footer a:hover { color: #43DAAD; text-decoration: underline; }
   fill: #999;
 }
 
+
+
+
+.info {
+			width: 250px;
+			padding: 6px 8px;
+			font: 13px Arial, Helvetica, sans-serif;
+			background: white;
+			background: rgba(255,255,255,0.8);
+			box-shadow: 0 0 15px rgba(0,0,0,0.2);
+			border-radius: 5px;
+			color: #999;
+		}
+		.info h4 {
+			margin: 0 0 5px;
+			color: #777;
+		}

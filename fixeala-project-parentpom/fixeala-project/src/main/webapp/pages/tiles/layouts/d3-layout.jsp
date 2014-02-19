@@ -18,6 +18,10 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/topojson.v1.min.js"></script>	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/d3.fixeala.map.js"></script>  	
   
+  
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
+<script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+  
   	<link type="text/css" href="http://fonts.googleapis.com/css?family=Oxygen:400,300,700|Lato:400,900|Graduate:400,900" rel="stylesheet">
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/3.1.1/bootstrap-3.1.1.css" rel="stylesheet">
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/font-awesome/4.0.3/font-awesome-4.0.3.css" rel="stylesheet">
