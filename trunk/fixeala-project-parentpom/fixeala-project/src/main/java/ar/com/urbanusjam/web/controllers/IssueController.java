@@ -629,17 +629,22 @@ public class IssueController {
 			JSONObject geometry = new JSONObject();
 			geometry.put("type", "Point");
 			geometry.put("coordinates", new float[]{ 
-					Float.parseFloat(s.getLatitude()), Float.parseFloat(s.getLongitude()) });
+//					Float.parseFloat(s.getLatitude()), Float.parseFloat(s.getLongitude()) });
+					Float.parseFloat(s.getLongitude()), Float.parseFloat(s.getLatitude()) });
 			
 			feature.put("geometry", geometry);
 			
 			JSONObject properties = new JSONObject();
 			properties.put("id", s.getId());
-			properties.put("address", s.getAddress());
+			properties.put("address", s.getFormattedAddress());
 			properties.put("title", s.getTitle());
+			properties.put("status", s.getStatus());
+			properties.put("statusCss", s.getStatusCss());
+			properties.put("date", s.getFechaFormateada());
+			properties.put("description", s.getDescription());
+			properties.put("user", s.getUsername());
 			
-			feature.put("properties", properties);
-			
+			feature.put("properties", properties);			
 			array.put(feature);
 		}
 		

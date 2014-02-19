@@ -19,19 +19,19 @@
 	<div id="container" class="row">
 	
 	
-			<div id="map-svg-canvas"></div>
-			
+<!-- 			<div id="map-svg-canvas"></div> -->
+				<p id="map_leaflet"></p>
 	
-		<div class="col-md-6 col-md-offset-4">	
-			<div id="content">
+<!-- 		<div class="col-md-6 col-md-offset-4">	 -->
+<!-- 			<div id="content"> -->
 			
 <!-- 			<div id="map_canvas"></div> -->
 			
-						<p id="map_leaflet"></p>
+					
 
 			
-			</div>
-		</div>
+<!-- 			</div> -->
+<!-- 		</div> -->
 	</div>
 
 	

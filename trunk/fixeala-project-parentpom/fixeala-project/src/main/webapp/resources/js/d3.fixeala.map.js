@@ -5,10 +5,26 @@ var svg;
 var coords = [
 -40.446947,-65.529327
 		]; 
-
-
+var AMBA_IDS = ["D02003", "D02004", "D02011", "D02017", "D02035", "D02036", "D02132", "D02038", 
+                "D02051", "D02052", "D02134", "D02133", "D02129", "D02061", "D02063", "D02062", 
+                "D02070", "D02130", "D02075", "D02077", "D02079", "D02080", "D02089", "D02128", 
+                "D02092", "D02105", "D02106", "D02053", "D02109", "D02113", "D02118", "D02122", "CAPFED"];
 
 $(document).ready(function(){
+	
+//	ft2json.query(
+//		    'SELECT col6\x3e\x3e1 FROM 1ThRwXgDcj9PYFMBlJ4pIAdAkLjDWY6MeCvM9ZOM', /* Fusion Tables query. */
+//		    function(result) {
+//		        /* Callback function. */
+//		        alert(typeof result);
+//		    },
+//		    {
+//		        /* Optional parameters. */
+//		        start : 25,
+//		        limit : 50
+//		    }
+//		);
+	
 		
 	var myData = [];
 	var width =  500;	
@@ -37,144 +53,336 @@ $(document).ready(function(){
 
 function init_leaflet(){
 
-	//http://ta.wq.io/leaflet_d3/leaflet.cluster
-
+	//http://ta.wq.io/leaflet_d3
 	
-	 var map = new L.map("map_leaflet")
-	   .setView([-35, -65], 4)
-	   .locate({"setView": true});
-	 
+	var provinciasPath;
+	var departamentosPath;
+	var reclamosOverlay;
+	var info;
 	
+	//MAPA 
+	var cloudmadeUrl = 'http://{s}.tile.cloudmade.com/API-key/{styleId}/256/{z}/{x}/{y}.png',
+	    cloudmadeAttribution = 'Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2011 CloudMade';
 	 
-	 var layer = L.tileLayer('http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png', {
+	var layer = L.tileLayer('http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png', {
 			attribution: 'Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2011 CloudMade',
 			key: 'BC9A493B41014CAABB98F0471D759707',
 			styleId: 22677
-		}).addTo(map);
+	});
+	
+	var layerB = L.tileLayer('http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png', {
+			attribution: 'Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2011 CloudMade',
+			key: '1a1b06b230af4efdbb989ea99e9841af',
+			styleId: 20760
+	});
+	
+
+	var map = L.map('map_leaflet', {
+	    center: new L.LatLng(-33.578015,-63.658218),
+	    zoom: 5,
+	    minZoom: 4,
+	    maxZoom: 18,
+	    layers: [layer]
+	});
+	
+	//long - lat	
+//	var north = L.latLng(-66.216667, -21.766667),
+//    	east = L.latLng(53.633333, -26.25),
+//    	south = L.latLng(-66.516667, -55.05),
+//    	west = L.latLng(-73.566667, -50.016667),
+//    	bounds = L.latLngBounds(south, west, north, east);
+//	
+//	map.fitBounds(bounds);
+	
+
+	//ESTILOS
+	var popupStyle = {
+			"color": "#000"			
+    };
+	
+	var myStyle = {
+			"color": "#ff7800",
+			"weight": 2,
+			"opacity": 0.5,
+			"display": "none"
+	 };
 	 
+	var provinciaStyle = {
+		color       : "#3997AD",
+        opacity	  : 1,
+		fillColor   : "#597E8E",
+		fillOpacity : 0.2,
+		weight      : 2		
+	}
 	
-	//dimensions
-	    var w = 500;
-	    var h = 700;
-
-	 var geojson;
-	 
- d3.json("resources/data/reclamos.json", function(error, markers) {
-		 
-		 var geojsonLayer = new L.geoJson(markers);
-
-		 map.addLayer(geojsonLayer);
-		
-		 console.log(markers);
-		
-		 
-	 });
-
-	 d3.json("resources/data/argentina.json", function(error, data) {
-		 
-		 console.log(data);
+	var departamentoStyle = {
+		color		: "#3997AD",
+		fillColor   : "#EEE",
+		weight      : 1,	
+		opacity     : 1
+	}
 	
-		 var converted = topojson.feature(data, data.objects.provincias);
 
-		
-//		 var myStyle = {
-//				    "color": "#ff7800",
-//				    "weight": 2,
-//				    "opacity": 0.65
-//				};
+	loadProvincias();
+//	loadDepartamentos("algo");
+	loadReclamos();
 	
-		 geojson = L.geoJson(converted, {
-			    style: style,
-			    onEachFeature: onEachFeature
-			}).addTo(map);
-		 
-		 
-		 var info = L.control();
+//	map.on('load', function(){		
+//		displayLayersOnZoom(map.getZoom());	
+//	});
 
-		 info.onAdd = function (map) {
-		     this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
-		     this.update();
-		     return this._div;
-		 };
-
-		 // method that we will use to update the control based on feature properties passed
-		 info.update = function (props) {
-			 console.log();
-		     this._div.innerHTML = '<h4>Rep&uacute;blica Argentina</h4>' +  (props ?
-		          props.PROVINCIA 
-		         : 'Posicione el cursor sobre una provincia');
-		 };
-
-		 info.addTo(map);
+	//When view resets use the smaller icon if zoom level is less than 13
+//	map.on('viewreset', function(){
+//		displayLayersOnZoom(map.getZoom());
+//		console.log("zoom level: "+ map.getZoom());
+//	});
+	
+	
+	function displayLayersOnZoom(zoom){
+		if(zoom >= 6){
+			provinciasPath.removeLayer(map);
+//			departamentosPath.addTo(map);
 			
-	// get color depending on population density value
-		function getColor(d) {
-			return d > 1000 ? '#800026' :
-			       d > 500  ? '#BD0026' :
-			       d > 200  ? '#E31A1C' :
-			       d > 100  ? '#FC4E2A' :
-			       d > 50   ? '#FD8D3C' :
-			       d > 20   ? '#FEB24C' :
-			       d > 10   ? '#FED976' :
-			                  '#FFEDA0';
-		}
 
-		function style(feature) {
-			return {
-				weight: 2,
-				opacity: 1,
-				color: 'white',
-				dashArray: '3',
-				fillOpacity: 0.7,
-				fillColor: 'yellow'
-			};
 		}
+		if(zoom < 6){			
+//			departamentosPath.removeLayer(map);
+			provinciasPath.addTo(map);
+			
+		}
+	}
+	
+	function loadReclamos(){
+		
+		//RECLAMOS 
+		d3.json("resources/data/reclamos.json", function(error, markers) {
+			 
+			console.log(markers);
+			
+			var markersCluster = L.markerClusterGroup({maxClusterRadius: 100, showCoverageOnHover: false});
+			
+			reclamosOverlay  = new L.geoJson(markers, {
+				style: popupStyle,
+				onEachFeature: function (feature, layer) {
+					
+					var marker = feature.properties;
+					console.log(marker);
+					var textLimit = 400;
+					var shortDescription = marker.description.substr(0, textLimit);
+					
+					var markerInfo = '<table border="0" cellpadding="0" cellspacing="0" style="width:380px">'
+						 +'   <tr>'
+						 +'	 	<td style="text-align:left; padding-bottom:10px"><strong><h4 style="display:inline">'+getIssueURL(marker.id, marker.title, 'link')
+						 +'																	&nbsp;&nbsp;<i class="fa fa-chevron-right"></i>&nbsp;&nbsp;' 
+						 +'															       <span class="'+marker.statusCss+'">'+ marker.status +'</span></h4></strong></td>'				           
+					
+						 +'	 </tr>'	
+						 +'  <tr>'
+						 +'	 	<td style="text-align:left;color:grey">'+marker.address+'</td>'				
+						 +'	 </tr><tr><td>&nbsp;</td></tr>'	
+						 +'   <tr style="font-size:12px;">'
+						 +'	 	<td style="text-align:justify;color:black;padding-bottom:10px">'+shortDescription+' ...</td>'				
+						 +'	 </tr>'	
+						 +'	 <tr>'
+						 +'		<td style="text-align:left;color:grey;padding-top:5px;border-top:1px solid grey">Nro. #'+marker.id+'&nbsp;&nbsp;<i class="fa fa-caret-right"></i>&nbsp;&nbsp;Reportado por: '+getUserURL(marker.user)+' &nbsp;   <div style="margin:0;padding:0;float:right;clear:both;display:inline">'+ marker.date +'</div></td>'
+						 +'	 </tr>'				
+						 +'	 </table>';			
+						
+						
+					
+			    	layer.bindPopup(markerInfo, {minWidth: 390, maxWidth: 390});
+			    	markersCluster.addLayer(layer);
+			    	
+			    	var iconHover = L.icon({
+//			    	    iconUrl: 'my-icon.png',
+			    	    iconSize: [38, 95],
+			    	    iconAnchor: [22, 94],
+			    	    popupAnchor: [-3, -76],
+//			    	    shadowUrl: 'my-icon-shadow.png',
+//			    	    shadowRetinaUrl: 'my-icon-shadow@2x.png',
+			    	    shadowSize: [68, 95],
+			    	    shadowAnchor: [22, 94]
+			    	});
+			    	
+			    	
+			    	layer.on('mouseover', function(){		
+							layer.setIcon(iconHover);
+			    		});
+			    	
+			    }
+			});
+			
+			
+			map.addLayer(markersCluster);
+				 
+		});
+		
+	}
+	
+	function getIssueURL(issueID, issueTitle, type){
+		var protocol = window.location.protocol;
+		var host = window.location.host;
+		var context = "fixeala";
+		var subcontext = "issues/" + issueID;		
+		var parsedTitle = issueTitle.replace(/\s/g, '-').toLowerCase();	
+		var url = protocol + "//" + host + "/" + context + "/" + subcontext + "-" + parsedTitle + ".html";	
+		
+		if(type == 'link')
+			return '<a href="'+ url +'">'+ issueTitle + '</a>';		
+		
+		if(type == 'plain')
+			return url;
+	}
+	
+	function getUserURL(userID){
+		var protocol = window.location.protocol;
+		var host = window.location.host;
+		var context = "fixeala";
+		var subcontext = "users/" + userID;	
+		var url = protocol + "//" + host + "/" + context + "/" + subcontext + ".html";	
+		var urlLink = '<a style="cursor:pointer" id="issue-user" href="'+ url +'">' + userID + '</a>';	
+		return urlLink;
+	}
+
+	//DEPARTAMENTOS
+	function loadDepartamentos(name){
+		
+		d3.json("resources/data/argentina.json", function(error, data) {
+			 
+			var departamentosConverted = topojson.feature(data, data.objects.departamentos);			
+			var departamentosFeatures = topojson.feature(data, data.objects.departamentos).features;
+		
+			
+			
+			var r = name;
+						
+			var filter = departamentosFeatures.filter(function (e) {
+	              return r ===  _getName(e.properties.p_id) && AMBA_IDS.indexOf(e.id) == -1;
+	          });
+		
+         
+         departamentosPath = L.geoJson(filter, {
+			    style: departamentoStyle
+			}).addTo(map);
+         
+//         departamentosPath = L.geoJson(departamentosConverted, {
+//        	 	style: departamentoStyle
+//			}).addTo(map);
+           
+		   
+		 });
+	}
+	
+	   function _getName(e) {
+     		return e.replace(/\s+/g, "-").toLowerCase();
+   	};
+   	
+	//PROVINCIAS
+	function loadProvincias(){
+		
+		
+		d3.json("resources/data/argentina.json", function(error, data) {
+			 
+			console.log(data);
+		
+			var provinciasConverted = topojson.feature(data, data.objects.provincias);
+			
+			provinciasPath = L.geoJson(provinciasConverted, {
+				    style: provinciaStyle,
+				    onEachFeature: onEachFeature
+			}).addTo(map);
+	
+			 var info = L.control();
+			 info.onAdd = function (map) {
+			     this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+			     this.update();
+			     return this._div;
+			 };
+			 
+			 // method that we will use to update the control based on feature properties passed
+			 info.update = function (props) {
+			     this._div.innerHTML = '<h4>Rep&uacute;blica Argentina</h4>' 
+			    	 					+  (props ? props.PROVINCIA : 'Posicione el cursor sobre una provincia');
+			 };
+			 info.addTo(map);
+				
+			 
+			 function onEachFeature(feature, layer) {
+					layer.on({
+						mouseover: highlightFeature,
+						mouseout: resetHighlight,
+						click: zoomToFeature
+					});
+				}
+				 
+				 // get color depending on population density value
+				function getColor(d) {
+					return d > 1000 ? '#800026' :
+					       d > 500  ? '#BD0026' :
+					       d > 200  ? '#E31A1C' :
+					       d > 100  ? '#FC4E2A' :
+					       d > 50   ? '#FD8D3C' :
+					       d > 20   ? '#FEB24C' :
+					       d > 10   ? '#FED976' :
+					                  '#FFEDA0';
+				}
+
+				function style(feature) {
+					return {
+						weight: 2,
+						opacity: 1,
+						color: 'white',
+						dashArray: '3',
+						fillOpacity: 0.4,
+						fillColor: 'yellow'
+					};
+				}	  
+
+				function highlightFeature(e) {
+					var layer = e.target;
+
+					layer.setStyle({
+						weight: 2,
+						color: '#3997AD',
+						dashArray: '',
+						fillOpacity: 0.6
+					});
+
+					if (!L.Browser.ie && !L.Browser.opera) {
+						layer.bringToFront();
+					}
+
+					info.update(layer.feature.properties);
+				}
+
+				function resetHighlight(e) {
+					provinciasPath.resetStyle(e.target);
+					info.update();
+				}
+
+				function zoomToFeature(e) {		
+
+					
+					map.fitBounds(e.target.getBounds());
+					var name = _getName(e.target.feature.properties.PROVINCIA);
+					console.log(name);
+					loadDepartamentos(name);
+				
+				} 	
+		
+		   
+		 });
+		
+	}
+	
+
+
+
+	
+	
 	  
-
-		function highlightFeature(e) {
-			var layer = e.target;
-
-			layer.setStyle({
-				weight: 2,
-				color: '#3997AD',
-				dashArray: '',
-				fillOpacity: 0.7
-			});
-
-			if (!L.Browser.ie && !L.Browser.opera) {
-				layer.bringToFront();
-			}
-
-			info.update(layer.feature.properties);
-		}
-
-		function resetHighlight(e) {
-			geojson.resetStyle(e.target);
-			info.update();
-		}
-
-		function zoomToFeature(e) {
-			map.fitBounds(e.target.getBounds());
-		}
-	   
-		function onEachFeature(feature, layer) {
-			layer.on({
-				mouseover: highlightFeature,
-				mouseout: resetHighlight,
-				click: zoomToFeature
-			});
-		}
-		
-		
-
-		
-	   
-	 });
-	
-	 
 	
 	
-
 }
 
 
