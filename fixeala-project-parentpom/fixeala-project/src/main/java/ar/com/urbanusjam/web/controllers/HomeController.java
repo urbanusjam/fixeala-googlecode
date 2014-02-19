@@ -561,11 +561,7 @@ public class HomeController {
 			
 			if(currentStatus.equals(IssueStatus.CLOSED)){
 				statusList.add("Reabrir");
-			}
-			
-			if(currentStatus.equals(IssueStatus.ARCHIVED)){
-				statusList = new ArrayList<String>();
-			}
+			}			
 			
 		return "users";
 		

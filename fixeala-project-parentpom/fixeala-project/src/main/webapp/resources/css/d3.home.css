@@ -8,9 +8,7 @@ body {
 /* 	background: #232a2d; */
 /* 	background: #3276B1; */
 /* 	background: #597E8E;	 */
-	background: #FFF;	
-	color: #fff;
-	
+	background: #FFF;		
 }
 
 html {
@@ -21,6 +19,7 @@ html {
 header { 
 	width: 100%; 
 	height: 60px;
+	color: #fff;
 /* 	border-bottom: 1px dashed #7699A8; */
 	line-height: 60px; 
 	margin-bottom: 20px;
@@ -146,9 +145,14 @@ footer a:hover { color: #43DAAD; text-decoration: underline; }
 	border:0px solid #fff;	 
 }
 
-#map_canvas, #map_leaflet { width: 500px; height: 710px;}
+#map_canvas, #map_leaflet { width: 600px; height: 710px; margin: 0 0 0 30px;}
 
-
+g.provincias path {
+	stroke: rgba(0,0,0,0.2);
+	fill: none;
+	stroke-width: 1px;
+	stroke-linejoin: round;
+}
 
 @font-face{
 	font-family: "sayglyphs";

@@ -221,8 +221,7 @@ public class IssueServiceImpl implements IssueService {
 							for(Issue i : assignedIssues){
 								//- todos resueltos, cerrados o archivados
 								if( i.getStatus().equals(IssueStatus.SOLVED) 
-										|| i.getStatus().equals(IssueStatus.CLOSED)
-										|| i.getStatus().equals(IssueStatus.ARCHIVED) ){
+										|| i.getStatus().equals(IssueStatus.CLOSED) ){
 									hasPendingIssues = false;
 								}
 								else
@@ -679,11 +678,15 @@ public class IssueServiceImpl implements IssueService {
 		String css = StringUtils.EMPTY;
 		
 		if(status.equals(IssueStatus.OPEN)){
-			css = "label label-important";
+			css = "label label-danger";
+		}
+		
+		if(status.equals(IssueStatus.REOPENED)){
+			css = "label label-danger";
 		}
 		
 		if(status.equals(IssueStatus.ACKNOWLEDGED)){
-			css = "label label-info";
+			css = "label label-primary";
 		}
 		
 		if(status.equals(IssueStatus.IN_PROGRESS)){
@@ -694,16 +697,8 @@ public class IssueServiceImpl implements IssueService {
 			css = "label label-success";
 		}
 		
-		if(status.equals(IssueStatus.REOPENED)){
-			css = "label label-important";
-		}
-		
 		if(status.equals(IssueStatus.CLOSED)){
-			css = "label label-inverse";
-		}
-		
-		if(status.equals(IssueStatus.ARCHIVED)){
-			css = "label";
+			css = "label label-default";
 		}
 		
 		return css;
