@@ -6,54 +6,176 @@ var coords = [
 -40.446947,-65.529327
 		]; 
 
+
+
 $(document).ready(function(){
 		
 	var myData = [];
 	var width =  500;	
-	
-	d3.text("resources/data/lanacion-censo.csv", function(datasetText) {
-		myData = d3.csv.parseRows(datasetText);
-	});
-
-	generateMap('map-svg-canvas', width, myData);
-	
-//	init_map();	
-	
 	
 	$( "a.floating-tab" ).hover(function() {
 		  $( this ).animate({
 		        'margin-right': parseInt($(this).css('margin-right')) == -110 ?  0 :  -110 		      
 		                
 		    }, 400);
-		});
+	});
+	
+//	d3.text("resources/data/lanacion-censo.csv", function(datasetText) {
+//		myData = d3.csv.parseRows(datasetText);
+//	});
+
+	//generateMap('map-svg-canvas', width, myData);
+	
+	init_leaflet();
+	
+	
 	
 
 		
 });
 
-function init_map(){
+
+function init_leaflet(){
+
+	//http://ta.wq.io/leaflet_d3/leaflet.cluster
+
 	
-	var po = org.polymaps;
+	 var map = new L.map("map_leaflet")
+	   .setView([-35, -65], 4)
+	   .locate({"setView": true});
+	 
+	
+	 
+	 var layer = L.tileLayer('http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png', {
+			attribution: 'Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2011 CloudMade',
+			key: 'BC9A493B41014CAABB98F0471D759707',
+			styleId: 22677
+		}).addTo(map);
+	 
+	
+	//dimensions
+	    var w = 500;
+	    var h = 700;
 
-	var map = po.map()
-	    .container(d3.select("#map_canvas").node().appendChild(po.svg("svg")))
-	    .center({ lat: coords[0], lon:coords[1] }) 
-	    .zoomRange([3, 20])
-	    .zoom(5)
-	    .add(po.interact());	    
+	 var geojson;
+	 
+ d3.json("resources/data/reclamos.json", function(error, markers) {
+		 
+		 var geojsonLayer = new L.geoJson(markers);
 
-	map.add(po.image()
-	    .url(po.url("http://{S}tile.cloudmade.com"
-	    + "/1a1b06b230af4efdbb989ea99e9841af" // http://cloudmade.com/register
-	    + "/998/256/{Z}/{X}/{Y}.png")
-	    .hosts(["a.", "b.", "c.", ""])));
-
-	map.add(po.compass()
-	    .pan("none"));
+		 map.addLayer(geojsonLayer);
 		
+		 console.log(markers);
+		
+		 
+	 });
+
+	 d3.json("resources/data/argentina.json", function(error, data) {
+		 
+		 console.log(data);
+	
+		 var converted = topojson.feature(data, data.objects.provincias);
+
+		
+//		 var myStyle = {
+//				    "color": "#ff7800",
+//				    "weight": 2,
+//				    "opacity": 0.65
+//				};
+	
+		 geojson = L.geoJson(converted, {
+			    style: style,
+			    onEachFeature: onEachFeature
+			}).addTo(map);
+		 
+		 
+		 var info = L.control();
+
+		 info.onAdd = function (map) {
+		     this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+		     this.update();
+		     return this._div;
+		 };
+
+		 // method that we will use to update the control based on feature properties passed
+		 info.update = function (props) {
+			 console.log();
+		     this._div.innerHTML = '<h4>Rep&uacute;blica Argentina</h4>' +  (props ?
+		          props.PROVINCIA 
+		         : 'Posicione el cursor sobre una provincia');
+		 };
+
+		 info.addTo(map);
+			
+	// get color depending on population density value
+		function getColor(d) {
+			return d > 1000 ? '#800026' :
+			       d > 500  ? '#BD0026' :
+			       d > 200  ? '#E31A1C' :
+			       d > 100  ? '#FC4E2A' :
+			       d > 50   ? '#FD8D3C' :
+			       d > 20   ? '#FEB24C' :
+			       d > 10   ? '#FED976' :
+			                  '#FFEDA0';
+		}
+
+		function style(feature) {
+			return {
+				weight: 2,
+				opacity: 1,
+				color: 'white',
+				dashArray: '3',
+				fillOpacity: 0.7,
+				fillColor: 'yellow'
+			};
+		}
+	  
+
+		function highlightFeature(e) {
+			var layer = e.target;
+
+			layer.setStyle({
+				weight: 2,
+				color: '#3997AD',
+				dashArray: '',
+				fillOpacity: 0.7
+			});
+
+			if (!L.Browser.ie && !L.Browser.opera) {
+				layer.bringToFront();
+			}
+
+			info.update(layer.feature.properties);
+		}
+
+		function resetHighlight(e) {
+			geojson.resetStyle(e.target);
+			info.update();
+		}
+
+		function zoomToFeature(e) {
+			map.fitBounds(e.target.getBounds());
+		}
+	   
+		function onEachFeature(feature, layer) {
+			layer.on({
+				mouseover: highlightFeature,
+				mouseout: resetHighlight,
+				click: zoomToFeature
+			});
+		}
+		
+		
+
+		
+	   
+	 });
+	
+	 
+	
+	
+
 }
-
-
 
 
 

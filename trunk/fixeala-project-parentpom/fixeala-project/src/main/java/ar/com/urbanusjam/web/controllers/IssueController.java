@@ -614,15 +614,38 @@ public class IssueController {
 	public @ResponseBody List<IssueDTO> loadMapMarkers(@ModelAttribute("issue") IssueDTO issue, HttpServletRequest request) throws JSONException{		
 		List<IssueDTO> issues = issueService.loadAllIssues();	
 		
+		
+		JSONObject obj = new JSONObject();
 		JSONArray array = new JSONArray();
+		
+		obj.put("type", "FeatureCollection");
+		
+		
 		for(IssueDTO s : issues){
-			JSONObject obj = new JSONObject();
-			obj.put("id", s.getId());
-			obj.put("title", s.getTitle());
-			array.put(obj);
+			JSONObject feature = new JSONObject();
+			
+			feature.put("type", "Feature");
+				
+			JSONObject geometry = new JSONObject();
+			geometry.put("type", "Point");
+			geometry.put("coordinates", new float[]{ 
+					Float.parseFloat(s.getLatitude()), Float.parseFloat(s.getLongitude()) });
+			
+			feature.put("geometry", geometry);
+			
+			JSONObject properties = new JSONObject();
+			properties.put("id", s.getId());
+			properties.put("address", s.getAddress());
+			properties.put("title", s.getTitle());
+			
+			feature.put("properties", properties);
+			
+			array.put(feature);
 		}
 		
-		System.out.println(array.toString());
+		obj.put("features", array);
+		
+		System.out.println(obj.toString());
 		
 		return issues;		
 	}
