@@ -13,8 +13,11 @@
 <%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/polymaps/polymaps.js?2.5.1"></script>  	 --%>
 <%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/polymaps/nns.min.js?1.1.0"></script>    	 --%>
 <!--   	  <script src="http://ft2json.appspot.com/api/ft2json.js" type="text/javascript"></script> -->
+
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/leaflet/0.7.2/leaflet.js"></script>  
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/leaflet/0.7.2/leaflet.markercluster-src.js"></script>     	
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/leaflet/0.7.2/leaflet.groupedlayercontrol.js"></script>     	
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/leaflet/0.7.2/leaflet-d3-layer.js"></script>     	
   	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery-1.10.2.min.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/3.1.1/bootstrap-3.1.1.js"></script>
@@ -29,9 +32,11 @@
   	<link type="text/css" href="http://fonts.googleapis.com/css?family=Oxygen:400,300,700|Lato:400,900|Graduate:400,900" rel="stylesheet">
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/3.1.1/bootstrap-3.1.1.css" rel="stylesheet">
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/font-awesome/4.0.3/font-awesome-4.0.3.css" rel="stylesheet">
+	
   	<link type="text/css" href="${pageContext.request.contextPath}/resources/js/libs/leaflet/0.7.2/leaflet.css" rel="stylesheet">	
   	<link type="text/css" href="${pageContext.request.contextPath}/resources/js/libs/leaflet/0.7.2/leaflet.markercluster.css" rel="stylesheet">	
   	<link type="text/css" href="${pageContext.request.contextPath}/resources/js/libs/leaflet/0.7.2/leaflet.markercluster-default.css" rel="stylesheet">	
+  	
   	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/d3.fixeala.css" rel="stylesheet">	
   	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/d3.home.css" rel="stylesheet">	
   	  		
