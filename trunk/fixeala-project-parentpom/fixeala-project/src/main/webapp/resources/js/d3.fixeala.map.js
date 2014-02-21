@@ -62,10 +62,10 @@ function init_leaflet(){
 	
 	// DATA LOADING		
 //	loadReclamos();
-//	loadProvincias();
+	loadProvincias();
 //	loadDepartamentos();	
 	
-	loadNewProvincias();
+//	loadNewProvincias();
 
 	
 	// LAYERS			
