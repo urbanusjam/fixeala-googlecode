@@ -13,8 +13,9 @@ $(document).ready(function(){
 	var myData = [];
 	var width =  500;	
 	
-	
-	$( ".floating-tab-menu li" ).hover(function() {
+	var $menu_item = $( ".floating-tab-menu li" );
+
+	$menu_item.hover(function() {
 		$(this).animate({
 			marginRight : parseInt($(this).css('margin-right')) == 0 ?  100  : 0 
 		}, 400);
@@ -37,9 +38,12 @@ function init_leaflet(){
 
 	//http://ta.wq.io/leaflet_d3
 	
-	// VARIABLES	
+	// VARIABLES	 
 	var provinciasPath;
-	var departamentosPath;	
+	var departamentosPath =  new L.geoJson();
+	var departamentoPathByProvincia;
+	var currentDepartamento;
+	var currentProvincia;
 	var info;
 	var currentZoom;
 		
@@ -57,9 +61,12 @@ function init_leaflet(){
 	var minimal   = L.tileLayer(cloudmadeUrl, {styleId: 22677, key: cludmadeKey, attribution: cloudmadeAttribution});
 	
 	// DATA LOADING		
-	loadReclamos();
-	loadProvincias();		
-	//loadDepartamentos("algo");	
+//	loadReclamos();
+//	loadProvincias();
+//	loadDepartamentos();	
+	
+	loadNewProvincias();
+
 	
 	// LAYERS			
 	var rec = L.layerGroup();
@@ -104,9 +111,31 @@ function init_leaflet(){
 	// EVENTS	
 	map.on('viewreset', function(){
 		currentZoom = map.getZoom();
-		//displayLayersOnZoom(currentZoom);
+		displayLayersOnZoom(currentZoom);
 		console.log("zoom level: "+ map.getZoom());
-	});		
+	});	
+
+	
+	
+	function displayLayersOnZoom(zoom){		
+		if(zoom <= 6){
+			if(departamentoPathByProvincia != null){
+				map.removeLayer(departamentoPathByProvincia);
+			}
+			provinciasPath.addTo(map);
+		
+		}
+//		if(zoom >= 7){
+//			if(departamentoPathByProvincia == null){
+//
+//				map.removeLayer(provinciasPath);
+//				departamentosPath.addTo(map);
+//			}
+//		
+//		}
+		
+		
+	}
 
 	// STYLES
 	var popupStyle = {
@@ -128,6 +157,15 @@ function init_leaflet(){
 		weight      : 2		
 	}
 	
+	
+	var provinciaUnselectedStyle = {
+			color       : "#1FBBA6",
+	        opacity	    : 1,  
+			fillColor   : "#2BFCE0",
+			fillOpacity : 0.1,
+			weight      : 2		
+		}
+	
 	var provinciaHoverStyle = {
 		weight: 2,
 		color: '#1FBBA6',
@@ -137,17 +175,14 @@ function init_leaflet(){
 	}	
 	
 	var departamentoStyle = {
-		color		: "#E1e1e1",
+		color		: "#1FBBA6",
 		opacity     : 1,
-		fillColor   : "#EEE",
+		fillColor   : "#2BFCE0",
 		fillOpacity : 0.4,
-		weight      : 1		
+		weight      : 2		
 	}	
 	
-	function displayLayersOnZoom(zoom){		
-		if(zoom >= 8)
-			provinciasPath.removeLayer(map);
-	}
+	
 		
 	//RECLAMOS 		
 	function loadReclamos(){	
@@ -163,7 +198,7 @@ function init_leaflet(){
 				onEachFeature: function (feature, layer) {
 					
 					var marker = feature.properties;
-					console.log(marker);
+					//console.log(marker);
 					var textLimit = 400;
 					var shortDescription = marker.description.substr(0, textLimit);
 					
@@ -213,16 +248,200 @@ function init_leaflet(){
 		
 	}	
 	
+	function loadNewProvincias(){
+			
+		d3.json('resources/data/provincias.json', function(error, dataProv) {
+			console.log(dataProv);
+			/**
+//			var provincias = dataProv.features;		
+			
+			var options = [{ style: provinciaStyle , onEachFeature : onEachFeature }];
+		
+			var data = [];
+			
+			//loop provincias
+			for(var i=0 ; i < provincias.length; i++){
+		      
+				var provinciaNameRaw = provincias[i].properties.provincia.toUpperCase();
+				var provinciaName = provinciaNameRaw.replace(/\s+/g, "_"); 
+
+		        //load departamentos
+//		        d3.json('resources/data/provincias/' +  provinciaName  + '.json', function(error, dataDept) {		
+//		        	
+//		        	var departamentos = dataDept.features;
+//		        	
+//					for(var i = 0; i < departamentos.length; i++){				      
+//						departamentosPath.addData(departamentos[i].geometry);				    
+//				    }			
+//					
+//					departamentosPath.setStyle(provinciaStyle);	
+//					departamentosPath.setStyle(provinciaStyle);	
+//					departamentosPath.addTo(map);
+//				});
+		    
+		    }
+		
+//			var a1 = topojson.feature(dataProv, dataProv.features);
+//			var provinciasFeatures = topojson.feature(data, data.objects.provincias).features;
+			**/
+			provinciasPath = L.geoJson(dataProv, {
+			    style: provinciaStyle
+			}).addTo(map);
+			
+/**
+			
+			// INFO
+			var info = L.control();
+			info.onAdd = function (map) {
+			    this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+			    this.update();
+			    return this._div;
+			};
+		
+			info.update = function (props) {
+			    this._div.innerHTML = '<h4>Rep&uacute;blica Argentina</h4>' 
+			   	 						+  (props ? props.PROVINCIA : 'Posicione el cursor sobre una provincia');
+			};
+						
+			info.addTo(map);
+							 
+			function onEachFeature(feature, layer) {
+				layer.on({
+					mouseover: highlightFeature,
+					mouseout: resetHighlight,
+					click: zoomToFeature
+				});
+			}
+				 
+			// get color depending on population density value
+			function getColor(d) {
+				return d > 1000 ? '#800026' :
+				       d > 500  ? '#BD0026' :
+				       d > 200  ? '#E31A1C' :
+				       d > 100  ? '#FC4E2A' :
+				       d > 50   ? '#FD8D3C' :
+				       d > 20   ? '#FEB24C' :
+				       d > 10   ? '#FED976' :
+				                  '#FFEDA0';
+			}
+
+		
+
+			function highlightFeature(e) {	
+				console.log(e);
+				var layer = e.target;
+				var layer_id = _getName(layer.feature.properties.PROVINCIA);
+				
+				
+				if(currentProvincia != null){
+					console.log(currentDepartamento);
+					var current_prov_id = _getName(currentProvincia.feature.properties.PROVINCIA);
+					var current_locality_prov_id = _getName(currentDepartamento.feature.properties.p_id);
+				
+					console.log(current_locality_prov_id + " > "+ current_prov_id);
+					
+					if(current_locality_prov_id != current_prov_id){
+						layer.setStyle(provinciaHoverStyle);
+						if (!L.Browser.ie && !L.Browser.opera) {
+							layer.bringToFront();
+						}
+					}
+					if(layer_id != current_prov_id){
+						layer.setStyle(provinciaHoverStyle);
+					}
+				}
+				
+				else{
+					layer.setStyle(provinciaHoverStyle);
+				}
+				
+				
+				console.log(layer);
+				
+				info.update(layer.feature.properties);			
+				updateSelectedProvinceLabel(layer.feature.properties.PROVINCIA);	
+			
+				
+			}
+
+			function resetHighlight(e) {
+				provinciasPath.resetStyle(e.target);
+				info.update();
+				updateSelectedProvinceLabel("ARGENTINA");					
+			}
+
+			function zoomToFeature(e) {						
+				map.fitBounds(e.target.getBounds());				
+				var provincia = _getName(e.target.feature.properties.PROVINCIA);
+				console.log(provincia);				
+				currentProvincia = e.target;
+//				map.removeLayer(e.target);
+//				e.target.addTo(map);
+				loadDepartamentosByProvincia(provincia);				
+			} 			
+**/
+			
+		});
+		
+	}
+	
+	
+	function loadNewDepartamentos(){
+		
+		
+		
+		d3.json("resources/data/provincias/CORDOBA.json", function(error, data) {
+
+			console.log(data.features);
+			var layer =  new L.geoJson();
+			for(var i=0; i<data.features.length; i++){
+		      
+		        layer.addData(data.features[i].geometry);
+		    
+		    }
+		    layer.setStyle(provinciaStyle);
+			layer.addTo(map);
+
+			
+		});
+		
+	}
+	
+	function loadNewDepartamentos2(){
+		
+		d3.json("resources/data/provincias/LA_RIOJA.json", function(error, data) {
+
+			console.log(data.features);
+			var layer =  new L.geoJson();
+			for(var i=0; i<data.features.length; i++){
+		      
+		        layer.addData(data.features[i].geometry);
+		    
+		    }
+		    layer.setStyle(provinciaStyle);
+			layer.addTo(map);
+
+			
+		});
+		
+	}
+	
+	
 	//PROVINCIAS
 	function loadProvincias(){		
 		
 		d3.json("resources/data/argentina.json", function(error, data) {
 			 
-			//console.log(data);
+			console.log(data);
 		
 			var provinciasConverted = topojson.feature(data, data.objects.provincias);
+			var provinciasFeatures = topojson.feature(data, data.objects.provincias).features;
 			
-			provinciasPath = L.geoJson(provinciasConverted, {
+			var filter = provinciasFeatures.filter(function (e) {
+	              return !('islas-malvinas' ===  _getName(e.properties.PROVINCIA) && AMBA_IDS.indexOf(e.id) == -1);
+	          });
+			
+			provinciasPath = L.geoJson(filter, {
 				    style: provinciaStyle,
 				    onEachFeature: onEachFeature
 			}).addTo(map);
@@ -239,7 +458,7 @@ function init_leaflet(){
 			    this._div.innerHTML = '<h4>Rep&uacute;blica Argentina</h4>' 
 			   	 						+  (props ? props.PROVINCIA : 'Posicione el cursor sobre una provincia');
 			};
-			
+						
 			info.addTo(map);
 							 
 			function onEachFeature(feature, layer) {
@@ -276,37 +495,130 @@ function init_leaflet(){
 
 			function highlightFeature(e) {				
 				var layer = e.target;
-				layer.setStyle(provinciaHoverStyle);
+				var layer_id = _getName(layer.feature.properties.PROVINCIA);
 				
-				if (!L.Browser.ie && !L.Browser.opera) {
-					layer.bringToFront();
+				
+				if(currentProvincia != null){
+					console.log(currentDepartamento);
+					var current_prov_id = _getName(currentProvincia.feature.properties.PROVINCIA);
+					var current_locality_prov_id = _getName(currentDepartamento.feature.properties.p_id);
+				
+					console.log(current_locality_prov_id + " > "+ current_prov_id);
+					
+					if(current_locality_prov_id != current_prov_id){
+						layer.setStyle(provinciaHoverStyle);
+						if (!L.Browser.ie && !L.Browser.opera) {
+							layer.bringToFront();
+						}
+					}
+					if(layer_id != current_prov_id){
+						layer.setStyle(provinciaHoverStyle);
+					}
 				}
 				
+				else{
+					layer.setStyle(provinciaHoverStyle);
+				}
+				
+				
+				console.log(layer);
+				
 				info.update(layer.feature.properties);			
+				updateSelectedProvinceLabel(layer.feature.properties.PROVINCIA);	
+			
+				
 			}
 
 			function resetHighlight(e) {
 				provinciasPath.resetStyle(e.target);
 				info.update();
+				updateSelectedProvinceLabel("ARGENTINA");					
 			}
 
 			function zoomToFeature(e) {						
 				map.fitBounds(e.target.getBounds());				
-				var name = _getName(e.target.feature.properties.PROVINCIA);
-				console.log(name);
-				loadDepartamentos(name);			
+				var provincia = _getName(e.target.feature.properties.PROVINCIA);
+				console.log(provincia);				
+				currentProvincia = e.target;
+//				map.removeLayer(e.target);
+//				e.target.addTo(map);
+				loadDepartamentosByProvincia(provincia);				
 			} 			
 		   
 		 });		
 	}
+	
+	function updateSelectedProvinceLabel(selected){		
+		$('.selectedProvince').text(selected);		
+	}
 
 	//DEPARTAMENTOS
-	function loadDepartamentos(name){
+	
+	function loadDepartamentosByProvincia(provincia){
 		
 		d3.json("resources/data/argentina.json", function(error, data) {
 			 
 			var departamentosConverted = topojson.feature(data, data.objects.departamentos);			
 			var departamentosFeatures = topojson.feature(data, data.objects.departamentos).features;
+					
+			var provincia_key_name = provincia;
+						
+			var filter = departamentosFeatures.filter(function (e) {
+	              return provincia_key_name ===  _getName(e.properties.p_id) && AMBA_IDS.indexOf(e.id) == -1;
+	          });
+			
+			if(departamentoPathByProvincia != null){
+				map.removeLayer(departamentoPathByProvincia);				
+			}
+				 
+			departamentoPathByProvincia = L.geoJson(filter, {
+			    style: departamentoStyle,
+			    onEachFeature: onEachFeature
+			}).addTo(map);
+			
+			
+			function onEachFeature(feature, layer) {
+				layer.on({
+					mouseover: highlightFeature,
+					mouseout: resetHighlight,
+					click: zoomToFeature
+				});
+			}
+			
+			function highlightFeature(e) {	
+								
+				var layer = e.target;				
+				currentDepartamento = layer;
+			
+				layer.setStyle(provinciaHoverStyle);
+				if (!L.Browser.ie && !L.Browser.opera) {
+					layer.bringToFront();
+				}
+								
+				console.log(layer);
+				updateSelectedProvinceLabel(layer.feature.properties.a + " (" + layer.feature.properties.p.toUpperCase() + ")");					
+			}
+
+			function resetHighlight(e) {
+				provinciasPath.resetStyle(e.target);
+				updateSelectedProvinceLabel("ARGENTINA");					
+			}
+
+			function zoomToFeature(e) {				
+				map.fitBounds(e.target.getBounds());		
+			} 		
+			
+			
+       
+		});
+	}
+	
+	function loadDepartamentos(){
+		
+		d3.json("resources/data/argentina.json", function(error, data) {
+			 
+			var departamentosConverted = topojson.feature(data, data.objects.departamentos);			
+			//var departamentosFeatures = topojson.feature(data, data.objects.departamentos).features;
 					
 //			var r = name;
 //						
@@ -321,39 +633,39 @@ function init_leaflet(){
          
          departamentosPath = L.geoJson(departamentosConverted, {
         	 	style: departamentoStyle
-			}).addTo(map);
+			});
          
-         function highlightFeature(e) {
-				
-				if(currentZoom > 7){
-					
-					var layer = e.target;
-
-					layer.setStyle({
-						weight: 2,
-						color: '#3997AD',
-						dashArray: '',
-						fillOpacity: 0.6
-					});
-
-					if (!L.Browser.ie && !L.Browser.opera) {
-						layer.bringToFront();
-					}
-
-					info.update(layer.feature.properties);
-					
-				}
-				
-			}
-
-			function resetHighlight(e) {
-				provinciasPath.resetStyle(e.target);
-				info.update();
-			}
-
-			function zoomToFeature(e) {						
-				map.fitBounds(e.target.getBounds());				
-			} 	
+//         function highlightFeature(e) {
+//				
+//				if(currentZoom > 7){
+//					
+//					var layer = e.target;
+//
+//					layer.setStyle({
+//						weight: 2,
+//						color: '#3997AD',
+//						dashArray: '',
+//						fillOpacity: 0.6
+//					});
+//
+//					if (!L.Browser.ie && !L.Browser.opera) {
+//						layer.bringToFront();
+//					}
+//
+//					info.update(layer.feature.properties);
+//					
+//				}
+//				
+//			}
+//
+//			function resetHighlight(e) {
+//				provinciasPath.resetStyle(e.target);
+//				info.update();
+//			}
+//
+//			function zoomToFeature(e) {						
+//				map.fitBounds(e.target.getBounds());				
+//			} 	
            
 		   
 		 });

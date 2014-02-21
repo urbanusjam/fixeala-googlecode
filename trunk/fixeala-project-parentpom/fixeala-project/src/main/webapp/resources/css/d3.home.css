@@ -103,10 +103,12 @@ footer a:hover { color: #43DAAD; text-decoration: underline; }
 #myTab.nav-tabs > li.active > a:focus { font-weight: normal; border-radius: 0;  background-color: #3276b1; color: #fff;}
 #myTabContent.tab-content  {border: 0px solid grey; padding:0 0 0 10px; }
 
+.selectedProvince { font-weight: bold;  }
+
 ul.floating-tab-menu {	 
 	 position: fixed;
      right: 0;
-   	 top: 26%;   
+   	 top: 14%;   
      width: 295px;        
 	 background: none;
      overflow: hidden;
@@ -148,16 +150,23 @@ ul.floating-tab-menu li a span {
     vertical-align: middle;   
 } 
 
-table.table-resumen { border: 0px solid red; width: 400px; margin: 0 auto; }
-table.table-resumen tbody td:first-child { text-align: right;  width:100px; }
+table.table-resumen { border: 0px solid red; width: 600px; margin: 0; }
+table.table-resumen tr td { border: none;  }
+/* table.table-resumen tr:last-child { border-bottom: none;  } */
+table.table-resumen td:first-child { vertical-align: middle; width:200px }
+/* table.table-resumen td:last-child {  } */
+table.table-resumen td { 
+	font-size: 20px; 
+	width: 150px; 
+	text-align: left;  
+	height: 40px; 
+	line-height: 40px;   border: 1px solid red;}
+table.table-resumen td span { display: block; }
 
-table.table-resumen tbody td:last-child { text-align: center; font-size: 16px; vertical-align: bottom; }
-table.table-resumen tbody td { border: 0px solid #000; font-size: 20px; width: 200px; text-align: center;  height: 40px; line-height: 40px;  }
-table.table-resumen tbody tr {  border-bottom: 0px dashed #ccc; }
-table.table-resumen tbody tr:last-child { border-bottom: none;  }
+
 
 .open { color: #d2322d; }
-.closed { color: #333; }
+.closed { color: #999; }
 .solved { color: #47a447; }
 .acknowledged { color: #3276b1; }
 .inprogress { color: #ed9c28; }
@@ -195,6 +204,8 @@ table.table-resumen tbody tr:last-child { border-bottom: none;  }
 
 
 .info {
+	position: absolute;
+	left: -270px;
 	width: 250px;
 	padding: 6px 8px;
 	font: 13px Arial, Helvetica, sans-serif;
