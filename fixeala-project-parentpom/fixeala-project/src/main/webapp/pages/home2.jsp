@@ -28,7 +28,6 @@
 		<div class="col-md-6">	
 		
 			<div id="content">
-
 					
 					<ul id="myTab" class="nav nav-tabs">
                 		<li class="active"><a href="#tab-resumen" data-toggle="tab"><i class="fa fa-check-circle"></i>Resumen</a></li>
@@ -42,48 +41,27 @@
                 
                 <br>
                 
-                  <h3>En la <strong>República Argentina</strong> hay...</h3>
+<!--                   <h3>En la <strong>República Argentina</strong> hay...</h3> -->
+
+ 						<h3>De <span class="selectedProvince">ARGENTINA</span>...</h3>
 				
 					<br>
 					
-					<table class="table table-resumen table-hover">
-						<tbody>
+					<table class="table table-resumen">					
 							<tr>
-								<td><strong>11.421</strong></td>
-								<td><small>reclamos</small></td>
-								<td><span class="solved">RESUELTOS</span></td>
-							</tr>
-							<tr>
-								<td><strong>7.788</strong></td>
-								<td><small>reclamos</small></td>
-								<td><span class="inprogress">EN PROGRESO</span></td>
-							</tr>
-							<tr>
-								<td><strong>4.451</strong></td>
-								<td><small>reclamos</small></td>
-								<td><span class="open">ABIERTOS</span></td>
-							</tr>					
-							<tr>
-								<td><strong>2.674</strong></td>
-								<td><small>reclamos</small></td>
-								<td><span class="acknowledged">ADMITIDOS</span></td>
-							</tr>					
-							<tr>
-								<td><strong>332</strong></td>
-								<td><small>reclamos</small></td>
-								<td><span class="closed">CERRADOS</span></td>
-							</tr>
-							<tr>
-								<td><strong>65</strong></td>
-								<td><small>reclamos</small></td>
-								<td><span class="open">REABIERTOS</span></td>
-							</tr>					
-						</tbody>
+								<td><h2><strong>26.731</strong><br><small>reclamos</small><span class="important">publicados</span></h2></td>
+								<td><h2>11.421<small><span class="solved">resueltos</span></small></h2></td>
+								<td><h2>7.788<small><span class="inprogress">en progreso</span></small></h2></td>	
+								<td><h2>4.451<small><span class="open">abiertos</span></small></h2></td>						
+							</tr>												
+							<tr>	
+								<td></td>			
+								<td><h2>2.674<small><span class="acknowledged">admitidos</span></small></h2></td>
+								<td><h2>332<small><span class="closed">cerrados</span></small></h2></td>							
+								<td colspan="3"><h2>65<small><span class="open">reabiertos</span></small></h2></td>
+							</tr>	
 					</table>
 					
-					<br>
-					
-					<h3>... de un total de <span class="important">26.731</span> reclamos publicados.</h3>
                  </div>
                  
                  
