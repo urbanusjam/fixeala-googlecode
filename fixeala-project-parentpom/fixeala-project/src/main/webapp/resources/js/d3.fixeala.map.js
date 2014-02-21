@@ -13,24 +13,14 @@ $(document).ready(function(){
 	var myData = [];
 	var width =  500;	
 	
-	$( "ul.floating-tab-menu li" ).hover(function() {
-//		var $a = $(this).find("a > i");
-//		alert(parseInt($a.css('margin-right')));
-		$(this).find("a > i").animate({
-			        'margin-right': parseInt($(this).css('margin-right')) == 130 ?  -130  : 0  	      
-			 
+	
+	$( ".floating-tab-menu li" ).hover(function() {
+		$(this).animate({
+			marginRight : parseInt($(this).css('margin-right')) == 0 ?  100  : 0 
 		}, 400);
-				
-		
-
-	
-//		$( "ul.floating-tab-menu > li" ).eq( i++ ).animate({
-//			        'margin-right': parseInt($(this).css('margin-right')) == 0 ?  110 :  0 		           
-//			    }, 400);
-
-	
-		
+		return false;
 	});
+
 	
 //	d3.text("resources/data/lanacion-censo.csv", function(datasetText) {
 //		myData = d3.csv.parseRows(datasetText);
