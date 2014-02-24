@@ -61,7 +61,7 @@ function init_leaflet(){
 	var minimal   = L.tileLayer(cloudmadeUrl, {styleId: 22677, key: cludmadeKey, attribution: cloudmadeAttribution});
 	
 	// DATA LOADING		
-//	loadReclamos();
+	loadReclamos();
 	loadProvincias();
 //	loadDepartamentos();	
 	
@@ -118,23 +118,13 @@ function init_leaflet(){
 	
 	
 	function displayLayersOnZoom(zoom){		
-		if(zoom <= 6){
+		if(zoom <= 10){
 			if(departamentoPathByProvincia != null){
 				map.removeLayer(departamentoPathByProvincia);
 			}
 			provinciasPath.addTo(map);
 		
-		}
-//		if(zoom >= 7){
-//			if(departamentoPathByProvincia == null){
-//
-//				map.removeLayer(provinciasPath);
-//				departamentosPath.addTo(map);
-//			}
-//		
-//		}
-		
-		
+		}		
 	}
 
 	// STYLES
@@ -496,8 +486,7 @@ function init_leaflet(){
 			function highlightFeature(e) {				
 				var layer = e.target;
 				var layer_id = _getName(layer.feature.properties.PROVINCIA);
-				
-				
+								
 				if(currentProvincia != null){
 					console.log(currentDepartamento);
 					var current_prov_id = _getName(currentProvincia.feature.properties.PROVINCIA);
