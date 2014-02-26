@@ -5,6 +5,6 @@
 		    <p>Todos los contenidos asociados a su cuenta seguirán disponibles en el sitio de FIXEALA.</p>
 		</div>		
 		<br><br>		
-		<small><a href="http://localhost:8080/fixeala">Volver a la página de Inicio</a>	</small>	
+		<small><a href="javascript:getDomainUrl()">Volver a la página de Inicio</a>	</small>	
 	</div>
 </div>

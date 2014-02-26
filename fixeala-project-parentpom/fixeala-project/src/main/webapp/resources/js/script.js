@@ -149,7 +149,7 @@ $(document).ready(function(){
 //			 	    	        data: "username=" + username + "&email=" + email + "&password=" + password,
 //			 	    	        async:false,
 //			 	    	        success: function(response){        			 	    	        	
-//			 	    	        	window.location.href = "http://localhost:8080/fixeala";
+//			 	    	        	window.location.href = getDomainUrl();
 //			 	    	         },
 //			 	    	         error: function(xhr, textStatus, errorThrown){
 //			 	    	             alert("Error! Status = " + xhr.status);
@@ -202,7 +202,7 @@ $(document).ready(function(){
 //					 	    							formOptions: {resetForm:true}
 //					 	    						});
 //					 	    					});   
-				 	    						//redirect("http://localhost:8080/fixeala/account/signup.html");
+				 	    						//redirect(getDomainUrl() + "account/signup.html");
 					 	    					
 					 	    				}
 					 	    				else{
@@ -380,7 +380,7 @@ $(document).ready(function(){
 						            	
 						              	  if(data.result){						              		  
 						              		 setTimeout(function() { 
-						              			window.location.href = "http://localhost:8080/fixeala/" + data.pageRedirect;
+						              			window.location.href = getDomainUrl() + data.pageRedirect;
 											 }, 1500);		
 						              	  }
 						              	  else

@@ -55,7 +55,7 @@
             setTimeout(function () {
                 var data = $.extend(true, [], self._data);
                 
-                var url = "http://localhost:8080/fixeala/users/" + '${profileUser}' + "/loadBackendUsers.html";
+                var url = getDomainUrl() + "users/" + '${profileUser}' + "/loadBackendUsers.html";
 			 	 
 			 	   $.ajax({
 						url: url,
@@ -178,7 +178,7 @@
             sortProperty: 'apellido' 
 		},
 		{	
-            label: 'Último acceso',
+            label: 'ï¿½ltimo acceso',
             property: 'lastLogin',
             sortable: true,
             sortProperty: 'lastLogin'            				         		

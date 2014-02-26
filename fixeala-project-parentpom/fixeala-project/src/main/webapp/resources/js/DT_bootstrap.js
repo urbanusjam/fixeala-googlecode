@@ -1,3 +1,7 @@
+ function getDomainUrl(){
+			 	return window.location;
+			 }		
+
 /* Set the defaults for DataTables initialisation */
 $.extend( true, $.fn.dataTable.defaults, {
 	"sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
@@ -217,7 +221,7 @@ $(document).ready(function() {
 //		               	 { "mDataProp" : "username" },
 //		                 { "mDataProp" : "neighborhood", "sDefaultContent": "" }
 //					  ],
-		"sAjaxSource": "http://localhost:8080/fixeala/usuarios/loadUsers.html",
+		"sAjaxSource": getDomainUrl() + "usuarios/loadUsers.html",
 		"fnServerData": function ( sSource, aoData, fnCallback ) {
 	            $.ajax( {
 	                "dataType": 'json',
@@ -252,7 +256,7 @@ $(document).ready(function() {
 		               	 { "sTitle" : "ESTADO" , "mData" : "status" }
 		            	
 	                  ],		  		
-		"sAjaxSource": "http://localhost:8080/fixeala/reclamos/loadIssues.html",
+		"sAjaxSource": getDomainUrl() + "reclamos/loadIssues.html",
 		"fnServerData": function ( sSource, aoData, fnCallback ) {
 	            $.ajax( {
 	                "dataType": 'json',
@@ -281,7 +285,7 @@ $(document).ready(function() {
 		               	 { "sTitle" : "ULTIMO ACCESO" , "mData" : "lastLoginDate", "sType" : "date" },
 		               	 { "sTitle" : "ESTADO" , "mData" : "accountStatus" }			            	
 	                  ],		  		
-		"sAjaxSource": "http://localhost:8080/fixeala/users/coripel/loadBackendUsers.html",
+		"sAjaxSource": getDomainUrl() + "users/coripel/loadBackendUsers.html",
 		"fnServerData": function ( sSource, aoData, fnCallback ) {				
 			 	aoData.push({"name": "areaID", "value": "5"});				 	
 	            $.ajax( {
@@ -319,7 +323,7 @@ $(document).ready(function() {
 		               	 { "sTitle" : "PROVINCIA" , "mData" : "province" },		   		            
 		               	 { "sTitle" : "ESTADO" , "mData" : "status" }		            	
 	                  ],		  		
-		"sAjaxSource": "http://localhost:8080/fixeala/users/"+userID+"/loadUserIssues.html",
+		"sAjaxSource": getDomainUrl() + "users/"+userID+"/loadUserIssues.html",
 		"fnServerData": function ( sSource, aoData, fnCallback ) {							 	
 	            $.ajax( {
 	                "dataType": 'json',
@@ -346,7 +350,7 @@ $(document).ready(function() {
 		                 { "sTitle" : "MENSAJE" , "mData" : "mensaje" },		    
 		               	 { "sTitle" : "NRO. DE RECLAMO" , "mData" : "nroReclamo" }		               	
 	                  ],		  		
-		"sAjaxSource": "http://localhost:8080/fixeala/users/"+userID+"/loadUserComments.html",
+		"sAjaxSource": getDomainUrl() + "users/"+userID+"/loadUserComments.html",
 		"fnServerData": function ( sSource, aoData, fnCallback ) {		
 	            $.ajax( {
 	                "dataType": 'json',

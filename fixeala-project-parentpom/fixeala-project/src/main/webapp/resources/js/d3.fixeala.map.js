@@ -33,6 +33,16 @@ $(document).ready(function(){
 
 });
 
+function loadCaptcha(){
+	
+	//CAPTCHA
+	   	Recaptcha.create("6Lck8coSAAAAAKsNsoJdRVpHrCYfpbC60xhY7Ywv", 'captchadiv', {                              
+	   		theme: "clean",
+	   		callback: Recaptcha.focus_response_field
+	   	});  
+	
+}
+
 
 function init_leaflet(){
 

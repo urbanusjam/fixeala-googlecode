@@ -8,9 +8,11 @@
 </head>
 <body>
 
-<%	response.sendRedirect("http://localhost:8383/fixeala");	%>
-
-
+<% 
+	String url = request.getRequestURL().toString();
+	String domainURL = url.substring(0, url.length() - request.getRequestURI().length()) + request.getContextPath() + "/";
+	response.sendRedirect(domainURL);		
+%>
 
 </body>
 </html>

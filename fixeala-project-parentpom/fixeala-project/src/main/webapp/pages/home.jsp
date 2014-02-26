@@ -26,10 +26,9 @@
 		<!-- ROW 1 -->
 		
 		<div class="container" style="margin:0;padding:0;height:450px;border:0px solid #000; width:1180px">
-		
-		
 	
-		  <!-- MAP -->  	 				
+	
+		<!-- MAP -->  	 				
   	
   				<select id="cbxProvincias" name="cbxProvincias" onchange="findProvincia(value);return false" onfocus="">              	
 					<option value="BA">Buenos Aires</option>

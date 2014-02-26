@@ -29,8 +29,7 @@
 			      	   	Recaptcha.create("6Lck8coSAAAAAKsNsoJdRVpHrCYfpbC60xhY7Ywv", 'captchadiv', {                              
 			      	   		theme: "clean"
 // 			      	   		callback: Recaptcha.focus_response_field
-			      	   	});    
-			  
+			      	   	});    			  
 					});
 				</script>
  				<div id="captchadiv"></div>  				
