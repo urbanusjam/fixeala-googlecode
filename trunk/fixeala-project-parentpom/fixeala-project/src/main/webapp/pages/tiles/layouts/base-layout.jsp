@@ -148,6 +148,14 @@ path:hover {
         
 		$(document).ready(function(){
 			
+			function getDomainUrl(){
+				var protocol = window.location.protocol;
+				var host = window.location.host;
+				var context = "fixeala";
+				var domainUrl = protocol + "//" + host + "/" + context + "/";
+			 	return domainUrl;
+			}					
+			
 			 var query = "?issue=%QUERY";
 			
 			 window.localStorage.clear()
@@ -489,10 +497,7 @@ path:hover {
 	            });
 			}
 			
-			function getUrl(){
-				 return "http://localhost:8080/fixeala";
-			}
-						
+				
 			$('.navbar .nav > li > a').tooltip({
   				placement: 'bottom'
   			});
@@ -545,7 +550,7 @@ path:hover {
 		 			        $('.ajax_loading').show();
 		 			 		
 		 			 		 $.ajax({
-				        			url: getUrl() + "/login.html",
+				        			url: getDomainUrl() + "login.html",
 				            		type: "POST",		            	
 						            beforeSend: function(xhr) {
 						                xhr.withCredentials = true;
@@ -602,7 +607,7 @@ path:hover {
             		var filter = search.term.toLowerCase();
 
             		$.ajax({ 
-            			  url: "http://localhost:8080/fixeala/loadTags.html",
+            			  url: getDomainUrl() + "loadTags.html",
 	            		  type: "GET",	
             			  success: function(data){
 		            		var choices = $.grep(data, function(element) {

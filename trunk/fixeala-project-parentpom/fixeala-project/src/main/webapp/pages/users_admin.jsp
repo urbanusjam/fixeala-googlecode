@@ -43,7 +43,7 @@
 	}
 	
 	function assignUser(){
-		var url = "http://localhost:8080/fixeala/issues/assignUser.html";
+		var url = getDomainUrl() + "issues/assignUser.html";
 	    var data = 'selectedUser='+ selectedUser + '&issueID='+ rowId;
   
 		$.ajax({
@@ -67,7 +67,7 @@
 	}
 	
 	function updateStatus(status){
-		    var url = "http://localhost:8080/fixeala/issues/updateIssueStatus.html";
+		    var url = getDomainUrl() + "issues/updateIssueStatus.html";
 		    var data = 'newStatus='+ status + '&issueID='+ rowId;
 	     
 			$.ajax({
@@ -114,7 +114,7 @@
 					 minlength: 4,
 					 maxlength: 20,
 					 remote: {
-			 	    		url: "http://localhost:8080/fixeala/account/signup/checkUsernameAvailability.html", 
+			 	    		url: getDomainUrl() + "account/signup/checkUsernameAvailability.html", 
 							type: "POST", 
 							data: {
 						        username: function(){ return $("#backendUserForm #username").val(); }
@@ -125,7 +125,7 @@
 		 	    	 required : true,
 		 	    	 email : true,
 		 	    	 remote: {
-			 	    		url: "http://localhost:8080/fixeala/account/signup/checkEmailAvailability.html", 
+			 	    		url: getDomainUrl() + "account/signup/checkEmailAvailability.html", 
 							type: "POST", 
 							data: {
 						        email: function(){ return $("#backendUserForm #email").val(); }
@@ -201,7 +201,7 @@
 				
 				alert("valid");
 		
-				var url = "http://localhost:8080/fixeala/account/signup.html";
+				var url = getDomainUrl() + "account/signup.html";
 				var backendUser = true;
 				 
 				$.ajax({
@@ -232,7 +232,7 @@
 	        minimumInputLength: 1,
 	        multiple: true,
 	        ajax: { 
-	            url: "http://localhost:8080/fixeala/issues/getAvailableUsers/" +currentArea+ ".html",
+	            url: getDomainUrl() + "issues/getAvailableUsers/" +currentArea+ ".html",
 	        	dataType: 'json',
 	        	quietMillis: 100,
 	            data: function (term) {

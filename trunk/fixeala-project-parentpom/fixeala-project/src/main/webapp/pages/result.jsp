@@ -9,7 +9,7 @@
    
 </div>
 <br><br>
-<a href="http://localhost:8080/fixeala">Volver a la página de Inicio</a>
+<a href="javascript:getDomainUrl()">Volver a la página de Inicio</a>
 	
 </div>
 	
