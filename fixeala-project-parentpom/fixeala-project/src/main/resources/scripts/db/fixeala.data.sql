@@ -5,9 +5,25 @@
 /*    		coripel@gmail.com				 */	 
 /*  Copyright Fixeala - 2013	             */
 /*  Created:  08-10-2013 (dd-MM-YYYY)        */
-		
 
-INSERT INTO `user` 
+
+INSERT INTO `AREA` (`NAME`,`ACRONYM`,`PROVINCE`,`PROVINCE_ACRONYM`,`CITY`,`CITY_ACRONYM`) 
+VALUES 
+('Comuna 1','C1', 'Buenos Aires', 'BA', 'Ciudad de Buenos Aires', 'CABA'),
+('Comuna 2','C2', 'Buenos Aires', 'BA', 'Ciudad de Buenos Aires', 'CABA'),
+('Comuna 3','C3', 'Buenos Aires', 'BA', 'Ciudad de Buenos Aires', 'CABA'),
+('Comuna 4','C4', 'Buenos Aires', 'BA', 'Ciudad de Buenos Aires', 'CABA'),
+('Ministerio de Ambiente y Espacio Publico','MAYEPGC', 'Buenos Aires', 'BA', 'Ciudad de Buenos Aires', 'CABA');
+
+
+INSERT INTO `ROLE` (`ID_ROLE`,`NAME`) VALUES 
+(1,'ROLE_ADMIN'),
+(2,'ROLE_MANAGER'),
+(3,'ROLE_AREA'),
+(4,'ROLE_USER');
+
+
+INSERT INTO `USER` 
 (`USERNAME`,`PASSWORD`,`EMAIL`,`NAME`, `LAST_NAME`,`SALT`, `ID_AREA`,`GOV_POSITION`,`GOV_SUB_AREA`,`GOV_SUB_AREA_ACRONYM`,
 `NEIGHBORHOOD`,`REGISTRATION_DATE`,`LAST_PASSWORD_CHANGE_DATE`,`LAST_LOGIN_DATE`,`CLOSED_ACCOUNT_DATE`, `VERIFIED_OFFICIAL`, `ENABLED`) 
 VALUES
@@ -27,14 +43,7 @@ VALUES
 ('user8','c7589745dd1841655ac79a8f6fbb8e63b01b1e00','user8@gmail.com',NULL,NULL, NULL, NULL, NULL, NULL, NULL, 'Caballito',NULL,NULL,NULL,NULL,0,1);
 
 
-INSERT INTO `role` (`ID_ROLE`,`NAME`) VALUES 
-(1,'ROLE_ADMIN'),
-(2,'ROLE_MANAGER'),
-(3,'ROLE_AREA'),
-(4,'ROLE_USER');
-
-
-INSERT INTO `user_role` (`ID_USER`,`ID_ROLE`) VALUES 
+INSERT INTO `USER_ROLE` (`ID_USER`,`ID_ROLE`) VALUES 
 (1,1),
 (2,1),
 (3,2),
@@ -44,16 +53,7 @@ INSERT INTO `user_role` (`ID_USER`,`ID_ROLE`) VALUES
 (7,3);
 
 
-INSERT INTO `area` (`NAME`,`ACRONYM`,`PROVINCE`,`PROVINCE_ACRONYM`,`CITY`,`CITY_ACRONYM`) 
-VALUES 
-('Comuna 1','C1', 'Buenos Aires', 'BA', 'Ciudad de Buenos Aires', 'CABA'),
-('Comuna 2','C2', 'Buenos Aires', 'BA', 'Ciudad de Buenos Aires', 'CABA'),
-('Comuna 3','C3', 'Buenos Aires', 'BA', 'Ciudad de Buenos Aires', 'CABA'),
-('Comuna 4','C4', 'Buenos Aires', 'BA', 'Ciudad de Buenos Aires', 'CABA'),
-('Ministerio de Ambiente y Espacio Publico','MAYEPGC', 'Buenos Aires', 'BA', 'Ciudad de Buenos Aires', 'CABA');
-
-
-INSERT INTO `comment` (`ID_ISSUE`,`ID_USER`, `COMMENT_DATE`, `COMMENT_MESSAGE`, `FLAG`) VALUES
+INSERT INTO `COMMENT` (`ID_ISSUE`,`ID_USER`, `COMMENT_DATE`, `COMMENT_MESSAGE`, `FLAG`) VALUES
 (82621, 3, NOW(), 'Aliquam non sodales nulla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.', false ),
 (82621, 4, NOW(), 'Aliquam non sodales nulla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.', false ),
 (82621, 4, NOW(), 'Aliquam non sodales nulla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.', false ),
@@ -61,3 +61,4 @@ INSERT INTO `comment` (`ID_ISSUE`,`ID_USER`, `COMMENT_DATE`, `COMMENT_MESSAGE`, 
 (82621, 5, NOW(), 'Aliquam non sodales nulla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.', false ),
 (82621, 5, NOW(), 'Aliquam non sodales nulla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.', false ),
 (82621, 6, NOW(), 'Aliquam non sodales nulla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.', false );
+

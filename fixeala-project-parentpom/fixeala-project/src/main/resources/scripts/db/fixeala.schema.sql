@@ -7,8 +7,8 @@
 /*  Created:  08-10-2013 (dd-MM-YYYY)        */
 		
 
-DROP DATABASE IF EXISTS fixeala;
-CREATE DATABASE fixeala;
+	--DROP DATABASE IF EXISTS fixeala;
+	--CREATE DATABASE fixeala;
 USE fixeala;
 
 
@@ -252,34 +252,34 @@ CREATE TABLE COMMENT (
 
 
 -- ISSUE_VOTE
-CREATE TABLE issue_vote (	
+CREATE TABLE ISSUE_VOTE (	
        id_issue BIGINT(20) NOT NULL,
 	   id_voter BIGINT(20) NOT NULL,	 
 	   vote SMALLINT NOT NULL CHECK ("VOTE" = 1 OR "VOTE" = -1),
 	   vote_date DATETIME NOT NULL,
 	   	   
 	   PRIMARY KEY (id_issue, id_voter),
-	   FOREIGN KEY (id_issue) REFERENCES issue (id_issue),
-	   FOREIGN KEY (id_voter) REFERENCES user (id_user)	  
+	   FOREIGN KEY (id_issue) REFERENCES ISSUE (id_issue),
+	   FOREIGN KEY (id_voter) REFERENCES USER (id_user)	  
 	   
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- ISSUE_FOLLOW
-CREATE TABLE issue_follow (	 	
+CREATE TABLE ISSUE_FOLLOW (	 	
 	   id_issue BIGINT(20) NOT NULL,
 	   id_follower BIGINT(20) NOT NULL,	 
 	   follow_date DATETIME NOT NULL,
 	   	  
 	   PRIMARY KEY (id_issue, id_follower),
-	   FOREIGN KEY (id_issue) REFERENCES issue (id_issue),
-	   FOREIGN KEY (id_follower) REFERENCES user (id_user)	  
+	   FOREIGN KEY (id_issue) REFERENCES ISSUE (id_issue),
+	   FOREIGN KEY (id_follower) REFERENCES USER (id_user)	  
 	   
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 -- ISSUE_VIEW
-CREATE TABLE issue_pageview (	
+CREATE TABLE ISSUE_PAGEVIEW (	
 	   id_issue_pageview BIGINT(20) NOT NULL AUTO_INCREMENT,    
 	   id_issue BIGINT(20) NOT NULL,
 	   id_user BIGINT(20) NOT NULL,	 
@@ -287,8 +287,8 @@ CREATE TABLE issue_pageview (
 	   pageview_date DATETIME NOT NULL,
 	   
 	   PRIMARY KEY (id_issue_pageview),
-	   FOREIGN KEY (id_issue) REFERENCES issue (id_issue),
-	   FOREIGN KEY (id_user) REFERENCES user (id_user)	  
+	   FOREIGN KEY (id_issue) REFERENCES ISSUE (id_issue),
+	   FOREIGN KEY (id_user) REFERENCES USER (id_user)	  
 	   
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
