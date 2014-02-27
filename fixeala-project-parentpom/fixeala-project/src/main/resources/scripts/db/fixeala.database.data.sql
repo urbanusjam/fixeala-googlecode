@@ -7,7 +7,7 @@
 /*  Created:  08-10-2013 (dd-MM-YYYY)        */
 
 
-INSERT INTO `AREA` (`NAME`,`ACRONYM`,`PROVINCE`,`PROVINCE_ACRONYM`,`CITY`,`CITY_ACRONYM`) 
+INSERT INTO `area` (`name`,`acronym`,`province`,`province_acronym`,`city`,`city_acronym`) 
 VALUES 
 ('Comuna 1','C1', 'Buenos Aires', 'BA', 'Ciudad de Buenos Aires', 'CABA'),
 ('Comuna 2','C2', 'Buenos Aires', 'BA', 'Ciudad de Buenos Aires', 'CABA'),
@@ -16,16 +16,20 @@ VALUES
 ('Ministerio de Ambiente y Espacio Publico','MAYEPGC', 'Buenos Aires', 'BA', 'Ciudad de Buenos Aires', 'CABA');
 
 
-INSERT INTO `ROLE` (`ID_ROLE`,`NAME`) VALUES 
+INSERT INTO `role` (`id_role`,`rolename`) VALUES 
 (1,'ROLE_ADMIN'),
 (2,'ROLE_MANAGER'),
 (3,'ROLE_AREA'),
 (4,'ROLE_USER');
 
+-- role_admin
+-- role_moderator
+-- role_publisher
 
-INSERT INTO `USER` 
-(`USERNAME`,`PASSWORD`,`EMAIL`,`NAME`, `LAST_NAME`,`SALT`, `ID_AREA`,`GOV_POSITION`,`GOV_SUB_AREA`,`GOV_SUB_AREA_ACRONYM`,
-`NEIGHBORHOOD`,`REGISTRATION_DATE`,`LAST_PASSWORD_CHANGE_DATE`,`LAST_LOGIN_DATE`,`CLOSED_ACCOUNT_DATE`, `VERIFIED_OFFICIAL`, `ENABLED`) 
+
+INSERT INTO `user` 
+(`username`,`password`,`email`,`name`, `last_name`,`salt`, `id_area`,`gov_position`,`gov_sub_area`,`gov_sub_area_acronym`,
+`place_of_residence`,`registration_date`,`last_password_change_date`,`last_login_date`,`closed_account_date`, `is_verified_official`, `enabled`) 
 VALUES
 ('coripel','c7589745dd1841655ac79a8f6fbb8e63b01b1e00','coripel@gmail.com','Cora','Reyes Calens',NULL, 5, 'Responsable de area', NULL, NULL, NULL,NULL,NULL,NULL,NULL,1,1),
 ('fakeuser','20dc925be88e7d0bd130c6c2cf43a77eb344243f','fakeuser@gmail.com','Juan','Vasquez',NULL, 1, 'Presidente Comunal', NULL, NULL, NULL,NULL,NULL,NULL,NULL,1,1),
@@ -43,7 +47,7 @@ VALUES
 ('user8','c7589745dd1841655ac79a8f6fbb8e63b01b1e00','user8@gmail.com',NULL,NULL, NULL, NULL, NULL, NULL, NULL, 'Caballito',NULL,NULL,NULL,NULL,0,1);
 
 
-INSERT INTO `USER_ROLE` (`ID_USER`,`ID_ROLE`) VALUES 
+INSERT INTO `user_role` (`id_user`,`id_role`) VALUES 
 (1,1),
 (2,1),
 (3,2),
@@ -53,7 +57,7 @@ INSERT INTO `USER_ROLE` (`ID_USER`,`ID_ROLE`) VALUES
 (7,3);
 
 
-INSERT INTO `COMMENT` (`ID_ISSUE`,`ID_USER`, `COMMENT_DATE`, `COMMENT_MESSAGE`, `FLAG`) VALUES
+INSERT INTO `comment` (`id_issue`,`id_user`, `creation_date`, `message`, `flag`) VALUES
 (82621, 3, NOW(), 'Aliquam non sodales nulla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.', false ),
 (82621, 4, NOW(), 'Aliquam non sodales nulla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.', false ),
 (82621, 4, NOW(), 'Aliquam non sodales nulla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.', false ),
