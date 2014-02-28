@@ -24,7 +24,6 @@ USE fixeala;
 /* ###################################################################################### */
 
 
--- ACTIVATION
 CREATE TABLE activation ( 
 	   token VARCHAR(126) NOT NULL,
 	   username VARCHAR(50) NOT NULL,		  
@@ -37,7 +36,6 @@ CREATE TABLE activation (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- AREA
 CREATE TABLE area ( 
 	   id_area BIGINT(20) NOT NULL AUTO_INCREMENT,
 	   area_name VARCHAR(255) NULL,
@@ -47,13 +45,13 @@ CREATE TABLE area (
 	   province VARCHAR(15) NULL,
 	   province_acronym VARCHAR(2) NULL,
 	   
-	   PRIMARY KEY (id_area)
-	   UNIQUE KEY (areaname)
+	   PRIMARY KEY (id_area),
+	   UNIQUE KEY (area_name)
 	   
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- COMMENT			
+	
 CREATE TABLE comment ( 	  
 	   id_comment BIGINT(20) NOT NULL AUTO_INCREMENT,    
 	   id_issue BIGINT(20) NOT NULL, 
@@ -67,7 +65,6 @@ CREATE TABLE comment (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- CONTENIDO
 CREATE TABLE content ( 
 	   id_content BIGINT(20) NOT NULL AUTO_INCREMENT,
 	   id_issue BIGINT(20) NULL,	   
@@ -86,7 +83,6 @@ CREATE TABLE content (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- ISSUE
 CREATE TABLE issue (
 	   id_issue BIGINT(20) NOT NULL, 
 	   id_reporter BIGINT(20) NOT NULL,
@@ -110,7 +106,6 @@ CREATE TABLE issue (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- ISSUE_FOLLOW
 CREATE TABLE issue_follow (	 	
 	   id_issue BIGINT(20) NOT NULL,
 	   id_follower BIGINT(20) NOT NULL,	 
@@ -121,7 +116,6 @@ CREATE TABLE issue_follow (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- ISSUE LICITACION	
 CREATE TABLE issue_licitacion ( 	  
 	   id_issue BIGINT(20) NOT NULL, 	
 	   nro_licitacion VARCHAR(20) NULL, 
@@ -152,7 +146,6 @@ CREATE TABLE issue_licitacion (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;	
 
 
--- ISSUE_TAG
 CREATE TABLE issue_tag (
 	   id_issue BIGINT(20) NOT NULL,
 	   id_tag BIGINT(20) NOT NULL,		   
@@ -162,7 +155,6 @@ CREATE TABLE issue_tag (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- ISSUE_UPDATE_HISTORY
 CREATE TABLE issue_update_history ( 	  
 	   id_issue_history BIGINT(20) NOT NULL AUTO_INCREMENT, 	   
 	   id_issue BIGINT(20) NOT NULL, 	   
@@ -180,7 +172,6 @@ CREATE TABLE issue_update_history (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- ISSUE_VIEW
 CREATE TABLE issue_pageview (	
 	   id_issue_pageview BIGINT(20) NOT NULL AUTO_INCREMENT,    
 	   id_issue BIGINT(20) NOT NULL,
@@ -192,7 +183,7 @@ CREATE TABLE issue_pageview (
 	   
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ISSUE_VOTE
+
 CREATE TABLE issue_vote (	
        id_issue BIGINT(20) NOT NULL,
 	   id_voter BIGINT(20) NOT NULL,	 
@@ -204,7 +195,6 @@ CREATE TABLE issue_vote (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- PASSWORD CHANGE REQUEST 
 CREATE TABLE password_change_request ( 
 	   token VARCHAR(126) NOT NULL,
 	   username VARCHAR(50) NOT NULL,		  
@@ -216,7 +206,6 @@ CREATE TABLE password_change_request (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- PERSISTENT LOGIN (REMEMBER ME)
 CREATE TABLE persistent_logins(
 	   username VARCHAR(50) NULL,
 	   series VARCHAR(64) NULL,
@@ -228,7 +217,6 @@ CREATE TABLE persistent_logins(
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- ROLE
 CREATE TABLE role (
 	   id_role BIGINT(20) NOT NULL AUTO_INCREMENT,
 	   rolename VARCHAR(50) NOT NULL,
@@ -238,7 +226,6 @@ CREATE TABLE role (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- TAG
 CREATE TABLE tag (
 	   id_tag BIGINT(20) NOT NULL AUTO_INCREMENT,
 	   tagname VARCHAR (50) NOT NULL,
@@ -248,7 +235,6 @@ CREATE TABLE tag (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;	
 
 
--- USER 	
 CREATE TABLE user ( 
 	   id_user BIGINT(20) NOT NULL AUTO_INCREMENT,
 	   username VARCHAR(50) NOT NULL,
@@ -276,7 +262,6 @@ CREATE TABLE user (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- USER_ROLE
 CREATE TABLE user_role (
 	   id_user BIGINT(20) NOT NULL,
 	   id_role VARCHAR(50) NOT NULL,		

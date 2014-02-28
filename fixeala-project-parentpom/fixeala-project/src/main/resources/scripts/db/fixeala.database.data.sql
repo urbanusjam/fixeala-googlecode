@@ -7,7 +7,7 @@
 /*  Created:  08-10-2013 (dd-MM-YYYY)        */
 
 
-INSERT INTO `area` (`name`,`acronym`,`province`,`province_acronym`,`city`,`city_acronym`) 
+INSERT INTO `area` (`area_name`,`acronym`,`province`,`province_acronym`,`city`,`city_acronym`) 
 VALUES 
 ('Comuna 1','C1', 'Buenos Aires', 'BA', 'Ciudad de Buenos Aires', 'CABA'),
 ('Comuna 2','C2', 'Buenos Aires', 'BA', 'Ciudad de Buenos Aires', 'CABA'),
@@ -56,7 +56,7 @@ INSERT INTO `user_role` (`id_user`,`id_role`) VALUES
 (6,3), 
 (7,3);
 
-
+/*
 INSERT INTO `comment` (`id_issue`,`id_user`, `creation_date`, `message`, `flag`) VALUES
 (82621, 3, NOW(), 'Aliquam non sodales nulla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.', false ),
 (82621, 4, NOW(), 'Aliquam non sodales nulla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.', false ),
@@ -65,4 +65,4 @@ INSERT INTO `comment` (`id_issue`,`id_user`, `creation_date`, `message`, `flag`)
 (82621, 5, NOW(), 'Aliquam non sodales nulla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.', false ),
 (82621, 5, NOW(), 'Aliquam non sodales nulla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.', false ),
 (82621, 6, NOW(), 'Aliquam non sodales nulla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.', false );
-
+*/
