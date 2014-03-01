@@ -13,7 +13,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="ISSUE_FOLLOW")
+@Table(name="issue_follow")
 public class IssueFollow implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -22,14 +22,14 @@ public class IssueFollow implements Serializable {
     private IssueFollowPK id;
 	
 	@ManyToOne
-	@JoinColumn(name="ID_ISSUE", insertable=false, updatable=false)
+	@JoinColumn(name="id_issue", insertable=false, updatable=false)
 	private Issue issue;
 	
 	@ManyToOne
-	@JoinColumn(name="ID_FOLLOWER", insertable=false, updatable=false)
+	@JoinColumn(name="id_follower", insertable=false, updatable=false)
 	private User follower;
 	
-	@Column(name = "FOLLOW_DATE")
+	@Column(name = "follow_date")
 	private GregorianCalendar date;
 	
 	

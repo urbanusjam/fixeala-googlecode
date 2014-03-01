@@ -14,40 +14,40 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="ISSUE_HISTORIAL_REVISION")
+@Table(name="issue_update_history")
 public class IssueHistorialRevision implements Serializable {
 
 	private static final long serialVersionUID = -3016074901901662598L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID_ISSUE_HISTORIAL_REVISION")
+	@Column(name = "id_issue_update_history")
 	private Long id;
 	
 	@ManyToOne
-	@JoinColumn(name = "ID_ISSUE")	
+	@JoinColumn(name = "id_issue")	
 	private Issue issue;
 	
 	@OneToOne
-	@JoinColumn(name = "ID_USER")
+	@JoinColumn(name = "id_user")
 	private User usuario;
 	
-	@Column(name = "HISTORIAL_DATE")
+	@Column(name = "update_date")
 	private GregorianCalendar fecha;
 	
-	@Column(name = "STATUS")
+	@Column(name = "status")
 	private String estado;
 	
-	@Column(name = "MOTIVO")
+	@Column(name = "motive")
 	private String motivo;
 	
-	@Column(name = "OPERACION")
+	@Column(name = "operation_type")
 	private String operacion;
 	
-	@Column(name = "OBSERVACIONES")
+	@Column(name = "observations")
 	private String observaciones;
 	
-	@Column(name = "CAMPOS_MODIFICADOS") 
+	@Column(name = "modified_fields") 
 	private String[] camposModificados;
 
 	

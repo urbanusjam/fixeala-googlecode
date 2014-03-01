@@ -156,7 +156,7 @@ CREATE TABLE issue_tag (
 
 
 CREATE TABLE issue_update_history ( 	  
-	   id_issue_history BIGINT(20) NOT NULL AUTO_INCREMENT, 	   
+	   id_issue_update_history BIGINT(20) NOT NULL AUTO_INCREMENT, 	   
 	   id_issue BIGINT(20) NOT NULL, 	   
 	   id_user BIGINT(20) NOT NULL,	   
 	   update_date DATETIME NOT NULL,    	   

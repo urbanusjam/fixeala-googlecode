@@ -14,28 +14,28 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="ISSUE_PAGEVIEW")
+@Table(name="issue_pageview")
 public class IssuePageView implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID_ISSUE_PAGEVIEW")
+	@Column(name = "id_issue_pageview")
 	private Long id;
 	
 	@ManyToOne
-	@JoinColumn(name="ID_ISSUE")
+	@JoinColumn(name="id_issue")
 	private Issue issue;
 	
 	@OneToOne
-	@JoinColumn(name = "ID_USER")
+	@JoinColumn(name = "id_user")
 	private User user;
 	
-	@Column(name = "IP_ADDRESS")
+	@Column(name = "ip_address")
 	private int ipAddress;
 	
-	@Column(name = "PAGEVIEW_DATE")
+	@Column(name = "pageview_date")
 	private GregorianCalendar date;
 
 	public Long getId() {

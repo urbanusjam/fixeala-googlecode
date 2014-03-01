@@ -10,10 +10,10 @@ public class AuthorityPK implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Column(name="ID_USER", unique=true)
+	@Column(name="id_user", unique=true)
     private String username;
     
-    @Column(name="ID_ROLE", unique=true)
+    @Column(name="id_role", unique=true)
     private String authority;
     
     public AuthorityPK(){

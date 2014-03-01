@@ -19,16 +19,16 @@ import org.springframework.security.core.GrantedAuthority;
  *
  */
 @Entity
-@Table(name="ROLE")
+@Table(name="role")
 public class Authority implements GrantedAuthority, Serializable {
     private static final long serialVersionUID = 1L;
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="ID_ROLE")
+    @Column(name="id_role")
     private Long id;
     
-    @Column(name="NAME")
+    @Column(name="rolename")
     private String authority;
     
 	@ManyToMany(cascade = CascadeType.ALL, mappedBy="roles")
