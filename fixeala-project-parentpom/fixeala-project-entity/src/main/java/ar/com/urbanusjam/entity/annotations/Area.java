@@ -15,32 +15,32 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="AREA")
+@Table(name="area")
 public class Area implements Serializable {
 
 	private static final long serialVersionUID = -7285598176392005222L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID_AREA")
+	@Column(name = "id_area")
 	private Long id;
 
-	@Column(name = "NAME")
+	@Column(name = "area_name")
 	private String nombre;
 	
-	@Column(name = "ACRONYM")
+	@Column(name = "acronym")
 	private String sigla;
 	
-	@Column(name = "PROVINCE")
+	@Column(name = "province")
 	private String provincia;
 	
-	@Column(name = "PROVINCE_ACRONYM")
+	@Column(name = "province_acronym")
 	private String provinciaSigla;
 	
-	@Column(name = "CITY")
+	@Column(name = "city")
 	private String ciudad;
 	
-	@Column(name = "CITY_ACRONYM")
+	@Column(name = "city_acronym")
 	private String ciudadSigla;
 	
 	@OneToMany(mappedBy="assignedArea", fetch = FetchType.LAZY, cascade = CascadeType.ALL)  

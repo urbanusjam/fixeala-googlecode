@@ -10,10 +10,10 @@ public class IssueVotePK implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Column(name="ID_ISSUE")
+	@Column(name="id_issue")
 	private Long issueID;
 	
-	@Column(name="ID_VOTER")
+	@Column(name="id_voter")
 	private Long voterID;
 	
 	

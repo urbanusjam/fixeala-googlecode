@@ -14,31 +14,31 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="COMMENT")
+@Table(name="comment")
 public class Comment implements Serializable {
 
 	private static final long serialVersionUID = 5843368000713199365L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID_COMMENT")
+	@Column(name = "id_comment")
 	private Long id;
 	
 	@ManyToOne
-	@JoinColumn(name = "ID_ISSUE")
+	@JoinColumn(name = "id_issue")
 	private Issue issue;
 	
 	@OneToOne
-	@JoinColumn(name = "ID_USER")
+	@JoinColumn(name = "id_user")
 	private User usuario;
 	
-	@Column(name = "COMMENT_DATE")
+	@Column(name = "creation_date")
 	private GregorianCalendar fecha;
 	
-	@Column(name = "COMMENT_MESSAGE")
+	@Column(name = "message")
 	private String mensaje;
 	
-	@Column(name = "FLAG")
+	@Column(name = "flag")
 	private boolean denunciado;
 		
 	public Comment() { } 

@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="ISSUE_VOTE")
+@Table(name="issue_vote")
 public class IssueVote implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -20,17 +20,17 @@ public class IssueVote implements Serializable {
     private IssueVotePK id;
 	
 	@ManyToOne
-	@JoinColumn(name="ID_ISSUE", insertable=false, updatable=false)
+	@JoinColumn(name="id_issue", insertable=false, updatable=false)
 	private Issue issue;
 	
 	@ManyToOne
-	@JoinColumn(name="ID_VOTER", insertable=false, updatable=false)
+	@JoinColumn(name="id_voter", insertable=false, updatable=false)
 	private User voter;
 	
-	@Column(name = "VOTE")
+	@Column(name = "vote")
 	private int vote;
 	
-	@Column(name = "VOTE_DATE")
+	@Column(name = "vote_date")
 	private GregorianCalendar date;
 	
 	

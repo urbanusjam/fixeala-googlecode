@@ -8,10 +8,10 @@ public class IssueFollowPK implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Column(name="ID_ISSUE")
+	@Column(name="id_issue")
 	private Long issueID;
 	
-	@Column(name="ID_FOLLOWER")
+	@Column(name="id_follower")
 	private Long followerID;
 
 	

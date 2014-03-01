@@ -24,55 +24,55 @@ import org.hibernate.annotations.Cascade;
 
 
 @Entity
-@Table(name="ISSUE")
+@Table(name="issue")
 public class Issue implements Serializable  {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "ID_ISSUE")
+	@Column(name = "id_issue")
 	private Long id;
 	
 	@OneToOne
-	@JoinColumn(name = "ID_REPORTER")
+	@JoinColumn(name = "id_reporter")
 	private User reporter;
 	
-	@Column(name = "REPORTED_DATE")
+	@Column(name = "creation_date")
 	private GregorianCalendar date;
 	
-	@Column(name = "ADDRESS")
+	@Column(name = "address")
 	private String address;
 	
-	@Column(name = "LATITUDE")
+	@Column(name = "latitude")
 	private float latitude;
 	
-	@Column(name = "LONGITUDE")
+	@Column(name = "longitude")
 	private float longitude;
 	
-	@Column(name = "NEIGHBORHOOD")
+	@Column(name = "neighborhood")
 	private String neighborhood;
 	
-	@Column(name = "CITY")
+	@Column(name = "city")
 	private String city;
 	
-	@Column(name = "PROVINCE")
+	@Column(name = "province")
 	private String province;
 	
-	@Column(name = "TITLE")
+	@Column(name = "title")
 	private String title;
 	
-	@Column(name = "DESCRIPTION")
+	@Column(name = "description")
 	private String description;
 	
-	@Column(name = "STATUS")
+	@Column(name = "status")
 	private String status;
 	
 	@OneToOne
-	@JoinColumn(name = "ID_ASSIGNED_OFFICIAL")
+	@JoinColumn(name = "id_assigned_official")
 	private User assignedOfficial;
 	
 	@ManyToOne
-	@JoinColumn(name = "ID_AREA")
+	@JoinColumn(name = "id_area")
 	private Area assignedArea;
 		
     @OneToMany(mappedBy="issue", fetch = FetchType.EAGER, cascade = CascadeType.ALL)  
@@ -87,9 +87,9 @@ public class Issue implements Serializable  {
 	
 	@ManyToMany(fetch = FetchType.EAGER) //owner side
     @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.ALL})	
-	@JoinTable(name = "ISSUE_TAG", 
-	         joinColumns = @JoinColumn(name = "ID_ISSUE"),
-	         inverseJoinColumns = @JoinColumn(name = "ID_TAG") 
+	@JoinTable(name = "issue_tag", 
+	         joinColumns = @JoinColumn(name = "id_issue"),
+	         inverseJoinColumns = @JoinColumn(name = "id_tag") 
 	)
 	private Set<Tag> tagsList;	
 	

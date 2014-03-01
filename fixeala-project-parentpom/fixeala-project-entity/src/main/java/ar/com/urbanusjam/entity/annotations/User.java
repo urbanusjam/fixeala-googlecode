@@ -30,63 +30,63 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 
 @Entity
-@Table(name="USER")
+@Table(name="user")
 public class User implements UserDetails {
 	
     private static final long serialVersionUID = 1L;
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="ID_USER")
+    @Column(name="id_user")
     private Long id;
   
-    @Column(name="USERNAME", unique=true)
+    @Column(name="username", unique=true)
     private String username;
     
-    @Column(name="PASSWORD")
+    @Column(name="password")
     private String password;
     
-    @Column(name="EMAIL")
+    @Column(name="email")
     private String email;
     
-    @Column(name="NAME")
+    @Column(name="name")
     private String nombre;
     
-    @Column(name="LAST_NAME")
+    @Column(name="last_name")
     private String apellido;
     
     @OneToOne
-	@JoinColumn(name = "ID_AREA")
+	@JoinColumn(name = "id_area")
     private Area area;
     
-    @Column(name="GOV_POSITION")
+    @Column(name="gov_position")
     private String cargo;
     
-    @Column(name="GOV_SUB_AREA")
+    @Column(name="gov_sub_area")
     private String subArea;
     
-    @Column(name="GOV_SUB_AREA_ACRONYM")
+    @Column(name="gov_sub_area_acronym")
     private String siglaSubArea;
     
-    @Column(name="NEIGHBORHOOD")
+    @Column(name="place_of_residence")
     private String neighborhood;  
     
-    @Column(name="IS_AREA")
+    @Column(name="is_area")
     private boolean isArea;
     
-    @Column(name="VERIFIED_OFFICIAL")
+    @Column(name="is_verified_official")
     private boolean verifiedOfficial;
        
-    @Column(name="ENABLED")
+    @Column(name="enabled")
     private boolean enabled;
     
-    @Column(name="REGISTRATION_DATE")
+    @Column(name="registration_date")
     private Date registrationDate;
     
-    @Column(name="LAST_LOGIN_DATE")
+    @Column(name="last_login_date")
     private Date lastLoginDate;
     
-    @Column(name="CLOSED_ACCOUNT_DATE")
+    @Column(name="closed_account_date")
     private Date closedAccountDate;
     
     @Transient
@@ -102,9 +102,9 @@ public class User implements UserDetails {
 //	private Collection<GrantedAuthority> grantedAuthorities;
     
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = "USER_ROLE",
-	         joinColumns = @JoinColumn(name = "ID_USER"),
-	         inverseJoinColumns = @JoinColumn(name = "ID_ROLE"))
+	@JoinTable(name = "user_role",
+	         joinColumns = @JoinColumn(name = "id_user"),
+	         inverseJoinColumns = @JoinColumn(name = "id_role"))
     private Collection<Authority> roles;  
     
   

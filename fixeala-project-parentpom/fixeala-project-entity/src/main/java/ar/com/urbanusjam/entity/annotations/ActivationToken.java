@@ -9,22 +9,22 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="ACTIVATION")
+@Table(name="activation")
 public class ActivationToken implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "TOKEN")
+	@Column(name = "token")
 	private String token;
 
-	@Column(name="USERNAME")
+	@Column(name="username")
 	private String username;
 	
-	@Column(name="CREATION_DATE")
+	@Column(name="creation_date")
 	private Date creation;
 	
-	@Column(name="EXPIRATION_DATE")
+	@Column(name="expiration_date")
 	private Date expiration;
 	
 	public ActivationToken(){}

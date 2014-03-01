@@ -17,7 +17,7 @@ import javax.persistence.Table;
 
 
 @Entity
-@Table(name="CONTENIDO")
+@Table(name="content")
 @Inheritance(strategy=InheritanceType.JOINED)
 public class Contenido implements Serializable {
     
@@ -25,38 +25,35 @@ public class Contenido implements Serializable {
 
     @Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID_CONTENIDO")
+	@Column(name = "id_content")
     private Long id;   
-    
-    @Column(name = "TIPO")
-    private String tipo;    
-    
-    @Column(name = "ALTO")
+   
+    @Column(name = "height")
     private Integer alto;
     
-    @Column(name = "ANCHO")
+    @Column(name = "width")
     private Integer ancho;
     
-    @Column(name = "PATH_RELATIVO")
-    private String pathRelativo;   
+    @Column(name = "relative_path")
+    private String pathRelativo;    
     
-    @Column(name = "URL")
-    private String url;  
-    
-    @Column(name = "NOMBRE")
+    @Column(name = "filename")
     private String nombre;
     
-    @Column(name = "NOMBRE_CON_EXTENSION")
+    @Column(name = "filename_extension")
+    private String tipo;
+    
+    @Column(name = "filename_with_extension")
     private String nombreConExtension;
     
-    @Column(name = "ORDEN")
+    @Column(name = "file_order")
     private int orden;
     
-    @Column(name = "IS_PROFILE_PIC")
+    @Column(name = "is_profile_pic")
     private boolean profilePic;
     
     @ManyToOne
-	@JoinColumn(name = "ID_ISSUE", updatable = false)	
+	@JoinColumn(name = "id_issue", updatable = false)	
 	private Issue issue;
     
     
@@ -102,14 +99,6 @@ public class Contenido implements Serializable {
 
 	public void setPathRelativo(String pathRelativo) {
 		this.pathRelativo = pathRelativo;
-	}
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
 	}
 
 	public String getNombre() {

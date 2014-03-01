@@ -19,84 +19,84 @@ import org.hibernate.bytecode.javassist.FieldHandled;
 import org.hibernate.bytecode.javassist.FieldHandler;
 
 @Entity
-@Table(name="ISSUE_LICITACION")
+@Table(name="issue_licitacion")
 public class IssueLicitacion implements Serializable {
 
 	private static final long serialVersionUID = -3526522777509354350L;
 	
 	@Id
 	//@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID_ISSUE")	
+	@Column(name = "id_issue")	
 	private Long id;
 	
-	@Column(name = "NRO_LICITACION")
+	@Column(name = "nro_licitacion")
 	private String nroLicitacion;
 	
-	@Column(name = "NRO_EXPEDIENTE")
+	@Column(name = "nro_expediente")
 	private String nroExpediente;
 	
 //	@OneToOne
 //	@JoinColumn(name = "ID_ISSUE")
 //	private Issue issue;
 	
-	@Column(name = "TIPO")
+	@Column(name = "tipo")
 	private String tipo;
 	
-	@Column(name = "OBJETO")
+	@Column(name = "objeto")
 	private String objeto;
 	
-	@Column(name = "VALOR_PLIEGO")
+	@Column(name = "valor_pliego")
 	private Float valorPliego;
 	
-	@Column(name = "DOCUMENTACION_PLIEGO")
+	@Column(name = "documentacion_pliego")
 	private String documentacionPliego;
 	
-	@Column(name = "UNIDAD_EJECUTORA")
+	@Column(name = "unidad_ejecutora")
 	private String unidadEjecutora;
 	
-	@Column(name = "UNIDAD_FINANCIAMIENTO")
+	@Column(name = "unidad_financiamiento")
 	private String unidadFinanciamiento;
 	
-	@Column(name = "EMPRESA_CONSTRUCTORA_NOMBRE")
+	@Column(name = "empresa_constructora_nombre")
 	private String empresaConstructoraNombre;
 	
-	@Column(name = "EMPRESA_CONSTRUCTORA_CUIT")
+	@Column(name = "empresa_constructora_cuit")
 	private Integer empresaConstructoraCuit;
 	
-	@Column(name = "EMPRESA_CONSTRUCTORA_EMAIL")
+	@Column(name = "empresa_constructora_email")
 	private String empresaConstructoraEmail;
 	
-	@Column(name = "REPRESENTANTE_TECNICO_NOMBRE")
+	@Column(name = "representante_tecnico_nombre")
 	private String representanteTecnicoNombre;
 	
-	@Column(name = "REPRESENTANTE_TECNICO_DNI")
+	@Column(name = "representante_tecnico_dni")
 	private Integer representanteTecnicoDni;
 	
-	@Column(name = "REPRESENTANTE_TECNICO_EMAIL")
+	@Column(name = "representante_tecnico_email")
 	private String representanteTecnicoEmail;
 	
-	@Column(name = "PLAZO_EJECUCION")
+	@Column(name = "plazo_ejecucion")
 	private int plazoEjecucionEnDias;
 	
-	@Column(name = "PRESUPUESTO_ADJUDICADO")
+	@Column(name = "presupuesto_adjudicado")
 	private Float presupuestoAdjudicado;
 	
-	@Column(name = "PRESUPUESTO_FINAL")
+	@Column(name = "presupuesto_final")
 	private Float presupuestoFinal;
 		
-	@Column(name = "FECHA_ESTIMADA_INICIO")
+	@Column(name = "fecha_estimada_inicio")
 	private Date fechaEstimadaInicio;	
 	
-	@Column(name = "FECHA_ESTIMADA_FIN")
+	@Column(name = "fecha_estimada_fin")
 	private Date fechaEstimadaFin;
 	
-	@Column(name = "FECHA_REAL_INICIO")
+	@Column(name = "fecha_real_inicio")
 	private Date fechaRealInicio;
 	
-	@Column(name = "FECHA_REAL_FIN")
+	@Column(name = "fecha_real_fin")
 	private Date fechaRealFin;
 	
-	@Column(name = "STATUS_OBRA")
+	@Column(name = "status_obra")
 	private String estadoObra;
 	
   	   	
