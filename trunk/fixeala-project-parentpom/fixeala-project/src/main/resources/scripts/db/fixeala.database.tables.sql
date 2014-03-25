@@ -89,7 +89,7 @@ CREATE TABLE issue (
 	   id_assigned_official BIGINT(20) NULL,
 	   id_area BIGINT(20) NULL,
 	   creation_date DATETIME NOT NULL,    	  
-	   last_update_date DATETIME NOT NULL,    	  
+	   last_update_date DATETIME NULL,    	  
 	   address VARCHAR(255) NOT NULL,
 	   neighborhood VARCHAR (64) NULL,  
 	   city VARCHAR(255) NOT NULL,		
@@ -99,7 +99,7 @@ CREATE TABLE issue (
 	   title VARCHAR(255) NOT NULL,
 	   description LONGTEXT NOT NULL,		  
 	   status VARCHAR(30) NOT NULL, 
-	   priority VARCHAR(30) NOT NULL, 
+	   priority VARCHAR(30) NULL, 
 	   
 	   PRIMARY KEY (id_issue)
 	   
@@ -139,7 +139,7 @@ CREATE TABLE issue_licitacion (
 	   fecha_estimada_fin DATETIME NULL,
 	   fecha_real_inicio DATETIME NULL,
 	   fecha_real_fin DATETIME NULL,
-	   stauts_obra VARCHAR(30) NULL,  
+	   status_obra VARCHAR(30) NULL,  
 	   
 	   KEY(id_issue)
 	   
@@ -166,7 +166,7 @@ CREATE TABLE issue_update_history (
 	   observations VARCHAR(500) NULL,  
 	   modified_fields VARCHAR(255) NULL, 
 	   
-	   PRIMARY KEY(id_issue_history),
+	   PRIMARY KEY(id_issue_update_history),
 	   KEY(id_issue)
 	   
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -206,7 +206,7 @@ CREATE TABLE password_change_request (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE persistent_logins(
+CREATE TABLE persistent_logins (
 	   username VARCHAR(50) NULL,
 	   series VARCHAR(64) NULL,
 	   token VARCHAR(64) NULL,
