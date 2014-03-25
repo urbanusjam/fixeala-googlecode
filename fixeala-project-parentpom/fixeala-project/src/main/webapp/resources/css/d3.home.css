@@ -24,6 +24,16 @@ i { margin-right:10px; }
 
 button.btn { font-size: 12px !important; }
 
+/*  .leaflet-popup-content-wrapper, */
+/*     .leaflet-popup-tip { */
+/*     background: #fff; */
+/*     box-shadow: 0 3px 14px rgba(0,0,0,0.4); */
+/* } */
+
+/* .leaflet-container {  */
+/*     background: #fff; */
+/*  }  */
+
 nav#menu { 
  	width: 100%; 
 	height: 60px;

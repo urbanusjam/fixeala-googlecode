@@ -8,21 +8,21 @@
                            http://www.springframework.org/schema/context
                            http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
-<!-- 	  <bean id="dataSourceFixeala" class="org.springframework.jndi.JndiObjectFactoryBean"> -->
-<!-- 	    <property name="jndiName"> -->
-<!-- 	            <value>${datasource.fixeala.mysql.jndi}</value> -->
-<!-- 	    </property> -->
-<!-- 	  </bean> -->
+	  <bean id="dataSourceFixeala" class="org.springframework.jndi.JndiObjectFactoryBean">
+	    <property name="jndiName">
+	            <value>${datasource.fixeala.mysql.jndi}</value>
+	    </property>
+	  </bean>
 	 
 
 	<context:property-placeholder/>
 	
-	<bean id="dataSourceFixeala" class="org.apache.commons.dbcp.BasicDataSource">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
-        <property name="url" value="jdbc:mysql://${OPENSHIFT_MYSQL_DB_HOST}:${OPENSHIFT_MYSQL_DB_PORT}/${OPENSHIFT_APP_NAME}"></property>
-        <property name="username" value="${OPENSHIFT_MYSQL_DB_USERNAME}"></property>
-        <property name="password" value="${OPENSHIFT_MYSQL_DB_PASSWORD}"></property>        
-    </bean>
+<!-- 	<bean id="dataSourceFixeala" class="org.apache.commons.dbcp.BasicDataSource"> -->
+<!--         <property name="driverClassName" value="com.mysql.jdbc.Driver"></property> -->
+<!--         <property name="url" value="jdbc:mysql://${OPENSHIFT_MYSQL_DB_HOST}:${OPENSHIFT_MYSQL_DB_PORT}/${OPENSHIFT_APP_NAME}"></property> -->
+<!--         <property name="username" value="${OPENSHIFT_MYSQL_DB_USERNAME}"></property> -->
+<!--         <property name="password" value="${OPENSHIFT_MYSQL_DB_PASSWORD}"></property>         -->
+<!--     </bean> -->
   
 <!--   	<bean id="dataSourceFixeala" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"> -->
 <!-- 	    <property name="driverClassName" value="${jdbc.driverClassName}"/> -->

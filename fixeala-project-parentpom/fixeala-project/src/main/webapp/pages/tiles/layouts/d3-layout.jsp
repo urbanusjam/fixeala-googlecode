@@ -14,17 +14,20 @@
 <%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/polymaps/nns.min.js?1.1.0"></script>    	 --%>
 <!--   	  <script src="http://ft2json.appspot.com/api/ft2json.js" type="text/javascript"></script> -->
 
- 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/recaptcha_ajax.js"></script>	
+ 
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery-1.10.2.min.js"></script>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/3.1.1/bootstrap-3.1.1.js"></script>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/d3.min.js"></script>	
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/topojson.v1.min.js"></script>	
+  	
+  		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/recaptcha_ajax.js"></script>	
  	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/leaflet/0.7.2/leaflet-src.js"></script>  
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/leaflet/0.7.2/leaflet.markercluster-src.js"></script>     	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/leaflet/0.7.2/leaflet.groupedlayercontrol.js"></script>     	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/leaflet/0.7.2/leaflet-d3-layer.js"></script>     	
   	
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery-1.10.2.min.js"></script>
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/3.1.1/bootstrap-3.1.1.js"></script>
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/d3.min.js"></script>	
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/topojson.v1.min.js"></script>	
+  	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/d3.fixeala.map.js"></script>  	
 
   

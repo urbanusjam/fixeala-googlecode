@@ -13,7 +13,7 @@
   <name>fixeala-project Maven Webapp</name>
   <url>http://maven.apache.org</url>  
   <build>
-    <finalName>fixeala-webapp</finalName>
+    <finalName>fixeala-webapp-1.0.0-SNAPSHOT</finalName>
   </build>
   <dependencies>
   		<!-- Fixeala Modules -->
@@ -140,12 +140,12 @@
     	</dependency>		
 		
 		<!-- Servlet -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>javax.servlet</groupId> -->
-<!-- 			<artifactId>servlet-api</artifactId> -->
-<!-- 			<version>2.5</version> -->
-<!-- 			<scope>provided</scope> -->
-<!-- 		</dependency> -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<scope>provided</scope>
+		</dependency>
 		<dependency>
 			<groupId>javax.servlet.jsp</groupId>
 			<artifactId>jsp-api</artifactId>
