@@ -103,7 +103,12 @@
 								           <input type="file" name="files[]" id="fileupload">
 								    </span>									  
 								</div>	
-								<ul id="eventTags"></ul>
+<!-- 								<ul id="eventTags"></ul> -->
+
+
+   							<input type="hidden" id="new-issue-tags" name="tags" style="width:300px" class="input-xlarge" />
+           
+      
 							</fieldset>
 						<input id="submitIssue" type="submit" class="finish"/>
 					</form>

@@ -21,7 +21,7 @@ public class AreaDAOImpl extends GenericDAOImpl<Area, Serializable> implements A
 
 	@Override
 	public Area getAreaByName(String name) {
-		List<Area> areas = this.findWhere(" name = ? ", new Object[]{name});
+		List<Area> areas = this.findWhere(" area_name = ? ", new Object[]{name});
 		return areas.size() > 0 ? areas.get(0) : null;
 	}
 	

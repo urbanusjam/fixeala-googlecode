@@ -1,9 +1,15 @@
 package ar.com.urbanusjam.web.controllers;
 
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,11 +18,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.UserService;
 import ar.com.urbanusjam.web.domain.LoginStatus;
  
@@ -36,8 +44,27 @@ public class LoginController {
 	@Qualifier("userService")
 	UserService userService;
 	
+	@Autowired
+	@Qualifier("issueService")
+	IssueService issueService;
+	
 	@RequestMapping(value="/home", method = RequestMethod.GET)
-	public String home(){
+	public String home(Model model) throws JSONException{		
+		
+		List<String> dbTags = issueService.getTagList();
+		JSONArray array = new JSONArray();
+		String allTags = StringUtils.EMPTY;
+		
+		for(String s : dbTags){
+			JSONObject obj = new JSONObject();
+			obj.put("id", dbTags.indexOf(s));
+			obj.put("text", s);
+			array.put(obj);
+		}
+		
+		allTags = array.toString();
+		model.addAttribute("allTags", allTags.length() == 0 ? "[{}]" : allTags);
+		
 		return "home";
 	}
 	

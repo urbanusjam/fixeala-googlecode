@@ -35,6 +35,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.ContenidoService;
 import ar.com.urbanusjam.services.IssueService;
@@ -139,6 +142,17 @@ public class IssueController {
 				
 				model.addAttribute("tagsByIssue", issueTagsByComma);
 				model.addAttribute("allTags", allTags.length() == 0 ? "[{}]" : allTags);
+				
+				JSONArray jsonArray = new JSONArray();     
+				
+				for(CommentDTO c : issue.getComentarios()){
+					JSONObject obj = new JSONObject(); 
+					obj.put("fecha", c.getFechaFormateada()); 
+					obj.put("usuario", c.getUsuario()); 
+					obj.put("mensaje", c.getMensaje()); 				
+			        jsonArray.put(obj);
+				}
+				model.addAttribute("comentariosJson", jsonArray); 
 				model.addAttribute("comentarios", issue.getComentarios());
 				
 				List<ContenidoDTO> contenidos = new ArrayList<ContenidoDTO>();
@@ -411,8 +425,7 @@ public class IssueController {
 					issue.setStatus(IssueStatus.OPEN);		
 					issue.setUser(userDTO);			
 					issue.setId(String.valueOf(idIssue));	
-					
-					
+				
 					if(issue.getProvince().equals("Ciudad Autónoma de Buenos Aires")){
 						issue.setCity("Ciudad Autónoma de Buenos Aires");
 						issue.setProvince("Buenos Aires");
@@ -687,7 +700,7 @@ public class IssueController {
 			}
 			
 		}catch(AccessDeniedException e){
-			return new AlertStatus(false, "Debe estar logueado para ingresar un nuevo reclamo.");
+			return new AlertStatus(false, "Debe estar logueado para publicar un nuevo comentario.");
 		}		
 	}
 	

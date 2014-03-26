@@ -35,9 +35,9 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-tags.js"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-contextmenu.js"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-fileupload.js"></script>
-
+ <script src="//raw.github.com/botmonster/jquery-bootpag/master/lib/jquery.bootpag.min.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-wysiwyg.js"></script> 
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-paginator.js"></script> 
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-paginator.min.js"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootbox.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/select2.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/typeahead.js"></script> 
@@ -67,7 +67,9 @@
   	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/markerclusterer.js"></script>	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/markermanager.js"></script>	
-    
+  	
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/select2.js"></script>	
+    	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/select2.css" rel="stylesheet">
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.stepy.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.validate.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.blockUI.js"></script>
@@ -144,10 +146,19 @@ path:hover {
   	<script type="text/javascript">
     //<![CDATA[
                
-              
+             
         
 		$(document).ready(function(){
 			
+			$("#new-issue-tags").select2({
+				tags: ${allTags},
+				tokenSeparators: [",", " "],
+				   id: function (item) {
+		                return item.text;
+				   }
+			});
+		 	
+		
 			function getDomainUrl(){
 				var protocol = window.location.protocol;
 				var host = window.location.host;
@@ -345,6 +356,7 @@ path:hover {
 				}, finish: function(index) {
 					
 					var $form = $("#issueWizard");
+					console.log($form.serialize());
 								
 					$.ajax({ 
 					 		url: "./reportIssue.html", 		

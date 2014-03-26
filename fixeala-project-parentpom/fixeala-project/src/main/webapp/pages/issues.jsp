@@ -17,6 +17,8 @@
 		
 		<script type="text/javascript">
 		
+		
+		
 		$('[data-toggle="popover"]').popover();
 
 		$('body').on('click', function (e) {
@@ -30,13 +32,64 @@
 		});
 		
 		$(function(e){	
+			
+			var comentarios = $.parseJSON('${comentariosJson}');	
 		
+			
+			 $('#page-selection').bootpag({
+		            total: 3,
+		            page: 1,
+		            maxVisible: 5,
+		        }).on("page", function(event, /* page number here */ num){
+		        	
+		        	
+		        	var totalItems = comentarios.length;
+		        	var itemsPerPage = 3;
+		        	var totalPages = Math.ceil(totalItems / itemsPerPage);		        	
+		        	var currentPage = num;
+		        	var startIndex = itemsPerPage * (currentPage - 1);
+// 					var startIndex = currentPage - Math.ceil(currentPage / itemsPerPage);
+// 		        	var endIndex = currentPage - Math.ceil(currentPage / itemsPerPage) + itemsPerPage;
+			    	var endIndex = itemsPerPage * (currentPage - 1) + itemsPerPage;
+					console.log("total pages:" + totalPages + " - current page: " + currentPage + " > From " + startIndex + " to " + endIndex  );
+				
+					var rows;
+				
+					for(var i = startIndex; i < endIndex ; i++) {
+					
+						rows +='<tr>'
+				     		+			'<td>'
+				     		+				'<div class="media">'
+				     		+					  '<span class="pull-left">'
+				     		+					  '<img class="media-object thumbnail" src="${pageContext.request.contextPath}/resources/images/nopic64.png">'
+
+				     		+					 '</span>'
+				     		+					  '<div style="font-size:12px;margin-bottom:10px">'
+				     		+					  	'<a href="#"><strong>'+comentarios[i].usuario+'</strong></a> &nbsp; &raquo;  &nbsp; '
+				     		+				    	comentarios[i].fecha
+				     		+				      '</div>'
+				     		+			 		  '<div class="media-body" style="display:block">		'
+				     		+				    	'<p style="font-size:13px">'+comentarios[i].mensaje+'</p>'
+				     		+			  		'</div>'
+				     		+				'</div>		'				
+				     		+			'</td>'
+				     		+		'</tr>';
+					}
+					
+		             $("#content-comment").html(
+		            	'<table id="tblComments" class="table table-hover">'
+		            	+rows+
+		            	'</table>'
+		            		 
+		            		 ); 
+		        });
+		   
 			var idIssue = '${id}';
 			var loggedUser = '${loggedUser}';
 	   		var latitud = '${latitud}';
 	   		var longitud = '${longitud}';
-			var newTitle;			
-		
+			var newTitle;				
+			
 			var issueLocation = [];		
 			issueLocation.id = idIssue;
 			issueLocation.latitude = latitud;
@@ -1022,7 +1075,7 @@
   			  	<a id="bookmarkme" href="#" rel="sidebar" title="Agregar a favoritos">Agregar a Favoritos</a>
   			</div>  
 				<i class="icon-print"></i>&nbsp;
-  			    <a href="#" title="Imprimir">Imprimir</a>
+  			    <a href="#" onclick="javascript:window.print();" title="Imprimir">Imprimir</a>
   			    
   			    <i class="icon-warning-sign"></i>&nbsp;
   			    <a href="#" title="Denunciar">Denunciar</a>  			    
@@ -1397,34 +1450,38 @@
 		           
 		               	<button id="btn-comment" type="submit" style="float:right;margin-top:15px;margin-bottom:15px;" class="btn btn-info">Publicar</button>	
 		        
-				<div class="comment-list">
-						
-				<table id="tblComments" class="table table-hover">				        
-				   <c:forEach items="${comentarios}" var="comentario" varStatus="i">	
-						<tr>
-							<td>
-								<div class="media">
+				<div id="comment-list" class="comment-list">						
 
-									  <span class="pull-left">
-									  <img class="media-object thumbnail" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
-									 	<center><strong>${i.index + 1}</strong></center>
-									 </span>
-									  <div style="font-size:12px;margin-bottom:10px">
-									  	<a href="#"><strong>${comentario.usuario}</strong></a> &nbsp; &raquo;  &nbsp; 
-								    	${comentario.fechaFormateada}
-								      </div>
-							 		  <div class="media-body" style="display:block">				    	
-								    	
-								    	<p style="font-size:13px">${comentario.mensaje}</p>	 
-							  		</div>
-								</div>						
-							</td>
-						</tr>
-					</c:forEach>
-				</table>
-				
-				<div id="comments-pag"></div>	
-			
+					 <div id="content-comment">
+					 
+					 
+					 	<table id="tblComments" class="table table-hover">				        
+					   <c:forEach items="${comentarios}" var="comentario" varStatus="i" begin="0" end="2">	
+							<tr>
+								<td>
+									<div class="media">
+	
+										  <span class="pull-left">
+										  <img class="media-object thumbnail" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
+										 	<center><strong>${i.index + 1}</strong></center>
+										 </span>
+										  <div style="font-size:12px;margin-bottom:10px">
+										  	<a href="#"><strong>${comentario.usuario}</strong></a> &nbsp; &raquo;  &nbsp; 
+									    	${comentario.fechaFormateada}
+									      </div>
+								 		  <div class="media-body" style="display:block">				    	
+									    	
+									    	<p style="font-size:13px">${comentario.mensaje}</p>	 
+								  		</div>
+									</div>						
+								</td>
+							</tr>
+						</c:forEach>
+					</table>	
+					 
+					 </div>
+					 <div id="page-selection"></div>			
+<!-- 				<div id="comments-pag"></div>	 -->			
 				</div>
 				
 					</div>
