@@ -13,7 +13,7 @@
         http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd ">
         
     <!-- support JSR303 annotation if JSR 303 validation present on classpath -->
-	<mvc:annotation-driven />
+	<mvc:annotation-driven ignoreDefaultModelOnRedirect="true" />
 	
  	<mvc:resources mapping="/resources/**" location="/resources/" />
  
