@@ -33,37 +33,48 @@
 		
 		$(function(e){	
 			
-			var comentarios = $.parseJSON('${comentariosJson}');	
-		
-			
+			var comentarios = $.parseJSON('${comentariosJson}');				
+			var totalItems = comentarios.length;		  
+        	var itemsPerPage = 3;
+        	var totalPages = Math.ceil(totalItems / itemsPerPage);	
+       
 			 $('#page-selection').bootpag({
-		            total: 3,
+		            total: totalPages,
 		            page: 1,
 		            maxVisible: 5,
-		        }).on("page", function(event, /* page number here */ num){
-		        	
-		        	
-		        	var totalItems = comentarios.length;
-		        	var itemsPerPage = 3;
-		        	var totalPages = Math.ceil(totalItems / itemsPerPage);		        	
+		        }).on("page", function(event, num){
+		        		        			        	
+		        	      	
+		        	        			        	
 		        	var currentPage = num;
-		        	var startIndex = itemsPerPage * (currentPage - 1);
-// 					var startIndex = currentPage - Math.ceil(currentPage / itemsPerPage);
-// 		        	var endIndex = currentPage - Math.ceil(currentPage / itemsPerPage) + itemsPerPage;
-			    	var endIndex = itemsPerPage * (currentPage - 1) + itemsPerPage;
+		        	var startIndex = (currentPage - 1) * itemsPerPage ;			        	
+			    	var endIndex = startIndex+itemsPerPage-1 ;			    
+			    	
+					var lastPage = totalPages-currentPage;
+					
+					//is last page
+		        	if(lastPage == 0){
+						var itemsLeft = totalItems - [ (currentPage-1) * itemsPerPage ]; //ej: 7 - [ (3-1) * 3] = 1
+						console.log("items in last page: " + itemsLeft);
+		        		if( itemsLeft < itemsPerPage )
+		        			endIndex = (currentPage-1) * itemsPerPage + itemsLeft-1;
+		        	}
+		        			        		
+			    	var rows;
+			    	
 					console.log("total pages:" + totalPages + " - current page: " + currentPage + " > From " + startIndex + " to " + endIndex  );
-				
-					var rows;
-				
-					for(var i = startIndex; i < endIndex ; i++) {
+													
+					for(var i = startIndex; i <= endIndex ; i++) {
+						
+						var index = i+1;
 					
 						rows +='<tr>'
 				     		+			'<td>'
 				     		+				'<div class="media">'
 				     		+					  '<span class="pull-left">'
-				     		+					  '<img class="media-object thumbnail" src="${pageContext.request.contextPath}/resources/images/nopic64.png">'
-
-				     		+					 '</span>'
+				     		+					   		'<img class="media-object thumbnail" src="${pageContext.request.contextPath}/resources/images/nopic64.png">'
+							+							 '<center><strong>'+ index  +'</strong></center>'
+				     		+					  '</span>'
 				     		+					  '<div style="font-size:12px;margin-bottom:10px">'
 				     		+					  	'<a href="#"><strong>'+comentarios[i].usuario+'</strong></a> &nbsp; &raquo;  &nbsp; '
 				     		+				    	comentarios[i].fecha
@@ -78,7 +89,7 @@
 					
 		             $("#content-comment").html(
 		            	'<table id="tblComments" class="table table-hover">'
-		            	+rows+
+		            					+rows+
 		            	'</table>'
 		            		 
 		            		 ); 
@@ -1245,17 +1256,16 @@
 				        </thead>	
 				        <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 				      
-				         <c:forEach items="${historial}" var="revision">	
-				        
-				         <c:set var="count" value="${count + 1}" scope="page"/>		
-						 <tr>		
-						 	<td><c:out value="${count}" /></td>						 	
-						    <td>${revision.fechaFormateada}</td>						  
-						    <td>${revision.motivo}</td>
-						    <td><script type="text/javascript">document.write( getUserURL('${revision.username}') );</script></td>
-						    <td>${revision.estado}</td>
-						    <td>${revision.observaciones}</td>
-						 </tr>
+				         <c:forEach items="${historial}" var="revision">					        
+					         <c:set var="count" value="${count + 1}" scope="page"/>		
+							 <tr>		
+							 	<td><c:out value="${count}" /></td>						 	
+							    <td>${revision.fechaFormateada}</td>						  
+							    <td>${revision.motivo}</td>
+							    <td><script type="text/javascript">document.write( getUserURL('${revision.username}') );</script></td>
+							    <td>${revision.estado}</td>
+							    <td>${revision.observaciones}</td>
+							 </tr>
 						 </c:forEach>
 					</table>
 			      </div>
@@ -1443,47 +1453,38 @@
 			      <div class="accordion-inner">
 			      			     
 			    <!-- EDITOR BOX-->   
-			    <div style=" width:660px;margin:20px 0;">
-			   
+			    <div style=" width:660px;margin:20px 0;">			   
 		                <textarea class="span9" id="comment-text" name="comment-text"
 		                	placeholder="Ingrese su comentario" rows="5"></textarea>
 		           
 		               	<button id="btn-comment" type="submit" style="float:right;margin-top:15px;margin-bottom:15px;" class="btn btn-info">Publicar</button>	
 		        
-				<div id="comment-list" class="comment-list">						
-
-					 <div id="content-comment">
-					 
-					 
-					 	<table id="tblComments" class="table table-hover">				        
-					   <c:forEach items="${comentarios}" var="comentario" varStatus="i" begin="0" end="2">	
-							<tr>
-								<td>
-									<div class="media">
-	
-										  <span class="pull-left">
-										  <img class="media-object thumbnail" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
-										 	<center><strong>${i.index + 1}</strong></center>
-										 </span>
-										  <div style="font-size:12px;margin-bottom:10px">
-										  	<a href="#"><strong>${comentario.usuario}</strong></a> &nbsp; &raquo;  &nbsp; 
-									    	${comentario.fechaFormateada}
-									      </div>
-								 		  <div class="media-body" style="display:block">				    	
-									    	
-									    	<p style="font-size:13px">${comentario.mensaje}</p>	 
-								  		</div>
-									</div>						
-								</td>
-							</tr>
-						</c:forEach>
-					</table>	
-					 
-					 </div>
-					 <div id="page-selection"></div>			
-<!-- 				<div id="comments-pag"></div>	 -->			
-				</div>
-				
+						<div id="content-comment">
+							<table id="tblComments" class="table table-hover">				        
+							   <c:forEach items="${comentarios}" var="comentario" varStatus="i" begin="0" end="2">	
+									<tr>
+										<td>
+											<div class="media">
+			
+												  <span class="pull-left">
+												  <img class="media-object thumbnail" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
+												 	<center><strong>${i.index + 1}</strong></center>
+												 </span>
+												  <div style="font-size:12px;margin-bottom:10px">
+												  	<a href="#"><strong>${comentario.usuario}</strong></a> &nbsp; &raquo;  &nbsp; 
+											    	${comentario.fechaFormateada}
+											      </div>
+										 		  <div class="media-body" style="display:block">				    	
+											    	
+											    	<p style="font-size:13px">${comentario.mensaje}</p>	 
+										  		</div>
+											</div>						
+										</td>
+									</tr>
+								</c:forEach>
+							 </table>						 
+						 </div>
+						 <div id="page-selection"></div>		
 					</div>
 			       
 			      </div>
