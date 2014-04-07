@@ -98,12 +98,14 @@ CREATE TABLE issue (
 	   longitude FLOAT NOT NULL,
 	   title VARCHAR(255) NOT NULL,
 	   description LONGTEXT NOT NULL,		  
-	   status VARCHAR(30) NOT NULL, 
-	   priority VARCHAR(30) NULL, 
+	   status VARCHAR(64) NOT NULL, 
+	   priority VARCHAR(64) NULL, 
+	   resolution VARCHAR(64) NULL, 	   
 	   
 	   PRIMARY KEY (id_issue)
 	   
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 
 CREATE TABLE issue_follow (	 	
@@ -116,7 +118,7 @@ CREATE TABLE issue_follow (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE issue_licitacion ( 	  
+/*CREATE TABLE issue_licitacion ( 	  
 	   id_issue BIGINT(20) NOT NULL, 	
 	   nro_licitacion VARCHAR(20) NULL, 
 	   nro_expediente VARCHAR(20) NULL, 	
@@ -143,8 +145,45 @@ CREATE TABLE issue_licitacion (
 	   
 	   KEY(id_issue)
 	   
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;	
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;	*/
 
+
+CREATE TABLE issue_repair ( 	  
+	   id_issue BIGINT(20) NOT NULL, 	
+	   nro_licitacion VARCHAR(20) NULL, 
+	   nro_expediente VARCHAR(20) NULL, 	
+	   tipo_licitacion VARCHAR(20) NULL,  	
+	   descripcion VARCHAR (600) NULL, 	  
+	   valor_pliego FLOAT(20) NULL,
+	   unidad_ejecutora VARCHAR (255) NULL, 
+	   unidad_financiamiento VARCHAR (255) NULL, 
+	   empresa_contratada_nombre VARCHAR (255) NULL, 
+	   empresa_contratada_cuit BIGINT (30) NULL, 	 
+	   representante_tecnico_nombre VARCHAR (255) NULL, 
+	   representante_tecnico_dni BIGINT (30) NULL, 	 
+	   plazo_ejecucion_en_dias INT(10) NULL, 
+	   presupuesto_adjudicado FLOAT (20) NULL,
+	   presupuesto_final FLOAT (20) NULL,
+	   fecha_estimada_inicio DATETIME NULL,
+	   fecha_estimada_fin DATETIME NULL,
+	   fecha_real_inicio DATETIME NULL,
+	   fecha_real_fin DATETIME NULL,
+	   estado_obra VARCHAR(30) NULL,  
+	   
+	   KEY(id_issue)
+	   
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;	
+ 
+
+CREATE TABLE issue_link (
+	   id_issue BIGINT(20) NOT NULL, 
+	   id_related_issue BIGINT(20) NOT NULL, 
+	   link_type VARCHAR(64) NOT NULL, 
+	   
+	   PRIMARY KEY (id_issue, id_related_issue)
+	    
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ 
 
 CREATE TABLE issue_tag (
 	   id_issue BIGINT(20) NOT NULL,
@@ -299,8 +338,23 @@ ALTER TABLE issue
     ADD CONSTRAINT FOREIGN KEY fk_issue_3 (id_area)
     REFERENCES area (id_area);
 
-ALTER TABLE issue_licitacion
+/*ALTER TABLE issue_licitacion
     ADD CONSTRAINT FOREIGN KEY fk_issue_licitacion_1 (id_issue)
+    REFERENCES issue (id_issue)
+    ON DELETE CASCADE ON UPDATE CASCADE;*/
+    
+ALTER TABLE issue_repair
+    ADD CONSTRAINT FOREIGN KEY fk_issue_repair_1 (id_issue)
+    REFERENCES issue (id_issue)
+    ON DELETE CASCADE ON UPDATE CASCADE;
+    
+ALTER TABLE issue_link
+    ADD CONSTRAINT FOREIGN KEY fk_issue_link_1 (id_issue)
+    REFERENCES issue (id_issue)
+    ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE issue_link
+    ADD CONSTRAINT FOREIGN KEY fk_issue_link_2 (id_related_issue)
     REFERENCES issue (id_issue)
     ON DELETE CASCADE ON UPDATE CASCADE;
     
