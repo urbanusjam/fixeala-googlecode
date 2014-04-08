@@ -4,17 +4,17 @@ import java.io.Serializable;
 
 import ar.com.urbanusjam.dao.IssueLicitacionDAO;
 import ar.com.urbanusjam.dao.impl.utils.GenericDAOImpl;
-import ar.com.urbanusjam.entity.annotations.IssueLicitacion;
+import ar.com.urbanusjam.entity.annotations.IssueRepair;
 
-public class IssueLicitacionDAOImpl extends GenericDAOImpl<IssueLicitacion, Serializable> 
+public class IssueLicitacionDAOImpl extends GenericDAOImpl<IssueRepair, Serializable> 
 implements IssueLicitacionDAO {
 
 	public IssueLicitacionDAOImpl() {
-		super(IssueLicitacion.class);
+		super(IssueRepair.class);
 	}
 
 	@Override
-	public void saveOrUpdateLicitacion(IssueLicitacion licitacion) {
+	public void saveOrUpdateLicitacion(IssueRepair licitacion) {
 		this.saveOrUpdate(licitacion);
 	}
 

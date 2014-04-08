@@ -16,8 +16,7 @@ public class CommentDAOImpl  extends GenericDAOImpl<Comment, Serializable> imple
 	@Override
 	public List<Comment> findCommentsByIssueId(
 			Long issueID) {
-//		return findWhere(" issue.id = ? ORDER BY fecha desc ", issueID);
-		return findWhere(" issue.id = ? ORDER BY DATE(fecha) desc, TIME(fecha) desc ", issueID);
+		return findWhere(" issue.id = ? ", issueID);
 	}
 
 	@Override

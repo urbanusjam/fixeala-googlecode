@@ -50,7 +50,6 @@ CREATE TABLE area (
 	   
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
 	
 CREATE TABLE comment ( 	  
 	   id_comment BIGINT(20) NOT NULL AUTO_INCREMENT,    
@@ -67,7 +66,7 @@ CREATE TABLE comment (
 
 CREATE TABLE content ( 
 	   id_content BIGINT(20) NOT NULL AUTO_INCREMENT,
-	   id_issue BIGINT(20) NULL,	   
+	   id_issue BIGINT(20) NOT NULL,	   
 	   height BIGINT(22) NOT NULL,
 	   width BIGINT(22) NOT NULL,
 	   filename VARCHAR(255) NOT NULL,
@@ -89,7 +88,7 @@ CREATE TABLE issue (
 	   id_assigned_official BIGINT(20) NULL,
 	   id_area BIGINT(20) NULL,
 	   creation_date DATETIME NOT NULL,    	  
-	   last_update_date DATETIME NULL,    	  
+	   last_update_date DATETIME NOT NULL,    	  
 	   address VARCHAR(255) NOT NULL,
 	   neighborhood VARCHAR (64) NULL,  
 	   city VARCHAR(255) NOT NULL,		
@@ -97,15 +96,14 @@ CREATE TABLE issue (
 	   latitude FLOAT NOT NULL,
 	   longitude FLOAT NOT NULL,
 	   title VARCHAR(255) NOT NULL,
-	   description LONGTEXT NOT NULL,		  
-	   status VARCHAR(64) NOT NULL, 
+	   description LONGTEXT NOT NULL,		  	 
 	   priority VARCHAR(64) NULL, 
-	   resolution VARCHAR(64) NULL, 	   
+	   resolution_type VARCHAR(64) NULL, 	
+	   status VARCHAR(64) NOT NULL,
 	   
 	   PRIMARY KEY (id_issue)
 	   
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 
 CREATE TABLE issue_follow (	 	
@@ -118,41 +116,11 @@ CREATE TABLE issue_follow (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-/*CREATE TABLE issue_licitacion ( 	  
-	   id_issue BIGINT(20) NOT NULL, 	
-	   nro_licitacion VARCHAR(20) NULL, 
-	   nro_expediente VARCHAR(20) NULL, 	
-	   objeto VARCHAR (600) NULL, 
-	   tipo VARCHAR(20) NULL,  	
-	   valor_pliego FLOAT(20) NULL,
-	   documentacion_pliego VARCHAR(255) NULL,	
-	   unidad_ejecutora VARCHAR (255) NULL, 
-	   unidad_financiamiento VARCHAR (255) NULL, 
-	   empresa_constructora_nombre VARCHAR (255) NULL, 
-	   empresa_constructora_cuit BIGINT (30) NULL, 
-	   empresa_constructora_email VARCHAR (255) NULL, 
-	   representante_tecnico_nombre VARCHAR (255) NULL, 
-	   representante_tecnico_dni BIGINT (30) NULL, 
-	   representante_tecnico_email VARCHAR (255) NULL, 
-	   plazo_ejecucion INT(10) NULL, 
-	   presupuesto_adjudicado FLOAT (20) NULL,
-	   presupuesto_final FLOAT (20) NULL,
-	   fecha_estimada_inicio DATETIME NULL,
-	   fecha_estimada_fin DATETIME NULL,
-	   fecha_real_inicio DATETIME NULL,
-	   fecha_real_fin DATETIME NULL,
-	   status_obra VARCHAR(30) NULL,  
-	   
-	   KEY(id_issue)
-	   
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;	*/
-
-
 CREATE TABLE issue_repair ( 	  
 	   id_issue BIGINT(20) NOT NULL, 	
 	   nro_licitacion VARCHAR(20) NULL, 
 	   nro_expediente VARCHAR(20) NULL, 	
-	   tipo_licitacion VARCHAR(20) NULL,  	
+	   tipo VARCHAR(20) NULL,  	
 	   descripcion VARCHAR (600) NULL, 	  
 	   valor_pliego FLOAT(20) NULL,
 	   unidad_ejecutora VARCHAR (255) NULL, 
@@ -200,8 +168,8 @@ CREATE TABLE issue_update_history (
 	   id_user BIGINT(20) NOT NULL,	   
 	   update_date DATETIME NOT NULL,    	   
 	   status VARCHAR(30) NOT NULL, 	    
-	   operation_type VARCHAR(1) NOT NULL,
-	   motive VARCHAR(255) NOT NULL, 	
+	   operation VARCHAR(1) NOT NULL,
+	   user_action VARCHAR(255) NOT NULL, 	
 	   observations VARCHAR(500) NULL,  
 	   modified_fields VARCHAR(255) NULL, 
 	   
@@ -337,11 +305,6 @@ ALTER TABLE issue
 ALTER TABLE issue
     ADD CONSTRAINT FOREIGN KEY fk_issue_3 (id_area)
     REFERENCES area (id_area);
-
-/*ALTER TABLE issue_licitacion
-    ADD CONSTRAINT FOREIGN KEY fk_issue_licitacion_1 (id_issue)
-    REFERENCES issue (id_issue)
-    ON DELETE CASCADE ON UPDATE CASCADE;*/
     
 ALTER TABLE issue_repair
     ADD CONSTRAINT FOREIGN KEY fk_issue_repair_1 (id_issue)

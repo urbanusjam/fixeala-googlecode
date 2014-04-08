@@ -19,8 +19,8 @@ import org.hibernate.bytecode.javassist.FieldHandled;
 import org.hibernate.bytecode.javassist.FieldHandler;
 
 @Entity
-@Table(name="issue_licitacion")
-public class IssueLicitacion implements Serializable {
+@Table(name="issue_repair")
+public class IssueRepair implements Serializable {
 
 	private static final long serialVersionUID = -3526522777509354350L;
 	
@@ -42,14 +42,11 @@ public class IssueLicitacion implements Serializable {
 	@Column(name = "tipo")
 	private String tipo;
 	
-	@Column(name = "objeto")
+	@Column(name = "descripcion")
 	private String objeto;
 	
 	@Column(name = "valor_pliego")
 	private Float valorPliego;
-	
-	@Column(name = "documentacion_pliego")
-	private String documentacionPliego;
 	
 	@Column(name = "unidad_ejecutora")
 	private String unidadEjecutora;
@@ -57,14 +54,11 @@ public class IssueLicitacion implements Serializable {
 	@Column(name = "unidad_financiamiento")
 	private String unidadFinanciamiento;
 	
-	@Column(name = "empresa_constructora_nombre")
+	@Column(name = "empresa_contratada_nombre")
 	private String empresaConstructoraNombre;
 	
-	@Column(name = "empresa_constructora_cuit")
+	@Column(name = "empresa_contratada_cuit")
 	private Integer empresaConstructoraCuit;
-	
-	@Column(name = "empresa_constructora_email")
-	private String empresaConstructoraEmail;
 	
 	@Column(name = "representante_tecnico_nombre")
 	private String representanteTecnicoNombre;
@@ -72,10 +66,7 @@ public class IssueLicitacion implements Serializable {
 	@Column(name = "representante_tecnico_dni")
 	private Integer representanteTecnicoDni;
 	
-	@Column(name = "representante_tecnico_email")
-	private String representanteTecnicoEmail;
-	
-	@Column(name = "plazo_ejecucion")
+	@Column(name = "plazo_ejecucion_en_dias")
 	private int plazoEjecucionEnDias;
 	
 	@Column(name = "presupuesto_adjudicado")
@@ -96,11 +87,11 @@ public class IssueLicitacion implements Serializable {
 	@Column(name = "fecha_real_fin")
 	private Date fechaRealFin;
 	
-	@Column(name = "status_obra")
+	@Column(name = "estado_obra")
 	private String estadoObra;
 	
   	   	
-	public IssueLicitacion(){}
+	public IssueRepair(){}
 	
 	
 	public Long getId() {
@@ -159,14 +150,6 @@ public class IssueLicitacion implements Serializable {
 		this.valorPliego = valorPliego;
 	}
 
-	public String getDocumentacionPliego() {
-		return documentacionPliego;
-	}
-
-	public void setDocumentacionPliego(String documentacionPliego) {
-		this.documentacionPliego = documentacionPliego;
-	}
-
 	public String getUnidadEjecutora() {
 		return unidadEjecutora;
 	}
@@ -198,15 +181,7 @@ public class IssueLicitacion implements Serializable {
 	public void setEmpresaConstructoraCuit(Integer empresaConstructoraCuit) {
 		this.empresaConstructoraCuit = empresaConstructoraCuit;
 	}
-
-	public String getEmpresaConstructoraEmail() {
-		return empresaConstructoraEmail;
-	}
-
-	public void setEmpresaConstructoraEmail(String empresaConstructoraEmail) {
-		this.empresaConstructoraEmail = empresaConstructoraEmail;
-	}
-
+	
 	public String getRepresentanteTecnicoNombre() {
 		return representanteTecnicoNombre;
 	}
@@ -221,14 +196,6 @@ public class IssueLicitacion implements Serializable {
 
 	public void setRepresentanteTecnicoDni(Integer representanteTecnicoDni) {
 		this.representanteTecnicoDni = representanteTecnicoDni;
-	}
-
-	public String getRepresentanteTecnicoEmail() {
-		return representanteTecnicoEmail;
-	}
-
-	public void setRepresentanteTecnicoEmail(String representanteTecnicoEmail) {
-		this.representanteTecnicoEmail = representanteTecnicoEmail;
 	}
 
 	public int getPlazoEjecucionEnDias() {
@@ -294,7 +261,5 @@ public class IssueLicitacion implements Serializable {
 	public void setEstadoObra(String estadoObra) {
 		this.estadoObra = estadoObra;
 	}
-
-
 
 }

@@ -150,7 +150,7 @@ path:hover {
         
 		$(document).ready(function(){
 			
-			$("#new-issue-tags").select2({
+			$("#tags").select2({
 				tags: ${allTags},
 				tokenSeparators: [",", " "],
 				   id: function (item) {
@@ -355,48 +355,58 @@ path:hover {
 				
 				}, finish: function(index) {
 					
-					var $form = $("#issueWizard");
-					console.log($form.serialize());
-								
-					$.ajax({ 
-					 		url: "./reportIssue.html", 		
-					 		type: "POST",					 	
-					 		data : $form.serialize(),	
-					 		success : function(alertStatus){					 		
-					 			if(alertStatus.result){
-					 				
-					 				bootbox.alert(alertStatus.message, function() {
-					 					setTimeout(function () {
-			 	    						window.location.reload();
-			 	    					}, 400);	
-					 				});		 	    					
-		 	    				}
-		 	    				else{	 	    			
-		 	    					bootbox.alert(alertStatus.message);	 	    										 	    					
-		 	    				}  
-					 			
-					 		},
-					 		error: function(jqXHR, exception) {
-				                   if (jqXHR.status === 0) {
-				                       alert('Not connect.\n Verify Network.');
-				                   } else if (jqXHR.status == 404) {
-				                       alert('Requested page not found. [404]');
-				                   } else if (jqXHR.status == 500) {
-				                       alert('Internal Server Error [500].');
-				                   } else if (exception === 'parsererror') {
-				                       alert('Requested JSON parse failed.');
-				                   } else if (exception === 'timeout') {
-				                       alert('Time out error.');
-				                   } else if (exception === 'abort') {
-				                       alert('Ajax request aborted.');
-				                   } else {
-				                       alert('Uncaught Error.\n' + jqXHR.responseText);
-				                   }
-				               }
-					 	
-					 	});
+					if( $("#tags").val() == ""){
+						bootbox.alert("Debe especificar al menos una etiqueta.");						
+					}
 					
+					else{
+						
+						var $form = $("#issueWizard");
+						console.log($form.serialize());
+									
+						$.ajax({ 
+						 		url: "./reportIssue.html", 		
+						 		type: "POST",					 	
+						 		data : $form.serialize(),	
+						 		success : function(alertStatus){					 		
+						 			if(alertStatus.result){
+						 				
+						 				bootbox.alert(alertStatus.message, function() {
+						 					setTimeout(function () {
+				 	    						window.location.reload();
+				 	    					}, 400);	
+						 				});		 	    					
+			 	    				}
+			 	    				else{	 	    			
+			 	    					bootbox.alert(alertStatus.message);	 	    										 	    					
+			 	    				}  
+						 			
+						 		},
+						 		error: function(jqXHR, exception) {
+					                   if (jqXHR.status === 0) {
+					                       alert('Not connect.\n Verify Network.');
+					                   } else if (jqXHR.status == 404) {
+					                       alert('Requested page not found. [404]');
+					                   } else if (jqXHR.status == 500) {
+					                       alert('Internal Server Error [500].');
+					                   } else if (exception === 'parsererror') {
+					                       alert('Requested JSON parse failed.');
+					                   } else if (exception === 'timeout') {
+					                       alert('Time out error.');
+					                   } else if (exception === 'abort') {
+					                       alert('Ajax request aborted.');
+					                   } else {
+					                       alert('Uncaught Error.\n' + jqXHR.responseText);
+					                   }
+					               }
+						 	
+						 	});
+						
+						
+						
+					}
 					return false;
+					
 			  }
 			});
 			
@@ -458,13 +468,15 @@ path:hover {
 			}  
 	
 
-			$("#issueWizard").validate({				
+			$("#issueWizard").validate({	
+					ignore: ".ignore, .select2-input",
 					rules: {
 			 			address: { required: true},					 		
 			 			city: { required: true},		
 			 			province: { required: true},		
 	 				    title: { required: true, maxlength: 50},				    
-	 				    description: { required: true, maxlength: 300}							
+	 				    description: { required: true, maxlength: 300}
+	 				  
 	 				  },
 	 			    messages: {
 	 			    	  address: { required : 'Este campo es requerido.'},			 			    
@@ -472,7 +484,6 @@ path:hover {
 	 			    	  province: { required : 'Este campo es requerido.' },
 	 					  title: { required : 'Este campo es requerido.', maxlength: 'El m&aacute;ximo es de 50 caracteres.' },
 	 					  description: { required : 'Este campo es requerido.' , maxlength: 'El m&aacute;ximo es de 300 caracteres'}
-	 					
 	 				},
 	 				highlight: function (element) { 
 	 			        $(element).addClass("error"); 

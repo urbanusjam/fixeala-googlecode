@@ -15,7 +15,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="issue_update_history")
-public class IssueHistorialRevision implements Serializable {
+public class IssueUpdateHistory implements Serializable {
 
 	private static final long serialVersionUID = -3016074901901662598L;
 	
@@ -37,12 +37,12 @@ public class IssueHistorialRevision implements Serializable {
 	
 	@Column(name = "status")
 	private String estado;
-	
-	@Column(name = "motive")
-	private String motivo;
-	
+		
 	@Column(name = "operation_type")
 	private String operacion;
+
+	@Column(name = "user_action")
+	private String motivo;
 	
 	@Column(name = "observations")
 	private String observaciones;
@@ -51,10 +51,10 @@ public class IssueHistorialRevision implements Serializable {
 	private String[] camposModificados;
 
 	
-	public IssueHistorialRevision(){ }
+	public IssueUpdateHistory(){ }
 	
 	
-	public IssueHistorialRevision(Issue issue, User usuario,
+	public IssueUpdateHistory(Issue issue, User usuario,
 			GregorianCalendar fecha, String estado, String motivo,
 			String operacion, String observaciones) {
 		super();
@@ -122,7 +122,7 @@ public class IssueHistorialRevision implements Serializable {
 	public void setOperacion(String operacion) {
 		this.operacion = operacion;
 	}
-
+	
 	public String getObservaciones() {
 		return observaciones;
 	}

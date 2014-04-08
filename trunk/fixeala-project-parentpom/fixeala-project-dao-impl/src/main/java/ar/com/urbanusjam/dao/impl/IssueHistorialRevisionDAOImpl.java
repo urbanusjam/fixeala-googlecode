@@ -4,17 +4,17 @@ import java.io.Serializable;
 
 import ar.com.urbanusjam.dao.IssueHistorialRevisionDAO;
 import ar.com.urbanusjam.dao.impl.utils.GenericDAOImpl;
-import ar.com.urbanusjam.entity.annotations.IssueHistorialRevision;
+import ar.com.urbanusjam.entity.annotations.IssueUpdateHistory;
 
-public class IssueHistorialRevisionDAOImpl extends GenericDAOImpl<IssueHistorialRevision, Serializable> 
+public class IssueHistorialRevisionDAOImpl extends GenericDAOImpl<IssueUpdateHistory, Serializable> 
 implements IssueHistorialRevisionDAO {
 
 	public IssueHistorialRevisionDAOImpl() {
-		super(IssueHistorialRevision.class);
+		super(IssueUpdateHistory.class);
 	}
 
 	@Override
-	public void saveHistorial(IssueHistorialRevision historial) {
+	public void saveHistorial(IssueUpdateHistory historial) {
 		this.save(historial);		
 	}
 	

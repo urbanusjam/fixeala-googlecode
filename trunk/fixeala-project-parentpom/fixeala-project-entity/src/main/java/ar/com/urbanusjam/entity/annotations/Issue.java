@@ -16,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
@@ -38,7 +39,10 @@ public class Issue implements Serializable  {
 	private User reporter;
 	
 	@Column(name = "creation_date")
-	private GregorianCalendar date;
+	private GregorianCalendar creationDate;
+	
+	@Column(name = "last_update_date")
+	private GregorianCalendar lastUpdateDate;
 	
 	@Column(name = "address")
 	private String address;
@@ -64,6 +68,12 @@ public class Issue implements Serializable  {
 	@Column(name = "description")
 	private String description;
 	
+	@Column(name = "priority")
+	private String priority;
+	
+	@Column(name = "resolution_type")
+	private String resolutionType;
+	
 	@Column(name = "status")
 	private String status;
 	
@@ -75,12 +85,14 @@ public class Issue implements Serializable  {
 	@JoinColumn(name = "id_area")
 	private Area assignedArea;
 		
-    @OneToMany(mappedBy="issue", fetch = FetchType.EAGER, cascade = CascadeType.ALL)  
-	private Set<IssueHistorialRevision> revisiones;
+    @OneToMany(mappedBy="issue", fetch = FetchType.EAGER)  
+    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.ALL})	
+    @OrderBy("fecha DESC")
+	private Set<IssueUpdateHistory> revisiones;
 
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn  
-	private IssueLicitacion licitacion;
+	private IssueRepair licitacion;
 
 //	@ManyToMany(fetch = FetchType.EAGER, mappedBy="issueList") //inverse side
 //	private Set<Tag> tagsList;	
@@ -94,9 +106,10 @@ public class Issue implements Serializable  {
 	private Set<Tag> tagsList;	
 	
 	@OneToMany(mappedBy="issue", fetch = FetchType.EAGER, cascade = CascadeType.ALL)  
-	private Set<Contenido> contenidos;
+	private Set<MediaContent> contenidos;
 	
 	@OneToMany(mappedBy="issue", fetch = FetchType.EAGER, cascade = CascadeType.ALL)  
+	@OrderBy("fecha DESC")
 	private Set<Comment> comentarios;
 	
 //	@OneToMany(mappedBy="issue", fetch = FetchType.LAZY, cascade = CascadeType.ALL) 
@@ -111,20 +124,20 @@ public class Issue implements Serializable  {
 	
 	public Issue(){   
 		tagsList = new HashSet<Tag>(); 
-		revisiones = new HashSet<IssueHistorialRevision>();
-		contenidos = new HashSet<Contenido>();
+		revisiones = new HashSet<IssueUpdateHistory>();
+		contenidos = new HashSet<MediaContent>();
 		comentarios = new HashSet<Comment>();
 //		votes = new HashSet<IssueVote>();
 		followers = new HashSet<IssueFollow>();
 	}	
 		
 	
-	public Issue(User reporter, GregorianCalendar date, String address, float latitude,
+	public Issue(User reporter, GregorianCalendar creationDate, String address, float latitude,
 			float longitude, String neighborhood, String city, String province, String title,
 			String description, Set<Tag> tagsList) {
 		super();
 		this.reporter = reporter;
-		this.date = date;
+		this.creationDate = creationDate;
 		this.address = address;
 		this.latitude = latitude;
 		this.longitude = longitude;
@@ -152,15 +165,21 @@ public class Issue implements Serializable  {
 		this.reporter = reporter;
 	}
 	
-
-	public GregorianCalendar getDate() {
-		return date;
+	public GregorianCalendar getCreationDate() {
+		return creationDate;
 	}
 
-	public void setDate(GregorianCalendar date) {
-		this.date = date;
+	public void setCreationDate(GregorianCalendar creationDate) {
+		this.creationDate = creationDate;
 	}
 
+	public GregorianCalendar getLastUpdateDate() {
+		return lastUpdateDate;
+	}
+
+	public void setLastUpdateDate(GregorianCalendar lastUpdateDate) {
+		this.lastUpdateDate = lastUpdateDate;
+	}
 
 	public String getTitle() {
 		return title;
@@ -258,28 +277,28 @@ public class Issue implements Serializable  {
 		this.tagsList = tagsList;
 	}
 		
-	public Set<IssueHistorialRevision> getRevisiones() {
+	public Set<IssueUpdateHistory> getRevisiones() {
 		return revisiones;
 	}
 
-	public void setRevisiones(Set<IssueHistorialRevision> revisiones) {
+	public void setRevisiones(Set<IssueUpdateHistory> revisiones) {
 		this.revisiones = revisiones;
 	}
 
-	public IssueLicitacion getLicitacion() {
+	public IssueRepair getLicitacion() {
 		return licitacion;
 	}
 
-	public void setLicitacion(IssueLicitacion licitacion) {
+	public void setLicitacion(IssueRepair licitacion) {
 		this.licitacion = licitacion;
 	}
 	
-	public Set<Contenido> getContenidos() {
+	public Set<MediaContent> getContenidos() {
 		return contenidos;
 	}
 
 
-	public void setContenidos(Set<Contenido> contenidos) {
+	public void setContenidos(Set<MediaContent> contenidos) {
 		this.contenidos = contenidos;
 	}
 	
@@ -320,7 +339,7 @@ public class Issue implements Serializable  {
 	    }			
 	}	
 	
-	public void addRevision(IssueHistorialRevision revision) {	
+	public void addRevision(IssueUpdateHistory revision) {	
 		if (!getRevisiones().contains(revision)) {
 			getRevisiones().add(revision);
 		}
