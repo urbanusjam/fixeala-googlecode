@@ -8,6 +8,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,10 +25,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ar.com.urbanusjam.dao.ContenidoDAO;
 import ar.com.urbanusjam.dao.IssueDAO;
-import ar.com.urbanusjam.entity.annotations.Contenido;
+import ar.com.urbanusjam.entity.annotations.MediaContent;
 import ar.com.urbanusjam.entity.annotations.Issue;
 import ar.com.urbanusjam.services.ContenidoService;
-import ar.com.urbanusjam.services.dto.ContenidoDTO;
+import ar.com.urbanusjam.services.dto.MediaContentDTO;
 import ar.com.urbanusjam.services.dto.FileWrapperDTO;
 import ar.com.urbanusjam.services.exceptions.BusinessException;
 import ar.com.urbanusjam.services.utils.DateUtils;
@@ -51,14 +54,14 @@ public class ContenidoServiceImpl implements ContenidoService {
     
     
 	@Override
-	public ContenidoDTO obtenerAvatarUsuario(String username)
+	public MediaContentDTO obtenerAvatarUsuario(String username)
 			throws BusinessException {
 		return null;
 	}
 
 	
 	@Override	
-	public ContenidoDTO subirContenido(ContenidoDTO fileWrapper) throws BusinessException {
+	public MediaContentDTO subirContenido(MediaContentDTO fileWrapper) throws BusinessException {
 			
 		InputStream inputStream = fileWrapper.getInputStream();
 		
@@ -66,7 +69,7 @@ public class ContenidoServiceImpl implements ContenidoService {
 			throw new BusinessException("archivo no encontrado");	
 			
 		//file is CREATED and saved in external folder
-		fileWrapper = this.uploadFile2(inputStream, fileWrapper);
+		fileWrapper = this.uploadFile(inputStream, fileWrapper);
 		
 		//file reference is PERSISTED in database
 		this.grabarContenido(fileWrapper);
@@ -76,12 +79,12 @@ public class ContenidoServiceImpl implements ContenidoService {
 	
 	
 	@Override
-	public List<ContenidoDTO> listarContenidos(Long idIssue) throws BusinessException {
-		List<Contenido> contenidos = contenidoDAO.findContenidosByIssue(idIssue);
-		List<ContenidoDTO> contenidosDTO = new ArrayList<ContenidoDTO>();
+	public List<MediaContentDTO> listarContenidos(Long idIssue) throws BusinessException {
+		List<MediaContent> contenidos = contenidoDAO.findContenidosByIssue(idIssue);
+		List<MediaContentDTO> contenidosDTO = new ArrayList<MediaContentDTO>();
 		
-		for(Contenido contenido : contenidos){
-			ContenidoDTO contenidoDTO = convertirAContenidoDTO(contenido);
+		for(MediaContent contenido : contenidos){
+			MediaContentDTO contenidoDTO = convertirAContenidoDTO(contenido);
 			File file = this.abrirContenidoFile(contenidoDTO);
 			contenidoDTO.setFile(file);
 			contenidosDTO.add(contenidoDTO);			
@@ -92,14 +95,15 @@ public class ContenidoServiceImpl implements ContenidoService {
 	
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=false, rollbackFor=Exception.class)
-	public void borrarContenido(ContenidoDTO contenido) throws BusinessException {				
-		contenidoDAO.delete(convertirAContenido(contenido));
-		this.deleteFile(this.pathImagenes + contenido.getNombreConExtension()); 	
+	public void borrarContenido(MediaContentDTO contenido) throws BusinessException {			
+		contenidoDAO.deleteContenido(convertirAContenido(contenido));
+//		contenidoDAO.delete(convertirAContenido(contenido));
+		this.deleteFile(this.pathImagenes + contenido.getNombreConExtension());  // si no encuentra el archivo en la PC, lanza excepcion y no borra los registros de la BD.
 	}	
 	
 	@Override
-	 public ContenidoDTO convertirAContenidoDTO(Contenido contenido) {        
-       ContenidoDTO contenidoDTO = new ContenidoDTO();
+	 public MediaContentDTO convertirAContenidoDTO(MediaContent contenido) {        
+       MediaContentDTO contenidoDTO = new MediaContentDTO();
        contenidoDTO.setId(contenido.getId());
        contenidoDTO.setPathRelativo(contenido.getPathRelativo());
        contenidoDTO.setAlto(contenido.getAlto());
@@ -114,8 +118,8 @@ public class ContenidoServiceImpl implements ContenidoService {
    }
       
    @Override
-   public Contenido convertirAContenido(ContenidoDTO contenidoDTO) {        
-       Contenido contenido = new Contenido();
+   public MediaContent convertirAContenido(MediaContentDTO contenidoDTO) {        
+       MediaContent contenido = new MediaContent();
        contenido.setId(contenidoDTO.getId());
        contenido.setPathRelativo(contenidoDTO.getPathRelativo());
        contenido.setAlto(contenidoDTO.getAlto());
@@ -124,65 +128,14 @@ public class ContenidoServiceImpl implements ContenidoService {
        contenido.setTipo(contenidoDTO.getExtension());
        contenido.setNombreConExtension(contenidoDTO.getNombreConExtension());
        contenido.setOrden(Integer.valueOf(contenidoDTO.getOrden()));
-       contenido.setProfilePic(contenidoDTO.isProfilePic());
-       
-       Issue issue = new Issue();
-	   issue.setId(contenidoDTO.getNroReclamo() == null ? null : Long.valueOf(contenidoDTO.getNroReclamo()));		
-       contenido.setIssue(issue);
-       
+       contenido.setProfilePic(contenidoDTO.isProfilePic()); 
+//       contenido.setFecha(getCurrentCalendar(new Date()));       
        return contenido;
    }   
      
-   @Override
-   public FileWrapperDTO uploadFile(InputStream inputStream, String extensionArchivo) {		
-		
-		FileWrapperDTO fileWrapper = new FileWrapperDTO();
-		
-		if(inputStream == null)		
-			throw new BusinessException("archivo no encontrado");			
-	    
-       /** Archivo random a generar **/
-       String nombreArchivoHash = UUID.randomUUID().toString();
-      
-       File file = new File( this.pathImagenes + "IMG-" + DateUtils.generateTimestamp() + "-FXL-" +  nombreArchivoHash + "." + extensionArchivo.toLowerCase());
-       
-       try {
-           FileOutputStream fileOutputStream;
-           fileOutputStream = new FileOutputStream(file);
-           byte[] buffer = new byte[BUFFER_SIZE];
-           int bulk;
-           while (true) {
-               bulk = inputStream.read(buffer);
-               if (bulk < 0) {
-                   break;
-               }
-               fileOutputStream.write(buffer, 0, bulk);
-               fileOutputStream.flush();
-           }
-           
-           BufferedImage readImage = null;           
-           readImage = ImageIO.read(file);   
-           
-           fileWrapper.setFile(file);
-           fileWrapper.setAlto(readImage.getHeight());
-           fileWrapper.setAncho(readImage.getWidth());
-
-           fileOutputStream.close();
-           inputStream.close();
-         
-       }
-       catch (FileNotFoundException e) {
-    	   throw new BusinessException("archivo no encontrado");
-       } 
-       catch (IOException e) {
-    	   throw new BusinessException("archivo no encontrado");       		
-       }
-     
-       return fileWrapper;
-   }   
    
    @Override
-   public ContenidoDTO uploadFile2(InputStream inputStream, ContenidoDTO fileWrapper) {		
+   public MediaContentDTO uploadFile(InputStream inputStream, MediaContentDTO fileWrapper) {		
 		
 		if(inputStream == null)		
 			throw new BusinessException("archivo no encontrado");			
@@ -234,9 +187,10 @@ public class ContenidoServiceImpl implements ContenidoService {
        return fileWrapper;
    }   
    
-   private void grabarContenido(ContenidoDTO contenidoDTO) {	
+   private void grabarContenido(MediaContentDTO contenidoDTO) {	
        try {
-       	 	Contenido contenido = convertirAContenido(contenidoDTO);     
+       	 	MediaContent contenido = convertirAContenido(contenidoDTO);      
+       	 	contenido.setIssue(issueDAO.findIssueById(contenidoDTO.getNroReclamo()));
             contenidoDAO.save(contenido);
             contenidoDTO.setId(contenido.getId());   
 		} catch (BusinessException e) {		
@@ -266,18 +220,18 @@ public class ContenidoServiceImpl implements ContenidoService {
    /**************************************/
    
    @Override
-   public ContenidoDTO obtenerContenido(String idContenido, String idIssue) throws BusinessException {
+   public MediaContentDTO obtenerContenido(String idContenido, String idIssue) throws BusinessException {
 
-	    Contenido contenido = contenidoDAO.findContenidoByContenidoAndIssue(Long.valueOf(idContenido), Long.valueOf(idIssue));
+	    MediaContent contenido = contenidoDAO.findContenidoByContenidoAndIssue(Long.valueOf(idContenido), Long.valueOf(idIssue));
         if ( contenido == null ){		
         	throw new BusinessException("archivo no encontrado");	
 		}        
-        ContenidoDTO contenidoDTO = convertirAContenidoDTO(contenido);         
+        MediaContentDTO contenidoDTO = convertirAContenidoDTO(contenido);         
         return contenidoDTO;
    }
 	
    @Override
-   public File abrirContenidoFile(ContenidoDTO contenidoDTO) throws BusinessException {
+   public File abrirContenidoFile(MediaContentDTO contenidoDTO) throws BusinessException {
 	   
 	    File file = null;
 	    
@@ -292,7 +246,7 @@ public class ContenidoServiceImpl implements ContenidoService {
       
    }
 	
-   private InputStream abrirContenidoRaw(ContenidoDTO contenidoDTO) throws BusinessException {
+   private InputStream abrirContenidoRaw(MediaContentDTO contenidoDTO) throws BusinessException {
 		try {
 	            if ( contenidoDTO == null )
 	            	throw new BusinessException("archivo no encontrado");	
@@ -313,7 +267,7 @@ public class ContenidoServiceImpl implements ContenidoService {
    }
 
 	
-   private void grabarImagenDisco(Contenido contenido) throws BusinessException {
+   private void grabarImagenDisco(MediaContent contenido) throws BusinessException {
         try {
             /** Copio el archivo del temporal al directorio de las imagenes **/
             FileUtils.copyFile(new File(this.pathImagenes
@@ -351,9 +305,15 @@ public class ContenidoServiceImpl implements ContenidoService {
 	@Override
 	public int obtenerUltimoOrden(String issueID)
 			throws BusinessException {
-		List<Contenido> contenidos = contenidoDAO.findContenidosByIssue(Long.valueOf(issueID));		
+		List<MediaContent> contenidos = contenidoDAO.findContenidosByIssue(Long.valueOf(issueID));		
 		int cantidadContenidos = contenidos.size();
 		return cantidadContenidos;		
 	}
+	
+	private GregorianCalendar getCurrentCalendar(Date date){		
+		Calendar calendar = new GregorianCalendar();
+		calendar.setTime(date);
+		return (GregorianCalendar) calendar;	
+	} 
 
 }

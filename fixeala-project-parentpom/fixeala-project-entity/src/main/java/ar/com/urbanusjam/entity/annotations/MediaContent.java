@@ -1,11 +1,10 @@
 package ar.com.urbanusjam.entity.annotations;
 
 import java.io.Serializable;
+import java.util.GregorianCalendar;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,13 +12,14 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 
 @Entity
 @Table(name="content")
 @Inheritance(strategy=InheritanceType.JOINED)
-public class Contenido implements Serializable {
+public class MediaContent implements Serializable {
     
     private static final long serialVersionUID = 1L;
 
@@ -46,6 +46,9 @@ public class Contenido implements Serializable {
     @Column(name = "filename_with_extension")
     private String nombreConExtension;
     
+//    @Column(name = "upload_date")
+//    private GregorianCalendar fecha;
+    
     @Column(name = "file_order")
     private int orden;
     
@@ -53,11 +56,11 @@ public class Contenido implements Serializable {
     private boolean profilePic;
     
     @ManyToOne
-	@JoinColumn(name = "id_issue", updatable = false)	
+	@JoinColumn(name = "id_issue")	
 	private Issue issue;
     
     
-	public Contenido(){
+	public MediaContent(){
         
     }
 
@@ -116,7 +119,15 @@ public class Contenido implements Serializable {
 	public void setNombreConExtension(String nombreConExtension) {
 		this.nombreConExtension = nombreConExtension;
 	}
-	
+		
+//	public GregorianCalendar getFecha() {
+//		return fecha;
+//	}
+//
+//	public void setFecha(GregorianCalendar fecha) {
+//		this.fecha = fecha;
+//	}
+
 	public int getOrden() {
 		return orden;
 	}

@@ -43,11 +43,11 @@ import ar.com.urbanusjam.services.ContenidoService;
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.UserService;
 import ar.com.urbanusjam.services.dto.CommentDTO;
-import ar.com.urbanusjam.services.dto.ContenidoDTO;
+import ar.com.urbanusjam.services.dto.MediaContentDTO;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.IssueFollowDTO;
-import ar.com.urbanusjam.services.dto.IssueHistorialRevisionDTO;
-import ar.com.urbanusjam.services.dto.IssueLicitacionDTO;
+import ar.com.urbanusjam.services.dto.IssueUpdateHistoryDTO;
+import ar.com.urbanusjam.services.dto.IssueRepairDTO;
 import ar.com.urbanusjam.services.dto.IssuePageViewDTO;
 import ar.com.urbanusjam.services.dto.IssueVoteDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
@@ -73,17 +73,17 @@ public class IssueController {
 	private ContenidoService contenidoService;
 	
 	private static final String UPLOAD_DIRECTORY = "C:\\temp\\fixeala\\uploads\\";
-	private ContenidoDTO uploadedFile = null;
+	private MediaContentDTO uploadedFile = null;
 	
 	@Autowired
 	@Qualifier(value = "fixealaAuthenticationManager")
 	protected AuthenticationManager fixealaAuthenticationManager;
 	
-	public ContenidoDTO getUploadedFile() {
+	public MediaContentDTO getUploadedFile() {
 		return uploadedFile;
 	}
 
-	public void setUploadedFile(ContenidoDTO uploadedFile) {
+	public void setUploadedFile(MediaContentDTO uploadedFile) {
 		this.uploadedFile = uploadedFile;
 	}
 
@@ -105,7 +105,8 @@ public class IssueController {
 				model.addAttribute("estadoCss", issue.getStatusCss());
 				model.addAttribute("direccion", issue.getFormattedAddress());					
 				model.addAttribute("id", issue.getId());
-				model.addAttribute("fecha", issue.getFormattedDate(issue.getDate()));
+				model.addAttribute("fechaCreacion", issue.getFormattedDate(issue.getCreationDate()));
+				model.addAttribute("fechaUltimaActualizacion", issue.getFormattedDate(issue.getLastUpdateDate()));
 				model.addAttribute("calle", issue.getAddress());		
 				model.addAttribute("barrio", issue.getNeighborhood());
 				model.addAttribute("ciudad", issue.getCity());
@@ -137,8 +138,7 @@ public class IssueController {
 					array.put(obj);
 				}
 				
-				allTags = array.toString();
-				
+				allTags = array.toString();				
 				
 				model.addAttribute("tagsByIssue", issueTagsByComma);
 				model.addAttribute("allTags", allTags.length() == 0 ? "[{}]" : allTags);
@@ -155,12 +155,12 @@ public class IssueController {
 				model.addAttribute("comentariosJson", jsonArray); 
 				model.addAttribute("comentarios", issue.getComentarios());
 				
-				List<ContenidoDTO> contenidos = new ArrayList<ContenidoDTO>();
+				List<MediaContentDTO> contenidos = new ArrayList<MediaContentDTO>();
 				contenidos = issue.getContenidos();
 				
 				if(contenidos.size() > 0){
 					model.addAttribute("contenidos", contenidos);
-					ContenidoDTO contenido = contenidos.get(0);						
+					MediaContentDTO contenido = contenidos.get(0);						
 					model.addAttribute("image", contenido);
 					model.addAttribute("imageUrl", contenido.getPathRelativo());
 					model.addAttribute("imageName", contenido.getNombre());
@@ -206,7 +206,7 @@ public class IssueController {
 				model.addAttribute("isCurrentlyVoted", currentVote.isCurrentlyVoteByUser());	
 				model.addAttribute("isVoteUp", currentVote.getVote() == 1 ? true : false);	
 				
-				IssueLicitacionDTO licitacion = new IssueLicitacionDTO();
+				IssueRepairDTO licitacion = new IssueRepairDTO();
 				
 				if(issue.getLicitacion() != null){
 					
@@ -222,10 +222,8 @@ public class IssueController {
 					model.addAttribute("unidadFinanciamiento", licitacion.getUnidadFinanciamiento());
 					model.addAttribute("empresaNombre", licitacion.getEmpresaNombre());
 					model.addAttribute("empresaCuit", licitacion.getEmpresaCuit());
-					model.addAttribute("empresaEmail", licitacion.getEmpresaEmail());
 					model.addAttribute("representanteNombre", licitacion.getRepresentanteNombre());
 					model.addAttribute("representanteDni", licitacion.getRepresentanteDni());
-					model.addAttribute("representanteEmail", licitacion.getRepresentanteEmail());
 //					model.addAttribute("lic-plazo", licitacion.getPlazoEjecucionEnDias());
 					model.addAttribute("presupuestoAdjudicado", licitacion.getPresupuestoAdjudicado());
 					model.addAttribute("presupuestoFinal", licitacion.getPresupuestoFinal());
@@ -233,10 +231,6 @@ public class IssueController {
 					model.addAttribute("fechaEstimadaFinal", parseDate(licitacion.getFechaEstimadaFin()));
 					model.addAttribute("fechaRealInicio", parseDate(licitacion.getFechaRealInicio()));
 					model.addAttribute("fechaRealFinal", parseDate(licitacion.getFechaRealFin()));
-					
-//					String string = licitacion.getFechaEstimadaInicio();
-//					SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy"); 
-//				    Date convertedDate = dateFormat.parse(string); 
 					
 				}
 			
@@ -252,74 +246,83 @@ public class IssueController {
 	
 	@RequestMapping(value="/issues/handleMultipleFileUpload", method = RequestMethod.POST)
 	public @ResponseBody ContenidoResponse processMultipleUpload(@RequestParam("issueID") String issueID, 
-			@RequestParam("files[]") List<MultipartFile> files, HttpServletRequest request, Model model) throws JSONException{
+			@RequestParam("userID") String userID, @RequestParam("files[]") List<MultipartFile> files, 
+			HttpServletRequest request, Model model) throws JSONException{
 		
 		InputStream inputStream = null;
 		String fileName = StringUtils.EMPTY;
 		String extensionArchivo = StringUtils.EMPTY;	
-		ContenidoDTO newContenido = new ContenidoDTO();
-		List<ContenidoDTO> uploadedFiles = new ArrayList<ContenidoDTO>();
+		MediaContentDTO newContenido = new MediaContentDTO();
+		List<MediaContentDTO> uploadedFiles = new ArrayList<MediaContentDTO>();
 		ContenidoResponse response = new ContenidoResponse();
 		
 		JSONArray jsonArray = new JSONArray();
 	    
-		try {		
-	    	
-	    	if(issueID.isEmpty()){
-	    		return new ContenidoResponse(false, "No se pudo cargar el archivo.");
-	    	}
-	
-			if(files.size() > 0){				
-			
-				for(MultipartFile file : files){
-					fileName = file.getOriginalFilename();			
-					inputStream = file.getInputStream();
-					extensionArchivo =  FileUploadUtils.getExtensionArchivo(fileName);		
-					newContenido.setInputStream(inputStream);
-					newContenido.setExtension(extensionArchivo);	
-					newContenido.setNroReclamo(issueID);		
-					
-					newContenido.setOrden(String.valueOf(0));
-					
-//					int orden = contenidoService.obtenerUltimoOrden(issueID);
-//					int nuevoOrden = files.indexOf(file);
-//					
-//					if(orden == 0)
-//						contenido.setOrden(String.valueOf(nuevoOrden));
-//					else
-//						contenido.setOrden(String.valueOf(nuevoOrden++));
-					
-					newContenido = contenidoService.subirContenido(newContenido);							
-					uploadedFiles.add(newContenido);
-					
-					JSONObject jsonObject = new JSONObject();
-					jsonObject.put("id", newContenido.getId().toString());
-					jsonObject.put("name", newContenido.getNombreConExtension());
-					jsonObject.put("format", newContenido.getExtension());
-					jsonObject.put("url", UPLOAD_DIRECTORY);
-					jsonObject.put("thumbnailUrl", "UPLOAD_DIRECTORY");
-					jsonObject.put("size", Double.valueOf(newContenido.getFile().length()));
-					jsonObject.put("error", StringUtils.EMPTY);
-					
-					jsonArray.put(jsonObject);
-				}
-
-				List<ContenidoDTO> contenidos = contenidoService.listarContenidos(Long.valueOf(issueID));
-				model.addAttribute("contenidos", contenidos);
-				model.addAttribute("cantidadContenidos", contenidos.size());
-
-				response.setStatus(true);
-				response.setTotalUploadedFiles(contenidos.size());
-				response.setUploadedFiles(jsonArray.toString());
-				return response;
+		try {			
 				
-			}
-			
-			else{
-				return new ContenidoResponse(false, "No se pudo cargar el archivo.");
-			}
-			
-	    
+				if(issueID.isEmpty()){
+		    		return new ContenidoResponse(false, "No se pudo cargar el archivo.");
+		    	}
+		
+				if(files.size() > 0){		
+					
+					for(MultipartFile file : files){
+						fileName = file.getOriginalFilename();			
+						inputStream = file.getInputStream();
+						extensionArchivo = FileUploadUtils.getExtensionArchivo(fileName);		
+						newContenido.setInputStream(inputStream);
+						newContenido.setExtension(extensionArchivo);	
+						newContenido.setNroReclamo(issueID);							
+						newContenido.setOrden(String.valueOf(0));			
+						
+						newContenido = contenidoService.subirContenido(newContenido);							
+						uploadedFiles.add(newContenido);
+						
+						JSONObject jsonObject = new JSONObject();
+						jsonObject.put("id", newContenido.getId().toString());
+						jsonObject.put("name", newContenido.getNombreConExtension());
+						jsonObject.put("format", newContenido.getExtension());
+						jsonObject.put("url", UPLOAD_DIRECTORY);
+						jsonObject.put("thumbnailUrl", "UPLOAD_DIRECTORY");
+						jsonObject.put("size", Double.valueOf(newContenido.getFile().length()));
+						jsonObject.put("error", StringUtils.EMPTY);
+						
+						jsonArray.put(jsonObject);
+					}
+
+					List<MediaContentDTO> contenidos = contenidoService.listarContenidos(Long.valueOf(issueID));
+					model.addAttribute("contenidos", contenidos);
+					model.addAttribute("cantidadContenidos", contenidos.size());
+
+					response.setStatus(true);
+					response.setTotalUploadedFiles(contenidos.size());
+					response.setUploadedFiles(jsonArray.toString());		
+					
+					IssueDTO issue = issueService.getIssueById(issueID);	
+					
+					IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
+					revision.setNroReclamo(Long.valueOf(issueID));	
+					revision.setFecha(new Date());
+					revision.setUsername(userID);	
+					revision.setOperacion(Operation.CREATE);			
+					revision.setMotivo(Messages.ISSUE_UPDATE_ATTACH_FILES + " " + files.size() + " archivo(s).");
+					revision.setObservaciones(Messages.ISSUE_CREATE_OBS);					
+					revision.setEstado(issue.getStatus());	
+					
+//					issue.getHistorial().add(revision);			
+//					issueService.updateIssue(issue); NO ANDA BIEN > duplica los registros del historial
+					
+					issueService.addHistoryUpdateComment(revision);
+					
+					return response;
+					
+				}
+	
+				else{
+					return new ContenidoResponse(false, "No se pudo cargar el archivo.");
+				}
+		
+				
 	    } catch (IOException e) {
 	    	return new ContenidoResponse(false, "No se pudo cargar el archivo.");
 	    }
@@ -334,7 +337,7 @@ public class IssueController {
 		InputStream inputStream = null;
 		String fileName = StringUtils.EMPTY;
 		String extensionArchivo = StringUtils.EMPTY;
-		ContenidoDTO nuevoContenido = new ContenidoDTO();	
+		MediaContentDTO nuevoContenido = new MediaContentDTO();	
 		
 	    try {		
 	
@@ -346,7 +349,7 @@ public class IssueController {
 				nuevoContenido.setExtension(extensionArchivo);	
 				nuevoContenido.setOrden("0");	
 				nuevoContenido.setProfilePic(isProfilePic);
-				nuevoContenido = contenidoService.uploadFile2(inputStream, nuevoContenido);	
+				nuevoContenido = contenidoService.uploadFile(inputStream, nuevoContenido);	
 				this.setUploadedFile(nuevoContenido);
 			}
 			
@@ -361,14 +364,27 @@ public class IssueController {
 	
 	@RequestMapping(value="/issues/deleteFile", method = RequestMethod.POST)
 	public @ResponseBody ContenidoResponse doDeleteFile(@RequestParam("issueID") String issueID, 
-			@RequestParam("fileID") String fileID, Model model, HttpServletRequest request) throws ParseException {
+			@RequestParam("userID") String userID, @RequestParam("fileID") String fileID, 
+			Model model, HttpServletRequest request) throws ParseException {
 		
 		try {	
-			ContenidoDTO contenidoABorrar = contenidoService.obtenerContenido(fileID, issueID);				
+			MediaContentDTO contenidoABorrar = contenidoService.obtenerContenido(fileID, issueID);				
 			contenidoService.borrarContenido(contenidoABorrar);	
 			
-			IssueDTO issue = issueService.getIssueById(issueID);
-			List<ContenidoDTO> contenidos = new ArrayList<ContenidoDTO>();
+			IssueDTO issue = issueService.getIssueById(issueID);			
+			
+			IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
+			revision.setNroReclamo(Long.valueOf(issueID));	
+			revision.setFecha(new Date());
+			revision.setUsername(userID);	
+			revision.setOperacion(Operation.CREATE);			
+			revision.setMotivo(Messages.ISSUE_UPDATE_REMOVE_FILES + " 1 archivo.");
+			revision.setObservaciones(Messages.ISSUE_CREATE_OBS);					
+			revision.setEstado(issue.getStatus());					
+			
+			issueService.addHistoryUpdateComment(revision);			
+		
+			List<MediaContentDTO> contenidos = new ArrayList<MediaContentDTO>();
 			contenidos = issue.getContenidos();
 			
 			model.addAttribute("contenidos", contenidos);
@@ -421,7 +437,8 @@ public class IssueController {
 									
 					UserDTO userDTO = new UserDTO();
 					userDTO.setUsername(userDB.getUsername());					
-					issue.setDate(new Date());
+					issue.setCreationDate(new Date());
+					issue.setLastUpdateDate(issue.getCreationDate());
 					issue.setStatus(IssueStatus.OPEN);		
 					issue.setUser(userDTO);			
 					issue.setId(String.valueOf(idIssue));	
@@ -431,11 +448,11 @@ public class IssueController {
 						issue.setProvince("Buenos Aires");
 					}
 										
-					IssueHistorialRevisionDTO revision = new IssueHistorialRevisionDTO();
+					IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
 					revision.setFecha(new Date());
 					revision.setUsername(userDTO.getUsername());	
 					revision.setOperacion(Operation.CREATE);			
-					revision.setMotivo("ALTA");
+					revision.setMotivo(Messages.ISSUE_CREATION + " el reclamo.");
 					revision.setObservaciones(Messages.ISSUE_CREATE_OBS);
 					revision.setEstado(issue.getStatus());
 					
@@ -446,7 +463,7 @@ public class IssueController {
 					issue.getHistorial().add(revision);
 										
 				    //contenido
-					ContenidoDTO contenido = this.getUploadedFile();
+					MediaContentDTO contenido = this.getUploadedFile();
 					
 					if(contenido != null){
 						contenido.setNroReclamo(String.valueOf(issue.getId()));
@@ -474,7 +491,7 @@ public class IssueController {
 	
 	@RequestMapping(value="/issues/updateIssue", method = RequestMethod.POST)
 	public @ResponseBody AlertStatus doUpdatetIssue(@ModelAttribute("issue") IssueDTO issue, 
-			@ModelAttribute("licitacion") IssueLicitacionDTO licitacion, HttpServletRequest request) throws ParseException{
+			@ModelAttribute("licitacion") IssueRepairDTO licitacion, HttpServletRequest request) throws ParseException{
 		
 		try {			
 				User user =  getCurrentUser(SecurityContextHolder.getContext().getAuthentication());
@@ -526,14 +543,16 @@ public class IssueController {
 					
 					issue.setLicitacion(licitacion);
 					
-					IssueHistorialRevisionDTO revision = new IssueHistorialRevisionDTO();
+					IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
 					revision.setFecha(new Date());
 					revision.setUsername(userDTO.getUsername());			
 					revision.setNroReclamo(Long.valueOf(issue.getId()));			
 					revision.setOperacion(Operation.UPDATE);			
-					revision.setMotivo("MODIFICACION");			
+					revision.setMotivo(Messages.ISSUE_UPDATE_FIELDS + " el reclamo.");			
 					revision.setEstado(issue.getStatus());
 					revision.setObservaciones(Messages.ISSUE_UPDATE_OBS);
+					
+					issue.setLastUpdateDate(revision.getFecha());
 					issue.getHistorial().add(revision);
 					issue.setAssignedArea(issueService.getAreaByName("Comuna 1"));
 					
@@ -602,8 +621,7 @@ public class IssueController {
 		
 	@RequestMapping(value="/loadTags", method = RequestMethod.GET)
 	public @ResponseBody List<String> loadTagList(HttpServletRequest request){
-		return issueService.getTagList();
-		
+		return issueService.getTagList();		
 	}
 	
 	@RequestMapping(value="/loadTags2", method = RequestMethod.GET)
@@ -693,6 +711,25 @@ public class IssueController {
 				comentario.setUsuario(userDB.getUsername());
 				comentario.setMensaje(mensaje);
 				issueService.postComment(comentario);
+				
+				IssueDTO issue = issueService.getIssueById(issueID);	
+				
+				IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
+				revision.setFecha(new Date());
+				revision.setUsername(comentario.getUsuario());			
+				revision.setNroReclamo(Long.valueOf(issueID));			
+				revision.setOperacion(Operation.UPDATE);			
+				revision.setMotivo(Messages.ISSUE_UPDATE_COMMENT + " en el reclamo.");			
+				revision.setEstado(issue.getStatus());
+				revision.setObservaciones(Messages.ISSUE_UPDATE_OBS);
+				
+				issue.setLastUpdateDate(revision.getFecha());
+//				issue.getHistorial().add(revision);
+				issue.setAssignedArea(issueService.getAreaByName("Comuna 1"));
+				
+				issueService.addHistoryUpdateComment(revision);				
+//				issueService.updateIssue(issue);
+				
 				List<CommentDTO> comments = issueService.getCommentsByIssue(issueID);
 				model.addAttribute("comentarios", issueService.getCommentsByIssue(issueID));
 				model.addAttribute("cantidadComentarios", comments.size());			

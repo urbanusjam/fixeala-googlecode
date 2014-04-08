@@ -14,28 +14,27 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ar.com.urbanusjam.dao.ContenidoDAO;
 import ar.com.urbanusjam.dao.impl.utils.GenericDAOImpl;
-import ar.com.urbanusjam.entity.annotations.Contenido;
-import ar.com.urbanusjam.entity.annotations.Issue;
+import ar.com.urbanusjam.entity.annotations.MediaContent;
 
 @Transactional(propagation= Propagation.REQUIRED, readOnly=false)
-public class ContenidoDAOImpl extends GenericDAOImpl<Contenido, Serializable> implements ContenidoDAO  {
+public class ContenidoDAOImpl extends GenericDAOImpl<MediaContent, Serializable> implements ContenidoDAO  {
 
 	public ContenidoDAOImpl() {
-		super(Contenido.class);
+		super(MediaContent.class);
 	}
 
 	@Override
-	public Contenido findContenidoById(Long idContenido) {
-		List<Contenido> contenidos = this.findWhere( " id = ? ", new Object[]{idContenido});    	
+	public MediaContent findContenidoById(Long idContenido) {
+		List<MediaContent> contenidos = this.findWhere( " id = ? ", new Object[]{idContenido});    	
     	return contenidos.size() > 0 ? contenidos.get(0) : null; 
 	}
 
 	@Override
-	public List<Contenido> findContenidosByIssue(Long idIssue) {
+	public List<MediaContent> findContenidosByIssue(Long idIssue) {
 //		List<Contenido> contenidos = this.findWhere(" issue.id = ? ", new Object[]{idIssue});    	
 		
 		
-		List<Contenido> contenidos = getSessionFactory().getCurrentSession().createCriteria(Contenido.class)  	
+		List<MediaContent> contenidos = getSessionFactory().getCurrentSession().createCriteria(MediaContent.class)  	
 			
 				.createAlias("issue", "i")
 				.add(Restrictions.eq("i.id", idIssue))
@@ -47,7 +46,7 @@ public class ContenidoDAOImpl extends GenericDAOImpl<Contenido, Serializable> im
 	}	
 	
 	@Override
-	public void deleteContenidosByIssue(Collection<Contenido> contenidos, Long idIssue) {
+	public void deleteContenidosByIssue(Collection<MediaContent> contenidos, Long idIssue) {
 		
 		Session session = getSessionFactory().getCurrentSession();
 		Transaction tx = session.beginTransaction();
@@ -57,7 +56,7 @@ public class ContenidoDAOImpl extends GenericDAOImpl<Contenido, Serializable> im
 			Long[] contenidosID = new Long[contenidos.size()];
 			int index = 0;
 			
-			for (Contenido c : contenidos) {
+			for (MediaContent c : contenidos) {
 				contenidosID[index] = c.getId();	
 				index++;
 			}
@@ -87,20 +86,25 @@ public class ContenidoDAOImpl extends GenericDAOImpl<Contenido, Serializable> im
 	public boolean existe(Long idContenido) {
 		if ( idContenido == null )
     		return false;
-    	List<Contenido> contenidos = this.findWhere("id = ?", new Object[]{idContenido});
+    	List<MediaContent> contenidos = this.findWhere("id = ?", new Object[]{idContenido});
     	return contenidos.size() > 0 ? true : false; 
 	}
 
 	@Override
-	public Contenido findContenidoByContenidoAndIssue(Long idContenido, Long idIssue) {
-		List<Contenido> contenidos = this.findWhere( " id = ? AND issue.id = ? AND profilePic = false ", new Object[]{idContenido, idIssue});    	
+	public MediaContent findContenidoByContenidoAndIssue(Long idContenido, Long idIssue) {
+		List<MediaContent> contenidos = this.findWhere( " id = ? AND issue.id = ? AND profilePic = false ", new Object[]{idContenido, idIssue});    	
     	return contenidos.size() > 0 ? contenidos.get(0) : null; 
 	}
 
 	@Override
-	public Contenido findUserProfilePic(Long idUser) {
+	public MediaContent findUserProfilePic(Long idUser) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void deleteContenido(MediaContent contenido) {
+		this.delete(contenido);
 	}
 
 		

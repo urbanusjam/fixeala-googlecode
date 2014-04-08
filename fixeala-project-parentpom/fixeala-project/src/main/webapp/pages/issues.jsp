@@ -43,8 +43,6 @@
 		            page: 1,
 		            maxVisible: 5,
 		        }).on("page", function(event, num){
-		        		        			        	
-		        	      	
 		        	        			        	
 		        	var currentPage = num;
 		        	var startIndex = (currentPage - 1) * itemsPerPage ;			        	
@@ -153,7 +151,8 @@
 			  //--NON-EDITABLE FIELDS
 			  
 			  $("#issue-id").editable({name: 'id',  disabled: true});			  
-			  $("#issue-date").editable({name: 'date', disabled: true});		
+			  $("#issue-date").editable({name: 'creationDate', disabled: true});
+			  $("#issue-last-update").editable({name: 'lastUpdate', disabled: true});				  
 			  $("#issue-street").editable({name: 'address', disabled: true});		
 			  $("#issue-city").editable({name: 'city', disabled: true});			  
 			  $("#issue-province").editable({name: 'province', disabled: true});
@@ -649,7 +648,21 @@
 				
 				$(function () {
 				    'use strict';
-
+				   
+				    
+				    $('#btnAddFiles').click(function(e){
+				    	
+						var loggedUser = '${loggedUser}';
+				    	
+				    	if(loggedUser == ""){
+				    		$("#mdl-fileupload").modal('hide');
+				    		e.stopPropagation();
+				    		bootbox.alert("Debe estar logueado para agregar archivos.");
+				    	}	
+				    	
+				    });
+				    
+				    
 				    $('#multiplefileupload').fileupload();
 				
 				    $('#multiplefileupload').fileupload({
@@ -658,7 +671,7 @@
 					     dataType: 'json',
 					     contentType: false,
 						 processData: false,
-						 formData: [{ name: 'issueID', value: ${id} }],
+						 formData: [ { name: 'issueID', value: ${id} }, { name: 'userID', value: loggedUser }],
 					     maxNumberOfFiles: 5,
 						 maxFileSize: 5000000, // 5 MB		
 						 acceptFileTypes: /(\.|\/)(jpe?g|png)$/i,
@@ -683,7 +696,9 @@
 					
 					var issueID = ${id};
 					var contenidoID = $(this).closest('tr').attr('id');					
-					var data = 'issueID='+ issueID + '&fileID='+ contenidoID;
+					var data = 'issueID='+ issueID + '&fileID='+ contenidoID + '&userID='+ loggedUser;
+					
+					console.log(data);
 
 					  bootbox.confirm("&iquest;Confirma que desea eliminar el archivo?", "Cancelar", "Eliminar", function(result){
 						  
@@ -1151,7 +1166,7 @@
 		    	
 	    			<br>
 	    			<div class="caption">
-	    				<a href="#mdl-fileupload" data-toggle="modal" class="btn btn-info">
+	    				<a id="btnAddFiles" href="#mdl-fileupload" data-toggle="modal" class="btn btn-info">
 	    				<i class="icon-upload-alt"></i>&nbsp;&nbsp;&nbsp;Agregar imagenes
 	    				</a>
 	    			</div>
@@ -1167,8 +1182,20 @@
 						    <td><a href="#" id="issue-id">${id}</a></td>						  
 						 </tr>
 						 <tr>
-						    <th>Fecha:</th>
-						    <td><a href="#" id="issue-date">${fecha}</a></td>						   
+						    <th>Fecha de publicaci&oacute;n:</th>
+						    <td><a href="#" id="issue-date">${fechaCreacion}</a></td>						   
+						 </tr>
+						 <tr>
+						    <th>&Uacute;ltima actualizaci&oacute;n:</th>
+						    <td><a href="#" id="issue-last-update">${fechaUltimaActualizacion}</a></td>						   
+						 </tr>
+						  <tr>
+						    <th>Informante:</th>
+						    <td><script type="text/javascript">document.write( getUserURL('${usuario}') );</script></td>							    		   
+						 </tr>
+						 <tr>
+						    <th>Responsable:</th>
+						    <td><a href="#" id="issue-area">${area}</a></td>						   
 						 </tr>
 						 <tr>
 						    <th>Direcci&oacute;n:</th>
@@ -1189,14 +1216,6 @@
 						 <tr>
 						    <th>Coordenadas:</th>
 						    <td><a href="#" id="issue-lat">${latitud}</a>, <a href="#" id="issue-lng">${longitud}</a></td>						   
-						 </tr>
-						 <tr>
-						    <th>Reportado por:</th>
-						    <td><script type="text/javascript">document.write( getUserURL('${usuario}') );</script></td>							    		   
-						 </tr>
-						 <tr>
-						    <th>Asignado a:</th>
-						    <td><a href="#" id="issue-area">${area}</a></td>						   
 						 </tr>
 						  <tr>
 						    <th>Descripci&oacute;n:</th>
@@ -1238,46 +1257,61 @@
 			  <div class="accordion-group">
 			    <div class="accordion-heading">
 			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-			       <h4><i class="icon-time icon-large"></i>&nbsp;&nbsp;HISTORIAL DE ACTUALIZACIONES (${cantidadRevisiones})</h4>
+			       <h4><i class="icon-time icon-large"></i>&nbsp;&nbsp;HISTORIAL DE CAMBIOS (${cantidadRevisiones})</h4>
 			      </a>
 			    </div>
 			    <div id="collapseThree" class="accordion-body collapse">
 			      <div class="accordion-inner">
-			        <table class="table table-hover table-bordered table-striped">			        	
-			        	<thead>			        
+			      	
+			      	<table class="table table-hover" style="width:100%">
+			      		<c:forEach items="${historial}" var="revision">					        
+					    	<c:set var="count" value="${count + 1}" scope="page"/>	
 					        <tr>
-					        	<th>#</th>
-					        	<th>Fecha y Hora</th>					        	
-					        	<th>Motivo</th>
-					        	<th>Usuario</th>
-					        	<th>Estado del reclamo</th>
-					        	<th>Observaciones</th>
-					        </tr>
-				        </thead>	
-				        <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-				      
-				         <c:forEach items="${historial}" var="revision">					        
-					         <c:set var="count" value="${count + 1}" scope="page"/>		
-							 <tr>		
-							 	<td><c:out value="${count}" /></td>						 	
-							    <td>${revision.fechaFormateada}</td>						  
-							    <td>${revision.motivo}</td>
-							    <td><script type="text/javascript">document.write( getUserURL('${revision.username}') );</script></td>
-							    <td>${revision.estado}</td>
-							    <td>${revision.observaciones}</td>
-							 </tr>
+					        	<td style="border-top:none; width:5%"><c:out value="${count}" /></td>			
+					          	<td style="border-top:none; ">${revision.fechaFormateada}</td>				    		
+					    		<td style="border-top:none; ">
+					    			<a href="#"><script type="text/javascript">document.write( getUserURL('${revision.username}') );</script></a>
+					    		</td>
+					    		<td style="border-top:none; width:70%">${revision.motivo}</td>	
+					    	</tr>					    
 						 </c:forEach>
 					</table>
+			      
+<!-- 			        <table class="table table-hover table-bordered table-striped">			        	 -->
+<!-- 			        	<thead>			         -->
+<!-- 					        <tr> -->
+<!-- 					        	<th>#</th> -->
+<!-- 					        	<th>Fecha y Hora</th> -->
+<!-- 					        	<th>Usuario</th> -->
+<!-- 					        	<th>Acci&oacute;n</th> -->
+<!-- 					        	<th>Estado del reclamo</th> -->
+					        
+<!-- 					        </tr> -->
+<!-- 				        </thead>	 -->
+<%-- 				        <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> --%>
+				      
+<%-- 				         <c:forEach items="${historial}" var="revision">					         --%>
+<%-- 					         <c:set var="count" value="${count + 1}" scope="page"/>		 --%>
+<!-- 							 <tr>		 -->
+<%-- 							 	<td><c:out value="${count}" /></td>						 	 --%>
+<%-- 							    <td>${revision.fechaFormateada}</td> --%>
+<!-- 							    <td><script type="text/javascript">document.write( getUserURL('${revision.username}') );</script></td> -->
+<%-- 							    <td>${revision.motivo}</td> --%>
+<%-- 							    <td>${revision.estado}</td> --%>
+							  
+<!-- 							 </tr> -->
+<%-- 						 </c:forEach> --%>
+<!-- 					</table> -->
 			      </div>
 			    </div>
 			  </div>
 			  
 			  
-			  <!-- 3 LICITACION -->
+			  <!-- 3 REPARACION -->
 			  <div class="accordion-group">
 			    <div class="accordion-heading">
 			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-			        <h4><i class="icon-wrench icon-large"></i>&nbsp;&nbsp;LICITACI&Oacute;N (${cantidadLicitacion})</h4>
+			        <h4><i class="icon-wrench icon-large"></i>&nbsp;&nbsp;REPARACI&Oacute;N (${cantidadLicitacion})</h4>
 			      </a>			     
 			    </div>
 			    <div id="collapseTwo" class="accordion-body collapse">

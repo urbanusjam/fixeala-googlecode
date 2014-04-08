@@ -90,7 +90,7 @@
 							</fieldset>
 							
 							<fieldset title="3. Imagen">	
-							<legend></legend>	
+								<legend></legend>	
 								<div class="fileupload fileupload-new" data-provides="fileupload" style="display:inline-block">
 									<div class="fileupload-new thumbnail" style="width: 304px; height: 150px;">
 										<img src="${pageContext.request.contextPath}/resources/images/nopic.png" />
@@ -103,12 +103,7 @@
 								           <input type="file" name="files[]" id="fileupload">
 								    </span>									  
 								</div>	
-<!-- 								<ul id="eventTags"></ul> -->
-
-
-   							<input type="hidden" id="new-issue-tags" name="tags" style="width:300px" class="input-xlarge" />
-           
-      
+	   							<input type="hidden" id="tags" name="tags" style="width:300px" class="input-xlarge"  placeholder="Etiquetas"/>      
 							</fieldset>
 						<input id="submitIssue" type="submit" class="finish"/>
 					</form>
