@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 
 
-public class ContenidoDTO implements Serializable {
+public class MediaContentDTO implements Serializable {
 
 	private static final long serialVersionUID = 1500359499775427609L;
 
@@ -134,8 +134,8 @@ public class ContenidoDTO implements Serializable {
 		
 	    if (other == null) return false;
 	    if (other == this) return true;
-	    if (!(other instanceof ContenidoDTO))return false;
-	    ContenidoDTO otherMyClass = (ContenidoDTO)other;
+	    if (!(other instanceof MediaContentDTO))return false;
+	    MediaContentDTO otherMyClass = (MediaContentDTO)other;
 		
 	    return otherMyClass.getId().equals(this.getId()); 
 	}

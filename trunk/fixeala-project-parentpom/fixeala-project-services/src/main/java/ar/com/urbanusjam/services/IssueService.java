@@ -8,12 +8,15 @@ import ar.com.urbanusjam.services.dto.IssueCriteriaSearch;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.IssueFollowDTO;
 import ar.com.urbanusjam.services.dto.IssuePageViewDTO;
+import ar.com.urbanusjam.services.dto.IssueUpdateHistoryDTO;
 import ar.com.urbanusjam.services.dto.IssueVoteDTO;
 
 public interface IssueService {
 	
 	public void reportIssue(IssueDTO issue);	
 	public void postComment(CommentDTO comment);
+	
+	public void addHistoryUpdateComment(IssueUpdateHistoryDTO update);
 	
 	public void updateIssue(IssueDTO issue);		
 	public void updateIssueStatus(String issueID, String newStatus);

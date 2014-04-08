@@ -28,15 +28,16 @@ public class IssueDTO implements Serializable {
 	private String title;
 	private String parsedTitle;
 	private String description;
-	private Date date;	
+	private Date creationDate;	
+	private Date lastUpdateDate;	
 	private String area;
 	private AreaDTO assignedArea;
 	private UserDTO assignedOfficial;
-	private IssueLicitacionDTO licitacion = new IssueLicitacionDTO();
+	private IssueRepairDTO licitacion = new IssueRepairDTO();
 	private List<String> tags = new ArrayList<String>();
 	private Map<String, Object> tagsMap = new HashMap<String, Object>();
-	private List<IssueHistorialRevisionDTO> historial = new ArrayList<IssueHistorialRevisionDTO>();
-	private List<ContenidoDTO> contenidos = new ArrayList<ContenidoDTO>();
+	private List<IssueUpdateHistoryDTO> historial = new ArrayList<IssueUpdateHistoryDTO>();
+	private List<MediaContentDTO> contenidos = new ArrayList<MediaContentDTO>();
 	private List<CommentDTO> comentarios = new ArrayList<CommentDTO>();	
 	private List<IssueFollowDTO> followers = new ArrayList<IssueFollowDTO>();
 	private String status;
@@ -131,11 +132,11 @@ public class IssueDTO implements Serializable {
 		this.assignedOfficial = assignedOfficial;
 	}
 
-	public IssueLicitacionDTO getLicitacion() {
+	public IssueRepairDTO getLicitacion() {
 		return licitacion;
 	}
 
-	public void setLicitacion(IssueLicitacionDTO licitacion) {
+	public void setLicitacion(IssueRepairDTO licitacion) {
 		this.licitacion = licitacion;
 	}
 	
@@ -155,19 +156,19 @@ public class IssueDTO implements Serializable {
 		this.tagsMap = tagsMap;
 	}
 
-	public List<IssueHistorialRevisionDTO> getHistorial() {
+	public List<IssueUpdateHistoryDTO> getHistorial() {
 		return historial;
 	}
 
-	public void setHistorial(List<IssueHistorialRevisionDTO> historial) {
+	public void setHistorial(List<IssueUpdateHistoryDTO> historial) {
 		this.historial = historial;
 	}
 		
-	public List<ContenidoDTO> getContenidos() {
+	public List<MediaContentDTO> getContenidos() {
 		return contenidos;
 	}
 
-	public void setContenidos(List<ContenidoDTO> contenidos) {
+	public void setContenidos(List<MediaContentDTO> contenidos) {
 		this.contenidos = contenidos;
 	}
 
@@ -179,12 +180,20 @@ public class IssueDTO implements Serializable {
 		this.comentarios = comentarios;
 	}
 
-	public Date getDate() {
-		return date;
+	public Date getCreationDate() {
+		return creationDate;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
+	}
+
+	public Date getLastUpdateDate() {
+		return lastUpdateDate;
+	}
+
+	public void setLastUpdateDate(Date lastUpdateDate) {
+		this.lastUpdateDate = lastUpdateDate;
 	}
 
 	public String getLatitude() {
@@ -243,12 +252,11 @@ public class IssueDTO implements Serializable {
 		this.followers = followers;
 	}
 
-	public String getFormattedDate(Date date){		
-		
+	public String getFormattedDate(Date date){				
 		String formattedDate = "";
 		Date d = date;		
         SimpleDateFormat df = new SimpleDateFormat();
-        df.applyPattern("dd/MM/yyyy");
+        df.applyPattern("dd/MM/yyyy HH:mm");
         formattedDate = df.format(d.getTime());
         return formattedDate;	
 	}
