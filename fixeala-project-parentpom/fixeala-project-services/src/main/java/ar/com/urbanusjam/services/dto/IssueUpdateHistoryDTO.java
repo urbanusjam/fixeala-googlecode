@@ -4,17 +4,17 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class IssueHistorialRevisionDTO implements Serializable {
+public class IssueUpdateHistoryDTO implements Serializable {
 	
 	private static final long serialVersionUID = 3825783987489912575L;
 	
 	private Long nroReclamo;
 	private String username;
 	private Date fecha;	
-	private String fechaFormateada;	
-	private String motivo;
+	private String fechaFormateada;		
 	private String observaciones;
 	private String operacion;
+	private String motivo;
 	private String estado;
 	private String[] camposModificados;
 	

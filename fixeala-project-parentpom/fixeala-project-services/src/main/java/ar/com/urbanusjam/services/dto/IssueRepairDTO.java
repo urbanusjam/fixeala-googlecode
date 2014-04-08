@@ -5,7 +5,7 @@ import java.util.Date;
 
 //import org.springframework.format.annotation.DateTimeFormat;
 
-public class IssueLicitacionDTO implements Serializable {
+public class IssueRepairDTO implements Serializable {
 
 	private static final long serialVersionUID = -7810118330923948669L;
 	
@@ -14,17 +14,14 @@ public class IssueLicitacionDTO implements Serializable {
 	private String nroExpediente;
 	private String nroReclamo;
 	private Float valorPliego;
-	private String documentacionPliego;
 	private String unidadEjecutora;
 	private String unidadFinanciamiento;
 	private String empresaConstructora;
 	private String empresaNombre;
 	private Integer empresaCuit;
-	private String empresaEmail;
 	private String representanteTecnico;
 	private String representanteNombre;
 	private Integer representanteDni;
-	private String representanteEmail;
 	private int plazoEjecucionEnDias;
 	private Float presupuestoAdjudicado;
 	private Float presupuestoFinal;
@@ -80,14 +77,6 @@ public class IssueLicitacionDTO implements Serializable {
 		this.valorPliego = valorPliego;
 	}
 	
-	public String getDocumentacionPliego() {
-		return documentacionPliego;
-	}
-	
-	public void setDocumentacionPliego(String documentacionPliego) {
-		this.documentacionPliego = documentacionPliego;
-	}
-	
 	public String getEmpresaConstructora() {
 		return empresaConstructora;
 	}
@@ -98,8 +87,7 @@ public class IssueLicitacionDTO implements Serializable {
 	
 	public void setEmpresaConstructora() {
 		this.empresaConstructora = getEmpresaNombre() 
-				+ "," + getEmpresaCuit() 
-				+ "," + getEmpresaEmail();
+				+ "," + getEmpresaCuit();
 	}
 	
 	public String getEmpresaNombre() {
@@ -116,14 +104,6 @@ public class IssueLicitacionDTO implements Serializable {
 	
 	public void setEmpresaCuit(Integer empresaCuit) {
 		this.empresaCuit = empresaCuit;
-	}
-	
-	public String getEmpresaEmail() {
-		return empresaEmail;
-	}
-	
-	public void setEmpresaEmail(String empresaEmail) {
-		this.empresaEmail = empresaEmail;
 	}
 	
 	public String getUnidadEjecutora() {
@@ -148,8 +128,7 @@ public class IssueLicitacionDTO implements Serializable {
 	
 	public void setRepresentanteTecnico() {
 		this.representanteTecnico = getRepresentanteNombre() 
-				+ ","+ getRepresentanteDni() 
-				+ "," + getRepresentanteEmail();
+				+ ","+ getRepresentanteDni();
 	}
 	
 	public void setRepresentanteTecnico(String representanteTecnico) {
@@ -170,14 +149,6 @@ public class IssueLicitacionDTO implements Serializable {
 
 	public void setRepresentanteDni(Integer representanteDni) {
 		this.representanteDni = representanteDni;
-	}
-
-	public String getRepresentanteEmail() {
-		return representanteEmail;
-	}
-
-	public void setRepresentanteEmail(String representanteEmail) {
-		this.representanteEmail = representanteEmail;
 	}
 
 	public int getPlazoEjecucionEnDias() {

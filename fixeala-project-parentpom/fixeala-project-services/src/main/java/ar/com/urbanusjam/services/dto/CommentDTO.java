@@ -67,7 +67,7 @@ public class CommentDTO implements Serializable {
 		String formattedDate = "";
 		Date d = date;		
         SimpleDateFormat df = new SimpleDateFormat();
-        df.applyPattern("dd/MM/yyyy");
+        df.applyPattern("dd/MM/yyyy HH:mm");
         formattedDate = df.format(d.getTime());
         return formattedDate;	
 	}
