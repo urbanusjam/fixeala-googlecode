@@ -1065,17 +1065,31 @@
       
       <div class="row">
       
+      	<ul class="user-action-nav">
+      		<li><i class="icon-eye-open"></i><span>${cantidadVisitas}</span></li>
+      		<li>
+      			<div class="arrows"><i class="icon-caret-up"></i><i class="icon-caret-down"></i></div>
+      			<div class="text">${cantidadVotos}</div>
+      		</li>
+      		<li><i class="icon-screenshot"></i><span>0</span></li>
+      		<li><i class="icon-comments-alt"></i><span>${cantidadComentarios}</span></li>
+      		<li><i class="icon-star"></i></li>
+      		<li><i class="icon-print"></i></li>
+      		<li><i class="icon-flag"></i></li>
+      		<li><i class="icon-share"></i>
+      	</ul>
+      
       
       	
 <!--   			  <li><a href="#" title="Vistas"><h4>Vistas (0)</h4></a></li> -->
 <!--   			   <li><a href="#" title="Votos"><h4>Votar (0)</h4></a></li> -->
   			<div style="display:inline-block">	
-  			  	<i class="icon-ok"></i>
+  		
   			  	${cantidadVisitas}   			  
   			  	<c:if test="${cantidadVisitas == 1}">visita</c:if>
   			  	<c:if test="${cantidadVisitas != 1}">visitas</c:if>
   			</div>
-  			||	
+  			
   			<div id="votes" style="display:inline-block">	
   				<span id="voteCount">${cantidadVotos}</span>
   				<c:if test="${cantidadVotos == 1}">voto</c:if>
@@ -1086,16 +1100,16 @@
   				<a class="vote-down" href="#" title="Voto negativo"><i id="icon-down" class="icon-thumbs-down"></i></a>
   				&nbsp;
   			</div>
-  			||
+  			
   			<div id="watchers" style="display:inline-block">		  	
 	    		<a href="#" id="watching-toggle"></a>
  			    (<a href="#" id="view-watcher-list" data-toggle="popover"></a>)
   			</div>  			
-  			||	
-  			<div style="display:inline-block">	
-  				${cantidadComentarios} comentarios  			
+  		
+  			<div style="display:inline-block;">  			
+  				${cantidadComentarios} comentarios		
   			</div>
-  			||	
+  		
   			<div style="display:inline-block">	
   			  	<i class="icon-star"></i>
   			  	<a id="bookmarkme" href="#" rel="sidebar" title="Agregar a favoritos">Agregar a Favoritos</a>
@@ -1109,7 +1123,7 @@
 
 		  		  		
 	 	  <div id="btnGroupSocial" class="btn-group">
-	 			<button class="btn"><i class="icon-share icon-large"></i>&nbsp;&nbsp;Compartir</button>
+	 			<button class="btn"><i class="icon-share icon-large"></i>Compartir</button>
 	 			<button class="btn dropdown-toggle" data-toggle="dropdown">
 	   			<span class="caret"></span>
 	 			</button>	  	
@@ -1257,7 +1271,7 @@
 			  <div class="accordion-group">
 			    <div class="accordion-heading">
 			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-			       <h4><i class="icon-time icon-large"></i>&nbsp;&nbsp;HISTORIAL DE CAMBIOS (${cantidadRevisiones})</h4>
+			       <h4><i class="icon-time icon-large"></i>HISTORIAL DE CAMBIOS (${cantidadRevisiones})</h4>
 			      </a>
 			    </div>
 			    <div id="collapseThree" class="accordion-body collapse">
@@ -1311,7 +1325,7 @@
 			  <div class="accordion-group">
 			    <div class="accordion-heading">
 			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-			        <h4><i class="icon-wrench icon-large"></i>&nbsp;&nbsp;REPARACI&Oacute;N (${cantidadLicitacion})</h4>
+			        <h4><i class="icon-wrench icon-large"></i>REPARACI&Oacute;N (${cantidadLicitacion})</h4>
 			      </a>			     
 			    </div>
 			    <div id="collapseTwo" class="accordion-body collapse">
@@ -1320,7 +1334,7 @@
 <!-- 			    <button id="reset-btn" class="btn btn-large btn-danger" style="margin-left:595px">Resetear valores</button> -->
 					
 					<c:if test="${cantidadLicitacion eq 0}">
-						Por el momento no hay informaci&oacute;n disponible.		 
+						No hay informaci&oacute;n disponible.		 
 					</c:if>
 					
 					<c:if test="${cantidadLicitacion gt 0}">	
@@ -1415,7 +1429,7 @@
 			  <div class="accordion-group">
 			    <div class="accordion-heading">
 			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">
-			        <h4><i class="icon-map-marker icon-large"></i>&nbsp;&nbsp;RECLAMOS SIMILARES (${cantidadReclamosSimilares})</h4>
+			        <h4><i class="icon-pushpin icon-large"></i>RECLAMOS SIMILARES (${cantidadReclamosSimilares})</h4>
 			      </a>
 			    </div>
 			    <div id="collapseFour" class="accordion-body collapse">
@@ -1456,7 +1470,7 @@
 			  <div class="accordion-group">
 			    <div class="accordion-heading">
 			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFive">
-			       <h4><i class="icon-camera icon-large"></i>&nbsp;&nbsp;IM&Aacute;GENES (<span class="cantidadContenidos">${cantidadContenidos}</span>)</h4>			        
+			       <h4><i class="icon-picture icon-large"></i>IM&Aacute;GENES (<span class="cantidadContenidos">${cantidadContenidos}</span>)</h4>			        
 			      </a>
 			    </div>
 			    <div id="collapseFive" class="accordion-body collapse">
@@ -1480,7 +1494,7 @@
 			  <div class="accordion-group">
 			    <div class="accordion-heading ">
 			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseSix">
-			       <h4><i class="icon-comments icon-large"></i>&nbsp;&nbsp;COMENTARIOS (${cantidadComentarios})</h4>
+			       <h4><i class="icon-comments icon-large"></i>COMENTARIOS (${cantidadComentarios})</h4>
 			      </a>
 			    </div>
 			    <div id="collapseSix" class="accordion-body collapse">

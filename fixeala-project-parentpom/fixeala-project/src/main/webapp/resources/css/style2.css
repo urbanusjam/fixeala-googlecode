@@ -1,12 +1,12 @@
 @import url(http://fonts.googleapis.com/css?family=Oswald);
 
 
-
 html, body {
 	margin: 0;
 	padding: 0;
-	font-family: 'Arial';
 	height: 100%;
+	font-family: 'Arial';
+	font-size: 13px;
 }
 
 html {
@@ -63,6 +63,9 @@ h7 {
 	text-transform: uppercase;
 	color: #B0B0B0;
 }
+
+
+
 
 .alert {
 	text-shadow: none;
@@ -823,12 +826,12 @@ div[data-role="editor-toolbar"] {
 /* #mdl-licitacion .modal-footer{text-align:center;} */
 
 
-#tbl-issue th{width:170px;vertical-align:middle;}
-#tbl-issue td{height:15px; }
+#tbl-issue th { width: 170px; vertical-align: middle; }
+#tbl-issue td { height: 15px; }
 
-#tbl-licitacion {width:700px; margin:0 auto; margin-top:20px;}
-#tbl-licitacion th{width:200px;height:30px; vertical-align:middle;}
-#tbl-licitacion td{height:30px; }
+#tbl-licitacion { width: 700px; margin:0 auto; margin-top: 20px; }
+#tbl-licitacion th { width: 200px; height: 30px; vertical-align: middle; }
+#tbl-licitacion td { height: 30px; }
 
 .issue-textarea{height:80px; width:290px;}
 .licitacion-textarea{height:80px; width:300px;}
@@ -1166,3 +1169,37 @@ a.no-hover { text-decoration: none; color: #000;}
 	text-align: center; 
 	padding: 0 35px 0 35px;		
 }
+
+
+
+.user-action-nav  { 
+/* 	width: auto;  */
+	border: 0px solid #000;  
+	list-style-type:none;
+	margin:0 auto;
+	padding:0; 
+	}
+
+.user-action-nav  li {
+	display: inline-block; 
+	height: 50px; 
+	width: 105px; 
+	line-height: 50px;
+	text-align: center; 	
+	border-right: 1px solid #ccc;
+	font-size: 28px;		
+	vertical-align:middle;
+	 }
+
+.user-action-nav  li:last-child { border: none; } 
+.user-action-nav  li i[class*="icon"]  { margin-right: 5px;}
+.user-action-nav  li div.arrows { border: 0px solid blue;  width: 45px; float:left; height: 100%; }
+.user-action-nav  li div.arrows i[class*="icon"]  { display:block; height: 20px;  }
+.user-action-nav  li div.text { float:right; width: 45px; border: 0px solid pink; height: 100%;  }
+
+
+
+
+
+
+
