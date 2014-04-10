@@ -107,6 +107,7 @@
 			getClosestMarkersByIssue(issueLocation);
 			
 			$('#btn-update').attr('disabled', true);
+			$('#btn-reset').attr('disabled', true);
 			
 			//default config
 			$.fn.editable.defaults.mode = 'popup';	
@@ -123,10 +124,15 @@
 			//enable / disable
 		    $('#btn-edit').click(function() {
 		    	enableDisableFields();
-		    	if( $('#btn-update').is(":disabled") == true )
+		    	if( $('#btn-update').is(":disabled") == true ){		    	
 					$('#btn-update').attr('disabled', false);
-		    	else
+		    		$('#btn-reset').attr('disabled', false);
+		    	}
+		    	else{
 		    		$('#btn-update').attr('disabled', true);
+		    		$('#btn-reset').attr('disabled', true);
+		    	}
+		    		
 		    }); 
 			  
 		    function enableDisableFields(){
@@ -326,23 +332,23 @@
 			  
 			  $('#lic-tipo').editable({
 				  name: 'tipoObra',
-				  value: 'Indefinido',
+				  value: 'IN',
 			      source: [
-						{value: 'Indefinido', text: 'Indefinido'},
-						{value: 'P&uacute;blica', text: 'P&uacute;blica'},
-			            {value: 'Privada', text: 'Privada'},
-			            {value: 'Contrataci&oacute;n directa', text: 'Contrataci&oacute;n directa'}
+						{value: 'IN', text: 'Indefinido'},
+						{value: 'PB', text: 'Publica'},
+			            {value: 'PV', text: 'Privada'},
+			            {value: 'CD', text: 'Contratacion directa'}
 			        ]
 			    });    
 			  
 			  $('#lic-estadoObra').editable({
 				  name: 'estadoObra',
-				  value: 'Sin iniciar',
+				  value: 'SI',
 			      source: [
-					    {value: 'Sin iniciar', text: 'Sin iniciar'},
-			            {value: 'En curso', text: 'En curso'},
-			            {value: 'Interrumpida', text: 'Interrumpida'},
-			            {value: 'Finalizada', text: 'Finalizada'}
+					    {value: 'SI', text: 'Sin iniciar'},
+			            {value: 'EC', text: 'En curso'},
+			            {value: 'IN', text: 'Interrumpida'},
+			            {value: 'FN', text: 'Finalizada'}
 			        ]
 			  });  
 			  
@@ -386,13 +392,13 @@
 				  }
 			  });
 			  
-			  $("#lic-empresaEmail").editable({	
-				  name: 'empresaEmail',
-				  emptytext:'Vac&iacute;o',
-				  ajaxOptions: {
-				        type: 'put'
-				  }
-			  });
+// 			  $("#lic-empresaEmail").editable({	
+// 				  name: 'empresaEmail',
+// 				  emptytext:'Vac&iacute;o',
+// 				  ajaxOptions: {
+// 				        type: 'put'
+// 				  }
+// 			  });
 			  
 			  $("#lic-representanteNombre").editable({			
 				  name: 'representanteNombre',
@@ -410,13 +416,13 @@
 				  }
 			  });
 			  
-			  $("#lic-representanteEmail").editable({		
-				  name: 'representanteEmail',
-				  emptytext:'Vac&iacute;o',
-				  ajaxOptions: {
-				        type: 'put'
-				  }
-			  });
+// 			  $("#lic-representanteEmail").editable({		
+// 				  name: 'representanteEmail',
+// 				  emptytext:'Vac&iacute;o',
+// 				  ajaxOptions: {
+// 				        type: 'put'
+// 				  }
+// 			  });
 			 
 			  
 			  $("#lic-presupuestoAdjudicado").editable({	
@@ -533,8 +539,9 @@
 			
 			  
 			  //--RESET Form Licitacion 
-			  $('#reset-btn').click(function() {
-				  resetLicitacionValues();
+			  $('#btn-reset').click(function() {
+// 				 if( $('#btn-update').is(":disabled") == false )
+				  	resetLicitacionValues();
 				});
 			  
 			  /*******************************************/
@@ -644,11 +651,38 @@
 				});
 			  	
 			  	
+				$('#btn-save-repair').click(function() {						
+								
+					var $form = $("#repairForm");
+					var data = 'issueID='+ idIssue + '&userID='+ 'coripel' + '&repairForm='+ $form.serialize();
+					
+					console.log(data);
+				
+					$.ajax({
+        			    url: "./saveRepairInfo.html",
+				 		type: "POST",	
+				 		data: data,
+				 		dataType: "json",									 
+				        success: function(data){		
+				        	if(data.result){				
+				        		
+				        			bootbox.alert(data.message); 
+				        		
+					    	   }
+					    	   
+					    	   else{
+					    		   bootbox.alert(data.message);		
+					    	   }
+	            		}
+        			});
+						  
+				});
+			  	
+			  	
 				
 				
 				$(function () {
-				    'use strict';
-				   
+				    'use strict';				   
 				    
 				    $('#btnAddFiles').click(function(e){
 				    	
@@ -990,8 +1024,7 @@
 				    		bootbox.alert("Ya ha votado por este reclamo.");	
 				    	}
 				    	
-				    	else{ 	
-				    	
+				    	else{ 					    	
 					    	
 					    	$.ajax({
 		        			    url: "./voteIssue.html",
@@ -1065,26 +1098,23 @@
       
       <div class="row">
       
-      	<ul class="user-action-nav">
-      		<li><i class="icon-eye-open"></i><span>${cantidadVisitas}</span></li>
-      		<li>
-      			<div class="arrows"><i class="icon-caret-up"></i><i class="icon-caret-down"></i></div>
-      			<div class="text">${cantidadVotos}</div>
-      		</li>
-      		<li><i class="icon-screenshot"></i><span>0</span></li>
-      		<li><i class="icon-comments-alt"></i><span>${cantidadComentarios}</span></li>
-      		<li><i class="icon-star"></i></li>
-      		<li><i class="icon-print"></i></li>
-      		<li><i class="icon-flag"></i></li>
-      		<li><i class="icon-share"></i>
-      	</ul>
+<!--       	<ul class="user-action-nav"> -->
+<%--       		<li><i class="icon-eye-open"></i><span>${cantidadVisitas}</span></li> --%>
+<!--       		<li> -->
+<!--       			<div class="arrows"><i class="icon-caret-up"></i><i class="icon-caret-down"></i></div> -->
+<%--       			<div class="text">${cantidadVotos}</div> --%>
+<!--       		</li> -->
+<!--       		<li><i class="icon-screenshot"></i><span>0</span></li> -->
+<%--       		<li><i class="icon-comments"></i><span>${cantidadComentarios}</span></li> --%>
+<!--       		<li><i class="icon-star"></i></li> -->
+<!--       		<li><i class="icon-print"></i></li> -->
+<!--       		<li><i class="icon-flag"></i></li> -->
+<!--       		<li><i class="icon-share"></i> -->
+<!--       	</ul> -->
       
       
-      	
-<!--   			  <li><a href="#" title="Vistas"><h4>Vistas (0)</h4></a></li> -->
-<!--   			   <li><a href="#" title="Votos"><h4>Votar (0)</h4></a></li> -->
-  			<div style="display:inline-block">	
-  		
+
+  			<div style="display:inline-block">	  		
   			  	${cantidadVisitas}   			  
   			  	<c:if test="${cantidadVisitas == 1}">visita</c:if>
   			  	<c:if test="${cantidadVisitas != 1}">visitas</c:if>
@@ -1329,16 +1359,22 @@
 			      </a>			     
 			    </div>
 			    <div id="collapseTwo" class="accordion-body collapse">
-			      <div class="accordion-inner">			      
+			      <div class="accordion-inner">		
 			      
-<!-- 			    <button id="reset-btn" class="btn btn-large btn-danger" style="margin-left:595px">Resetear valores</button> -->
+			      	
+			    
 					
 					<c:if test="${cantidadLicitacion eq 0}">
-						No hay informaci&oacute;n disponible.		 
+						No hay informaci&oacute;n disponible.	
+						 <button id="btn-add-repair"  href="#mdl-repair" data-toggle="modal" class="btn btn-success"><i class="icon-plus icon-large"></i>Agregar datos</button>	 
+						
+						 
 					</c:if>
 					
-					<c:if test="${cantidadLicitacion gt 0}">	
-						<table id="tbl-licitacion" class="table table-hover table-bordered table-striped">							
+					<c:if test="${cantidadLicitacion ne 0}">	
+						<button id="btn-reset" class="btn btn-danger" style="margin-left:595px"><i class="icon-eraser icon-large"></i>Resetear valores</button>
+						
+						<table id="tbl-licitacion" class="table table-hover ">							
 							 <tr>
 							    <th>Obra:</th>
 							    <td><a href="#" id="lic-obra" data-type="textarea">${obra}</a></td>						  
@@ -1375,7 +1411,7 @@
 							  	<td>
 							    	Raz&oacute;n social: <a href="#" id="lic-empresaNombre" data-type="text">${empresaNombre}</a>
 							    	<br>CUIT: <a href="#" id="lic-empresaCuit" data-type="text">${empresaCuit}</a>	
-							    	<br>Email: <a href="#" id="lic-empresaEmail" data-type="email">${empresaEmail}</a>
+<%-- 							    	<br>Email: <a href="#" id="lic-empresaEmail" data-type="email">${empresaEmail}</a> --%>
 							    </td>
 							 </tr>
 							 <tr>
@@ -1383,17 +1419,17 @@
 							      <td>
 							    	Nombre y Apellido: <a href="#" id="lic-representanteNombre" data-type="text">${representanteNombre}</a>
 							    	<br>DNI: <a href="#" id="lic-representanteDni" data-type="number">${representanteDni}</a>
-							    	<br>Email: <a href="#" id="lic-representanteEmail" data-type="email">${representanteEmail}</a>	
+<%-- 							    	<br>Email: <a href="#" id="lic-representanteEmail" data-type="email">${representanteEmail}</a>	 --%>
 							      </td>								   						  
 							 </tr>
 							 <tr>
-							    <th>Presupuesto Adjudicado:</th>
+							    <th>Presupuesto adjudicado:</th>
 							    <td>
 							    	$ <a href="#" id="lic-presupuestoAdjudicado" data-type="number">${presupuestoAdjudicado}</a>
 							    </td>
 							 </tr>
 							 <tr>	
-							    <th>Presupuesto Final:</th>
+							    <th>Presupuesto final:</th>
 							    <td>
 							    	$ <a href="#" id="lic-presupuestoFinal" data-type="number">${presupuestoFinal}</a>
 							    </td>					  
@@ -1635,6 +1671,110 @@
 		    		<i class="icon-remove icon-large"></i>&nbsp;&nbsp;&nbsp;Cerrar
 		    </button>	 
 	  	</div>
+	  	</form>
+	</div>
+	
+	
+	<div id="mdl-repair" class="modal hide fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="fileUploadLabel" aria-hidden="true">
+	  	<form id="repairForm">
+	  	<div class="modal-header">
+		    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+		    	
+		    	<h4 id="fileUploadLabel"> 
+			    	Reparaci&oacute;n de la incidencia
+		    	</h4>
+	  	</div>
+	  	
+	  		<div class="modal-body">
+	  		
+	  		<table id="tbl-repair">
+	  			<tr>
+	  				<td colspan="2">
+				    
+		    	   		<textarea id="obra" name="obra" placeholder="Descripci&oacute;n de la obra..."></textarea>	
+					</td>
+					<td>	    	   		
+	    	   			<select id="tipoObra" name="tipoObra">		    	   			
+	    	   				<option selected="selected">Tipo de licitaci&oacute;n</option>
+	    	   				<option value="PB">Publica</option>
+	    	   				<option value="PV">Privada</option>
+	    	   				<option value="CD">Contratacion directa</option>	    	   	
+				 		</select>		
+				 		<select id="estadoObra" name="estadoObra">		    	   	
+				 			<option selected="selected">Estado de la obra</option>		
+	    	   				<option value="SI">Sin iniciar</option>
+	    	   				<option value="EC">En curso</option>
+	    	   				<option value="IN">Interrumpida</option>
+	    	   				<option value="FN">Finalizada</option>
+	    	   				<option value="CN">Cancelada</option>
+				 		</select>		
+				 	</td>					
+	  			</tr>	  			
+	  			<tr>	  				
+	  				<td>	  					
+	  					<input type="text" id="nroLicitacion" name="nroLicitacion" placeholder="N&ordm de Licitaci&oacute;n"/>		 
+				 		<input type="text" id="nroExpediente" name="nroExpediente" placeholder="N&ordm de de Expediente"/>				    	   		
+					</td>					
+					<td>
+						<input type="text" id="unidadEjecutora" name="unidadEjecutora" placeholder="Unidad ejecutora"/>	
+		    	   		<input type="text" id="unidadFinanciacion" name="unidadFinanciacion" placeholder="Unidad de financiaci&oacute;n"/>		    	   	
+		    	   	
+				 	</td>
+				 	<td>
+				 		<input type="text" id="valorPliego" name="valorPliego" placeholder="Valor del pliego (en $ argentinos)"/>			 	
+				 	</td>		
+	  			</tr>
+	  			<tr><td colspan="3"><hr></td></tr>
+	  			
+	  			<tr>
+	  				<td>
+	  					<label>Empresa contratada</label>
+	  					<input type="text" id="empresaNombre" name="empresaNombre" placeholder="Raz&oacute;n social"/>	
+	  					<input type="text" id="empresaCuit" name="empresaCuit" placeholder="CUIT"/>	
+	  				</td>
+	  				<td>
+	  					<label>Representante t&eacute;cnico</label>
+	  					<input type="text" id="representanteNombre" name="representanteNombre" placeholder="Nombre(s) y Apellido(s)"/>	
+	  					<input type="text" id="representanteDni" name="representanteDni" placeholder="DNI"/>	
+	  				</td>
+	  				<td>
+					</td>
+	  			</tr>
+	  				
+	  			<tr><td colspan="3"><hr></td></tr>
+	  			<tr>
+	  				<td>
+				    	<label>Estimaci&oacute;n</label>
+		    	   		<input type="text" id="presupuestoAdjudicado" name="presupuestoAdjudicado" placeholder="Presupuesto adjudicado (en $ argentinos)"/>		
+<!-- 		    	   		<input type="text" id="fechaEstimadaInicio" name="fechaEstimadaInicio" placeholder="Fecha de inicio"/> 		    	   -->
+<!-- 		    	   		<input type="text" id="fechaEstimadaFin" name="fechaEstimadaFin" placeholder="Fecha de finalizaci&oacute;n"/>	 -->
+		    	   	    	   	 
+					</td>	
+					<td>
+				    	<label>Ejecuci&oacute;n</label>
+		    	   		<input type="text" id="presupuestoAdjudicado" name="presupuestoAdjudicado" placeholder="Presupuesto final (en $ argentinos)"/>	  	 
+<!-- 		    	   		<input type="text" id="fechaRealInicio" name="fechaRealInicio" placeholder="Fecha real de inicio"/>		    	 -->
+<!-- 		    	   		<input type="text" id="fechaRealFin" name="fechaRealFin" placeholder="Fecha real de finalizaci&oacute;n"/>	 -->
+		    	   			    	   	 
+					</td>	
+					<td>
+						<input type="text" id="plazoEjecucionEnDias" name="plazoEjecucionEnDias" placeholder="Plazo de ejecuci&oacute;n (en d&iacute;as)"/>			 		
+					</td>								
+	  			</tr>		
+	  				
+	  		
+	  		</table>
+	    	
+								
+			</div>
+		  	<div class="modal-footer"> 	
+		  		<button class="btn btn-info" id="btn-save-repair">
+			    	<i class="icon-ok icon-large"></i>Guardar
+			    </button>  			  	
+		  		<button class="btn" data-dismiss="modal" aria-hidden="true">
+			    	<i class="icon-remove icon-large"></i>Cerrar
+			    </button>	 
+		  	</div>
 	  	</form>
 	</div>
 	

@@ -257,8 +257,8 @@
 										      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
 										      </i>
 										    </span>
-												</div>  											
-											</div>		
+										</div>  											
+									</div>		
 									<div style="margin: 0 auto; border: 0px solid #000; width:210px;">					
 										<span class="span" style="margin-left:0; margin-right:10px; width:50px; border:0px solid #000; height:30px; line-height:30px; font-size:12px;text-align:right">Hasta:</span>
 										<div id="to-datepicker" class="input-append">
@@ -267,9 +267,9 @@
 										      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
 										      </i>
 										    </span>
-												</div>
-											</div>	
-											<small><i class="icon-info-sign"></i>&nbsp; Haga clic sobre el ícono del Calendario para seleccionar las fechas.</small>									
+										</div>
+									</div>	
+									<small><i class="icon-info-sign"></i>&nbsp; Haga clic sobre el ícono del Calendario para seleccionar las fechas.</small>									
 			    	   			</td>						    	   			
 			    	   			<td>
 									<label for="status"><i class="icon-double-angle-right"></i>&nbsp;Estado del reclamo</label>	
