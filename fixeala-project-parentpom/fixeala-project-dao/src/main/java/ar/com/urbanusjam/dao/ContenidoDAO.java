@@ -5,19 +5,21 @@ import java.util.Collection;
 import java.util.List;
 
 import ar.com.urbanusjam.dao.utils.GenericDAO;
-import ar.com.urbanusjam.entity.annotations.Contenido;
+import ar.com.urbanusjam.entity.annotations.MediaContent;
 
-public interface ContenidoDAO extends GenericDAO<Contenido, Serializable> {
+public interface ContenidoDAO extends GenericDAO<MediaContent, Serializable> {
 	
-	public Contenido findContenidoById(Long idContenido);   
+	public MediaContent findContenidoById(Long idContenido);   
 	
-	public Contenido findUserProfilePic(Long idUser); 
+	public MediaContent findUserProfilePic(Long idUser); 
 	
-	public Contenido findContenidoByContenidoAndIssue(Long idContenido, Long idIssue);   
+	public MediaContent findContenidoByContenidoAndIssue(Long idContenido, Long idIssue);   
 	
-	public List<Contenido> findContenidosByIssue(Long idIssue);	
+	public List<MediaContent> findContenidosByIssue(Long idIssue);	
 	
-	public void deleteContenidosByIssue(Collection<Contenido> contenidos, Long idIssue);
+	public void deleteContenidosByIssue(Collection<MediaContent> contenidos, Long idIssue);
+	
+	public void deleteContenido(MediaContent contenido);
 	
 	public boolean existe(Long idContenido);
 	

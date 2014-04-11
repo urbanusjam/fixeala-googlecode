@@ -651,7 +651,7 @@
 				});
 			  	
 			  	
-				$('#btn-save-repair').click(function() {						
+				$('#btn-save-repair').click(function(e) {						
 								
 					var $form = $("#repairForm");
 					var data = 'issueID='+ idIssue + '&userID='+ 'coripel' + '&repairForm='+ $form.serialize();
@@ -661,21 +661,20 @@
 					$.ajax({
         			    url: "./saveRepairInfo.html",
 				 		type: "POST",	
-				 		data: data,
-				 		dataType: "json",									 
+				 		data: data,				 								 
 				        success: function(data){		
 				        	if(data.result){				
 				        		
-				        			bootbox.alert(data.message); 
-				        		
-					    	   }
-					    	   
-					    	   else{
+			        			bootbox.alert(data.message); 
+	            			}
+				        	 else{
 					    		   bootbox.alert(data.message);		
 					    	   }
-	            		}
-        			});
+				        }
+        				
+					
 						  
+					});
 				});
 			  	
 			  	
@@ -1007,8 +1006,7 @@
 			    	if(thumb.hasClass('btn disabled'))
 			    		e.preventDefault();
 			    	
-			    	else{
-			    		
+			    	else {
 			    		
 				    	var voteValue;
 				    	var voteUp = false;
@@ -1695,13 +1693,13 @@
 					</td>
 					<td>	    	   		
 	    	   			<select id="tipoObra" name="tipoObra">		    	   			
-	    	   				<option selected="selected">Tipo de licitaci&oacute;n</option>
+	    	   				<option value="NONE" selected="selected">Tipo de licitaci&oacute;n</option>
 	    	   				<option value="PB">Publica</option>
 	    	   				<option value="PV">Privada</option>
 	    	   				<option value="CD">Contratacion directa</option>	    	   	
 				 		</select>		
 				 		<select id="estadoObra" name="estadoObra">		    	   	
-				 			<option selected="selected">Estado de la obra</option>		
+				 			<option value="NONE" selected="selected">Estado de la obra</option>		
 	    	   				<option value="SI">Sin iniciar</option>
 	    	   				<option value="EC">En curso</option>
 	    	   				<option value="IN">Interrumpida</option>
@@ -1717,7 +1715,7 @@
 					</td>					
 					<td>
 						<input type="text" id="unidadEjecutora" name="unidadEjecutora" placeholder="Unidad ejecutora"/>	
-		    	   		<input type="text" id="unidadFinanciacion" name="unidadFinanciacion" placeholder="Unidad de financiaci&oacute;n"/>		    	   	
+		    	   		<input type="text" id="unidadFinanciamiento" name="unidadFinanciamiento" placeholder="Unidad de financiamiento"/>		    	   	
 		    	   	
 				 	</td>
 				 	<td>
@@ -1752,13 +1750,14 @@
 					</td>	
 					<td>
 				    	<label>Ejecuci&oacute;n</label>
-		    	   		<input type="text" id="presupuestoAdjudicado" name="presupuestoAdjudicado" placeholder="Presupuesto final (en $ argentinos)"/>	  	 
+		    	   		<input type="text" id="presupuestoFinal" name="presupuestoFinal" placeholder="Presupuesto final (en $ argentinos)"/>	
+		    	   		<input type="text" id="plazoEjecucionEnDias" name="plazoEjecucionEnDias" placeholder="Plazo (en d&iacute;as)"/>			  	 
 <!-- 		    	   		<input type="text" id="fechaRealInicio" name="fechaRealInicio" placeholder="Fecha real de inicio"/>		    	 -->
 <!-- 		    	   		<input type="text" id="fechaRealFin" name="fechaRealFin" placeholder="Fecha real de finalizaci&oacute;n"/>	 -->
 		    	   			    	   	 
 					</td>	
 					<td>
-						<input type="text" id="plazoEjecucionEnDias" name="plazoEjecucionEnDias" placeholder="Plazo de ejecuci&oacute;n (en d&iacute;as)"/>			 		
+						 		
 					</td>								
 	  			</tr>		
 	  				

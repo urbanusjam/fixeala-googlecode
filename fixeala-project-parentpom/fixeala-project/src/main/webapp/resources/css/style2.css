@@ -14,7 +14,7 @@ html {
 	/* prevents scrollbar from repositioning web page */
 }
 
-
+button.btn { font-size: 13px; }
 
 input#search { z-index:2; } /* evita que el tooltip quede tapado por el campo de busqueda */
 
@@ -759,6 +759,15 @@ div[data-role="editor-toolbar"] {
 	overflow:hidden;
 }
 
+#mdl-repair {width:800px;}
+#mdl-repair	.modal-body {
+	max-height: 550px; 
+	overflow:hidden;
+}
+#repairForm textarea { width: 480px; height: 100px; }
+#tbl-repair { width: 100%; border: 1px solid red;}
+#tbl-repair td { vertical-align: top; }
+
 #mdl-fileupload { 	height: auto; margin-top: -30px;}
 
 
@@ -829,9 +838,10 @@ div[data-role="editor-toolbar"] {
 #tbl-issue th { width: 170px; vertical-align: middle; }
 #tbl-issue td { height: 15px; }
 
-#tbl-licitacion { width: 700px; margin:0 auto; margin-top: 20px; }
-#tbl-licitacion th { width: 200px; height: 30px; vertical-align: middle; }
-#tbl-licitacion td { height: 30px; }
+#tbl-licitacion { width: 700px; margin:0 auto; margin-top: 20px; border: none; }
+#tbl-licitacion th { width: 200px; vertical-align: middle; }
+#tbl-licitacion td { height: 15px; }
+
 
 .issue-textarea{height:80px; width:290px;}
 .licitacion-textarea{height:80px; width:300px;}
@@ -1173,7 +1183,7 @@ a.no-hover { text-decoration: none; color: #000;}
 
 
 .user-action-nav  { 
-/* 	width: auto;  */
+	width: 100%; 
 	border: 0px solid #000;  
 	list-style-type:none;
 	margin:0 auto;
@@ -1183,19 +1193,22 @@ a.no-hover { text-decoration: none; color: #000;}
 .user-action-nav  li {
 	display: inline-block; 
 	height: 50px; 
-	width: 105px; 
+	width: 106px; 
 	line-height: 50px;
 	text-align: center; 	
-	border-right: 1px solid #ccc;
-	font-size: 28px;		
+/* 	border-right: 1px solid #fff; */
+	font-size: 26px;		
 	vertical-align:middle;
-	 }
+/* 	color: #676767; */
+	background-color: #EEEEEE;
+	}
+	
 
 .user-action-nav  li:last-child { border: none; } 
-.user-action-nav  li i[class*="icon"]  { margin-right: 5px;}
-.user-action-nav  li div.arrows { border: 0px solid blue;  width: 45px; float:left; height: 100%; }
-.user-action-nav  li div.arrows i[class*="icon"]  { display:block; height: 20px;  }
-.user-action-nav  li div.text { float:right; width: 45px; border: 0px solid pink; height: 100%;  }
+/* .user-action-nav  li i[class*="icon"]  { margin-right: 10px;} */
+.user-action-nav  li div.arrows { border: 0px solid blue;  width: 55px; float:left; height: 100%;  }
+.user-action-nav  li div.arrows i[class*="icon"]  { display:block; height: 20px; width:15px; }
+.user-action-nav  li div.text { float:right; width: 45px; border: 0px solid pink; height: 100%; text-align: left;  }
 
 
 
