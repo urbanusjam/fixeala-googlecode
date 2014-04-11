@@ -1,9 +1,9 @@
 package ar.com.urbanusjam.dao;
 
-import ar.com.urbanusjam.entity.annotations.IssueLicitacion;
+import ar.com.urbanusjam.entity.annotations.IssueRepair;
 
 public interface IssueLicitacionDAO {
 	
-	public void saveOrUpdateLicitacion(IssueLicitacion licitacion);
+	public void saveOrUpdateLicitacion(IssueRepair licitacion);
 
 }

@@ -595,40 +595,35 @@ public class IssueController {
 	public @ResponseBody AlertStatus saveRepairInfo(@RequestParam("issueID") String issueID, @RequestParam("userID") String userID, 
 			@ModelAttribute("repairForm") IssueRepairDTO licitacion, HttpServletRequest request) throws ParseException{
 		
-		try {			
-				User user =  getCurrentUser(SecurityContextHolder.getContext().getAuthentication());
-				UserDetails userDB = userService.loadUserByUsername(user.getUsername());		
+		try {	
+						
+				licitacion.setNroReclamo(String.valueOf(issueID));
 				
-				if(userDB == null){
-					return new AlertStatus(false, "Debe estar logueado para ingresar un nuevo reclamo.");
-				}						
+				IssueDTO issue = issueService.getIssueById(issueID);
+				issue.setLicitacion(licitacion);
+				
+				
+				IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
+				revision.setFecha(new Date());
+				revision.setUsername(userID);			
+				revision.setNroReclamo(Long.valueOf(issueID));			
+				revision.setOperacion(Operation.UPDATE);			
+				revision.setMotivo(Messages.ISSUE_UPDATE_FIELDS + " el reclamo.");			
+				revision.setEstado(issue.getStatus());
+				revision.setObservaciones(Messages.ISSUE_UPDATE_OBS);
+				
+				issue.setLastUpdateDate(revision.getFecha());
+				issueService.addHistoryUpdateComment(revision);	
+//				issueService.updateIssue(issue);
 			
-				//user is logged-in
-				else{
-									
-					
-					licitacion.setNroReclamo(String.valueOf(issueID));
-					
-					IssueDTO issue = issueService.getIssueById(issueID);
-					
-					
-					IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
-					revision.setFecha(new Date());
-					revision.setUsername(userID);			
-					revision.setNroReclamo(Long.valueOf(issueID));			
-					revision.setOperacion(Operation.UPDATE);			
-					revision.setMotivo(Messages.ISSUE_UPDATE_FIELDS + " el reclamo.");			
-					revision.setEstado(issue.getStatus());
-					revision.setObservaciones(Messages.ISSUE_UPDATE_OBS);
-					
-					issue.setLastUpdateDate(revision.getFecha());
-					issueService.addHistoryUpdateComment(revision);					
-				
-					return new AlertStatus(true, "El reclamo ha sido actualizado.");			
-			}
+				return new AlertStatus(true, "El reclamo ha sido actualizado.");			
+			
 		}			
 		catch(AccessDeniedException e){
 			return new AlertStatus(false, "Debe estar logueado para ingresar un nuevo reclamo.");
+		}
+		catch(Exception e){
+			return new AlertStatus(false, "No se pudo guardar la información. Intente de nuevo.");
 		}
 	
 	}

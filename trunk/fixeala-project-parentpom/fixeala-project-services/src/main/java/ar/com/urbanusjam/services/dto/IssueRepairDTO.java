@@ -22,7 +22,7 @@ public class IssueRepairDTO implements Serializable {
 	private String representanteTecnico;
 	private String representanteNombre;
 	private Integer representanteDni;
-	private int plazoEjecucionEnDias;
+	private Integer plazoEjecucionEnDias;
 	private Float presupuestoAdjudicado;
 	private Float presupuestoFinal;
 //	@DateTimeFormat(pattern = "dd-MM-yyyy")
@@ -35,6 +35,8 @@ public class IssueRepairDTO implements Serializable {
 	private Date fechaRealFin;
 	private String tipoObra;
 	private String estadoObra;
+	
+	public IssueRepairDTO(){}
 	
 	
 	public String getObra() {
@@ -151,11 +153,11 @@ public class IssueRepairDTO implements Serializable {
 		this.representanteDni = representanteDni;
 	}
 
-	public int getPlazoEjecucionEnDias() {
+	public Integer getPlazoEjecucionEnDias() {
 		return plazoEjecucionEnDias;
 	}
 	
-	public void setPlazoEjecucionEnDias(int plazoEjecucionEnDias) {
+	public void setPlazoEjecucionEnDias(Integer plazoEjecucionEnDias) {
 		this.plazoEjecucionEnDias = plazoEjecucionEnDias;
 	}
 	
