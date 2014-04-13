@@ -22,6 +22,7 @@ import ar.com.urbanusjam.dao.CommentDAO;
 import ar.com.urbanusjam.dao.IssueDAO;
 import ar.com.urbanusjam.dao.IssueFollowDAO;
 import ar.com.urbanusjam.dao.IssueHistorialRevisionDAO;
+import ar.com.urbanusjam.dao.IssueLicitacionDAO;
 import ar.com.urbanusjam.dao.IssuePageViewDAO;
 import ar.com.urbanusjam.dao.IssueVoteDAO;
 import ar.com.urbanusjam.dao.TagDAO;
@@ -76,6 +77,7 @@ public class IssueServiceImpl implements IssueService {
 	private IssuePageViewDAO issuePageViewDAO;
 	private IssueVoteDAO issueVoteDAO;
 	private IssueHistorialRevisionDAO issueUpdateDAO;
+	private IssueLicitacionDAO issueRepairDAO;
 	
 	
 	public void setUserService(UserService userService) {
@@ -86,6 +88,10 @@ public class IssueServiceImpl implements IssueService {
 		this.contenidoService = contenidoService;
 	}
 	
+	public void setIssueRepairDAO(IssueLicitacionDAO issueRepairDAO) {
+		this.issueRepairDAO = issueRepairDAO;
+	}
+
 	public void setIssueDAO(IssueDAO issueDAO) {
 		this.issueDAO = issueDAO;
 	}
@@ -903,8 +909,29 @@ public class IssueServiceImpl implements IssueService {
 	}
 
 	@Override
-	public void addHistoryUpdateComment(IssueUpdateHistoryDTO update) {
+	public void addHistoryUpdate(IssueUpdateHistoryDTO update) {
 		issueUpdateDAO.saveHistorial(convertTo(update));		
+	}
+
+	@Override
+	public void addRepairInfo(IssueRepairDTO licitacion) {
+		issueRepairDAO.saveLicitacion(convertTo(licitacion));
+	}
+
+	@Override
+	public void updateRepairInfo(IssueRepairDTO licitacion) {
+		issueRepairDAO.updateLicitacion(convertTo(licitacion));
+	}
+
+	@Override
+	public void deleteRepairInfo(String issueID) {
+		issueRepairDAO.deleteLicitacion(Long.valueOf(issueID));
+	}
+
+	@Override
+	public IssueRepairDTO getRepairInfoByIssue(String issueID) {
+		IssueRepair licitacion = issueRepairDAO.getLicitacionByIssue(Long.valueOf(issueID));
+		return convertTo(licitacion);
 	}
 
 	

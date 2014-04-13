@@ -98,6 +98,7 @@ public class IssueController {
 		String issueID = parts[0];
 		
 		try{
+				request.getSession().setAttribute("issueID", issueID);
 			 	issue = issueService.getIssueById(issueID);	
 			 	
 			 	model.addAttribute("titulo", issue.getTitle());
@@ -169,6 +170,7 @@ public class IssueController {
 				model.addAttribute("cantidadContenidos", contenidos.size());
 				model.addAttribute("cantidadRevisiones", issue.getHistorial().size());
 				model.addAttribute("cantidadLicitacion", issue.getLicitacion() != null ? 1 : 0);
+				model.addAttribute("estadoLicitacion", issue.getLicitacion() != null ? issue.getLicitacion().getEstadoObra() : "Sin datos");
 				model.addAttribute("cantidadReclamosSimilares", 0);
 				model.addAttribute("cantidadArchivos", 0);
 				model.addAttribute("cantidadComentarios", issue.getComentarios().size());	
@@ -312,7 +314,7 @@ public class IssueController {
 //					issue.getHistorial().add(revision);			
 //					issueService.updateIssue(issue); NO ANDA BIEN > duplica los registros del historial
 					
-					issueService.addHistoryUpdateComment(revision);
+					issueService.addHistoryUpdate(revision);
 					
 					return response;
 					
@@ -382,7 +384,7 @@ public class IssueController {
 			revision.setObservaciones(Messages.ISSUE_CREATE_OBS);					
 			revision.setEstado(issue.getStatus());					
 			
-			issueService.addHistoryUpdateComment(revision);			
+			issueService.addHistoryUpdate(revision);			
 		
 			List<MediaContentDTO> contenidos = new ArrayList<MediaContentDTO>();
 			contenidos = issue.getContenidos();
@@ -491,7 +493,7 @@ public class IssueController {
 	
 	@RequestMapping(value="/issues/updateIssue", method = RequestMethod.POST)
 	public @ResponseBody AlertStatus doUpdatetIssue(@ModelAttribute("issue") IssueDTO issue, 
-			@ModelAttribute("licitacion") IssueRepairDTO licitacion, HttpServletRequest request) throws ParseException{
+			HttpServletRequest request) throws ParseException{
 		
 		try {			
 				User user =  getCurrentUser(SecurityContextHolder.getContext().getAuthentication());
@@ -506,7 +508,6 @@ public class IssueController {
 									
 					//se actualizan los datos del reclamo
 					
-					//se actualizan los datos de la licitacion
 					
 					//se actualiza el historial de revisiones
 			
@@ -533,15 +534,6 @@ public class IssueController {
 				
 					
 					issue.setTags(Arrays.asList(tagsArray)); 
-					
-					if(licitacion.getNroLicitacion() == null || licitacion.getNroLicitacion() == "")
-						licitacion = null;
-					
-					else{
-						licitacion.setNroReclamo(String.valueOf(issue.getId()));
-					}
-					
-					issue.setLicitacion(licitacion);
 					
 					IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
 					revision.setFecha(new Date());
@@ -592,16 +584,17 @@ public class IssueController {
 	
 	
 	@RequestMapping(value="/issues/saveRepairInfo", method = RequestMethod.POST)
-	public @ResponseBody AlertStatus saveRepairInfo(@RequestParam("issueID") String issueID, @RequestParam("userID") String userID, 
-			@ModelAttribute("repairForm") IssueRepairDTO licitacion, HttpServletRequest request) throws ParseException{
+	public @ResponseBody AlertStatus saveRepairInfo(@RequestParam("issueID") String issueID, 
+			@RequestParam("userID") String userID, 
+			@ModelAttribute("repairForm") IssueRepairDTO licitacionDTO, 
+			Model model, HttpServletRequest request) throws ParseException{
 		
 		try {	
 						
-				licitacion.setNroReclamo(String.valueOf(issueID));
+				licitacionDTO.setNroReclamo(String.valueOf(issueID));
 				
 				IssueDTO issue = issueService.getIssueById(issueID);
-				issue.setLicitacion(licitacion);
-				
+				issue.setLicitacion(licitacionDTO);
 				
 				IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
 				revision.setFecha(new Date());
@@ -613,19 +606,83 @@ public class IssueController {
 				revision.setObservaciones(Messages.ISSUE_UPDATE_OBS);
 				
 				issue.setLastUpdateDate(revision.getFecha());
-				issueService.addHistoryUpdateComment(revision);	
-//				issueService.updateIssue(issue);
-			
-				return new AlertStatus(true, "El reclamo ha sido actualizado.");			
+				
+				issueService.addRepairInfo(licitacionDTO);
+				issueService.addHistoryUpdate(revision);	
+				
+				return new AlertStatus(true, "La informacion ha sido guardada.");			
 			
 		}			
 		catch(AccessDeniedException e){
 			return new AlertStatus(false, "Debe estar logueado para ingresar un nuevo reclamo.");
 		}
 		catch(Exception e){
-			return new AlertStatus(false, "No se pudo guardar la información. Intente de nuevo.");
+			return new AlertStatus(false, "No se pudo guardar la informacion. Intente de nuevo.");
 		}
+	}
 	
+	@RequestMapping(value="/issues/updateRepairInfo", method = RequestMethod.POST)
+	public @ResponseBody AlertStatus updateRepairInfo(@ModelAttribute("licitacion") IssueRepairDTO licitacionDTO, 
+			Model model, HttpServletRequest request) throws ParseException{
+		
+		try {	
+			  	String issueID = (String) request.getSession().getAttribute("issueID");
+				licitacionDTO.setNroReclamo(issueID);
+				IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
+				revision.setFecha(new Date());
+				revision.setUsername("coripel");			
+				revision.setNroReclamo(Long.valueOf(issueID));			
+				revision.setOperacion(Operation.UPDATE);			
+				revision.setMotivo(Messages.ISSUE_UPDATE_FIELDS + " el reclamo.");			
+				revision.setEstado("ESTADO");
+				revision.setObservaciones(Messages.ISSUE_UPDATE_OBS);
+				
+				issueService.updateRepairInfo(licitacionDTO);
+				issueService.addHistoryUpdate(revision);	
+				
+				return new AlertStatus(true, "La informacion ha sido actualizada.");			
+			
+		}			
+		catch(AccessDeniedException e){
+			return new AlertStatus(false, "Debe estar logueado para ingresar un nuevo reclamo.");
+		}
+		catch(Exception e){
+			return new AlertStatus(false, "No se pudo actualizar la informacion. Intente de nuevo.");
+		}
+	}
+	
+	@RequestMapping(value="/issues/deleteRepairInfo", method = RequestMethod.POST)
+	public @ResponseBody AlertStatus deleteRepairInfo(@RequestParam("issueID") String issueID, 
+			@RequestParam("userID") String userID,
+			Model model, HttpServletRequest request) throws ParseException{
+		
+		try {	
+				
+				IssueDTO issue = issueService.getIssueById(issueID);
+				
+				IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
+				revision.setFecha(new Date());
+				revision.setUsername(userID);			
+				revision.setNroReclamo(Long.valueOf(issueID));			
+				revision.setOperacion(Operation.UPDATE);			
+				revision.setMotivo(Messages.ISSUE_UPDATE_FIELDS + " el reclamo.");			
+				revision.setEstado(issue.getStatus());
+				revision.setObservaciones(Messages.ISSUE_UPDATE_OBS);
+				
+				issue.setLastUpdateDate(revision.getFecha());
+				
+				issueService.deleteRepairInfo(issueID);
+				issueService.addHistoryUpdate(revision);	
+				
+				return new AlertStatus(true, "La informacion ha sido eliminada.");			
+			
+		}			
+		catch(AccessDeniedException e){
+			return new AlertStatus(false, "Debe estar logueado para ingresar un nuevo reclamo.");
+		}
+		catch(Exception e){
+			return new AlertStatus(false, "No se pudo eliminar la informacion. Intente de nuevo.");
+		}
 	}
 	
 	@RequestMapping(value="/issues/assignUser", method = RequestMethod.POST)
@@ -765,7 +822,7 @@ public class IssueController {
 //				issue.getHistorial().add(revision);
 				issue.setAssignedArea(issueService.getAreaByName("Comuna 1"));
 				
-				issueService.addHistoryUpdateComment(revision);				
+				issueService.addHistoryUpdate(revision);				
 //				issueService.updateIssue(issue);
 				
 				List<CommentDTO> comments = issueService.getCommentsByIssue(issueID);

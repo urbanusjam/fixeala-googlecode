@@ -14,7 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import ar.com.urbanusjam.dao.ContenidoDAO;
-import ar.com.urbanusjam.entity.annotations.Contenido;
+import ar.com.urbanusjam.entity.annotations.MediaContent;
 import ar.com.urbanusjam.entity.annotations.Issue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -26,11 +26,11 @@ public class ContenidoDAOTest {
 	
 	private Long idIssue;
 	private Issue issue;
-	private Contenido contenidoA;
-	private Contenido contenidoB;
-	private Contenido contenidoC;
-	private List<Contenido> contenidos;
-	private List<Contenido> contenidosDB;
+	private MediaContent contenidoA;
+	private MediaContent contenidoB;
+	private MediaContent contenidoC;
+	private List<MediaContent> contenidos;
+	private List<MediaContent> contenidosDB;
 	
 	@Before
 	public void init(){	
@@ -40,7 +40,7 @@ public class ContenidoDAOTest {
 		issue = new Issue();
 		issue.setId(idIssue);
 			
-		contenidoA = new Contenido();	
+		contenidoA = new MediaContent();	
 		contenidoA.setId(new Long(4));
 		contenidoA.setAlto(1024);
 		contenidoA.setAncho(758);			
@@ -50,7 +50,7 @@ public class ContenidoDAOTest {
 		contenidoA.setTipo("png");
 		contenidoA.setIssue(issue);
 		
-		contenidoB = new Contenido();	
+		contenidoB = new MediaContent();	
 		contenidoA.setId(new Long(5));
 		contenidoB.setAlto(640);
 		contenidoB.setAncho(480);			
@@ -60,7 +60,7 @@ public class ContenidoDAOTest {
 		contenidoB.setTipo("gif");
 		contenidoB.setIssue(issue);
 		
-		contenidoC = new Contenido();	
+		contenidoC = new MediaContent();	
 		contenidoA.setId(new Long(6));
 		contenidoC.setAlto(800);
 		contenidoC.setAncho(600);			
@@ -70,20 +70,20 @@ public class ContenidoDAOTest {
 		contenidoC.setTipo("jpeg");
 		contenidoC.setIssue(issue);
 		
-		contenidos = new ArrayList<Contenido>();
+		contenidos = new ArrayList<MediaContent>();
 		contenidos.add(contenidoA);
 		contenidos.add(contenidoB);
 		contenidos.add(contenidoC);
 		
-		contenidosDB = new ArrayList<Contenido>();
+		contenidosDB = new ArrayList<MediaContent>();
 		contenidosDB = contenidoDAO.findContenidosByIssue(idIssue);
 		
 	}
 	
 	//@Test
-	public void findContenidosByIssue(){ 
+	public void findMediaContentsByIssue(){ 
 
-		List<Contenido> contenidos = new ArrayList<Contenido>();
+		List<MediaContent> contenidos = new ArrayList<MediaContent>();
 		Long idIssue = new Long(17324);
 		
 		contenidos = contenidoDAO.findContenidosByIssue(idIssue);
@@ -93,7 +93,7 @@ public class ContenidoDAOTest {
 	}
 	
 	@Test
-	public void saveContenidosTest(){		
+	public void saveMediaContentsTest(){		
 		
 		contenidoDAO.saveAll(contenidos);
 		
@@ -103,7 +103,7 @@ public class ContenidoDAOTest {
 	
 	//@Test
 	//@Rollback
-	public void deleteOneContenidoTest(){
+	public void deleteOneMediaContentTest(){
 		
 		contenidos.remove(2);
 		contenidos.remove(1);
@@ -116,7 +116,7 @@ public class ContenidoDAOTest {
 	}
 	
 	//@Test
-	public void deleteMultipleContenidosTest(){
+	public void deleteMultipleMediaContentsTest(){
 		
 		contenidos.remove(0);
 		
@@ -129,7 +129,7 @@ public class ContenidoDAOTest {
 	}
 	
 	//@Test
-	public void deleteAllContenidosTest(){
+	public void deleteAllMediaContentsTest(){
 		
 		int sizeBefore = contenidoDAO.findContenidosByIssue(idIssue).size();	
 		contenidoDAO.deleteContenidosByIssue(contenidosDB, idIssue);		

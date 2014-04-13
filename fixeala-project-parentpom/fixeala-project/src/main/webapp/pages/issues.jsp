@@ -107,7 +107,6 @@
 			getClosestMarkersByIssue(issueLocation);
 			
 			$('#btn-update').attr('disabled', true);
-			$('#btn-reset').attr('disabled', true);
 			
 			//default config
 			$.fn.editable.defaults.mode = 'popup';	
@@ -120,19 +119,28 @@
 			  '<button type="button" class="btn editable-cancel"><i class="icon-remove"></i></button>';     
 			
 			$('#btn-edit').addClass('notClicked');
+			$('#btn-update-repair').attr('disabled', true);
 			
 			//enable / disable
 		    $('#btn-edit').click(function() {
 		    	enableDisableFields();
 		    	if( $('#btn-update').is(":disabled") == true ){		    	
 					$('#btn-update').attr('disabled', false);
-		    		$('#btn-reset').attr('disabled', false);
 		    	}
-		    	else{
+		    	else
 		    		$('#btn-update').attr('disabled', true);
-		    		$('#btn-reset').attr('disabled', true);
+		    }); 
+			
+		    $('#btn-edit-repair').click(function() {
+		    	if( $('#btn-update-repair').is(":disabled") == true ){		    	
+					$('#btn-update-repair').attr('disabled', false);
 		    	}
-		    		
+		    	else
+		    		$('#btn-update').attr('disabled', true);
+		    	
+// 		    	if(!${isCommonUser})
+		    	$('#tbl-licitacion .editable').editable('toggleDisabled');
+		    	
 		    }); 
 			  
 		    function enableDisableFields(){
@@ -150,8 +158,7 @@
 		    	   $('#edit-tags').show();
 		       }
 		       
-			   if(!${isCommonUser})
-		       		$('#tbl-licitacion .editable').editable('toggleDisabled');
+			
 		    }
 	
 			  //--NON-EDITABLE FIELDS
@@ -332,23 +339,22 @@
 			  
 			  $('#lic-tipo').editable({
 				  name: 'tipoObra',
-				  value: 'IN',
+				  value: 'Publica',
 			      source: [
-						{value: 'IN', text: 'Indefinido'},
-						{value: 'PB', text: 'Publica'},
-			            {value: 'PV', text: 'Privada'},
-			            {value: 'CD', text: 'Contratacion directa'}
+						{value: 'Publica', text: 'Publica'},
+			            {value: 'Privada', text: 'Privada'},
+			            {value: 'Contratacion directa', text: 'Contratacion directa'}
 			        ]
 			    });    
 			  
 			  $('#lic-estadoObra').editable({
 				  name: 'estadoObra',
-				  value: 'SI',
+				  value: 'Sin iniciar',
 			      source: [
-					    {value: 'SI', text: 'Sin iniciar'},
-			            {value: 'EC', text: 'En curso'},
-			            {value: 'IN', text: 'Interrumpida'},
-			            {value: 'FN', text: 'Finalizada'}
+					    {value: 'Sin iniciar', text: 'Sin iniciar'},
+			            {value: 'En curso', text: 'En curso'},
+			            {value: 'Interrumpida', text: 'Interrumpida'},
+			            {value: 'Finalizada', text: 'Finalizada'}
 			        ]
 			  });  
 			  
@@ -577,7 +583,7 @@
 					  
 					  if(result){
 						  
-						  $('.editable').editable('submit', {
+						  $('#tbl-issue .editable').editable('submit', {
 							  
 						       url: './updateIssue.html', 
 						       ajaxOptions: {
@@ -651,33 +657,77 @@
 				});
 			  	
 			  	
-				$('#btn-save-repair').click(function(e) {						
-								
+				$('#btn-save-repair').click(function(e) {	
 					var $form = $("#repairForm");
-					var data = 'issueID='+ idIssue + '&userID='+ 'coripel' + '&repairForm='+ $form.serialize();
-					
-					console.log(data);
-				
+					var formData = 'issueID='+ idIssue + '&userID='+ 'coripel' + '&repairForm='+ $form.serialize();
 					$.ajax({
         			    url: "./saveRepairInfo.html",
 				 		type: "POST",	
-				 		data: data,				 								 
-				        success: function(data){		
-				        	if(data.result){				
-				        		
-			        			bootbox.alert(data.message); 
-	            			}
-				        	 else{
-					    		   bootbox.alert(data.message);		
-					    	   }
-				        }
-        				
+				 		data: formData,				 								 
+				        success: function(data){	
+				        	if(data.result){
+				        		$("#mdl-repair").modal('hide');
+// 			        			$('#collapseTwo').load(location.href + '#collapseTwo #tbl-licitacion'); 
+				        		window.location.reload();
+				        	}
+				        	else{
+				        		$("#mdl-repair").modal('hide');
+				        		bootbox.alert(data.message); 
+				        	}
+						}
+					});
+					return false; 
+				});
+				
+				$('#btn-update-repair').click(function(e) {	
+				
+					//var formData = 'issueID='+ idIssue + '&userID='+ 'coripel' + '&licitacion=' + $('#tbl-licitacion .editable').serialize() ;
 					
-						  
+					$('#tbl-licitacion .editable').editable('submit', {
+					
+					       url: './updateRepairInfo.html', 
+					       ajaxOptions: {
+					           dataType: 'json'
+					       },  				       
+					       success: function(data, config) {
+					    	   if(data.result){		
+					    		   bootbox.alert(data.message); 
+					    		   window.location.reload();	
+					    	   }						    	   
+					    	   else{
+					    		   bootbox.alert(data.message);		
+					    	   }						    	
+					       },
+					       error: function (response) {
+					           console.log(response);
+					       }
+
+					   });//editable 
+					   
+					
+					return false; 
+				});
+				
+				$('#btn-delete-repair').click(function(e) {		
+					 bootbox.confirm("&iquest;Confirma que desea eliminar los datos?", function(result){
+						  if(result){
+							  var formData = 'issueID='+ idIssue + '&userID=' + 'coripel'; //CAMBIAR
+								$.ajax({
+			        			    url: "./deleteRepairInfo.html",
+							 		type: "POST",	
+							 		data: formData,				 								 
+							        success: function(data){	
+							        	if(data.result){
+							        		window.location.reload();
+							        	}
+							        	else{
+							        		bootbox.alert(data.message); 
+							        	}
+									}
+								});
+						  }
 					});
 				});
-			  	
-			  	
 				
 				
 				$(function () {
@@ -1353,24 +1403,20 @@
 			  <div class="accordion-group">
 			    <div class="accordion-heading">
 			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-			        <h4><i class="icon-wrench icon-large"></i>REPARACI&Oacute;N (${cantidadLicitacion})</h4>
+			        <h4><i class="icon-wrench icon-large"></i>REPARACI&Oacute;N (${estadoLicitacion})</h4>
 			      </a>			     
 			    </div>
 			    <div id="collapseTwo" class="accordion-body collapse">
-			      <div class="accordion-inner">		
-			      
-			      	
-			    
-					
+			      <div class="accordion-inner">	
 					<c:if test="${cantidadLicitacion eq 0}">
 						No hay informaci&oacute;n disponible.	
 						 <button id="btn-add-repair"  href="#mdl-repair" data-toggle="modal" class="btn btn-success"><i class="icon-plus icon-large"></i>Agregar datos</button>	 
-						
-						 
 					</c:if>
-					
-					<c:if test="${cantidadLicitacion ne 0}">	
-						<button id="btn-reset" class="btn btn-danger" style="margin-left:595px"><i class="icon-eraser icon-large"></i>Resetear valores</button>
+					<c:if test="${cantidadLicitacion ne 0}">
+						<button id="btn-delete-repair" class="btn" title="Eliminar"><i class="icon-trash icon-large"></i></button>	
+						<button id="btn-edit-repair" class="btn btn-info" title="Editar"><i class="icon-pencil icon-large"></i></button>	
+						<button id="btn-update-repair" class="btn btn-success" title="Guardar"><i class="icon-ok icon-large"></i></button>	
+<!-- 						<button id="btn-reset-repair" class="btn btn-danger" title="Limpiar campos"><i class="icon-eraser icon-large"></i></button> -->
 						
 						<table id="tbl-licitacion" class="table table-hover ">							
 							 <tr>
@@ -1460,45 +1506,45 @@
 			  
 		
 			  <!-- 4 RECLAMOS SIMILARES -->
-			  <div class="accordion-group">
-			    <div class="accordion-heading">
-			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">
-			        <h4><i class="icon-pushpin icon-large"></i>RECLAMOS SIMILARES (${cantidadReclamosSimilares})</h4>
-			      </a>
-			    </div>
-			    <div id="collapseFour" class="accordion-body collapse">
-			      <div class="accordion-inner">
-			       	<div class="row-fluid">
-			            <ul class="thumbnails">
-			              <li class="span3">
-			                <div class="thumbnail">
-			                  <img style="width: 200px; height: 150px;" src="${pageContext.request.contextPath}/resources/images/nopicsmall.png" alt="">
-			                  <div class="caption">
-			                  	<h5>Thumbnail label</h5>		                   
-			                  </div>
-			                </div>
-			              </li>
-			              <li class="span3">
-			                <div class="thumbnail">
-			                  <img style="width: 200px; height: 150px;" src="${pageContext.request.contextPath}/resources/images/nopicsmall.png" alt="">
-			                  <div class="caption">
-			                     <h5>Thumbnail label</h5>		                   
-			                  </div>
-			                </div>
-			              </li>
-			              <li class="span3">
-			                <div class="thumbnail">
-			                 <img style="width: 200px; height: 150px;" src="${pageContext.request.contextPath}/resources/images/nopicsmall.png" alt="">
-			                  <div class="caption">
-			                      <h5>Thumbnail label</h5>		                  
-			                  </div>
-			                </div>
-			              </li>
-			            </ul>
-		        	</div>		   	
-			      </div>
-			    </div>
-			  </div>
+<!-- 			  <div class="accordion-group"> -->
+<!-- 			    <div class="accordion-heading"> -->
+<!-- 			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour"> -->
+<%-- 			        <h4><i class="icon-pushpin icon-large"></i>RECLAMOS SIMILARES (${cantidadReclamosSimilares})</h4> --%>
+<!-- 			      </a> -->
+<!-- 			    </div> -->
+<!-- 			    <div id="collapseFour" class="accordion-body collapse"> -->
+<!-- 			      <div class="accordion-inner"> -->
+<!-- 			       	<div class="row-fluid"> -->
+<!-- 			            <ul class="thumbnails"> -->
+<!-- 			              <li class="span3"> -->
+<!-- 			                <div class="thumbnail"> -->
+<%-- 			                  <img style="width: 200px; height: 150px;" src="${pageContext.request.contextPath}/resources/images/nopicsmall.png" alt=""> --%>
+<!-- 			                  <div class="caption"> -->
+<!-- 			                  	<h5>Thumbnail label</h5>		                    -->
+<!-- 			                  </div> -->
+<!-- 			                </div> -->
+<!-- 			              </li> -->
+<!-- 			              <li class="span3"> -->
+<!-- 			                <div class="thumbnail"> -->
+<%-- 			                  <img style="width: 200px; height: 150px;" src="${pageContext.request.contextPath}/resources/images/nopicsmall.png" alt=""> --%>
+<!-- 			                  <div class="caption"> -->
+<!-- 			                     <h5>Thumbnail label</h5>		                    -->
+<!-- 			                  </div> -->
+<!-- 			                </div> -->
+<!-- 			              </li> -->
+<!-- 			              <li class="span3"> -->
+<!-- 			                <div class="thumbnail"> -->
+<%-- 			                 <img style="width: 200px; height: 150px;" src="${pageContext.request.contextPath}/resources/images/nopicsmall.png" alt=""> --%>
+<!-- 			                  <div class="caption"> -->
+<!-- 			                      <h5>Thumbnail label</h5>		                   -->
+<!-- 			                  </div> -->
+<!-- 			                </div> -->
+<!-- 			              </li> -->
+<!-- 			            </ul> -->
+<!-- 		        	</div>		   	 -->
+<!-- 			      </div> -->
+<!-- 			    </div> -->
+<!-- 			  </div> -->
 			  			  
 			  <!-- 5 IMAGES & VIDEOS -->
 			  <div class="accordion-group">
@@ -1692,19 +1738,19 @@
 		    	   		<textarea id="obra" name="obra" placeholder="Descripci&oacute;n de la obra..."></textarea>	
 					</td>
 					<td>	    	   		
-	    	   			<select id="tipoObra" name="tipoObra">		    	   			
-	    	   				<option value="NONE" selected="selected">Tipo de licitaci&oacute;n</option>
-	    	   				<option value="PB">Publica</option>
-	    	   				<option value="PV">Privada</option>
-	    	   				<option value="CD">Contratacion directa</option>	    	   	
-				 		</select>		
-				 		<select id="estadoObra" name="estadoObra">		    	   	
-				 			<option value="NONE" selected="selected">Estado de la obra</option>		
-	    	   				<option value="SI">Sin iniciar</option>
-	    	   				<option value="EC">En curso</option>
-	    	   				<option value="IN">Interrumpida</option>
-	    	   				<option value="FN">Finalizada</option>
-	    	   				<option value="CN">Cancelada</option>
+						<label>Tipo</label>
+	    	   			<select id="tipoObra" name="tipoObra">		
+	    	   				<option value="Publica">Publica</option>
+	    	   				<option value="Privada">Privada</option>
+	    	   				<option value="Contratacion directa">Contratacion directa</option>	    	   	
+				 		</select>	
+				 		<label>Estado</label>	
+				 		<select id="estadoObra" name="estadoObra">		
+	    	   				<option value="Sin iniciar">Sin iniciar</option>
+	    	   				<option value="En Curso">En curso</option>
+	    	   				<option value="Interrumpida">Interrumpida</option>
+	    	   				<option value="Finalizada">Finalizada</option>
+	    	   				<option value="Cancelada">Cancelada</option>
 				 		</select>		
 				 	</td>					
 	  			</tr>	  			
@@ -1713,53 +1759,53 @@
 	  					<input type="text" id="nroLicitacion" name="nroLicitacion" placeholder="N&ordm de Licitaci&oacute;n"/>		 
 				 		<input type="text" id="nroExpediente" name="nroExpediente" placeholder="N&ordm de de Expediente"/>				    	   		
 					</td>					
-					<td>
-						<input type="text" id="unidadEjecutora" name="unidadEjecutora" placeholder="Unidad ejecutora"/>	
-		    	   		<input type="text" id="unidadFinanciamiento" name="unidadFinanciamiento" placeholder="Unidad de financiamiento"/>		    	   	
+<!-- 					<td> -->
+<!-- 						<input type="text" id="unidadEjecutora" name="unidadEjecutora" placeholder="Unidad ejecutora"/>	 -->
+<!-- 		    	   		<input type="text" id="unidadFinanciamiento" name="unidadFinanciamiento" placeholder="Unidad de financiamiento"/>		    	   	 -->
 		    	   	
-				 	</td>
-				 	<td>
-				 		<input type="text" id="valorPliego" name="valorPliego" placeholder="Valor del pliego (en $ argentinos)"/>			 	
-				 	</td>		
+<!-- 				 	</td> -->
+<!-- 				 	<td> -->
+<!-- 				 		<input type="text" id="valorPliego" name="valorPliego" placeholder="Valor del pliego (en $ argentinos)"/>			 	 -->
+<!-- 				 	</td>		 -->
 	  			</tr>
-	  			<tr><td colspan="3"><hr></td></tr>
+<!-- 	  			<tr><td colspan="3"><hr></td></tr> -->
 	  			
-	  			<tr>
-	  				<td>
-	  					<label>Empresa contratada</label>
-	  					<input type="text" id="empresaNombre" name="empresaNombre" placeholder="Raz&oacute;n social"/>	
-	  					<input type="text" id="empresaCuit" name="empresaCuit" placeholder="CUIT"/>	
-	  				</td>
-	  				<td>
-	  					<label>Representante t&eacute;cnico</label>
-	  					<input type="text" id="representanteNombre" name="representanteNombre" placeholder="Nombre(s) y Apellido(s)"/>	
-	  					<input type="text" id="representanteDni" name="representanteDni" placeholder="DNI"/>	
-	  				</td>
-	  				<td>
-					</td>
-	  			</tr>
+<!-- 	  			<tr> -->
+<!-- 	  				<td> -->
+<!-- 	  					<label>Empresa contratada</label> -->
+<!-- 	  					<input type="text" id="empresaNombre" name="empresaNombre" placeholder="Raz&oacute;n social"/>	 -->
+<!-- 	  					<input type="text" id="empresaCuit" name="empresaCuit" placeholder="CUIT"/>	 -->
+<!-- 	  				</td> -->
+<!-- 	  				<td> -->
+<!-- 	  					<label>Representante t&eacute;cnico</label> -->
+<!-- 	  					<input type="text" id="representanteNombre" name="representanteNombre" placeholder="Nombre(s) y Apellido(s)"/>	 -->
+<!-- 	  					<input type="text" id="representanteDni" name="representanteDni" placeholder="DNI"/>	 -->
+<!-- 	  				</td> -->
+<!-- 	  				<td> -->
+<!-- 					</td> -->
+<!-- 	  			</tr> -->
 	  				
-	  			<tr><td colspan="3"><hr></td></tr>
-	  			<tr>
-	  				<td>
-				    	<label>Estimaci&oacute;n</label>
-		    	   		<input type="text" id="presupuestoAdjudicado" name="presupuestoAdjudicado" placeholder="Presupuesto adjudicado (en $ argentinos)"/>		
-<!-- 		    	   		<input type="text" id="fechaEstimadaInicio" name="fechaEstimadaInicio" placeholder="Fecha de inicio"/> 		    	   -->
-<!-- 		    	   		<input type="text" id="fechaEstimadaFin" name="fechaEstimadaFin" placeholder="Fecha de finalizaci&oacute;n"/>	 -->
+<!-- 	  			<tr><td colspan="3"><hr></td></tr> -->
+<!-- 	  			<tr> -->
+<!-- 	  				<td> -->
+<!-- 				    	<label>Estimaci&oacute;n</label> -->
+<!-- 		    	   		<input type="text" id="presupuestoAdjudicado" name="presupuestoAdjudicado" placeholder="Presupuesto adjudicado (en $ argentinos)"/>		 -->
+<!-- <!-- 		    	   		<input type="text" id="fechaEstimadaInicio" name="fechaEstimadaInicio" placeholder="Fecha de inicio"/> 		    	   -->
+<!-- <!-- 		    	   		<input type="text" id="fechaEstimadaFin" name="fechaEstimadaFin" placeholder="Fecha de finalizaci&oacute;n"/>	 --> 
 		    	   	    	   	 
-					</td>	
-					<td>
-				    	<label>Ejecuci&oacute;n</label>
-		    	   		<input type="text" id="presupuestoFinal" name="presupuestoFinal" placeholder="Presupuesto final (en $ argentinos)"/>	
-		    	   		<input type="text" id="plazoEjecucionEnDias" name="plazoEjecucionEnDias" placeholder="Plazo (en d&iacute;as)"/>			  	 
-<!-- 		    	   		<input type="text" id="fechaRealInicio" name="fechaRealInicio" placeholder="Fecha real de inicio"/>		    	 -->
-<!-- 		    	   		<input type="text" id="fechaRealFin" name="fechaRealFin" placeholder="Fecha real de finalizaci&oacute;n"/>	 -->
+<!-- 					</td>	 -->
+<!-- 					<td> -->
+<!-- 				    	<label>Ejecuci&oacute;n</label> -->
+<!-- 		    	   		<input type="text" id="presupuestoFinal" name="presupuestoFinal" placeholder="Presupuesto final (en $ argentinos)"/>	 -->
+<!-- 		    	   		<input type="text" id="plazoEjecucionEnDias" name="plazoEjecucionEnDias" placeholder="Plazo (en d&iacute;as)"/>			  	  -->
+<!-- <!-- 		    	   		<input type="text" id="fechaRealInicio" name="fechaRealInicio" placeholder="Fecha real de inicio"/>		    	 --> 
+<!-- <!-- 		    	   		<input type="text" id="fechaRealFin" name="fechaRealFin" placeholder="Fecha real de finalizaci&oacute;n"/>	 --> 
 		    	   			    	   	 
-					</td>	
-					<td>
+<!-- 					</td>	 -->
+<!-- 					<td> -->
 						 		
-					</td>								
-	  			</tr>		
+<!-- 					</td>								 -->
+<!-- 	  			</tr>		 -->
 	  				
 	  		
 	  		</table>
