@@ -20,7 +20,7 @@
     
     <bean id="issueUpdateDAO" class="ar.com.urbanusjam.dao.impl.IssueHistorialRevisionDAOImpl" parent="hibernateParent" /> 
     
-    <bean id="licitacionDAO" class="ar.com.urbanusjam.dao.impl.IssueLicitacionDAOImpl" parent="hibernateParent" /> 
+    <bean id="issueLicitacionDAO" class="ar.com.urbanusjam.dao.impl.IssueLicitacionDAOImpl" parent="hibernateParent" /> 
     
     <bean id="areaDAO" class="ar.com.urbanusjam.dao.impl.AreaDAOImpl" parent="hibernateParent" />
     

@@ -761,8 +761,8 @@ div[data-role="editor-toolbar"] {
 
 #mdl-repair {width:800px;}
 #mdl-repair	.modal-body {
-	max-height: 550px; 
-	overflow:hidden;
+	max-height: auto; 
+/* 	overflow:hidden; */
 }
 #repairForm textarea { width: 480px; height: 100px; }
 #tbl-repair { width: 100%; border: 1px solid red;}

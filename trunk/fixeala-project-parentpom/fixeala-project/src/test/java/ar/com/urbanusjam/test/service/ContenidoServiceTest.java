@@ -17,7 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import ar.com.urbanusjam.services.ContenidoService;
-import ar.com.urbanusjam.services.dto.ContenidoDTO;
+import ar.com.urbanusjam.services.dto.MediaContentDTO;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"classpath:test-context.xml"}) 
@@ -66,8 +66,8 @@ public class ContenidoServiceTest {
         System.out.println(" ----------------------------------------------------------------------- ");
         System.out.println("\n");
         
-		ContenidoDTO contenido = new ContenidoDTO();
-		List<ContenidoDTO> filesToUpload = new ArrayList<ContenidoDTO>();
+		MediaContentDTO contenido = new MediaContentDTO();
+		List<MediaContentDTO> filesToUpload = new ArrayList<MediaContentDTO>();
 		int uploadedFiles = 0;
 		
 		for(InputStream input : inputStreams){
@@ -79,7 +79,7 @@ public class ContenidoServiceTest {
 			uploadedFiles++;
 		}		
 		
-		for(ContenidoDTO file : filesToUpload){
+		for(MediaContentDTO file : filesToUpload){
 			System.out.println("Uploaded file " + (filesToUpload.indexOf(file) + 1) + ": " + file.getFile().getName() + " (" + getFileSize(file.getFile()) + " Kb)");		
 			Assert.assertNotNull(file.getFile().length());
 		}	
@@ -101,11 +101,11 @@ public class ContenidoServiceTest {
         
 		Long idIssue = new Long(18865);		
 		
-		List<ContenidoDTO> contenidos = contenidoService.listarContenidos(idIssue);
+		List<MediaContentDTO> contenidos = contenidoService.listarContenidos(idIssue);
 		
 		Assert.assertNotSame(0, contenidos.size());
 				
-		for(ContenidoDTO contenido : contenidos){
+		for(MediaContentDTO contenido : contenidos){
 			System.out.println("Contenido " + (contenidos.indexOf(contenido) + 1) + ": " + contenido.getNombreConExtension());				
 		}
 		
@@ -125,11 +125,11 @@ public class ContenidoServiceTest {
         System.out.println("\n");
         
         Long idIssue = new Long(18865);		
-		List<ContenidoDTO> contenidos = contenidoService.listarContenidos(idIssue);
+		List<MediaContentDTO> contenidos = contenidoService.listarContenidos(idIssue);
         
 		int deletedFiles = 0;
 		
-		for(ContenidoDTO contenido : contenidos){
+		for(MediaContentDTO contenido : contenidos){
 			System.out.println("Deleting file " + (contenidos.indexOf(contenido) + 1) + ": " + contenido.getNombreConExtension());
 			contenidoService.borrarContenido(contenido);
 			deletedFiles++;

@@ -25,6 +25,7 @@
 		<property name="issuePageViewDAO" ref="issuePageViewDAO" />
 		<property name="issueVoteDAO" ref="issueVoteDAO" />
 		<property name="issueUpdateDAO" ref="issueUpdateDAO" />
+		<property name="issueRepairDAO" ref="issueLicitacionDAO" />
 	</bean>
 	
 <!-- 	<bean name="exportService" class="ar.com.urbanusjam.services.impl.ExportServiceImpl" > -->
