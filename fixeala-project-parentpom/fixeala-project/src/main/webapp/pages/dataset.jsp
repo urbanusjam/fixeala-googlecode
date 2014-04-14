@@ -26,8 +26,7 @@
 	  
 	  $('#from-datepicker').datetimepicker({		  
 		  format: 'dd/MM/yyyy',
-		  language: 'es',
-		
+		  language: 'es',		
 	      pickTime: false
 	  });
 	  	 	  
@@ -36,8 +35,7 @@
 		  language: 'es',	
 		  endDate: today,
 	      pickTime: false
-	  });
-	  	  
+	  });	  	  
 	 	
 	  var today = new Date();	  
 	  var date = new Date();	 

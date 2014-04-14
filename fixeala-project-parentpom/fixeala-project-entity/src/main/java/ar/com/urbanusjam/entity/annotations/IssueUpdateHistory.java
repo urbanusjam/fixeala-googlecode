@@ -38,7 +38,7 @@ public class IssueUpdateHistory implements Serializable {
 	@Column(name = "status")
 	private String estado;
 		
-	@Column(name = "operation")
+	@Column(name = "operation_type")
 	private String operacion;
 
 	@Column(name = "user_action")
