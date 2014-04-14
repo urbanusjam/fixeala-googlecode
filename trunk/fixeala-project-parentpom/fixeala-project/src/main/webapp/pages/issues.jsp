@@ -33,6 +33,28 @@
 		
 		$(function(e){	
 			
+
+			$('#fecha-estimada-from').datetimepicker({		  
+				  format: 'dd/MM/yyyy',
+				  language: 'es',		
+			      pickTime: false
+			 });
+			$('#fecha-estimada-to').datetimepicker({		  
+				  format: 'dd/MM/yyyy',
+				  language: 'es',		
+			      pickTime: false
+			 });
+			$('#fecha-real-from').datetimepicker({		  
+				  format: 'dd/MM/yyyy',
+				  language: 'es',		
+			      pickTime: false
+			 });
+			$('#fecha-real-to').datetimepicker({		  
+				  format: 'dd/MM/yyyy',
+				  language: 'es',		
+			      pickTime: false
+			 });
+			
 			var comentarios = $.parseJSON('${comentariosJson}');				
 			var totalItems = comentarios.length;		  
         	var itemsPerPage = 3;
@@ -104,9 +126,7 @@
 			issueLocation.latitude = latitud;
 			issueLocation.longitude = longitud;		
 			
-			getClosestMarkersByIssue(issueLocation);
-			
-			$('#btn-update').attr('disabled', true);
+			getClosestMarkersByIssue(issueLocation);			
 			
 			//default config
 			$.fn.editable.defaults.mode = 'popup';	
@@ -118,8 +138,9 @@
 			  '<button type="submit" class="btn btn-warning editable-submit"><i class="icon-ok icon-white"></i></button>' +
 			  '<button type="button" class="btn editable-cancel"><i class="icon-remove"></i></button>';     
 			
-			$('#btn-edit').addClass('notClicked');
+			$('#btn-update').attr('disabled', true);
 			$('#btn-update-repair').attr('disabled', true);
+			$('#btn-edit').addClass('notClicked');
 			
 			//enable / disable
 		    $('#btn-edit').click(function() {
@@ -134,11 +155,14 @@
 		    $('#btn-edit-repair').click(function() {
 		    	if( $('#btn-update-repair').is(":disabled") == true ){		    	
 					$('#btn-update-repair').attr('disabled', false);
+					$('#btn-delete-repair').attr('disabled', true);
 		    	}
-		    	else
-		    		$('#btn-update').attr('disabled', true);
-		    	
-// 		    	if(!${isCommonUser})
+		    	else{
+		    		$('#btn-update-repair').attr('disabled', true);
+		    		$('#btn-delete-repair').attr('disabled', false);
+		    	}
+		    		
+
 		    	$('#tbl-licitacion .editable').editable('toggleDisabled');
 		    	
 		    }); 
@@ -449,7 +473,7 @@
 			  
 			  
 			  
-			  $('#fechaEstimadaInicio').editable({
+			  $('#lic-fechaEstimadaInicio').editable({
 				  name:'fechaEstimadaInicio',
 				  mode: 'popup',
 				  placement: 'top',
@@ -468,7 +492,7 @@
 			    });
 			 
 			  
-			  $('#fechaEstimadaFin').editable({
+			  $('#lic-fechaEstimadaFin').editable({
 				  name:'fechaEstimadaFin',
 				  mode: 'popup',
 				  placement: 'right',
@@ -486,7 +510,7 @@
 				  }
 			  });
 			  
-			  $('#fechaRealInicio').editable({
+			  $('#lic-fechaRealInicio').editable({
 				  name:'fechaRealInicio',	
 				  mode: 'popup',
 				  placement: 'top',
@@ -504,7 +528,7 @@
 				  }
 			    });
 			  
-			  $('#fechaRealFin').editable({
+			  $('#lic-fechaRealFin').editable({
 				  name:'fechaRealFin',	
 				  mode: 'popup',
 				  placement: 'right',
@@ -537,10 +561,10 @@
 				     $('#lic-presupuestoFinal').editable('setValue', 0); 
 				     $('#lic-tipo').editable('setValue', 1); 
 				     $('#lic-estadoObra').editable('setValue', 1); 
-				     $('#fechaEstimadaInicio').editable('setValue', null); 
-				     $('#fechaEstimadaFin').editable('setValue', null); 
-				     $('#fechaRealInicio').editable('setValue', null); 
-				     $('#fechaRealFin').editable('setValue', null); 
+				     $('#lic-fechaEstimadaInicio').editable('setValue', null); 
+				     $('#lic-fechaEstimadaFin').editable('setValue', null); 
+				     $('#lic-fechaRealInicio').editable('setValue', null); 
+				     $('#lic-fechaRealFin').editable('setValue', null); 
 			  }
 			
 			  
@@ -552,7 +576,7 @@
 			  
 			  /*******************************************/
 			
-			   $('#btn-comment').click(function() {
+			  $('#btn-comment').click(function() {
 					var message = $("#comment-text").val();
 					var id = ${id};					
 					var data = 'issueID='+ id + '&comment='+ message;		
@@ -572,10 +596,7 @@
 	            		}
         			});
 			  });
-			   
-			   
-			  
-			  
+			   			   
 			
 			  $('#btn-update').click(function() {				  
 				 				  
@@ -657,27 +678,64 @@
 				});
 			  	
 			  	
-				$('#btn-save-repair').click(function(e) {	
-					var $form = $("#repairForm");
-					var formData = 'issueID='+ idIssue + '&userID='+ 'coripel' + '&repairForm='+ $form.serialize();
-					$.ajax({
-        			    url: "./saveRepairInfo.html",
-				 		type: "POST",	
-				 		data: formData,				 								 
-				        success: function(data){	
-				        	if(data.result){
-				        		$("#mdl-repair").modal('hide');
-// 			        			$('#collapseTwo').load(location.href + '#collapseTwo #tbl-licitacion'); 
-				        		window.location.reload();
-				        	}
-				        	else{
-				        		$("#mdl-repair").modal('hide');
-				        		bootbox.alert(data.message); 
-				        	}
-						}
-					});
-					return false; 
+			  
+				
+			  	
+				$("#repairForm").validate({				
+					
+					rules: 
+					{								 
+						 obra: { required: true },			
+				 	     nroLicitacion: { required: true },		    			
+				 	     nroExpediente: { required: true }
+				 	}, 	 		
+					
+				 	messages: 
+					{ 	 	  			 	     			
+				 			obra: 
+				  			{
+				  			 		required: "El campo OBRA es requerido."			 	
+				  		 	},	
+				  		 	nroLicitacion: 
+				  			{
+				  			 		required: "El campo N&ordm de LICITACI&Oacute;N es requerido."			 	
+				  		 	},	
+				  		 	nroExpediente: 
+				  			{
+				  			 		required: "El campo N&ordm DE EXPEDIENTE es requerido."			 	
+				  		 	}
+				  	},
+				  	
+				  	highlight: function (element) { 
+	 			       $(element).css({ "border-color": "red" });
+	 			    },
+		 	    	
+	 			    unhighlight: function (element) { 
+	 			        $(element).css("border-color", "#ccc"); 
+	 			    },
+	 			    errorPlacement: function(error, element) {},
+
+	 			    submitHandler: function() {
+						var $form = $("#repairForm");
+						var formData = 'issueID='+ idIssue + '&userID='+ 'coripel' + '&repairForm='+ $form.serialize();
+						$.ajax({
+	        			    url: "./saveRepairInfo.html",
+					 		type: "POST",	
+					 		data: formData,				 								 
+					        success: function(data){	
+					        	if(data.result){
+					        		$("#mdl-repair").modal('hide');
+					        		window.location.reload();
+					        	}
+					        	else{
+					        		$("#mdl-repair").modal('hide');
+					        		bootbox.alert(data.message); 
+					        	}
+							}
+						});
+	  		  		}
 				});
+
 				
 				$('#btn-update-repair').click(function(e) {	
 				
@@ -1179,10 +1237,10 @@
   				&nbsp;
   			</div>
   			
-  			<div id="watchers" style="display:inline-block">		  	
-	    		<a href="#" id="watching-toggle"></a>
- 			    (<a href="#" id="view-watcher-list" data-toggle="popover"></a>)
-  			</div>  			
+<!--   			<div id="watchers" style="display:inline-block">		  	 -->
+<!-- 	    		<a href="#" id="watching-toggle"></a> -->
+<!--  			    (<a href="#" id="view-watcher-list" data-toggle="popover"></a>) -->
+<!--   			</div>  			 -->
   		
   			<div style="display:inline-block;">  			
   				${cantidadComentarios} comentarios		
@@ -1195,40 +1253,39 @@
 				<i class="icon-print"></i>&nbsp;
   			    <a href="#" onclick="javascript:window.print();" title="Imprimir">Imprimir</a>
   			    
-  			    <i class="icon-warning-sign"></i>&nbsp;
-  			    <a href="#" title="Denunciar">Denunciar</a>  			    
+<!--   			    <i class="icon-warning-sign"></i>&nbsp; -->
+<!--   			    <a href="#" title="Denunciar">Denunciar</a>  			     -->
 		  
-
-		  		  		
-	 	  <div id="btnGroupSocial" class="btn-group">
-	 			<button class="btn"><i class="icon-share icon-large"></i>Compartir</button>
-	 			<button class="btn dropdown-toggle" data-toggle="dropdown">
-	   			<span class="caret"></span>
-	 			</button>	  	
-	 			<ul class="dropdown-menu">
-		    	<li><a href="#" title=""><i class="icon-envelope-alt icon-large"></i>&nbsp;&nbsp;&nbsp;Email</a></li>
-		    	<li><a href="#" title=""><i class="icon-facebook-sign icon-large"></i>&nbsp;&nbsp;&nbsp;Facebook</a></li>
-		    	<li><a href="#" title=""><i class="icon-google-plus icon-large"></i>&nbsp;&nbsp;&nbsp;Google+</a></li>
-		    	<li><a href="#" title=""><i class="icon-twitter icon-large"></i>&nbsp;&nbsp;&nbsp;Twitter</a></li>
-	 			</ul>
-		   </div>
+		  
+<!-- 	 	  <div id="btnGroupSocial" class="btn-group"> -->
+<!-- 	 			<button class="btn"><i class="icon-share icon-large"></i>Compartir</button> -->
+<!-- 	 			<button class="btn dropdown-toggle" data-toggle="dropdown"> -->
+<!-- 	   			<span class="caret"></span> -->
+<!-- 	 			</button>	  	 -->
+<!-- 	 			<ul class="dropdown-menu"> -->
+<!-- 		    	<li><a href="#" title=""><i class="icon-envelope-alt icon-large"></i>&nbsp;&nbsp;&nbsp;Email</a></li> -->
+<!-- 		    	<li><a href="#" title=""><i class="icon-facebook-sign icon-large"></i>&nbsp;&nbsp;&nbsp;Facebook</a></li> -->
+<!-- 		    	<li><a href="#" title=""><i class="icon-google-plus icon-large"></i>&nbsp;&nbsp;&nbsp;Google+</a></li> -->
+<!-- 		    	<li><a href="#" title=""><i class="icon-twitter icon-large"></i>&nbsp;&nbsp;&nbsp;Twitter</a></li> -->
+<!-- 	 			</ul> -->
+<!-- 		   </div> -->
 
 			<sec:authorize access="hasAnyRole('ROLE_USER','ROLE_ADMIN', 'ROLE_MANAGER')">
 				<c:if test="${estado eq 'ABIERTO' || estado eq 'REABIERTO'}">
 					<div id="btn-status" class="btn-group" style="float:right;">			
-						<button class="btn btn-success"><i class="icon-ok icon-large"></i>&nbsp;&nbsp;Resolver</button>
+						<button class="btn btn-success"><i class="icon-ok icon-large"></i>Resolver</button>
 					</div>
 				</c:if>
 				<c:if test="${estado eq 'RESUELTO' || estado eq 'CERRADO'}">
 					<div id="btn-status" class="btn-group" style="float:right;">			
-						<button class="btn btn-warning"><i class="icon-rotate-right icon-large"></i>&nbsp;&nbsp;Reabrir</button>
+						<button class="btn btn-warning"><i class="icon-rotate-right icon-large"></i>Reabrir</button>
 					</div>
 				</c:if>	
-				<div class="btn-group" style="float:right;">
-					<button id="btn-update"  class="btn btn-primary"><i class="icon-save icon-large"></i>&nbsp;&nbsp;Guardar</button>			
+				<div class="btn-group" style="float:right;margin-right:5px;">
+					<button id="btn-update"  class="btn btn-primary"><i class="icon-save icon-large"></i>Guardar</button>			
 				</div>
 				<div class="btn-group" style="float:right;">
-					<button id="btn-edit" class="btn btn-info"><i class="icon-pencil icon-large"></i>&nbsp;&nbsp;Editar</button>			
+					<button id="btn-edit" class="btn btn-info"><i class="icon-pencil icon-large"></i>Editar</button>			
 				</div>						
 			</sec:authorize>
 	
@@ -1413,11 +1470,16 @@
 						 <button id="btn-add-repair"  href="#mdl-repair" data-toggle="modal" class="btn btn-success"><i class="icon-plus icon-large"></i>Agregar datos</button>	 
 					</c:if>
 					<c:if test="${cantidadLicitacion ne 0}">
-						<button id="btn-delete-repair" class="btn" title="Eliminar"><i class="icon-trash icon-large"></i></button>	
-						<button id="btn-edit-repair" class="btn btn-info" title="Editar"><i class="icon-pencil icon-large"></i></button>	
-						<button id="btn-update-repair" class="btn btn-success" title="Guardar"><i class="icon-ok icon-large"></i></button>	
-<!-- 						<button id="btn-reset-repair" class="btn btn-danger" title="Limpiar campos"><i class="icon-eraser icon-large"></i></button> -->
-						
+					
+					<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')">
+						<div style="width: 200px; float: right; margin: 20px 10px 20px 0;">
+							<button id="btn-delete-repair" class="btn" title="Eliminar"><i class="icon-trash icon-large"></i></button>	
+							<button id="btn-edit-repair" class="btn" title="Editar"><i class="icon-pencil icon-large"></i></button>	
+							<button id="btn-update-repair" class="btn" title="Guardar"><i class="icon-ok icon-large"></i></button>						
+						</div>
+					
+					</sec:authorize>
+											
 						<table id="tbl-licitacion" class="table table-hover ">							
 							 <tr>
 							    <th>Obra:</th>
@@ -1451,7 +1513,7 @@
 							    <th>Valor del pliego:</th>
 							    <td>$ <a href="#" id="lic-valorPliego" data-type="number">${valorPliego}</a></td>		
 							 </tr>						 <tr>
-							    <th>Empresa constructora:</th>
+							    <th>Empresa contratada:</th>
 							  	<td>
 							    	Raz&oacute;n social: <a href="#" id="lic-empresaNombre" data-type="text">${empresaNombre}</a>
 							    	<br>CUIT: <a href="#" id="lic-empresaCuit" data-type="text">${empresaCuit}</a>	
@@ -1481,17 +1543,17 @@
 							 <tr>
 							    <th>Fechas estimadas:</th>
 							    <td>
-							    	<a href="#" id="fechaEstimadaInicio" data-type="combodate">${fechaEstimadaInicio}</a>
+							    	<a href="#" id="lic-fechaEstimadaInicio" data-type="combodate">${fechaEstimadaInicio}</a>
 													&mdash;
-													<a href="#" id="fechaEstimadaFin" data-type="combodate">${fechaEstimadaFinal}</a>
+													<a href="#" id="lic-fechaEstimadaFin" data-type="combodate">${fechaEstimadaFinal}</a>
 							    </td>	
 							 </tr>
 							 <tr>
 							    <th>Fechas reales:</th>
 							    <td>
-							    	<a href="#" id="fechaRealInicio" data-type="combodate">${fechaRealInicio}</a>	
+							    	<a href="#" id="lic-fechaRealInicio" data-type="combodate">${fechaRealInicio}</a>	
 													&mdash;
-													<a href="#" id="fechaRealFin" data-type="combodate">${fechaRealFinal}</a>	
+													<a href="#" id="lic-fechaRealFin" data-type="combodate">${fechaRealFinal}</a>	
 							    </td>					  
 							 </tr>
 				  		</table>	
@@ -1733,8 +1795,7 @@
 	  		
 	  		<table id="tbl-repair">
 	  			<tr>
-	  				<td colspan="2">
-				    
+	  				<td colspan="2">				    
 		    	   		<textarea id="obra" name="obra" placeholder="Descripci&oacute;n de la obra..."></textarea>	
 					</td>
 					<td>	    	   		
@@ -1759,53 +1820,79 @@
 	  					<input type="text" id="nroLicitacion" name="nroLicitacion" placeholder="N&ordm de Licitaci&oacute;n"/>		 
 				 		<input type="text" id="nroExpediente" name="nroExpediente" placeholder="N&ordm de de Expediente"/>				    	   		
 					</td>					
-<!-- 					<td> -->
-<!-- 						<input type="text" id="unidadEjecutora" name="unidadEjecutora" placeholder="Unidad ejecutora"/>	 -->
-<!-- 		    	   		<input type="text" id="unidadFinanciamiento" name="unidadFinanciamiento" placeholder="Unidad de financiamiento"/>		    	   	 -->
+					<td>
+						<input type="text" id="unidadEjecutora" name="unidadEjecutora" placeholder="Unidad ejecutora"/>	
+		    	   		<input type="text" id="unidadFinanciamiento" name="unidadFinanciamiento" placeholder="Unidad de financiamiento"/>		    	   	
 		    	   	
-<!-- 				 	</td> -->
-<!-- 				 	<td> -->
-<!-- 				 		<input type="text" id="valorPliego" name="valorPliego" placeholder="Valor del pliego (en $ argentinos)"/>			 	 -->
-<!-- 				 	</td>		 -->
+				 	</td>
+				 	<td>
+				 		<input type="text" id="valorPliego" name="valorPliego" placeholder="Valor del pliego (en $ argentinos)"/>			 	
+				 	</td>		
 	  			</tr>
-<!-- 	  			<tr><td colspan="3"><hr></td></tr> -->
+	  			<tr><td colspan="3"><hr></td></tr>
 	  			
-<!-- 	  			<tr> -->
-<!-- 	  				<td> -->
-<!-- 	  					<label>Empresa contratada</label> -->
-<!-- 	  					<input type="text" id="empresaNombre" name="empresaNombre" placeholder="Raz&oacute;n social"/>	 -->
-<!-- 	  					<input type="text" id="empresaCuit" name="empresaCuit" placeholder="CUIT"/>	 -->
-<!-- 	  				</td> -->
-<!-- 	  				<td> -->
-<!-- 	  					<label>Representante t&eacute;cnico</label> -->
-<!-- 	  					<input type="text" id="representanteNombre" name="representanteNombre" placeholder="Nombre(s) y Apellido(s)"/>	 -->
-<!-- 	  					<input type="text" id="representanteDni" name="representanteDni" placeholder="DNI"/>	 -->
-<!-- 	  				</td> -->
-<!-- 	  				<td> -->
-<!-- 					</td> -->
-<!-- 	  			</tr> -->
+	  			<tr>
+	  				<td>
+	  					<label>Empresa contratada</label>
+	  					<input type="text" id="empresaNombre" name="empresaNombre" placeholder="Raz&oacute;n social"/>	
+	  					<input type="text" id="empresaCuit" name="empresaCuit" placeholder="CUIT"/>	
+	  				</td>
+	  				<td>
+	  					<label>Representante t&eacute;cnico</label>
+	  					<input type="text" id="representanteNombre" name="representanteNombre" placeholder="Nombre(s) y Apellido(s)"/>	
+	  					<input type="text" id="representanteDni" name="representanteDni" placeholder="DNI"/>	
+	  				</td>
+	  				<td>
+					</td>
+	  			</tr>
 	  				
-<!-- 	  			<tr><td colspan="3"><hr></td></tr> -->
-<!-- 	  			<tr> -->
-<!-- 	  				<td> -->
-<!-- 				    	<label>Estimaci&oacute;n</label> -->
-<!-- 		    	   		<input type="text" id="presupuestoAdjudicado" name="presupuestoAdjudicado" placeholder="Presupuesto adjudicado (en $ argentinos)"/>		 -->
-<!-- <!-- 		    	   		<input type="text" id="fechaEstimadaInicio" name="fechaEstimadaInicio" placeholder="Fecha de inicio"/> 		    	   -->
-<!-- <!-- 		    	   		<input type="text" id="fechaEstimadaFin" name="fechaEstimadaFin" placeholder="Fecha de finalizaci&oacute;n"/>	 --> 
-		    	   	    	   	 
-<!-- 					</td>	 -->
-<!-- 					<td> -->
-<!-- 				    	<label>Ejecuci&oacute;n</label> -->
-<!-- 		    	   		<input type="text" id="presupuestoFinal" name="presupuestoFinal" placeholder="Presupuesto final (en $ argentinos)"/>	 -->
-<!-- 		    	   		<input type="text" id="plazoEjecucionEnDias" name="plazoEjecucionEnDias" placeholder="Plazo (en d&iacute;as)"/>			  	  -->
-<!-- <!-- 		    	   		<input type="text" id="fechaRealInicio" name="fechaRealInicio" placeholder="Fecha real de inicio"/>		    	 --> 
-<!-- <!-- 		    	   		<input type="text" id="fechaRealFin" name="fechaRealFin" placeholder="Fecha real de finalizaci&oacute;n"/>	 --> 
-		    	   			    	   	 
-<!-- 					</td>	 -->
-<!-- 					<td> -->
-						 		
-<!-- 					</td>								 -->
-<!-- 	  			</tr>		 -->
+	  			<tr><td colspan="3"><hr></td></tr>
+	  			<tr>
+	  				<td>
+				    	<label>Estimaci&oacute;n</label>
+		    	   		<input type="text" id="presupuestoAdjudicado" name="presupuestoAdjudicado" placeholder="Presupuesto adjudicado (en $ argentinos)"/>		
+ 		    	   		
+ 		    	   		<div id="fecha-estimada-from" class="input-append">											   
+						    <input id="fechaEstimadaInicio" name="fechaEstimadaInicio" type="text" class="repairDate" placeholder="Fecha inicio (dd/mm/aaaa)"/>
+						    <span class="add-on">
+						      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+						      </i>
+						    </span>
+						</div>  	
+						
+						<div id="fecha-estimada-to" class="input-append">											   
+						    <input id="fechaEstimadaFin" name="fechaEstimadaFin" type="text" class="repairDate" placeholder="Fecha fin (dd/mm/aaaa)"/>
+						    <span class="add-on">
+						      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+						      </i>
+						    </span>
+						</div>  		
+ 				    	   	    
+					</td>	
+					<td>
+				    	<label>Ejecuci&oacute;n</label>
+		    	   		<input type="text" id="presupuestoFinal" name="presupuestoFinal" placeholder="Presupuesto final (en $ argentinos)"/>	
+		    	   		
+		    	   		<div id="fecha-real-from" class="input-append">											   
+						    <input id="fechaRealInicio" name="fechaRealInicio" type="text" class="repairDate" placeholder="Fecha inicio (dd/mm/aaaa)"/>
+						    <span class="add-on">
+						      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+						      </i>
+						    </span>
+						</div>  							
+						<div id="fecha-real-to" class="input-append">											   
+						    <input id="fechaRealFin" name="fechaRealFin" type="text" class="repairDate" placeholder="Fecha fin (dd/mm/aaaa)"/>
+						    <span class="add-on">
+						      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+						      </i>
+						    </span>
+						</div>  		  	   	 
+					</td>	
+					<td>
+						 <input type="text" id="plazoEjecucionEnDias" name="plazoEjecucionEnDias" placeholder="Plazo (en d&iacute;as)"/>	
+		    	   				
+					</td>								
+	  			</tr>		
 	  				
 	  		
 	  		</table>
@@ -1813,12 +1900,15 @@
 								
 			</div>
 		  	<div class="modal-footer"> 	
-		  		<button class="btn btn-info" id="btn-save-repair">
-			    	<i class="icon-ok icon-large"></i>Guardar
-			    </button>  			  	
-		  		<button class="btn" data-dismiss="modal" aria-hidden="true">
-			    	<i class="icon-remove icon-large"></i>Cerrar
-			    </button>	 
+		  		<div class="btn-container">
+			  		<button  type="submit" class="btn btn-info" id="btn-save-repair">
+				    	<i class="icon-ok icon-large"></i>Guardar
+				    </button>  			  	
+			  		<button class="btn" data-dismiss="modal" aria-hidden="true">
+				    	<i class="icon-remove icon-large"></i>Cerrar
+				    </button>	
+		  		</div>
+		  		 
 		  	</div>
 	  	</form>
 	</div>

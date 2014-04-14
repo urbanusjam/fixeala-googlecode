@@ -601,7 +601,7 @@ public class IssueController {
 				revision.setUsername(userID);			
 				revision.setNroReclamo(Long.valueOf(issueID));			
 				revision.setOperacion(Operation.UPDATE);			
-				revision.setMotivo(Messages.ISSUE_UPDATE_FIELDS + " el reclamo.");			
+				revision.setMotivo(Messages.ISSUE_REPAIR_INFO_ADD);			
 				revision.setEstado(issue.getStatus());
 				revision.setObservaciones(Messages.ISSUE_UPDATE_OBS);
 				
@@ -633,7 +633,7 @@ public class IssueController {
 				revision.setUsername("coripel");			
 				revision.setNroReclamo(Long.valueOf(issueID));			
 				revision.setOperacion(Operation.UPDATE);			
-				revision.setMotivo(Messages.ISSUE_UPDATE_FIELDS + " el reclamo.");			
+				revision.setMotivo(Messages.ISSUE_REPAIR_INFO_UPDATE);			
 				revision.setEstado("ESTADO");
 				revision.setObservaciones(Messages.ISSUE_UPDATE_OBS);
 				
@@ -665,7 +665,7 @@ public class IssueController {
 				revision.setUsername(userID);			
 				revision.setNroReclamo(Long.valueOf(issueID));			
 				revision.setOperacion(Operation.UPDATE);			
-				revision.setMotivo(Messages.ISSUE_UPDATE_FIELDS + " el reclamo.");			
+				revision.setMotivo(Messages.ISSUE_REPAIR_INFO_DELETE);			
 				revision.setEstado(issue.getStatus());
 				revision.setObservaciones(Messages.ISSUE_UPDATE_OBS);
 				
