@@ -521,10 +521,10 @@ public class IssueServiceImpl implements IssueService {
 		issue.setDescription(issueDTO.getDescription());
 		
 		//licitacion
-		if(issueDTO.getLicitacion() != null)
-			issue.setLicitacion(convertTo(issueDTO.getLicitacion()));
-		else
-			issue.setLicitacion(null);
+//		if(issueDTO.getLicitacion() != null)
+//			issue.setLicitacion(convertTo(issueDTO.getLicitacion()));
+//		else
+//			issue.setLicitacion(null);
 	
 		//historial de revisiones
 		for(IssueUpdateHistoryDTO historial : issueDTO.getHistorial()){
