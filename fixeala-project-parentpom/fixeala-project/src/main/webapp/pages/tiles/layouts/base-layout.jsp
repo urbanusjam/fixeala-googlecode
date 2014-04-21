@@ -9,7 +9,7 @@
 	<meta http-equiv="content-type" content="text/html; charset=UTF8">
 	<title><tiles:insertAttribute name="title" ignore="true" /></title>	
 
-  	<script type="text/javascript" src="http://maps.google.com/maps/api/js?libraries=geometry,places&components=country:ar&language=ES&sensor=false"></script> 
+<!--   	<script type="text/javascript" src="http://maps.google.com/maps/api/js?libraries=geometry,places&components=country:ar&language=ES&sensor=false"></script>  -->
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.jsonp-2.4.0.min.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery-ui-1.10.3.custom.js"></script>
@@ -35,7 +35,7 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-tags.js"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-contextmenu.js"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-fileupload.js"></script>
- <script src="//raw.github.com/botmonster/jquery-bootpag/master/lib/jquery.bootpag.min.js"></script>
+<!--  <script src="//raw.github.com/botmonster/jquery-bootpag/master/lib/jquery.bootpag.min.js"></script> -->
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-wysiwyg.js"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-paginator.min.js"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootbox.js"></script>
