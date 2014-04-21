@@ -1233,3 +1233,85 @@ a.no-hover { text-decoration: none; color: #000;}
 .voteInactive{ color: #ccc !important; }
 
 .popover .popover-content a { font-size: 13px; }
+
+
+.widgetContainer {
+	width: 270px; 
+/* 	height: 400px;  */
+	border: 0px solid #000; 
+	backgorund-color:#40C0ED; 
+	line-height: 25px;
+	margin: 0 auto;
+}
+.widgetHeader {	
+	height: 25px; 
+	background-color: #527CAC;
+	padding: 5px 10px 5px 10px; 
+	font-weight: bold;
+	font-size: 12px;
+	color: #fff;
+	text-transform: uppercase;
+}
+
+.widgetBody {
+/* 	height: 300px; */
+}
+.widgetRow {
+	height: 70px; 
+	background-color: #F9FAFC;
+	border-bottom: 1px dashed #ccc;
+	padding: 10px; 
+}
+
+.widgetRow:hover { background-color: #F1F1F1; }
+
+.widgetRowTitle {
+	font-size: 13px;
+	font-weight: bold;
+	height: 25px;
+	display: block; 
+}
+
+.widgetRowLocation {
+	font-size: 11px;
+	display: block; 
+	height: 20px;
+}
+.widgetRowDate {
+	font-size: 11px; 
+	color: #bbb;
+	display: block; 
+	height: 20px;
+}
+
+.widgetFooter { 
+	height: 15px; 
+	background: #E6E6E6;
+	line-height: 15px;
+	padding: 5px 10px 5px 10px; 
+	color: #34393F;
+}
+
+.widgetLogo { 
+	float: left; 
+	width: 150px;
+
+	font-size: 11px;
+}
+
+.widgetLogo a {
+	color: #34393F;
+}
+
+.widgetLogo a:hover{
+	color: #40C0ED;
+	text-decoration: none;
+}
+
+.widgetRefresh {
+	float: right;
+	width: 30px;
+	border: 0px solid red; 
+}
+
+.widgetRefresh  i[class^="icon-"] {  vertical-align: top; border: 0px solid red; }
