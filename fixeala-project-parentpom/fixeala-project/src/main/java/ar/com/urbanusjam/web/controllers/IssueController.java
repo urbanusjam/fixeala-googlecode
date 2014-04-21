@@ -35,21 +35,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.ContenidoService;
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.UserService;
 import ar.com.urbanusjam.services.dto.CommentDTO;
-import ar.com.urbanusjam.services.dto.MediaContentDTO;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.IssueFollowDTO;
-import ar.com.urbanusjam.services.dto.IssueUpdateHistoryDTO;
-import ar.com.urbanusjam.services.dto.IssueRepairDTO;
 import ar.com.urbanusjam.services.dto.IssuePageViewDTO;
+import ar.com.urbanusjam.services.dto.IssueRepairDTO;
+import ar.com.urbanusjam.services.dto.IssueUpdateHistoryDTO;
 import ar.com.urbanusjam.services.dto.IssueVoteDTO;
+import ar.com.urbanusjam.services.dto.MediaContentDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
 import ar.com.urbanusjam.services.utils.FileUploadUtils;
 import ar.com.urbanusjam.services.utils.IssueStatus;
@@ -445,8 +442,9 @@ public class IssueController {
 					issue.setUser(userDTO);			
 					issue.setId(String.valueOf(idIssue));	
 				
-					if(issue.getProvince().equals("Ciudad Autónoma de Buenos Aires")){
-						issue.setCity("Ciudad Autónoma de Buenos Aires");
+					//REVISAR
+					if(issue.getProvince().equals("Ciudad Aut�noma de Buenos Aires")){
+						issue.setCity("Ciudad Autonoma de Buenos Aires");
 						issue.setProvince("Buenos Aires");
 					}
 										
