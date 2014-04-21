@@ -443,8 +443,8 @@ public class IssueController {
 					issue.setId(String.valueOf(idIssue));	
 				
 					//REVISAR
-					if(issue.getProvince().equals("Ciudad Aut�noma de Buenos Aires")){
-						issue.setCity("Ciudad Autonoma de Buenos Aires");
+					if(issue.getProvince().equals("Ciudad Autónoma de Buenos Aires")){
+						issue.setCity("Ciudad Autónoma de Buenos Aires");
 						issue.setProvince("Buenos Aires");
 					}
 										
