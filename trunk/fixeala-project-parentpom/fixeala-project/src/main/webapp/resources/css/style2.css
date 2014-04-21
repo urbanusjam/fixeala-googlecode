@@ -234,15 +234,7 @@ ul#loginNav li.signupLink a:hover {
 	text-shadow: none;
 }
 
-.btn-group a.btn {
-	line-height: 25px;
-}
 
-.btn-group {
-	margin-top: 5px;
-}
-
-.btn-group button i[class^="icon-"] { margin-right: 5px;}
 
 .tooltip-inner {
 	width:120px; 
@@ -1187,36 +1179,57 @@ a.no-hover { text-decoration: none; color: #000;}
 
 
 .user-action-nav  { 
-	width: 100%; 
-	border: 0px solid #000;  
+	width: 700px; 
+	border: 0px solid green;  
 	list-style-type:none;
-	margin:0 auto;
+	margin:0;
 	padding:0; 
+	display: inline-block;
 	}
 
 .user-action-nav  li {
 	display: inline-block; 
-	height: 50px; 
-	width: 106px; 
-	line-height: 50px;
+	height: 40px; 
+	width: 80px; 
+	line-height: 40px;
 	text-align: center; 	
-/* 	border-right: 1px solid #fff; */
-	font-size: 26px;		
+	border-right: 1px solid #ccc;
+	font-size: 20px;		
 	vertical-align:middle;
-/* 	color: #676767; */
-	background-color: #EEEEEE;
-	}
 	
+}
+	
+.user-action-nav  li a {
+	display: inline-block; 	
+	font-size: 20px;	
+	color: #000;
+}
 
-.user-action-nav  li:last-child { border: none; } 
-/* .user-action-nav  li i[class*="icon"]  { margin-right: 10px;} */
-.user-action-nav  li div.arrows { border: 0px solid blue;  width: 55px; float:left; height: 100%;  }
-.user-action-nav  li div.arrows i[class*="icon"]  { display:block; height: 20px; width:15px; }
-.user-action-nav  li div.text { float:right; width: 45px; border: 0px solid pink; height: 100%; text-align: left;  }
+.user-action-nav li a:hover{ text-decoration: none; color: #0088CC; }
+	
+/* .user-action-nav  li:last-child { border: none; }  */
+.user-action-nav  li.withText i[class*="icon"],
+.user-action-nav  li.withText a i[class*="icon"]  { margin-left: 10px;}
+.user-action-nav  li div.arrows a { border: 0px solid blue;  width: 38px; float:right; font-size: 26px; margin-top: 5px;  }
+.user-action-nav  li div.arrows a i[class*="icon"]  { display:block; height: 13px; line-height: 13px; text-align: left; margin-left:3px; }
+.user-action-nav  li div.text { float:left; width: 38px; border: 0px solid red; height: 100%; text-align: right;  }
+
+.user-action-btns{
+	border: 0px solid red; display: inline-block; float: right; height: 40px;
+}
 
 
+.btn-group a.btn {
+	line-height: 25px;
+}
 
+.btn-group {
+	margin-top: 5px;
+}
 
+/* .btn-group button i[class^="icon-"] { margin-right: 5px;} */
 
+.voteActive{ color: #0088CC !important; } /* red #FF0000*/
+.voteInactive{ color: #ccc !important; }
 
-
+.popover .popover-content a { font-size: 13px; }
