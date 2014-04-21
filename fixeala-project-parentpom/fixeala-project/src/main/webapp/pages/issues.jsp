@@ -119,7 +119,7 @@
 			var loggedUser = '${loggedUser}';
 	   		var latitud = '${latitud}';
 	   		var longitud = '${longitud}';
-			var newTitle;				
+			var newTitle = "";				
 			
 			var issueLocation = [];		
 			issueLocation.id = idIssue;
@@ -208,19 +208,19 @@
 				  mode: 'popup',
 				  placement: 'right',
 				  ajaxOptions: {
-				        type: 'json'
+				        type: 'put'
 				  },
 				  validate: function(value) {
 					    if($.trim(value) == '') {
 					        return 'Este campo es requerido.';
 					    }
 					    if($.trim(value).length > 50) {
-					        return 'La longitud máxima del campo es de 50 caracteres.';
+					        return 'La longitud maxima del campo es de 50 caracteres.';
 					    }
 				  },
-				  success: function(response, newValue) {		             
+				  success: function(response, newValue) {	
 		               newTitle =  newValue;
-		            }
+		          }
 			  });
 
 			  $("#issue-desc").editable({ 		
@@ -262,10 +262,6 @@
 		          }
 			  });
 			  
-			  
-			
-		  
-			
 			  $('#issue-tags').editable({
 				    pk: 22,
 				 	name: 'tagsMap',				 
@@ -295,19 +291,6 @@
 		                    
   			  }); 
 
-// 			  $('.issue-tags').on('shown', function() {
-// 				    var editable = $(this).data('editable');
-// 				    value = editable.value;
-// 				    $.each(value,function(i){
-// 				       value[i] = $('<p>' + value[i] + '</p>').text();
-// 				    });				    
-// 			  });
-	
-// 			  $('[id^="tags-edit-"]').click(function(e) {
-// 				    e.stopPropagation();
-// 				    e.preventDefault();
-// 				    $('#' + $(this).data('editable') ).editable('toggle');
-// 			  });
 			  
 			 
 			  
@@ -604,7 +587,7 @@
 					  
 					  if(result){
 						  
-						  $('#tbl-issue .editable').editable('submit', {
+						  $('#tbl-issue .editable, #issue-header .editable').editable('submit', {
 							  
 						       url: './updateIssue.html', 
 						       ajaxOptions: {
@@ -639,7 +622,7 @@
 			  
 			  	//update status only
 				$('#btn-status').click(function() {
-					var label = $(this).text().trim();
+					var label = $(this).find('button').attr('title').trim();
 					var status = "";
 					var id = ${id};
 					var title = '${titulo}';
@@ -651,7 +634,7 @@
 						status = "REABIERTO";
 					
 					var data = 'issueID='+ id + '&newStatus='+ status;
-				
+					
 					$.ajax({
         			    url: "./updateIssueStatus.html",
 				 		type: "POST",	
@@ -967,32 +950,30 @@
 			        var $watcherDiv = $('#watchers');
 		        	var $watchingLink = $('#watching-toggle');
 		        	var $watcherList = $('#view-watcher-list');	       
-			    	var iconUnWatch = '<i class="icon-eye-close" id="icon-unwatch" style="margin-right:5px;"></i>';
-		        	var iconWatch = '<i class="icon-eye-open" id="icon-watch" style="margin-right:5px;"></i>';
-		        	
-		        	var numberOfWatchers = '${cantidadObservadores}';
-		        	
-		        	var data = "issueID=" + idIssue;
-		        	
-		        	var loader = '<span class="loader"><img src="${pageContext.request.contextPath}/resources/images/loader.gif" style="margin-right:5px; alt="Loading"/></span>';	  
+			    	var iconUnWatch = '<i class="icon-frown" id="icon-unwatch" style="color:#0088CC"></i>';
+		        	var iconWatch = '<i class="icon-smile" id="icon-watch"></i>';		        	
+		        	var numberOfWatchers = '${cantidadObservadores}';		        	
+		        	var data = "issueID=" + idIssue;		        
+		        	var loader = '<span class="loader"><img src="${pageContext.request.contextPath}/resources/images/loader.gif" style="margin-left:10px; alt="Loading"/></span>';	  
 		        		        	
 			        if(isWatching == 'true'){	
 			        	$watchingLink.addClass('watching');
-			        	$(iconUnWatch).insertBefore($watchingLink);
-			        	$watchingLink.text('Observando');
+			        	$watchingLink.append(iconUnWatch);
+// 			        	$(iconUnWatch).insertBefore($watchingLink);
+// 			        	$watchingLink.text('Observando');
 			        	$watchingLink.attr('title', 'Dejar de observar este reclamo');
 			        	$watcherList.html(numberOfWatchers); 
 			        }
 			        
 			        else {
 			        	$watchingLink.addClass('unwatch');
-			        	$(iconWatch).insertBefore($watchingLink);
-			        	$watchingLink.text('Observar');
+// 			        	$(iconWatch).insertBefore($watchingLink);
+			        	$watchingLink.append(iconWatch);
+// 			        	$watchingLink.text('Observar');
 			        	$watchingLink.attr('title', 'Observar este reclamo');
 			        	$watcherList.html(numberOfWatchers); 
 			        }			        
-			       
-			       
+			      
 			       $watcherList.popover({trigger: 'manual', title: '', html : true})
 						       .click(function(e){
 						           var element = $(this);
@@ -1001,11 +982,10 @@
 						               type: 'POST',
 						               dataType: 'json',
 						               data: data,
-						               success: function(response){
-						            	   
+						               success: function(response){						            	   
 							    	        var f = '';				             
 										    $.each(response, function(i, follower){	
-										    	f += '<i class="icon-angle-right"></i>&nbsp;';
+										    	f += '<i class="icon-angle-right" style="margin-right: 5px;"></i>&nbsp;';
 										    	f += getUserURL(follower);
 										    	f += '<br>';
 										    });
@@ -1034,7 +1014,7 @@
 						 										 				
 						 				setTimeout(function(){
 						 					$('.loader').replaceWith(iconWatch);
-						 					$watchingLink.text('Observar');
+// 						 					$watchingLink.text('Observar');
 							 				$watchingLink.attr('title', 'Observar este reclamo');							 		
 							 				$('#view-watcher-list').html(data.message);							 					 						      
 						 				}, 1000);
@@ -1063,7 +1043,7 @@
 						        		
 						        		setTimeout(function(){							 					
 						 					$('.loader').replaceWith(iconUnWatch);
-						 					$watchingLink.text('Observando');
+// 						 					$watchingLink.text('Observando');
 							 				$watchingLink.attr('title', 'Dejar de observar este reclamo');
 							 				$('#view-watcher-list').html(data.message);
 							 			
@@ -1092,19 +1072,23 @@
 			    
 			    if(isVoted == 'true'){
 			    	if(isVoteUp == 'true'){
-			    		$voteUp.addClass('btn btn-success');
-				    	$voteDown.addClass('btn disabled');				    	
+// 			    		$voteUp.addClass('btn btn-success');
+// 				    	$voteDown.addClass('btn disabled');		
+				    	$voteUp.addClass('voteActive');
+				    	$voteDown.addClass('voteInactive');		
 			    	}
 			    	else{
-			    		$voteDown.addClass('btn btn-success');
-				    	$voteUp.addClass('btn disabled');			    	
+// 			    		$voteDown.addClass('btn btn-success');
+// 				    	$voteUp.addClass('btn disabled');	
+			    		$voteUp.addClass('voteActive');
+				    	$voteDown.addClass('voteInactive');		
 			    	}
 			    	
 			    }
-			    else{
-			    	$voteUp.addClass('btn btn-info');
-			    	$voteDown.addClass('btn btn-danger');
-			    }
+// 			    else{
+// 			    	$voteUp.addClass('btn btn-info');
+// 			    	$voteDown.addClass('btn btn-danger');
+// 			    }
 			    
 			 
 			    $('#votes a').click(function(e) {
@@ -1140,17 +1124,26 @@
 						        	if(data.result){	
 						        		
 						        		if(voteUp){						        			
-						        			$voteUp.removeClass('btn btn-info');
-						 					$voteUp.addClass('btn btn-success');
-					        				$voteDown.removeClass('btn btn-danger');
-									    	$voteDown.addClass('btn disabled');	
+// 						        			$voteUp.removeClass('btn btn-info');
+// 						 					$voteUp.addClass('btn btn-success');
+// 					        				$voteDown.removeClass('btn btn-danger');
+// 									    	$voteDown.addClass('btn disabled');	
+									    	
+									    	$voteUp.removeClass('voteInactive');
+									    	$voteUp.addClass('voteActive');
+									    	$voteDown.addClass('voteActive');		
+									    	$voteDown.addClass('voteInactive');		
 						        		}
 						        		
 						        		else{						        			
-						        			$voteDown.removeClass('btn btn-danger');
-						 					$voteDown.addClass('btn btn-success');	
-					        				$voteUp.removeClass('btn btn-info');
-									    	$voteUp.addClass('btn disabled');	
+// 						        			$voteDown.removeClass('btn btn-danger');
+// 						 					$voteDown.addClass('btn btn-success');	
+// 					        				$voteUp.removeClass('btn btn-info');
+// 									    	$voteUp.addClass('btn disabled');	
+											$voteDown.removeClass('voteInactive');
+						        			$voteDown.addClass('voteActive');
+						        			$voteUp.removeClass('voteActive');
+									    	$voteUp.addClass('voteInactive');
 						        		}
 						        		
 						        		$('#voteCount').html(data.message); 
@@ -1192,7 +1185,7 @@
 		    <div class="span9">
 		      <!--Body content-->
 		     
-  	  <div class="hero-unit" style="padding:20px; margin-bottom:15px">	  
+  	  <div id="issue-header" class="hero-unit" style="padding:20px; margin-bottom:15px">	  
         <h3 style="display:inline">
         	<a href="#" id="issue-title">${titulo}</a>
         	&nbsp;&nbsp;
@@ -1200,58 +1193,80 @@
         <p>${direccion}</p>       
       </div>
       
-    
+<!--      <hr> -->
       
-      <div class="row">
+      <div class="row" style="border: 0px solid #000; height: 40px; padding: 10px 0 10px 0; 
+      				border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; margin-bottom: 20px;">
       
-<!--       	<ul class="user-action-nav"> -->
-<%--       		<li><i class="icon-eye-open"></i><span>${cantidadVisitas}</span></li> --%>
-<!--       		<li> -->
-<!--       			<div class="arrows"><i class="icon-caret-up"></i><i class="icon-caret-down"></i></div> -->
-<%--       			<div class="text">${cantidadVotos}</div> --%>
-<!--       		</li> -->
-<!--       		<li><i class="icon-screenshot"></i><span>0</span></li> -->
-<%--       		<li><i class="icon-comments"></i><span>${cantidadComentarios}</span></li> --%>
-<!--       		<li><i class="icon-star"></i></li> -->
-<!--       		<li><i class="icon-print"></i></li> -->
-<!--       		<li><i class="icon-flag"></i></li> -->
-<!--       		<li><i class="icon-share"></i> -->
-<!--       	</ul> -->
+      	<ul class="user-action-nav">
+      		<li class="withText" title="Visitas"><span>${cantidadVisitas}</span><i class="icon-eye-open"></i></li>
+      		<li class="withText" id="votes">
+      			<div class="text" title="Votos totales"><span id="voteCount">${cantidadVotos}</span></div>
+      			<div class="arrows">
+      				<a href="#" class="vote-up" id="icon-up" title="Voto positivo"><i class="icon-caret-up "></i></a>
+      				<a href="#" class="vote-down" id="icon-down" title="Voto negativo"><i class="icon-caret-down "></i></a>
+      			</div>      			
+      		</li>
+      		<li class="withText">
+      			<div id="watchers" style="display:inline-block">      			
+				(<a href="#" id="view-watcher-list" data-toggle="popover"></a>)
+				<a href="#" id="watching-toggle"></a>
+				</div>
+			</li>
+      		<li class="withText" title="Comentarios"><span>${cantidadComentarios}</span><i class="icon-comments"></i></li>
+      		<li>      			
+      			<a id="bookmarkme" href="#" rel="sidebar" title="Agregar a Favoritos"><i class="icon-star"></i></a>
+      		</li>
+      		<li>
+      			<a href="#" onclick="javascript:window.print();" title="Imprimir"><i class="icon-print"></i></a>
+      		</li>
+      		<li>
+      			<a href="#" onclick="javascript:;" title="Denunciar reclamo"><i class="icon-flag"></i></a>
+      		</li>
+      		<li>
+	      		<a href="#" onclick="javascript:;" title="Compartir"><i class="icon-share"></i></a>
+	      	</li>
+      	</ul>
       
       
 
-  			<div style="display:inline-block">	  		
-  			  	${cantidadVisitas}   			  
-  			  	<c:if test="${cantidadVisitas == 1}">visita</c:if>
-  			  	<c:if test="${cantidadVisitas != 1}">visitas</c:if>
-  			</div>
+<!--   			<div style="display:inline-block">	  		 -->
+<%--   			  	${cantidadVisitas}   			   --%>
+<%--   			  	<c:if test="${cantidadVisitas == 1}">visita</c:if> --%>
+<%--   			  	<c:if test="${cantidadVisitas != 1}">visitas</c:if> --%>
+<!--   			</div> -->
   			
-  			<div id="votes" style="display:inline-block">	
-  				<span id="voteCount">${cantidadVotos}</span>
-  				<c:if test="${cantidadVotos == 1}">voto</c:if>
-  			  	<c:if test="${cantidadVotos != 1}">votos</c:if>
-  				&nbsp;  				
-  				<a class="vote-up" href="#" title="Voto positivo"><i id="icon-up" class="icon-thumbs-up"></i></a>  	  				
-  				&nbsp;
-  				<a class="vote-down" href="#" title="Voto negativo"><i id="icon-down" class="icon-thumbs-down"></i></a>
-  				&nbsp;
-  			</div>
+<!--   			<div id="votes" style="display:inline-block">	 -->
+<%--   				<span id="voteCount">${cantidadVotos}</span> --%>
+<%--   				<c:if test="${cantidadVotos == 1}">voto</c:if> --%>
+<%--   			  	<c:if test="${cantidadVotos != 1}">votos</c:if> --%>
+<!--   				&nbsp;  				 -->
+<!--   				<a class="vote-up" href="#" title="Voto positivo"><i id="icon-up" class="icon-thumbs-up"></i></a>  	  				 -->
+<!--   				&nbsp; -->
+<!--   				<a class="vote-down" href="#" title="Voto negativo"><i id="icon-down" class="icon-thumbs-down"></i></a> -->
+<!--   				&nbsp; -->
+<!--   			</div> -->
   			
 <!--   			<div id="watchers" style="display:inline-block">		  	 -->
 <!-- 	    		<a href="#" id="watching-toggle"></a> -->
 <!--  			    (<a href="#" id="view-watcher-list" data-toggle="popover"></a>) -->
 <!--   			</div>  			 -->
+
+
   		
-  			<div style="display:inline-block;">  			
-  				${cantidadComentarios} comentarios		
-  			</div>
+<!--   			<div style="display:inline-block;">  			 -->
+<%--   				${cantidadComentarios} comentarios		 --%>
+<!--   			</div> -->
   		
-  			<div style="display:inline-block">	
-  			  	<i class="icon-star"></i>
-  			  	<a id="bookmarkme" href="#" rel="sidebar" title="Agregar a favoritos">Agregar a Favoritos</a>
-  			</div>  
-				<i class="icon-print"></i>&nbsp;
-  			    <a href="#" onclick="javascript:window.print();" title="Imprimir">Imprimir</a>
+<!--   			<div style="display:inline-block">	 -->
+<!--   			  	<i class="icon-star"></i> -->
+<!--   			  	<a id="bookmarkme" href="#" rel="sidebar" title="Agregar a favoritos">Agregar a Favoritos</a> -->
+<!--   			</div>   -->
+  			
+<!-- 				<i class="icon-print"></i>&nbsp; -->
+<!--   			    <a href="#" onclick="javascript:window.print();" title="Imprimir">Imprimir</a> -->
+
+
   			    
 <!--   			    <i class="icon-warning-sign"></i>&nbsp; -->
 <!--   			    <a href="#" title="Denunciar">Denunciar</a>  			     -->
@@ -1270,28 +1285,32 @@
 <!-- 	 			</ul> -->
 <!-- 		   </div> -->
 
-			<sec:authorize access="hasAnyRole('ROLE_USER','ROLE_ADMIN', 'ROLE_MANAGER')">
-				<c:if test="${estado eq 'ABIERTO' || estado eq 'REABIERTO'}">
-					<div id="btn-status" class="btn-group" style="float:right;">			
-						<button class="btn btn-success"><i class="icon-ok icon-large"></i>Resolver</button>
+			<div class="user-action-btns">
+			
+				<sec:authorize access="hasAnyRole('ROLE_USER','ROLE_ADMIN', 'ROLE_MANAGER')">
+					<div class="btn-group" style="float:right;">
+						<button id="btn-update" class="btn btn-info" title="Guardar cambios"><i class="icon-ok icon-large"></i></button>			
 					</div>
-				</c:if>
-				<c:if test="${estado eq 'RESUELTO' || estado eq 'CERRADO'}">
-					<div id="btn-status" class="btn-group" style="float:right;">			
-						<button class="btn btn-warning"><i class="icon-rotate-right icon-large"></i>Reabrir</button>
-					</div>
-				</c:if>	
-				<div class="btn-group" style="float:right;margin-right:5px;">
-					<button id="btn-update"  class="btn btn-primary"><i class="icon-save icon-large"></i>Guardar</button>			
-				</div>
-				<div class="btn-group" style="float:right;">
-					<button id="btn-edit" class="btn btn-info"><i class="icon-pencil icon-large"></i>Editar</button>			
-				</div>						
-			</sec:authorize>
+					<div class="btn-group" style="float:right;margin-right:5px;">
+						<button id="btn-edit" class="btn" title="Editar"><i class="icon-pencil icon-large"></i></button>			
+					</div>	
+					<c:if test="${estado eq 'ABIERTO' || estado eq 'REABIERTO'}">
+						<div id="btn-status" class="btn-group" style="float:right;">			
+							<button class="btn btn-success" title="Resolver"><i class="icon-wrench icon-large"></i></button>
+						</div>
+					</c:if>
+					<c:if test="${estado eq 'RESUELTO' || estado eq 'CERRADO'}">
+						<div id="btn-status" class="btn-group" style="float:right;">			
+							<button class="btn btn-warning" title="Reabrir"><i class="icon-rotate-right icon-large"></i></button>
+						</div>
+					</c:if>	
+										
+				</sec:authorize>
+			
+			</div>
+			
 	
 	   </div>
-	   
-	   <hr>
 	 
 	  <div class="row">
 	  
