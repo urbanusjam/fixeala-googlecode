@@ -55,8 +55,8 @@ $(document).ready(function(){
     	<div class="row-fluid">
 			  
 			
-			<div class="span7">
-				<div class="page-header"><h4>Código del widget</h4> </div>			
+			<div class="span7" style="text-align:center;">
+				<div class="page-header" style="text-align: left !important;"><h4>Código del widget</h4> </div>			
 				<textarea id="widgetCode" style="width: 560px; height: 320px; font-family: Courier New; font-size: 12px;"></textarea>
 			</div>
 				
@@ -167,7 +167,11 @@ $(document).ready(function(){
 					
 				<div class="widgetContainer">
 					<div class="widgetHeader">
-						&Uacute;ltimos reclamos
+						&Uacute;ltimos reclamos	
+						<span class="pull-right">
+							<i class="icon-question-sign"></i> &nbsp;
+							<i class="icon-refresh"></i>
+						</span>
 					</div>
 					<div class="widgetBody">
 						<div class="widgetRow">
@@ -184,7 +188,7 @@ $(document).ready(function(){
 							<span class="widgetRowLocation">Paraná » Entre Ríos</span>	
 							<span class="widgetRowDate">hace 1 hora</span>
 						</div>
-						<div class="widgetRow">
+						<div class="widgetRow" style="border-bottom: none">
 							<span class="widgetRowTitle">
 								<a href="#">Basura esparcida por toda la vereda</a>
 							</span>			
@@ -198,12 +202,12 @@ $(document).ready(function(){
 						
 						<div class="widgetLogo">
 							<a href="#">
-								<i>© <strong>FIXEALA</strong></i>
+								<i>© <strong>Fixeala</strong></i>
 							</a>
 						</div>
-						<div class="widgetRefresh">
-							<i class="icon-refresh"></i>
-						</div>						
+<!-- 						<span class="pull-right"> -->
+<!-- 							<i class="icon-refresh"></i> -->
+<!-- 						</span>						 -->
 					</div>
 				</div>
 			
