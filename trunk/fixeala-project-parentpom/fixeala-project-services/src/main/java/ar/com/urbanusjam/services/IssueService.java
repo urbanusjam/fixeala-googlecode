@@ -29,6 +29,7 @@ public interface IssueService {
 	public void assignUserToIssue(String issueID, String username);
 		
 	public List<IssueDTO> loadAllIssues();	
+	public List<IssueDTO> loadIssues(int numberOfResults);	
 	public List<IssueDTO> loadIssuesByStatus(String[] status);	
 	public List<IssueDTO> loadIssuesByUser(String username);	
 	public List<IssueDTO> loadIssuesByArea(String areaName);

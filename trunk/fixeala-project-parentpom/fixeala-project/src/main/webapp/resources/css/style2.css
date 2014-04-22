@@ -1256,17 +1256,37 @@ a.no-hover { text-decoration: none; color: #000;}
 	border-left: 1px solid #527CAC;
 }
 
-.widgetBody {
-/* 	height: 300px; */
+.widgetHeader a { color: #fff; }
+
+.widgetHeader a:hover{
+	color: #40C0ED;
+	text-decoration: none;
 }
-.widgetRow {
-	height: 70px; 
-/* 	background-color: #F9FAFC; */
-	border-bottom: 1px dashed #ccc;
+
+.widgetBody {
+	height: 270px;
 	border-right: 1px solid #ccc;
 	border-left: 1px solid #ccc;
+}
+
+.widgetIssues {height: 270px;}
+
+.widgetLoader {
+	background: #F1F1F1; 
+	height: 270px; 
+	line-height: 270px; 
+	text-align: center;
+	border-right: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+}
+
+.widgetRow {
+	height: 70px; 
+	border-bottom: 1px dashed #ccc;	
 	padding: 10px; 
 }
+
+.widgetRow:last-child { border-bottom: none; }
 
 .widgetRow:hover { background-color: #F1F1F1; }
 
@@ -1301,8 +1321,6 @@ a.no-hover { text-decoration: none; color: #000;}
 }
 
 .widgetLogo { 
-/* 	float: left;  */
-/* 	width: 150px; */
 	font-size: 11px;
 	text-align: center;
 }
@@ -1316,5 +1334,6 @@ a.no-hover { text-decoration: none; color: #000;}
 	text-decoration: none;
 }
 
-
 .widgetRefresh  i[class^="icon-"] {  vertical-align: top; border: 0px solid red; }
+
+

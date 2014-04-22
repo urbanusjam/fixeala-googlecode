@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -46,6 +48,22 @@ public class IssueDAOImpl extends GenericDAOImpl<Issue, Serializable> implements
 		issues = this.findAll();
 		return issues;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Issue> getIssues(int numberOfResults) {
+		List<Issue> issues = new ArrayList<Issue>();
+//		Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Issue.class);
+//		criteria.setMaxResults(numberOfResults);
+//		criteria.addOrder(Order.asc("creationDate"));
+//		issues = criteria.list();	
+		
+		Query query  = getSessionFactory().getCurrentSession().createQuery("FROM Issue i ORDER BY i.creationDate DESC ");  
+		issues = query.setMaxResults(numberOfResults).list(); 
+		
+		return issues;
+	}
+	
 
 	@Override
 	public List<Issue> getIssuesByStatus(String[] status) {
@@ -128,7 +146,5 @@ public class IssueDAOImpl extends GenericDAOImpl<Issue, Serializable> implements
 		issues = this.findWhere(" id = ? ", new Object[]{  Long.parseLong(issueID) });
 		return issues.get(0).getTagsList();
 	}
-	
-	
 
 }

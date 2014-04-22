@@ -1,3 +1,7 @@
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <script type="text/javascript">
 
 $(document).ready(function(){
@@ -27,6 +31,26 @@ $(document).ready(function(){
 		+ '<\/script>';
 
 	$("#widgetCode").val(snippet);
+	
+	
+	$('#btn-refresh-widget').click(function() {
+	
+		$.ajax({
+		    url: "./refreshWidget.html",
+	 		type: "GET",		 		
+	 		dataType: "json",									 
+	        success: function(data){	
+	        	var $widgetBody =  $('.widgetIssues');
+	        	var loader = '<div class="widgetLoader"><img src="${pageContext.request.contextPath}/resources/images/loader.gif" alt="Loading"/></span>';	  
+	          	$widgetBody.replaceWith(loader);	        	
+	        	$widgetBody.load(location.href + " .widgetIssues > * ");	
+ 				setTimeout(function(){	 				
+ 					$('.widgetLoader').replaceWith($widgetBody);					 					 						      
+ 				}, 1000);
+    		}
+		});
+			  
+	});
 	
 	
 });
@@ -163,51 +187,38 @@ $(document).ready(function(){
 			
 			<div class="span4 pull-right">	 
 			
-				<div class="page-header"><h4>Ejemplo</h4> </div>			
-					
+				<div class="page-header"><h4>Previsualización</h4> </div>
+				
 				<div class="widgetContainer">
 					<div class="widgetHeader">
 						&Uacute;ltimos reclamos	
 						<span class="pull-right">
 							<i class="icon-question-sign"></i> &nbsp;
-							<i class="icon-refresh"></i>
+							<a href="#" id="btn-refresh-widget">
+								<i class="icon-refresh"></i>
+							</a>
 						</span>
-					</div>
-					<div class="widgetBody">
-						<div class="widgetRow">
-							<span class="widgetRowTitle">
-								<a href="#">Hay un pozo en medio de la Avenida!!!</a>
-							</span>
-							<span class="widgetRowLocation">CABA » Buenos Aires</span>
-							<span class="widgetRowDate">hace 3 minutos</span>
-						</div>
-						<div class="widgetRow">
-							<span class="widgetRowTitle">
-								<a href="#">La mampostería de viene abajo</a>
-							</span>		
-							<span class="widgetRowLocation">Paraná » Entre Ríos</span>	
-							<span class="widgetRowDate">hace 1 hora</span>
-						</div>
-						<div class="widgetRow" style="border-bottom: none">
-							<span class="widgetRowTitle">
-								<a href="#">Basura esparcida por toda la vereda</a>
-							</span>			
-							<span class="widgetRowLocation">GBA » Buenos Aires</span>	
-							<span class="widgetRowDate">ayer</span>
-						</div>
-					
-					</div>
-					
-					<div class="widgetFooter">
+					</div>				
+					<div class="widgetBody">			
+						<div class="widgetIssues">						
+							<c:forEach items="${widgetIssues}" var="issue">							
+								<div class="widgetRow">
+									<span class="widgetRowTitle">
+									<a href="#">${issue.title}</a>
+									</span>		
+									<span class="widgetRowLocation">${issue.city} » ${issue.province}</span>	
+									<span class="widgetRowDate">${issue.fechaFormateada}</span>							
+								</div>
+						</c:forEach>						
+						</div>		
 						
+					</div>					
+					<div class="widgetFooter">						
 						<div class="widgetLogo">
-							<a href="#">
+							<a href="http://localhost:8080/fixeala" target="_blank">
 								<i>© <strong>Fixeala</strong></i>
 							</a>
 						</div>
-<!-- 						<span class="pull-right"> -->
-<!-- 							<i class="icon-refresh"></i> -->
-<!-- 						</span>						 -->
 					</div>
 				</div>
 			
