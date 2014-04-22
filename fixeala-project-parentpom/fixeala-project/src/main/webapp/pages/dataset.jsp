@@ -87,7 +87,7 @@
 		
 		<!-- Dataset -->
 	    <div class="page-header">
-    	 	<h4><i class="icon-tasks"></i>&nbsp;&nbsp;<i class="icon-angle-right"></i>&nbsp;&nbsp;Tu Dataset</h4>    	 	
+    	 	<h4><i class="icon-tasks"></i>&nbsp;&nbsp;<i class="icon-angle-right"></i>&nbsp;&nbsp;Cat&aacute;logo de Datos</h4>    	 	
     	</div>    	
     	
     	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse rhoncus odio eu iaculis malesuada. 

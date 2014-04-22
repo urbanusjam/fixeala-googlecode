@@ -1,3 +1,17 @@
+	<script type="text/javascript">    
+		$(document).ready(function(){
+			
+			$("#tags").select2({
+				tags: ${allTags},
+				tokenSeparators: [",", " "],
+				   id: function (item) {
+		                return item.text;
+				   }
+			});
+			
+		});
+	</script>
+	
 	<div id="content">
 	
 		<div id="searchBar" class="row-fluid">

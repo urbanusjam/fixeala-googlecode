@@ -321,6 +321,17 @@ public class IssueServiceImpl implements IssueService {
 	}
 	
 	@Override
+	public List<IssueDTO> loadIssues(int numberOfResults) {
+		List<Issue> issues = new ArrayList<Issue>();
+		issues = issueDAO.getIssues(numberOfResults);
+		List<IssueDTO> issuesDTO = new ArrayList<IssueDTO>();
+		for(Issue issue : issues){		
+			issuesDTO.add(convertToDTO(issue));
+		}
+		return issuesDTO;	
+	}
+	
+	@Override
 	public List<IssueDTO> loadIssuesByStatus(String[] status) {
 		List<Issue> issues = new ArrayList<Issue>();
 		issues = issueDAO.getIssuesByStatus(status);
@@ -933,6 +944,5 @@ public class IssueServiceImpl implements IssueService {
 		IssueRepair licitacion = issueRepairDAO.getLicitacionByIssue(Long.valueOf(issueID));
 		return convertTo(licitacion);
 	}
-
 	
 }

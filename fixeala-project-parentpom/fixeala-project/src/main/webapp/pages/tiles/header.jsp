@@ -20,8 +20,8 @@
 <%--              	<li><a href="${pageContext.request.contextPath}/index.jsp" title="Reclamos" ><i class="icon-white icon-globe  icon-2x "></i></a></li> --%>
 				<li><a href="${pageContext.request.contextPath}/reclamos.html" title="Reclamos"><i class=" icon-pushpin icon-2x"></i></a></li>
 				<li><a href="${pageContext.request.contextPath}/usuarios.html" title="Usuarios"><i class="icon-group icon-2x"></i></a></li>				
-				<li><a href="${pageContext.request.contextPath}/dataset.html" title="Tu dataset"><i class="icon-tasks icon-2x"></i></a></li>		
-				<li><a href="${pageContext.request.contextPath}/widget.html" title="Tu widget"><i class="icon-cogs icon-2x"></i></a></li>	
+				<li><a href="${pageContext.request.contextPath}/dataset.html" title="Datasets"><i class="icon-tasks icon-2x"></i></a></li>		
+				<li><a href="${pageContext.request.contextPath}/widget.html" title="Widget"><i class="icon-cogs icon-2x"></i></a></li>	
 				<li><a href="#" title="Mobile App"><i class="icon-mobile-phone icon-2x"></i></a></li>			
 				<li><a href="#" title="Indicadores"><i class="icon-signal icon-2x"></i></a></li>		
 				<li><a href="#" title="Acerca del sitio"><i class="icon-question icon-2x"></i></a></li>			

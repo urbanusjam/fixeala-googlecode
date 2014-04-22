@@ -9,7 +9,7 @@
 	<meta http-equiv="content-type" content="text/html; charset=UTF8">
 	<title><tiles:insertAttribute name="title" ignore="true" /></title>	
 
-<!--   	<script type="text/javascript" src="http://maps.google.com/maps/api/js?libraries=geometry,places&components=country:ar&language=ES&sensor=false"></script>  -->
+  	<script type="text/javascript" src="http://maps.google.com/maps/api/js?libraries=geometry,places&components=country:ar&language=ES&sensor=false"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.jsonp-2.4.0.min.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery-ui-1.10.3.custom.js"></script>
@@ -150,13 +150,13 @@ path:hover {
         
 		$(document).ready(function(){
 			
-			$("#tags").select2({
-				tags: ${allTags},
-				tokenSeparators: [",", " "],
-				   id: function (item) {
-		                return item.text;
-				   }
-			});
+// 			$("#tags").select2({
+// 				tags: ${allTags},
+// 				tokenSeparators: [",", " "],
+// 				   id: function (item) {
+// 		                return item.text;
+// 				   }
+// 			});
 		 	
 		
 			function getDomainUrl(){
