@@ -1,0 +1,140 @@
+.widget {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	font-family: 'Arial';
+	overflow: hidden;
+}
+
+.widgetContainer {
+	width: 270px; 
+	border: 0px solid #000; 
+	backgorund-color: #40C0ED; 
+	line-height: 25px;
+	margin: 0 auto;
+}
+.widgetHeader {	
+	height: 25px; 
+	background-color: #527CAC;
+	padding: 5px 10px 5px 10px; 
+	font-weight: bold;
+	font-size: 12px;
+	color: #fff;
+	text-transform: uppercase;
+	border-top: 1px solid #527CAC;
+	border-right: 1px solid #527CAC;
+	border-left: 1px solid #527CAC;
+}
+
+.widgetHeader a { 
+	color: #fff; 
+	text-decoration: none; 
+}
+
+.widgetHeader a img {
+	border: 1px solid #fff;
+	float: right;
+	background: #fff;
+}
+
+.widgetHeader a:hover{
+	color: #fff;
+	text-decoration: none;
+}
+
+.widgetBody {
+	border-right: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+}
+
+.widgetIssues {
+	height: auto;	
+}
+
+.widgetError { 	
+	padding: 10px; 
+	width:auto;
+	height: 70px; 
+	font-size: 13px;
+}
+
+.widgetLoader {
+	background: #F1F1F1; 
+	height: 70px; 
+	line-height: 70px;
+	text-align: center;
+	border-right: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+}
+
+.widgetRow {
+	height: 70px; 
+	border-bottom: 1px dashed #ccc;	
+	padding: 10px; 
+}
+
+.widgetRow a { 
+	color: #000; 
+}
+
+.widgetRow a:hover { 
+	text-decoration: underline; 
+}
+
+.widgetRow:last-child { 
+	border-bottom: none; 
+}
+
+.widgetRow:hover { 
+	background-color: #F1F1F1; 
+}
+
+.widgetRowTitle {
+	font-size: 13px;
+	font-weight: bold;
+	height: 25px;
+	display: block; 
+}
+
+.widgetRowLocation {
+	font-size: 11px;
+	display: block; 
+	height: 20px;
+}
+.widgetRowDate {
+	font-size: 11px; 
+	color: grey;
+	display: block; 
+	height: 20px;
+}
+
+.widgetFooter { 
+	height: 15px; 
+	background-color: #527CAC;
+	line-height: 15px;
+	padding: 5px 10px 5px 10px; 
+	color: #fff;
+	border-right: 1px solid #527CAC;
+	border-left: 1px solid #527CAC;
+	border-bottom: 1px solid #527CAC;
+}
+
+.widgetLogo { 
+	font-size: 11px;
+	text-align: center;
+}
+
+.widgetLogo a {
+	color: #fff;
+	text-decoration: none; 
+}
+
+.widgetLogo a:hover {
+	color: #40C0ED;
+	text-decoration: none;
+}
+
+.widgetRefresh  i[class^="icon-"] {  
+	vertical-align: top; 
+	border: 0px solid red; 
+}
