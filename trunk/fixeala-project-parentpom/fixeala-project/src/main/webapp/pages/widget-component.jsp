@@ -21,7 +21,7 @@
 					<c:forEach items="${issueList}" var="issue">							
 						<div class="widgetRow">
 							<span class="widgetRowTitle">
-								<a href="#">${issue.title}</a>
+								<a href="#" onclick="redirectIssueURL('${issue.id}', '${issue.title}');">${issue.title}</a>
 							</span>		
 							<span class="widgetRowLocation">${issue.city} » ${issue.province}</span>	
 							<span class="widgetRowDate">${issue.fechaFormateada}</span>							
