@@ -21,7 +21,7 @@
 			+ '<\/script>'
 			+ '\n'
 			+ '\n'
-			+ '<iframe style="width: 270px; border: none" onload="resizeIframe(this)" src="http://localhost:8080/fixeala/widget-component.html"></iframe>';
+			+ '<iframe style="width: 300px; border: none" onload="resizeIframe(this)" src="http://localhost:8080/fixeala/widget-component.html"></iframe>';
 			
 		$("#widgetScript").val(snippet);
 		
@@ -157,7 +157,7 @@
 			
 				<div class="page-header"><h4>Previsualización</h4> </div>
 				
-				<iframe style="width: 270px; border: none;" onload="resizeIframe(this)" src="http://localhost:8080/fixeala/widget-component.html"></iframe>
+				<iframe style="width: 300px; border: none;" onload="resizeIframe(this)" src="http://localhost:8080/fixeala/widget-component.html"></iframe>
 			
 			
 <!-- 				 <table class="table" style="margin-top:50px;"> -->

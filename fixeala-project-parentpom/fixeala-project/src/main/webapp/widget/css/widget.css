@@ -7,7 +7,7 @@
 }
 
 .widgetContainer {
-	width: 270px; 
+	width: 300px; 
 	border: 0px solid #000; 
 	backgorund-color: #40C0ED; 
 	line-height: 25px;
@@ -68,7 +68,8 @@
 }
 
 .widgetRow {
-	height: 70px; 
+	min-height: 70px; 
+	max-height: 100px;
 	border-bottom: 1px dashed #ccc;	
 	padding: 10px; 
 }
@@ -95,18 +96,35 @@
 	font-weight: bold;
 	height: 25px;
 	display: block; 
+	-o-text-overflow: ellipsis;   /* Opera */
+    text-overflow:    ellipsis;   /* IE, Safari (WebKit) */
+    overflow:hidden;              /* don't show excess chars */
+    white-space:nowrap;           /* force single line */
 }
 
 .widgetRowLocation {
 	font-size: 11px;
 	display: block; 
-	height: 20px;
 }
 .widgetRowDate {
 	font-size: 11px; 
 	color: grey;
 	display: block; 
+	height: 25px;
+	display: inline; 
+	
+}
+
+.widgetRowStatus {
+	width: 100px;
+	font-size: 11px; 	
+	font-weight: bold;
+	text-align: center;
+	display: inline-block; 
 	height: 20px;
+	line-height: 20px;
+	color: #fff;
+	float: right;
 }
 
 .widgetFooter { 

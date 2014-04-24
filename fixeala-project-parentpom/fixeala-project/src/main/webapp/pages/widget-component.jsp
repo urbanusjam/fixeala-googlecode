@@ -21,10 +21,10 @@
 					<c:forEach items="${issueList}" var="issue">							
 						<div class="widgetRow">
 							<span class="widgetRowTitle">
-								<a href="#" onclick="redirectIssueURL('${issue.id}', '${issue.title}');">${issue.title}</a>
+								<a href="#" title="${issue.title}" onclick="redirectIssueURL('${issue.id}', '${issue.title}');">${issue.title}</a>
 							</span>		
 							<span class="widgetRowLocation">${issue.city} » ${issue.province}</span>	
-							<span class="widgetRowDate">${issue.fechaFormateada}</span>							
+							<span class="widgetRowDate">${issue.fechaFormateada}</span><span class="widgetRowStatus" style="background-color: ${issue.statusCss}">${issue.status}</span>						
 						</div>
 					</c:forEach>					
 				</c:if>	
@@ -39,8 +39,8 @@
 		</div>					
 		<div class="widgetFooter">						
 			<div class="widgetLogo">
-				<a href="http://localhost:8080/fixeala" target="_blank" title="Plataforma web para la resolución colaborativa de reclamos barriales  de la República Argentina.">
-					<i>© <strong>Fixeala</strong></i>
+				<a href="http://localhost:8080/fixeala" target="_blank" title="Plataforma web para la resolución colaborativa de reclamos barriales de la República Argentina.">
+					<i>© <strong>FIXEALA</strong></i>
 				</a>
 			</div>
 		</div>
