@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.dto.IssueDTO;
+import ar.com.urbanusjam.services.utils.IssueStatus;
+import ar.com.urbanusjam.services.utils.IssueStatusColorCode;
 import ar.com.urbanusjam.web.domain.AlertStatus;
+import ar.com.urbanusjam.web.utils.StatusResponse;
 
 @Controller
 public class WidgetController {
@@ -34,7 +37,7 @@ public class WidgetController {
 	public @ResponseBody AlertStatus refreshWidget(Model model) throws JSONException { 			
 		List<IssueDTO> issues = new ArrayList<IssueDTO>();
 		try{
-			issues = issueService.loadIssues(2);
+			issues = issueService.loadIssues(MAX_RESULTS);
 			model.addAttribute("numberOfIssues", issues.size());
 			model.addAttribute("widgetIssues", issues);	
 			return new AlertStatus(true, "OK");
@@ -49,6 +52,23 @@ public class WidgetController {
 		List<IssueDTO> issues = new ArrayList<IssueDTO>();		
 		try{
 			issues = issueService.loadIssues(MAX_RESULTS);	
+			
+			for(IssueDTO issue : issues){
+				if(issue.getStatus().equals(IssueStatus.OPEN))
+					issue.setStatusCss(IssueStatusColorCode.CSS_OPEN);
+				if(issue.getStatus().equals(IssueStatus.REOPENED))
+					issue.setStatusCss(IssueStatusColorCode.CSS_REOPENED);
+				if(issue.getStatus().equals(IssueStatus.ACKNOWLEDGED))
+					issue.setStatusCss(IssueStatusColorCode.CSS_ACKNOWLEDGED);
+				if(issue.getStatus().equals(IssueStatus.IN_PROGRESS))
+					issue.setStatusCss(IssueStatusColorCode.CSS_IN_PROGRESS);
+				if(issue.getStatus().equals(IssueStatus.SOLVED))
+					issue.setStatusCss(IssueStatusColorCode.CSS_SOLVED);
+				if(issue.getStatus().equals(IssueStatus.CLOSED))
+					issue.setStatusCss(IssueStatusColorCode.CSS_CLOSED);
+			}
+				
+			
 			model.addAttribute("numberOfIssues", issues.size());			
 			if(issues.size() > 0)			
 				model.addAttribute("issueList", issues);			
