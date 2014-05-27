@@ -125,7 +125,7 @@ public class User implements UserDetails {
     }
 
     public User(String username, String password, boolean enabled, boolean accountNonExpired, boolean accountNonLocked, 
-    		boolean credentialsNonExpired, Collection<Authority> authorities) {
+    		boolean credentialsNonExpired, Collection<Authority> roles) {
     	
         if (((username == null) || "".equals(username)) || (password == null)) {
             throw new IllegalArgumentException("Cannot pass null or empty values to constructor");
@@ -306,22 +306,43 @@ public class User implements UserDetails {
     	this.credentialsNonExpired = credentialsNonExpired; 
     }
 
-	public boolean hasRole(String role, Collection<GrantedAuthority> authorities) {
-       boolean hasRole = false;
-       
-       for (GrantedAuthority grantedAuthority : authorities) {
-    	   hasRole = grantedAuthority.getAuthority().equals(role);
-           break;
-       }       
-     
-        return hasRole;
-    }
+//	public boolean hasRole(String role, Collection<GrantedAuthority> authorities) {
+//       boolean hasRole = false;
+//       
+//       for (GrantedAuthority grantedAuthority : authorities) {
+//    	   hasRole = grantedAuthority.getAuthority().equals(role);
+//           break;
+//       }       
+//     
+//        return hasRole;
+//    }
     
-    public boolean hasSingleRole(String role, Collection<GrantedAuthority> authorities) {
+    public boolean hasRole(String role, Collection<Authority> authorities) {
+        boolean hasRole = false;
+        
+        for (Authority authority : authorities) {
+     	   hasRole = authority.getAuthority().equals(role);
+            break;
+        }       
+      
+         return hasRole;
+     }
+    
+//    public boolean hasSingleRole(String role, Collection<GrantedAuthority> authorities) {
+//        boolean hasRole = false;        
+//        if(authorities.size() == 1){
+//        	for (GrantedAuthority grantedAuthority : authorities) {
+//          	     hasRole = grantedAuthority.getAuthority().equals(role);              
+//             }  
+//        }               
+//        return hasRole;        
+//     }
+    
+    public boolean hasSingleRole(String role, Collection<Authority> authorities) {
         boolean hasRole = false;        
         if(authorities.size() == 1){
-        	for (GrantedAuthority grantedAuthority : authorities) {
-          	     hasRole = grantedAuthority.getAuthority().equals(role);              
+        	for (Authority authority : authorities) {
+          	     hasRole = authority.getAuthority().equals(role);              
              }  
         }               
         return hasRole;        

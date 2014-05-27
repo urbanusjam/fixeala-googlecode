@@ -1,3 +1,4 @@
+
 $(document).ready(function(){
 	
 			$('#signupForm #username').focus();
@@ -45,118 +46,127 @@ $(document).ready(function(){
  		        trigger: 'custom', 
  		        onlyOne: false,    
  		        position: 'right'  
- 		    });
- 		
+ 		    });  
+ 			  		
+ 			 
+ 			
 			$("#signupForm").validate({		
 				
 						rules: 
 						{	 onfocusin: false,	
 							
-//							 recaptcha_response_field: { 
-//								 required :  true,
-//								 remote: { 
-//						                url:"./signup/verifyCaptcha.html",
-//						                type:"POST",
-//						                async:false,
-//						                data: {
-//						                    recaptcha_challenge_field: function(){ return $('#recaptcha_challenge_field').val(); },
-//						                    recaptcha_response_field: function(){ return $('#recaptcha_response_field').val(); }
-//						                }
-//						            }
-//							 },
-							
-							 username: { 
-								 required : true, 
-								 // regex : /^[a-z0-9_-]{3,15}$/,
-								 minlength: 4,
-			    				 maxlength: 20,
-			    				 remote: {
-						 	    		url: "./signup/checkUsernameAvailability.html", 
-										type: "POST", 
-										data: {
-									        username: function(){ return $("#signupForm #username").val(); }
-									    }		
-					 	    	 }					 	    	
-							 },								
-					 	     email: { 
-					 	    	 required : true,
-					 	    	 email : true,
-					 	    	 remote: {
-						 	    		url: "./signup/checkEmailAvailability.html", 
-										type: "POST", 
-										data: {
-									        email: function(){ return $("#signupForm #email").val(); }
-									      }		
-					 	    	 }
-					 	     },
-			    			 password: {  
-			    				 required : true, 
-			    				 // regex : /^(?=.{8,16})(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$_-]).*$/
-			    				 minlength: 6,
-			    				 maxlength: 30
-			    			 } ,
-				   	    	 confirmPassword: {		
-				   	    		 required : true, 
-				   	      		 equalTo: "#password"				   	      		 
-				   	    	 },
+							 
+//							 username: { 
+//								 required : true, 
+//								 // regex : /^[a-z0-9_-]{3,15}$/,
+//								 minlength: 4,
+//			    				 maxlength: 20,
+//			    				 remote: {
+//						 	    		url: "./signup/checkUsernameAvailability.html", 
+//										type: "POST", 
+//										data: {
+//									        username: function(){ return $("#signupForm #username").val(); }
+//									    }		
+//					 	    	 }					 	    	
+//							 },								
+//					 	     email: { 
+//					 	    	 required : true,
+//					 	    	 email : true,
+//					 	    	 remote: {
+//						 	    		url: "./signup/checkEmailAvailability.html", 
+//										type: "POST", 
+//										data: {
+//									        email: function(){ return $("#signupForm #email").val(); }
+//									      }		
+//					 	    	 }
+//					 	     },
+//			    			 password: {  
+//			    				 required : true, 
+//			    				 // regex : /^(?=.{8,16})(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$_-]).*$/
+//			    				 minlength: 6,
+//			    				 maxlength: 30
+//			    			 } ,
+//				   	    	 confirmPassword: {		
+//				   	    		 required : true, 
+//				   	      		 equalTo: "#password"				   	      		 
+//				   	    	 },
 				   	    	
 					 	}, 	 
 					 	
 			 		 	messages: 
 			 		 	{ 	 	  
-//			 		 		    recaptcha_response_field: 
-//			 		 		    { 
-//			 		 		    	required :  "Este campo es requerido.",
-//			 		 		    	remote: "Captcha inv&aacute;lido"
-//			 		 		    },
+			 		 		    recaptcha_response_field: 
+			 		 		    { 
+			 		 		    	required :  "Este campo es requerido.",
+			 		 		    	remote: "Captcha inv&aacute;lido"
+			 		 		    },
 			 		 		    
-			 	     			username: 
-			 	     			{		
-			 	     					required: "Este campo es requerido.",	 	     			 	
-			 	     			 		minlength: "El nombre de usuario debe tener por lo menos 4 caracteres.",
-			 	     			 		maxlength: "El m&aacute;ximo es de 20 caracteres.",
-			 	     			 		remote: "El nombre de usuario ya ha sido registrado."
-			 	     		 	},
-			 	     			email: 
-			 	     			{
-			 	     					required: "Este campo es requerido.",	 	
-			 	     					email: "Ingrese una direcci&oacute;n de email v&aacute;lida.",
-			 	     					remote: "La direcci&oacute;n de email ya ha sido registrada."
-			 	     			},
-			 	     			password: 
-			 	     			{		
-			 	     					required: "Este campo es requerido.",	 	
-			 	     			 		minlength: "La contrase&ntilde;a debe tener por lo menos 6 caracteres.",
-			 	     			 		maxlength: "El m&aacute;ximo es de 30 caracteres."
-			 	     		 	},			     				
-			     				confirmPassword: 
-			     				{			     				
-			     						equalTo:  "La contrase&ntilde;a y la confirmaci&oacute;n no coinciden.",
-			     						required: "Este campo es requerido."
-			     				}
+//			 	     			username: 
+//			 	     			{		
+//			 	     					required: "Este campo es requerido.",	 	     			 	
+//			 	     			 		minlength: "El nombre de usuario debe tener por lo menos 4 caracteres.",
+//			 	     			 		maxlength: "El m&aacute;ximo es de 20 caracteres.",
+//			 	     			 		remote: "El nombre de usuario ya ha sido registrado."
+//			 	     		 	},
+//			 	     			email: 
+//			 	     			{
+//			 	     					required: "Este campo es requerido.",	 	
+//			 	     					email: "Ingrese una direcci&oacute;n de email v&aacute;lida.",
+//			 	     					remote: "La direcci&oacute;n de email ya ha sido registrada."
+//			 	     			},
+//			 	     			password: 
+//			 	     			{		
+//			 	     					required: "Este campo es requerido.",	 	
+//			 	     			 		minlength: "La contrase&ntilde;a debe tener por lo menos 6 caracteres.",
+//			 	     			 		maxlength: "El m&aacute;ximo es de 30 caracteres."
+//			 	     		 	},			     				
+//			     				confirmPassword: 
+//			     				{			     				
+//			     						equalTo:  "La contrase&ntilde;a y la confirmaci&oacute;n no coinciden.",
+//			     						required: "Este campo es requerido."
+//			     				}
 			     				
 			 	     	},
-			 	     	
-//			 	    	submitHandler: function() {
-//			 	    		
-//			 	    		var username = $('#signupForm #username').val();
-//			 	    	    var email = $('#signupForm #email').val();
-//			 	    	    var password = $('#signupForm #password').val();
-//
-//			 	    	    $.ajax({
-//			 	    	        type: "POST",
-//			 	    	        url: "./signup/createAccount.html",
-//			 	    	        data: "username=" + username + "&email=" + email + "&password=" + password,
-//			 	    	        async:false,
-//			 	    	        success: function(response){        			 	    	        	
-//			 	    	        	window.location.href = getDomainUrl();
-//			 	    	         },
-//			 	    	         error: function(xhr, textStatus, errorThrown){
-//			 	    	             alert("Error! Status = " + xhr.status);
-//			 	    	         }
-//			 	    	    });
-//			 	    		
-//			 	    	},
+			 	    /** 	
+			 	    	submitHandler: function() {
+			 	    		
+			 	    
+			 	    		
+			 	    		
+			 	    		bootbox.confirm("&iquest;Confirma que desea crear la cuenta?", function(result){	
+			 	    			
+			 	    			var username = $('#signupForm #username').val();
+				 	    	    var email = $('#signupForm #email').val();
+				 	    	    var password = $('#signupForm #password').val();	
+				 	    	    								
+			            		$.ajax({
+			            			    url: "../account/signup/createAccount.html",
+								 		type: "POST",	
+								 		data: "username=" + username + "&email=" + email + "&password=" + password,								 
+								        success: function(data){
+								        	
+								        	if(data.result){	 					
+					 	    					
+								        		bootbox.alert(data.message, function() {
+								        			setTimeout(function() { 
+								        				window.location.href = getDomainUrl();
+								        			}, 1000);	
+								        		});					 	    					
+					 	    				}
+					 	    				else{					 	    				
+					 	    					bootbox.alert(data.message, function() {
+					 	    						$("#signupForm").formwizard({ 
+					 	    							formOptions: {resetForm:true}
+					 	    						});	 						
+					 	    					}); 
+					 	    				}					 	    				
+					            		}		 	    			
+			            		});
+				            		
+			 	    		});
+			 	    		
+
+			 	    	},**/
 			 	    	
 			 	    	highlight: function (element) { 
 			 	    		$(element).closest('.input-prepend').removeClass('success').addClass('error');
@@ -179,48 +189,65 @@ $(document).ready(function(){
 			 	    	}*/
 			 });
 			
-			$("#btnSignup").click(function() {
+		
+		
+			
+			$('#signupForm').submit(function() {
+		        return validateCaptcha();
+		    });
+			
+			
+			function validateCaptcha(){				
 				
-				$signupForm = $("#signupForm");
-				
-				if( $signupForm.valid() ){	
-							 					
-							if (confirm('Confirma que desea crear la cuenta?')) {
-							
-			            		$.ajax({
-			            			    url: "./signup/doCreateAccount",
-								 		type: "POST",	
-								 		data: $signupForm.serialize(),
-								 		dataType: "json",									 
-								        success: function(data){		
-								        	alert(data.result);
-					 	    			/**	if(alertStatus.result){	 					
-					 	    					
-					 	    					bootbox.alert("Se ha enviado un link de activaci�n de cuenta a su casilla de correo.");
-//					 	    					bootbox.alert(alertStatus.message, function() {
-//						 	    					$("#signupForm").formwizard({ 
-//					 	    							formOptions: {resetForm:true}
-//					 	    						});
-//					 	    					});   
-				 	    						//redirect(getDomainUrl() + "account/signup.html");
-					 	    					
-					 	    				}
-					 	    				else{
-//					 	    					bootbox.alert("Ha ocurrido un error y no se ha podido mandar el link de activaci�n. Intente de nuevo.");
-//					 	    					bootbox.alert(alertStatus.message, function() {
-//					 	    						$("#signupForm").formwizard({ 
-//					 	    							formOptions: {resetForm:true}
-//					 	    						});	 						
-//					 	    					});    	
-					 	    				
-					 	    				}**/
-					            		}
-			            		});
-							}//confirm 			
-					
-				}//validate
-
-            });
+	    	    var captchaPrivateKey = "6LdIQfQSAAAAAP_NbTRB9gRBTAzgN345VOHincSt";
+	    	    var captchaIP = "172.16.67.108";
+	    	    var captchaChallenge = Recaptcha.get_challenge();
+	    	    var captchaResponse =  Recaptcha.get_response();  	    	    
+	    	 
+	    	    var captchaInfo =
+	            {
+    	    		"privatekey":  captchaPrivateKey,
+    	    		"remoteip"  :  captchaIP,
+    	    		"challenge" :  captchaChallenge,
+    	    	    "response"  :  captchaResponse	    	    		
+	            };
+	    	    
+	    	    console.log(JSON.stringify(captchaInfo));
+	    	  
+	    	   $.ajax({
+	    		   		type: 'POST',
+	    		   		url: 'http://www.google.com/recaptcha/api/verify',	    		   		
+	    		   		contentType: 'application/json; charset=utf-8',
+	    		   		dataType: 'jsonp',	
+	    		   		data: JSON.stringify(captchaInfo),	    		   		
+	    		   		success: function(data){
+//	    		   			console.log($.parseJSON(data));
+	    		   		},
+		    		   	 error: function(jqXHR, exception) {
+		    		   		 console.log(jqXHR);
+			                   if (jqXHR.status === 0) {
+			                       alert('Not connect.\n Verify Network.');
+			                   } else if (jqXHR.status == 404) {
+			                       alert('Requested page not found. [404]');
+			                   } else if (jqXHR.status == 500) {
+			                       alert('Internal Server Error [500].');
+			                   } else if (exception === 'parsererror') {
+			                       alert('Requested JSON parse failed.');
+			                   } else if (exception === 'timeout') {
+			                       alert('Time out error.');
+			                   } else if (exception === 'abort') {
+			                       alert('Ajax request aborted.');
+			                   } else {
+			                       alert('Uncaught Error.\n' + jqXHR.responseText);
+			                   }
+			               }
+	             
+	    	   });
+	    	   
+	    	 
+	    	  
+	    	  return false;
+			}
 			
 			
 			/** ======================================================================================================== **/

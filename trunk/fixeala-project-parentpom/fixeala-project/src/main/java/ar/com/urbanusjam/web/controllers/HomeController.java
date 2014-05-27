@@ -543,10 +543,10 @@ public class HomeController {
 				statusList.add("Cerrar");
 			}
 			
-			if(currentStatus.equals(IssueStatus.ACKNOWLEDGED)){
-				statusList.add("Resolver");
-				statusList.add("Cerrar");
-			}
+//			if(currentStatus.equals(IssueStatus.ACKNOWLEDGED)){
+//				statusList.add("Resolver");
+//				statusList.add("Cerrar");
+//			}
 			
 			if(currentStatus.equals(IssueStatus.SOLVED)){
 				statusList.add("Reabrir");
@@ -583,12 +583,12 @@ public class HomeController {
 					isSameUser = ((User) loggedUser).getUsername().equals(user.getUsername());
 				}
 				
-				if(user.hasRole("ROLE_ADMIN", user.getAuthorities()) 
-						|| user.hasRole("ROLE_MANAGER", user.getAuthorities()) ){
-					if(!isSameUser){
-						return "redirect:/" + "error.html";
-					}					
-				}
+//				if(user.hasRole("ROLE_ADMIN", user.getAuthorities()) 
+//						|| user.hasRole("ROLE_MANAGER", user.getAuthorities()) ){
+//					if(!isSameUser){
+//						return "redirect:/" + "error.html";
+//					}					
+//				}
 				
 				model.addAttribute("loggedUser", loggedUser);
 				model.addAttribute("loggedMatchesProfile", isSameUser);			

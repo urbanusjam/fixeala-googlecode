@@ -177,8 +177,8 @@ public class IssueServiceImpl implements IssueService {
 		revision.setNroReclamo(issue.getId());			
 		revision.setOperacion(Operation.UPDATE);	
 		
-		if(newStatus.equals(IssueStatus.ACKNOWLEDGED))
-			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_ACKNOWLEDGE + " el reclamo.");			
+//		if(newStatus.equals(IssueStatus.ACKNOWLEDGED))
+//			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_ACKNOWLEDGE + " el reclamo.");			
 		if(newStatus.equals(IssueStatus.IN_PROGRESS))	
 			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_PROGRESS + " el reclamo.");			
 		if(newStatus.equals(IssueStatus.SOLVED))
@@ -593,6 +593,8 @@ public class IssueServiceImpl implements IssueService {
 		UserDTO userDTO = new UserDTO();
 		userDTO.setUsername(issue.getReporter().getUsername());
 		
+		String[] cssStyle = assignCSSbyStatus(issue.getStatus());
+		
 		IssueDTO issueDTO = new IssueDTO();
 		issueDTO.setId(String.valueOf(issue.getId()));
 		issueDTO.setUser(userDTO);
@@ -601,13 +603,14 @@ public class IssueServiceImpl implements IssueService {
 		issueDTO.setCity(issue.getCity());	
 		issueDTO.setProvince(issue.getProvince());	
 		issueDTO.setTitle(issue.getTitle());
+		issueDTO.setTitleCss(cssStyle[1]);
 		issueDTO.setDescription(issue.getDescription());	
 		issueDTO.setCreationDate(issue.getCreationDate().getTime());		
 		issueDTO.setLastUpdateDate(issue.getLastUpdateDate().getTime());		
 		issueDTO.setLatitude(String.valueOf(issue.getLatitude()));
 		issueDTO.setLongitude(String.valueOf(issue.getLongitude()));
 		issueDTO.setStatus(issue.getStatus());
-		issueDTO.setStatusCss(this.assignCSSbyStatus(issue.getStatus()));
+		issueDTO.setStatusCss(cssStyle[0]);
 		issueDTO.setUsername(userDTO.getUsername());
 		issueDTO.setFechaFormateada(issue.getCreationDate().getTime());
 		
@@ -707,32 +710,37 @@ public class IssueServiceImpl implements IssueService {
 		return (GregorianCalendar) calendar;	
 	} 
 	
-	private String assignCSSbyStatus(String status){
+	private String[] assignCSSbyStatus(String status){
 		
-		String css = StringUtils.EMPTY;
+		String[] css = new String[2];
 		
 		if(status.equals(IssueStatus.OPEN)){
-			css = "label label-danger";
+			css[0] = "label label-important";
+			css[1] = "#B94A48";
 		}
 		
 		if(status.equals(IssueStatus.REOPENED)){
-			css = "label label-danger";
+			css[0] = "label label-important";
+			css[1] = "#B94A48";
 		}
 		
-		if(status.equals(IssueStatus.ACKNOWLEDGED)){
-			css = "label label-primary";
-		}
+//		if(status.equals(IssueStatus.ACKNOWLEDGED)){
+//			css = "label label-primary";
+//		}
 		
 		if(status.equals(IssueStatus.IN_PROGRESS)){
-			css = "label label-warning";
+			css[0] = "label label-warning";
+			css[1] = "#F89406";		
 		}
 		
 		if(status.equals(IssueStatus.SOLVED)){
-			css = "label label-success";
+			css[0] = "label label-success";
+			css[1] = "#468847";			
 		}
 		
 		if(status.equals(IssueStatus.CLOSED)){
-			css = "label label-default";
+			css[0] = "label label-inverse";
+			css[1] = "#333333";			
 		}
 		
 		return css;

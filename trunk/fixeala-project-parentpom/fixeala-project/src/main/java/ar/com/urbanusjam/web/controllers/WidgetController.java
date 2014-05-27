@@ -58,8 +58,8 @@ public class WidgetController {
 					issue.setStatusCss(IssueStatusColorCode.CSS_OPEN);
 				if(issue.getStatus().equals(IssueStatus.REOPENED))
 					issue.setStatusCss(IssueStatusColorCode.CSS_REOPENED);
-				if(issue.getStatus().equals(IssueStatus.ACKNOWLEDGED))
-					issue.setStatusCss(IssueStatusColorCode.CSS_ACKNOWLEDGED);
+//				if(issue.getStatus().equals(IssueStatus.ACKNOWLEDGED))
+//					issue.setStatusCss(IssueStatusColorCode.CSS_ACKNOWLEDGED);
 				if(issue.getStatus().equals(IssueStatus.IN_PROGRESS))
 					issue.setStatusCss(IssueStatusColorCode.CSS_IN_PROGRESS);
 				if(issue.getStatus().equals(IssueStatus.SOLVED))

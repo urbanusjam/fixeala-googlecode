@@ -581,7 +581,9 @@
 			  });
 			   			   
 			
-			  $('#btn-update').click(function() {				  
+			  $('#btn-update').click(function() {			
+				  
+				  var id = ${id};
 				 				  
 				  bootbox.confirm("&iquest;Desea confirmar los cambios?", function(result){
 					  
@@ -593,15 +595,15 @@
 						       ajaxOptions: {
 						           dataType: 'json'
 						       },  				       
-						       success: function(data, config) {	
+						       success: function(data) {	
 						    	   
 						    	   if(data.result){		
 						    		   bootbox.alert(data.message); 
+						    		  
 						    			setTimeout(function () {	
-						    				var url = getIssueURL(id, newTitle, 'plain');
-						    				alert(url);
+						    				var url = getIssueURL(id, newTitle, 'plain');						    				
 							    			window.location.href= url;	
-						    			}, 500);		
+						    			}, 1000);		
 						    	   }						    	   
 						    	   else{
 						    		   bootbox.alert(data.message);		
@@ -1189,7 +1191,7 @@
         <h3 style="display:inline">
         	<a href="#" id="issue-title">${titulo}</a>
         	&nbsp;&nbsp;
-        	<i class="icon-chevron-right icon-large"></i>&nbsp;&nbsp;<span style="color:green">${estado}</span></h3>
+        	<i class="icon-chevron-right icon-large"></i>&nbsp;&nbsp;<span style="color:${tituloCss}">${estado}</span></h3>
         <p>${direccion}</p>       
       </div>
       
@@ -1201,7 +1203,7 @@
       	<ul class="user-action-nav">
       		<li class="withText" title="Visitas"><span>${cantidadVisitas}</span><i class="icon-eye-open"></i></li>
       		<li class="withText" id="votes">
-      			<div class="text" title="Votos totales"><span id="voteCount">${cantidadVotos}</span></div>
+      			<div class="text" title="Votos"><span id="voteCount">${cantidadVotos}</span></div>
       			<div class="arrows">
       				<a href="#" class="vote-up" id="icon-up" title="Voto positivo"><i class="icon-caret-up "></i></a>
       				<a href="#" class="vote-down" id="icon-down" title="Voto negativo"><i class="icon-caret-down "></i></a>
@@ -1220,9 +1222,9 @@
       		<li>
       			<a href="#" onclick="javascript:window.print();" title="Imprimir"><i class="icon-print"></i></a>
       		</li>
-      		<li>
-      			<a href="#" onclick="javascript:;" title="Denunciar reclamo"><i class="icon-flag"></i></a>
-      		</li>
+<!--       		<li> -->
+<!--       			<a href="#" onclick="javascript:;" title="Denunciar reclamo"><i class="icon-flag"></i></a> -->
+<!--       		</li> -->
       		<li>
 	      		<a href="#" onclick="javascript:;" title="Compartir"><i class="icon-share"></i></a>
 	      	</li>
@@ -1285,9 +1287,9 @@
 <!-- 	 			</ul> -->
 <!-- 		   </div> -->
 
-			<div class="user-action-btns">
+			<div id="userIssueActions" class="user-action-btns">
 			
-				<sec:authorize access="hasAnyRole('ROLE_USER','ROLE_ADMIN', 'ROLE_MANAGER')">
+				<sec:authorize access="hasRole('ROLE_USER')">
 					<div class="btn-group" style="float:right;">
 						<button id="btn-update" class="btn btn-info" title="Guardar cambios"><i class="icon-ok icon-large"></i></button>			
 					</div>
@@ -1396,14 +1398,6 @@
 						  <tr>
 						    <th>Etiquetas:</th>
 						    <td>
-<!-- 						        <span class="issue-tags"  -->
-<!-- 						        	  id="tags-editable-1"            					 -->
-<!--             						  data-type="select2" -->
-<%--             						  data-value="${tagsByIssue}"> --%>
-<!--             					</span> -->
-<!--        							<a href="#" id="tags-edit-1" data-editable="tags-editable-1">        							 -->
-<!--        								<i id="edit-tags" class="icon-pencil" style="display:none"></i> -->
-<!--        							</a> -->
        							<a id="issue-tags" href="#" data-type="select2">${tagsByIssue}</a>
 						    </td>						   
 						 </tr>
@@ -1475,115 +1469,109 @@
 			  </div>
 			  
 			  
-			  <!-- 3 REPARACION -->
-			  <div class="accordion-group">
-			    <div class="accordion-heading">
-			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-			        <h4><i class="icon-wrench icon-large"></i>REPARACI&Oacute;N (${estadoLicitacion})</h4>
-			      </a>			     
-			    </div>
-			    <div id="collapseTwo" class="accordion-body collapse">
-			      <div class="accordion-inner">	
-					<c:if test="${cantidadLicitacion eq 0}">
-						No hay informaci&oacute;n disponible.	
-						 <button id="btn-add-repair"  href="#mdl-repair" data-toggle="modal" class="btn btn-success"><i class="icon-plus icon-large"></i>Agregar datos</button>	 
-					</c:if>
-					<c:if test="${cantidadLicitacion ne 0}">
+			  <!-- 3 REPARACION --> <!-- FUERA DEL ALCANCE -->
+<!-- 			  <div class="accordion-group"> -->
+<!-- 			    <div class="accordion-heading"> -->
+<!-- 			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo"> -->
+<%-- 			        <h4><i class="icon-wrench icon-large"></i>REPARACI&Oacute;N (${estadoLicitacion})</h4> --%>
+<!-- 			      </a>			      -->
+<!-- 			    </div> -->
+<!-- 			    <div id="collapseTwo" class="accordion-body collapse"> -->
+<!-- 			      <div class="accordion-inner">	 -->
+<%-- 					<c:if test="${cantidadLicitacion eq 0}"> --%>
+<!-- 						No hay informaci&oacute;n disponible.	 -->
+<!-- 						 <button id="btn-add-repair"  href="#mdl-repair" data-toggle="modal" class="btn btn-success">Agregar datos</button>	  -->
+<%-- 					</c:if> --%>
+<%-- 					<c:if test="${cantidadLicitacion ne 0}"> --%>
 					
-					<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')">
-						<div style="width: 200px; float: right; margin: 20px 10px 20px 0;">
-							<button id="btn-delete-repair" class="btn" title="Eliminar"><i class="icon-trash icon-large"></i></button>	
-							<button id="btn-edit-repair" class="btn" title="Editar"><i class="icon-pencil icon-large"></i></button>	
-							<button id="btn-update-repair" class="btn" title="Guardar"><i class="icon-ok icon-large"></i></button>						
-						</div>
-					
-					</sec:authorize>
+<%-- 					<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')"> --%>
+<!-- 						<div style="width: 200px; float: right; margin: 20px 10px 20px 0;"> -->
+<!-- 							<button id="btn-delete-repair" class="btn" title="Eliminar"><i class="icon-trash icon-large"></i></button>	 -->
+<!-- 							<button id="btn-edit-repair" class="btn" title="Editar"><i class="icon-pencil icon-large"></i></button>	 -->
+<!-- 							<button id="btn-update-repair" class="btn" title="Guardar"><i class="icon-ok icon-large"></i></button>						 -->
+<!-- 						</div>					 -->
+<%-- 					</sec:authorize> --%>
 											
-						<table id="tbl-licitacion" class="table table-hover ">							
-							 <tr>
-							    <th>Obra:</th>
-							    <td><a href="#" id="lic-obra" data-type="textarea">${obra}</a></td>						  
-							 </tr>
-							 <tr>
-							    <th>N&ordm de Licitaci&oacute;n:</th>
-							    <td><a href="#" id="lic-nroLicitacion" data-type="text">${nroLicitacion}</a>						  
-							 </tr>
-							 <tr>
-							    <th>N&ordm de Expediente:</th>
-							    <td><a href="#" id="lic-nroExpediente" data-type="text">${nroExpediente}</a></td>						  
-							 </tr>
-							 <tr>
-							    <th>Estado de la obra:</th>
-							    <td><a href="#" id="lic-estadoObra" data-type="select">${estadoObra}</a></td>						  
-							 </tr>
-							 <tr>
-							    <th>Tipo:</th>
-							    <td><a href="#" id="lic-tipo" data-type="select" >${tipoObra}</a></td>						  
-							 </tr>
-							 <tr>
-							 	<th>Unidad ejecutora:</th>
-							    <td><a href="#" id="lic-unidadEjecutora" data-type="text">${unidadEjecutora}</a></td>
-							 </tr>	
-							 <tr>	
-							    <th>Unidad de financiaci&oacute;n:</th>
-							    <td><a href="#" id="lic-unidadFinanciamiento" data-type="text">${unidadFinanciamiento}</a></td>		
-							 </tr>
-							 <tr>	
-							    <th>Valor del pliego:</th>
-							    <td>$ <a href="#" id="lic-valorPliego" data-type="number">${valorPliego}</a></td>		
-							 </tr>						 <tr>
-							    <th>Empresa contratada:</th>
-							  	<td>
-							    	Raz&oacute;n social: <a href="#" id="lic-empresaNombre" data-type="text">${empresaNombre}</a>
-							    	<br>CUIT: <a href="#" id="lic-empresaCuit" data-type="text">${empresaCuit}</a>	
-<%-- 							    	<br>Email: <a href="#" id="lic-empresaEmail" data-type="email">${empresaEmail}</a> --%>
-							    </td>
-							 </tr>
-							 <tr>
-							    <th>Representante t&eacute;cnico:</th>
-							      <td>
-							    	Nombre y Apellido: <a href="#" id="lic-representanteNombre" data-type="text">${representanteNombre}</a>
-							    	<br>DNI: <a href="#" id="lic-representanteDni" data-type="number">${representanteDni}</a>
-<%-- 							    	<br>Email: <a href="#" id="lic-representanteEmail" data-type="email">${representanteEmail}</a>	 --%>
-							      </td>								   						  
-							 </tr>
-							 <tr>
-							    <th>Presupuesto adjudicado:</th>
-							    <td>
-							    	$ <a href="#" id="lic-presupuestoAdjudicado" data-type="number">${presupuestoAdjudicado}</a>
-							    </td>
-							 </tr>
-							 <tr>	
-							    <th>Presupuesto final:</th>
-							    <td>
-							    	$ <a href="#" id="lic-presupuestoFinal" data-type="number">${presupuestoFinal}</a>
-							    </td>					  
-							 </tr>
-							 <tr>
-							    <th>Fechas estimadas:</th>
-							    <td>
-							    	<a href="#" id="lic-fechaEstimadaInicio" data-type="combodate">${fechaEstimadaInicio}</a>
-													&mdash;
-													<a href="#" id="lic-fechaEstimadaFin" data-type="combodate">${fechaEstimadaFinal}</a>
-							    </td>	
-							 </tr>
-							 <tr>
-							    <th>Fechas reales:</th>
-							    <td>
-							    	<a href="#" id="lic-fechaRealInicio" data-type="combodate">${fechaRealInicio}</a>	
-													&mdash;
-													<a href="#" id="lic-fechaRealFin" data-type="combodate">${fechaRealFinal}</a>	
-							    </td>					  
-							 </tr>
-				  		</table>	
-					</c:if>
-							
-					
-			  			
-				</div>
-
-			    </div>
-			  </div>			  
+<!-- 						<table id="tbl-licitacion" class="table table-hover ">							 -->
+<!-- 							 <tr> -->
+<!-- 							    <th>Obra:</th> -->
+<%-- 							    <td><a href="#" id="lic-obra" data-type="textarea">${obra}</a></td>						   --%>
+<!-- 							 </tr> -->
+<!-- 							 <tr> -->
+<!-- 							    <th>N&ordm de Licitaci&oacute;n:</th> -->
+<%-- 							    <td><a href="#" id="lic-nroLicitacion" data-type="text">${nroLicitacion}</a>						   --%>
+<!-- 							 </tr> -->
+<!-- 							 <tr> -->
+<!-- 							    <th>N&ordm de Expediente:</th> -->
+<%-- 							    <td><a href="#" id="lic-nroExpediente" data-type="text">${nroExpediente}</a></td>						   --%>
+<!-- 							 </tr> -->
+<!-- 							 <tr> -->
+<!-- 							    <th>Estado de la obra:</th> -->
+<%-- 							    <td><a href="#" id="lic-estadoObra" data-type="select">${estadoObra}</a></td>						   --%>
+<!-- 							 </tr> -->
+<!-- 							 <tr> -->
+<!-- 							    <th>Tipo:</th> -->
+<%-- 							    <td><a href="#" id="lic-tipo" data-type="select" >${tipoObra}</a></td>						   --%>
+<!-- 							 </tr> -->
+<!-- 							 <tr> -->
+<!-- 							 	<th>Unidad ejecutora:</th> -->
+<%-- 							    <td><a href="#" id="lic-unidadEjecutora" data-type="text">${unidadEjecutora}</a></td> --%>
+<!-- 							 </tr>	 -->
+<!-- 							 <tr>	 -->
+<!-- 							    <th>Unidad de financiaci&oacute;n:</th> -->
+<%-- 							    <td><a href="#" id="lic-unidadFinanciamiento" data-type="text">${unidadFinanciamiento}</a></td>		 --%>
+<!-- 							 </tr> -->
+<!-- 							 <tr>	 -->
+<!-- 							    <th>Valor del pliego:</th> -->
+<%-- 							    <td>$ <a href="#" id="lic-valorPliego" data-type="number">${valorPliego}</a></td>		 --%>
+<!-- 							 </tr>						 <tr> -->
+<!-- 							    <th>Empresa contratada:</th> -->
+<!-- 							  	<td> -->
+<%-- 							    	Raz&oacute;n social: <a href="#" id="lic-empresaNombre" data-type="text">${empresaNombre}</a> --%>
+<%-- 							    	<br>CUIT: <a href="#" id="lic-empresaCuit" data-type="text">${empresaCuit}</a>	 --%>
+<!-- 							    </td> -->
+<!-- 							 </tr> -->
+<!-- 							 <tr> -->
+<!-- 							    <th>Representante t&eacute;cnico:</th> -->
+<!-- 							      <td> -->
+<%-- 							    	Nombre y Apellido: <a href="#" id="lic-representanteNombre" data-type="text">${representanteNombre}</a> --%>
+<%-- 							    	<br>DNI: <a href="#" id="lic-representanteDni" data-type="number">${representanteDni}</a> --%>
+<!-- 							      </td>								   						   -->
+<!-- 							 </tr> -->
+<!-- 							 <tr> -->
+<!-- 							    <th>Presupuesto adjudicado:</th> -->
+<!-- 							    <td> -->
+<%-- 							    	$ <a href="#" id="lic-presupuestoAdjudicado" data-type="number">${presupuestoAdjudicado}</a> --%>
+<!-- 							    </td> -->
+<!-- 							 </tr> -->
+<!-- 							 <tr>	 -->
+<!-- 							    <th>Presupuesto final:</th> -->
+<!-- 							    <td> -->
+<%-- 							    	$ <a href="#" id="lic-presupuestoFinal" data-type="number">${presupuestoFinal}</a> --%>
+<!-- 							    </td>					   -->
+<!-- 							 </tr> -->
+<!-- 							 <tr> -->
+<!-- 							    <th>Fechas estimadas:</th> -->
+<!-- 							    <td> -->
+<%-- 							    	<a href="#" id="lic-fechaEstimadaInicio" data-type="combodate">${fechaEstimadaInicio}</a> --%>
+<!-- 													&mdash; -->
+<%-- 													<a href="#" id="lic-fechaEstimadaFin" data-type="combodate">${fechaEstimadaFinal}</a> --%>
+<!-- 							    </td>	 -->
+<!-- 							 </tr> -->
+<!-- 							 <tr> -->
+<!-- 							    <th>Fechas reales:</th> -->
+<!-- 							    <td> -->
+<%-- 							    	<a href="#" id="lic-fechaRealInicio" data-type="combodate">${fechaRealInicio}</a>	 --%>
+<!-- 													&mdash; -->
+<%-- 									<a href="#" id="lic-fechaRealFin" data-type="combodate">${fechaRealFinal}</a>	 --%>
+<!-- 							    </td>					   -->
+<!-- 							 </tr> -->
+<!-- 				  		</table>	 -->
+<%-- 					</c:if> --%>
+<!-- 					</div> -->
+<!-- 			    </div> -->
+<!-- 			  </div>		 -->
+			  <!-- 3 REPARACION --> <!-- FUERA DEL ALCANCE -->	  
 			  
 		
 			  <!-- 4 RECLAMOS SIMILARES -->

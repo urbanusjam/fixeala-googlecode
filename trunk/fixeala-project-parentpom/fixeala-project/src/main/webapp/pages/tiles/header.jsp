@@ -17,7 +17,6 @@
           	<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
           	<!-- MAIN NAV -->
             <ul id="menuNav" class="nav">
-<%--              	<li><a href="${pageContext.request.contextPath}/index.jsp" title="Reclamos" ><i class="icon-white icon-globe  icon-2x "></i></a></li> --%>
 				<li><a href="${pageContext.request.contextPath}/reclamos.html" title="Reclamos"><i class=" icon-pushpin icon-2x"></i></a></li>
 				<li><a href="${pageContext.request.contextPath}/usuarios.html" title="Usuarios"><i class="icon-group icon-2x"></i></a></li>				
 				<li><a href="${pageContext.request.contextPath}/dataset.html" title="Datasets"><i class="icon-tasks icon-2x"></i></a></li>		
@@ -32,7 +31,7 @@
          	<ul id="loginNav" class="nav">      
          		
          		<!-- user NOT logged in -->
-                <sec:authorize ifNotGranted="ROLE_USER, ROLE_ADMIN, ROLE_MANAGER">               
+                <sec:authorize ifNotGranted="ROLE_USER">               
 	           		<li class="dropdown">
 	                	<a id="loginLink" href="#" class="dropdown-toggle" data-toggle="dropdown">                	
 	                	LOGIN&nbsp;<i class="icon-angle-down "></i>
@@ -57,8 +56,6 @@
 									         	<input type="checkbox" id="_spring_security_remember_me" name="_spring_security_remember_me" value="remember_me" > 
 							        			Recordarme
 									      </label>
-    								
-							      	
 									<div align="center" class="forgotPassLink"><a class="link" href="${pageContext.request.contextPath}/account/forgotPassword.html">¿Olvidaste tu contraseña?</a></div>     
 		     					</form>
 		     					<!-- /LOGIN FORM -->

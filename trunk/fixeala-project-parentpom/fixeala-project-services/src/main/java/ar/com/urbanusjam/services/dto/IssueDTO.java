@@ -26,6 +26,7 @@ public class IssueDTO implements Serializable {
 	private String latitude;
 	private String longitude;
 	private String title;
+	private String titleCss;
 	private String parsedTitle;
 	private String description;
 	private Date creationDate;	
@@ -41,7 +42,7 @@ public class IssueDTO implements Serializable {
 	private List<CommentDTO> comentarios = new ArrayList<CommentDTO>();	
 	private List<IssueFollowDTO> followers = new ArrayList<IssueFollowDTO>();
 	private String status;
-	private String statusCss;
+	private String statusCss;	
 	private String fechaFormateada;
 
 	
@@ -99,7 +100,15 @@ public class IssueDTO implements Serializable {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
+		
+	public String getTitleCss() {
+		return titleCss;
+	}
+
+	public void setTitleCss(String titleCss) {
+		this.titleCss = titleCss;
+	}
+
 	public String getDescription() {
 		return description;
 	}

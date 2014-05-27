@@ -9,6 +9,7 @@ import java.util.UUID;
 import javax.mail.MessagingException;
 import javax.naming.AuthenticationException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
@@ -70,7 +71,8 @@ public class AccountController {
 	
 
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)	
-	public String showSignUpPage(){
+	public String showSignUpPage(HttpServletResponse response){
+//		response.setContentType("text/javascript");
 		return "signup";
 	}
 	
@@ -92,72 +94,67 @@ public class AccountController {
 			return true;	    
     }
     
-    @RequestMapping(value = "/signup/verifyCaptcha", method = RequestMethod.POST)
-   	public @ResponseBody boolean doVerifyCaptcha(@RequestParam String challengeField, @RequestParam String responseField){   			
-    	if(responseField.equals(challengeField)) 
-    		return true;
-    	else 
-    		return false;
-    }
+//    @RequestMapping(value = "/signup/verifyCaptcha", method = RequestMethod.POST)
+//   	public @ResponseBody boolean doVerifyCaptcha(@RequestParam String challengeField, @RequestParam String responseField){   			
+//    	if(responseField.equals(challengeField)) 
+//    		return true;
+//    	else 
+//    		return false;
+//    }
     
         
-    @RequestMapping(value = "/signup", method = RequestMethod.POST)
+    @RequestMapping(value = "/signup/createAccount", method = RequestMethod.POST)
 	public @ResponseBody AlertStatus doCreateAccount(@ModelAttribute("user") UserDTO user, 
-			@RequestParam("userArea") String userArea, @RequestParam("backendUser") boolean backendUser, HttpServletRequest request){
+			/*@RequestParam("userArea") String userArea, @RequestParam("backendUser") boolean backendUser,*/ HttpServletRequest request){
  					
 		try {
 			
 			String encodedPass = passwordEncoder.encodePassword(user.getPassword(), user.getUsername());
-	    	user.setPassword(encodedPass);
+	    	user.setPassword(encodedPass);	       	
+	    	user.setRegistrationDate(new Date());
+	    	user.setEnabled(false);
+	    	user.setVerifiedOfficial(false);	   
+		    user.setAreaId("1");
+		    
+		    List<String> roles = new ArrayList<String>();
+		    roles.add("ROLE_USER");
+		    user.setAuthorities(roles);
 	    	
-	    	if(user.getAccountStatus().equals("active"))	    	
-	    		user.setEnabled(true);
-	    	else
-	    		user.setEnabled(false);
-	    	
-	    	List<String> authorities = new ArrayList<String>();
-			authorities.add(user.getRol());
-			user.setAuthorities(authorities);	
-			user.setRegistrationDate(new Date());
-	    				
-	        String message = "Se ha creado el usuario.";
-	        
-	        //ROLE_USER
-	        if(!backendUser){
-	        	DateTime creation = new DateTime();
-	 			DateTime expiration = creation.plusDays(3); 
-	 						
-	 			//random token generation
-	 			String token = UUID.randomUUID().toString();
-	 			EmailUtils emailUtils = new EmailUtils();
-	 			
-	 			ActivationDTO tokenDTO = new ActivationDTO();
-	 			tokenDTO.setToken(token);
-	 			tokenDTO.setUsername(user.getUsername());
-	 			tokenDTO.setCreation(creation.toDate());
-	 			tokenDTO.setExpiration(expiration.toDate());
-	 			
-	 			//save token in DB
-	 			userService.saveActivationToken(tokenDTO);		
-	 		
-	 			//send activation email
-	 			emailUtils.sendActivationEmail(user.getUsername(), token, user.getEmail());		
-	 			
-	 			message = "Se ha enviado un link de activacion de cuenta a su casilla de correo. ";
-	        }
-	        
-	        user.setVerifiedOfficial(true);	   
-	        user.setAreaId(userArea);
-	        //create account
-	        userService.createAccount(user);
-	         
+        	DateTime creation = new DateTime();
+ 			DateTime expiration = creation.plusDays(3); 
+ 						
+ 			//random token generation
+ 			String token = UUID.randomUUID().toString();
+ 			EmailUtils emailUtils = new EmailUtils();
+ 			
+ 			ActivationDTO tokenDTO = new ActivationDTO();
+ 			tokenDTO.setToken(token);
+ 			tokenDTO.setUsername(user.getUsername());
+ 			tokenDTO.setCreation(creation.toDate());
+ 			tokenDTO.setExpiration(expiration.toDate());
+ 			
+ 			/**
+ 			 * TODO englobar la creacion de CUENTA, el TOKEN y el envio de EMAIL en una unica transaccion
+ 			 */
+ 			
+ 			//create user
+ 			userService.createAccount(user);
+ 			  
+ 			//save token
+ 			userService.saveActivationToken(tokenDTO);		
+ 		
+ 			//send activation email
+ 			emailUtils.sendActivationEmail(user.getUsername(), token, user.getEmail());		
+ 			
+ 			String message = "Se ha enviado un link de activacion de cuenta a su casilla de correo. ";
+
 			return new AlertStatus(true, message);
 					
 			
 		} catch (Exception e) {
 			if(e instanceof MessagingException){
 				userService.deleteAccountAndToken(user.getUsername());
-				return new AlertStatus(false, "Ha ocurrido un error y no se ha podido mandar el link de activaci�n. Intente de nuevo. ");		
+				return new AlertStatus(false, "Ha ocurrido un error y no se ha podido mandar el link de activaci&oacute;n. Intente de nuevo. ");		
 			}	
 			else{
 				return new AlertStatus(false, "Ha ocurrido un error al crear su cuenta. Intente de nuevo. ");		
