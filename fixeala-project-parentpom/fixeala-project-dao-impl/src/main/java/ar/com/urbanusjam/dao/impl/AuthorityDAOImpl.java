@@ -26,7 +26,7 @@ public class AuthorityDAOImpl extends GenericDAOImpl<Authority, Serializable> im
 	
 	@Override
 	public Authority getRoleByName(String rolename){
-		List<Authority> roles = this.findWhere(" role = ? ", new Object[]{rolename});
+		List<Authority> roles = this.findWhere(" rolename = ? ", new Object[]{rolename});
 		return roles.size() > 0 ? roles.get(0) : null;
 	}	
 	

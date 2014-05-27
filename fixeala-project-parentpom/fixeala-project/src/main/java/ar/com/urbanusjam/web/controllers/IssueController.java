@@ -99,6 +99,7 @@ public class IssueController {
 			 	issue = issueService.getIssueById(issueID);	
 			 	
 			 	model.addAttribute("titulo", issue.getTitle());
+			 	model.addAttribute("tituloCss", issue.getTitleCss());
 				model.addAttribute("estado", issue.getStatus());
 				model.addAttribute("estadoCss", issue.getStatusCss());
 				model.addAttribute("direccion", issue.getFormattedAddress());					

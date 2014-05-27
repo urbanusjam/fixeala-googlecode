@@ -7,9 +7,10 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import ar.com.urbanusjam.dao.ActivationDAO;
-import ar.com.urbanusjam.dao.AreaDAO;
 import ar.com.urbanusjam.dao.AuthorityDAO;
 import ar.com.urbanusjam.dao.PasswordResetDAO;
 import ar.com.urbanusjam.dao.UserDAO;
@@ -22,14 +23,14 @@ import ar.com.urbanusjam.services.dto.ActivationDTO;
 import ar.com.urbanusjam.services.dto.PasswordResetTokenDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
 
-
+//@Service
+//@Transactional
 public class UserServiceImpl implements UserService {
 	
 	private UserDAO userDAO;
 	private AuthorityDAO authorityDAO;
 	private PasswordResetDAO passwordResetDAO;
 	private ActivationDAO activationDAO;
-	private AreaDAO areaDAO;
 	
 	
 	public void setUserDAO(UserDAO userDAO) {
@@ -48,10 +49,7 @@ public class UserServiceImpl implements UserService {
 		this.activationDAO = activationDAO;
 	}
 		
-	public void setAreaDAO(AreaDAO areaDAO) {
-		this.areaDAO = areaDAO;
-	}
-	
+		
 	@Override
 	public User loadUserByUsername(String username) throws UsernameNotFoundException, DisabledException{	
 		
@@ -59,6 +57,9 @@ public class UserServiceImpl implements UserService {
 				User user = (User) userDAO.loadUserByUsername(username);
 				
 			 	 if(user == null)
+			 		 throw new BadCredentialsException("Authentication failed.");
+			 	 
+			 	 if(!user.hasSingleRole("ROLE_USER", user.getRoles()))
 			 		 throw new BadCredentialsException("Authentication failed.");
 			 	 
 			 	 else			 	
@@ -211,22 +212,22 @@ public class UserServiceImpl implements UserService {
 		User user = new User();
 		user.setUsername(userDTO.getUsername());
 		user.setPassword(userDTO.getPassword());
-		user.setEmail(userDTO.getEmail());
+		user.setEmail(userDTO.getEmail());		
 		user.setRoles(convertToAuthority(userDTO.getAuthorities()));
 		user.setEnabled(userDTO.isEnabled());
 		
-		if(userDTO.isVerifiedOfficial()){
-			user.setVerifiedOfficial(true);
-			user.setNombre(userDTO.getNombre());
-			user.setApellido(userDTO.getApellido());
-			user.setCargo(userDTO.getCargo());
-			user.setSubArea(userDTO.getSubarea());
-			user.setArea(areaDAO.getAreaById(userDTO.getAreaId()));
-		}
-		
-		else{
+//		if(userDTO.isVerifiedOfficial()){
+//			user.setVerifiedOfficial(true);
+//			user.setNombre(userDTO.getNombre());
+//			user.setApellido(userDTO.getApellido());
+//			user.setCargo(userDTO.getCargo());
+//			user.setSubArea(userDTO.getSubarea());
+//			user.setArea(areaDAO.getAreaById(userDTO.getAreaId()));
+//		}
+//		
+//		else{
 			userDTO.setNeighborhood(userDTO.getNeighborhood());
-		}
+//		}
 		
 		return user;
 	}

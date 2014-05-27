@@ -9,6 +9,7 @@
 	<meta http-equiv="content-type" content="text/html; charset=UTF8">
 	<title><tiles:insertAttribute name="title" ignore="true" /></title>	
 
+	<script type="text/javascript" src="https://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
   	<script type="text/javascript" src="http://maps.google.com/maps/api/js?libraries=geometry,places&components=country:ar&language=ES&sensor=false"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.jsonp-2.4.0.min.js"></script>
@@ -146,9 +147,31 @@ path:hover {
   	<script type="text/javascript">
     //<![CDATA[
                
-             
+            function getDomainUrl(){
+				var protocol = window.location.protocol;
+				var host = window.location.host;
+				var context = "fixeala";
+				var domainUrl = protocol + "//" + host + "/" + context + "/";
+				console.log(domainUrl);
+			 	return domainUrl;
+			}	
+            
+          //reCAPTCHA
+			function showRecaptcha(element){
+        	  
+				var publicKey = "6LdIQfQSAAAAAEgTUFWNpFNc5Lv815x4pyEXSB5l";
+			
+	      	   	Recaptcha.create(publicKey, element, {                              
+	      	   		theme: "clean",
+	      	   		callback: Recaptcha.focus_response_field
+	      	   	});  
+			}
         
 		$(document).ready(function(){
+			
+			
+			
+			
 			
 // 			$("#tags").select2({
 // 				tags: ${allTags},
@@ -159,13 +182,7 @@ path:hover {
 // 			});
 		 	
 		
-			function getDomainUrl(){
-				var protocol = window.location.protocol;
-				var host = window.location.host;
-				var context = "fixeala";
-				var domainUrl = protocol + "//" + host + "/" + context + "/";
-			 	return domainUrl;
-			}					
+							
 			
 			 var query = "?issue=%QUERY";
 			
@@ -585,10 +602,15 @@ path:hover {
 								            		$('#btnLogin').show();
 								            		$('.ajax_loading').hide(); 
 								            		
-								            		if (data.loggedIn) {						            			
-									                	 $('#loginNav').load(location.href + " #loginNav > *");	
-// 									                	 window.location.reload();
-									                	 return false;
+								            		if(data.loggedIn) {								            			
+								            			
+								            			$('#loginNav').load(location.href + " #loginNav > *");	
+								            			
+								            			var pathArray = window.location.pathname.split( '/' );								            			
+														if(pathArray.indexOf("issues") != -1);	
+															$('#userIssueActions').load(location.href + " #userIssueActions > *");	
+														
+									                	return false;
 											          
 		 							                } else {							                
 									                    loginFailed(data);							                    
