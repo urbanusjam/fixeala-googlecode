@@ -1233,3 +1233,27 @@ a.no-hover { text-decoration: none; color: #000;}
 .voteInactive{ color: #ccc !important; }
 
 .popover .popover-content a { font-size: 13px; }
+
+
+/** Simple CAPTCHA **/
+
+#captcha_register {
+	margin: 10px 0 20px 60px;
+	width: 360px; 
+	display: inline-block;
+}
+
+#captcha_register img {
+	height: 40px;
+	width: 200px;
+}
+
+#captcha_register input {
+	width: 140px; 
+	padding: 4px; 
+	border-radius: 3px;
+	border: 1px solid #ccc;
+	float: right;
+}
+
+.captcha_refresh { margin-left: 10px; }
