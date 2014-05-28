@@ -127,30 +127,28 @@ $(document).ready(function(){
 //			     				}
 			     				
 			 	     	},
-			 	    /** 	
+			 	    
 			 	    	submitHandler: function() {
 			 	    		
-			 	    
-			 	    		
-			 	    		
-			 	    		bootbox.confirm("&iquest;Confirma que desea crear la cuenta?", function(result){	
+			 	    		//bootbox.confirm("&iquest;Confirma que desea crear la cuenta?", function(result){	
 			 	    			
 			 	    			var username = $('#signupForm #username').val();
 				 	    	    var email = $('#signupForm #email').val();
-				 	    	    var password = $('#signupForm #password').val();	
-				 	    	    								
+				 	    	    var password = $('#signupForm #password').val();					 	    	    								
+				 	    	    var captcha = $('[name="captcha_answer"]').val();
+				 	    	  
 			            		$.ajax({
 			            			    url: "../account/signup/createAccount.html",
 								 		type: "POST",	
-								 		data: "username=" + username + "&email=" + email + "&password=" + password,								 
+								 		data: "username=" + username + "&email=" + email + "&password=" + password + "&captcha_answer=" + captcha ,								 
 								        success: function(data){
 								        	
 								        	if(data.result){	 					
 					 	    					
 								        		bootbox.alert(data.message, function() {
-								        			setTimeout(function() { 
-								        				window.location.href = getDomainUrl();
-								        			}, 1000);	
+//								        			setTimeout(function() { 
+//								        				window.location.href = getDomainUrl();
+//								        			}, 1000);	
 								        		});					 	    					
 					 	    				}
 					 	    				else{					 	    				
@@ -163,10 +161,10 @@ $(document).ready(function(){
 					            		}		 	    			
 			            		});
 				            		
-			 	    		});
+			 	    		//});
 			 	    		
 
-			 	    	},**/
+			 	    	},
 			 	    	
 			 	    	highlight: function (element) { 
 			 	    		$(element).closest('.input-prepend').removeClass('success').addClass('error');
@@ -192,9 +190,9 @@ $(document).ready(function(){
 		
 		
 			
-			$('#signupForm').submit(function() {
-		        return validateCaptcha();
-		    });
+//			$('#signupForm').submit(function() {
+//		        return validateCaptcha();
+//		    });
 			
 			
 			function validateCaptcha(){				
@@ -221,7 +219,7 @@ $(document).ready(function(){
 	    		   		dataType: 'jsonp',	
 	    		   		data: JSON.stringify(captchaInfo),	    		   		
 	    		   		success: function(data){
-//	    		   			console.log($.parseJSON(data));
+	    		   			console.log($.parseJSON(data));
 	    		   		},
 		    		   	 error: function(jqXHR, exception) {
 		    		   		 console.log(jqXHR);

@@ -9,7 +9,6 @@
 	<meta http-equiv="content-type" content="text/html; charset=UTF8">
 	<title><tiles:insertAttribute name="title" ignore="true" /></title>	
 
-	<script type="text/javascript" src="https://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
   	<script type="text/javascript" src="http://maps.google.com/maps/api/js?libraries=geometry,places&components=country:ar&language=ES&sensor=false"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.jsonp-2.4.0.min.js"></script>
@@ -156,16 +155,10 @@ path:hover {
 			 	return domainUrl;
 			}	
             
-          //reCAPTCHA
-			function showRecaptcha(element){
-        	  
-				var publicKey = "6LdIQfQSAAAAAEgTUFWNpFNc5Lv815x4pyEXSB5l";
-			
-	      	   	Recaptcha.create(publicKey, element, {                              
-	      	   		theme: "clean",
-	      	   		callback: Recaptcha.focus_response_field
-	      	   	});  
-			}
+            function showRecaptcha (divId) {
+            	var captchaContent = '<label>Ingrese el texto de la imagen</label><img src="../captchaImg" /><input name="captcha_answer" class="field" />';
+            	$("#"+divId).html (captchaContent);
+            }
         
 		$(document).ready(function(){
 			

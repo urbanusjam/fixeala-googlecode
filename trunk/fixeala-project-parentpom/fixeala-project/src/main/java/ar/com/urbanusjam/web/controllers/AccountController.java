@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.AbstractController;
 
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.ContenidoService;
@@ -43,10 +44,11 @@ import ar.com.urbanusjam.web.domain.AlertStatus;
 import ar.com.urbanusjam.web.domain.ContenidoResponse;
 import ar.com.urbanusjam.web.security.CustomAuthenticationProvider;
 import ar.com.urbanusjam.web.utils.EmailUtils;
+import ar.com.urbanusjam.web.validators.SimpleCaptchaValidator;
 
 @Controller
 @RequestMapping(value="/account")
-public class AccountController {
+public class AccountController extends AbstractController {
 	
 	@Autowired
 	@Qualifier(value = "userService")
@@ -93,20 +95,25 @@ public class AccountController {
 		else
 			return true;	    
     }
-    
-//    @RequestMapping(value = "/signup/verifyCaptcha", method = RequestMethod.POST)
-//   	public @ResponseBody boolean doVerifyCaptcha(@RequestParam String challengeField, @RequestParam String responseField){   			
-//    	if(responseField.equals(challengeField)) 
-//    		return true;
-//    	else 
-//    		return false;
-//    }
-    
+  
+    @RequestMapping(value = "/signup/captchaImg",  method = RequestMethod.GET)
+    private boolean isCaptchaValido (HttpServletRequest request) {
+		SimpleCaptchaValidator validator = new SimpleCaptchaValidator();
+		if(validator.isCaptchaValido(request)) {
+			return true;
+		} else {	
+			return false;
+		}
+	}
         
     @RequestMapping(value = "/signup/createAccount", method = RequestMethod.POST)
 	public @ResponseBody AlertStatus doCreateAccount(@ModelAttribute("user") UserDTO user, 
-			/*@RequestParam("userArea") String userArea, @RequestParam("backendUser") boolean backendUser,*/ HttpServletRequest request){
- 					
+			HttpServletRequest request){
+    
+    	if(!isCaptchaValido(request)) {
+    		return new AlertStatus(true, "Captcha invalido");
+    	}
+    	    	
 		try {
 			
 			String encodedPass = passwordEncoder.encodePassword(user.getPassword(), user.getUsername());
@@ -452,6 +459,14 @@ public class AccountController {
 			
 		userDTO.setAuthorities(authToString);	
 		return userDTO;
+	}
+
+
+	@Override
+	protected ModelAndView handleRequestInternal(HttpServletRequest arg0,
+			HttpServletResponse arg1) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }
