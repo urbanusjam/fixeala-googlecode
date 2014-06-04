@@ -10,22 +10,27 @@
 	<import resource="classpath:ctx/placeholders/fixeala-general-beans.xml" />
 	
 	<!--	DataSource        -->
-	<import resource="classpath:ctx/datasource/fixeala-datasource.xml" />
+<!-- 	<import resource="classpath:ctx/datasource/fixeala-datasource.xml" /> -->
 
-	<!--	Log4j             -->
-	<import resource="classpath:ctx/log4j/fixeala-log4j.xml" />
+
+	<!--	Hibernate         -->
+	<import resource="classpath:ctx/fixeala-config.xml" />
+<!-- 	<import resource="classpath:ctx/fixeala-persistence.xml" /> -->
+
 
 	<!--	DAO               -->
 	<import resource="classpath:ctx/dao/fixeala-common-dao.xml" />
 
-	<!--	Hibernate         -->
-	<import resource="classpath:ctx/hibernate/fixeala-persistence.xml" />
+
 
 	<!--	Services          -->
 	<import resource="classpath:ctx/services/fixeala-services.xml" />
 	
 	<!--	Security          -->
 	<import resource="classpath:ctx/security/fixeala-security.xml" />
+	
+	<!--	Log4j             -->
+	<import resource="classpath:ctx/log4j/fixeala-log4j.xml" />
 
 
 </beans>

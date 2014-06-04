@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+ 			 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+ 								http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd" version="2.0">
+                                 
+    <persistence-unit name="fixealaPU" transaction-type="RESOURCE_LOCAL" >  
+    	
+    	<provider>org.hibernate.ejb.HibernatePersistence</provider>
+    	
+    	<jta-data-source>java:comp/env/jdbc/FixealaDS</jta-data-source>
+      	
+      	<class>ar.com.urbanusjam.entity.annotations.ActivationToken</class>
+      	<class>ar.com.urbanusjam.entity.annotations.Area</class>       
+       	<class>ar.com.urbanusjam.entity.annotations.Authority</class> 
+        <class>ar.com.urbanusjam.entity.annotations.Comment</class>      
+        <class>ar.com.urbanusjam.entity.annotations.Issue</class>  
+        <class>ar.com.urbanusjam.entity.annotations.IssueFollow</class>        
+        <class>ar.com.urbanusjam.entity.annotations.IssueLink</class>  
+        <class>ar.com.urbanusjam.entity.annotations.IssuePageView</class>
+        <class>ar.com.urbanusjam.entity.annotations.IssueRepair</class>
+        <class>ar.com.urbanusjam.entity.annotations.IssueUpdateHistory</class> 
+        <class>ar.com.urbanusjam.entity.annotations.IssueVote</class> 
+        <class>ar.com.urbanusjam.entity.annotations.MediaContent</class>   
+        <class>ar.com.urbanusjam.entity.annotations.PasswordResetToken</class>    
+        <class>ar.com.urbanusjam.entity.annotations.Tag</class>   
+        <class>ar.com.urbanusjam.entity.annotations.User</class>
+        
+        <exclude-unlisted-classes/>    
+        
+        <properties>
+      		<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+    	</properties>
+        
+	</persistence-unit>
+	
+</persistence>     
