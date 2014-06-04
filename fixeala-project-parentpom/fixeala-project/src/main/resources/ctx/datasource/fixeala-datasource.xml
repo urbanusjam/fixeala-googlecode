@@ -8,11 +8,11 @@
                            http://www.springframework.org/schema/context
                            http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
-	  <bean id="dataSourceFixeala" class="org.springframework.jndi.JndiObjectFactoryBean">
-	    <property name="jndiName">
-	            <value>${datasource.fixeala.mysql.jndi}</value>
-	    </property>
-	  </bean>
+<!-- 	  <bean id="dataSourceFixeala" class="org.springframework.jndi.JndiObjectFactoryBean"> -->
+<!-- 	    <property name="jndiName"> -->
+<!-- 	            <value>${datasource.fixeala.mysql.jndi}</value> -->
+<!-- 	    </property> -->
+<!-- 	  </bean> -->
 	 
 
 	<context:property-placeholder/>

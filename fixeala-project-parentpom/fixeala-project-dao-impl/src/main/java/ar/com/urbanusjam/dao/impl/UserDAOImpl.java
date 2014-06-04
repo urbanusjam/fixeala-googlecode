@@ -53,13 +53,14 @@ public class UserDAOImpl extends GenericDAOImpl<User, Serializable>  implements 
 		return users;
 	}
 	
+	/**
 	@Override
 	public List<User> findUsersByArea(String areaID) {
 		List<User> users = new ArrayList<User>();		
 		users = this.findWhere(" enabled = true AND area.id = ? AND verifiedOfficial = true AND isArea = false ORDER BY username ASC", new Object[]{Long.valueOf(areaID)});			
 		return users;
 	}
-	
+	**/
 	
 	@Override	 	
 	@Transactional

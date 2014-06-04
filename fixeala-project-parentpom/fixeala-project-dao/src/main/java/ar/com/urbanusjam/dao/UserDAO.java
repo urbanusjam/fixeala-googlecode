@@ -23,7 +23,7 @@ public interface UserDAO extends UserDetailsManager {
 
 	public List<User> findAllActiveUsers();
 	
-	public List<User> findUsersByArea(String areaID);
+//	public List<User> findUsersByArea(String areaID);
 	
 	public List<User> findUsersByCriteria(UserCriteriaSearch criteria);
 	

@@ -708,7 +708,7 @@ public class IssueController {
 	
 	@RequestMapping(value="/issues/getAvailableUsers/{areaID}", produces = "application/json", method = RequestMethod.GET)
 	public @ResponseBody List<UserDTO> loadAvailableUsers(@PathVariable("areaID") String areaID, HttpServletRequest request){		
-		List<UserDTO> u = userService.loadVerifiedUsersByArea(areaID);	
+		List<UserDTO> u = null; //userService.loadVerifiedUsersByArea(areaID);	
 		return u;		
 	}
 	

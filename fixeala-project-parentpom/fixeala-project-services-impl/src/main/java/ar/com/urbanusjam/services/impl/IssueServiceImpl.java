@@ -130,13 +130,13 @@ public class IssueServiceImpl implements IssueService {
 
 	@Override
 	public void reportIssue(IssueDTO issueDTO) {
-		Area area = areaDAO.getAreaById("1"); //cambiar!!!!
+//		Area area = areaDAO.getAreaById("1"); 
 		Issue issue = new Issue();
 		issue = this.convertTo(issueDTO);
 		User u = userDAO.loadUserByUsername(issueDTO.getUser().getUsername());
 		issue.setReporter(u);
-		issue.setAssignedArea(area);
-		asignarUsuarioDefault(issue);
+//		issue.setAssignedArea(area);
+//		asignarUsuarioDefault(issue);
 		issueDAO.saveIssue(issue);		
 	}
 	
@@ -218,7 +218,7 @@ public class IssueServiceImpl implements IssueService {
 		issueDAO.updateIssue(issue);
 	}
 	
-	
+	/**
 	private void asignarUsuarioDefault(Issue issue) {
 		
 		//asignar USUARIO (ADMIN o MANAGER) seg�n AREA
@@ -279,6 +279,7 @@ public class IssueServiceImpl implements IssueService {
 				
 		
 	}
+	**/
 	
 	private boolean hasLessAssignedIssues(List<User> users, User user){
 		HashMap<String, Integer> unSorted = new HashMap<String, Integer>();

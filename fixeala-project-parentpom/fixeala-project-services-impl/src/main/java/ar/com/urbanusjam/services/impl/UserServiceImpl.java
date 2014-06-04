@@ -100,7 +100,7 @@ public class UserServiceImpl implements UserService {
 		
 		return usersDTO;
 	}
-	
+	/**
 	@Override
 	public List<UserDTO> loadVerifiedUsersByArea(String areaID) {
 		List<User> users = userDAO.findUsersByArea(areaID);
@@ -112,7 +112,7 @@ public class UserServiceImpl implements UserService {
 		}
 		return usersDTO;
 	}
-
+	 **/
 
 	@Override
 	public void changePassword(String username, String newPassword) {		

@@ -442,7 +442,7 @@ public class HomeController {
         int iTotalRecords; // total number of records (unfiltered)
         int iTotalDisplayRecords; //value will be set when code filters companies by keyword
            
-        List<UserDTO> dbUsers = userService.loadVerifiedUsersByArea(areaID);
+        List<UserDTO> dbUsers = null; //userService.loadVerifiedUsersByArea(areaID);
         List<UserDTO> users = new ArrayList<UserDTO>();
         
         iTotalRecords = dbUsers.size();        

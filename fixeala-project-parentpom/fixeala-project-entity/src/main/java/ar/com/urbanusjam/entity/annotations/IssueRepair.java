@@ -15,8 +15,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.LazyToOne;
 import org.hibernate.annotations.LazyToOneOption;
-import org.hibernate.bytecode.javassist.FieldHandled;
-import org.hibernate.bytecode.javassist.FieldHandler;
+//import org.hibernate.bytecode.javassist.FieldHandled;
+//import org.hibernate.bytecode.javassist.FieldHandler;
 
 @Entity
 @Table(name="issue_repair")
