@@ -258,14 +258,14 @@ public class HomeController {
 		List<IssueDTO> dbIssues = new ArrayList<IssueDTO>();
 		List<IssueDTO> issues = new ArrayList<IssueDTO>();
 		
-		if(user.hasRole("ROLE_AREA", user.getAuthorities()))
-			dbIssues = issueService.loadIssuesByArea(user.getAreaNombre());
-		
-		if(user.hasRole("ROLE_ADMIN", user.getAuthorities()) 
-				|| user.hasRole("ROLE_MANAGER", user.getAuthorities()))
-			dbIssues = issueService.getIssuesAsignados(userID);
-		
-		else
+//		if(user.hasRole("ROLE_AREA", user.getAuthorities()))
+//			dbIssues = issueService.loadIssuesByArea(user.getAreaNombre());
+//		
+//		if(user.hasRole("ROLE_ADMIN", user.getAuthorities()) 
+//				|| user.hasRole("ROLE_MANAGER", user.getAuthorities()))
+//			dbIssues = issueService.getIssuesAsignados(userID);
+//		
+//		else
 			dbIssues = issueService.loadIssuesByUser(userID);		
 		
 		JQueryDataTableParamModel param = DataTablesParamUtility.getParam(request);

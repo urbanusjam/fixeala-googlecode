@@ -10,14 +10,21 @@
     				    http://www.springframework.org/schema/tx
 						http://www.springframework.org/schema/tx/spring-tx-3.1.xsd ">
   
-	<context:annotation-config base-package="ar.com.urbanusjam.jpa"/>
+	<context:annotation-config base-package="ar.com.urbanusjam"/>
 		
 	<tx:annotation-driven />
 	
 	 <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 <!-- 	<property name="persistenceXmlLocation" value="classpath:META-INF/persistence.xml" /> -->
         <property name="persistenceUnitName" value="fixealaPU" />
+        <property name="dataSource" ref="dataSourceFixeala"/>
     </bean>
+    
+	<bean id="dataSourceFixeala" class="org.springframework.jndi.JndiObjectFactoryBean">
+	    <property name="jndiName">   
+	            <value>java:comp/env/jdbc/FixealaDS</value>
+	    </property>
+	  </bean>
 	
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactory" />

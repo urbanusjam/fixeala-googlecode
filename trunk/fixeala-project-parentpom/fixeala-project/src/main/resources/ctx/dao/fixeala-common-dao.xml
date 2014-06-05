@@ -17,23 +17,23 @@
     
     <bean id="activationDAO" class="ar.com.urbanusjam.jpa.dao.impl.ActivationDAOImpl"/>
     
-<!--     <bean id="issueDAO" class="ar.com.urbanusjam.jpa.dao.impl.IssueDAOImpl"/> -->
+    <bean id="issueDAO" class="ar.com.urbanusjam.jpa.dao.impl.IssueDAOImpl"/>
     
-<!--     <bean id="issueUpdateDAO" class="ar.com.urbanusjam.jpa.dao.impl.IssueHistorialRevisionDAOImpl"/> -->
+    <bean id="issueUpdateDAO" class="ar.com.urbanusjam.jpa.dao.impl.IssueHistorialRevisionDAOImpl"/>
     
-<!--     <bean id="issueLicitacionDAO" class="ar.com.urbanusjam.jpa.dao.impl.IssueLicitacionDAOImpl"/> -->
+    <bean id="issueLicitacionDAO" class="ar.com.urbanusjam.jpa.dao.impl.IssueLicitacionDAOImpl"/>
     
-<!--     <bean id="tagDAO" class="ar.com.urbanusjam.jpa.dao.impl.TagDAOImpl"/> -->
+    <bean id="tagDAO" class="ar.com.urbanusjam.jpa.dao.impl.TagDAOImpl"/>
     
-<!--     <bean id="contenidoDAO" class="ar.com.urbanusjam.jpa.dao.impl.ContenidoDAOImpl"/> -->
+    <bean id="contenidoDAO" class="ar.com.urbanusjam.jpa.dao.impl.ContenidoDAOImpl"/>
     
-<!--     <bean id="commentDAO" class="ar.com.urbanusjam.jpa.dao.impl.CommentDAOImpl"/> -->
+    <bean id="commentDAO" class="ar.com.urbanusjam.jpa.dao.impl.CommentDAOImpl"/>
     
-<!--     <bean id="issueFollowDAO" class="ar.com.urbanusjam.jpa.dao.impl.IssueFollowDAOImpl"/> -->
+    <bean id="issueFollowDAO" class="ar.com.urbanusjam.jpa.dao.impl.IssueFollowDAOImpl"/>
     
-<!--     <bean id="issuePageViewDAO" class="ar.com.urbanusjam.jpa.dao.impl.IssuePageViewDAOImpl"/> -->
+    <bean id="issuePageViewDAO" class="ar.com.urbanusjam.jpa.dao.impl.IssuePageViewDAOImpl"/>
     
-<!--     <bean id="issueVoteDAO" class="ar.com.urbanusjam.jpa.dao.impl.IssueVoteDAOImpl"/> -->
+    <bean id="issueVoteDAO" class="ar.com.urbanusjam.jpa.dao.impl.IssueVoteDAOImpl"/>
     
 	<!--     <bean id="areaDAO" class="ar.com.urbanusjam.jpa.dao.impl.AreaDAOImpl"/> -->
 	

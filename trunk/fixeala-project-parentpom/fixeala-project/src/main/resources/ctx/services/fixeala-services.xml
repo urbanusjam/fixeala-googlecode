@@ -1,7 +1,8 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
-    http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+    					http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
  
   
   	<!-- Common Services -->
@@ -16,16 +17,16 @@
 	<bean name="issueService" class="ar.com.urbanusjam.services.impl.IssueServiceImpl" >
 		<property name="userService" ref="userService" />
 		<property name="contenidoService" ref="contenidoService" />
-<!-- 		<property name="issueDAO" ref="issueDAO" /> -->
-<!-- 		<property name="userDAO" ref="userDAO" /> -->
+		<property name="issueDAO" ref="issueDAO" />
+		<property name="userDAO" ref="userDAO" />
 <!-- 		<property name="areaDAO" ref="areaDAO" /> -->
-<!-- 		<property name="tagDAO" ref="tagDAO" /> -->
-<!-- 		<property name="commentDAO" ref="commentDAO" /> -->
-<!-- 		<property name="issueFollowDAO" ref="issueFollowDAO" /> -->
-<!-- 		<property name="issuePageViewDAO" ref="issuePageViewDAO" /> -->
-<!-- 		<property name="issueVoteDAO" ref="issueVoteDAO" /> -->
-<!-- 		<property name="issueUpdateDAO" ref="issueUpdateDAO" /> -->
-<!-- 		<property name="issueRepairDAO" ref="issueLicitacionDAO" /> -->
+		<property name="tagDAO" ref="tagDAO" />
+		<property name="commentDAO" ref="commentDAO" />
+		<property name="issueFollowDAO" ref="issueFollowDAO" />
+		<property name="issuePageViewDAO" ref="issuePageViewDAO" />
+		<property name="issueVoteDAO" ref="issueVoteDAO" />
+		<property name="issueUpdateDAO" ref="issueUpdateDAO" />
+		<property name="issueRepairDAO" ref="issueLicitacionDAO" />
 	</bean>
 	
 	<bean name="exportService" class="ar.com.urbanusjam.services.impl.ExportServiceImpl" >
@@ -34,8 +35,8 @@
 	</bean>
 	
 	<bean name="contenidoService" class="ar.com.urbanusjam.services.impl.ContenidoServiceImpl" >
-<!-- 		<property name="contenidoDAO" ref="contenidoDAO" />		 -->
-<!-- 		<property name="issueDAO" ref="issueDAO" />		 -->
+		<property name="contenidoDAO" ref="contenidoDAO" />		
+		<property name="issueDAO" ref="issueDAO" />		
 		<property name="pathImagenes" value="${path.imagenes}${file.separator}" />    
 	</bean>	
 	
