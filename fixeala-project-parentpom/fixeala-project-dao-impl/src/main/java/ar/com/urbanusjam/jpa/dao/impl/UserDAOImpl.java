@@ -39,7 +39,7 @@ public class UserDAOImpl implements UserDAO, UserDetailsManager  {
 	
 	@Override
 	public User loadUserByUsername(String username) throws UsernameNotFoundException {		
-		User user = entityManager.createNamedQuery("User.findByUsername", User.class)
+		User user = entityManager.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
 									  .setParameter("username", username)			
 				   					  .getSingleResult();	
 		return user;			
@@ -47,7 +47,7 @@ public class UserDAOImpl implements UserDAO, UserDetailsManager  {
 	
 	@Override
 	public List<User> findAllActiveUsers() {		
-		List<User> users = entityManager.createNamedQuery("User.findEnabledUsers", User.class)
+		List<User> users = entityManager.createQuery("SELECT u FROM User u WHERE u.enabled = :enabled", User.class)
 										.setParameter("enabled", true)
 									    .getResultList();
 		return users;
@@ -118,7 +118,7 @@ public class UserDAOImpl implements UserDAO, UserDetailsManager  {
 
 	@Override
 	public boolean emailExists(String email) {
-		User user = entityManager.createNamedQuery("User.emailExists", User.class)
+		User user = entityManager.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
 				 .setParameter("email", email)			
 				 .getSingleResult();
 		return user != null ? true : false;

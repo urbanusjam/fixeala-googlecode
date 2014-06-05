@@ -1,24 +1,24 @@
 package ar.com.urbanusjam.jpa.dao.impl;
 
-import java.io.Serializable;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
 
 import ar.com.urbanusjam.dao.IssueHistorialRevisionDAO;
-import ar.com.urbanusjam.dao.impl.utils.GenericDAOImpl;
 import ar.com.urbanusjam.entity.annotations.IssueUpdateHistory;
 
 @Repository
-public class IssueHistorialRevisionDAOImpl extends GenericDAOImpl<IssueUpdateHistory, Serializable> 
-						implements IssueHistorialRevisionDAO {
+public class IssueHistorialRevisionDAOImpl implements IssueHistorialRevisionDAO {
 
-	public IssueHistorialRevisionDAOImpl() {
-		super(IssueUpdateHistory.class);
-	}
+	@PersistenceContext(unitName = "fixealaPU")
+	private EntityManager entityManager; 
+	
+	public IssueHistorialRevisionDAOImpl() {}
 
 	@Override
 	public void saveHistorial(IssueUpdateHistory historial) {
-		this.save(historial);		
+		entityManager.persist(historial);		
 	}
 	
 	

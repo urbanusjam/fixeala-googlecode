@@ -17,7 +17,6 @@ import java.util.UUID;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -26,15 +25,13 @@ import org.springframework.transaction.annotation.Transactional;
 import ar.com.urbanusjam.dao.ContenidoDAO;
 import ar.com.urbanusjam.dao.IssueDAO;
 import ar.com.urbanusjam.entity.annotations.MediaContent;
-import ar.com.urbanusjam.entity.annotations.Issue;
 import ar.com.urbanusjam.services.ContenidoService;
 import ar.com.urbanusjam.services.dto.MediaContentDTO;
-import ar.com.urbanusjam.services.dto.FileWrapperDTO;
 import ar.com.urbanusjam.services.exceptions.BusinessException;
 import ar.com.urbanusjam.services.utils.DateUtils;
 import ar.com.urbanusjam.services.utils.FileUploadUtils;
 
-@Service("contenidoService")
+@Service
 @Transactional(propagation=Propagation.REQUIRED, readOnly=false, rollbackFor=Exception.class)
 public class ContenidoServiceImpl implements ContenidoService {
 	 
@@ -45,14 +42,28 @@ public class ContenidoServiceImpl implements ContenidoService {
 
     @Value("${path.imagenes}") 
     private String pathImagenes;
-    
-    @Autowired
+ 
     private ContenidoDAO contenidoDAO;
-    
-    @Autowired
+
     private IssueDAO issueDAO;
     
-    
+  
+
+	public void setPathImagenes(String pathImagenes) {
+		this.pathImagenes = pathImagenes;
+	}
+
+
+	public void setContenidoDAO(ContenidoDAO contenidoDAO) {
+		this.contenidoDAO = contenidoDAO;
+	}
+
+
+	public void setIssueDAO(IssueDAO issueDAO) {
+		this.issueDAO = issueDAO;
+	}
+
+
 	@Override
 	public MediaContentDTO obtenerAvatarUsuario(String username)
 			throws BusinessException {

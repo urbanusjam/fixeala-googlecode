@@ -23,8 +23,8 @@ import ar.com.urbanusjam.services.dto.ActivationDTO;
 import ar.com.urbanusjam.services.dto.PasswordResetTokenDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
 
-//@Service
-//@Transactional
+@Service
+@Transactional
 public class UserServiceImpl implements UserService {
 	
 	private UserDAO userDAO;

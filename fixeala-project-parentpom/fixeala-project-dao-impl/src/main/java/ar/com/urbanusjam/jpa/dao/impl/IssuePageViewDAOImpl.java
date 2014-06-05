@@ -1,37 +1,42 @@
 package ar.com.urbanusjam.jpa.dao.impl;
 
-import java.io.Serializable;
 import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
 
 import ar.com.urbanusjam.dao.IssuePageViewDAO;
-import ar.com.urbanusjam.dao.impl.utils.GenericDAOImpl;
 import ar.com.urbanusjam.entity.annotations.IssuePageView;
 
 @Repository
-public class IssuePageViewDAOImpl extends GenericDAOImpl<IssuePageView, Serializable> 
-	implements IssuePageViewDAO {
+public class IssuePageViewDAOImpl implements IssuePageViewDAO {
+	
+	@PersistenceContext(unitName = "fixealaPU")
+	private EntityManager entityManager; 
 
-	public IssuePageViewDAOImpl() {
-		super(IssuePageView.class);
-	}
+	public IssuePageViewDAOImpl() {}
 
 	@Override
 	public void saveIssuePageView(IssuePageView pageview) {
-		this.save(pageview);
+		entityManager.persist(pageview);
 	}
 
 	@Override
 	public int getIssuePageViews(Long issueID) {
-		List<IssuePageView> pageviews = this.findWhere(" issue.id = ? ", new Object[]{issueID});
+		List<IssuePageView> pageviews = entityManager.createNamedQuery("IssuePageView.findByIssue", IssuePageView.class)
+				   .setParameter("issue.id", issueID)
+			       .getResultList();
 		return pageviews.size();
 	}
 
 	@Override
 	public boolean existsIssuePageView(Long issueID, String username) {
-		List<IssuePageView> pageviews = this.findWhere(" issue.id = ? AND user.username = ? ", 
-				new Object[]{issueID, username});
+		List<IssuePageView> pageviews = entityManager.createNamedQuery("IssuePageView.findByIssue", IssuePageView.class)
+				   .setParameter("issue.id", issueID)
+				   .setParameter("user.username", username)
+			       .getResultList();
 		return pageviews.size() > 0 ? true : false; 	
 	}
 

@@ -4,26 +4,24 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import ar.com.urbanusjam.dao.ContenidoDAO;
-import ar.com.urbanusjam.dao.impl.utils.GenericDAOImpl;
 import ar.com.urbanusjam.entity.annotations.MediaContent;
 
 @Repository
 @Transactional(propagation= Propagation.REQUIRED, readOnly=false)
-public class ContenidoDAOImpl extends GenericDAOImpl<MediaContent, Serializable> implements ContenidoDAO  {
+public class ContenidoDAOImpl implements ContenidoDAO  {
+	
+	@PersistenceContext(unitName = "fixealaPU")
+	private EntityManager entityManager; 
 
-	public ContenidoDAOImpl() {
-		super(MediaContent.class);
-	}
+	public ContenidoDAOImpl() {}
 
 	@Override
 	public MediaContent findContenidoById(Long idContenido) {
@@ -36,13 +34,13 @@ public class ContenidoDAOImpl extends GenericDAOImpl<MediaContent, Serializable>
 //		List<Contenido> contenidos = this.findWhere(" issue.id = ? ", new Object[]{idIssue});    	
 		
 		
-		List<MediaContent> contenidos = getSessionFactory().getCurrentSession().createCriteria(MediaContent.class)  	
+		List<MediaContent> contenidos =  null;/**getSessionFactory().getCurrentSession().createCriteria(MediaContent.class)  	
 			
 				.createAlias("issue", "i")
 				.add(Restrictions.eq("i.id", idIssue))
 		        .addOrder(Order.asc("orden") )
 		        .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
-		        .list();
+		        .list();**/
 		
     	return contenidos; 
 	}	
@@ -50,7 +48,7 @@ public class ContenidoDAOImpl extends GenericDAOImpl<MediaContent, Serializable>
 	@Override
 	public void deleteContenidosByIssue(Collection<MediaContent> contenidos, Long idIssue) {
 		
-		Session session = getSessionFactory().getCurrentSession();
+		/**Session session = getSessionFactory().getCurrentSession();
 		Transaction tx = session.beginTransaction();
 		
 		try{				
@@ -80,7 +78,7 @@ public class ContenidoDAOImpl extends GenericDAOImpl<MediaContent, Serializable>
 			 session.clear();
 			 session.close();
 			 
-		}		
+		}	**/	
 	     
 	}
 	
@@ -107,6 +105,66 @@ public class ContenidoDAOImpl extends GenericDAOImpl<MediaContent, Serializable>
 	@Override
 	public void deleteContenido(MediaContent contenido) {
 		this.delete(contenido);
+	}
+
+	@Override
+	public Serializable save(MediaContent persitentObject) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void saveAll(Collection<MediaContent> col) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void update(MediaContent persitentObject) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(MediaContent persitentObject) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void saveOrUpdate(MediaContent persitentObject) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getPersistentClazzName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<MediaContent> findAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<MediaContent> findWhere(String where, Object... params) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<MediaContent> findByQuery(String query, Object... params) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MediaContent get(Serializable id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 		
