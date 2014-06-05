@@ -88,6 +88,10 @@
 
 		
 	<!-- Datasource -->	
+<!-- 	<bean class="ar.com.urbanusjam.dao.impl.security.DatabasePasswordSecurerBean" init-method="secureDatabase"  -->
+<!-- 			depends-on="dataSourceFixeala"> -->
+<!-- 		<property name="dataSource" ref="dataSourceFixeala"/> -->
+<!-- 	</bean> -->
 	<bean class="ar.com.urbanusjam.dao.impl.security.DatabasePasswordSecurerBean" init-method="secureDatabase" 
 			depends-on="dataSourceFixeala">
 		<property name="dataSource" ref="dataSourceFixeala"/>
