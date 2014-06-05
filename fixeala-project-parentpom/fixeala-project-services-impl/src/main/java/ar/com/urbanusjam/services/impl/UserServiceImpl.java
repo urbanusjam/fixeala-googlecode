@@ -1,13 +1,19 @@
 package ar.com.urbanusjam.services.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
+import javax.mail.MessagingException;
+
+import org.joda.time.DateTime;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import ar.com.urbanusjam.dao.ActivationDAO;
@@ -18,19 +24,21 @@ import ar.com.urbanusjam.entity.annotations.ActivationToken;
 import ar.com.urbanusjam.entity.annotations.Authority;
 import ar.com.urbanusjam.entity.annotations.PasswordResetToken;
 import ar.com.urbanusjam.entity.annotations.User;
+import ar.com.urbanusjam.services.MailService;
 import ar.com.urbanusjam.services.UserService;
 import ar.com.urbanusjam.services.dto.ActivationDTO;
 import ar.com.urbanusjam.services.dto.PasswordResetTokenDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
 
+
 @Service
-@Transactional
 public class UserServiceImpl implements UserService {
 	
 	private UserDAO userDAO;
 	private AuthorityDAO authorityDAO;
 	private PasswordResetDAO passwordResetDAO;
 	private ActivationDAO activationDAO;
+	private MailService mailService;
 	
 	
 	public void setUserDAO(UserDAO userDAO) {
@@ -49,7 +57,10 @@ public class UserServiceImpl implements UserService {
 		this.activationDAO = activationDAO;
 	}
 		
-		
+	public void setMailService(MailService mailService) {
+		this.mailService = mailService;
+	}
+
 	@Override
 	public User loadUserByUsername(String username) throws UsernameNotFoundException, DisabledException{	
 		
@@ -116,15 +127,56 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void changePassword(String username, String newPassword) {		
-			userDAO.changePassword(username, newPassword);			
+		userDAO.changePassword(username, newPassword);			
 	}
-
 	
 	@Override
-	public void createAccount(UserDTO userDTO) {
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = MessagingException.class)
+	public void createAccount(UserDTO userDTO) throws Exception {
+		
 		User user = new User();
+		ActivationDTO tokenDTO = new ActivationDTO();		
+		DateTime currentDate = new DateTime();
+		
+		//user data
+	    List<String> roles = new ArrayList<String>();
+	    roles.add("ROLE_USER");	
+    	user.setEnabled(false);
+	    userDTO.setAuthorities(roles);
+	    userDTO.setRegistrationDate(currentDate.toDate());
 		user = this.convertTo(userDTO);
-		userDAO.createUser(user);		
+		
+		//token data			
+		DateTime expiration = currentDate.plusDays(3); 	
+		String tokenUUID = UUID.randomUUID().toString(); //random token	
+		tokenDTO.setToken(tokenUUID);
+		tokenDTO.setUsername(user.getUsername());
+		tokenDTO.setCreation(currentDate.toDate());
+		tokenDTO.setExpiration(expiration.toDate());			
+		ActivationToken token = convertTo(tokenDTO); 			
+		
+		try {
+			//create user
+			userDAO.createUser(user);		
+			  
+			//save token 			
+			activationDAO.saveToken(token);
+			
+			//send activation email			
+			mailService.sendActivationRequestEmail(user.getUsername(), tokenUUID, user.getEmail());
+			
+		} catch (Exception e) {
+			throw new MessagingException();
+		}	
+				
+	}
+		
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public void activateAccount(String username) throws UsernameNotFoundException, Exception {
+		userDAO.activateAccount(username);
+		activationDAO.deleteTokenByUsername(username);			
+		mailService.sendActivationSuccessEmail(username, userDAO.loadUserByUsername(username).getEmail());
 	}
 	
 	@Override
@@ -136,7 +188,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public boolean usernameExists(String username) {
-		return userDAO.usernameExists(username);
+		return userDAO.userExists(username);
 	}
 
 	@Override
@@ -192,19 +244,11 @@ public class UserServiceImpl implements UserService {
 	public String findUsernameByActivationToken(String token) {
 		return activationDAO.findUsernameByActivationToken(token);
 	}
-	
-	@Override
-	public void activateAccount(String username) {
-		userDAO.activateAccount(username);
-	}
 
 	@Override
 	public void closeAccount(String username) {
 		userDAO.closeAccount(username);
 	}
-	
-	
-	
 	
 	
 	
@@ -215,6 +259,8 @@ public class UserServiceImpl implements UserService {
 		user.setEmail(userDTO.getEmail());		
 		user.setRoles(convertToAuthority(userDTO.getAuthorities()));
 		user.setEnabled(userDTO.isEnabled());
+		user.setNeighborhood(userDTO.getNeighborhood());
+		user.setRegistrationDate(userDTO.getRegistrationDate());		
 		
 //		if(userDTO.isVerifiedOfficial()){
 //			user.setVerifiedOfficial(true);
@@ -226,7 +272,7 @@ public class UserServiceImpl implements UserService {
 //		}
 //		
 //		else{
-			userDTO.setNeighborhood(userDTO.getNeighborhood());
+			
 //		}
 		
 		return user;

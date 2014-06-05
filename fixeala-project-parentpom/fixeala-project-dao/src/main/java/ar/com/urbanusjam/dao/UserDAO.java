@@ -30,7 +30,7 @@ public interface UserDAO extends /*JpaRepository<User, Long>,*/ UserDetailsManag
 	
 	public void createUser(User user);
 	
-	public boolean usernameExists(String username);
+	public boolean userExists(String username);
 	
 	public boolean emailExists(String email);
 	

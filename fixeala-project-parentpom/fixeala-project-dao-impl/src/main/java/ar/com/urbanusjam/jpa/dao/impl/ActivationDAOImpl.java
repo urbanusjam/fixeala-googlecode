@@ -1,6 +1,7 @@
 package ar.com.urbanusjam.jpa.dao.impl;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
@@ -22,29 +23,39 @@ public class ActivationDAOImpl implements ActivationDAO {
 	}
 
 	@Override
-	public String findUsernameByActivationToken(String token) {		
-		ActivationToken activeToken = (ActivationToken) entityManager.createQuery(
-			    						"SELECT a FROM ActivationToken a WHERE a.creationDate < a.expirationDate AND token = :token")
+	public String findUsernameByActivationToken(String token) throws NoResultException {		
+		try{
+			ActivationToken activeToken = (ActivationToken) entityManager.createQuery(		
+			    						"SELECT a FROM ActivationToken a WHERE CURRENT_DATE < a.expiration AND token = :token")
 			    						.setParameter("token", token)	
 			    						.getSingleResult();
-		return activeToken.getUsername();
+			return activeToken.getUsername();
+		}catch(NoResultException e){
+			return null;
+		}
+		
 	}
 
 	@Override
 	public void deleteToken(String token) {		
 		ActivationToken expiredToken = (ActivationToken) entityManager.createQuery(
-				"SELECT a FROM ActivationToken a WHERE a.creationDate < a.expirationDate AND token = :token")
+				"SELECT a FROM ActivationToken a WHERE CURRENT_DATE >= a.expiration AND token = :token")
 				.setParameter("token", token)	
 				.getSingleResult();		
 		entityManager.remove(expiredToken);			
 	}
 
 	@Override
-	public void deleteTokenByUsername(String username) {		
-		ActivationToken activeToken = entityManager.createNamedQuery("ActivationToken.deleteByUsername", ActivationToken.class)
+	public void deleteTokenByUsername(String username) throws NoResultException {		
+		try{
+			ActivationToken activeToken = entityManager.createQuery("SELECT a FROM ActivationToken a WHERE a.username = :username", ActivationToken.class)		
 				  								   .setParameter("username", username)			
 				  							       .getSingleResult();		
-		entityManager.remove(activeToken);		
+			entityManager.remove(activeToken);	
+		}catch(NoResultException e){
+			throw new NoResultException();
+		}
+			
 	}
 
 }

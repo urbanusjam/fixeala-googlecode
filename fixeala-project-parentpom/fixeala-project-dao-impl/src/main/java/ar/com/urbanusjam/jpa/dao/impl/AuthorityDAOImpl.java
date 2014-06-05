@@ -23,7 +23,7 @@ public class AuthorityDAOImpl implements AuthorityDAO  {
 	
 	@Override
 	public Authority getRoleById(Long id){
-		Authority rol = entityManager.createNamedQuery("Authority.findByRoleId", Authority.class)
+		Authority rol = entityManager.createQuery("SELECT a FROM Authority a WHERE a.id = :id ", Authority.class)
 				  					 .setParameter("id", id)			
 				  					 .getSingleResult();	
 		return rol;
@@ -31,7 +31,7 @@ public class AuthorityDAOImpl implements AuthorityDAO  {
 	
 	@Override
 	public Authority getRoleByName(String rolename){
-		Authority rol = entityManager.createNamedQuery("Authority.findByRoleName", Authority.class)
+		Authority rol = entityManager.createQuery("SELECT a FROM Authority a WHERE a.authority = :rolename ", Authority.class)
 					 .setParameter("rolename", rolename)			
 					 .getSingleResult();	
 		return rol;

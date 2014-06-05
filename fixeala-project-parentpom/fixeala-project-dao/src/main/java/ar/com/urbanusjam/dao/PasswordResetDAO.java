@@ -2,7 +2,7 @@ package ar.com.urbanusjam.dao;
 
 import ar.com.urbanusjam.entity.annotations.PasswordResetToken;
 
-public interface PasswordResetDAO{
+public interface PasswordResetDAO {
 	
 	public void saveToken(PasswordResetToken token);
 	
