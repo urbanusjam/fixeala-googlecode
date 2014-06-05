@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import org.hibernate.Transaction;
@@ -28,7 +29,7 @@ public class UserDAOImpl implements UserDAO, UserDetailsManager  {
 	@PersistenceContext(unitName = "fixealaPU")
 	private EntityManager entityManager;   
 
-//	@Autowired
+	@Autowired
 	private ActivationDAO activationDAO;
 		
 	public UserDAOImpl() {}
@@ -39,9 +40,15 @@ public class UserDAOImpl implements UserDAO, UserDetailsManager  {
 	
 	@Override
 	public User loadUserByUsername(String username) throws UsernameNotFoundException {		
-		User user = entityManager.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
-									  .setParameter("username", username)			
-				   					  .getSingleResult();	
+		User user = new User();		
+		try{
+			user = entityManager.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
+					  .setParameter("username", username)			
+ 					  .getSingleResult();	
+		} catch(NoResultException e){
+			user = null;
+		}
+		
 		return user;			
 	}	
 	
@@ -63,14 +70,9 @@ public class UserDAOImpl implements UserDAO, UserDetailsManager  {
 	**/
 	
 	@Override	 	
-	@Transactional
-	public void createUser(User user) {		
-		entityManager.getTransaction().begin(); 		
+	public void createUser(User user) {	
 		entityManager.persist(user);				
-		entityManager.getTransaction().commit();	
-		entityManager.close();
 	}
-
 	
 	@Override
 	public void updateUser(UserDetails user) {		
@@ -88,48 +90,38 @@ public class UserDAOImpl implements UserDAO, UserDetailsManager  {
 	public void changePassword(String username, String newPassword) {
 		User user = (User) this.loadUserByUsername(username);			
 		user.setPassword(newPassword);
-		((Transaction) entityManager).commit();//implicitly flushes if flush mode is COMMIT or AUTO.		
+		entityManager.merge(user);
 	}
 
 	@Override
 	public boolean userExists(String username) {
-		@SuppressWarnings("unchecked")
-		List<User> users = (List<User>) this.loadUserByUsername(username);		
-		return users.size() > 0 ? true : false;
-	}
-
-	@Override
-	public User loadUserByName(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void createUser(UserDetails user) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean usernameExists(String username) {		
-		User user = (User) this.loadUserByUsername(username);		
+		User user =  this.loadUserByUsername(username);		
 		return user != null ? true : false;
 	}
 
 	@Override
 	public boolean emailExists(String email) {
-		User user = entityManager.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
-				 .setParameter("email", email)			
-				 .getSingleResult();
+		User user = new User();		
+		try{
+			user = entityManager.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
+					 			.setParameter("email", email)			
+					 			.getSingleResult();
+		} catch(NoResultException e){
+			user = null;
+		}		
 		return user != null ? true : false;
 	}
 	
 	@Override
-	public String findUsernameByEmail(String email) {
-		User user = entityManager.createNamedQuery("User.findUsernameByEmail", User.class)
-				 .setParameter("email", email)			
-				 .getSingleResult();	
-		return user.getUsername();
+	public String findUsernameByEmail(String email) throws NoResultException {
+		try{
+			User user = entityManager.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
+					 .setParameter("email", email)			
+					 .getSingleResult();	
+			return user.getUsername();
+		} catch(NoResultException e){
+			return null;
+		}	
 	}
 
 	@Override
@@ -146,6 +138,7 @@ public class UserDAOImpl implements UserDAO, UserDetailsManager  {
 		User userDB = (User) this.loadUserByUsername(user.getUsername());
 		userDB.setNeighborhood(user.getNeighborhood());
 		userDB.setEmail(user.getEmail());
+		entityManager.merge(userDB);
 		((Transaction) entityManager).commit();
 	}
 	
@@ -153,7 +146,7 @@ public class UserDAOImpl implements UserDAO, UserDetailsManager  {
 	public void activateAccount(String username) {
 		User user = (User) this.loadUserByUsername(username);
 		user.setEnabled(true);
-		((Transaction) entityManager).commit();
+		entityManager.merge(user);
 	}
 
 	@Override
@@ -161,6 +154,7 @@ public class UserDAOImpl implements UserDAO, UserDetailsManager  {
 		User user = (User) this.loadUserByUsername(username);	
 		user.setEnabled(false);
 		user.setClosedAccountDate(new Date());
+		entityManager.merge(user);
 		((Transaction) entityManager).commit();
 	}
 
@@ -198,6 +192,19 @@ public class UserDAOImpl implements UserDAO, UserDetailsManager  {
 	public Long findUserIDbyUsername(String username) {
 		User user = (User) this.loadUserByUsername(username);		
 		return user.getId();	
+	}
+	
+	
+	@Override
+	public User loadUserByName(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void createUser(UserDetails user) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

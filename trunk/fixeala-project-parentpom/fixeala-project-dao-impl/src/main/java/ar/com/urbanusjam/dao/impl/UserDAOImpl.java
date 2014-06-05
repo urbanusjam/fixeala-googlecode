@@ -106,12 +106,12 @@ public class UserDAOImpl extends GenericDAOImpl<User, Serializable>  implements 
 		}		
 	}
 
-	@Override
-	public boolean userExists(String username) {
-		@SuppressWarnings("unchecked")
-		List<User> users = (List<User>) this.loadUserByUsername(username);		
-		return users.size() > 0 ? true : false;
-	}
+//	@Override
+//	public boolean userExists(String username) {
+//		@SuppressWarnings("unchecked")
+//		List<User> users = (List<User>) this.loadUserByUsername(username);		
+//		return users.size() > 0 ? true : false;
+//	}
 
 	@Override
 	public User loadUserByName(String name) {
@@ -126,7 +126,7 @@ public class UserDAOImpl extends GenericDAOImpl<User, Serializable>  implements 
 	}
 
 	@Override
-	public boolean usernameExists(String username) {
+	public boolean userExists(String username) {
 		return this.findWhere(" username = ? ", new Object[]{username}).size() > 0 ? true : false;
 	}
 
