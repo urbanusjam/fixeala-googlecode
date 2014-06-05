@@ -36,8 +36,8 @@ public interface UserService extends UserDetailsService {
     public void deleteAccountAndToken(String username);
     public void deletePasswordToken(String token);    
 	
-	public void createAccount(UserDTO userDTO);
-	public void activateAccount(String username);	
+	public void createAccount(UserDTO userDTO) throws Exception;	
+	public void activateAccount(String username) throws UsernameNotFoundException, Exception;
 	public void updateAccount(UserDTO userDTO);	
 	public void closeAccount(String username);
 
