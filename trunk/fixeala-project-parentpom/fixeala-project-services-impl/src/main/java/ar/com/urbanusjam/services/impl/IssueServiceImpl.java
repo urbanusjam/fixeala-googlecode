@@ -16,6 +16,7 @@ import java.util.SortedMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import ar.com.urbanusjam.dao.AreaDAO;
 import ar.com.urbanusjam.dao.CommentDAO;
@@ -63,7 +64,8 @@ import ar.com.urbanusjam.services.utils.Operation;
 import ar.com.urbanusjam.services.utils.SortingDataUtils;
 
 
-@Service("issueService")
+@Service
+@Transactional
 public class IssueServiceImpl implements IssueService {
 	
 	private UserService userService;
@@ -281,6 +283,7 @@ public class IssueServiceImpl implements IssueService {
 	}
 	**/
 	
+	/**
 	private boolean hasLessAssignedIssues(List<User> users, User user){
 		HashMap<String, Integer> unSorted = new HashMap<String, Integer>();
 		
@@ -295,9 +298,9 @@ public class IssueServiceImpl implements IssueService {
 		
 		return false;
 		
-	}
+	}**/
 	
-	
+	/**
 	@Override
 	public List<IssueDTO> getIssuesAsignados(String username){
 		List<Issue> issues = new ArrayList<Issue>();
@@ -307,7 +310,7 @@ public class IssueServiceImpl implements IssueService {
 			issuesDTO.add(convertToDTO(issue));
 		}
 		return issuesDTO;	
-	}
+	}**/
 	
 
 	@Override
@@ -354,6 +357,7 @@ public class IssueServiceImpl implements IssueService {
 		return issuesDTO;	
 	}
 	
+	/**
 	@Override
 	public List<IssueDTO> loadIssuesByArea(String areaName) {
 		List<Issue> issues = new ArrayList<Issue>();
@@ -363,7 +367,7 @@ public class IssueServiceImpl implements IssueService {
 			issuesDTO.add(convertToDTO(issue));
 		}
 		return issuesDTO;	
-	}
+	}**/
 
 	
 	@Override

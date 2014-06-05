@@ -1,17 +1,12 @@
 package ar.com.urbanusjam.jpa.dao.impl;
 
-import java.io.Serializable;
-import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
 
 import ar.com.urbanusjam.dao.ActivationDAO;
-import ar.com.urbanusjam.dao.impl.utils.GenericDAOImpl;
 import ar.com.urbanusjam.entity.annotations.ActivationToken;
-import ar.com.urbanusjam.entity.annotations.User;
 
 @Repository
 public class ActivationDAOImpl implements ActivationDAO {

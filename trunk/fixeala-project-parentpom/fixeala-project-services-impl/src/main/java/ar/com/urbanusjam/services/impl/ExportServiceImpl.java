@@ -28,6 +28,7 @@ import org.apache.commons.lang.CharEncoding;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.jasperreports.JasperReportsUtils;
 
 import ar.com.urbanusjam.services.ExportService;
@@ -36,7 +37,8 @@ import ar.com.urbanusjam.services.dto.ReportDTO;
 import ar.com.urbanusjam.services.utils.DateUtils;
 import ar.com.urbanusjam.services.utils.FileFormat;
 
-@Service("exportService")
+@Service
+@Transactional
 public class ExportServiceImpl implements ExportService {
 	
 	@Value("${path.jasper.template}") 	
@@ -46,6 +48,18 @@ public class ExportServiceImpl implements ExportService {
 	private String pathJasperOutputFolder;
 	
 	
+	
+	
+	public void setPathJasperTemplate(String pathJasperTemplate) {
+		this.pathJasperTemplate = pathJasperTemplate;
+	}
+
+
+	public void setPathJasperOutputFolder(String pathJasperOutputFolder) {
+		this.pathJasperOutputFolder = pathJasperOutputFolder;
+	}
+
+
 	@Override
 	public boolean generateDataset(ReportDTO report) {	
 		String fileFormat = "";

@@ -32,10 +32,10 @@ public interface IssueService {
 	public List<IssueDTO> loadIssues(int numberOfResults);	
 	public List<IssueDTO> loadIssuesByStatus(String[] status);	
 	public List<IssueDTO> loadIssuesByUser(String username);	
-	public List<IssueDTO> loadIssuesByArea(String areaName);
+//	public List<IssueDTO> loadIssuesByArea(String areaName);
 	public List<IssueDTO> findIssuesByCriteria(IssueCriteriaSearch search);
 	
-	public List<IssueDTO> getIssuesAsignados(String username);	
+//	public List<IssueDTO> getIssuesAsignados(String username);	
 	public List<CommentDTO> getCommentsByIssue(String issueID);
 	public List<String> getTagList();
 	public IssueDTO getIssueById(String issueID);	

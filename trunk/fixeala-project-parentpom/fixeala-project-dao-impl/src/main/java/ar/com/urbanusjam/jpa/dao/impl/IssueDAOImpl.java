@@ -1,107 +1,91 @@
 package ar.com.urbanusjam.jpa.dao.impl;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.hibernate.Criteria;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import ar.com.urbanusjam.dao.IssueDAO;
-import ar.com.urbanusjam.dao.impl.utils.GenericDAOImpl;
 import ar.com.urbanusjam.dao.utils.IssueCriteriaSearchRaw;
 import ar.com.urbanusjam.entity.annotations.Issue;
 import ar.com.urbanusjam.entity.annotations.Tag;
 
 @Repository
 @Transactional(propagation= Propagation.REQUIRED, readOnly=false)
-public class IssueDAOImpl extends GenericDAOImpl<Issue, Serializable> implements IssueDAO {	
+public class IssueDAOImpl implements IssueDAO {	
 	
-	@Autowired
-	private SessionFactory sessionFactory;	
-	 
-	public IssueDAOImpl() {
-		super(Issue.class);
-	}
+	@PersistenceContext(unitName = "fixealaPU")
+	private EntityManager entityManager; 
+	
+	public IssueDAOImpl() {}
 
 	@Override
 	public void saveIssue(Issue issue) {
-		this.save(issue);		
+		entityManager.persist(issue);		
 	}
 	
 	@Override
 	public void updateIssue(Issue issue) {
-		issue = (Issue) getSessionFactory().getCurrentSession().merge(issue);	
-		this.update(issue);		
+		entityManager.merge(issue);		
 	}
 
 	@Override
 	public List<Issue> getAllIssues() {
-		List<Issue> issues = new ArrayList<Issue>();
-		issues = this.findAll();
-		return issues;
+		return (List<Issue>) entityManager.createQuery("SELECT i FROM Issue i").getResultList();
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Issue> getIssues(int numberOfResults) {
-		List<Issue> issues = new ArrayList<Issue>();
-//		Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Issue.class);
-//		criteria.setMaxResults(numberOfResults);
-//		criteria.addOrder(Order.asc("creationDate"));
-//		issues = criteria.list();	
-		
-		Query query  = getSessionFactory().getCurrentSession().createQuery("FROM Issue i ORDER BY i.creationDate DESC ");  
-		issues = query.setMaxResults(numberOfResults).list(); 
-		
+		List<Issue> issues = entityManager.createQuery("SELECT i FROM Issue i ORDER BY i.creationDate DESC ")
+				.setMaxResults(numberOfResults)  
+				.getResultList(); 
 		return issues;
 	}
 	
 
 	@Override
 	public List<Issue> getIssuesByStatus(String[] status) {
-		List<Issue> issues = new ArrayList<Issue>();
-		issues = this.getHibernateTemplate().
-						findByNamedParam(" SELECT * FROM Issue i WEHRE i.status IN (:statusOptions) ", 
-								"statusOptions", status);
+		List<Issue> issues = (List<Issue>)entityManager.createQuery("SELECT * FROM Issue i WEHRE i.status IN (:statusOptions)")
+										  .setParameter("statusOptions", status)
+										  .getResultList();
 		return issues;
 	}
 	
 	@Override
 	public List<Issue> getIssuesByUser(String username) {
-		List<Issue> issues = new ArrayList<Issue>();
-		issues = this.findWhere(" reporter.username = ? ", new Object[]{ username});
+		List<Issue> issues = entityManager.createNamedQuery("Issue.findByUsername", Issue.class)
+			     .setParameter("reporter.username", username)
+			     .getResultList();
 		return issues;
 	}
 	
-	@Override
-	public List<Issue> getIssuesByArea(String areaName) {
-		List<Issue> issues = new ArrayList<Issue>();
-		issues = this.findWhere(" assignedArea.nombre = ? ", new Object[]{areaName});
-		return issues;
-	}
+//	@Override
+//	public List<Issue> getIssuesByArea(String areaName) {
+//		List<Issue> issues = new ArrayList<Issue>();
+//		issues = this.findWhere(" assignedArea.nombre = ? ", new Object[]{areaName});
+//		return issues;
+//	}
 	
-	@Override
-	public List<Issue> getAssignedIssuesByVerifiedOfficial(String username) {
-		List<Issue> issues = new ArrayList<Issue>();
-		issues = this.findWhere(" assignedOfficial.username = ? ", new Object[]{ username});
-		return issues;
-	}
+//	@Override
+//	public List<Issue> getAssignedIssuesByVerifiedOfficial(String username) {
+//		List<Issue> issues = new ArrayList<Issue>();
+//		issues = this.findWhere(" assignedOfficial.username = ? ", new Object[]{ username});
+//		return issues;
+//	}
 
 	@Override
 	public Issue findIssueById(String issueID) {
-		List<Issue> issues = new ArrayList<Issue>();
-		issues = this.findWhere(" id = ? ", new Object[]{  Long.valueOf(issueID) });
-		return issues.get(0);
+		Issue issue = entityManager.createNamedQuery("Issue.findByID", Issue.class)
+			     .setParameter("id", Long.valueOf(issueID))
+			     .getSingleResult();
+		return issue;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -109,7 +93,7 @@ public class IssueDAOImpl extends GenericDAOImpl<Issue, Serializable> implements
 	public List<Issue> getIssuesByCriteria(IssueCriteriaSearchRaw issueSearch) {
 		
 		List<Issue> issues = new ArrayList<Issue>();		
-		Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Issue.class);
+		/*Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Issue.class);
 				
 		if(!issueSearch.getProvincia().equals("Todas"))		
 			criteria.add(Restrictions.eq("province", issueSearch.getProvincia()));
@@ -137,16 +121,17 @@ public class IssueDAOImpl extends GenericDAOImpl<Issue, Serializable> implements
 		        .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 			        		
 		issues = criteria.list();	
-		
+		*/
 		return issues;        
         
 	}
 
 	@Override
 	public Set<Tag> findIssueTagsById(String issueID) {
-		List<Issue> issues = new ArrayList<Issue>();
-		issues = this.findWhere(" id = ? ", new Object[]{  Long.parseLong(issueID) });
-		return issues.get(0).getTagsList();
+		Issue issue = entityManager.createNamedQuery("Issue.findByID", Issue.class)
+				     .setParameter("id", Long.valueOf(issueID))
+				     .getSingleResult();
+		return issue.getTagsList();
 	}
 
 }

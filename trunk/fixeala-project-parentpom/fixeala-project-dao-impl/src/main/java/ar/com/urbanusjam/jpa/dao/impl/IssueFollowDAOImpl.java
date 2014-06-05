@@ -1,59 +1,62 @@
 package ar.com.urbanusjam.jpa.dao.impl;
 
-import java.io.Serializable;
 import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import ar.com.urbanusjam.dao.IssueFollowDAO;
-import ar.com.urbanusjam.dao.impl.utils.GenericDAOImpl;
 import ar.com.urbanusjam.entity.annotations.IssueFollow;
 
 @Repository
 @Transactional(propagation= Propagation.REQUIRED, readOnly=false)
-public class IssueFollowDAOImpl extends GenericDAOImpl<IssueFollow, Serializable> implements IssueFollowDAO {	
+public class IssueFollowDAOImpl implements IssueFollowDAO {	
 	
-	public IssueFollowDAOImpl() {
-		super(IssueFollow.class);
-	}
+	@PersistenceContext(unitName = "fixealaPU")
+	private EntityManager entityManager; 
+	
+	public IssueFollowDAOImpl() {}
 
 	@Override
 	public void saveFollowing(IssueFollow newFollowing) {
-		this.save(newFollowing);
+		entityManager.persist(newFollowing);
 	}
 
 	@Override
 	public void deleteFollowing(IssueFollow following) {
-		List<IssueFollow> followings = this.findWhere(" id.issueID = ? AND id.followerID = ? ", 
-				new Object[]{
-				following.getId().getIssueID(), 
-				following.getId().getFollowerID()
-					});
-		this.delete(followings.get(0));		
+		IssueFollow activeFollowing = entityManager.createNamedQuery("IssueFollow.findByIssueFollower", IssueFollow.class)
+			     .setParameter("id.issueID", following.getId().getIssueID())
+			     .setParameter("id.followerID", following.getId().getFollowerID())
+			     .getSingleResult();
+		entityManager.remove(activeFollowing);		
 	}
 
 	@Override
 	public IssueFollow findFollowing(IssueFollow following) {
-		List<IssueFollow> followings = this.findWhere(" id.issueID = ? AND id.followerID = ? ", 
-				new Object[]{
-					following.getId().getIssueID(), 
-					following.getId().getFollowerID()
-					});
-		
-		return followings.size() > 0 ? followings.get(0) : null; 		
+		IssueFollow activeFollowing = entityManager.createNamedQuery("IssueFollow.findByIssueFollower", IssueFollow.class)
+				     .setParameter("id.issueID", following.getId().getIssueID())
+				     .setParameter("id.followerID", following.getId().getFollowerID())
+				     .getSingleResult();
+		return activeFollowing; 		
 	}
 
 	@Override
 	public List<IssueFollow> findFollowingsByIssue(Long issueID) {
-		List<IssueFollow> followers = this.findWhere(" id.issueID = ? ", new Object[]{ issueID });
+		List<IssueFollow> followers = entityManager.createNamedQuery("IssueFollow.findByIssue", IssueFollow.class)
+			     .setParameter("id.issueID", issueID)
+			     .getResultList();
 		return followers;
 	}
 
 	@Override
 	public List<IssueFollow> findFollowingsByUser(Long userID) {
-		List<IssueFollow> followings = this.findWhere(" id.followerID = ? ", new Object[]{ userID });
+		List<IssueFollow> followings = entityManager.createNamedQuery("IssueFollow.findByUser", IssueFollow.class)
+			     .setParameter("id.followerID", userID)
+			     .getResultList();
 		return followings;
 	}
 
