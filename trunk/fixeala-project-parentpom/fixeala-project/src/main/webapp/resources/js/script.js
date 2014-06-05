@@ -46,50 +46,47 @@ $(document).ready(function(){
  		        trigger: 'custom', 
  		        onlyOne: false,    
  		        position: 'right'  
- 		    });  
- 			  		
- 			 
+ 		    });  			 
  			
 			$("#signupForm").validate({		
 				
 						rules: 
-						{	 onfocusin: false,	
-							
+						{	 onfocusin: false,								
 							 
-//							 username: { 
-//								 required : true, 
-//								 // regex : /^[a-z0-9_-]{3,15}$/,
-//								 minlength: 4,
-//			    				 maxlength: 20,
-//			    				 remote: {
-//						 	    		url: "./signup/checkUsernameAvailability.html", 
-//										type: "POST", 
-//										data: {
-//									        username: function(){ return $("#signupForm #username").val(); }
-//									    }		
-//					 	    	 }					 	    	
-//							 },								
-//					 	     email: { 
-//					 	    	 required : true,
-//					 	    	 email : true,
-//					 	    	 remote: {
-//						 	    		url: "./signup/checkEmailAvailability.html", 
-//										type: "POST", 
-//										data: {
-//									        email: function(){ return $("#signupForm #email").val(); }
-//									      }		
-//					 	    	 }
-//					 	     },
-//			    			 password: {  
-//			    				 required : true, 
-//			    				 // regex : /^(?=.{8,16})(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$_-]).*$/
-//			    				 minlength: 6,
-//			    				 maxlength: 30
-//			    			 } ,
-//				   	    	 confirmPassword: {		
-//				   	    		 required : true, 
-//				   	      		 equalTo: "#password"				   	      		 
-//				   	    	 },
+							 username: { 
+								 required : true, 
+								 // regex : /^[a-z0-9_-]{3,15}$/,
+								 minlength: 4,
+			    				 maxlength: 20,
+			    				 remote: {
+						 	    		url: "./signup/checkUsernameAvailability.html", 
+										type: "POST", 
+										data: {
+									        username: function(){ return $("#signupForm #username").val(); }
+									    }		
+					 	    	 }					 	    	
+							 },								
+					 	     email: { 
+					 	    	 required : true,
+					 	    	 email : true,
+					 	    	 remote: {
+						 	    		url: "./signup/checkEmailAvailability.html", 
+										type: "POST", 
+										data: {
+									        email: function(){ return $("#signupForm #email").val(); }
+									      }		
+					 	    	 }
+					 	     },
+			    			 password: {  
+			    				 required : true, 
+			    				 // regex : /^(?=.{8,16})(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$_-]).*$/
+			    				 minlength: 6,
+			    				 maxlength: 30
+			    			 } ,
+				   	    	 confirmPassword: {		
+				   	    		 required : true, 
+				   	      		 equalTo: "#password"				   	      		 
+				   	    	 },
 				   	    	
 					 	}, 	 
 					 	
@@ -101,36 +98,36 @@ $(document).ready(function(){
 			 		 		    	remote: "Captcha inv&aacute;lido"
 			 		 		    },
 			 		 		    
-//			 	     			username: 
-//			 	     			{		
-//			 	     					required: "Este campo es requerido.",	 	     			 	
-//			 	     			 		minlength: "El nombre de usuario debe tener por lo menos 4 caracteres.",
-//			 	     			 		maxlength: "El m&aacute;ximo es de 20 caracteres.",
-//			 	     			 		remote: "El nombre de usuario ya ha sido registrado."
-//			 	     		 	},
-//			 	     			email: 
-//			 	     			{
-//			 	     					required: "Este campo es requerido.",	 	
-//			 	     					email: "Ingrese una direcci&oacute;n de email v&aacute;lida.",
-//			 	     					remote: "La direcci&oacute;n de email ya ha sido registrada."
-//			 	     			},
-//			 	     			password: 
-//			 	     			{		
-//			 	     					required: "Este campo es requerido.",	 	
-//			 	     			 		minlength: "La contrase&ntilde;a debe tener por lo menos 6 caracteres.",
-//			 	     			 		maxlength: "El m&aacute;ximo es de 30 caracteres."
-//			 	     		 	},			     				
-//			     				confirmPassword: 
-//			     				{			     				
-//			     						equalTo:  "La contrase&ntilde;a y la confirmaci&oacute;n no coinciden.",
-//			     						required: "Este campo es requerido."
-//			     				}
+			 	     			username: 
+			 	     			{		
+			 	     					required: "Este campo es requerido.",	 	     			 	
+			 	     			 		minlength: "El nombre de usuario debe tener por lo menos 4 caracteres.",
+			 	     			 		maxlength: "El m&aacute;ximo es de 20 caracteres.",
+			 	     			 		remote: "El nombre de usuario ya ha sido registrado."
+			 	     		 	},
+			 	     			email: 
+			 	     			{
+			 	     					required: "Este campo es requerido.",	 	
+			 	     					email: "Ingrese una direcci&oacute;n de email v&aacute;lida.",
+			 	     					remote: "La direcci&oacute;n de email ya ha sido registrada."
+			 	     			},
+			 	     			password: 
+			 	     			{		
+			 	     					required: "Este campo es requerido.",	 	
+			 	     			 		minlength: "La contrase&ntilde;a debe tener por lo menos 6 caracteres.",
+			 	     			 		maxlength: "El m&aacute;ximo es de 30 caracteres."
+			 	     		 	},			     				
+			     				confirmPassword: 
+			     				{			     				
+			     						equalTo:  "La contrase&ntilde;a y la confirmaci&oacute;n no coinciden.",
+			     						required: "Este campo es requerido."
+			     				}
 			     				
 			 	     	},
 			 	    
 			 	    	submitHandler: function() {
 			 	    		
-			 	    		//bootbox.confirm("&iquest;Confirma que desea crear la cuenta?", function(result){	
+//			 	    		bootbox.confirm("&iquest;Confirma que desea crear la cuenta?", function(result){	
 			 	    			
 			 	    			var username = $('#signupForm #username').val();
 				 	    	    var email = $('#signupForm #email').val();
@@ -143,25 +140,20 @@ $(document).ready(function(){
 								 		data: "username=" + username + "&email=" + email + "&password=" + password + "&captcha_answer=" + captcha ,								 
 								        success: function(data){
 								        	
-								        	if(data.result){	 					
-					 	    					
+								        	if(data.result){	 
 								        		bootbox.alert(data.message, function() {
-//								        			setTimeout(function() { 
-//								        				window.location.href = getDomainUrl();
-//								        			}, 1000);	
+								        			setTimeout(function() { 
+								        				window.location.href = getDomainUrl();
+								        			}, 1000);	
 								        		});					 	    					
 					 	    				}
-					 	    				else{					 	    				
-					 	    					bootbox.alert(data.message, function() {
-					 	    						$("#signupForm").formwizard({ 
-					 	    							formOptions: {resetForm:true}
-					 	    						});	 						
-					 	    					}); 
+					 	    				else{					 	
+					 	    					bootbox.alert(data.message);
 					 	    				}					 	    				
 					            		}		 	    			
 			            		});
 				            		
-			 	    		//});
+//			 	    		});
 			 	    		
 
 			 	    	},
@@ -257,7 +249,7 @@ $(document).ready(function(){
 			});
 			
 			// initialize tooltipster on form input elements
-		    $('#changePasswordForm input[type="password"], #closeAccountForm input[type="password"], #updateAccountForm input#email').tooltipster({ 		    
+		    $('#changePasswordForm input[type="password"], #resetCredentialsForm input[type="password"], #closeAccountForm input[type="password"], #updateAccountForm input#email').tooltipster({ 		    
 		    	animation: 'fade',		
 		    	delay: 200,
 		    	interactive: true,
@@ -439,6 +431,92 @@ $(document).ready(function(){
 			});
 		    
 		    
+		    //// RESET PASSWORD  ////
+		   
+		    $( "#resetCredentialsForm" ).validate({				
+				
+				rules: 
+				{				
+			 	     newPassword: { 
+			 	    	 required : true			 	    
+			 	     },			    			
+			 	     newPasswordConfirmation: {					   	    		
+			      		 equalTo: "#newPassword"
+			    	 }
+			 	}, 	 		
+				
+			 	messages: 
+				{ 	 	
+			  		 	newPassword: 
+			  			{
+			  			 		required: "Este campo es requerido."			  			 		
+			  		 	},	
+			  		 	newPasswordConfirmation: 
+						{			     					
+								equalTo:  "La nueva clave y la confirmaci&oacute;n no coinciden."
+						}
+			  	},
+			  	
+			  	highlight: function (element) { 
+ 			        $(element).addClass("error"); 
+ 			    },
+	 	    	
+ 			    unhighlight: function (element) { 
+ 			        $(element).removeClass("error"); 
+ 			    },
+		
+ 		 		errorPlacement: function (error, element) {
+ 		            $(element).tooltipster('update', $(error).text());
+ 		            $(element).tooltipster('show');				        
+  		        },
+			  	
+			  	submitHandler: function() {
+			  		
+			  		 var newPassword = $('#newPassword').val();					  	     
+			  	     var path = window.location.pathname;			 
+					 var token = path.substr(path.lastIndexOf('/') + 1);			 
+					 var tokenEncode = encodeURIComponent(token);
+					 
+					 alert(tokenEncode);
+			  	  
+			         $.ajax({
+			        	  type: "POST",
+			        	  url: "./" + tokenEncode,
+				          data: "newPassword=" + newPassword,    
+				          async: false,
+				          success: function(data){        
+
+				        	  if(data.response){
+				        		  var newUrl = window.location.protocol + "//" + window.location.host + "/fixeala";			              	      
+			              	      window.location.href = newUrl;	
+				        	  }
+				        	  else
+				        		  bootbox.alert(data.message);    		  
+				        	  
+				           },
+				          
+			               error: function(jqXHR, exception) {
+			                   if (jqXHR.status === 0) {
+			                       alert('Not connect.\n Verify Network.');
+			                   } else if (jqXHR.status == 404) {
+			                       alert('Requested page not found. [404]');
+			                   } else if (jqXHR.status == 500) {
+			                       alert('Internal Server Error [500].');
+			                   } else if (exception === 'parsererror') {
+			                       alert('Requested JSON parse failed.');
+			                   } else if (exception === 'timeout') {
+			                       alert('Time out error.');
+			                   } else if (exception === 'abort') {
+			                       alert('Ajax request aborted.');
+			                   } else {
+			                       alert('Uncaught Error.\n' + jqXHR.responseText);
+			                   }
+			               }
+			         });
+			     }
+			});
+		    
+		    
 		    /**
 		    $("#fileupload-profile").change(function(){				
 				
@@ -575,42 +653,52 @@ $(document).ready(function(){
 			
 			$("#forgotPasswordForm").validate({ 
 				
-//				rules: 
-//				{								 
-//					 email: "required"		 	    
-//			 	}, 	 		
-//				
-//			 	messages: 
-//				{ 	 	  			 	     			
-//			 			email: 
-//			  			{
-//			  			 		required: function(){
-//			  			 		  showAlert("Debe ingresar una dirección de correo.", "alert-error");	        		  
-//			  			 		}		 	
-//			  		 	}
-//			  		 
-//			  	},
+				rules: 
+				{								 
+					 passwordResetEmail: { 
+			 	    	 required : true,
+			 	    	 email : true			 	    	
+			 	     }
+			 	}, 	 		
+				
+			 	messages: 
+				{ 	 	  			 	     			
+			 			passwordResetEmail: 
+			  			{
+		  			 		required: function(){
+		  			 			showAlert("Ingrese una dirección de correo v&aacute;lida.", "alert-error");	        			  
+		  			 		},
+		  			 		email: function(){
+			  			 		showAlert("Ingrese una dirección de correo v&aacute;lida.", "alert-error");	        		  
+			  			 	}	
+			  		 	}		
+			 	
+			  	},
+			  			  	
+			  	errorPlacement: function (error, element) {
+			  		$(element).removeClass('error');				  	   
+				},
 				
 				submitHandler: function()  {
 					
-					var email = $('#email').val();
+					var email = $('#passwordResetEmail').val();
 					 
 				     $.ajax({
 				    	  type: "POST",
-				          url: "./forgotPassword/sendEmailToken.html",
+				          url: "./forgotPassword/sendPasswordResetMail.html",
 				          data: "email=" + email,    
 				          async: false,
-				          success: function(result){   
-				        	
-				        	  if(result){	        		  
-				        		  showAlert("�Felicitaciones! El reclamo ha sido registrado con �xito.", "alert-success");
+				          success: function(data){   
+				        	  
+				        	  if(data.result){	        		  
+				        		  showAlert(data.message, "alert-success");
 				        		
 				        	  }else{
-				        		  showAlert("La direcci&oacute;n de correo no est&aacute; registrada en el sitio.", "alert-error");	        		  
+				        		  showAlert(data.message, "alert-error");	        		  
 				        	  }
 				          },
 				           error: function(jqXHR, exception) {
-				        	   showAlert("Ha ocurrido un error al procesar su requerimiento. Por favor, intente m&aacute;s tarde.", "alert-error");	   	        	  
+				        	   showAlert(data.message, "alert-error");	   	        	  
 				           }
 				     });
 				     return false;
@@ -630,12 +718,12 @@ $(document).ready(function(){
 		
 	function showAlert(message, alertType) {
 
-	    $('#alert_placeholder').append('<div id="alertdiv" style="text-align:center;height:45px;line-height:45px;border:2px solid" class="alert ' 
+	    $('#alert_placeholder').html('<div id="alertdiv" style="text-align:center;height:auto;padding: 15px;border:2px solid" class="alert ' 
 	    		+  alertType + '"><a class="close" data-dismiss="alert">&times;</a><span>'+message+'</span></div>');
 
 	    setTimeout(function() { // this will automatically close the alert and remove this if the users doesnt close it in 5 secs
 
-	      $("#alertdiv").fadeOut('slow');
+//	      $("#alertdiv").fadeOut('slow');
 	      //$("#alertdiv").remove();
 
 	    }, 6000);
