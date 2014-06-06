@@ -1,0 +1,125 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security" 
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"	
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                    http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+                    http://www.springframework.org/schema/jdbc
+					http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd                    
+                    http://www.springframework.org/schema/security 
+                    http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+	
+	
+	<security:global-method-security secured-annotations="enabled" />
+	
+	<security:http auto-config="true" use-expressions="true"> 
+			
+			<security:intercept-url pattern="/index.jsp" access="permitAll"/>		
+			<security:intercept-url pattern="/home.html" access="permitAll"/>					
+     		<security:intercept-url pattern="/resources/**" access="permitAll" /> 	 	    	 
+     		<security:intercept-url pattern="/reclamos.html" access="permitAll"/>				
+     		<security:intercept-url pattern="/usuarios.html" access="permitAll"/>	     		
+     		<security:intercept-url pattern="/dataset.html" access="permitAll"/>
+     		<security:intercept-url pattern="/widget.html" access="permitAll"/>	     	
+     		<security:intercept-url pattern="/widget-component.html" access="permitAll"/>	    			
+     	
+			<security:intercept-url pattern="/account/signup.html" access="permitAll"/>	
+<!-- 			<security:intercept-url pattern="/account/signup/verifyCaptcha.html" access="permitAll"/> -->
+<!-- 			<security:intercept-url pattern="/account/signup/createAccount.html" access="permitAll"/>		 -->			
+			<security:intercept-url pattern="/account/forgotPassword.jsp" access="permitAll"/>
+			<security:intercept-url pattern="/account/changePassword.jsp" access="isAuthenticated()"/>
+			<security:intercept-url pattern="/account/resetPassword/**" access="permitAll"/>
+			
+			<security:intercept-url pattern="/map2.html" access="permitAll"/>
+			<security:intercept-url pattern="/template.html" access="permitAll"/>			
+			<security:intercept-url pattern="/template2.html" access="permitAll"/>	
+	
+			<security:intercept-url pattern="/closedAccount.html" access="permitAll"/>		
+			<security:intercept-url pattern="/error.html" access="permitAll"/>
+			
+            <security:form-login login-page="/login" 
+								 login-processing-url="/login"
+			/>
+            					 
+<!--             <security:form-login login-page="/index"  -->
+<!-- 								 login-processing-url="/doLogin" -->
+<!-- 								 default-target-url="/"	 -->
+<!-- 								 authentication-success-handler-ref="authenticationSuccessHandler" -->
+<!-- 								 authentication-failure-handler-ref="authenticationFailureHandler"							  -->
+<!--             					 always-use-default-target="true" />  -->
+            					            					 	            					 		
+			<security:logout invalidate-session="true"
+							 logout-url="/logout.html"	
+			 				 />			
+			 				 			 				 				 
+			<security:remember-me key="fixealaRememberMeKey" 
+								  user-service-ref="userService"
+								  data-source-ref="dataSourceFixeala"			
+								  token-validity-seconds="600"	/>			
+								  							  							  
+			<security:access-denied-handler ref="accessDeniedHandler" />
+			<security:request-cache ref="nullRequestCache"/>				 
+	</security:http>
+	
+	
+	<bean id="nullRequestCache" class="org.springframework.security.web.savedrequest.NullRequestCache"/>
+		
+		
+	<!-- Custom Authentication Provider -->
+	<bean id="customAuthenticationProvider" class="ar.com.urbanusjam.web.security.CustomAuthenticationProvider" />
+	
+	
+	<!-- Password Encoding -->
+    <bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" />
+    	
+    	
+	<!-- Salt for Password Encoding -->
+	<bean id="saltSource" class="org.springframework.security.authentication.dao.ReflectionSaltSource" >
+		<property name="userPropertyToUse" value="username"/>
+	</bean>
+	
+	
+	<!-- Authentication Manager -->
+	<security:authentication-manager alias="fixealaAuthenticationManager">	
+		   <security:authentication-provider  ref="customAuthenticationProvider" >
+<!-- 		   		<security:password-encoder ref="passwordEncoder"/>  -->
+		   </security:authentication-provider>	  	
+	</security:authentication-manager> 
+
+		
+	<!-- Datasource -->	
+<!-- 	<bean class="ar.com.urbanusjam.dao.impl.security.DatabasePasswordSecurerBean" init-method="secureDatabase"  -->
+<!-- 			depends-on="dataSourceFixeala"> -->
+<!-- 		<property name="dataSource" ref="dataSourceFixeala"/> -->
+<!-- 	</bean> -->
+	<bean class="ar.com.urbanusjam.dao.impl.security.DatabasePasswordSecurerBean" init-method="secureDatabase" 
+			depends-on="dataSourceFixeala">
+		<property name="dataSource" ref="dataSourceFixeala"/>
+	</bean>
+
+
+	<!-- Handlers -->
+	<bean id="accessDeniedHandler" class="ar.com.urbanusjam.web.security.CustomAccessDeniedHandler">
+		<property name="accessDeniedUrl" value="/error.html"/>
+    </bean>
+    
+<!--     <bean id="logoutSuccessHandler" class="ar.com.urbanusjam.web.security.CustomLogoutSuccessHandler"> -->
+	
+<!--     </bean> -->
+   
+   
+    <bean id="authenticationFailureHandler" class="ar.com.urbanusjam.web.security.CustomAuthenticationFailureHandler">
+        <property name="allowSessionCreation" value="true" />
+        <property name="useForward" value="false" />
+	    <property name="exceptionMappings">
+	        <props>
+	            <prop key="org.springframework.security.authentication.BadCredentialsException">/index.jsp</prop>
+	            <prop key="org.springframework.security.authentication.CredentialsExpiredException">/index.jsp</prop>
+	            <prop key="org.springframework.security.authentication.DisabledException">/index.jsp</prop>
+	        </props>
+	    </property>
+     </bean>
+     
+<!--      <bean id="authenticationSuccessHandler" class="ar.com.urbanusjam.web.security.CustomAuthenticationSuccessHandler" />    -->
+	
+</beans>
