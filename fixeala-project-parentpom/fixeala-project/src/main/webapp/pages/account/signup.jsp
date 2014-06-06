@@ -6,24 +6,20 @@
    	    <form id="signupForm" method="POST" class="well span6">
 		    <div class="row">
 	  			<div class="input-prepend">
-<!-- 		  			<span class="add-on"><i class="icon-user"></i></span> -->
 					<label>Nombre de usuario</label>
-		  			<input type="text" id="username" name="username" placeholder="ejemplo1234">
+		  			<input type="text" id="username" name="username">
 	  			</div>
 	  			<div class="input-prepend">
-<!-- 		  			<span class="add-on"><i class="icon-envelope"></i></span> -->
 					<label>Email</label>
-		  			<input type="text" id="email" name="email" placeholder="ejemplo1234@micorreo.com">
+		  			<input type="text" id="email" name="email">
 		  		</div>
 	  			<div class="input-prepend">
-<!-- 		  			<span class="add-on"><i class="icon-lock"></i></span> -->
 					<label>Contraseña</label>
-		  			<input type="password" id="password" name="password" placeholder="***********">
+		  			<input type="password" id="password" name="password">
 		  		</div>
 	  			<div class="input-prepend">
-<!-- 	  				<span class="add-on"><i class="icon-lock"></i></span> -->
 	  				<label>Confirme contraseña</label>
-	  				<input type="password" id="confirmPassword" name="confirmPassword" placeholder="***********">
+	  				<input type="password" id="confirmPassword" name="confirmPassword">
 	  			</div>
 
  				<div id="captcha_register"> 

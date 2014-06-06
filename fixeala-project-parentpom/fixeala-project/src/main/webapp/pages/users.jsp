@@ -54,15 +54,13 @@
 			  <div class="row-fluid">
 			  
 			  <div class="row">
-	    	   	<div class="span4 pull-left" style="padding:0;text-align:left;margin:0; border:0px solid #000">
-    	   				<blockquote>
-    	   				
+	    	   	<div class="span5 pull-left" style="padding:0;text-align:left;margin:0; border:0px solid #000">
+    	   				<blockquote>    	   				
 					        <h3>${profileUser}</h3> &nbsp;&nbsp;					        
 					        <c:if test="${ !isActiveUser }">
-					        	<span class="label" style="vertical-align:super;">Usuario eliminado</span>
+					        	<span class="label" style="vertical-align:super;">Este usuario ya no forma parte de Fixeala</span>
 					        </c:if> 
-					        <small><cite>Vecino de <i>${neighborhood}</i>&nbsp;&nbsp;<i class="icon-map-marker"></i></cite></small>						      
-					    
+					        <small><cite>Vecino de <i>${neighborhood}</i>&nbsp;&nbsp;<i class="icon-map-marker"></i></cite></small>			
 					    </blockquote>
 				</div>
 			</div>
