@@ -310,11 +310,13 @@ $(document).ready(function(){
 			  		
 			  		 var currentPassword = $('#currentPassword').val();
 			  	     var newPassword = $('#newPassword').val();
+			  	     $("#changePasswordForm").serialize();
 			  	    
 			         $.ajax({
 			        	  type: "POST",
-			              url: "../account/changePassword/doChange.html",
-			              data: "password=" + currentPassword + "&newPassword=" + newPassword,      
+			              url: "../account/changePassword.html",
+			              data: "currentPassword=" + currentPassword + "&newPassword=" + newPassword,   
+			              data:  $("#changePasswordForm").serialize(),
 			              success: function(data){  
 			            	
 			              	  if(data.result){
@@ -347,6 +349,7 @@ $(document).ready(function(){
 			                   }
 			               }
 			         });
+			         return false;
 			     }
 			});
 		    
@@ -486,9 +489,10 @@ $(document).ready(function(){
 				          async: false,
 				          success: function(data){        
 
-				        	  if(data.response){
-				        		  var newUrl = window.location.protocol + "//" + window.location.host + "/fixeala";			              	      
-			              	      window.location.href = newUrl;	
+				        	  if(data.result){				        		  
+				        		  setTimeout(function() { 
+				        				window.location.href = getDomainUrl();
+				        		  }, 1000);	
 				        	  }
 				        	  else
 				        		  bootbox.alert(data.message);    		  
