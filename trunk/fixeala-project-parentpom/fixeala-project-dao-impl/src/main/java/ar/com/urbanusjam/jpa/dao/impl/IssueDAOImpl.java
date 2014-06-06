@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
@@ -35,9 +36,10 @@ public class IssueDAOImpl implements IssueDAO {
 		entityManager.merge(issue);		
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<Issue> getAllIssues() {
-		return (List<Issue>) entityManager.createQuery("SELECT i FROM Issue i").getResultList();
+	public List<Issue> getAllIssues() throws NoResultException {
+		return (List<Issue>) entityManager.createQuery("SELECT i FROM Issue i ORDER BY i.creationDate DESC").getResultList();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -60,8 +62,8 @@ public class IssueDAOImpl implements IssueDAO {
 	
 	@Override
 	public List<Issue> getIssuesByUser(String username) {
-		List<Issue> issues = entityManager.createNamedQuery("Issue.findByUsername", Issue.class)
-			     .setParameter("reporter.username", username)
+		List<Issue> issues = entityManager.createQuery("SELECT i FROM Issue i WHERE i.reporter.username = :username", Issue.class)
+			     .setParameter("username", username)
 			     .getResultList();
 		return issues;
 	}
@@ -82,13 +84,12 @@ public class IssueDAOImpl implements IssueDAO {
 
 	@Override
 	public Issue findIssueById(String issueID) {
-		Issue issue = entityManager.createNamedQuery("Issue.findByID", Issue.class)
-			     .setParameter("id", Long.valueOf(issueID))
+		Issue issue = entityManager.createQuery("SELECT i FROM Issue i WHERE i.id = :issueID ", Issue.class)
+			     .setParameter("issueID", Long.valueOf(issueID))
 			     .getSingleResult();
 		return issue;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<Issue> getIssuesByCriteria(IssueCriteriaSearchRaw issueSearch) {
 		

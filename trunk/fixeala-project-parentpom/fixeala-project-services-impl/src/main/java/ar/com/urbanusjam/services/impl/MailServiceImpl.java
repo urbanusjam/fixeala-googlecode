@@ -74,7 +74,7 @@ public class MailServiceImpl implements MailService {
 	      
 	      message.setFrom(from);
 	      message.setTo(email);
-	      message.setSubject("Fixeala - Activación de Cuenta");
+	      message.setSubject("Fixeala - Activación de cuenta");
 	      message.setText(text);  
 	      mailSender.send(message);
 	      
@@ -104,14 +104,61 @@ public class MailServiceImpl implements MailService {
 	      
 	      message.setFrom(from);
 	      message.setTo(email);
-	      message.setSubject("Fixeala - Recueración de Clave");
+	      message.setSubject("Fixeala - Recuperación de clave");
 	      message.setText(text);    
 	      mailSender.send(message);
 	      
 	      System.out.println("Mensaje enviado existosamente...");
 	}
 	
+	@Override
+	public void sendPasswordResetSuccessEmail(String username, String email) throws Exception {
+		
+		  SimpleMailMessage message = new SimpleMailMessage();
+		
+	      String text = "Hola, <b>" + username + "</b>";      
+	      text += "<br><br>";
+	      text += "Este es un mensaje de confirmación de que la clave de tu cuenta de Fixeala ha sido modificada.";
+	      text += "<br><br>";
+	      text += "Si no pediste cambiar tu clave, iniciá sesión y cambiá la clave si es necesario. Si tenés problemas, contactate con el servicio de ayuda de Fixeala.";  
+	      text += "<br><br>";
+	      text += "Atentamente,";
+	      text += "<br>";
+	      text += "<b>El equipo de Fixeala</b>";
+	      
+	      message.setFrom(from);
+	      message.setTo(email);
+	      message.setSubject("Fixeala - Modificaste tu clave de Fixeala");
+	      message.setText(text);  
+	      mailSender.send(message);
+	      
+	      System.out.println("Mensaje enviado existosamente...");
+	}
 	
+	@Override
+	public void sendClosedAccountEmail(String username, String email)
+			throws Exception {
+		 SimpleMailMessage message = new SimpleMailMessage();
+			
+	      String text = "Hola, <b>" + username + "</b>";      
+	      text += "<br><br>";
+	      text += "Tu cuenta de Fixeala ha sido desactivada.";
+	      text += "<br><br>";
+	      text += "Tus datos personajes se han eliminado pero la información de tus reclamos seguirá vigente en nuestro sitio para el resto de los usuarios.";  
+	      text += "<br><br>";
+	      text += "Atentamente,";
+	      text += "<br>";
+	      text += "<b>El equipo de Fixeala</b>";
+	      
+	      message.setFrom(from);
+	      message.setTo(email);
+	      message.setSubject("Fixeala - Cierre de cuenta");
+	      message.setText(text);  
+	      mailSender.send(message);
+	      
+	      System.out.println("Mensaje enviado existosamente...");
+		
+	}
 	
 	
 	
@@ -161,4 +208,6 @@ public class MailServiceImpl implements MailService {
 		   
 		   return message;
 	}
+
+	
 }

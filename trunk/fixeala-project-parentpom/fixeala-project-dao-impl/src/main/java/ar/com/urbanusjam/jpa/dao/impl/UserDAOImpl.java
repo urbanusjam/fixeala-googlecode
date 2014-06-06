@@ -115,22 +115,38 @@ public class UserDAOImpl implements UserDAO, UserDetailsManager  {
 	@Override
 	public String findUsernameByEmail(String email) throws NoResultException {
 		try{
-			User user = entityManager.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
+			String username = (String) entityManager.createQuery("SELECT u.username FROM User u WHERE u.email = :email")
 					 .setParameter("email", email)			
 					 .getSingleResult();	
-			return user.getUsername();
+			return username;
+		} catch(NoResultException e){
+			return null;
+		}	
+	}
+	
+	@Override
+	public String findEmailbyUsername(String username) {
+		try{
+			String email = (String) entityManager.createQuery("SELECT u.email FROM User u WHERE u.username = :username")
+					 .setParameter("username", username)			
+					 .getSingleResult();	
+			return email;
 		} catch(NoResultException e){
 			return null;
 		}	
 	}
 
 	@Override
-	public String findPassword(String username, String password) {	
-		User user = entityManager.createNamedQuery("User.findPassword", User.class)
+	public boolean findPassword(String username, String password) {	
+		try{
+			entityManager.createQuery("SELECT u.username FROM User u WHERE u.username = :username AND u.password = :password")		
 				 .setParameter("username", username)			
 				 .setParameter("password", password)			
-				 .getSingleResult();					
-		return user.getPassword();
+				 .getSingleResult();	
+			return true;
+		}catch(NoResultException e){
+			return false;
+		}		
 	}
 
 	@Override
@@ -154,8 +170,7 @@ public class UserDAOImpl implements UserDAO, UserDetailsManager  {
 		User user = (User) this.loadUserByUsername(username);	
 		user.setEnabled(false);
 		user.setClosedAccountDate(new Date());
-		entityManager.merge(user);
-		((Transaction) entityManager).commit();
+		entityManager.merge(user);	
 	}
 
 	@Override
@@ -206,5 +221,7 @@ public class UserDAOImpl implements UserDAO, UserDetailsManager  {
 		// TODO Auto-generated method stub
 		
 	}
+
+	
 
 }

@@ -7,5 +7,9 @@ public interface MailService {
 	public void sendActivationSuccessEmail(String username, String email) throws Exception;
 	
 	public void sendPasswordResetEmail(String username, String token, String email) throws Exception;	
+	
+	public void sendPasswordResetSuccessEmail(String username, String email) throws Exception;	
+	
+	public void sendClosedAccountEmail(String username, String email) throws Exception;	
 
 }

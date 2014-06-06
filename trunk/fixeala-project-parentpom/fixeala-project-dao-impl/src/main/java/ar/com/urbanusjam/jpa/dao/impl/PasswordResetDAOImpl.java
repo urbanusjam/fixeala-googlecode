@@ -42,7 +42,7 @@ public class PasswordResetDAOImpl implements PasswordResetDAO {
 	public void deleteToken(String token) throws NoResultException {
 		try{
 			PasswordResetToken pwdToken = (PasswordResetToken) entityManager.createQuery(
-				"SELECT t FROM PasswordResetToken t WHERE CURRENT_DATE >= t.expiration AND token = :token")
+				"SELECT t FROM PasswordResetToken t WHERE t.token = :token")
 				.setParameter("token", token)	
 				.getSingleResult();		
 			entityManager.remove(pwdToken);	

@@ -29,7 +29,7 @@ public class TagDAOImpl implements TagDAO {
 
 	@Override
 	public boolean tagExists(String tagname) {
-		Tag tag = entityManager.createNamedQuery("Tag.existsByName", Tag.class)
+		Tag tag = entityManager.createQuery("SELECT t FROM Tag t WHERE t.tagname = :tagname", Tag.class)
 				   .setParameter("tagname", tagname)			
 			       .getSingleResult();	
 		return tag != null ? true : false;
@@ -37,7 +37,7 @@ public class TagDAOImpl implements TagDAO {
 
 	@Override
 	public Tag findTagByName(String tagname) {
-		Tag tag = entityManager.createNamedQuery("Tag.findByTagName", Tag.class)
+		Tag tag = entityManager.createNamedQuery("SELECT t FROM Tag t WHERE t.tagname = :tagname", Tag.class)
 				   .setParameter("tagname", tagname)			
 			       .getSingleResult();	
 		return tag;
