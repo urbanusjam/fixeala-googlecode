@@ -37,6 +37,7 @@ import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.ContenidoService;
 import ar.com.urbanusjam.services.MailService;
 import ar.com.urbanusjam.services.UserService;
+import ar.com.urbanusjam.services.dto.PasswordChangeDTO;
 import ar.com.urbanusjam.services.dto.PasswordResetTokenDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
 import ar.com.urbanusjam.web.domain.AlertStatus;
@@ -237,9 +238,8 @@ public class AccountController extends AbstractController {
 	
 	@RequestMapping(value="/resetPassword/{token}", method = RequestMethod.POST)
 	public @ResponseBody AlertStatus doResetPassword(@PathVariable("token") String tokenID, 
-			@RequestParam("newPassword")  String newPassword, HttpServletRequest request) { 	
-		
-		//validate token against database
+			@RequestParam("newPassword") String newPassword, HttpServletRequest request) { 	
+	
 		String token = StringUtils.EMPTY;
 		try{
 			token = tokenID.substring(0,tokenID.lastIndexOf("."));
@@ -247,34 +247,21 @@ public class AccountController extends AbstractController {
 		catch(StringIndexOutOfBoundsException e){
 			token = tokenID;
 		}
-		
-		//find username by token (expiration date validated in query)
+	
 		String username = userService.findUsernameByPasswordToken(token);			
 		final String plainPass = newPassword;	
-		String encodedNewPass = passwordEncoder.encodePassword(plainPass, username);	
+		String newEncodedPass = passwordEncoder.encodePassword(plainPass, username);	
 	
-		if(username != null){
-			
-			try{
-				//change password		
-				userService.changePassword(username, encodedNewPass);							
-						
-				//delete token
-				userService.deletePasswordToken(token);
-							
-				//auto-login with new password				
-				UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-						username, plainPass);
-			    request.getSession();
-			    authToken.setDetails(new WebAuthenticationDetails(request));
-				Authentication authenticatedUser = fixealaAuthenticationManager.authenticate(authToken);
-				SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+		if(username != null){			
+			try{		
+				
+				userService.changePassword(new PasswordChangeDTO("forgot", token, username, null, newEncodedPass));					
 				
 			} catch(Exception e){				
-				return new AlertStatus(false, "No se ha podido modificar la clave.");
+				return new AlertStatus(false, "Ha ocurrido un error al procesar el cambio. Intente m&aacute;s tarde.");
 			}
 			
-			return new AlertStatus(true, "La clave ha sido exitosamente modificada.");
+			return new AlertStatus(true, "La clave ha sido modificada.");
 		}
 			
 		else{		
@@ -293,44 +280,37 @@ public class AccountController extends AbstractController {
 		return "index";	
 	}
     	
-	@RequestMapping(value = "/changePassword/doChange", method = RequestMethod.POST)
-	public @ResponseBody AlertStatus doChangePassword(@ModelAttribute(value="user") UserDTO user, 
-			HttpServletRequest request){
+	@RequestMapping(value = "/changePassword", method = RequestMethod.POST)
+	public @ResponseBody AlertStatus doChangePassword(@RequestParam("currentPassword") String currentPassword, 
+			@RequestParam("newPassword") String newPassword, HttpServletRequest request){
 				
 		User loggedUser = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		final String newPlainPass = user.getNewPassword();
-		
-		String currentEncodedPass = passwordEncoder.encodePassword(user.getPassword(), loggedUser.getUsername());	
-		user.setPassword(currentEncodedPass);
-		
-		String currentDBPass = userService.findPassword(loggedUser.getUsername(), currentEncodedPass);		
-		
-		String newEncodedPass = passwordEncoder.encodePassword(user.getNewPassword(), loggedUser.getUsername());
-		user.setNewPassword(newEncodedPass);
-		
-		//valido clave actual
-		if(currentEncodedPass.equals(currentDBPass)){
-				//auto-login con nueva clave
-				try{
-					userService.changePassword(loggedUser.getUsername(), newEncodedPass);		
-					UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-							loggedUser.getUsername(), newPlainPass);
-				    request.getSession();
-					token.setDetails(new WebAuthenticationDetails(request));
-					Authentication authenticatedUser = fixealaAuthenticationManager.authenticate(token);
-					SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
-				} catch(Exception e){
-					if(e instanceof AuthenticationException)
-						return new AlertStatus(false, "Ha ocurrido un error al intentar iniciar sesión con la nueva clave.");
-					else
-						return new AlertStatus(false, "Ha ocurrido un error al intentar modificar la clave.");
-				}
-				return new AlertStatus(true, "La clave ha sido modificada.");
+		final String newPlainPass = newPassword;		
+		String currentEncodedPass = passwordEncoder.encodePassword(currentPassword, loggedUser.getUsername());	
+		String newEncodedPass = passwordEncoder.encodePassword(newPassword, loggedUser.getUsername());
+				
+		try{
+			userService.changePassword(new PasswordChangeDTO("change", null, loggedUser.getUsername(), currentEncodedPass, newEncodedPass));	
+			
+			//auto-login con nueva clave
+			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+					loggedUser.getUsername(), newPlainPass);
+		    request.getSession();
+			token.setDetails(new WebAuthenticationDetails(request));
+			Authentication authenticatedUser = fixealaAuthenticationManager.authenticate(token);
+			SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+			
+		} catch(Exception e){
+			if(e instanceof AuthenticationException)
+				return new AlertStatus(false, "Ha ocurrido un error al intentar iniciar sesión con la nueva clave.");
+			else
+				return new AlertStatus(false, e.getMessage());
 		}
-		else{
-			return new AlertStatus(false, "La clave actual ingresada es incorrecta.");		
-		}
+		
+		return new AlertStatus(true, "La clave ha sido modificada.");
+		
 	}
+
 	
 	@RequestMapping(value="/updateAccount", method = RequestMethod.POST)
 	public @ResponseBody ContenidoResponse doUpdateAccount(@RequestParam ("newEmail") String newEmail, @RequestParam ("newBarrio") String newBarrio, HttpServletRequest request) {
