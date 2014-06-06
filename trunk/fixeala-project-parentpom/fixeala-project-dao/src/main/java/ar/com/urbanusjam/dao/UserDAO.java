@@ -34,9 +34,11 @@ public interface UserDAO extends /*JpaRepository<User, Long>,*/ UserDetailsManag
 	
 	public boolean emailExists(String email);
 	
+	public String findEmailbyUsername(String username);
+	
 	public String findUsernameByEmail(String email);
 		
-	public String findPassword(String username, String password);	
+	public boolean findPassword(String username, String password);	
 
 	public void changePassword(String username, String newPassword);	
 	
