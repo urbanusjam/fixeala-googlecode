@@ -6,30 +6,25 @@
 						http://www.springframework.org/schema/context
 						http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
-	<!--	PlaceHolder       -->
-	<import resource="classpath:ctx/placeholders/fixeala-general-beans.xml" />
+	<!--	Placeholders       -->
+	<import resource="classpath:ctx/fixeala-placeholders.xml" />
 	
-	<!--	DataSource        -->
-<!-- 	<import resource="classpath:ctx/datasource/fixeala-datasource.xml" /> -->
-
-
-	<!--	Hibernate         -->
-	<import resource="classpath:ctx/fixeala-config.xml" />
-
+	<!--	Datasource / Hibernate         -->
+	<import resource="classpath:ctx/fixeala-datasource.xml" />
 
 	<!--	DAO               -->
-	<import resource="classpath:ctx/dao/fixeala-common-dao.xml" />
-
-
+	<import resource="classpath:ctx/fixeala-dao.xml" />
 
 	<!--	Services          -->
-	<import resource="classpath:ctx/services/fixeala-services.xml" />
+	<import resource="classpath:ctx/fixeala-services.xml" />
 	
 	<!--	Security          -->
-	<import resource="classpath:ctx/security/fixeala-security.xml" />
+	<import resource="classpath:ctx/fixeala-security.xml" />
+	
+	<!--	Mail              -->
+	<import resource="classpath:ctx/fixeala-mail.xml" />
 	
 	<!--	Log4j             -->
-	<import resource="classpath:ctx/log4j/fixeala-log4j.xml" />
-
+	<import resource="classpath:ctx/fixeala-log4j.xml" />
 
 </beans>
