@@ -623,15 +623,15 @@ public class HomeController {
 				model.addAttribute("total_comments", commentsCounter);
 				model.addAttribute("total_widgets", "0");				
 								
-				if(user.isVerifiedOfficial()){
-					model.addAttribute("current_nombre", user.getNombre());
-					model.addAttribute("current_apellido", user.getApellido());
-					model.addAttribute("current_rol", user.getAuthorities().size() > 0 ? user.getAuthorities().get(0) : "");
-					model.addAttribute("current_area", user.getAreaNombre());
-					model.addAttribute("current_areaID", user.getAreaId());
-					model.addAttribute("current_ciudad", user.getAreaCiudad());
-					model.addAttribute("current_provincia", user.getAreaProvinciaSigla());
-				}				
+//				if(user.isVerifiedOfficial()){
+//					model.addAttribute("current_nombre", user.getNombre());
+//					model.addAttribute("current_apellido", user.getApellido());
+//					model.addAttribute("current_rol", user.getAuthorities().size() > 0 ? user.getAuthorities().get(0) : "");
+//					model.addAttribute("current_area", user.getAreaNombre());
+//					model.addAttribute("current_areaID", user.getAreaId());
+//					model.addAttribute("current_ciudad", user.getAreaCiudad());
+//					model.addAttribute("current_provincia", user.getAreaProvinciaSigla());
+//				}				
 				
 		}catch(Exception e){
 			return "redirect:/" + "error.html";
