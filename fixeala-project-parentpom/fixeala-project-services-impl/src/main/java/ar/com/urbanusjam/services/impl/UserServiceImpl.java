@@ -1,7 +1,6 @@
 package ar.com.urbanusjam.services.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,12 +26,16 @@ import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.MailService;
 import ar.com.urbanusjam.services.UserService;
 import ar.com.urbanusjam.services.dto.ActivationDTO;
+import ar.com.urbanusjam.services.dto.PasswordChangeDTO;
 import ar.com.urbanusjam.services.dto.PasswordResetTokenDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
 
 
 @Service
 public class UserServiceImpl implements UserService {
+	
+	private static final String PASSWORD_FORGOT = "forgot";
+	private static final String PASSWORD_CHANGE = "change";
 	
 	private UserDAO userDAO;
 	private AuthorityDAO authorityDAO;
@@ -112,7 +115,9 @@ public class UserServiceImpl implements UserService {
 		return usersDTO;
 	}
 	/**
-	@Override
+	@throws Exception 
+	 * @throws UsernameNotFoundException 
+	 * @Override
 	public List<UserDTO> loadVerifiedUsersByArea(String areaID) {
 		List<User> users = userDAO.findUsersByArea(areaID);
 		List<UserDTO> usersDTO = new ArrayList<UserDTO>();
@@ -124,10 +129,29 @@ public class UserServiceImpl implements UserService {
 		return usersDTO;
 	}
 	 **/
+	
+	
 
 	@Override
-	public void changePassword(String username, String newPassword) {		
-		userDAO.changePassword(username, newPassword);			
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = MessagingException.class)
+	public void changePassword(PasswordChangeDTO passwordChange) throws Exception {
+		
+		String operation = passwordChange.getOperation();
+		String username = passwordChange.getUsername();
+		
+		if(operation.equals(PASSWORD_FORGOT)){		
+			userDAO.changePassword(passwordChange.getUsername(), passwordChange.getNewPassword());		
+			passwordResetDAO.deleteToken(passwordChange.getToken());			
+			mailService.sendPasswordResetSuccessEmail(username, userDAO.findEmailbyUsername(username));
+		}
+		else if(operation.equals(PASSWORD_CHANGE)){
+			if(userDAO.findPassword(username, passwordChange.getCurrentPassword())){
+				userDAO.changePassword(username, passwordChange.getNewPassword());		
+				mailService.sendPasswordResetSuccessEmail(username, userDAO.findEmailbyUsername(username));
+			}				
+			else
+				throw new Exception("La clave actual ingresada es incorrecta.");
+		}	
 	}
 	
 	@Override
@@ -196,10 +220,10 @@ public class UserServiceImpl implements UserService {
 		return userDAO.emailExists(email);
 	}
 		
-	@Override
-	public String findPassword(String username, String password) {
-		return userDAO.findPassword(username, password);
-	}
+//	@Override
+//	public String findPassword(String username, String password) {
+//		return userDAO.findPassword(username, password);
+//	}
 
 	@Override
 	public String findUsernameByEmail(String email) {
@@ -217,11 +241,12 @@ public class UserServiceImpl implements UserService {
 	public String findUsernameByPasswordToken(String token) {
 		return passwordResetDAO.findUsernameByPasswordToken(token);
 	}
+	
 
-	@Override
-	public void deletePasswordToken(String token) {
-		passwordResetDAO.deleteToken(token);		
-	}
+//	@Override
+//	public void deletePasswordToken(String token) {
+//		passwordResetDAO.deleteToken(token);		
+//	}
 	
 	@Override
 	public void saveActivationToken(ActivationDTO activationDTO) {
@@ -246,11 +271,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void closeAccount(String username) {
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = MessagingException.class)
+	public void closeAccount(String username) throws Exception {		
 		userDAO.closeAccount(username);
+		mailService.sendClosedAccountEmail(username, userDAO.findEmailbyUsername(username));
 	}
-	
-	
+		
 	
 	public User convertTo(UserDTO userDTO){
 		User user = new User();
@@ -367,6 +393,7 @@ public class UserServiceImpl implements UserService {
 	public Long getUserId(String username) throws UsernameNotFoundException {
 		return userDAO.findUserIDbyUsername(username);
 	}
+
 
 	
 }

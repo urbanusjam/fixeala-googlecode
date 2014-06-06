@@ -25,17 +25,17 @@ public class IssuePageViewDAOImpl implements IssuePageViewDAO {
 
 	@Override
 	public int getIssuePageViews(Long issueID) {
-		List<IssuePageView> pageviews = entityManager.createNamedQuery("IssuePageView.findByIssue", IssuePageView.class)
-				   .setParameter("issue.id", issueID)
+		List<IssuePageView> pageviews = entityManager.createQuery("SELECT i FROM IssuePageView i WHERE i.issue.id = :issueID", IssuePageView.class)
+				   .setParameter("issueID", issueID)
 			       .getResultList();
 		return pageviews.size();
 	}
 
 	@Override
 	public boolean existsIssuePageView(Long issueID, String username) {
-		List<IssuePageView> pageviews = entityManager.createNamedQuery("IssuePageView.findByIssue", IssuePageView.class)
-				   .setParameter("issue.id", issueID)
-				   .setParameter("user.username", username)
+		List<IssuePageView> pageviews = entityManager.createNamedQuery("SELECT i FROM IssuePageView i WHERE i.issue.id = :issueID AND i.user.username = :username", IssuePageView.class)
+				   .setParameter("issueID", issueID)
+				   .setParameter("username", username)
 			       .getResultList();
 		return pageviews.size() > 0 ? true : false; 	
 	}

@@ -142,9 +142,10 @@ public class UserDAOImpl extends GenericDAOImpl<User, Serializable>  implements 
 	}
 
 	@Override
-	public String findPassword(String username, String password) {					
+	public boolean findPassword(String username, String password) {					
 		List<User> users = this.findWhere(" username = ? and password = ? ", new Object[]{username, password});		
-		return users.size() > 0 ? users.get(0).getPassword() : null;
+//		return users.size() > 0 ? users.get(0).getPassword() : null;
+		return false;
 	}
 
 	@Override
@@ -209,6 +210,12 @@ public class UserDAOImpl extends GenericDAOImpl<User, Serializable>  implements 
 	public Long findUserIDbyUsername(String username) {
 		List<User> users = this.findWhere(" username = ? ",  new Object[]{username});		
 		return users.size() > 0 ? users.get(0).getId() : null;	
+	}
+
+	@Override
+	public String findEmailbyUsername(String username) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	
