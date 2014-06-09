@@ -28,7 +28,7 @@ public interface UserService extends UserDetailsService {
     public boolean usernameExists(String username);	
 	public boolean emailExists(String email);
     
-    public void savePasswordResetToken(PasswordResetTokenDTO passwordDTO); 
+    public void savePasswordResetToken(PasswordResetTokenDTO passwordDTO) throws Exception; 
     public void saveActivationToken(ActivationDTO activationDTO);    
     
     public void changePassword(PasswordChangeDTO passwordChange) throws Exception;    

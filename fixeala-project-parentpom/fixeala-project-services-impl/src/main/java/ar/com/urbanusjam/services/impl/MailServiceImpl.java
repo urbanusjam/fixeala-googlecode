@@ -11,6 +11,8 @@ import javax.mail.internet.MimeMessage;
 
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,10 +23,11 @@ import ar.com.urbanusjam.services.MailService;
 public class MailServiceImpl implements MailService {
 	
 	final String from = "fixeala@gmail.com";
+	final String to = "coripel@gmail.com";
 	
-	private MailSender mailSender;
+	private JavaMailSender mailSender;
 	
-	public void setMailSender(MailSender mailSender) {
+	public void setMailSender(JavaMailSender mailSender) {
 		this.mailSender = mailSender;
 	}
 	
@@ -33,7 +36,13 @@ public class MailServiceImpl implements MailService {
 	@Override
 	public void sendActivationRequestEmail(String username, String token, String email) throws Exception {
 		
-		  SimpleMailMessage message = new SimpleMailMessage();
+		  MimeMessage message = this.mailSender.createMimeMessage();
+		  MimeMessageHelper helper = new MimeMessageHelper(message, true);
+		  
+		  helper.setFrom(from);
+	      //helper.setTo(email);
+		  helper.setTo(to);
+		  helper.setSubject("Fixeala - Activaci�n de cuenta");
 		
 	      String link = "<a target='_blank' href='http://localhost:8080/fixeala/account/activation/" + token + ".html' > link </a>";
 	    
@@ -50,10 +59,7 @@ public class MailServiceImpl implements MailService {
 	      text += "<br>";
 	      text += "<b>El equipo de Fixeala</b>";
 	      
-	      message.setFrom(from);
-	      message.setTo(email);
-	      message.setSubject("Fixeala - Registracion");
-	      message.setText(text);  
+	      helper.setText(text, true);
 	      mailSender.send(message);
 	      
 	      System.out.println("Mensaje enviado existosamente...");
@@ -62,7 +68,13 @@ public class MailServiceImpl implements MailService {
 	@Override
 	public void sendActivationSuccessEmail(String username, String email) throws Exception {
 		
-		  SimpleMailMessage message = new SimpleMailMessage();
+		  MimeMessage message = this.mailSender.createMimeMessage();
+		  MimeMessageHelper helper = new MimeMessageHelper(message, true);
+		  
+		  helper.setFrom(from);
+	      //helper.setTo(email);
+		  helper.setTo(to);
+		  helper.setSubject("Bienvenid@ a Fixeala - Tu plataforma colaborativa de reclamos barriales");
 		
 	      String text = "Hola, <b>" + username + "</b>";      
 	      text += "<br><br>";
@@ -72,10 +84,7 @@ public class MailServiceImpl implements MailService {
 	      text += "<br>";
 	      text += "<b>El equipo de Fixeala</b>";
 	      
-	      message.setFrom(from);
-	      message.setTo(email);
-	      message.setSubject("Fixeala - Activación de cuenta");
-	      message.setText(text);  
+	      helper.setText(text, true);
 	      mailSender.send(message);
 	      
 	      System.out.println("Mensaje enviado existosamente...");
@@ -84,7 +93,13 @@ public class MailServiceImpl implements MailService {
 	@Override
 	public void sendPasswordResetEmail(String username, String token, String email) throws Exception{
 		 
-		  SimpleMailMessage message = new SimpleMailMessage();
+		  MimeMessage message = this.mailSender.createMimeMessage();
+		  MimeMessageHelper helper = new MimeMessageHelper(message, true);
+		  
+		  helper.setFrom(from);
+	      //helper.setTo(email);
+		  helper.setTo(to);
+		  helper.setSubject("Recuperación de clave");
 	      
 	      String link = "<a target='_blank' href='http://localhost:8080/fixeala/account/resetPassword/" + token + ".html'> link" + "</a>";
 	    
@@ -102,10 +117,7 @@ public class MailServiceImpl implements MailService {
 	      text += "<br>";
 	      text += "<b>El equipo de Fixeala</b>";
 	      
-	      message.setFrom(from);
-	      message.setTo(email);
-	      message.setSubject("Fixeala - Recuperación de clave");
-	      message.setText(text);    
+	      helper.setText(text, true);
 	      mailSender.send(message);
 	      
 	      System.out.println("Mensaje enviado existosamente...");
@@ -114,7 +126,13 @@ public class MailServiceImpl implements MailService {
 	@Override
 	public void sendPasswordResetSuccessEmail(String username, String email) throws Exception {
 		
-		  SimpleMailMessage message = new SimpleMailMessage();
+		  MimeMessage message = this.mailSender.createMimeMessage();
+		  MimeMessageHelper helper = new MimeMessageHelper(message, true);
+		  
+		  helper.setFrom(from);
+	      //helper.setTo(email);
+		  helper.setTo(to);
+		  helper.setSubject("Modificaste tu clave de Fixeala");
 		
 	      String text = "Hola, <b>" + username + "</b>";      
 	      text += "<br><br>";
@@ -126,10 +144,7 @@ public class MailServiceImpl implements MailService {
 	      text += "<br>";
 	      text += "<b>El equipo de Fixeala</b>";
 	      
-	      message.setFrom(from);
-	      message.setTo(email);
-	      message.setSubject("Fixeala - Modificaste tu clave de Fixeala");
-	      message.setText(text);  
+	      helper.setText(text, true);
 	      mailSender.send(message);
 	      
 	      System.out.println("Mensaje enviado existosamente...");
@@ -138,7 +153,14 @@ public class MailServiceImpl implements MailService {
 	@Override
 	public void sendClosedAccountEmail(String username, String email)
 			throws Exception {
-		 SimpleMailMessage message = new SimpleMailMessage();
+		
+		  MimeMessage message = this.mailSender.createMimeMessage();
+		  MimeMessageHelper helper = new MimeMessageHelper(message, true);
+		  
+		  helper.setFrom(from);
+	      //helper.setTo(email);
+		  helper.setTo(to);
+		  helper.setSubject("Cierre de cuenta");
 			
 	      String text = "Hola, <b>" + username + "</b>";      
 	      text += "<br><br>";
@@ -150,10 +172,7 @@ public class MailServiceImpl implements MailService {
 	      text += "<br>";
 	      text += "<b>El equipo de Fixeala</b>";
 	      
-	      message.setFrom(from);
-	      message.setTo(email);
-	      message.setSubject("Fixeala - Cierre de cuenta");
-	      message.setText(text);  
+	      helper.setText(text, true);
 	      mailSender.send(message);
 	      
 	      System.out.println("Mensaje enviado existosamente...");

@@ -29,7 +29,9 @@ public class PasswordResetDAOImpl implements PasswordResetDAO {
 	public String findUsernameByPasswordToken(String token) throws NoResultException {		
 		try{
 			PasswordResetToken pwdToken = (PasswordResetToken) entityManager.createQuery(		
-				"SELECT t FROM PasswordResetToken t WHERE CURRENT_DATE < t.expiration AND token = :token")
+				" SELECT t1 FROM PasswordResetToken t1 " +
+				" WHERE t1.token = :token AND CURRENT_DATE < t1.expiration " +
+				" AND t1.creation = (SELECT MAX(t2.creation) FROM PasswordResetToken t2) ")
 				.setParameter("token", token)	
 				.getSingleResult();		
 			return pwdToken.getUsername();
@@ -37,6 +39,15 @@ public class PasswordResetDAOImpl implements PasswordResetDAO {
 			return null;
 		}		
 	}
+	/*
+	SELECT t1.*
+	FROM password_change_request t1
+	WHERE t1.username = 'helloworld' 
+	AND t1.creation_date < t1.expiration_date 
+	AND t1.creation_date = (SELECT MAX(t2.creation_date)
+	                 FROM  password_change_request t2
+	                 WHERE t2.username = t1.username)
+	                 */
 
 	@Override
 	public void deleteToken(String token) throws NoResultException {
