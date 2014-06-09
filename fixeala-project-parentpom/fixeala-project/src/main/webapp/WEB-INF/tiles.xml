@@ -88,4 +88,9 @@
   	<put-attribute name="body" value="/pages/error.jsp" />
   </definition>
   
+    <definition name="search" extends="base.layout">
+  	<put-attribute name="title" value="Fixeala" /> 
+  	<put-attribute name="body" value="/pages/search.jsp" />
+  </definition>
+  
 </tiles-definitions>

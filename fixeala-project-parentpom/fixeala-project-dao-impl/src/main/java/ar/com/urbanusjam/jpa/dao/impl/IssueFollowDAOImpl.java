@@ -38,11 +38,15 @@ public class IssueFollowDAOImpl implements IssueFollowDAO {
 
 	@Override
 	public IssueFollow findFollowing(IssueFollow following) {
-		IssueFollow activeFollowing = entityManager.createQuery("SELECT f FROM IssueFollow f WHERE f.id.issueID = :issueID and f.id.followerID = :followerID", IssueFollow.class)
+		try{
+			IssueFollow activeFollowing = entityManager.createQuery("SELECT f FROM IssueFollow f WHERE f.id.issueID = :issueID and f.id.followerID = :followerID", IssueFollow.class)
 				     .setParameter("issueID", following.getId().getIssueID())
 				     .setParameter("followerID", following.getId().getFollowerID())
 				     .getSingleResult();
 		return activeFollowing; 		
+		}catch(NoResultException e){
+			return null;
+		}		
 	}
 
 	@Override

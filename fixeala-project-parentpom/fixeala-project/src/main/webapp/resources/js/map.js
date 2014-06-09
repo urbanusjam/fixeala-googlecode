@@ -244,6 +244,15 @@ function getUserURL(userID){
 	return urlLink;
 }
 
+function getUserPlainURL(userID){
+	var protocol = window.location.protocol;
+	var host = window.location.host;
+	var context = "fixeala";
+	var subcontext = "users/" + userID;	
+	var url = protocol + "//" + host + "/" + context + "/" + subcontext + ".html";	
+	return url;
+}
+
 
 
 

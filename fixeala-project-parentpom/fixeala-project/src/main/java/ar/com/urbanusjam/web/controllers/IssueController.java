@@ -54,6 +54,7 @@ import ar.com.urbanusjam.services.utils.Messages;
 import ar.com.urbanusjam.services.utils.Operation;
 import ar.com.urbanusjam.web.domain.AlertStatus;
 import ar.com.urbanusjam.web.domain.ContenidoResponse;
+import ar.com.urbanusjam.web.utils.StatusList;
 
 
 @Controller
@@ -83,8 +84,67 @@ public class IssueController {
 	public void setUploadedFile(MediaContentDTO uploadedFile) {
 		this.uploadedFile = uploadedFile;
 	}
+	
+	@RequestMapping(value="/issues/search", method = RequestMethod.GET)
+	public String showSearchPage(Model model,  @RequestParam("type") String searchType, @RequestParam("value") String value,
+				HttpServletRequest request) throws JSONException{
+		
+			List<IssueDTO> issueSearch = issueService.searchByTagOrStatus(searchType, value);						
+			
+			JSONArray array = new JSONArray();
+			for(IssueDTO issue : issueSearch){
+				JSONObject obj = new JSONObject();
+				obj.put("id", issue.getId());
+				obj.put("title", issue.getTitle());
+				obj.put("date", issue.getFormattedDate(issue.getCreationDate()));
+				obj.put("user", issue.getUsername());
+				obj.put("address", issue.getFormattedAddress());
+				obj.put("description", issue.getDescription());
+				obj.put("status", issue.getStatus());
+				obj.put("statusCss", issue.getStatusCss());
+				array.put(obj);
+			}
+			
+			model.addAttribute("tag", value);
+			model.addAttribute("issuesByTag", array.toString());
+			
+	
+		
+		
+		
+		List<String> allTags = issueService.getTagList();	
+		JSONArray tagArray = new JSONArray();
+		for(String tag : allTags){			
+			String url = "./search.html?type=tag&value=" + tag;		
+			JSONObject obj = new JSONObject();
+			obj.put("url", url);
+			obj.put("label", tag);
+			tagArray.put(obj);
+		}
+		
+		model.addAttribute("allTags", tagArray.toString());
+				
+		List<StatusList> statusList = Arrays.asList(StatusList.values());
+		JSONArray statusArray = new JSONArray();
+		for(StatusList status : statusList){
+			JSONObject obj = new JSONObject();
+			String url = "./search.html?type=status&value=" + status.getLabel();		
+			obj.put("url", url);
+			obj.put("text", status.getLabel());
+			obj.put("css", status.getCssClass());
+			obj.put("color", status.getColorCode());
+		
+			statusArray.put(obj);
+		}
+		
 
+		model.addAttribute("allStatus", statusArray.toString());
+		
+		return "search";
+		
+	}
 
+	
 	@RequestMapping(value="/issues/{issueToken}", method = RequestMethod.GET)
 	public String showIssuePage(Model model, @PathVariable("issueToken") String issueToken, 
 				HttpServletRequest request){
@@ -123,9 +183,13 @@ public class IssueController {
 				
 				if(!issueTags.isEmpty()){
 					for(int i = 0; i < issueTags.size(); i++){
-						issueTagsByComma += issueTags.get(i) + ", ";
+			
+//						issueTagsByComma += issueTags.get(i) + ", ";
+						String url = "./search.html?type=tag&value="+issueTags.get(i);
+						issueTagsByComma += "<a class=\"taglink\" href=\"" + url + "\"><span class=\"label label-default\">" + issueTags.get(i) + "</span></a>";
+						
 					}				
-					issueTagsByComma = issueTagsByComma.substring(0, issueTagsByComma.length() -2);
+//					issueTagsByComma = issueTagsByComma.substring(0, issueTagsByComma.length() -2);
 				}
 				
 				List<String> dbTags = issueService.getTagList();

@@ -26,6 +26,8 @@ public interface IssueDAO {
 	
 	public List<Issue> getIssuesByCriteria(IssueCriteriaSearchRaw fields);
 	
+	public List<Issue> getIssuesByTag(String tag);
+	
 //	public List<Issue> getAssignedIssuesByVerifiedOfficial(String username);
 	
 	public Issue findIssueById(String id);

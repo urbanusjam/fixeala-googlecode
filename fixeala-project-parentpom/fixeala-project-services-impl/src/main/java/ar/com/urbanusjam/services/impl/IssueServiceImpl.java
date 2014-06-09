@@ -413,6 +413,24 @@ public class IssueServiceImpl implements IssueService {
 		return comentariosDTO;
 	}
 	
+	@Override
+	public List<IssueDTO> searchByTagOrStatus(String searchType, String value) {
+		List<IssueDTO> issuesDTO = new ArrayList<IssueDTO>();
+		List<Issue> issues = new ArrayList<Issue>();
+		
+		if(searchType.equals("tag")){
+			issues = issueDAO.getIssuesByTag(value);
+		}
+		else{
+			issues = issueDAO.getIssuesByStatus(new String[]{value});
+		}		
+		
+		for(Issue i : issues)
+			issuesDTO.add(convertToDTO(i));
+		
+		return issuesDTO;
+	}
+	
 	/********************************************************************************/
 	
 	public Area convertTo(AreaDTO areaDTO){
@@ -725,8 +743,8 @@ public class IssueServiceImpl implements IssueService {
 		}
 		
 		if(status.equals(IssueStatus.REOPENED)){
-			css[0] = "label label-important";
-			css[1] = "#B94A48";
+			css[0] = "label label-info";
+			css[1] = "#39B3D7";
 		}
 		
 //		if(status.equals(IssueStatus.ACKNOWLEDGED)){
@@ -957,5 +975,7 @@ public class IssueServiceImpl implements IssueService {
 		IssueRepair licitacion = issueRepairDAO.getLicitacionByIssue(Long.valueOf(issueID));
 		return convertTo(licitacion);
 	}
+
+	
 	
 }

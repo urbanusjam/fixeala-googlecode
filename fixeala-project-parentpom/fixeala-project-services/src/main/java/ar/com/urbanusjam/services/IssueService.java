@@ -53,5 +53,7 @@ public interface IssueService {
 	public void voteIssue(IssueVoteDTO voteDTO);
 	public IssueVoteDTO getCurrentVote(String issueID, String username);
 	public Long countIssueVotes(String issueID);	
+	
+	public List<IssueDTO> searchByTagOrStatus(String searchType, String value);
 		
 }

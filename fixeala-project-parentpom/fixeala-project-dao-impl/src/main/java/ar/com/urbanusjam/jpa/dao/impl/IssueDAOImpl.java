@@ -1,6 +1,7 @@
 package ar.com.urbanusjam.jpa.dao.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -54,10 +55,15 @@ public class IssueDAOImpl implements IssueDAO {
 
 	@Override
 	public List<Issue> getIssuesByStatus(String[] status) {
-		List<Issue> issues = (List<Issue>)entityManager.createQuery("SELECT * FROM Issue i WEHRE i.status IN (:statusOptions)")
-										  .setParameter("statusOptions", status)
-										  .getResultList();
-		return issues;
+		try{
+			List<Issue> issues = entityManager.createQuery("SELECT i FROM Issue i WHERE i.status IN (:statusOptions)", Issue.class)
+					  .setParameter("statusOptions", Arrays.asList(status))
+					  .getResultList();
+			return issues;
+			
+		}catch(NoResultException e){
+			return null;
+		}		
 	}
 	
 	@Override
@@ -129,10 +135,22 @@ public class IssueDAOImpl implements IssueDAO {
 
 	@Override
 	public Set<Tag> findIssueTagsById(String issueID) {
-		Issue issue = entityManager.createNamedQuery("Issue.findByID", Issue.class)
-				     .setParameter("id", Long.valueOf(issueID))
+		Issue issue = entityManager.createQuery("SELECT i FROM Issue i WHERE id = :issueID", Issue.class)
+				     .setParameter("issueID", Long.valueOf(issueID))
 				     .getSingleResult();
 		return issue.getTagsList();
+	}
+
+	@Override
+	public List<Issue> getIssuesByTag(String tag) {
+		try{
+			List<Issue> issues = entityManager.createQuery("SELECT i FROM Issue i LEFT JOIN FETCH i.tagsList t WHERE t.tagname = :tag)", Issue.class)
+				     .setParameter("tag", tag)
+				     .getResultList();
+			return issues;
+		}catch(NoResultException e){
+			return null;
+		}		
 	}
 
 }

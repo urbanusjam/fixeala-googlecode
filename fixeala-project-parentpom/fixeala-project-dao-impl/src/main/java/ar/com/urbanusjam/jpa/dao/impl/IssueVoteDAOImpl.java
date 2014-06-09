@@ -3,6 +3,7 @@ package ar.com.urbanusjam.jpa.dao.impl;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
@@ -28,11 +29,15 @@ public class IssueVoteDAOImpl implements IssueVoteDAO {
 
 	@Override
 	public IssueVote getVoteByUser(Long issueID, Long userID) {
-		IssueVote vote = entityManager.createQuery("SELECT i FROM IssueVote i WHERE id.issueID = :issueID AND i.id.voterID = :voterID", IssueVote.class)
+		try{
+			IssueVote vote = entityManager.createQuery("SELECT i FROM IssueVote i WHERE id.issueID = :issueID AND i.id.voterID = :voterID", IssueVote.class)
 				   .setParameter("issueID", issueID)
 				   .setParameter("voterID", userID)
 			       .getSingleResult();		
-		return vote;		
+			return vote;	
+		}catch(NoResultException e){
+			return null;
+		}			
 	}
 
 	@Override
