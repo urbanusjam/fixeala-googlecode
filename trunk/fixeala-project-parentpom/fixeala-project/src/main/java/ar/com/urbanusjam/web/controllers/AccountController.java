@@ -187,7 +187,7 @@ public class AccountController extends AbstractController {
 		String username = userService.findUsernameByEmail(email);
 		
 		if(username != null){			
-			
+
 			DateTime creation = new DateTime();
 			DateTime expiration = creation.plusDays(1); 
 		
@@ -203,7 +203,7 @@ public class AccountController extends AbstractController {
 				pwdTokenDTO.setExpiration(expiration.toDate());
 				
 				userService.savePasswordResetToken(pwdTokenDTO);
-				mailService.sendPasswordResetEmail(username, token, email);
+				//mailService.sendPasswordResetEmail(username, token, email);
 				
 			} catch (Exception e) {
 				

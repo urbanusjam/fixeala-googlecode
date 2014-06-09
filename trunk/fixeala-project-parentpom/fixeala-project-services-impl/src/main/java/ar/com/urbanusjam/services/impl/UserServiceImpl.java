@@ -196,7 +196,7 @@ public class UserServiceImpl implements UserService {
 	}
 		
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = MessagingException.class)
 	public void activateAccount(String username) throws UsernameNotFoundException, Exception {
 		userDAO.activateAccount(username);
 		activationDAO.deleteTokenByUsername(username);			
@@ -231,10 +231,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void savePasswordResetToken(PasswordResetTokenDTO passwordDTO) {
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = MessagingException.class)
+	public void savePasswordResetToken(PasswordResetTokenDTO passwordDTO) throws Exception {
 		PasswordResetToken token = new PasswordResetToken();
 		token = convertTo(passwordDTO);
 		passwordResetDAO.saveToken(token);		
+		String email = userDAO.findEmailbyUsername(token.getUsername());
+		mailService.sendPasswordResetEmail(token.getUsername(), token.getToken(), email);
 	}
 
 	@Override
