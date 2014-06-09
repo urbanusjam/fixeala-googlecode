@@ -2,17 +2,21 @@
 
 
 html, body {
-	margin: 0;
-	padding: 0;
-	height: 100%;
+/* 	margin: 0; */
+/* 	padding: 0; */
+/* 	height: 100%; */
 	font-family: 'Arial';
 	font-size: 13px;
 }
 
 html {
+	 position: relative;
+  min-height: 100%;
 	overflow-y: scroll;
 	/* prevents scrollbar from repositioning web page */
 }
+
+body { margin-bottom: 50px;}
 
 button .btn { font-size: 13px; }
 
@@ -38,11 +42,23 @@ a.link {
 	color: #000 !important;
 }
 
+
+
 a.link:hover {
 	background: none !important;
 	text-decoration: underline;
 	color: #000 !important;
 }
+
+a.taglink {color: #fff !important; margin-right: 5px; ;}
+
+a.taglink:hover span {text-decoration: underline; cursor:pointer;}
+
+a.tagLinkCloud:hover span { background-color: #333; }
+
+a.statusLinkCloud:hover span { background-color: #39B3D7; }
+
+
 
 h4 {
 	font-weight: normal;
@@ -459,17 +475,22 @@ legend {
 
 #content { 
 	width: 1180px;	
-	min-height: 100%;	
-	height: auto;
-	margin: 0 auto 50px;
+	min-height: 100%;
+    height: auto !important;
+    height: 100%;
+	margin: 0 auto;
 	margin-top: 80px;
 	margin-bottom: 30px;
-	clear: both;
 	padding: 0;
+	clear: both;
+/* 	border: 1px solid #000; */
 }
 
 
+
 footer {
+	position: absolute;
+  	bottom: 0;  
 	width: 100%;
 	height: 50px;
 	line-height: 50px;
@@ -477,9 +498,9 @@ footer {
 	color: #fff;
 	text-align: center;
 	background-color: #323A45;
-	clear: both;
-
+	clear: both;	
 }
+
 
 
 

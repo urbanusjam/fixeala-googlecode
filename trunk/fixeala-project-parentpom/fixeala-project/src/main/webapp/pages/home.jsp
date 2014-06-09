@@ -39,7 +39,7 @@
 		
 		<!-- ROW 1 -->
 		
-		<div class="container" style="margin:0;padding:0;height:450px;border:0px solid #000; width:1180px">
+		<div class="container">
 	
 	
 		<!-- MAP -->  	 				

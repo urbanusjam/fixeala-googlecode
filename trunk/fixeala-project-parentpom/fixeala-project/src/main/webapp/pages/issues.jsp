@@ -1,5 +1,5 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <!-- Boolean isCommonUser -->
@@ -1393,7 +1393,7 @@
 						 </tr>
 						 <tr>
 						    <th>Estado:</th>
-						    <td><a href="#" id="issue-status" data-type="text"><span class="${estadoCss}">${estado}</span></a></td>						   
+						    <td><a class="taglink" href="./search.html?type=status&value=${estado}" id="issue-status" data-type="text"><span class="${estadoCss}">${estado}</span></a></td>						   
 						 </tr>
 						  <tr>
 						    <th>Etiquetas:</th>
