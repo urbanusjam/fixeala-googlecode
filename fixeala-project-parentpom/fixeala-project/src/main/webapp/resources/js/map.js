@@ -399,7 +399,7 @@ function getClosestMarkersByIssue(location){
 			    	tr += '<img class="media-object pull-left thumbnail" style="width:64px; height:64px" src="'+imageSrc+'">';
 			    	tr += '<div class="media-body">';
 			    	tr += '<a href="'+getIssuePlainURL(marker.id, marker.title)+'"><h5 class="media-heading">'+marker.title+'</h5></a>';
-			    	tr += '<p style="font-size:11px">Reportado por: <a href="#">'+marker.username+'</a></p>';
+			    	tr += '<p style="font-size:11px">Reportado por: '+getUserURL(marker.username)+'</p>';
 			    	tr += '<span class="label '+marker.statusCss+'">'+marker.status+'</span>';
 			    	tr += '</div>';	
 			    	tr += '</div>';
