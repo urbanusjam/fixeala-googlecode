@@ -382,35 +382,38 @@ function getClosestMarkersByIssue(location){
 			    }); //ordeno distancias de menor a mayor
 			    
 			 
-			    var $table = $("#tblNearbyIssues tbody");		    
+			    var $table = $("#tblNearbyIssues tbody");	
 			    
-			    $.each(closestMarkers, function(i, marker){
-			    	console.log(marker);
-			    	var imageSrc = '';
-			    	
-			    	if(marker.contenidos.length > 0)
-			    		imageSrc = '../uploads/'+marker.contenidos[0].nombreConExtension;	
-			    	else
-			    		imageSrc = '../resources/images/nopic64.png';	
-			    
-			    	var tr = "";
-			    	tr += '<tr><td style="border-top:none">';
-			    	tr += '<div class="media">';
-			    	tr += '<img class="media-object pull-left thumbnail" style="width:64px; height:64px" src="'+imageSrc+'">';
-			    	tr += '<div class="media-body">';
-			    	tr += '<a href="'+getIssuePlainURL(marker.id, marker.title)+'"><h5 class="media-heading">'+marker.title+'</h5></a>';
-			    	tr += '<p style="font-size:11px">Reportado por: '+getUserURL(marker.username)+'</p>';
-			    	tr += '<span class="label '+marker.statusCss+'">'+marker.status+'</span>';
-			    	tr += '</div>';	
-			    	tr += '</div>';
-			    	tr += '</td></tr>';
-						   
-				    $table.append(tr);				 
-			    
-			    });
+			    if(closestMarkers.length == 0){
+			    	$table.append('No se encontraron resultados.');
+			    }
+			    else{
+			    	$.each(closestMarkers, function(i, marker){				    	
+				    	var tr = "";				    
+			    		var imageSrc = '';			    	
+				    	if(marker.contenidos.length > 0)
+				    		imageSrc = '../uploads/'+marker.contenidos[0].nombreConExtension;	
+				    	else
+				    		imageSrc = '../resources/images/nopic64.png';				    
+				    
+				    	tr += '<tr><td style="border-top:none">';
+				    	tr += '<div class="media">';
+				    	tr += '<img class="media-object pull-left thumbnail" style="width:64px; height:64px" src="'+imageSrc+'">';
+				    	tr += '<div class="media-body">';
+				    	tr += '<a href="'+getIssuePlainURL(marker.id, marker.title)+'"><h5 class="media-heading">'+marker.title+'</h5></a>';
+				    	tr += '<p style="font-size:11px">Reportado por: '+getUserURL(marker.username)+'</p>';
+				    	tr += '<a class=\"taglink\" href=\"./search.html?type=status&value='+marker.status+'\"><span class="label '+marker.statusCss+'">'+marker.status+'</a></span>';
+				    	tr += '</div>';	
+				    	tr += '</div>';
+				    	tr += '</td></tr>';					
+						
+				    	$table.append(tr);		
+				    
+				    });			    	
+			    }
 			    
 			   
-			  //  closestMarkers.slice(1, 6); //obtengo los 5 markers más cercanos al punto   
+			  //closestMarkers.slice(1, 6); //obtengo los 5 markers más cercanos al punto   
 			    console.info(closestMarkers);
 			  
 		  }		  
