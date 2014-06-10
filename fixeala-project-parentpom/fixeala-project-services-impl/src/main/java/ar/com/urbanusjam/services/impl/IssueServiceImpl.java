@@ -7,18 +7,15 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 import java.util.Set;
-import java.util.SortedMap;
 
-import org.apache.commons.lang.StringUtils;
+import javax.mail.MessagingException;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import ar.com.urbanusjam.dao.AreaDAO;
 import ar.com.urbanusjam.dao.CommentDAO;
 import ar.com.urbanusjam.dao.IssueDAO;
 import ar.com.urbanusjam.dao.IssueFollowDAO;
@@ -31,15 +28,15 @@ import ar.com.urbanusjam.dao.UserDAO;
 import ar.com.urbanusjam.dao.utils.IssueCriteriaSearchRaw;
 import ar.com.urbanusjam.entity.annotations.Area;
 import ar.com.urbanusjam.entity.annotations.Comment;
-import ar.com.urbanusjam.entity.annotations.MediaContent;
 import ar.com.urbanusjam.entity.annotations.Issue;
 import ar.com.urbanusjam.entity.annotations.IssueFollow;
 import ar.com.urbanusjam.entity.annotations.IssueFollowPK;
-import ar.com.urbanusjam.entity.annotations.IssueUpdateHistory;
-import ar.com.urbanusjam.entity.annotations.IssueRepair;
 import ar.com.urbanusjam.entity.annotations.IssuePageView;
+import ar.com.urbanusjam.entity.annotations.IssueRepair;
+import ar.com.urbanusjam.entity.annotations.IssueUpdateHistory;
 import ar.com.urbanusjam.entity.annotations.IssueVote;
 import ar.com.urbanusjam.entity.annotations.IssueVotePK;
+import ar.com.urbanusjam.entity.annotations.MediaContent;
 import ar.com.urbanusjam.entity.annotations.Tag;
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.ContenidoService;
@@ -47,16 +44,15 @@ import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.UserService;
 import ar.com.urbanusjam.services.dto.AreaDTO;
 import ar.com.urbanusjam.services.dto.CommentDTO;
-import ar.com.urbanusjam.services.dto.MediaContentDTO;
 import ar.com.urbanusjam.services.dto.IssueCriteriaSearch;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.IssueFollowDTO;
-import ar.com.urbanusjam.services.dto.IssueUpdateHistoryDTO;
-import ar.com.urbanusjam.services.dto.IssueRepairDTO;
 import ar.com.urbanusjam.services.dto.IssuePageViewDTO;
+import ar.com.urbanusjam.services.dto.IssueRepairDTO;
+import ar.com.urbanusjam.services.dto.IssueUpdateHistoryDTO;
 import ar.com.urbanusjam.services.dto.IssueVoteDTO;
+import ar.com.urbanusjam.services.dto.MediaContentDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
-import ar.com.urbanusjam.services.mock.MapUtil;
 import ar.com.urbanusjam.services.utils.DateUtils;
 import ar.com.urbanusjam.services.utils.IssueStatus;
 import ar.com.urbanusjam.services.utils.Messages;
@@ -72,7 +68,7 @@ public class IssueServiceImpl implements IssueService {
 	private ContenidoService contenidoService;
 	private IssueDAO issueDAO;
 	private UserDAO userDAO;
-	private AreaDAO areaDAO;
+//	private AreaDAO areaDAO;
 	private TagDAO tagDAO;
 	private CommentDAO commentDAO;
 	private IssueFollowDAO issueFollowDAO;
@@ -102,9 +98,9 @@ public class IssueServiceImpl implements IssueService {
 		this.userDAO = userDAO;
 	}
 
-	public void setAreaDAO(AreaDAO areaDAO) {
-		this.areaDAO = areaDAO;
-	}
+//	public void setAreaDAO(AreaDAO areaDAO) {
+//		this.areaDAO = areaDAO;
+//	}
 
 	public void setTagDAO(TagDAO tagDAO) {
 		this.tagDAO = tagDAO;
@@ -395,11 +391,29 @@ public class IssueServiceImpl implements IssueService {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
 	public void postComment(CommentDTO commentDTO) {
 		Issue issue = issueDAO.findIssueById(commentDTO.getNroReclamo());
 		User user = userDAO.loadUserByUsername(commentDTO.getUsuario());
+		
+		//comment
 		Comment comment = new Comment(issue, user, getCurrentCalendar(commentDTO.getFecha()), commentDTO.getMensaje(), false);
-		commentDAO.saveComment(comment);		
+				
+		//revision
+		IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
+		revision.setFecha(new Date());
+		revision.setUsername(comment.getUsuario().getUsername());			
+		revision.setNroReclamo(issue.getId());			
+		revision.setOperacion(Operation.UPDATE);			
+		revision.setMotivo(Messages.ISSUE_UPDATE_COMMENT);			
+		revision.setEstado(issue.getStatus());
+		revision.setObservaciones(Messages.ISSUE_UPDATE_OBS);	
+			
+		issue.setLastUpdateDate(this.getCurrentCalendar(revision.getFecha()));
+		
+		commentDAO.saveComment(comment);	
+		issueUpdateDAO.saveHistorial(convertTo(revision));
+		issueDAO.updateIssue(issue);
 	}
 
 	@Override
@@ -433,27 +447,27 @@ public class IssueServiceImpl implements IssueService {
 	
 	/********************************************************************************/
 	
-	public Area convertTo(AreaDTO areaDTO){
-		Area area = new Area();
-		area.setNombre(areaDTO.getAreaName());
-		area.setSigla(areaDTO.getAreaAcronym());
-		area.setCiudad(areaDTO.getCityName());
-		area.setCiudadSigla(areaDTO.getCityAcronym());
-		area.setProvincia(areaDTO.getProvinceName());
-		area.setProvinciaSigla(areaDTO.getProvinceAcronym());
-		return area;
-	}
-	
-	public AreaDTO convertTo(Area area){
-		AreaDTO areaDTO = new AreaDTO();
-		areaDTO.setAreaName(area.getNombre());
-		areaDTO.setAreaAcronym(area.getSigla());
-		areaDTO.setCityName(area.getCiudad());
-		areaDTO.setCityAcronym(area.getCiudadSigla());
-		areaDTO.setProvinceName(area.getProvincia());
-		areaDTO.setProvinceAcronym(area.getProvinciaSigla());
-		return areaDTO;
-	}
+//	public Area convertTo(AreaDTO areaDTO){
+//		Area area = new Area();
+//		area.setNombre(areaDTO.getAreaName());
+//		area.setSigla(areaDTO.getAreaAcronym());
+//		area.setCiudad(areaDTO.getCityName());
+//		area.setCiudadSigla(areaDTO.getCityAcronym());
+//		area.setProvincia(areaDTO.getProvinceName());
+//		area.setProvinciaSigla(areaDTO.getProvinceAcronym());
+//		return area;
+//	}
+//	
+//	public AreaDTO convertTo(Area area){
+//		AreaDTO areaDTO = new AreaDTO();
+//		areaDTO.setAreaName(area.getNombre());
+//		areaDTO.setAreaAcronym(area.getSigla());
+//		areaDTO.setCityName(area.getCiudad());
+//		areaDTO.setCityAcronym(area.getCiudadSigla());
+//		areaDTO.setProvinceName(area.getProvincia());
+//		areaDTO.setProvinceAcronym(area.getProvinciaSigla());
+//		return areaDTO;
+//	}
 	
 	public IssueRepair convertTo(IssueRepairDTO licitacionDTO){
 		IssueRepair licitacion = new IssueRepair();
@@ -650,28 +664,28 @@ public class IssueServiceImpl implements IssueService {
 		issueDTO.setTags(tagNames);
 		
 		//area asignada
-		if(issue.getAssignedArea() != null){
-			issueDTO.setAssignedArea(convertTo(issue.getAssignedArea()));
-			issueDTO.setArea(issue.getAssignedArea().getNombre());
-		}
-		else{
-			issueDTO.setAssignedArea(null);
-			issueDTO.setArea("Comuna 1");
-		}
+//		if(issue.getAssignedArea() != null){
+//			issueDTO.setAssignedArea(convertTo(issue.getAssignedArea()));
+//			issueDTO.setArea(issue.getAssignedArea().getNombre());
+//		}
+//		else{
+//			issueDTO.setAssignedArea(null);
+//			issueDTO.setArea("Comuna 1");
+//		}
 		
-		if(issue.getAssignedOfficial() != null){
-			UserDTO official = new UserDTO();
-			official.setUsername(issue.getAssignedArea().getNombre());
-			issueDTO.setAssignedOfficial(official);		
-		}
-		else
+//		if(issue.getAssignedOfficial() != null){
+//			UserDTO official = new UserDTO();
+//			official.setUsername(issue.getAssignedArea().getNombre());
+//			issueDTO.setAssignedOfficial(official);		
+//		}
+//		else
 			issueDTO.setAssignedOfficial(null);
 		
 		//licitacion
-		if(issue.getLicitacion() != null)
-			issueDTO.setLicitacion(convertTo(issue.getLicitacion()));
-		else
-			issueDTO.setLicitacion(null);
+//		if(issue.getLicitacion() != null)
+//			issueDTO.setLicitacion(convertTo(issue.getLicitacion()));
+//		else
+//			issueDTO.setLicitacion(null);
 		
 		//historial
 		List<IssueUpdateHistoryDTO> historialDTO = new ArrayList<IssueUpdateHistoryDTO>();

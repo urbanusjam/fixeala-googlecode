@@ -1,6 +1,6 @@
 <footer>
 	<div class="container">
-		Copyright © 2013 &nbsp;&ndash;&nbsp; <a href="#">UrbanusJam!</a> &nbsp;&ndash;&nbsp; Todos los derechos reservados.
+		Copyright © 2014 FIXEALA &nbsp;&bull;&nbsp; Desarrollado por <a href="#">URBANUS JAM!</a>
 	</div>
 		
 </footer>

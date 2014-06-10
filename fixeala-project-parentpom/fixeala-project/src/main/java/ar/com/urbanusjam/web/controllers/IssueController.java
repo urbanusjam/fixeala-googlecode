@@ -184,12 +184,12 @@ public class IssueController {
 				if(!issueTags.isEmpty()){
 					for(int i = 0; i < issueTags.size(); i++){
 			
-//						issueTagsByComma += issueTags.get(i) + ", ";
-						String url = "./search.html?type=tag&value="+issueTags.get(i);
-						issueTagsByComma += "<a class=\"taglink\" href=\"" + url + "\"><span class=\"label label-default\">" + issueTags.get(i) + "</span></a>";
+						issueTagsByComma += issueTags.get(i) + ", ";
+						//String url = "./search.html?type=tag&value="+issueTags.get(i);
+						//issueTagsByComma += "<a class=\"taglink\" href=\"" + url + "\"><span class=\"label label-default\">" + issueTags.get(i) + "</span></a>";
 						
 					}				
-//					issueTagsByComma = issueTagsByComma.substring(0, issueTagsByComma.length() -2);
+					issueTagsByComma = issueTagsByComma.substring(0, issueTagsByComma.length() -2);
 				}
 				
 				List<String> dbTags = issueService.getTagList();
@@ -868,26 +868,9 @@ public class IssueController {
 				comentario.setNroReclamo(issueID);
 				comentario.setUsuario(userDB.getUsername());
 				comentario.setMensaje(mensaje);
+				
 				issueService.postComment(comentario);
-				
-				IssueDTO issue = issueService.getIssueById(issueID);	
-				
-				IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
-				revision.setFecha(new Date());
-				revision.setUsername(comentario.getUsuario());			
-				revision.setNroReclamo(Long.valueOf(issueID));			
-				revision.setOperacion(Operation.UPDATE);			
-				revision.setMotivo(Messages.ISSUE_UPDATE_COMMENT + " en el reclamo.");			
-				revision.setEstado(issue.getStatus());
-				revision.setObservaciones(Messages.ISSUE_UPDATE_OBS);
-				
-				issue.setLastUpdateDate(revision.getFecha());
-//				issue.getHistorial().add(revision);
-//				issue.setAssignedArea(issueService.getAreaByName("Comuna 1"));
-				
-				issueService.addHistoryUpdate(revision);				
-//				issueService.updateIssue(issue);
-				
+							
 				List<CommentDTO> comments = issueService.getCommentsByIssue(issueID);
 				model.addAttribute("comentarios", issueService.getCommentsByIssue(issueID));
 				model.addAttribute("cantidadComentarios", comments.size());			
