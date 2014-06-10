@@ -39,7 +39,7 @@ public interface IssueService {
 	public List<CommentDTO> getCommentsByIssue(String issueID);
 	public List<String> getTagList();
 	public IssueDTO getIssueById(String issueID);	
-	public AreaDTO getAreaByName(String areaName);
+//	public AreaDTO getAreaByName(String areaName);
 		
 	public void followIssue(IssueFollowDTO followDTO);
 	public void unFollowIssue(IssueFollowDTO followDTO);

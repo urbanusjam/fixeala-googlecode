@@ -182,7 +182,6 @@
 		    	   $('#edit-tags').show();
 		       }
 		       
-			
 		    }
 	
 			  //--NON-EDITABLE FIELDS

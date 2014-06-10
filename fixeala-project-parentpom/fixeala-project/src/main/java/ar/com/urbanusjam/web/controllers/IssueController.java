@@ -609,7 +609,7 @@ public class IssueController {
 					
 					issue.setLastUpdateDate(revision.getFecha());
 					issue.getHistorial().add(revision);
-					issue.setAssignedArea(issueService.getAreaByName("Comuna 1"));
+//					issue.setAssignedArea(issueService.getAreaByName("Comuna 1"));
 					
 					issueService.updateIssue(issue);	
 					
@@ -883,7 +883,7 @@ public class IssueController {
 				
 				issue.setLastUpdateDate(revision.getFecha());
 //				issue.getHistorial().add(revision);
-				issue.setAssignedArea(issueService.getAreaByName("Comuna 1"));
+//				issue.setAssignedArea(issueService.getAreaByName("Comuna 1"));
 				
 				issueService.addHistoryUpdate(revision);				
 //				issueService.updateIssue(issue);
