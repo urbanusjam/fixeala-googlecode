@@ -143,6 +143,9 @@
 			$('#btn-edit').addClass('notClicked');
 			
 			//enable / disable
+			
+			$('.editableField').hide();
+			
 		    $('#btn-edit').click(function() {
 		    	enableDisableFields();
 		    	if( $('#btn-update').is(":disabled") == true ){		    	
@@ -174,12 +177,23 @@
 		       $('#issue-tags').editable('toggleDisabled');
 		       
 		       var iconTags =  $('#edit-tags');
+		       var iconEditable = $('.editableField');
 		       
+		       if(iconEditable.is(':visible')){
+		    	   $('.editableField').hide();
+		       }
+		       else{
+		    	   $('.editableField').show();
+		       }
+		       
+		      
 		       if(iconTags.is(':visible')){
 		    	   $('#edit-tags').hide();
+		    	   
 		       }
 		       else{
 		    	   $('#edit-tags').show();
+		    	  
 		       }
 		       
 		    }
@@ -275,22 +289,30 @@
 			                return item.text;
 			            }
 			        },
-// 			        display: function(value) {
-// 			            $.each(value,function(i){			           
-// 			               value[i] = "<span class='label'>" + $('<p>' + value[i] + '</p>').text() + "</span>";
-// 			            });
-// 			            $(this).html(value.join(" "));
-// 			        },						
+			        display: function(value) {
+			        	var tags = new Array(value.length);
+			        	
+			            $.each(value,function(i){				            	
+			            	var url = "./search.html?type=tag&value=" + $('<p>' + value[i] + '</p>').text();
+			            	tags[i] = "<a class=\"taglink\" href=\"" + url + "\"><span class=\"label label-default\">" + $('<p>' + value[i] + '</p>').text() + "</span></a>";
+			            });
+			            
+			            $(this).html(tags.join(" "));
+			        },						
 			        ajaxOptions: {
 				        type: 'put'
 				    }			 
-// 				    success: function(response, newValue) {
-// 		                console.log(response, newValue);
-// 		            },
 		                    
   			  }); 
-
 			  
+// 			  $('#issue-tags').on('shown', function() {
+// 				    var editable = $(this).data('editable');
+// 				    value = editable.value
+// 				    $.each(value,function(i){
+// 				       value[i] = $(value[i]).text()
+// 				    });
+// 				});
+
 			 
 			  
 			//---- CAMPOS LICITACION
@@ -622,42 +644,50 @@
 			  
 			  
 			  	//update status only
-				$('#btn-status').click(function() {
+				$('#btn-status').click(function(e) {
 					var label = $(this).find('button').attr('title').trim();
-					var status = "";
-					var id = ${id};
-					var title = '${titulo}';
-					
-					if(label == 'Resolver')
-						status = 'RESUELTO';
-					
-					if(label == 'Reabrir')
-						status = "REABIERTO";
-					
-					var data = 'issueID='+ id + '&newStatus='+ status;
-					
-					$.ajax({
-        			    url: "./updateIssueStatus.html",
-				 		type: "POST",	
-				 		data: data,
-				 		dataType: "json",									 
-				        success: function(data){		
-				        	if(data.result){				
-				        		
-				        			bootbox.alert(data.message); 
-				        			
-					    			setTimeout(function () {
-					    				var url = getIssueURL(id, title, 'plain');
-						    			window.location.href= url;	
-					    			}, 2000);						    			
+								
+					bootbox.confirm("&iquest;Confirma que desea <b>"+ label +" </b>el reclamo?", function(result){
+						  if(result){
+							  
+							  var status = "";
+								var id = ${id};
+								var title = '${titulo}';
+								
+								if(label == 'Resolver')
+									status = 'RESUELTO';
+								
+								if(label == 'Reabrir')
+									status = "REABIERTO";
+								
+								var data = 'issueID='+ id + '&newStatus='+ status;
+								
+								$.ajax({
+			        			    url: "./updateIssueStatus.html",
+							 		type: "POST",	
+							 		data: data,
+							 		dataType: "json",									 
+							        success: function(data){		
+							        	if(data.result){		
+							        			bootbox.alert(data.message); 				        			
+								    			setTimeout(function () {
+								    				var url = getIssueURL(id, title, 'plain');
+									    			window.location.href= url;	
+								    			}, 2000);						    			
 
-					    	   }
-					    	   
-					    	   else{
-					    		   bootbox.alert(data.message);		
-					    	   }
-	            		}
-        			});
+								    	   }
+								    	   
+								    	   else{
+								    		   bootbox.alert(data.message);		
+								    	   }
+				            		}
+			        			});
+							  
+						  }
+					 });
+							  
+					
+					
 						  
 				});
 			  	
@@ -1188,7 +1218,7 @@
 		     
   	  <div id="issue-header" class="hero-unit" style="padding:20px; margin-bottom:15px">	  
         <h3 style="display:inline">
-        	<a href="#" id="issue-title">${titulo}</a>
+        	<a href="#" id="issue-title">${titulo}</a>&nbsp;<i class="icon-pencil editableField"></i>
         	&nbsp;&nbsp;
         	<i class="icon-chevron-right icon-large"></i>&nbsp;&nbsp;<span style="color:${tituloCss}">${estado}</span></h3>
         <p>${direccion}</p>       
@@ -1372,7 +1402,7 @@
 						 </tr>
 						 <tr>
 						    <th>Barrio:</th>
-						    <td><a href="#" id="issue-barrio">${barrio}</a></td>						   
+						    <td><a href="#" id="issue-barrio">${barrio}</a>&nbsp;<i class="icon-pencil editableField"></i></td>						   
 						 </tr>
 						 <tr>
 						    <th>Ciudad / Localidad:</th>
@@ -1388,7 +1418,7 @@
 						 </tr>
 						  <tr>
 						    <th>Descripci&oacute;n:</th>
-						    <td><a href="#" id="issue-desc">${descripcion}</a></td>						   
+						    <td><a href="#" id="issue-desc">${descripcion}</a>&nbsp;<i class="icon-pencil editableField"></i></td>						   
 						 </tr>
 						 <tr>
 						    <th>Estado:</th>
@@ -1397,7 +1427,7 @@
 						  <tr>
 						    <th>Etiquetas:</th>
 						    <td>
-       							<a id="issue-tags" href="#" data-type="select2">${tagsByIssue}</a>
+       							<a id="issue-tags" href="#" data-type="select2">${tagsByIssue}</a>&nbsp;<i class="icon-pencil editableField"></i>
 						    </td>						   
 						 </tr>
 					</table>	 	

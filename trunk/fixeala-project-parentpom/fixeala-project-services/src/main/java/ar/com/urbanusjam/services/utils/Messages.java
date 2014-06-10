@@ -18,7 +18,7 @@ public final class Messages {
 	public static final String ISSUE_REPAIR_INFO_DELETE = "elimin&oacute; informaci&oacute;n sobre la reparaci&oacute;n del reclamo.";
 	
 	
-	public static final String ISSUE_UPDATE_COMMENT = "coment&oacute;";
+	public static final String ISSUE_UPDATE_COMMENT = "agreg&oacute; un comentario.";
 	public static final String ISSUE_UPDATE_ATTACH_FILES = "adjunt&oacute;";
 	public static final String ISSUE_UPDATE_REMOVE_FILES = "elimin&oacute;";
 	public static final String ISSUE_UPDATE_FIELDS = "actualiz&oacute;";

@@ -20,8 +20,8 @@ public class CommentDAOImpl implements CommentDAO  {
 
 	@Override
 	public List<Comment> findCommentsByIssueId(Long issueID) {
-		List<Comment> comments = entityManager.createNamedQuery("Comment.findByIssueId", Comment.class)
-				   					    .setParameter("id", issueID)
+		List<Comment> comments = entityManager.createQuery("SELECT c FROM Comment c WHERE c.issue.id = :issueID", Comment.class)
+				   					    .setParameter("issueID", issueID)
 				   					    .getResultList();
 		return comments;
 	}

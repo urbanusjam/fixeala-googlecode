@@ -34,6 +34,8 @@
         }
 	}
 	
+
+	
 	
 	function redirect(){
 		var url = window.location.origin + '/'+ 'fixeala/issues/' + rowId + '.html';
@@ -248,12 +250,14 @@
 							    		  var $contextMenu = $("#contextmenu-issue");
 							    		  
 							    		  $("body").on("contextmenu", "#tblUserIssues tr", function(e) {
-							    		  	$contextMenu.css({
-								    		      display: "block",
-								    		      left: e.pageX,
-								    		      top: e.pageY
-							    		    });
-							    		    return false;
+								    		  	$contextMenu.css({
+									    		      display: "block",
+									    		      left: e.pageX,
+									    		      top: e.pageY
+								    		    });		
+						    					rowId = $(this).find("td").eq(0).html().trim(); 
+						    					//rowTitle = $(this).find("td").eq(2).html().trim(); 								    		
+							    			  return false;							    			
 							    		  });
 							    		  
 							    		  $contextMenu.on("click", "a", function() {
@@ -416,11 +420,16 @@
 													</div>
 													<div class="fileupload-preview fileupload-exists thumbnail" style="height: 100px;min-width:100px;max-width: 100px; max-height: 100px; line-height: 20px;"></div>
 													
-													<span class="btn fileinput-button" style="line-height:30px; width:auto; font-size:12px">
-												        <i class="icon-plus"></i>&nbsp;&nbsp;
-												        <span>Seleccionar archivo</span>									        
-												           <input type="file" name="files[]" id="fileupload-profile">
-												    </span>									  
+<!-- 													<span class="btn fileinput-button" style="line-height:30px; width:auto; font-size:12px"> -->
+<!-- 												        <i class="icon-plus"></i>&nbsp;&nbsp; -->
+<!-- 												        <span>Seleccionar archivo</span>									         -->
+<!-- 												           <input type="file" name="files[]" id="fileupload-profile"> -->
+<!-- 												    </span>			 -->
+												    	<a href="#" class="fileinput-button" style="line-height:30px; width:250px; text-align: center; font-size:12px;">
+													        <span>Cambiar imagen</span>									        
+													        <input type="file" name="files[]" id="fileupload-profile">
+												    	</a>		
+												    						  
 												</div>		
 							                </div>
 						                </div>
@@ -439,7 +448,7 @@
 <%-- 											    <input type="text" id="province" name="province" class="input-large" value="${province}">  --%>
 											    
 											    <hr>
-											    <button id="btnUpdateAccount" class="btn btn-success"><i class="icon-ok"></i>&nbsp;&nbsp; Guardar datos</button>								 
+											    <button id="btnUpdateAccount" class="btn btn-success"><i class="icon-ok"></i>&nbsp;&nbsp; Actualizar datos</button>								 
 										  	</form>
 										</div>
 									</div>

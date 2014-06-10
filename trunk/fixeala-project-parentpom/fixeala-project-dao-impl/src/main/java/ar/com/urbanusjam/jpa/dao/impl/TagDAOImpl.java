@@ -3,6 +3,7 @@ package ar.com.urbanusjam.jpa.dao.impl;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
@@ -29,18 +30,26 @@ public class TagDAOImpl implements TagDAO {
 
 	@Override
 	public boolean tagExists(String tagname) {
-		Tag tag = entityManager.createQuery("SELECT t FROM Tag t WHERE t.tagname = :tagname", Tag.class)
-				   .setParameter("tagname", tagname)			
-			       .getSingleResult();	
-		return tag != null ? true : false;
+		try{
+			entityManager.createQuery("SELECT t FROM Tag t WHERE t.tagname = :tagname", Tag.class)
+					   .setParameter("tagname", tagname)			
+				       .getSingleResult();	
+			return true;
+		}catch(NoResultException e){
+			return false;
+		}		
 	}
 
 	@Override
 	public Tag findTagByName(String tagname) {
-		Tag tag = entityManager.createNamedQuery("SELECT t FROM Tag t WHERE t.tagname = :tagname", Tag.class)
-				   .setParameter("tagname", tagname)			
-			       .getSingleResult();	
-		return tag;
+		try{
+			Tag tag = entityManager.createQuery("SELECT t FROM Tag t WHERE t.tagname = :tagname", Tag.class)
+					   .setParameter("tagname", tagname)			
+				       .getSingleResult();	
+			return tag;
+		}catch(NoResultException e){
+			return null;
+		}		
 	}
 
 	@Override
