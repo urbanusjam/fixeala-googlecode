@@ -573,7 +573,7 @@ public class HomeController {
 				HttpServletRequest request){
 		
 		try{
-				Object loggedUser = SecurityContextHolder.getContext().getAuthentication().getPrincipal();	
+				User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();	
 				UserDTO user = new UserDTO();
 				boolean isSameUser = false;
 			

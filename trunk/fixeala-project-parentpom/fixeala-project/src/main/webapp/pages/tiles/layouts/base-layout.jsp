@@ -600,8 +600,10 @@ path:hover {
 								            			$('#loginNav').load(location.href + " #loginNav > *");	
 								            			
 								            			var pathArray = window.location.pathname.split( '/' );								            			
-														if(pathArray.indexOf("issues") != -1);	
+														if(pathArray.indexOf("issues") != -1){
 															$('#userIssueActions').load(location.href + " #userIssueActions > *");	
+														}//al recargar DES-bindea los eventos on click
+															
 														
 									                	return false;
 											          

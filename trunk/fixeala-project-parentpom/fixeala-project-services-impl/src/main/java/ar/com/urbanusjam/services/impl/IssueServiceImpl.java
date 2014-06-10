@@ -376,10 +376,10 @@ public class IssueServiceImpl implements IssueService {
 		return convertToDTO(issue);		
 	}
 	
-	@Override
-	public AreaDTO getAreaByName(String areaName) {
-		return convertTo(areaDAO.getAreaByName(areaName));
-	}
+//	@Override
+//	public AreaDTO getAreaByName(String areaName) {
+//		return convertTo(areaDAO.getAreaByName(areaName));
+//	}
 	
 	@Override
 	public List<String> getTagList() {

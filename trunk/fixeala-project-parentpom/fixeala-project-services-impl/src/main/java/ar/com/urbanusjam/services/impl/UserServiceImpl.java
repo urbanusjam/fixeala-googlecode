@@ -322,20 +322,20 @@ public class UserServiceImpl implements UserService {
 		userDTO.setRegistrationDate(user.getRegistrationDate());		
 		userDTO.setLastLoginDate(user.getLastLoginDate());		
 		
-		if(user.isVerifiedOfficial()){
-			userDTO.setVerifiedOfficial(user.isVerifiedOfficial());
-			userDTO.setNombre(user.getNombre());
-			userDTO.setApellido(user.getApellido());
-			userDTO.setCargo(user.getCargo());
-			userDTO.setAreaId(String.valueOf(user.getArea().getId()));
-			userDTO.setAreaNombre(user.getArea().getNombre());
-			userDTO.setAreaCiudad(user.getArea().getCiudad());
-			userDTO.setAreaProvinciaSigla(user.getArea().getProvinciaSigla());
-		}
-		
-		else{
+//		if(user.isVerifiedOfficial()){
+//			userDTO.setVerifiedOfficial(user.isVerifiedOfficial());
+//			userDTO.setNombre(user.getNombre());
+//			userDTO.setApellido(user.getApellido());
+//			userDTO.setCargo(user.getCargo());
+//			userDTO.setAreaId(String.valueOf(user.getArea().getId()));
+//			userDTO.setAreaNombre(user.getArea().getNombre());
+//			userDTO.setAreaCiudad(user.getArea().getCiudad());
+//			userDTO.setAreaProvinciaSigla(user.getArea().getProvinciaSigla());
+//		}
+//		
+//		else{
 			userDTO.setNeighborhood(user.getNeighborhood());
-		}
+//		}
 		
 		if(user.isEnabled())
 			userDTO.setAccountStatus("ACTIVO");
