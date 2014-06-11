@@ -51,18 +51,26 @@ public class IssueFollowDAOImpl implements IssueFollowDAO {
 
 	@Override
 	public List<IssueFollow> findFollowingsByIssue(Long issueID) {
-		List<IssueFollow> followers = entityManager.createQuery("SELECT f FROM IssueFollow f WHERE f.id.issueID = :issueID", IssueFollow.class)
+		try{
+			List<IssueFollow> followers = entityManager.createQuery("SELECT f FROM IssueFollow f WHERE f.id.issueID = :issueID", IssueFollow.class)
 			     .setParameter("issueID", issueID)
 			     .getResultList();
-		return followers;
+			return followers;
+		}catch(NoResultException e){
+			return null;
+		}
 	}
 
 	@Override
 	public List<IssueFollow> findFollowingsByUser(Long userID) throws NoResultException {
-		List<IssueFollow> followings = entityManager.createQuery("SELECT i FROM IssueFollow i WHERE i.id.followerID = :userID", IssueFollow.class)
+		try{
+			List<IssueFollow> followings = entityManager.createQuery("SELECT i FROM IssueFollow i WHERE i.id.followerID = :userID", IssueFollow.class)
 			     .setParameter("userID", userID)
 			     .getResultList();
-		return followings;
+			return followings;
+		}catch(NoResultException e){
+			return null;
+		}
 	}
 
 }

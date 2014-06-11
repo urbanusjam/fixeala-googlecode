@@ -144,18 +144,26 @@ function fillInAddress() {
     }
  
     var result = place.address_components;
-    
+    console.log(result);
     if(result == null){
       	alert("No se encontraron resultados");
         return false;        
     }
-  
+ 
     // hay resultados
     else{
     	for (var j = 0; j < result.length; j++) {
+    		
     	      var att = result[j].types[0];
+    	 
     	      if (component_form[att]) {
     	        var val = result[j][component_form[att]];
+    	        
+    	        if(att == 'administrative_area_level_1' && val == 'Ciudad Autónoma de Buenos Aires')
+    	        	val = 'Buenos Aires';
+    	        else if(att == 'locality' && val == 'Buenos Aires')
+    	        	val = 'Ciudad Autónoma de Buenos Aires';
+    	        
     	        document.getElementById(att).value = val;
     	       
     	        
@@ -511,18 +519,18 @@ function geocodeAddress(callback){
 						$("#longitude").val(latLng.lng());
 		        		callback(true);
 		        	}			        	
-				        	
-		        	if(location_type == "APPROXIMATE"){		        		
-		        		bootbox.alert("No se hall&oacute; un resultado exacto. Espeficique m&aacute;s datos.");
-		        	
+				   
+				    else if(location_type == "APPROXIMATE"){		        		
+		        		//bootbox.alert("No se hall&oacute; un resultado exacto. Espeficique m&aacute;s datos.");
+		        		callback(false);
 		        	}
 		        	
-		        	if(location_type == "GEOMETRIC_CENTER"){
+				    else if(location_type == "GEOMETRIC_CENTER"){
 		        		if(hasAddressTypes(results))	
 		        			callback(true);
 		        		else{
-		        			bootbox.alert("No se hall&oacute; un resultado exacto. Espeficique m&aacute;s datos.");	
-		        			
+		        			//bootbox.alert("No se hall&oacute; un resultado exacto. Espeficique m&aacute;s datos.");	
+		        			callback(false);
 		        		}
 		        			
 		        	}
@@ -530,18 +538,18 @@ function geocodeAddress(callback){
 		 }
 		 
 		 //ZERO RESULTS
-		 if (status == google.maps.GeocoderStatus.ZERO_RESULTS) { 
-			 bootbox.alert("No se encontraron resultados para la direcci&oacute;n sumninistrada.");
-			
+		 else if (status == google.maps.GeocoderStatus.ZERO_RESULTS) { 
+			 //bootbox.alert("No se encontraron resultados para la direcci&oacute;n sumninistrada.");
+			 callback(false);
 		 }   		
 		 
 		 //OTHER
-		 if ( (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) 
+		 else if ( (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) 
 				 || (status == google.maps.GeocoderStatus.REQUEST_DENIED)
 				 || (status == google.maps.GeocoderStatus.INVALID_REQUEST)
 				 || (status == google.maps.GeocoderStatus.UNKNOWN_ERROR ) ){    		 
-
-	        	bootbox.alert("Ocurri&oacute; un error al validar la direcci&oacute;n. Intente de nuevo.");
+			 callback(false);
+	        	//bootbox.alert("Ocurri&oacute; un error al validar la direcci&oacute;n. Intente de nuevo.");
 	        
 		 }
 		
@@ -556,6 +564,7 @@ function hasAddressTypes(results) {
 	
 	var types = 0;
 	var sameField = 0;
+	
 	
 	for (var i = 0; i < results[0].address_components.length; i++) {				
 		
@@ -629,7 +638,7 @@ function hasAddressTypes(results) {
 				}	
 				
 				else{
-					
+					console.log(results[0].address_components);
 					for (var i = 0; i < results[0].address_components.length; i++) { 
 
 						var addr = results[0].address_components[i];							
@@ -646,16 +655,30 @@ function hasAddressTypes(results) {
 		                 else if (addr.types[0] == 'locality')
 		                	 city = addr.long_name;
 		                 
-		                 else if (addr.types[0] == 'administrative_area_level_1')
-		                     province = addr.long_name;		                 
+		                 else if (addr.types[0] == 'administrative_area_level_1'){
+		                	 province = addr.long_name;		
+		                	
+		                 }
+		                                      
 		                  
 					} 
-
+					
+					
+					
+               	 }
+					
+			
+					
+				  if(province == "Ciudad Autónoma de Buenos Aires" && city == "Buenos Aires"){
+					  province = "Buenos Aires";
+					  city = "Ciudad Autónoma de Buenos Aires";
+				  }
 					$("#route").val(streetName);
 					$("#street_number").val(streetNumber);
 					$("#neighborhood").val(neighborhood);
 					$("#locality").val(city);
 					$("#administrative_area_level_1").val(province);
+					
 					
 					$("#latitude").val(latLng.lat());
 					$("#longitude").val(latLng.lng());
@@ -680,7 +703,7 @@ function hasAddressTypes(results) {
             		 google.maps.event.addListener(initMarker, 'dragend', function(e) {
             				 getAddressOnMapClick(e.latLng); 
              	  	});  
-				}
+				
 				
 			
 		} 

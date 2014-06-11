@@ -69,15 +69,15 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/markermanager.js"></script>	
   	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/select2.js"></script>	
-    	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/select2.css" rel="stylesheet">
+    	
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.stepy.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.validate.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.blockUI.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.tagit.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.tooltipster.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.shorten.1.0.js"></script>
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/recaptcha_ajax.js"></script>	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/moment.min.js"></script>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.bootstrap.wizard.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/script.js"></script>	
   	  	
   	<link type="text/css" href="http://fonts.googleapis.com/css?family=Oxygen:400,300,700|Lato:400,900|Graduate:400,900" rel="stylesheet">
@@ -85,7 +85,7 @@
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/DT_bootstrap.css" rel="stylesheet">
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.tagit.css" rel="stylesheet">
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/tagit.ui-zendesk.css" rel="stylesheet">
-		
+	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/select2.css" rel="stylesheet">
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/2.3.2/bootstrap.css" rel="stylesheet">   
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/2.3.2/bootstrap-combined.min.css" rel="stylesheet"> 
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/2.3.2/bootstrap-editable.css" rel="stylesheet"> 
@@ -163,7 +163,122 @@ path:hover {
 		$(document).ready(function(){
 			
 			
+			/****** BOOTSTRAP WIZARD ******/
 			
+			$('#rootwizard').bootstrapWizard({
+				
+				onNext: function(tab, navigation, index) {
+					
+					var isValidAddress = false;
+					
+					var $valid = $("#issueWizard").valid();
+		  			if(!$valid) {
+		  				alert('not');
+		  				$issueValidator.focusInvalid();
+		  				return false;
+		  			}
+		  			
+		  		
+					geocodeAddress(function(value) { 
+						if(!value){
+							return false;
+				    		bootbox.alert("Especifique una direcci&oacute;n v&aacute;lida.");
+				    		
+				    	} });	
+
+			    
+			    		
+		  			
+		  			
+		  			
+// 					if(index==2) {
+// 						// Make sure we entered the name
+// 						if(!$('#name').val()) {
+// 							alert('You must enter your name');
+// 							$('#name').focus();
+// 							return false;
+// 						}
+// 					}
+// 					// Set the name for the next tab
+// 					$('#tab3').html('Hello, ' + $('#name').val());
+					
+				}, 
+				onTabShow: function(tab, navigation, index) {
+					
+					var $total = navigation.find('li').length;
+					var $current = index+1;
+					var $percent = ($current/$total) * 100;
+					$('#rootwizard').find('.bar').css({width:$percent+'%'});
+					
+					// If it's the last tab then hide the last button and show the finish instead
+					if($current >= $total) {
+						$('#rootwizard').find('.pager .next').hide();
+						$('#rootwizard').find('.pager .finish').show();
+						$('#rootwizard').find('.pager .finish').removeClass('disabled');
+						$('#rootwizard').find('.pager .finish').removeClass('btn');
+					} else {
+						$('#rootwizard').find('.pager .next').show();
+						$('#rootwizard').find('.pager .finish').hide();
+					}
+					
+				},
+				onTabClick: function(tab, navigation, index) {
+// 					alert('on tab click disabled');
+					return false;
+				}});
+				$('#rootwizard .finish').click(function() {
+					if( $("#tags").val() == ""){
+						bootbox.alert("Debe especificar al menos una etiqueta.");						
+					}
+					
+					else{
+						
+						var $form = $("#issueWizard");
+						console.log($form.serialize());
+									
+						$.ajax({ 
+						 		url: "./reportIssue.html", 		
+						 		type: "POST",					 	
+						 		data : $form.serialize(),	
+						 		success : function(alertStatus){					 		
+						 			if(alertStatus.result){
+						 				
+						 				bootbox.alert(alertStatus.message, function() {
+						 					setTimeout(function () {
+				 	    						window.location.reload();
+				 	    					}, 400);	
+						 				});		 	    					
+			 	    				}
+			 	    				else{	 	    			
+			 	    					bootbox.alert(alertStatus.message);	 	    										 	    					
+			 	    				}  
+						 			
+						 		},
+						 		error: function(jqXHR, exception) {
+					                   if (jqXHR.status === 0) {
+					                       alert('Not connect.\n Verify Network.');
+					                   } else if (jqXHR.status == 404) {
+					                       alert('Requested page not found. [404]');
+					                   } else if (jqXHR.status == 500) {
+					                       alert('Internal Server Error [500].');
+					                   } else if (exception === 'parsererror') {
+					                       alert('Requested JSON parse failed.');
+					                   } else if (exception === 'timeout') {
+					                       alert('Time out error.');
+					                   } else if (exception === 'abort') {
+					                       alert('Ajax request aborted.');
+					                   } else {
+					                       alert('Uncaught Error.\n' + jqXHR.responseText);
+					                   }
+					               }
+						 	
+						 	});
+						
+						
+						
+					}
+					return false;
+				});
 			
 			
 // 			$("#tags").select2({
@@ -327,6 +442,8 @@ path:hover {
 			
 // 			$("#issueWizard").validate({ignore:".ignore"});
 			
+			/**
+			
 			$('#issueWizard').stepy({
 				backLabel  : '&laquo; Anterior',
 				nextLabel  : 'Siguiente &raquo;', 
@@ -335,7 +452,7 @@ path:hover {
 				transition : 'fade',
 				block: true,
 				validate: true,
-				/*next: function(index) {
+				next: function(index) {
 						
 					if($("#issueWizard").valid()){
 						
@@ -356,7 +473,7 @@ path:hover {
 					}
 					
 				   
-				},*/
+				},
 				select: function(index){
 					updateProgressBar(3, index-1);
 				},       
@@ -419,7 +536,7 @@ path:hover {
 					
 			  }
 			});
-			
+			*/
 			
 			$(function(){
 				function initToolbarBootstrapBindings() {
@@ -450,6 +567,7 @@ path:hover {
 			});
 		
 			
+			/**
 			// initialize tooltipster on form input elements
 		    $('#issueWizard input[type="text"], #issueWizard textarea').tooltipster({ 		    
 		    	animation: 'fade',		
@@ -461,6 +579,7 @@ path:hover {
 		        onlyOne: false,    // allow multiple tips to be open at a time
 		        position: 'right'  // display the tips to the right of the element
 		    });
+			**/
 			
 			/** ======================================================================================================== **/
 			/**                                               I S S U E	S		  	  								     **/
@@ -478,8 +597,8 @@ path:hover {
 			}  
 	
 
-			$("#issueWizard").validate({	
-					ignore: ".ignore, .select2-input",
+			var $issueValidator = $("#issueWizard").validate({	
+// 					ignore: ".ignore, .select2-input",
 					rules: {
 			 			address: { required: true},					 		
 			 			city: { required: true},		
@@ -495,17 +614,17 @@ path:hover {
 	 					  title: { required : 'Este campo es requerido.', maxlength: 'El m&aacute;ximo es de 50 caracteres.' },
 	 					  description: { required : 'Este campo es requerido.' , maxlength: 'El m&aacute;ximo es de 300 caracteres'}
 	 				},
-	 				highlight: function (element) { 
-	 			        $(element).addClass("error"); 
-	 			    },
+// 	 				highlight: function (element) { 
+// 	 			        $(element).addClass("error"); 
+// 	 			    },
 		 	    	
-	 			    unhighlight: function (element) { 
-	 			        $(element).removeClass("error"); 
-	 			    },
-			
+// 	 			    unhighlight: function (element) { 
+// 	 			        $(element).removeClass("error"); 
+// 	 			    },
 	 		 		errorPlacement: function (error, element) {
-	 		            $(element).tooltipster('update', $(error).text());
-	 		            $(element).tooltipster('show');				        
+// 	 		            $(element).tooltipster('update', $(error).text());
+// 	 		            $(element).tooltipster('show');	
+	 		           $(element).addClass("error"); 
 	  		        }
 			});
 			

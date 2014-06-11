@@ -311,7 +311,8 @@ ul#loginNav li.signupLink a:hover {
 	display: inline-block;
 	height: 25px;
 	vertical-align: bottom;
-	margin-left: 25px;
+	text-align: right;
+	margin-left: 15px;
 }
 
 .form-signin.alert {
@@ -531,7 +532,7 @@ footer {
 #issueFormWizard {
 	width: 316px;
 	height: 450px;		
-		display: none;		
+	display: none;		
 	overflow: hidden;
 	position: relative;	
 	float: right;	
@@ -540,23 +541,8 @@ footer {
 	margin-bottom: 0;
 	background: #fff;
 	border: 1px solid #CFCFCF;
-
-
 }
 
-/* #issueForm { */
-/* 	width: 316px; */
-/* 	height: 450px; */
-/* 	display: none;			 */
-/* 	overflow: hidden; */
-/* 	position: relative; */
-/* 	float: right;	 */
-/* 	padding: 0 10px 10px 10px;	 */
-/* 	margin-right: -316px; */
-/* 	margin-bottom: 0; */
-/* 	background: #fff; */
-/* 	border: 1px solid #CFCFCF; */
-/* } */
 
 #issueForm #fieldWrapper {
 	height: 280px;
@@ -577,7 +563,7 @@ footer {
 .form-issue input {
 	width: 306px;
 	height: 30px;
-	margin-bottom: 20px;
+	margin-bottom: 30px;
 /* 	display: block; */
 }
 
@@ -655,8 +641,8 @@ footer {
 
 	
 input.error, textarea.error, select.error {
-	color: #A60000;
-	border: 1px solid #A60000;
+	color: red;
+	border: 1px solid red;
 }
 
 label.valid {
