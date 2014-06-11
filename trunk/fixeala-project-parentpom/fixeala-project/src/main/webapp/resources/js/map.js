@@ -9,6 +9,7 @@ var markers = [];
 
 var placeSearch, autocomplete;
 var component_form = {
+  'street_number': 'short_name',		
   'neighborhood': 'short_name',
   'locality': 'long_name',
   'administrative_area_level_1': 'long_name'
@@ -483,13 +484,14 @@ function findProvincia (value) {
 function geocodeAddress(callback){
 	
 	 var address = $("#address").val();
+	 var streetNumber = $("#street_number").val();
 	 var neighborhood = $("#neighborhood").val();	 
 	 var city = $("#locality").val();
 	 var province = $("#administrative_area_level_1").val();	 
 	 var title = $("#title").val();
 	 var desc = $("#description").val();
 
-	 var searchAddress = address + ", " + neighborhood + ", " + city + ", " + province;			
+	 var searchAddress = address + " " + streetNumber +"," + neighborhood + "," + city + "," + province;			
 	 var geocoder;
 	 
 	 if(!geocoder) { 
@@ -500,47 +502,48 @@ function geocodeAddress(callback){
 		 address: searchAddress,
 		 country: "AR"			
 	 } 
+	 
+	var result = false;
 	
 	 geocoder.geocode(geocoderRequest, function(results, status) { 
- 
+		 var result = false;
 		 //OK
 		 if (status == google.maps.GeocoderStatus.OK) {
 		        	
-		        	var location_type = results[0].geometry.location_type;
+		        	var locationType = results[0].geometry.location_type;
 		        	
-		        	if(location_type == "RANGE_INTERPOLATED" || location_type == "ROOFTOP"){		
-//		        		 map.setCenter(results[0].geometry.location);
-//		                 var marker = new google.maps.Marker({
-//		                     map: map,
-//		                     position: results[0].geometry.location
-//		                 });
-		        		var latLng = results[0].geometry.location;		        	
-		        		$("#latitude").val(latLng.lat());
-						$("#longitude").val(latLng.lng());
-		        		callback(true);
-		        	}			        	
-				   
-				    else if(location_type == "APPROXIMATE"){		        		
-		        		//bootbox.alert("No se hall&oacute; un resultado exacto. Espeficique m&aacute;s datos.");
-		        		callback(false);
-		        	}
+		        	console.log(locationType);
 		        	
-				    else if(location_type == "GEOMETRIC_CENTER"){
-		        		if(hasAddressTypes(results))	
-		        			callback(true);
-		        		else{
-		        			//bootbox.alert("No se hall&oacute; un resultado exacto. Espeficique m&aacute;s datos.");	
-		        			callback(false);
-		        		}
-		        			
-		        	}
+		        		if(locationType === "RANGE_INTERPOLATED" || locationType == "ROOFTOP"){		
+			        		var latLng = results[0].geometry.location;		        	
+			        		$("#latitude").val(latLng.lat());
+							$("#longitude").val(latLng.lng());
+							result = true;
+			        	}			        	
+					   
+//		        		else if(locationType == "APPROXIMATE"){		
+//					    	
+//					    	addressFound = false;
+//
+//			        	}
+//			        	
+//		        		else if(locationType == "GEOMETRIC_CENTER"){
+//
+//					    	addressFound = false;
+//
+//			        			
+//			        	}
+		        	
+
+			        	
+		        	
 		        		
 		 }
-		 
+		 /**
 		 //ZERO RESULTS
 		 else if (status == google.maps.GeocoderStatus.ZERO_RESULTS) { 
-			 //bootbox.alert("No se encontraron resultados para la direcci&oacute;n sumninistrada.");
-			 callback(false);
+			
+			 addressFound = false;
 		 }   		
 		 
 		 //OTHER
@@ -548,13 +551,13 @@ function geocodeAddress(callback){
 				 || (status == google.maps.GeocoderStatus.REQUEST_DENIED)
 				 || (status == google.maps.GeocoderStatus.INVALID_REQUEST)
 				 || (status == google.maps.GeocoderStatus.UNKNOWN_ERROR ) ){    		 
-			 callback(false);
-	        	//bootbox.alert("Ocurri&oacute; un error al validar la direcci&oacute;n. Intente de nuevo.");
-	        
-		 }
+			 addressFound = false;  
+		 }**/
+		 
+		
 		
 	 });//geocoder
- 
+	 callback(result);
 	
 } 
 
@@ -580,10 +583,9 @@ function hasAddressTypes(results) {
          }
 		
 		 //barrio (opcional)
-         else if (addr.types[0] == ['neighborhood']){										
-        	 types++;   
-        	
-		 }
+//         else if (addr.types[0] == ['neighborhood']){										
+//        	 types++;           	
+//		 }
 		
 		 //ciudad - localidad
 		 else if (addr.types[0] == ['locality']){						
@@ -596,7 +598,7 @@ function hasAddressTypes(results) {
          }		 
 	}    
 	
-	if(types == 4 || types == 5) 
+	if(types == 5) 
 		return true;
 	else 
 		return false;
@@ -633,12 +635,15 @@ function hasAddressTypes(results) {
 								
 				var fullAddress = results[0].formatted_address;
 				
+		
+				
 				if(!isArgentina(fullAddress)){
 					alert("Se encuentra fuera de los límites de la República Argentina.");	  
 				}	
 				
 				else{
-					console.log(results[0].address_components);
+					console.log(results[0]);
+					
 					for (var i = 0; i < results[0].address_components.length; i++) { 
 
 						var addr = results[0].address_components[i];							
@@ -658,12 +663,8 @@ function hasAddressTypes(results) {
 		                 else if (addr.types[0] == 'administrative_area_level_1'){
 		                	 province = addr.long_name;		
 		                	
-		                 }
-		                                      
-		                  
+		                 }	 
 					} 
-					
-					
 					
                	 }
 					
@@ -687,7 +688,8 @@ function hasAddressTypes(results) {
 					
                     if (results[0].formatted_address != null) {
                           formattedAddress = results[0].formatted_address;
-                          $("#address").val(streetName + " " + streetNumber);
+//                          $("#address").val(streetName + " " + streetNumber);
+                          $("#address").val(streetName);
                     }
                                         
                     if(initMarker)
