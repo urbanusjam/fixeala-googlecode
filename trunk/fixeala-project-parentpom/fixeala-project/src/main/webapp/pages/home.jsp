@@ -51,17 +51,17 @@
 					<option value="CT">Catamarca</option>
 					<option value="CC">Chaco</option>
 					<option value="CH">Chubut</option>
-					<option value="CD">C�rdoba</option>					
+					<option value="CD">C&oacute;rdoba</option>					
 					<option value="CR">Corrientes</option>
-					<option value="ER">Entre R�os</option>
+					<option value="ER">Entre R&iacute;os</option>
 					<option value="FO">Formosa</option>
 					<option value="JY">Jujuy</option>
 					<option value="LP">La Pampa</option>				
 					<option value="LR">La Rioja</option>		
 					<option value="MZ">Mendoza</option>
 					<option value="MN">Misiones</option>
-					<option value="NQ">Neuqu�n</option>					
-					<option value="RN">R�o Negro</option>
+					<option value="NQ">Neuqu&eacute;n</option>					
+					<option value="RN">R&iacute;o Negro</option>
 					<option value="SA">Salta</option>					
 					<option value="SJ">San Juan</option>
 					<option value="SL">San Luis</option>				
@@ -69,7 +69,7 @@
 					<option value="SF">Santa Fe</option>					
 					<option value="SE">Santiago del Estero</option>
 					<option value="TF">Tierra del Fuego</option>
-					<option value="TM">Tucum�n</option>					
+					<option value="TM">Tucum&aacute;n</option>					
 		  		</select>
 		  		
 		  		<div id="map_canvas"></div>	
@@ -142,7 +142,9 @@
 						     	<input type="hidden" id="latitude" name="latitude"  />
 								<input type="hidden" id="longitude" name="longitude" />											
 								<div class="form-group">
-   	 								<input type="text" class="form-control" name="address" id="address" placeholder="Direcci&oacute;n (calle y altura)" required>
+   	 								<input type="text" class="form-control" style="width: 190px;" name="address" id="address" placeholder="Calle" required>
+   	 								
+   	 								<input type="text" class="form-control" style="width: 90px;float: right;" name="street_number" id="street_number" placeholder="Altura" required>
   								</div>			
 <!-- 								<input type="text" id="address" name="address" onfocus="geolocate()" autocomplete="off" placeholder="Direcci&oacute;n (calle y altura)" />	 -->
 								<div class="form-group">
