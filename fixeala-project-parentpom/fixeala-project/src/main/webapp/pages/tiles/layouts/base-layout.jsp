@@ -162,15 +162,14 @@ path:hover {
         
 		$(document).ready(function(){
 			
-			
+			var flag = 0;
 			/****** BOOTSTRAP WIZARD ******/
 			
 			$('#rootwizard').bootstrapWizard({
 				
 				onNext: function(tab, navigation, index) {
 					
-					var isValidAddress = false;
-					
+				
 					var $valid = $("#issueWizard").valid();
 		  			if(!$valid) {
 		  				alert('not');
@@ -179,17 +178,18 @@ path:hover {
 		  			}
 		  			
 		  		
-					geocodeAddress(function(value) { 
-						if(!value){
-							return false;
-				    		bootbox.alert("Especifique una direcci&oacute;n v&aacute;lida.");
-				    		
-				    	} });	
+					geocodeAddress(function(result) { 
+					
+						if(result){flag = 1;}
+							
+// 				    		bootbox.alert("Especifique una direcci&oacute;n v&aacute;lida.");
+	
+					});	
 
-			    
-			    		
-		  			
-		  			
+					alert(flag);
+					if(flag == 0){ return false; }
+			    	
+		  			return true;
 		  			
 // 					if(index==2) {
 // 						// Make sure we entered the name
