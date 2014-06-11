@@ -89,28 +89,24 @@ public class IssueController {
 	public String showSearchPage(Model model,  @RequestParam("type") String searchType, @RequestParam("value") String value,
 				HttpServletRequest request) throws JSONException{
 		
-			List<IssueDTO> issueSearch = issueService.searchByTagOrStatus(searchType, value);						
-			
-			JSONArray array = new JSONArray();
-			for(IssueDTO issue : issueSearch){
-				JSONObject obj = new JSONObject();
-				obj.put("id", issue.getId());
-				obj.put("title", issue.getTitle());
-				obj.put("date", issue.getFormattedDate(issue.getCreationDate()));
-				obj.put("user", issue.getUsername());
-				obj.put("address", issue.getFormattedAddress());
-				obj.put("description", issue.getDescription());
-				obj.put("status", issue.getStatus());
-				obj.put("statusCss", issue.getStatusCss());
-				array.put(obj);
-			}
-			
-			model.addAttribute("tag", value);
-			model.addAttribute("issuesByTag", array.toString());
-			
-	
+		List<IssueDTO> issueSearch = issueService.searchByTagOrStatus(searchType, value);						
 		
+		JSONArray array = new JSONArray();
+		for(IssueDTO issue : issueSearch){
+			JSONObject obj = new JSONObject();
+			obj.put("id", issue.getId());
+			obj.put("title", issue.getTitle());
+			obj.put("date", issue.getFormattedDate(issue.getCreationDate()));
+			obj.put("user", issue.getUsername());
+			obj.put("address", issue.getFormattedAddress());
+			obj.put("description", issue.getDescription());
+			obj.put("status", issue.getStatus());
+			obj.put("statusCss", issue.getStatusCss());
+			array.put(obj);
+		}
 		
+		model.addAttribute("tag", value);
+		model.addAttribute("issuesByTag", array.toString());
 		
 		List<String> allTags = issueService.getTagList();	
 		JSONArray tagArray = new JSONArray();
@@ -133,10 +129,8 @@ public class IssueController {
 			obj.put("text", status.getLabel());
 			obj.put("css", status.getCssClass());
 			obj.put("color", status.getColorCode());
-		
 			statusArray.put(obj);
 		}
-		
 
 		model.addAttribute("allStatus", statusArray.toString());
 		

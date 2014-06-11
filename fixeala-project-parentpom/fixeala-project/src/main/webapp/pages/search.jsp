@@ -3,7 +3,7 @@
 <div id="content">
 	<!-- Search -->
     <div class="page-header">
-   	 	<h3><i class="icon-angle-right"></i>&nbsp;&nbsp;Búsqueda de reclamos: "${tag}"</h3>    	 	
+   	 	<h3><i class="icon-angle-right"></i>&nbsp;&nbsp;B&uacute;squeda de reclamos: "${tag.toLowerCase()}"</h3>    	 	
    	</div>     	
    	
    	<div class="container-fluid">
@@ -12,7 +12,7 @@
 	  			<div class="issueList"></div>
 	  		</div>		  		
 	  		<div class="row span4 pull-right">
-	  			<h4>Categoría</h4>
+	  			<h4>Categor&iacute;a</h4>
 	  			<hr>
 	  			<div class="tagCloud"></div>		  			
 	  			<br>

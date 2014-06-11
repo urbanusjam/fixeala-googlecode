@@ -49,13 +49,13 @@
 							      	<button type="submit" id="btnLogin" class="btn btn-primary">            						
 							           Login
 							    	</button>							    	
-							    	<div class="ajax_loading" style="display:none" >
+							    	<div class="ajax_loading" style="display:none;" >
 										<img src="${pageContext.request.contextPath}/resources/images/loader.gif" alt="Loading"/>&nbsp;Procesando...
 									</div>										
 									 <label class="checkbox">									   
-									         	<input type="checkbox" id="_spring_security_remember_me" name="_spring_security_remember_me" value="remember_me" > 
-							        			Recordarme
-									      </label>
+							         	<input type="checkbox" id="_spring_security_remember_me" name="_spring_security_remember_me" value="remember_me" > 
+					        			Recordarme
+									 </label>
 									<div align="center" class="forgotPassLink"><a class="link" href="${pageContext.request.contextPath}/account/forgotPassword.html">¿Olvidaste tu contraseña?</a></div>     
 		     					</form>
 		     					<!-- /LOGIN FORM -->

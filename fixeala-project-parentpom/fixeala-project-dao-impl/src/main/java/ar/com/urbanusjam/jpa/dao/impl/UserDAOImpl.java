@@ -39,17 +39,15 @@ public class UserDAOImpl implements UserDAO, UserDetailsManager  {
 //	}
 	
 	@Override
-	public User loadUserByUsername(String username) throws UsernameNotFoundException {		
-		User user = new User();		
+	public User loadUserByUsername(String username) throws UsernameNotFoundException {	
 		try{
-			user = entityManager.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
+			User user = entityManager.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
 					  .setParameter("username", username)			
  					  .getSingleResult();	
+			return user;	
 		} catch(NoResultException e){
-			user = null;
-		}
-		
-		return user;			
+			return null;
+		}	
 	}	
 	
 	@Override

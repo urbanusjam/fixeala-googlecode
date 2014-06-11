@@ -33,7 +33,6 @@ var bootstrapWizardCreate = function(element, options) {
 			// Select first one
 			$navigation.find('a:first').tab('show');
 			$activeTab = $navigation.find(baseItemSelector + ':first');
-			
 		}
 
 		// See if we're currently in the first/last then disable the previous and last buttons
@@ -173,42 +172,16 @@ var bootstrapWizardCreate = function(element, options) {
 		// Remove menu item
 		$item.remove();
 	};
-
-	$navigation = element.find('ul:first', element);
-	$activeTab = $navigation.find(baseItemSelector + '.active', element);
 	
-	while( ($navigation.length){
-		$navigation.addClass('inactive');
-	}
-	
-	if(!$navigation.hasClass($settings.tabClass)) {
-		$navigation.addClass($settings.tabClass);
-	}
-	
-
-	// Load onInit
-	if($settings.onInit && typeof $settings.onInit === 'function'){
-		$settings.onInit($activeTab, $navigation, 0);
-	}
-
-	// Load onShow
-	if($settings.onShow && typeof $settings.onShow === 'function'){
-		$settings.onShow($activeTab, $navigation, obj.nextIndex());
-	}
-
-	// Work the next/previous buttons
-	obj.fixNavigationButtons();
-
-	$('a[data-toggle="tab"]', $navigation).on('click', function (e) {
+	var innerTabClick = function (e) {
 		// Get the index of the clicked tab
 		var clickedIndex = $navigation.find(baseItemSelector).index($(e.currentTarget).parent(baseItemSelector));
 		if($settings.onTabClick && typeof $settings.onTabClick === 'function' && $settings.onTabClick($activeTab, $navigation, obj.currentIndex(), clickedIndex)===false){
 			return false;
 		}
-	});
-
-	// attach to both shown and shown.bs.tab to support Bootstrap versions 2.3.2 and 3.0.0
-	$('a[data-toggle="tab"]', $navigation).on('shown shown.bs.tab', function (e) {  // use shown instead of show to help prevent double firing
+	};
+	
+	var innerTabShown = function (e) {  // use shown instead of show to help prevent double firing
 		$element = $(e.target).parent();
 		var nextTab = $navigation.find(baseItemSelector).index($element);
 
@@ -223,7 +196,48 @@ var bootstrapWizardCreate = function(element, options) {
 
 		$activeTab = $element; // activated tab
 		obj.fixNavigationButtons();
-	});
+	};
+	
+	this.resetWizard = function() {
+		
+		// remove the existing handlers
+		$('a[data-toggle="tab"]', $navigation).off('click', innerTabClick);
+		$('a[data-toggle="tab"]', $navigation).off('shown shown.bs.tab', innerTabShown);
+		
+		// reset elements based on current state of the DOM
+		$navigation = element.find('ul:first', element);
+		$activeTab = $navigation.find(baseItemSelector + '.active', element);
+		
+		// re-add handlers
+		$('a[data-toggle="tab"]', $navigation).on('click', innerTabClick);
+		$('a[data-toggle="tab"]', $navigation).on('shown shown.bs.tab', innerTabShown);
+		
+		obj.fixNavigationButtons();
+	};
+
+	$navigation = element.find('ul:first', element);
+	$activeTab = $navigation.find(baseItemSelector + '.active', element);
+
+	if(!$navigation.hasClass($settings.tabClass)) {
+		$navigation.addClass($settings.tabClass);
+	}
+
+	// Load onInit
+	if($settings.onInit && typeof $settings.onInit === 'function'){
+		$settings.onInit($activeTab, $navigation, 0);
+	}
+
+	// Load onShow
+	if($settings.onShow && typeof $settings.onShow === 'function'){
+		$settings.onShow($activeTab, $navigation, obj.nextIndex());
+	}
+
+	$('a[data-toggle="tab"]', $navigation).on('click', innerTabClick);
+
+	// attach to both shown and shown.bs.tab to support Bootstrap versions 2.3.2 and 3.0.0
+	$('a[data-toggle="tab"]', $navigation).on('shown shown.bs.tab', innerTabShown);
+
+	this.fixNavigationButtons();
 };
 $.fn.bootstrapWizard = function(options) {
 	//expose methods

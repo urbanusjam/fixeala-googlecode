@@ -1,3 +1,4 @@
+
 	<script type="text/javascript">    
 		$(document).ready(function(){
 			
@@ -78,33 +79,103 @@
 				
 			<div id="issueFormWizard">
 				
-				<!-- STEPY WIZARD -->	
+				
 					
 					<form id="issueWizard"  method="POST" class="form-issue form-horizontal">
 							
-							<div id="bar" class="progress progress-info progress-striped active" style="width:316px; margin-bottom:25px">
-	  							<div class="bar"></div>
-							</div>
+						<!-- begin STEPY WIZARD -->	
+							
+<!-- 							<div id="bar" class="progress progress-info progress-striped active" style="width:316px; margin-bottom:25px"> -->
+<!-- 	  							<div class="bar"></div> -->
+<!-- 							</div> -->
 					
-							<fieldset title="1. Ubicaci&oacute;n">	
-							<legend></legend>												
-									<input type="hidden" id="latitude" name="latitude"  />
-									<input type="hidden" id="longitude" name="longitude" />													
-									<input type="text" id="address" name="address" onfocus="geolocate()" autocomplete="off" placeholder="Direcci&oacute;n (calle y altura)" />	
-<!-- 									<input type="text" id="address" name="address" placeholder="Direcci�n (calle y altura)" />			 -->
-									<input type="text" id="neighborhood" name="neighborhood" placeholder="Barrio (opcional)"/>										
-									<input type="text" id="locality" name="city" placeholder="Ciudad" />		
-									<input type="text" id="administrative_area_level_1" name="province" placeholder="Provincia"/>							
-							</fieldset>
+<!-- 							<fieldset title="1. Ubicaci&oacute;n">	 -->
+<!-- 							<legend></legend>												 -->
+<!-- 									<input type="hidden" id="latitude" name="latitude"  /> -->
+<!-- 									<input type="hidden" id="longitude" name="longitude" />													 -->
+<!-- 									<input type="text" id="address" name="address" onfocus="geolocate()" autocomplete="off" placeholder="Direcci&oacute;n (calle y altura)" />	 -->
+<!-- 									<input type="text" id="neighborhood" name="neighborhood" placeholder="Barrio (opcional)"/>										 -->
+<!-- 									<input type="text" id="locality" name="city" placeholder="Ciudad" />		 -->
+<!-- 									<input type="text" id="administrative_area_level_1" name="province" placeholder="Provincia"/>							 -->
+<!-- 							</fieldset> -->
 							
-							<fieldset title="2. Detalles">
-							<legend></legend>				
-								<input type="text" id="title" name="title" placeholder="T&iacute;tulo"/>
-								<textarea rows="5" id="description" name="description" placeholder="Descripci&oacute;n..."></textarea>	
-							</fieldset>
+<!-- 							<fieldset title="2. Detalles"> -->
+<!-- 							<legend></legend>				 -->
+<!-- 								<input type="text" id="title" name="title" placeholder="T&iacute;tulo"/> -->
+<!-- 								<textarea rows="5" id="description" name="description" placeholder="Descripci&oacute;n..."></textarea>	 -->
+<!-- 							</fieldset> -->
 							
-							<fieldset title="3. Imagen">	
-								<legend></legend>	
+<!-- 							<fieldset title="3. Imagen">	 -->
+<!-- 								<legend></legend>	 -->
+<!-- 								<div class="fileupload fileupload-new" data-provides="fileupload" style="display:inline-block"> -->
+<!-- 									<div class="fileupload-new thumbnail" style="width: 304px; height: 150px;"> -->
+<%-- 										<img src="${pageContext.request.contextPath}/resources/images/nopic.png" /> --%>
+<!-- 									</div> -->
+<!-- 									<div class="fileupload-preview fileupload-exists thumbnail" style="height: 150px;min-width:300px;max-width: 200px; max-height: 150px; line-height: 20px;"></div> -->
+									
+<!-- 									<span class="btn fileinput-button" style="line-height:30px; width:auto; font-size:12px"> -->
+<!-- 								        <i class="icon-plus"></i>&nbsp;&nbsp; -->
+<!-- 								        <span>Seleccionar archivo</span>									         -->
+<!-- 								           <input type="file" name="files[]" id="fileupload"> -->
+<!-- 								    </span>									   -->
+<!-- 								</div>	 -->
+<!-- 	   							<input type="hidden" id="tags" name="tags" style="width:300px" class="input-xlarge"  placeholder="Etiquetas"/>       -->
+<!-- 							</fieldset> -->
+<!-- 						<input id="submitIssue" type="submit" class="finish"/> -->
+						
+					<!-- end STEPY WIZARD -->	
+					
+					<!-- begin BOOTSTRAP WIZARD -->
+					
+					<div id="rootwizard" style="margin-top:10px;">
+						<ul>
+						  	<li><a href="#tab1" data-toggle="tab">1. UBICACI&Oacute;N</a></li>
+							<li><a href="#tab2" data-toggle="tab">2. DATOS</a></li>
+							<li><a href="#tab3" data-toggle="tab">3. ARCHIVO</a></li>
+						</ul>
+						<div id="bar" class="progress progress-striped active">
+						  <div class="bar"></div>
+						</div>
+						<div class="tab-content">
+						 	<!-- TAB 1 -->
+						    <div class="tab-pane" id="tab1">
+						     	<input type="hidden" id="latitude" name="latitude"  />
+								<input type="hidden" id="longitude" name="longitude" />											
+								<div class="form-group">
+   	 								<input type="text" class="form-control" name="address" id="address" placeholder="Direcci&oacute;n (calle y altura)" required>
+  								</div>			
+<!-- 								<input type="text" id="address" name="address" onfocus="geolocate()" autocomplete="off" placeholder="Direcci&oacute;n (calle y altura)" />	 -->
+								<div class="form-group">
+									<input type="text" id="neighborhood" name="neighborhood" placeholder="Barrio (opcional)"/>	
+								</div>
+								
+								<div class="form-group">
+									<input type="text" id="locality" name="city" placeholder="Ciudad" required/>		
+								</div>
+								
+								<div class="form-group">
+									<input type="text" id="administrative_area_level_1" name="province" placeholder="Provincia" required/>	
+								</div>
+								
+																	
+									
+								
+								
+													
+						    </div>
+						    <!-- TAB 2 -->
+						    <div class="tab-pane" id="tab2">
+						    	<div class="form-group">
+									<input type="text" id="title" name="title" placeholder="T&iacute;tulo" required/>	
+								</div>
+								<div class="form-group">
+									<textarea rows="5" id="description" name="description" placeholder="Descripci&oacute;n..." required></textarea>	
+								</div>
+						      	
+								
+						    </div>
+						     <!-- TAB 3 -->
+							<div class="tab-pane" id="tab3">
 								<div class="fileupload fileupload-new" data-provides="fileupload" style="display:inline-block">
 									<div class="fileupload-new thumbnail" style="width: 304px; height: 150px;">
 										<img src="${pageContext.request.contextPath}/resources/images/nopic.png" />
@@ -117,14 +188,26 @@
 								           <input type="file" name="files[]" id="fileupload">
 								    </span>									  
 								</div>	
-	   							<input type="hidden" id="tags" name="tags" style="width:300px" class="input-xlarge"  placeholder="Etiquetas"/>      
-							</fieldset>
-						<input id="submitIssue" type="submit" class="finish"/>
+	   							<input type="hidden" id="tags" name="tags" style="width:300px" class="input-xlarge"  placeholder="Etiquetas"/>
+						    </div>
+							<ul class="pager wizard">
+								<li class="previous"><a href="javascript:;"><i class="icon-long-arrow-left"></i>&nbsp;&nbsp;Anterior</a></li>
+							  	<li class="next"><a href="javascript:;">Siguiente&nbsp;&nbsp;<i class="icon-long-arrow-right"></i></a></li>
+							  	<li class="next finish" style="display:none;"><a href="javascript:;">Publicar</a></li>
+							</ul>
+						</div>	
+					</div>
+					
+				<!-- end BOOTSTRAP WIZARD -->
+						
 					</form>
-								
+					
 				</div>			
 				
 				<div class="clearfix"></div>
+				
+				
+				
 				
 				
 	<!-- ROW 2 -->
