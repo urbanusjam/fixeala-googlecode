@@ -474,6 +474,7 @@ legend {
 
 
 
+
 #content { 
 	width: 1180px;	
 	min-height: 100%;
@@ -487,6 +488,7 @@ legend {
 /* 	border: 1px solid #000; */
 }
 
+#content > .container { margin:0;}
 
 
 footer {
@@ -510,11 +512,11 @@ footer {
 	overflow: hidden;
  	width: 1178px; /* border adds 2 pixels to width */
 /* 	width:95%; */
-	height: 460px;
+	height: 470px;
 	/* 	background:#CFCFCF url("../images/mapa.png") no-repeat center; */
 	background-color: #CFCFCF;
 	border: 1px solid #CFCFCF;
-	margin:0 auto;
+	margin:0;
 /* 	margin-bottom: 0; */
 	padding: 0;
 }
@@ -531,13 +533,13 @@ footer {
 
 #issueFormWizard {
 	width: 316px;
-	height: 450px;		
+	height: 460px;		
 	display: none;		
 	overflow: hidden;
 	position: relative;	
 	float: right;	
 	padding: 0 10px 10px 10px;	
-	margin-right: -338px;
+	margin-right: -348px;
 	margin-bottom: 0;
 	background: #fff;
 	border: 1px solid #CFCFCF;
@@ -548,9 +550,6 @@ footer {
 	height: 280px;
 }
 
-#issueForm label {
-	font-weight: bold;
-}
 
 /* .pac-item:hover { */
 /*     background-color: black;  */
@@ -560,34 +559,62 @@ footer {
 	color: #000;
 }
 
+.form-issue label { font-size: 13px; font-weight: bold; }
+
 .form-issue input {
 	width: 306px;
 	height: 30px;
-	margin-bottom: 30px;
+/* 	margin-bottom: 20px; */
 /* 	display: block; */
 }
 
-.form-issue select {
-	width: 170px;
-	height: 40px;
-	margin-bottom: 20px;
-/* 	display: block; */
-	clear: both;
-}
+.form-issue #title, .form-issue #description  { margin: 0;}
+
+.form-issue .form-group { margin-bottom: 20px; }
+
+/* .form-issue select { */
+/* 	width: 170px; */
+/* 	height: 40px; */
+/* 	margin-bottom: 20px; */
+/* 	clear: both; */
+/* } */
 
 .form-issue textarea {
 	width: 306px;
 	height: 170px;
+	margin-bottom: 20px;
 }
+
+.form-issue ul.select2-results {
+ max-height: 100px;
+
+}
+
+ul.select2-results  li.select2-search-choice {
+ height: 20px;
+}
+
+
+.form-issue .select2-choices {
+  min-height: 40px;
+  max-height: 100px;
+  overflow-y: auto;
+   width:310px;
+
+}
+.form-issue .select2-container.input-xlarge { margin-bottom: 20px; }
 
 .form-issue legend {
 	margin-bottom: 20px;
 }
 
-.form-issue .btn {
+.form-issue span.fileinput-button {
 	width: 100px;
-/* 	display: inline; */
-	height: 30px;
+	height: 20px; 
+	line-height:20px; 
+	font-size:12px;
+
+	margin: 0 auto;
 }
 
 .form-issue #btnBackNext {
@@ -606,6 +633,8 @@ footer {
 .form-issue .btn:hover {
 	background-position: 0;
 }
+
+.form-issue .tab-pane {height: 342px; }
 
 #eventTags ul {
 	margin-top: 20px;
@@ -639,27 +668,36 @@ footer {
 	font-size: 12px;
 }
 
-	
-input.error, textarea.error, select.error {
+
+.error {
 	color: red;
-	border: 1px solid red;
+/* 	border: 1px solid #FF0000; */
 }
+	
+/* input.error, textarea.error, select.error { */
+/* 	color: red; */
+/* 	border: 1px solid #FF0000; */
+/* } */
 
-label.valid {
-	width: 24px;
-	height: 24px;
-	background: url(../images/tick.png) center center no-repeat;
-	display: inline-block;
-	text-indent: -9999px;
-}
+/* label.valid { */
+/* 	width: 24px; */
+/* 	height: 24px; */
+/* 	background: url(../images/tick.png) center center no-repeat; */
+/* 	display: inline-block; */
+/* 	text-indent: -9999px; */
+/* } */
 
-label.error { /* 	    font-weight: bold; */
-	/* 	    color: red;   */
-	/* 	    padding: 2px 8px; */
-	/* 	    margin-top: 2px;	   */
-	/* 	    border:1px solid red; */
-	display: none;
-}
+/* label.error {  */
+/* 	font-weight: bold;  */
+/*     color: red;   */
+/*     margin: 0;	   */
+/*     font-size: 85%; */
+/* } */
+/* .error-container { 	    */
+/*     margin: 0;	   */
+/*     height: 20px;	 */
+/*     display:block; */
+/* } */
 
 a.accordion-toggle:hover {
 	text-decoration: none;

@@ -7,13 +7,17 @@ var init_coord = new google.maps.LatLng(-34.599722, -58.381944);
 var initMarker;
 var markers = [];
 
+var address;
+
 var placeSearch, autocomplete;
-var component_form = {
-  'street_number': 'short_name',		
-  'neighborhood': 'short_name',
-  'locality': 'long_name',
-  'administrative_area_level_1': 'long_name'
-};
+var componentForm = {
+		  street_number: 'short_name',
+		  route: 'long_name',
+		  neighborhood: 'long_name',
+		  locality: 'long_name',
+		  administrative_area_level_1: 'short_name'
+		};
+
 
 $(document).ready(function(){	
 	
@@ -33,14 +37,14 @@ $(document).ready(function(){
        
 
 		//AUTOCOMPLETE
-		var pac_input = document.getElementById('address');
+		var pac_input = document.getElementById('route');
 		var options = {
 				 		types: [ 'geocode' ],        		
 				 		componentRestrictions: {country: "ar"}
 				 	};
 		
 		// prevents enter key to submit form//	
-		$('#address').keydown(function (e) {
+		$('#route').keydown(function (e) {
 		  if (e.which == 13 && $('.pac-container:visible').length) return false;
 		});	
 		// prevents enter key to submit form//
@@ -101,16 +105,21 @@ $(document).ready(function(){
 	    google.maps.event.addListener(autocomplete, 'place_changed', function(e) {	   
 	    	fillInAddress();	
 	    	var arr = [];
-	    	arr = ($('#address').val()).split(",");
-	    	setTimeout(function(){$('#address').val(arr[0]);},0);
+	    	arr = ($('#route').val()).split(",");
+	    	setTimeout(function(){$('#route').val(arr[0]);},0);
 	    });
 	    
 	   
         //SET MARKER COORDINATES ON MAP CLICK
-        google.maps.event.addListener(map, 'click', function(e) {	         	
-        	if( $("#btnIssue").hasClass('active') ){
-        		getAddressOnMapClick(e.latLng);
-        	}        
+        google.maps.event.addListener(map, 'click', function(e) {	
+        	
+        	if($("#tab1").hasClass("active")){
+        		if( $("#btnIssue").hasClass('active') ){
+            		getAddressOnMapClick(e.latLng);
+            	}    
+        	}
+        	
+            
         });         
        
 	       
@@ -137,44 +146,32 @@ $(document).ready(function(){
 //end AUTOCOMPLETE
 
 function fillInAddress() {
+	
     var place = autocomplete.getPlace();
    
-    for (var component in component_form) {
+    for (var component in componentForm) {
       document.getElementById(component).value = "";
       document.getElementById(component).disabled = false;
     }
  
-    var result = place.address_components;
-    console.log(result);
-    if(result == null){
-      	alert("No se encontraron resultados");
-        return false;        
-    }
+	for (var i = 0; i < place.address_components.length; i++) {
+		
+		var addressType = place.address_components[i].types[0];
+	   
+	      if(componentForm[addressType]) {
+	    	  
+	    	  var val = place.address_components[i][componentForm[addressType]];
+	         	        
+	    	  if(addressType == 'administrative_area_level_1' && val == 'Ciudad Autónoma de Buenos Aires')
+	    		  val = 'Buenos Aires';
+	    	  else if(addressType == 'locality' && val == 'Buenos Aires')
+	    		  val = 'Ciudad Autónoma de Buenos Aires';
+	        
+	        document.getElementById(addressType).value = val;       
+	        
+	      }    	    
+	}     	
  
-    // hay resultados
-    else{
-    	for (var j = 0; j < result.length; j++) {
-    		
-    	      var att = result[j].types[0];
-    	 
-    	      if (component_form[att]) {
-    	        var val = result[j][component_form[att]];
-    	        
-    	        if(att == 'administrative_area_level_1' && val == 'Ciudad Autónoma de Buenos Aires')
-    	        	val = 'Buenos Aires';
-    	        else if(att == 'locality' && val == 'Buenos Aires')
-    	        	val = 'Ciudad Autónoma de Buenos Aires';
-    	        
-    	        document.getElementById(att).value = val;
-    	       
-    	        
-    	      }    	    
-    	}   
-    	
-    
-    }
-	
-    
     
 }
     
@@ -355,11 +352,6 @@ function loadMarkers(map){
 }
  
 
-
-function callback(value){ return value; }
-
-
-
 function getClosestMarkersByIssue(location){
 	
 	var markers, closestMarkers = [] ; 
@@ -503,61 +495,59 @@ function geocodeAddress(callback){
 		 country: "AR"			
 	 } 
 	 
-	var result = false;
 	
-	 geocoder.geocode(geocoderRequest, function(results, status) { 
-		 var result = false;
-		 //OK
-		 if (status == google.maps.GeocoderStatus.OK) {
-		        	
-		        	var locationType = results[0].geometry.location_type;
-		        	
-		        	console.log(locationType);
-		        	
-		        		if(locationType === "RANGE_INTERPOLATED" || locationType == "ROOFTOP"){		
-			        		var latLng = results[0].geometry.location;		        	
-			        		$("#latitude").val(latLng.lat());
-							$("#longitude").val(latLng.lng());
-							result = true;
-			        	}			        	
-					   
-//		        		else if(locationType == "APPROXIMATE"){		
-//					    	
-//					    	addressFound = false;
-//
-//			        	}
-//			        	
-//		        		else if(locationType == "GEOMETRIC_CENTER"){
-//
-//					    	addressFound = false;
-//
-//			        			
-//			        	}
-		        	
-
-			        	
-		        	
-		        		
-		 }
-		 /**
-		 //ZERO RESULTS
-		 else if (status == google.maps.GeocoderStatus.ZERO_RESULTS) { 
+	
+			 geocoder.geocode(geocoderRequest, function(results, status) { 
 			
-			 addressFound = false;
-		 }   		
-		 
-		 //OTHER
-		 else if ( (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) 
-				 || (status == google.maps.GeocoderStatus.REQUEST_DENIED)
-				 || (status == google.maps.GeocoderStatus.INVALID_REQUEST)
-				 || (status == google.maps.GeocoderStatus.UNKNOWN_ERROR ) ){    		 
-			 addressFound = false;  
-		 }**/
-		 
-		
-		
-	 });//geocoder
-	 callback(result);
+				 //OK
+				 if (status == google.maps.GeocoderStatus.OK) {
+				        	
+				        	var locationType = results[0].geometry.location_type;
+				        	address = results[0].geometry;
+				        	
+				        	
+		//		        		if(locationType === "RANGE_INTERPOLATED" || locationType == "ROOFTOP"){		
+		//			        		var latLng = results[0].geometry.location;		        	
+		//			        		$("#latitude").val(latLng.lat());
+		//							$("#longitude").val(latLng.lng());
+		//							result = true;
+		//			        	}			        	
+		//					   
+		//		        		else if(locationType == "APPROXIMATE"){		
+		//					    	
+		//					    	addressFound = false;
+		//
+		//			        	}
+		//			        	
+		//		        		else if(locationType == "GEOMETRIC_CENTER"){
+		//
+		//					    	addressFound = false;
+		//
+		//			        			
+		//			        	}
+				 }
+				 
+				 
+			
+				 /**
+				 //ZERO RESULTS
+				 else if (status == google.maps.GeocoderStatus.ZERO_RESULTS) { 
+					
+					 addressFound = false;
+				 }   		
+				 
+				 //OTHER
+				 else if ( (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) 
+						 || (status == google.maps.GeocoderStatus.REQUEST_DENIED)
+						 || (status == google.maps.GeocoderStatus.INVALID_REQUEST)
+						 || (status == google.maps.GeocoderStatus.UNKNOWN_ERROR ) ){    		 
+					 addressFound = false;  
+				 }**/
+				 
+				
+				
+			 });//geocoder
+	
 	
 } 
 
@@ -701,10 +691,15 @@ function hasAddressTypes(results) {
             			 draggable: true,            			
             			 position: results[0].geometry.location
             		}); 
-        		 
-            		 google.maps.event.addListener(initMarker, 'dragend', function(e) {
-            				 getAddressOnMapClick(e.latLng); 
-             	  	});  
+            		
+            	
+            		 
+            		
+        			 google.maps.event.addListener(initMarker, 'dragend', function(e) {
+        				 getAddressOnMapClick(e.latLng); 
+        			 }); 
+            		
+            		  
 				
 				
 			

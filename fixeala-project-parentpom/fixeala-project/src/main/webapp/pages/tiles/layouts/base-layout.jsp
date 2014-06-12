@@ -165,50 +165,69 @@ path:hover {
 			var flag = 0;
 			/****** BOOTSTRAP WIZARD ******/
 			
+			function enableDisableDraggableMarker(marker, tabIndex){
+				
+				if(marker != null){
+					if(tabIndex==0)
+						marker.setOptions({draggable:true});			
+					else
+						marker.setOptions({draggable:false});			
+				}
+			
+			}
+			
 			$('#rootwizard').bootstrapWizard({
 				
-				onNext: function(tab, navigation, index) {
-					
+				onPrevious: function(tab, navigation, index){	
+					enableDisableDraggableMarker(initMarker, index);
+		  		},				
+				onNext: function(tab, navigation, index) {					
 				
 					var $valid = $("#issueWizard").valid();
-		  			if(!$valid) {
-		  				alert('not');
+		  			
+					if(!$valid) {		  			
 		  				$issueValidator.focusInvalid();
 		  				return false;
 		  			}
 		  			
-		  		
-					geocodeAddress(function(result) { 
-					
-						if(result){flag = 1;}
-							
-// 				    		bootbox.alert("Especifique una direcci&oacute;n v&aacute;lida.");
+		  			enableDisableDraggableMarker(initMarker, index);
 	
-					});	
-
-					alert(flag);
-					if(flag == 0){ return false; }
-			    	
-		  			return true;
-		  			
-// 					if(index==2) {
-// 						// Make sure we entered the name
-// 						if(!$('#name').val()) {
-// 							alert('You must enter your name');
-// 							$('#name').focus();
-// 							return false;
-// 						}
-// 					}
-// 					// Set the name for the next tab
-// 					$('#tab3').html('Hello, ' + $('#name').val());
-					
+		  			if(index == 1){		  				
+		  				
+		  				// BLOCK UI
+		  	            $("#issueFormWizard").block({ 
+			  	        		message: "Procesando...<br><img src=\"${pageContext.request.contextPath}/resources/images/loader.gif\"/>",
+			  	            	overlayCSS:  { 
+			  	                   backgroundColor: '#000', 
+			  	                   opacity:         0.1, 
+			  	                   cursor:          'wait' 
+			  	                },
+			  	               	css: { 
+				  	               padding:        5, 
+				  	               margin:         0, 
+				  	               width:          '200px', 		  	            
+				  	               textAlign:      'center', 
+				  	               color:          '#000', 
+				  	               border:         '0px solid #aaa', 
+				  	               backgroundColor:'#fff', 
+				  	               cursor:         'wait' 
+			  	           		}
+		  	            }); 
+		  	 
+		  	          setTimeout(function(){  $("#issueFormWizard").unblock(); },2000);	
+		  	            
+		  	         
+		  				
+		  			}
+		  		
+				
 				}, 
 				onTabShow: function(tab, navigation, index) {
 					
 					var $total = navigation.find('li').length;
 					var $current = index+1;
 					var $percent = ($current/$total) * 100;
-					$('#rootwizard').find('.bar').css({width:$percent+'%'});
+// 					$('#rootwizard').find('.bar').css({width:$percent+'%'});
 					
 					// If it's the last tab then hide the last button and show the finish instead
 					if($current >= $total) {
@@ -228,7 +247,7 @@ path:hover {
 				}});
 				$('#rootwizard .finish').click(function() {
 					if( $("#tags").val() == ""){
-						bootbox.alert("Debe especificar al menos una etiqueta.");						
+						bootbox.alert("Debe especificar al menos una categor&iacute;a.");						
 					}
 					
 					else{
@@ -279,19 +298,7 @@ path:hover {
 					}
 					return false;
 				});
-			
-			
-// 			$("#tags").select2({
-// 				tags: ${allTags},
-// 				tokenSeparators: [",", " "],
-// 				   id: function (item) {
-// 		                return item.text;
-// 				   }
-// 			});
-		 	
-		
-							
-			
+
 			 var query = "?issue=%QUERY";
 			
 			 window.localStorage.clear()
@@ -596,23 +603,32 @@ path:hover {
 			    }, 3000);
 			}  
 	
+			
+			
+
+			//sin caracteres especiales
+			$.validator.addMethod("titleCheck",function(value){
+				var pattern = /^\s*[a-zA-Z0-9,\s]+\s*$/;
+				return pattern.test(value);
+			},  "Formato no v&aacute;lido.");
 
 			var $issueValidator = $("#issueWizard").validate({	
-// 					ignore: ".ignore, .select2-input",
 					rules: {
-			 			address: { required: true},					 		
-			 			city: { required: true},		
-			 			province: { required: true},		
-	 				    title: { required: true, maxlength: 50},				    
-	 				    description: { required: true, maxlength: 300}
+			 			route: { required: true },	
+			 			street_number: { required: true },
+// 			 			city: { required: true },		
+			 			province: { required: true },		
+			 			formTitle: { titleCheck: true },				    
+	 				    formDescription: { required: true }
 	 				  
 	 				  },
 	 			    messages: {
-	 			    	  address: { required : 'Este campo es requerido.'},			 			    
-	 			    	  city: { required : 'Este campo es requerido.' },	
-	 			    	  province: { required : 'Este campo es requerido.' },
-	 					  title: { required : 'Este campo es requerido.', maxlength: 'El m&aacute;ximo es de 50 caracteres.' },
-	 					  description: { required : 'Este campo es requerido.' , maxlength: 'El m&aacute;ximo es de 300 caracteres'}
+	 			    	  route: { required : 'Campo obligatorio.'},	
+	 			    	  street_number: { required : 'Campo obligatorio.' },
+	 			    	  city: { required : 'Campo obligatorio.' },	
+	 			    	  province: { required : 'Campo obligatorio.' },
+// 	 			    	  title: { required : 'Este campo es requerido.', titleCheck: 'sss'},
+	 					  formDescription: { required : 'Campo obligatorio.' }
 	 				},
 // 	 				highlight: function (element) { 
 // 	 			        $(element).addClass("error"); 
@@ -620,11 +636,9 @@ path:hover {
 		 	    	
 // 	 			    unhighlight: function (element) { 
 // 	 			        $(element).removeClass("error"); 
-// 	 			    },
+//  	 			    } ,
 	 		 		errorPlacement: function (error, element) {
-// 	 		            $(element).tooltipster('update', $(error).text());
-// 	 		            $(element).tooltipster('show');	
-	 		           $(element).addClass("error"); 
+	 		            $(element).addClass("error");
 	  		        }
 			});
 			
@@ -817,10 +831,31 @@ path:hover {
 				
 			}
                        
+          function clear(){
+        	  $("#route").val("");
+        	  $("#street_number").val("");
+        	  $("#neighborhood").val("");
+        	  $("#locality").val("");
+        	  $("#administrative_area_level_1").val("");
+        	  $("#title").val("");
+        	  $("#description").val("");
+        	  $("#tags").val("");
+          }
+     
+    
             
             $('#btnIssue').click(function(){ 
             	
-            	var $issueBox = $("#issueFormWizard");            	
+            	
+            	
+            	var $issueBox = $("#issueFormWizard");  
+            	
+            	if( parseInt($("#map_canvas").css('width')) == 1178 ){
+            		clear();
+            		var baseItemSelector = 'li:has([data-toggle="tab"])';
+            		$('#rootwizard').find(baseItemSelector + ':first');
+            	}
+            		
             	            	
             	 $issueBox.animate({
                      width: "toggle",
@@ -839,9 +874,7 @@ path:hover {
             });
             
 			$('#btnAdvancedSearch').click(function(){ 
-                        	
-            	 $("#searchFilters").slideToggle('slow');
-  
+            	 $("#searchFilters").slideToggle('slow');  
             	
             });
             
