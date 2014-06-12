@@ -2,13 +2,54 @@
 	<script type="text/javascript">    
 		$(document).ready(function(){
 			
-			$("#tags").select2({
+			$("#tags").select2({				
+				placeholder: 'Seleccione una etiqueta...',
+				maximumSelectionSize: 5,
 				tags: ${allTags},
+				multiple: true,			
 				tokenSeparators: [",", " "],
-				   id: function (item) {
-		                return item.text;
-				   }
-			});
+			   	id: function (item) {
+	                return item.text;
+			   	},  		
+				createSearchChoice:function(term, data) {
+					  if ($(data).filter(function() {
+					    return this.text.localeCompare(term)===0;
+					  }).length!=0) {
+						  //return {id:term, text:term};
+						  return false;
+					  }
+					},
+				formatNoMatches: function(term){ 
+						return "No se encontraron resultados.";
+				},		
+				formatSelectionTooBig : function(term){ 
+					return 'S&oacute;lo se permiten 5 etiquetas.'; 
+				}
+			});	
+			
+			//limit counter
+			$.fn.extend( {
+		        limiter: function(limit, elem) {
+		            $(this).on("keyup focus", function() {
+		                setCount(this, elem);
+		            });
+		            function setCount(src, elem) {
+		                var chars = src.value.length;
+		                if (chars > limit) {
+		                    src.value = src.value.substr(0, limit);
+		                    chars = limit;
+		                }
+		                elem.html( limit - chars + " / " + limit );
+		            }
+		            setCount($(this)[0], elem);
+		        }
+		    });
+			
+			//init limit conter
+			var elemTitle = $(".titleCounter");
+			var elemDesc = $(".descCounter");
+			$(".formTitle").limiter(80, elemTitle);
+			$(".formDescription").limiter(350, elemDesc);
 			
 		});
 	</script>
@@ -81,50 +122,8 @@
 				
 				
 					
-					<form id="issueWizard"  method="POST" class="form-issue form-horizontal">
-							
-						<!-- begin STEPY WIZARD -->	
-							
-<!-- 							<div id="bar" class="progress progress-info progress-striped active" style="width:316px; margin-bottom:25px"> -->
-<!-- 	  							<div class="bar"></div> -->
-<!-- 							</div> -->
-					
-<!-- 							<fieldset title="1. Ubicaci&oacute;n">	 -->
-<!-- 							<legend></legend>												 -->
-<!-- 									<input type="hidden" id="latitude" name="latitude"  /> -->
-<!-- 									<input type="hidden" id="longitude" name="longitude" />													 -->
-<!-- 									<input type="text" id="address" name="address" onfocus="geolocate()" autocomplete="off" placeholder="Direcci&oacute;n (calle y altura)" />	 -->
-<!-- 									<input type="text" id="neighborhood" name="neighborhood" placeholder="Barrio (opcional)"/>										 -->
-<!-- 									<input type="text" id="locality" name="city" placeholder="Ciudad" />		 -->
-<!-- 									<input type="text" id="administrative_area_level_1" name="province" placeholder="Provincia"/>							 -->
-<!-- 							</fieldset> -->
-							
-<!-- 							<fieldset title="2. Detalles"> -->
-<!-- 							<legend></legend>				 -->
-<!-- 								<input type="text" id="title" name="title" placeholder="T&iacute;tulo"/> -->
-<!-- 								<textarea rows="5" id="description" name="description" placeholder="Descripci&oacute;n..."></textarea>	 -->
-<!-- 							</fieldset> -->
-							
-<!-- 							<fieldset title="3. Imagen">	 -->
-<!-- 								<legend></legend>	 -->
-<!-- 								<div class="fileupload fileupload-new" data-provides="fileupload" style="display:inline-block"> -->
-<!-- 									<div class="fileupload-new thumbnail" style="width: 304px; height: 150px;"> -->
-<%-- 										<img src="${pageContext.request.contextPath}/resources/images/nopic.png" /> --%>
-<!-- 									</div> -->
-<!-- 									<div class="fileupload-preview fileupload-exists thumbnail" style="height: 150px;min-width:300px;max-width: 200px; max-height: 150px; line-height: 20px;"></div> -->
-									
-<!-- 									<span class="btn fileinput-button" style="line-height:30px; width:auto; font-size:12px"> -->
-<!-- 								        <i class="icon-plus"></i>&nbsp;&nbsp; -->
-<!-- 								        <span>Seleccionar archivo</span>									         -->
-<!-- 								           <input type="file" name="files[]" id="fileupload"> -->
-<!-- 								    </span>									   -->
-<!-- 								</div>	 -->
-<!-- 	   							<input type="hidden" id="tags" name="tags" style="width:300px" class="input-xlarge"  placeholder="Etiquetas"/>       -->
-<!-- 							</fieldset> -->
-<!-- 						<input id="submitIssue" type="submit" class="finish"/> -->
-						
-					<!-- end STEPY WIZARD -->	
-					
+					<form id="issueWizard"  method="POST" class="form-issue form-horizontal form-inline">
+
 					<!-- begin BOOTSTRAP WIZARD -->
 					
 					<div id="rootwizard" style="margin-top:10px;">
@@ -133,69 +132,88 @@
 							<li><a href="#tab2" data-toggle="tab">2. DATOS</a></li>
 							<li><a href="#tab3" data-toggle="tab">3. ARCHIVO</a></li>
 						</ul>
-						<div id="bar" class="progress progress-striped active">
-						  <div class="bar"></div>
-						</div>
+						<hr>
+<!-- 						<div id="bar" class="progress progress-striped active"> -->
+<!-- 						  <div class="bar"></div> -->
+<!-- 						</div> -->
 						<div class="tab-content">
 						 	<!-- TAB 1 -->
 						    <div class="tab-pane" id="tab1">
 						     	<input type="hidden" id="latitude" name="latitude"  />
 								<input type="hidden" id="longitude" name="longitude" />											
+								
 								<div class="form-group">
-   	 								<input type="text" class="form-control" style="width: 190px;" name="address" id="address" placeholder="Calle" required>
-   	 								
-   	 								<input type="text" class="form-control" style="width: 90px;float: right;" name="street_number" id="street_number" placeholder="Altura" required>
+									<div class="row">
+										<span class="span2" style="width:190px;margin:0;">
+											<label>Calle *</label>
+	   	 									<input type="text" class="form-control" style="width: 190px;" name="route" id="route" required>
+	   	 								
+	   	 								</span>
+	   	 								<span class="span1 pull-right">
+	   	 									<label style="border: 0px solid blue;width:90px; margin-left: -30px">Altura *</label>
+	   	 									<input type="text" class="form-control" style="width: 90px; float:right;" name="street_number" id="street_number" required>
+	   	 								</span>
+   	 								</div>
   								</div>			
-<!-- 								<input type="text" id="address" name="address" onfocus="geolocate()" autocomplete="off" placeholder="Direcci&oacute;n (calle y altura)" />	 -->
+
 								<div class="form-group">
-									<input type="text" id="neighborhood" name="neighborhood" placeholder="Barrio (opcional)"/>	
+									<label>Barrio (opcional)</label>
+									<input type="text" id="neighborhood" name="neighborhood"/>	
 								</div>
 								
 								<div class="form-group">
-									<input type="text" id="locality" name="city" placeholder="Ciudad" required/>		
+									<label>Ciudad *</label>
+									<input type="text" id="locality" name="city" required/>		
 								</div>
 								
 								<div class="form-group">
-									<input type="text" id="administrative_area_level_1" name="province" placeholder="Provincia" required/>	
-								</div>
-								
-																	
-									
-								
-								
-													
+									<label>Provincia *</label>
+									<input type="text" id="administrative_area_level_1" name="province" required>	
+								</div>																													
 						    </div>
+						    
 						    <!-- TAB 2 -->
 						    <div class="tab-pane" id="tab2">
 						    	<div class="form-group">
-									<input type="text" id="title" name="title" placeholder="T&iacute;tulo" required/>	
+						    		<label>T&iacute;tulo *</label><i class="icon-question-sign pull-right"></i>
+									<input type="text" id="title" class="formTitle" name="formTitle" placeholder="S&oacute;lo letras, n&uacute;meros y espacios..." required>	
+									<small><span class="titleCounter pull-right"></span></small>
 								</div>
 								<div class="form-group">
-									<textarea rows="5" id="description" name="description" placeholder="Descripci&oacute;n..." required></textarea>	
-								</div>
-						      	
-								
+									<label>Descripci&oacute;n *</label>
+									<textarea rows="5" id="description"  class="formDescription" name="formDescription"></textarea>	
+									<small><span class="descCounter pull-right"></span></small>
+								</div>												      	
 						    </div>
+						    
 						     <!-- TAB 3 -->
 							<div class="tab-pane" id="tab3">
+							
+								<label>Categor&iacute;a *</label>
+	   							<input type="hidden" id="tags" name="tags" style="width:300px" class="input-xlarge" required/>
+								
+								<label>Foto (opcional)</label>
 								<div class="fileupload fileupload-new" data-provides="fileupload" style="display:inline-block">
-									<div class="fileupload-new thumbnail" style="width: 304px; height: 150px;">
+									<div class="fileupload-new thumbnail" style="width: 304px; height: 100px;">
 										<img src="${pageContext.request.contextPath}/resources/images/nopic.png" />
 									</div>
-									<div class="fileupload-preview fileupload-exists thumbnail" style="height: 150px;min-width:300px;max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+									<div class="fileupload-preview fileupload-exists thumbnail" style="height: 100px;min-width:300px;max-width: 200px; max-height: 100px; line-height: 20px;"></div>
 									
-									<span class="btn fileinput-button" style="line-height:30px; width:auto; font-size:12px">
-								        <i class="icon-plus"></i>&nbsp;&nbsp;
-								        <span>Seleccionar archivo</span>									        
+									<span class="btn fileinput-button">
+								        <i class="icon-upload icon-large"></i>&nbsp;&nbsp;
+								        <span>Subir archivo</span>									        
 								           <input type="file" name="files[]" id="fileupload">
 								    </span>									  
 								</div>	
-	   							<input type="hidden" id="tags" name="tags" style="width:300px" class="input-xlarge"  placeholder="Etiquetas"/>
+								
+								
 						    </div>
-							<ul class="pager wizard">
+						    
+						    <!-- BUTTONS -->
+							<ul class="pager wizard" style="margin-top: 0; border: 0px solid blue;">
 								<li class="previous"><a href="javascript:;"><i class="icon-long-arrow-left"></i>&nbsp;&nbsp;Anterior</a></li>
 							  	<li class="next"><a href="javascript:;">Siguiente&nbsp;&nbsp;<i class="icon-long-arrow-right"></i></a></li>
-							  	<li class="next finish" style="display:none;"><a href="javascript:;">Publicar</a></li>
+							  	<li class="next finish" style="display:none;"><a href="javascript:;"><i class="icon-ok"></i>&nbsp;&nbsp;Publicar</a></li>
 							</ul>
 						</div>	
 					</div>
