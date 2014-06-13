@@ -341,7 +341,7 @@ ul#loginNav li.signupLink a:hover {
 }
 
 #btnIssue {
-	width: 273px;
+	width: 336px;
 	height: 40px;
 	font-size: 14px !important;
 	letter-spacing: 1px;
@@ -488,7 +488,7 @@ legend {
 /* 	border: 1px solid #000; */
 }
 
-#content > .container { margin:0;}
+#content > .container { margin:0; }
 
 
 footer {
@@ -508,6 +508,7 @@ footer {
 
 
 #map_canvas {
+	position: relative;
 	float: left;
 	overflow: hidden;
  	width: 1178px; /* border adds 2 pixels to width */
@@ -531,7 +532,7 @@ footer {
 
 
 
-#issueFormWizard {
+#issueFormWizard {position: relative;
 	width: 316px;
 	height: 460px;		
 	display: none;		
@@ -539,7 +540,7 @@ footer {
 	position: relative;	
 	float: right;	
 	padding: 0 10px 10px 10px;	
-	margin-right: -348px;
+	margin-right: -338px;
 	margin-bottom: 0;
 	background: #fff;
 	border: 1px solid #CFCFCF;
@@ -581,8 +582,7 @@ footer {
 
 .form-issue textarea {
 	width: 306px;
-	height: 170px;
-	margin-bottom: 20px;
+	height: 170px;	
 }
 
 .form-issue ul.select2-results {
@@ -1042,7 +1042,7 @@ input[type="text"],input[type="password"],.ui-autocomplete-input,textarea,.unedi
 #cbxProvincias {
 	position: relative;
 	left: 0;
-	top: 40px;
+	top: 6px;
 	z-index: 9;
 	float: right;
 	margin-right: 115px;

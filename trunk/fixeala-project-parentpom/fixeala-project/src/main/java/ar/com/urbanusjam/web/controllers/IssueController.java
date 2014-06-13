@@ -14,6 +14,7 @@ import java.util.Random;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.WordUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -490,6 +491,9 @@ public class IssueController {
 				//user is logged-in
 				else{
 					
+					String capitalize = WordUtils.capitalize(issue.getTitle());
+					issue.setTitle(capitalize);
+					
 					Random generator = new Random(); 
 					int idIssue = generator.nextInt(100000) + 1000;
 									
@@ -500,13 +504,7 @@ public class IssueController {
 					issue.setStatus(IssueStatus.OPEN);		
 					issue.setUser(userDTO);			
 					issue.setId(String.valueOf(idIssue));	
-				
-					//REVISAR
-					if(issue.getProvince().equals("Ciudad Autónoma de Buenos Aires")){
-						issue.setCity("Ciudad Autónoma de Buenos Aires");
-						issue.setProvince("Buenos Aires");
-					}
-										
+							
 					IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
 					revision.setFecha(new Date());
 					revision.setUsername(userDTO.getUsername());	

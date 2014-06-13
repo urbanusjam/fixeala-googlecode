@@ -1,190 +1,531 @@
 // Enable the visual refresh
 google.maps.visualRefresh = true; 
 
+var isAnimating = false; 
+var mapTimesClicked = 0;
+var autocompleteCalls = 0;
 var map;
 var init_coord = new google.maps.LatLng(-34.599722, -58.381944);
-
 var initMarker;
 var markers = [];
-
-var address;
-
 var placeSearch, autocomplete;
 var componentForm = {
-		  street_number: 'short_name',
-		  route: 'long_name',
+//		  street_number: 'short_name',
+//		  route: 'long_name',
 		  neighborhood: 'long_name',
 		  locality: 'long_name',
-		  administrative_area_level_1: 'short_name'
+		  administrative_area_level_1: 'long_name'
 		};
 
+/**************************************************************************************************/
 
-$(document).ready(function(){	
+$(document).ready(function(){		
+	 var geocoder;		 	
+	 
+	 google.maps.event.addDomListener(window, 'load', initMap);  	 
+ });
+
+
+function initMap() {
 	
-	 var geocoder;	
-	 
-	 function initialize() {
-
-        var mapOptions = {
-          center: init_coord,
-          zoom: 12,
-          mapTypeId: google.maps.MapTypeId.ROADMAP,
-          mapTypeControl: true,
-          scrollwheel: false
-        };
-        
-        map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
-       
-
-		//AUTOCOMPLETE
-		var pac_input = document.getElementById('route');
-		var options = {
-				 		types: [ 'geocode' ],        		
-				 		componentRestrictions: {country: "ar"}
-				 	};
-		
-		// prevents enter key to submit form//	
-		$('#route').keydown(function (e) {
-		  if (e.which == 13 && $('.pac-container:visible').length) return false;
-		});	
-		// prevents enter key to submit form//
-
-		// pick first item when list opens//	
-		    if (!$('.pac-container').is(':visible')) {
-		  $('#address').val($('.pac-container').find('.pac-item').eq(0).text());
-		  
-		  $('.pac-container').find('.pac-item').eq(0).addClass('.pac-item-selected');
-		
-		
-		}      
-		    
-		    (function pacSelectFirst(input){
-		        // store the original event binding function
-		        var _addEventListener = (input.addEventListener) ? input.addEventListener : input.attachEvent;
-
-		        function addEventListenerWrapper(type, listener) {
-		        // Simulate a 'down arrow' keypress on hitting 'return' when no pac suggestion is selected,
-		        // and then trigger the original listener.
-
-		        if (type == "keydown") {
-		          var orig_listener = listener;
-		          listener = function (event) {
-		            var suggestion_selected = $(".pac-item.pac-selected").length > 0;
-		            if (event.which == 13 && !suggestion_selected) {
-		              var simulated_downarrow = $.Event("keydown", {keyCode:40, which:40})
-		              orig_listener.apply(input, [simulated_downarrow]);
-		            }
-
-		            orig_listener.apply(input, [event]);
-		          };
-		        }
-
-		        // add the modified listener
-		        _addEventListener.apply(input, [type, listener]);
-		      }
-
-		      if (input.addEventListener)
-		        input.addEventListener = addEventListenerWrapper;
-		      else if (input.attachEvent)
-		        input.attachEvent = addEventListenerWrapper;
-
-		    })(pac_input);
-		    
-
-	    autocomplete = new google.maps.places.Autocomplete(pac_input, options);
-	    
-	    
-//	    $('#address').keypress(function(e) {
-//	    	  if (e.which == 13) {
-//	    		  $(".pac-container").show();
-//	    	    return false;
-//	    	  }
-//	    	});
-	 
-	    
-	    google.maps.event.addListener(autocomplete, 'place_changed', function(e) {	   
-	    	fillInAddress();	
-	    	var arr = [];
-	    	arr = ($('#route').val()).split(",");
-	    	setTimeout(function(){$('#route').val(arr[0]);},0);
-	    });
-	    
-	   
-        //SET MARKER COORDINATES ON MAP CLICK
-        google.maps.event.addListener(map, 'click', function(e) {	
-        	
-        	if($("#tab1").hasClass("active")){
-        		if( $("#btnIssue").hasClass('active') ){
-            		getAddressOnMapClick(e.latLng);
-            	}    
-        	}
-        	
-            
-        });         
-       
-	       
-	    //DISPLAY MARKERS FROM DB
-        loadMarkers(map);
+	var mapOptions = {
+			center: init_coord,
+			zoom: 12,
+			mapTypeId: google.maps.MapTypeId.ROADMAP,
+			mapTypeControl: true,
+			scrollwheel: false
+    };
+   
+    map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
       
-	 }//initialize   
-	 
-	 
-	 
-	 
-	 google.maps.event.addDomListener(window, 'load', initialize); 
-	 
-	 
-	 
+    /**** ADDRESS AUTOCOMPLETE ****/ 
+    initAutocomplete();
+ 
+    /**** SET MARKER ON CLICK EVENT ****/	    
+    google.maps.event.addListener(map, 'click', function(e) {	
+    	
+    	//open form
+    	if( parseInt($("#map_canvas").css('width')) == 842 ){
+    		
+    		mapTimesClicked++;
+
+ 		   if ( mapTimesClicked >= 2 ) {
+ 			   e.stopPropagation();
+ 			   e.preventDefault();			
+ 		   }
+ 		   else{
+ 			   mapTimesClicked = 0;	
+ 	    		if(!isAnimating){
+ 	    			blockIssueForm();
+ 	       	   	 
+ 	            	if($("#tab1").hasClass("active")){
+ 	            		if( $("#btnIssue").hasClass('active') ){
+ 	            			
+ 	            			setTimeout(function(){    	
+ 	            				getAddressOnMapClick(e.latLng);
+ 	            				enableNexButton();		
+ 	            				unBlockIssueForm();
+ 	            			}, 1500);		
+ 	            		}    
+ 	            	}            
+ 	    		}
+     		
+ 		   }
+    		
+    	}
+    
+    	
+    });      
+     
+	 $('#address').focusout(function(e) {
+		 if(autocompleteCalls == 1){
+			  if( $('#address').val() != "" ){
+				   google.maps.event.trigger(autocomplete, 'place_changed');
+			   }
+		 }
+		 
+	 });
+   
+    
+    /**** DISPLAY MARKERS FROM DB ****/
+    loadMarkers(map); 
+    
+}//init
+
+
+
+function initAutocomplete(){	
 	
-	 
+	var pac_input = document.getElementById('address');
+	var options = {
+			types: [ 'geocode' ],        		
+			componentRestrictions: {country: "ar"}
+	};
+		
+	// prevents enter key to submit form//	
+	$('#address').keydown(function (e) {
+	  if (e.which == 13 && $('.pac-container:visible').length) return false;
+	});		
+	
+	// pick first item when list opens//	
+	if (!$('.pac-container').is(':visible')) {
+		$('#address').val($('.pac-container').find('.pac-item').eq(0).text());
+		$('.pac-container').find('.pac-item').eq(0).addClass('.pac-item-selected');
+	}      
+	    
+    (function pacSelectFirst(input){
+       // store the original event binding function
+       var _addEventListener = (input.addEventListener) ? input.addEventListener : input.attachEvent;
+
+       function addEventListenerWrapper(type, listener) {
+       // Simulate a 'down arrow' keypress on hitting 'return' when no pac suggestion is selected,
+       // and then trigger the original listener.
+       if (type == "keydown") {
+         var orig_listener = listener;
+         listener = function (event) {
+           var suggestion_selected = $(".pac-item.pac-selected").length > 0;
+           if (event.which == 13 && !suggestion_selected) {
+             var simulated_downarrow = $.Event("blur", {keyCode:40, which:40})
+             orig_listener.apply(input, [simulated_downarrow]);
+           }
+
+           orig_listener.apply(input, [event]);
+         };
+       }
+
+       // add the modified listener
+       _addEventListener.apply(input, [type, listener]);
+     }
+
+     if (input.addEventListener)
+       input.addEventListener = addEventListenerWrapper;
+     else if (input.attachEvent)
+       input.attachEvent = addEventListenerWrapper;
+
+   })(pac_input);
+	    
+   autocomplete = new google.maps.places.Autocomplete(pac_input, options);
       
- });//document.ready
+   google.maps.event.addListener(autocomplete, 'place_changed', function(e) {	autocompleteCalls++;
+   		var addressArray = [];
+   		addressArray = ($('#address').val()).split(",");   
+   		setTimeout(function(){ $('#address').val(addressArray[0]); }, 0);
+   		fillInAddress();	   		
+   });
+   autocompleteCalls = 0;
+	
+}//autocomplete
 
+function disableNexButton(){
+	$(".pager li.next").addClass('disabled');
+}
 
+function enableNexButton(){
+	 $(".pager li.next").removeClass('disabled');
+}
 
+function blockIssueForm(){	
+    $("#mapFormContainer").block({ 
+     		message: "<h4>Procesando ubicaci&oacute;n...<br><br><img src=\"./resources/images/loader.gif\"/></h4>",
+         	overlayCSS:  { 
+                backgroundColor: '#000', 
+                opacity:         0.2, 
+                cursor:          'wait' 
+             },
+        	css: { 
+        	   '-webkit-border-radius': '5px', 
+               '-moz-border-radius': '5px', 
+               padding:        20, 
+               margin:         0, 
+               width:          '250px', 		  	            
+               textAlign:      'center', 
+               color:          '#000', 
+               border:         '0px solid #aaa', 
+               cursor:         'wait' 
+    		}
+    });
+}
 
-//end AUTOCOMPLETE
+function unBlockIssueForm(){
+	$("#mapFormContainer").unblock();	
+}
 
 function fillInAddress() {
-	
+
+	// BLOCK UI
+	blockIssueForm();
+	    
     var place = autocomplete.getPlace();
-   
-    for (var component in componentForm) {
-      document.getElementById(component).value = "";
-      document.getElementById(component).disabled = false;
-    }
- 
-	for (var i = 0; i < place.address_components.length; i++) {
+    
+    console.log(place);
+    
+    if (!place || !place.geometry || !hasAddressTypes(place)) {    	
+    	setTimeout(function(){    	
+    		unBlockIssueForm();	    	
+    		bootbox.alert("La direcci&oacute;n proporcionada no es v&aacute;lida o carece de precisi&oacute;n.", function() {    		
+    			disableNexButton();
+    		});    		
+    	}, 1500);  
+    }   
+	
+	else{
 		
-		var addressType = place.address_components[i].types[0];
-	   
-	      if(componentForm[addressType]) {
-	    	  
-	    	  var val = place.address_components[i][componentForm[addressType]];
-	         	        
-	    	  if(addressType == 'administrative_area_level_1' && val == 'Ciudad Autónoma de Buenos Aires')
-	    		  val = 'Buenos Aires';
-	    	  else if(addressType == 'locality' && val == 'Buenos Aires')
-	    		  val = 'Ciudad Autónoma de Buenos Aires';
-	        
-	        document.getElementById(addressType).value = val;       
-	        
-	      }    	    
-	}     	
- 
+	    var result = place.address_components;
+		
+		if(place.geometry.viewport) {
+			map.fitBounds(place.geometry.viewport);
+		} 
+		else{
+			map.setCenter(place.geometry.location);
+		    map.setZoom(17);  // Why 17? Because it looks good.
+		 }
+		 
+		 var infowindow = new google.maps.InfoWindow();
+		 
+		 if(initMarker){
+			   initMarker.setMap(null);
+		 }      	
+		 
+		 //global var
+		 initMarker = new google.maps.Marker({
+		    map: map,
+		    icon: "resources/images/markers/blue_MarkerA.png",
+		    draggable: true
+		 });
+		 initMarker.setPosition(place.geometry.location);
+		 initMarker.setVisible(true);
+	
+		 //split components to fill form inputs
+    	 for (var i = 0; i < place.address_components.length; i++) {    		
+    		var addressType = place.address_components[i].types[0];    	   
+    	    if(componentForm[addressType]) {
+    	    	var val = place.address_components[i][componentForm[addressType]];
+    	    	
+    	    	if(addressType == 'administrative_area_level_1' && val == 'Ciudad Autónoma de Buenos Aires')
+    	    		  val = 'Buenos Aires';
+    	    	else if(addressType == 'locality' && val == 'Buenos Aires')
+    	    		  val = 'Ciudad Autónoma de Buenos Aires';
+    	        
+    	    	$("#" + addressType).val(val);      	    
+    	    }    	    
+    	 }  
+    	    	 
+    	 //info window content
+    	 var addressInfo = '';
+         if (place.address_components) {
+        	 addressInfo = [
+              (place.address_components[0] && place.address_components[2].short_name || ''),
+              (place.address_components[1] && place.address_components[3].short_name || ''),
+              (place.address_components[2] && place.address_components[4].short_name || '')
+            ].join(', ');
+         }    	
+    	
+         infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + addressInfo);
+         infowindow.open(map, initMarker);
+         addMarkerListener(initMarker, infowindow);
+    	 
+    	 enableNexButton();		 
+		 unBlockIssueForm();	
+			
+	}
+}//fill
+
+
+function hasAddressTypes(result) {	
+	
+	var types = 0;
+	var sameField = 0;
+		
+	for (var i = 0; i < result.address_components.length; i++) {				
+		
+		var addr = result.address_components[i];	
+							
+		 //calle
+		 if (addr.types[0] == ['route'])		                
+			 types++;      
+         
+		 //altura
+         else if (addr.types[0] == ['street_number']){
+        	 types++;    
+         }
+		
+		 //barrio (opcional)
+//         else if (addr.types[0] == ['neighborhood']){										
+//        	 types++;           	
+//		 }
+		
+		 //ciudad - localidad
+		 else if (addr.types[0] == ['locality']){						
+			 types++;    
+		 }
+		
+		 //provincia
+         else if (addr.types[0] == ['administrative_area_level_1']){	                	
+        	 types++;    
+         }			 
+      
+	}    
+	
+	if(types == 4) 
+		return true;
+	else 
+		return false;
+}//has
     
+
+
+function geocodeAddress(callback){
+	
+	 var address = $("#address").val();
+//	 var streetNumber = $("#street_number").val();
+	 var neighborhood = $("#neighborhood").val();	 
+	 var city = $("#locality").val();
+	 var province = $("#administrative_area_level_1").val();	 
+	 var title = $("#title").val();
+	 var desc = $("#description").val();
+
+	 var searchAddress = address + "," + neighborhood + "," + city + "," + province;
+//	 var searchAddress = address + " " + streetNumber +"," + neighborhood + "," + city + "," + province;			
+	 var geocoder;
+	 
+	 if(!geocoder) { 
+		 geocoder = new google.maps.Geocoder(); 
+	 }
+	 
+	 var geocoderRequest = { 
+		 address: searchAddress,
+		 country: "AR"			
+	 } 
+	 
+	 geocoder.geocode(geocoderRequest, function(results, status) { 
+	
+		 //OK
+		 if (status == google.maps.GeocoderStatus.OK) {
+		        	
+       	var locationType = results[0].geometry.location_type;
+       	address = results[0].geometry;
+//       	
+       		if(locationType === "RANGE_INTERPOLATED" || locationType == "ROOFTOP"){		
+	        		var latLng = results[0].geometry.location;		        	
+	        		$("#latitude").val(latLng.lat());
+					$("#longitude").val(latLng.lng());
+				
+	        	}
+
+//					   
+//		        		else if(locationType == "APPROXIMATE"){		
+//					    	
+//					    	addressFound = false;
+//
+//			        	}
+//			        	
+//		        		else if(locationType == "GEOMETRIC_CENTER"){
+//
+//					    	addressFound = false;
+//
+//			        			
+//			        	}
+		 }
+		
+		
+	 });	
+	
+} //geocode
+
+
+
+
+
+function addMarkerListener (marker, infowindow){
+	  google.maps.event.addListener(marker, 'click', function() {         
+          infowindow.open(map, marker);          
+    });
 }
-    
-  function geolocate() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position) {
-        var geolocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
-        autocomplete.setBounds(new google.maps.LatLngBounds(geolocation, geolocation));
-        
-       
-      });
-    }
-  }
+
+function getAddressOnMapClick(latLng) {
+	 
+	 var geocoder;
+	 var infoWindow;
+
+	if (!geocoder) {
+		geocoder = new google.maps.Geocoder();
+	}	
+
+	var geocoderRequest = { 
+			latLng: latLng
+	} 
+		
+	geocoder.geocode(geocoderRequest, function(results, status) { 
+		
+		if (status == google.maps.GeocoderStatus.OK) {		
+				
+				var streetName = "";
+				var streetNumber = "";
+				var neighborhood = "";
+				var city = "";
+				var province = "";
+								
+				var fullAddress = results[0].formatted_address;
+				
+				if(!isArgentina(fullAddress)){
+					alert("Se encuentra fuera de los límites de la República Argentina.");	  
+				}	
+				
+				else{
+					console.log(results[0]);
+					
+					for (var i = 0; i < results[0].address_components.length; i++) { 
+
+						var addr = results[0].address_components[i];							
+						
+		                 if (addr.types[0] == 'route')	                
+		                	 streetName = addr.long_name;		               
+		                 
+		                 else if (addr.types[0] == 'street_number')
+		                	 streetNumber = addr.long_name;		                 
+		                 
+		                 else if (addr.types[0] == 'neighborhood')
+		                	 neighborhood = addr.long_name;
+		                 
+		                 else if (addr.types[0] == 'locality')
+		                	 city = addr.long_name;
+		                 
+		                 else if (addr.types[0] == 'administrative_area_level_1'){
+		                	 province = addr.long_name;		
+		                	
+		                 }	 
+					} 
+					
+              	 }
+					
+			
+					
+				  if(province == "Ciudad Autónoma de Buenos Aires" && city == "Buenos Aires"){
+					  province = "Buenos Aires";
+					  city = "Ciudad Autónoma de Buenos Aires";
+				  }
+
+//					$("#route").val(streetName);
+//					$("#street_number").val(streetNumber);
+					$("#neighborhood").val(neighborhood);
+					$("#locality").val(city);
+					$("#administrative_area_level_1").val(province);
+					
+					$("#latitude").val(latLng.lat());
+					$("#longitude").val(latLng.lng());
+						
+					var formattedAddress;
+					
+                   if (results[0].formatted_address != null) {
+                         formattedAddress = results[0].formatted_address;
+                         $("#address").val(streetName + " " + streetNumber);
+//                         $("#address").val(streetName);
+                   }
+                   
+               		map.setCenter(results[0].geometry.location);
+               		map.setZoom(17); 
+                                       
+                   if(initMarker)
+                	   initMarker.setMap(null);
+           		
+	           		initMarker = new google.maps.Marker({ 
+	           			 map: map,     
+	           			 icon: "resources/images/markers/blue_MarkerA.png",
+	           			 draggable: true,            			
+	           			 position: results[0].geometry.location
+	           		}); 
+           		
+           	 var address = '';
+             if (results[0].address_components) {
+                address = [
+                  (results[0].address_components[0] && results[0].address_components[2].short_name || ''),
+                  (results[0].address_components[1] && results[0].address_components[3].short_name || ''),
+                  (results[0].address_components[2] && results[0].address_components[4].short_name || '')
+                ].join(', ');
+             }    	
+             var infowindow = new google.maps.InfoWindow();
+        	 infowindow.setContent('<div><strong>' + streetName + " " + streetNumber + '</strong><br>' + address);
+        	 infowindow.open(map, initMarker);   
+        	 addMarkerListener(initMarker, infowindow);
+        	 
+       		  google.maps.event.addListener(initMarker, 'dragend', function(e) {
+       			 blockIssueForm();
+       			 
+       			 setTimeout(function(){    			
+       				 getAddressOnMapClick(e.latLng); 
+       				 enableNexButton();		
+       				 unBlockIssueForm();
+       			 }, 1500);				 
+       			
+       		 }); 
+           		  
+				
+				
+			
+		} 
+		else { 
+			content += '<p>No address could be found. Status = ' + status + '</p>'; 
+		} 
+
+
+	}); 
+}//map clic	
+	
+	
+function isArgentina(fullAddress){
+	
+	var addressArray = fullAddress.split(",");
+	var validCountry = false;
+	
+	for(var i = 0; i < addressArray.length; i++){			
+		if($.trim(addressArray[i]) == "Argentina"){
+			validCountry = true;					
+		}		
+	}
+	
+	return validCountry;	
+}
+
 
 function initializeMiniMap(lat, lng, titulo) {
 	  
@@ -260,14 +601,6 @@ function getUserPlainURL(userID){
 }
 
 
-
-
-
-
-
-
-
-
 /*** -------------- CARGA DE MARKERS EN EL MAPA -------------- ***/
 /*** --------------------------------------------------------- ***/
 
@@ -287,7 +620,7 @@ function loadMarkers(map){
 //        		var iconHover = 'resources/images/markers/yellow_MarkerR.png';
 	        	
 	        	console.info(markerArray);
-	        		        
+	        	
 	        	for (var i = 0; i < markerArray.length; i++) {         		
 	        			        		
 	        		var latlng = new google.maps.LatLng(markerArray[i].latitude, markerArray[i].longitude);
@@ -349,6 +682,7 @@ function loadMarkers(map){
 	        	 var markerclusterer = new MarkerClusterer(map, markers, clusterOptions);
 	        }//success	       
 	    });
+	 	
 }
  
 
@@ -389,6 +723,11 @@ function getClosestMarkersByIssue(location){
 			    	$table.append('No se encontraron resultados.');
 			    }
 			    else{
+			    	
+			    	if(closestMarkers.length > 5){
+			    		closestMarkers.splice(4, 4); //obtengo los 5 markers más cercanos al punto   
+			    	}			    	
+			    	
 			    	$.each(closestMarkers, function(i, marker){				    	
 				    	var tr = "";				    
 			    		var imageSrc = '';			    	
@@ -411,12 +750,8 @@ function getClosestMarkersByIssue(location){
 				    	$table.append(tr);		
 				    
 				    });			    	
-			    }
-			    
-			   
-			  //closestMarkers.slice(1, 6); //obtengo los 5 markers más cercanos al punto   
-			    console.info(closestMarkers);
-			  
+			    }		    
+			
 		  }		  
 	});	
 	
@@ -470,244 +805,3 @@ function findProvincia (value) {
 	}	
 		
 }
-
-
-
-function geocodeAddress(callback){
-	
-	 var address = $("#address").val();
-	 var streetNumber = $("#street_number").val();
-	 var neighborhood = $("#neighborhood").val();	 
-	 var city = $("#locality").val();
-	 var province = $("#administrative_area_level_1").val();	 
-	 var title = $("#title").val();
-	 var desc = $("#description").val();
-
-	 var searchAddress = address + " " + streetNumber +"," + neighborhood + "," + city + "," + province;			
-	 var geocoder;
-	 
-	 if(!geocoder) { 
-		 geocoder = new google.maps.Geocoder(); 
-	 }
-	 
-	 var geocoderRequest = { 
-		 address: searchAddress,
-		 country: "AR"			
-	 } 
-	 
-	 geocoder.geocode(geocoderRequest, function(results, status) { 
-	
-		 //OK
-		 if (status == google.maps.GeocoderStatus.OK) {
-		        	
-//        	var locationType = results[0].geometry.location_type;
-//        	address = results[0].geometry;
-//        	
-//        		if(locationType === "RANGE_INTERPOLATED" || locationType == "ROOFTOP"){		
-//	        		var latLng = results[0].geometry.location;		        	
-//	        		$("#latitude").val(latLng.lat());
-//					$("#longitude").val(latLng.lng());
-//				
-//	        	}
-        		callback(false);
-//					   
-//		        		else if(locationType == "APPROXIMATE"){		
-//					    	
-//					    	addressFound = false;
-//
-//			        	}
-//			        	
-//		        		else if(locationType == "GEOMETRIC_CENTER"){
-//
-//					    	addressFound = false;
-//
-//			        			
-//			        	}
-		 }
-		
-		
-	 });//geocoder
-	
-	
-} 
-
-
-
-function hasAddressTypes(results) {	
-	
-	var types = 0;
-	var sameField = 0;
-	
-	
-	for (var i = 0; i < results[0].address_components.length; i++) {				
-		
-		var addr = results[0].address_components[i];	
-							
-		 //calle
-		 if (addr.types[0] == ['route'])		                
-			 types++;      
-         
-		 //altura
-         else if (addr.types[0] == ['street_number']){
-        	 types++;    
-         }
-		
-		 //barrio (opcional)
-//         else if (addr.types[0] == ['neighborhood']){										
-//        	 types++;           	
-//		 }
-		
-		 //ciudad - localidad
-		 else if (addr.types[0] == ['locality']){						
-			 types++;    
-		 }
-		
-		 //provincia
-         else if (addr.types[0] == ['administrative_area_level_1']){	                	
-        	 types++;    
-         }		 
-	}    
-	
-	if(types == 5) 
-		return true;
-	else 
-		return false;
-}
- 
- function listenMarker (marker, infowindow){
-	  google.maps.event.addListener(marker, 'click', function() {         
-           infowindow.open(map, marker);          
-     });
-}
- 
- function getAddressOnMapClick(latLng) {
-	 
-	 var geocoder;
-	 var infoWindow;
-
-	if (!geocoder) {
-		geocoder = new google.maps.Geocoder();
-	}	
-
-	var geocoderRequest = { 
-			latLng: latLng
-	} 
-		
-	geocoder.geocode(geocoderRequest, function(results, status) { 
-		
-		if (status == google.maps.GeocoderStatus.OK) {		
-				
-				var streetName = "";
-				var streetNumber = "";
-				var neighborhood = "";
-				var city = "";
-				var province = "";
-								
-				var fullAddress = results[0].formatted_address;
-				
-		
-				
-				if(!isArgentina(fullAddress)){
-					alert("Se encuentra fuera de los límites de la República Argentina.");	  
-				}	
-				
-				else{
-					console.log(results[0]);
-					
-					for (var i = 0; i < results[0].address_components.length; i++) { 
-
-						var addr = results[0].address_components[i];							
-						
-		                 if (addr.types[0] == 'route')	                
-		                	 streetName = addr.long_name;		               
-		                 
-		                 else if (addr.types[0] == 'street_number')
-		                	 streetNumber = addr.long_name;		                 
-		                 
-		                 else if (addr.types[0] == 'neighborhood')
-		                	 neighborhood = addr.long_name;
-		                 
-		                 else if (addr.types[0] == 'locality')
-		                	 city = addr.long_name;
-		                 
-		                 else if (addr.types[0] == 'administrative_area_level_1'){
-		                	 province = addr.long_name;		
-		                	
-		                 }	 
-					} 
-					
-               	 }
-					
-			
-					
-				  if(province == "Ciudad Autónoma de Buenos Aires" && city == "Buenos Aires"){
-					  province = "Buenos Aires";
-					  city = "Ciudad Autónoma de Buenos Aires";
-				  }
-					$("#route").val(streetName);
-					$("#street_number").val(streetNumber);
-					$("#neighborhood").val(neighborhood);
-					$("#locality").val(city);
-					$("#administrative_area_level_1").val(province);
-					
-					
-					$("#latitude").val(latLng.lat());
-					$("#longitude").val(latLng.lng());
-						
-					var formattedAddress;
-					
-                    if (results[0].formatted_address != null) {
-                          formattedAddress = results[0].formatted_address;
-//                          $("#address").val(streetName + " " + streetNumber);
-                          $("#address").val(streetName);
-                    }
-                                        
-                    if(initMarker)
-            			initMarker.setMap(null);
-            		
-            		initMarker = new google.maps.Marker({ 
-            			 map: map,     
-            			 icon: "resources/images/markers/blue_MarkerA.png",
-            			 draggable: true,            			
-            			 position: results[0].geometry.location
-            		}); 
-            		
-            	
-            		 
-            		
-        			 google.maps.event.addListener(initMarker, 'dragend', function(e) {
-        				 getAddressOnMapClick(e.latLng); 
-        			 }); 
-            		
-            		  
-				
-				
-			
-		} 
-		else { 
-			content += '<p>No address could be found. Status = ' + status + '</p>'; 
-		} 
-
-
-	}); 
-	
-	
-	
-	function isArgentina(fullAddress){
-		
-		var addressArray = fullAddress.split(",");
-		var validCountry = false;
-		
-		for(var i = 0; i < addressArray.length; i++){			
-			if($.trim(addressArray[i]) == "Argentina"){
-				validCountry = true;					
-			}		
-		}
-		
-		return validCountry;	
-	}
-	
-	
-	
-} 
- 
