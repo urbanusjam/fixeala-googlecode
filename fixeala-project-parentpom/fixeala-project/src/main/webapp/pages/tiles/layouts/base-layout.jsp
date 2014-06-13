@@ -176,128 +176,138 @@ path:hover {
 			
 			}
 			
-			$('#rootwizard').bootstrapWizard({
+			initWiz();
+			
+			function initWiz(){
 				
-				onPrevious: function(tab, navigation, index){	
-					enableDisableDraggableMarker(initMarker, index);
-		  		},				
-				onNext: function(tab, navigation, index) {					
-				
-					var $valid = $("#issueWizard").valid();
-		  			
-					if(!$valid) {		  			
-		  				$issueValidator.focusInvalid();
-		  				return false;
-		  			}
-		  			
-		  			enableDisableDraggableMarker(initMarker, index);
-	
-		  			if(index == 1){		  				
-		  				
-		  				// BLOCK UI
-		  	            $("#issueFormWizard").block({ 
-			  	        		message: "Procesando...<br><img src=\"${pageContext.request.contextPath}/resources/images/loader.gif\"/>",
-			  	            	overlayCSS:  { 
-			  	                   backgroundColor: '#000', 
-			  	                   opacity:         0.1, 
-			  	                   cursor:          'wait' 
-			  	                },
-			  	               	css: { 
-				  	               padding:        5, 
-				  	               margin:         0, 
-				  	               width:          '200px', 		  	            
-				  	               textAlign:      'center', 
-				  	               color:          '#000', 
-				  	               border:         '0px solid #aaa', 
-				  	               backgroundColor:'#fff', 
-				  	               cursor:         'wait' 
-			  	           		}
-		  	            }); 
-		  	 
-		  	          setTimeout(function(){  $("#issueFormWizard").unblock(); },2000);	
-		  	            
-		  	         
-		  				
-		  			}
-		  		
-				
-				}, 
-				onTabShow: function(tab, navigation, index) {
+				 $('#rootwizard').bootstrapWizard({
 					
-					var $total = navigation.find('li').length;
-					var $current = index+1;
-					var $percent = ($current/$total) * 100;
-// 					$('#rootwizard').find('.bar').css({width:$percent+'%'});
+					onPrevious: function(tab, navigation, index){	
+						enableDisableDraggableMarker(initMarker, index);
+			  		},				
+					onNext: function(tab, navigation, index) {					
 					
-					// If it's the last tab then hide the last button and show the finish instead
-					if($current >= $total) {
-						$('#rootwizard').find('.pager .next').hide();
-						$('#rootwizard').find('.pager .finish').show();
-						$('#rootwizard').find('.pager .finish').removeClass('disabled');
-						$('#rootwizard').find('.pager .finish').removeClass('btn');
-					} else {
-						$('#rootwizard').find('.pager .next').show();
-						$('#rootwizard').find('.pager .finish').hide();
-					}
+						var $valid = $("#issueWizard").valid();
+			  			
+						if(!$valid) {		  			
+			  				$issueValidator.focusInvalid();
+			  				return false;
+			  			}
+			  			
+			  			enableDisableDraggableMarker(initMarker, index);
+		
+			  			if(index == 1){	
+			  				// BLOCK UI
+// 			  	            $("#issueFormWizard").block({ 
+// 				  	        		message: "Validando ubicaci&oacute;n...<br><img src=\"${pageContext.request.contextPath}/resources/images/loader.gif\"/>",
+// 				  	            	overlayCSS:  { 
+// 				  	                   backgroundColor: '#000', 
+// 				  	                   opacity:         0.2, 
+// 				  	                   cursor:          'wait' 
+// 				  	                },
+// 				  	               	css: { 
+// 					  	               padding:        5, 
+// 					  	               margin:         0, 
+// 					  	               width:          '200px', 		  	            
+// 					  	               textAlign:      'center', 
+// 					  	               color:          '#000', 
+// 					  	               border:         '0px solid #aaa', 
+// 					  	               backgroundColor:'#fff', 
+// 					  	               cursor:         'wait' 
+// 				  	           		}
+// 			  	            });
+			  			
+// 			  				setTimeout(function(){  $("#issueFormWizard").unblock(); },2000);	
+
+
+
+
+			  			}
+			  		
 					
-				},
-				onTabClick: function(tab, navigation, index) {
-// 					alert('on tab click disabled');
-					return false;
-				}});
-				$('#rootwizard .finish').click(function() {
-					if( $("#tags").val() == ""){
-						bootbox.alert("Debe especificar al menos una categor&iacute;a.");						
-					}
-					
-					else{
+					}, //onNext
+					onTabShow: function(tab, navigation, index){
 						
-						var $form = $("#issueWizard");
-						console.log($form.serialize());
-									
-						$.ajax({ 
-						 		url: "./reportIssue.html", 		
-						 		type: "POST",					 	
-						 		data : $form.serialize(),	
-						 		success : function(alertStatus){					 		
-						 			if(alertStatus.result){
-						 				
-						 				bootbox.alert(alertStatus.message, function() {
-						 					setTimeout(function () {
-				 	    						window.location.reload();
-				 	    					}, 400);	
-						 				});		 	    					
-			 	    				}
-			 	    				else{	 	    			
-			 	    					bootbox.alert(alertStatus.message);	 	    										 	    					
-			 	    				}  
-						 			
-						 		},
-						 		error: function(jqXHR, exception) {
-					                   if (jqXHR.status === 0) {
-					                       alert('Not connect.\n Verify Network.');
-					                   } else if (jqXHR.status == 404) {
-					                       alert('Requested page not found. [404]');
-					                   } else if (jqXHR.status == 500) {
-					                       alert('Internal Server Error [500].');
-					                   } else if (exception === 'parsererror') {
-					                       alert('Requested JSON parse failed.');
-					                   } else if (exception === 'timeout') {
-					                       alert('Time out error.');
-					                   } else if (exception === 'abort') {
-					                       alert('Ajax request aborted.');
-					                   } else {
-					                       alert('Uncaught Error.\n' + jqXHR.responseText);
-					                   }
-					               }
-						 	
-						 	});
+						var $total = navigation.find('li').length;
+						var $current = index+1;
+						var $percent = ($current/$total) * 100;
+//	 					$('#rootwizard').find('.bar').css({width:$percent+'%'});
 						
+						// If it's the last tab then hide the last button and show the finish instead
+						if($current >= $total) {
+							$('#rootwizard').find('.pager .next').hide();
+							$('#rootwizard').find('.pager .finish').show();
+							$('#rootwizard').find('.pager .finish').removeClass('disabled');
+							$('#rootwizard').find('.pager .finish').removeClass('btn');
+						} else {
+							$('#rootwizard').find('.pager .next').show();
+							$('#rootwizard').find('.pager .finish').hide();
+						}
 						
-						
-					}
-					return false;
+					}, //onTabshow
+					onTabClick: function(tab, navigation, index) {
+//	 					alert('on tab click disabled');
+						return false;
+					} //onTabClick
 				});
+				 
+				 return $('#rootwizard');
+				
+			}//initWiz
+			 
+			$('#rootwizard .finish').click(function() {
+				if( $("#tags").val() == ""){
+					bootbox.alert("Debe especificar al menos una categor&iacute;a.");						
+				}
+				
+				else{
+					
+					var $form = $("#issueWizard");
+					console.log($form.serialize());
+								
+					$.ajax({ 
+					 		url: "./reportIssue.html", 		
+					 		type: "POST",					 	
+					 		data : $form.serialize(),	
+					 		success : function(alertStatus){					 		
+					 			if(alertStatus.result){
+					 				
+					 				bootbox.alert(alertStatus.message, function() {
+					 					setTimeout(function () {
+			 	    						window.location.reload();
+			 	    					}, 400);	
+					 				});		 	    					
+		 	    				}
+		 	    				else{	 	    			
+		 	    					bootbox.alert(alertStatus.message);	 	    										 	    					
+		 	    				}  
+					 			
+					 		},
+					 		error: function(jqXHR, exception) {
+				                   if (jqXHR.status === 0) {
+				                       alert('Not connect.\n Verify Network.');
+				                   } else if (jqXHR.status == 404) {
+				                       alert('Requested page not found. [404]');
+				                   } else if (jqXHR.status == 500) {
+				                       alert('Internal Server Error [500].');
+				                   } else if (exception === 'parsererror') {
+				                       alert('Requested JSON parse failed.');
+				                   } else if (exception === 'timeout') {
+				                       alert('Time out error.');
+				                   } else if (exception === 'abort') {
+				                       alert('Ajax request aborted.');
+				                   } else {
+				                       alert('Uncaught Error.\n' + jqXHR.responseText);
+				                   }
+				               }
+					 	
+					 	});
+					
+					
+					
+				}
+				return false;
+			});
 
 			 var query = "?issue=%QUERY";
 			
@@ -831,45 +841,60 @@ path:hover {
 				
 			}
                        
-          function clear(){
-        	  $("#route").val("");
-        	  $("#street_number").val("");
-        	  $("#neighborhood").val("");
-        	  $("#locality").val("");
-        	  $("#administrative_area_level_1").val("");
-        	  $("#title").val("");
-        	  $("#description").val("");
-        	  $("#tags").val("");
+          function emptyFields(){
+        	  return $("#route").val() == "" 
+        	  			&& $("#street_number").val() == ""
+        	  			&& $("#locality").val() == ""
+        	  			&& $("#administrative_area_level_1").val() == "";
+        	
+          }
+          
+          function toggleIssueForm(){
+        	  
+        	  var $issueBox = $("#issueFormWizard");  
+        	  
+        	  $issueBox.animate({
+                  width: "toggle",
+                  right:"338px",
+                  opacity: "toggle"                   
+              }, 'slow');
+
+				 $("#map_canvas").animate({            		 
+         		  width : parseInt($issueBox.css('width')) == 316 ?  1178 :  842                   		
+              }, 'slow');
+				 
+				 $("#cbxProvincias").animate({
+	           	      marginRight : parseInt($issueBox.css('width')) == 316 ? 115 : 451        
+	           	 }, 'slow');
           }
      
     
             
             $('#btnIssue').click(function(){ 
             	
-            	
-            	
-            	var $issueBox = $("#issueFormWizard");  
-            	
-            	if( parseInt($("#map_canvas").css('width')) == 1178 ){
-            		clear();
-            		var baseItemSelector = 'li:has([data-toggle="tab"])';
-            		$('#rootwizard').find(baseItemSelector + ':first');
+            	if( parseInt($("#map_canvas").css('width')) == 842 ){
+            		if(!emptyFields()){
+            			
+            			bootbox.confirm("Si cierra el formulario, se descartar&aacute; la informaci&oacute;n ingresada. &iquest;Desde continuar?", function(result){
+                			if(result){
+                				window.parent.location.reload();
+                			}
+                		});
+            			
+            		}
+            		else{toggleIssueForm();}
+            		
+            	}
+            	else{
+            		
+            		toggleIssueForm();
+            		
             	}
             		
             	            	
-            	 $issueBox.animate({
-                     width: "toggle",
-                     right:"338px",
-                     opacity: "toggle"                   
-                 }, 'slow');
-  
- 				 $("#map_canvas").animate({            		 
-            		  width : parseInt($issueBox.css('width')) == 316 ?  1178 :  842                   		
-                 }, 'slow');
-            	 
-            	 $("#cbxProvincias").animate({
-            	      marginRight : parseInt($issueBox.css('width')) == 316 ? 115 : 451        
-            	 }, 'slow');
+            	
+           	 
+           	
             	             	
             });
             
