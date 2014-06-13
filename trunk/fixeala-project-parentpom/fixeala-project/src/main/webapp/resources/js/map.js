@@ -495,58 +495,38 @@ function geocodeAddress(callback){
 		 country: "AR"			
 	 } 
 	 
+	 geocoder.geocode(geocoderRequest, function(results, status) { 
 	
-	
-			 geocoder.geocode(geocoderRequest, function(results, status) { 
-			
-				 //OK
-				 if (status == google.maps.GeocoderStatus.OK) {
-				        	
-				        	var locationType = results[0].geometry.location_type;
-				        	address = results[0].geometry;
-				        	
-				        	
-		//		        		if(locationType === "RANGE_INTERPOLATED" || locationType == "ROOFTOP"){		
-		//			        		var latLng = results[0].geometry.location;		        	
-		//			        		$("#latitude").val(latLng.lat());
-		//							$("#longitude").val(latLng.lng());
-		//							result = true;
-		//			        	}			        	
-		//					   
-		//		        		else if(locationType == "APPROXIMATE"){		
-		//					    	
-		//					    	addressFound = false;
-		//
-		//			        	}
-		//			        	
-		//		        		else if(locationType == "GEOMETRIC_CENTER"){
-		//
-		//					    	addressFound = false;
-		//
-		//			        			
-		//			        	}
-				 }
-				 
-				 
-			
-				 /**
-				 //ZERO RESULTS
-				 else if (status == google.maps.GeocoderStatus.ZERO_RESULTS) { 
-					
-					 addressFound = false;
-				 }   		
-				 
-				 //OTHER
-				 else if ( (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) 
-						 || (status == google.maps.GeocoderStatus.REQUEST_DENIED)
-						 || (status == google.maps.GeocoderStatus.INVALID_REQUEST)
-						 || (status == google.maps.GeocoderStatus.UNKNOWN_ERROR ) ){    		 
-					 addressFound = false;  
-				 }**/
-				 
-				
-				
-			 });//geocoder
+		 //OK
+		 if (status == google.maps.GeocoderStatus.OK) {
+		        	
+//        	var locationType = results[0].geometry.location_type;
+//        	address = results[0].geometry;
+//        	
+//        		if(locationType === "RANGE_INTERPOLATED" || locationType == "ROOFTOP"){		
+//	        		var latLng = results[0].geometry.location;		        	
+//	        		$("#latitude").val(latLng.lat());
+//					$("#longitude").val(latLng.lng());
+//				
+//	        	}
+        		callback(false);
+//					   
+//		        		else if(locationType == "APPROXIMATE"){		
+//					    	
+//					    	addressFound = false;
+//
+//			        	}
+//			        	
+//		        		else if(locationType == "GEOMETRIC_CENTER"){
+//
+//					    	addressFound = false;
+//
+//			        			
+//			        	}
+		 }
+		
+		
+	 });//geocoder
 	
 	
 } 
