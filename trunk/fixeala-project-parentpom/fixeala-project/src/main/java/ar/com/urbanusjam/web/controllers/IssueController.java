@@ -391,7 +391,7 @@ public class IssueController {
 
 	@RequestMapping(value="/handleFileUpload", method = RequestMethod.POST)
 	public @ResponseBody ContenidoResponse doFileUpload(@RequestParam("file") MultipartFile file, 
-			@RequestParam("isProfilePic") boolean isProfilePic, HttpServletRequest request){		
+			/*@RequestParam("isProfilePic") boolean isProfilePic,*/ HttpServletRequest request){		
 		
 		InputStream inputStream = null;
 		String fileName = StringUtils.EMPTY;
@@ -407,7 +407,7 @@ public class IssueController {
 				nuevoContenido.setInputStream(inputStream);
 				nuevoContenido.setExtension(extensionArchivo);	
 				nuevoContenido.setOrden("0");	
-				nuevoContenido.setProfilePic(isProfilePic);
+//				nuevoContenido.setProfilePic(isProfilePic);
 				nuevoContenido = contenidoService.uploadFile(inputStream, nuevoContenido);	
 				this.setUploadedFile(nuevoContenido);
 			}
@@ -524,7 +524,7 @@ public class IssueController {
 					
 					if(contenido != null){
 						contenido.setNroReclamo(String.valueOf(issue.getId()));
-					    issue.getContenidos().add(contenido);
+					    issue.setUploadedFile(contenido);
 					}					
 					
 					issueService.reportIssue(issue);	

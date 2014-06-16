@@ -175,7 +175,7 @@ CREATE TABLE issue_tag (
 -- CONTENIDO
 CREATE TABLE content ( 
 	   id_content BIGINT(20) NOT NULL AUTO_INCREMENT,
-	   id_issue BIGINT(20) NULL,	   
+	   id_issue BIGINT(20) NOT NULL,	   
 	   height BIGINT(22) NOT NULL,
 	   width BIGINT(22) NOT NULL,
 	   filename VARCHAR(255) NOT NULL,

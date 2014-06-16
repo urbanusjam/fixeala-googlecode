@@ -140,7 +140,7 @@ public class ContenidoServiceImpl implements ContenidoService {
        contenido.setNombreConExtension(contenidoDTO.getNombreConExtension());
        contenido.setOrden(Integer.valueOf(contenidoDTO.getOrden()));
        contenido.setProfilePic(contenidoDTO.isProfilePic()); 
-//       contenido.setFecha(getCurrentCalendar(new Date()));       
+//       contenido.setFecha(getCurrentCalendar(new Date()));          
        return contenido;
    }   
      

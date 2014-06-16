@@ -54,24 +54,29 @@
 			 function emptyFields(){
 	        	  return $("#address").val() == "" 
 	        	  			&& $("#locality").val() == ""
-	        	  			&& $("#administrative_area_level_1").val() == "";
+	        	  			&& $("#administrative_area_level_1").val() == ""
+	        	  			&& $("#formTitle").val() == ""
+	        	  			&& $("#formDescription").val() == ""
+	        	  			&& $("#tags").val() == "";
 	          }
 	          
 	 
 			 var timesClicked = 0;
-			
-	      	 
-			 $( "#btnIssue" ).bind( "click", function( event ) {
-	            	
+		
+			 
+ 			 $( "#btnIssue" ).bind( "click", function( event ) {
+		
+				 isAnimating = true;
+	           
 				  timesClicked++;
 				   if ( timesClicked >= 3 ) {
 				     $( this ).unbind( event );
 				   }
-		            
+	
 	              
 	            	//open form
-	            	if( parseInt($("#map_canvas").css('width')) == 842 ){
-	            		
+	            	if( isFormOpen ){
+	            		alert("paso")
 	            		if(!emptyFields()){
 	            			
 	            			bootbox.confirm("Si cierra el formulario, se descartar&aacute; la informaci&oacute;n ingresada. &iquest;Desde continuar?", function(result){
@@ -105,7 +110,7 @@
 	            function toggleIssueForm(){
 	            	
 		          	  var $issueBox = $("#issueFormWizard");  
-		          	  var duration = 300;
+		          	  var duration = 1000;
 		          	  
 		          	  $issueBox.animate({
 		                    width: "toggle",
@@ -115,13 +120,39 @@
 		
 		  			  $("#map_canvas").animate({            		 
 		           		  width : parseInt($issueBox.css('width')) == 316 ?  1178 :  842                   		
-		              }, duration);
+		              }, duration, function(){
+		            	  
+		            	  if( $issueBox.is(":hidden") )
+		            		  isFormOpen = false;
+		            	  else
+		            		  isFormOpen = true;
+		              });
 		  				 
 		  			  $("#cbxProvincias").animate({
 		  	           	      marginRight : parseInt($issueBox.css('width')) == 316 ? 115 : 451        
 		  	          }, duration);  				 
 	  				     		
 	            }
+	            
+	        
+	            
+	            $("#file_upload_1").uploadify({	    
+	            	'debug' : false,
+	                'swf'           : './resources/images/uploadify.swf',
+	                'uploader'      : 'http://localhost:8080/fixeala/handleFileUpload.html',	         
+				    'fileObjName' :  'file',
+   					'method'   : 'post',
+					'auto' :  true,
+					'method'   : 'post',
+				    'multi'           : false,
+ 					'fileTypeExts'         : '*.jpg;*.jpeg;*.png',
+	                'removeCompleted' : false,
+	                'removeTimeout'   : false,
+	                'onUploadError' : function(file, errorCode, errorMsg, errorString) {
+	                    alert(errorString);
+	                }
+	            
+	            });
 			
 		});
 	</script>
@@ -150,6 +181,8 @@
 		<div id="searchFilters">
 		Completar filtros de busqueda.
 		</div>	
+		
+		
 		
 		<!-- ROW 1 -->
 		
@@ -248,17 +281,22 @@
 										<label>Categor&iacute;a *</label>
 			   							<input type="hidden" id="tags" name="tags" style="width:300px" class="input-xlarge" required/>								
 										<label>Foto (opcional)</label>
-										<div class="fileupload fileupload-new" data-provides="fileupload" style="display:inline-block">
-											<div class="fileupload-new thumbnail" style="width: 304px; height: 100px;">
-												<img src="${pageContext.request.contextPath}/resources/images/nopic.png" />
-											</div>
-											<div class="fileupload-preview fileupload-exists thumbnail" style="height: 100px;min-width:300px;max-width: 200px; max-height: 100px; line-height: 20px;"></div>
-											<span class="btn fileinput-button">
-										        <i class="icon-upload icon-large"></i>&nbsp;&nbsp;
-										        <span>Subir archivo</span>									        
-										        <input type="file" name="files[]" id="fileupload">
-										    </span>									  
-										</div>		
+										
+<!-- 										<div class="fileupload fileupload-new" data-provides="fileupload" style="display:inline-block"> -->
+<!-- 											<div class="fileupload-new thumbnail" style="width: 304px; height: 100px;"> -->
+<%-- 												<img src="${pageContext.request.contextPath}/resources/images/nopic.png" /> --%>
+<!-- 											</div> -->
+<!-- 											<div class="fileupload-preview fileupload-exists thumbnail" style="height: 100px;min-width:300px;max-width: 200px; max-height: 100px; line-height: 20px;"></div> -->
+<!-- 											<span class="btn fileinput-button"> -->
+<!-- 										        <i class="icon-upload icon-large"></i>&nbsp;&nbsp; -->
+<!-- 										        <span>Subir archivo</span>									         -->
+<!-- 										        <input type="file" name="files[]" id="fileupload"> -->
+<!-- 										    </span>									   -->
+<!-- 										</div> -->
+										
+										<!-- uploadify -->	
+										<input id="file_upload_1" name="file_upload_1" type="file"> 
+											
 								    </div>
 								    
 								    <!-- BUTTONS -->
