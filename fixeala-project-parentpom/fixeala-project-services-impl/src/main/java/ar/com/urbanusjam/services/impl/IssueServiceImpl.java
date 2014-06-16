@@ -10,8 +10,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Set;
 
-import javax.mail.MessagingException;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +24,6 @@ import ar.com.urbanusjam.dao.IssueVoteDAO;
 import ar.com.urbanusjam.dao.TagDAO;
 import ar.com.urbanusjam.dao.UserDAO;
 import ar.com.urbanusjam.dao.utils.IssueCriteriaSearchRaw;
-import ar.com.urbanusjam.entity.annotations.Area;
 import ar.com.urbanusjam.entity.annotations.Comment;
 import ar.com.urbanusjam.entity.annotations.Issue;
 import ar.com.urbanusjam.entity.annotations.IssueFollow;
@@ -42,7 +39,6 @@ import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.ContenidoService;
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.UserService;
-import ar.com.urbanusjam.services.dto.AreaDTO;
 import ar.com.urbanusjam.services.dto.CommentDTO;
 import ar.com.urbanusjam.services.dto.IssueCriteriaSearch;
 import ar.com.urbanusjam.services.dto.IssueDTO;
@@ -127,6 +123,7 @@ public class IssueServiceImpl implements IssueService {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
 	public void reportIssue(IssueDTO issueDTO) {
 //		Area area = areaDAO.getAreaById("1"); 
 		Issue issue = new Issue();
@@ -135,7 +132,9 @@ public class IssueServiceImpl implements IssueService {
 		issue.setReporter(u);
 //		issue.setAssignedArea(area);
 //		asignarUsuarioDefault(issue);
+		contenidoService.subirContenido(issueDTO.getUploadedFile());
 		issueDAO.saveIssue(issue);		
+		
 	}
 	
 	@Override
@@ -580,9 +579,9 @@ public class IssueServiceImpl implements IssueService {
 		}
 		
 		//contenidos
-		for(MediaContentDTO contenido : issueDTO.getContenidos()){			
-			issue.getContenidos().add(contenidoService.convertirAContenido(contenido));
-		}
+//		for(MediaContentDTO contenido : issueDTO.getContenidos()){			
+//			issue.getContenidos().add(contenidoService.convertirAContenido(contenido));
+//		}
 		
 		//tags
 		List<String> tagList = issueDTO.getTags();

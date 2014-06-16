@@ -17,6 +17,8 @@ var componentForm = {
 		  administrative_area_level_1: 'long_name'
 		};
 
+var isFormOpen;
+var isAnimating;
 /**************************************************************************************************/
 
 $(document).ready(function(){		
@@ -45,8 +47,7 @@ function initMap() {
     google.maps.event.addListener(map, 'click', function(e) {	
     	
     	//open form
-    	if( parseInt($("#map_canvas").css('width')) == 842 ){
-    		
+    	if(isFormOpen){	    		
     		mapTimesClicked++;
 
  		   if ( mapTimesClicked >= 2 ) {
@@ -55,23 +56,19 @@ function initMap() {
  		   }
  		   else{
  			   mapTimesClicked = 0;	
- 	    		if(!isAnimating){
- 	    			blockIssueForm();
- 	       	   	 
+ 	    		if(!isAnimating){ 	       	   	 
  	            	if($("#tab1").hasClass("active")){
- 	            		if( $("#btnIssue").hasClass('active') ){
- 	            			
+ 	            		blockIssueForm(); 	            	
+ 	            		if( $("#btnIssue").hasClass('active') ){ 	            			
  	            			setTimeout(function(){    	
  	            				getAddressOnMapClick(e.latLng);
  	            				enableNexButton();		
  	            				unBlockIssueForm();
  	            			}, 1500);		
  	            		}    
- 	            	}            
+ 	            	} 	            	
  	    		}
-     		
- 		   }
-    		
+ 		   }//else    		
     	}
     
     	
@@ -211,6 +208,9 @@ function fillInAddress() {
 	else{
 		
 	    var result = place.address_components;
+	    
+	    $("#latitude").val(place.geometry.location.lat());
+		$("#longitude").val(place.geometry.location.lng());
 		
 		if(place.geometry.viewport) {
 			map.fitBounds(place.geometry.viewport);
@@ -249,6 +249,8 @@ function fillInAddress() {
     	    	$("#" + addressType).val(val);      	    
     	    }    	    
     	 }  
+    	 
+    	
     	    	 
     	 //info window content
     	 var addressInfo = '';
@@ -264,8 +266,11 @@ function fillInAddress() {
          infowindow.open(map, initMarker);
          addMarkerListener(initMarker, infowindow);
     	 
-    	 enableNexButton();		 
-		 unBlockIssueForm();	
+    	 setTimeout(function(){    	
+     		unBlockIssueForm();	    	
+     		enableNexButton();		  		
+     	}, 800);
+	
 			
 	}
 }//fill
@@ -345,12 +350,12 @@ function geocodeAddress(callback){
        	var locationType = results[0].geometry.location_type;
        	address = results[0].geometry;
 //       	
-       		if(locationType === "RANGE_INTERPOLATED" || locationType == "ROOFTOP"){		
+//       		if(locationType === "RANGE_INTERPOLATED" || locationType == "ROOFTOP"){		
 	        		var latLng = results[0].geometry.location;		        	
 	        		$("#latitude").val(latLng.lat());
 					$("#longitude").val(latLng.lng());
 				
-	        	}
+//	        	}
 
 //					   
 //		        		else if(locationType == "APPROXIMATE"){		

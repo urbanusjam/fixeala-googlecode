@@ -424,7 +424,7 @@ path:hover {
 			var isValid = false;
 
 			$("#fileupload").change(function(){				
-			
+				alert("fileupload");
 				var fileInput = document.getElementById('fileupload');
 				var file = fileInput.files;
 				var formData = new FormData();			
@@ -860,72 +860,7 @@ path:hover {
 				
 			}
                        
-          function emptyFields(){
-        	  return $("#address").val() == "" 
-        	  			&& $("#locality").val() == ""
-        	  			&& $("#administrative_area_level_1").val() == "";
-          }
-          
- 
-      	 	$('#btnIssue').bind('click', bindIssue); 
-      	 
-            function bindIssue(){
-            	
-               	$('#btnIssue').unbind('click'); 	            
-              
-               	isAnimating = true;
-            	//open form
-            	if( parseInt($("#map_canvas").css('width')) == 842 ){
-            		
-            		if(!emptyFields()){
-            			
-            			bootbox.confirm("Si cierra el formulario, se descartar&aacute; la informaci&oacute;n ingresada. &iquest;Desde continuar?", function(result){
-                			if(result){
-                				window.parent.location.reload();
-                			}
-                		});
-            			
-            		}
-            		//empty form
-            		else{             		
-            		 	if( $(this).hasClass('btn-danger') ){                 	
-                 			$(this).removeClass('btn-danger').addClass('btn-primary').html("<i class=\"icon-map-marker icon-large\"></i>&nbsp;&nbsp;&nbsp;PUBLICAR RECLAMO");
-                 		}  toggleIssueForm();             		
-            		}
-            		
-            	}
-            	//closed form
-            	else{
-            		
-            		if( $(this).hasClass('btn-primary') ){
-                		$(this).removeClass('btn-primary').addClass('btn-danger').html("<i class=\"icon-remove-sign icon-large\"></i>&nbsp;&nbsp;&nbsp;CANCELAR RECLAMO");
-                	} toggleIssueForm();   
-            	
-            	}
-             
-            }
-           
-            function toggleIssueForm(){
-            	
-	          	  var $issueBox = $("#issueFormWizard");  
-	          	  var duration = 1500;
-	          	  
-	          	  $issueBox.animate({
-	                    width: "toggle",
-	                    right:"338px",
-	                    opacity: "toggle"                   
-	              }, duration, function(){	isAnimating = false; $('#btnIssue').bind('click',bindIssue);  });
-	
-	  			  $("#map_canvas").animate({            		 
-	           		  width : parseInt($issueBox.css('width')) == 316 ?  1178 :  842                   		
-	              }, duration);
-	  				 
-	  			  $("#cbxProvincias").animate({
-	  	           	      marginRight : parseInt($issueBox.css('width')) == 316 ? 115 : 451        
-	  	          }, duration);  				 
-  				     		
-            }
-            
+      
 			$('#btnAdvancedSearch').click(function(){ 
             	 $("#searchFilters").slideToggle('slow');              	
             });

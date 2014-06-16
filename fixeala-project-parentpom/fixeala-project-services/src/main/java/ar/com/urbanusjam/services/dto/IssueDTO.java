@@ -44,6 +44,7 @@ public class IssueDTO implements Serializable {
 	private String status;
 	private String statusCss;	
 	private String fechaFormateada;
+	private MediaContentDTO uploadedFile;
 
 	
 	public String getId() {
@@ -296,5 +297,14 @@ public class IssueDTO implements Serializable {
 		
 		return formattedAddress;
 	}
+
+	public MediaContentDTO getUploadedFile() {
+		return uploadedFile;
+	}
+
+	public void setUploadedFile(MediaContentDTO uploadedFile) {
+		this.uploadedFile = uploadedFile;
+	}
+	
 	
 }
