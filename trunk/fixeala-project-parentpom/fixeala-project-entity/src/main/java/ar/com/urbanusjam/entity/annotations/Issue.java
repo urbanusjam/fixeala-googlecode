@@ -1,6 +1,7 @@
 package ar.com.urbanusjam.entity.annotations;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
@@ -349,6 +350,22 @@ public class Issue implements Serializable  {
 		if (!getComentarios().contains(comment)) {
 			getComentarios().add(comment);
 		}
+	}
+	
+	public void addMediaContent(MediaContent contenido) {	
+//		if (!getContenidos().contains(contenido)) {
+//			getContenidos().add(contenido);
+//		}
+		
+		
+		if (contenido != null) {
+	        if (contenidos == null) {
+	        	contenidos = new HashSet<MediaContent>();          
+	        }
+	        contenidos.add(contenido);
+	        contenido.setIssue(this);
+	     }
+		
 	}
 	
 	@Override

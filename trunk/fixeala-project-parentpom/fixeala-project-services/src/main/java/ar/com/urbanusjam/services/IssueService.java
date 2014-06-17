@@ -17,6 +17,7 @@ public interface IssueService {
 	public void reportIssue(IssueDTO issue);	
 	public void postComment(CommentDTO comment);
 	
+	//rever
 	public void addHistoryUpdate(IssueUpdateHistoryDTO update);
 	public void addRepairInfo(IssueRepairDTO licitacion);
 	public void updateRepairInfo(IssueRepairDTO licitacion);

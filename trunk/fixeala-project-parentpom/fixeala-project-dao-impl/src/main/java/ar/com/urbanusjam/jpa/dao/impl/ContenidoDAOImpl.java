@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ar.com.urbanusjam.dao.ContenidoDAO;
 import ar.com.urbanusjam.entity.annotations.MediaContent;
+import ar.com.urbanusjam.entity.annotations.User;
 
 @Repository
 @Transactional(propagation= Propagation.REQUIRED, readOnly=false)
@@ -24,25 +26,35 @@ public class ContenidoDAOImpl implements ContenidoDAO  {
 	public ContenidoDAOImpl() {}
 
 	@Override
-	public MediaContent findContenidoById(Long idContenido) {
-		List<MediaContent> contenidos = this.findWhere( " id = ? ", new Object[]{idContenido});    	
-    	return contenidos.size() > 0 ? contenidos.get(0) : null; 
+	public MediaContent findContenidoById(Long contenidoID) {
+		try{
+			MediaContent contenido = entityManager.createQuery("SELECT c FROM MediaContent c WHERE c.id = :contenidoID", MediaContent.class)
+					  .setParameter("contenidoID", contenidoID)			
+ 					  .getSingleResult();	
+			return contenido;	
+		} catch(NoResultException e){
+			return null;
+		}	
 	}
 
 	@Override
 	public List<MediaContent> findContenidosByIssue(Long idIssue) {
-//		List<Contenido> contenidos = this.findWhere(" issue.id = ? ", new Object[]{idIssue});    	
+		try{
+			List<MediaContent> contenidos = entityManager.createQuery("SELECT c FROM MediaContent c WHERE c.issue.id = :idIssue", MediaContent.class)
+					 .setParameter("idIssue", idIssue)
+					 .getResultList();
+			return contenidos; 
+		} catch(NoResultException e){
+			return null;
+		}	
 		
-		
-		List<MediaContent> contenidos =  null;/**getSessionFactory().getCurrentSession().createCriteria(MediaContent.class)  	
+		/**List<MediaContent> contenidos =  getSessionFactory().getCurrentSession().createCriteria(MediaContent.class)  	
 			
 				.createAlias("issue", "i")
 				.add(Restrictions.eq("i.id", idIssue))
 		        .addOrder(Order.asc("orden") )
 		        .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
 		        .list();**/
-		
-    	return contenidos; 
 	}	
 	
 	@Override
@@ -166,6 +178,12 @@ public class ContenidoDAOImpl implements ContenidoDAO  {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public void saveContenido(MediaContent contenido) {
+		entityManager.merge(contenido);
+	}
+
 
 		
 }

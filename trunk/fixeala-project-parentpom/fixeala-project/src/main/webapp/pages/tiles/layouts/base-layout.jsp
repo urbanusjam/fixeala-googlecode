@@ -291,11 +291,13 @@ path:hover {
 				 						toggleIssueForm();
 				 					
 					 						
-					 					setTimeout(function(){   	
-					 						unBlockIssueForm();	   
-					 					}, 2000);
 					 					
-					 				});		 	    					
+					 					
+					 				});		
+					 				
+					 				setTimeout(function(){   	
+				 						unBlockIssueForm();	   
+				 					}, 2000);
 		 	    				}
 		 	    				else{	 	    			
 		 	    					bootbox.alert(alertStatus.message);	 	    										 	    					
