@@ -214,6 +214,16 @@
 			  
 			  //--EDITABLE FIELDS
 			  
+			  var updatedFields =  [];	
+			  
+			  var titleChange = {};
+			  var barrioChange = {};
+			  var descriptionChange = {};
+			  var tagsChange = {};
+			  
+			  var oldTitle;
+			  
+			  
 			  $("#issue-title").editable({
 				  pk: 1,  
 				  name: 'title', 
@@ -224,16 +234,34 @@
 				        type: 'put'
 				  },
 				  validate: function(value) {
+					  
+						var pattern = /^\s*[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9,\s]+\s*$/;
+
 					    if($.trim(value) == '') {
-					        return 'Este campo es requerido.';
+					        return 'Campo obligatorio.';
 					    }
-					    if($.trim(value).length > 50) {
-					        return 'La longitud maxima del campo es de 50 caracteres.';
+					    
+					    if($.trim(value).length > 80) {
+					        return 'La longitud m&aacute;xima del campo es de 80 caracteres.';
 					    }
+					    
+					    if(!pattern.test(value)){
+					    	return 'No se permiten caracteres especiales.';
+					    }
+					    
+				  },
+				  display: function(value) {
+					  currentTitle =  value;
+					  titleChange['value'] = value;	
 				  },
 				  success: function(response, newValue) {	
 		               newTitle =  newValue;
+		               titleChange['field'] = 'title';		
+		               titleChange['newValue'] = newValue;	
+					   if(newValue != oldTitle)
+						   updatedFields.push("title");
 		          }
+				
 			  });
 
 			  $("#issue-desc").editable({ 		
@@ -247,15 +275,33 @@
 				        type: 'put'
 				  },				
 				  validate: function(value) {
+					  
+						var pattern = /^[^'"]*$/;
+						
 					    if($.trim(value) == '') {
-					        return 'Este campo es requerido.';
+					        return 'Campo obligatorio.';
 					    }
+					    
 					    if($.trim(value).length > 600) {
-					        return 'La longitud maxima del campo es de 600 caracteres.';
+					        return 'La longitud m&aacute;xima del campo es de 600 caracteres.';
 					    }
-				  }
-			  	
+					    
+					    if(!pattern.test(value)){
+					    	return 'No se permiten comillas simples o dobles.';
+					    }
+				  },
+				  display: function(value) {
+					  descriptionChange['value'] = value;	
+				  },
+				  success: function(response, newValue) {
+					  descriptionChange['field'] = 'description';		
+					  descriptionChange['newValue'] = newValue;	
+				      fieldChanges.push(descriptionChange);
+				     
+		          }			  	
 			  });
+			  
+			
 			  
 			  $("#issue-barrio").editable({
 				  pk: 3,  
@@ -263,15 +309,29 @@
 				  mode: 'popup',	
 				  placement: 'right',
 				  ajaxOptions: {
-				        type: 'put'
-				  },
-				  validate: function(value) {					   
-					    if($.trim(value).length > 50) {
-					        return 'La longitud maxima del campo es de 50 caracteres.';
+					  dataType: 'json'
+				  },			
+				 
+				  validate: function(value) {		
+					  
+					 	var pattern = /^\s*[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9,\s]+\s*$/;
+					  
+					    if($.trim(value).length > 30) {
+					        return 'La longitud m&aacute;xima del campo es de 30 caracteres.';
+					    }
+					   					   
+					    if(!pattern.test(value)){
+					    	return 'No se permiten caracteres especiales.';
 					    }
 				  },
+				  display: function(value) {
+					  barrioChange['value'] = value;	
+				  },
 				  success: function(response, newValue) {
-		                console.log(response, newValue);
+					  barrioChange['field'] = 'barrio';		
+					  barrioChange['newValue'] = newValue;	
+				      fieldChanges.push(barrioChange);
+				     
 		          }
 			  });
 			  
@@ -613,10 +673,14 @@
 						  $('#tbl-issue .editable, #issue-header .editable').editable('submit', {
 							  
 						       url: './updateIssue.html', 
+// 						       data:   {fields: JSON.stringify(fieldChanges)}, //additional data
+ 								data:   {fields: fieldChanges}, //additional data
+						     
 						       ajaxOptions: {
 						           dataType: 'json'
 						       },  				       
 						       success: function(data) {	
+						    	  
 						    	   
 						    	   if(data.result){		
 						    		   bootbox.alert(data.message); 
@@ -1258,64 +1322,7 @@
 	      		<a href="#" onclick="javascript:;" title="Compartir"><i class="icon-share"></i></a>
 	      	</li>
       	</ul>
-      
-      
-
-<!--   			<div style="display:inline-block">	  		 -->
-<%--   			  	${cantidadVisitas}   			   --%>
-<%--   			  	<c:if test="${cantidadVisitas == 1}">visita</c:if> --%>
-<%--   			  	<c:if test="${cantidadVisitas != 1}">visitas</c:if> --%>
-<!--   			</div> -->
-  			
-<!--   			<div id="votes" style="display:inline-block">	 -->
-<%--   				<span id="voteCount">${cantidadVotos}</span> --%>
-<%--   				<c:if test="${cantidadVotos == 1}">voto</c:if> --%>
-<%--   			  	<c:if test="${cantidadVotos != 1}">votos</c:if> --%>
-<!--   				&nbsp;  				 -->
-<!--   				<a class="vote-up" href="#" title="Voto positivo"><i id="icon-up" class="icon-thumbs-up"></i></a>  	  				 -->
-<!--   				&nbsp; -->
-<!--   				<a class="vote-down" href="#" title="Voto negativo"><i id="icon-down" class="icon-thumbs-down"></i></a> -->
-<!--   				&nbsp; -->
-<!--   			</div> -->
-  			
-<!--   			<div id="watchers" style="display:inline-block">		  	 -->
-<!-- 	    		<a href="#" id="watching-toggle"></a> -->
-<!--  			    (<a href="#" id="view-watcher-list" data-toggle="popover"></a>) -->
-<!--   			</div>  			 -->
-
-
-  		
-<!--   			<div style="display:inline-block;">  			 -->
-<%--   				${cantidadComentarios} comentarios		 --%>
-<!--   			</div> -->
-  		
-<!--   			<div style="display:inline-block">	 -->
-<!--   			  	<i class="icon-star"></i> -->
-<!--   			  	<a id="bookmarkme" href="#" rel="sidebar" title="Agregar a favoritos">Agregar a Favoritos</a> -->
-<!--   			</div>   -->
-  			
-<!-- 				<i class="icon-print"></i>&nbsp; -->
-<!--   			    <a href="#" onclick="javascript:window.print();" title="Imprimir">Imprimir</a> -->
-
-
-  			    
-<!--   			    <i class="icon-warning-sign"></i>&nbsp; -->
-<!--   			    <a href="#" title="Denunciar">Denunciar</a>  			     -->
-		  
-		  
-<!-- 	 	  <div id="btnGroupSocial" class="btn-group"> -->
-<!-- 	 			<button class="btn"><i class="icon-share icon-large"></i>Compartir</button> -->
-<!-- 	 			<button class="btn dropdown-toggle" data-toggle="dropdown"> -->
-<!-- 	   			<span class="caret"></span> -->
-<!-- 	 			</button>	  	 -->
-<!-- 	 			<ul class="dropdown-menu"> -->
-<!-- 		    	<li><a href="#" title=""><i class="icon-envelope-alt icon-large"></i>&nbsp;&nbsp;&nbsp;Email</a></li> -->
-<!-- 		    	<li><a href="#" title=""><i class="icon-facebook-sign icon-large"></i>&nbsp;&nbsp;&nbsp;Facebook</a></li> -->
-<!-- 		    	<li><a href="#" title=""><i class="icon-google-plus icon-large"></i>&nbsp;&nbsp;&nbsp;Google+</a></li> -->
-<!-- 		    	<li><a href="#" title=""><i class="icon-twitter icon-large"></i>&nbsp;&nbsp;&nbsp;Twitter</a></li> -->
-<!-- 	 			</ul> -->
-<!-- 		   </div> -->
-
+   
 			<div id="userIssueActions" class="user-action-btns">
 			
 				<sec:authorize access="hasRole('ROLE_USER')">
@@ -1353,8 +1360,8 @@
 		 <ul class="thumbnails">
 	  	   		<li style="margin-left:0">		
 		    		<c:if test="${not empty image}">
-		    			<a data-lightbox="issue-lightbox2" class="thumbnail" href="${pageContext.request.contextPath}/uploads/${imageUrl}">							  	  			  	   		
-							<img src="${pageContext.request.contextPath}/uploads/${imageUrl}" alt="${imageName}">	 
+		    			<a data-lightbox="issue-lightbox2" class="thumbnail" href="${imageUrl}">							  	  			  	   		
+							<img src="${imageUrl}" alt="${imageName}">	 
 						</a>		
 		    		</c:if>
 		    		<c:if test="${empty image}">
@@ -1392,10 +1399,10 @@
 						    <th>Informante:</th>
 						    <td><script type="text/javascript">document.write( getUserURL('${usuario}') );</script></td>							    		   
 						 </tr>
-						 <tr>
-						    <th>Responsable:</th>
-						    <td><a href="#" id="issue-area">${area}</a></td>						   
-						 </tr>
+<!-- 						 <tr> -->
+<!-- 						    <th>Responsable:</th> -->
+<%-- 						    <td><a href="#" id="issue-area">${area}</a></td>						    --%>
+<!-- 						 </tr> -->
 						 <tr>
 						    <th>Direcci&oacute;n:</th>
 						    <td><a href="#" id="issue-street">${calle}</a></td>						   
@@ -1425,7 +1432,7 @@
 						    <td><a class="taglink" href="./search.html?type=status&value=${estado}" id="issue-status" data-type="text"><span class="${estadoCss}">${estado}</span></a></td>						   
 						 </tr>
 						  <tr>
-						    <th>Etiquetas:</th>
+						    <th>Categor&iacute;as:</th>
 						    <td>
        							<a id="issue-tags" href="#" data-type="select2">${tagsByIssue}</a>&nbsp;<i class="icon-pencil editableField"></i>
 						    </td>						   

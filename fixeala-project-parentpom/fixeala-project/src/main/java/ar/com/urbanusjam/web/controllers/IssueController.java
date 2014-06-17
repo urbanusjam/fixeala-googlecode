@@ -36,6 +36,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.gson.Gson;
+
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.ContenidoService;
 import ar.com.urbanusjam.services.IssueService;
@@ -72,7 +74,8 @@ public class IssueController {
 	private ContenidoService contenidoService;
 	
 	private static final String UPLOAD_DIRECTORY_WIN = "C:\\temp\\fixeala\\uploads\\";
-	private static final String UPLOAD_DIRECTORY_MAC = "file:///Users/cora/Documents/dev/temp/fixeala/uploads/";
+//	private static final String UPLOAD_DIRECTORY_MAC = "file:///Users/cora/Documents/dev/temp/fixeala/uploads/";
+	private static final String UPLOAD_DIRECTORY_MAC = "file:///C:/temp/fixeala/uploads";
 	private MediaContentDTO uploadedFile = null;
 	
 	@Autowired
@@ -113,7 +116,7 @@ public class IssueController {
 		List<String> allTags = issueService.getTagList();	
 		JSONArray tagArray = new JSONArray();
 		for(String tag : allTags){			
-			String url = "./search.html?type=tag&value=" + tag;		
+			String url = "./search.html?type=tag&value=" + tag.trim();		
 			JSONObject obj = new JSONObject();
 			obj.put("url", url);
 			obj.put("label", tag);
@@ -266,6 +269,7 @@ public class IssueController {
 				model.addAttribute("isCurrentlyVoted", currentVote.isCurrentlyVoteByUser());	
 				model.addAttribute("isVoteUp", currentVote.getVote() == 1 ? true : false);	
 				
+				/**
 				IssueRepairDTO licitacion = new IssueRepairDTO();
 				
 				if(issue.getLicitacion() != null){
@@ -293,6 +297,7 @@ public class IssueController {
 					model.addAttribute("fechaRealFinal", parseDate(licitacion.getFechaRealFin()));
 					
 				}
+				**/
 			
 			 
 		} catch(Exception e){
@@ -344,7 +349,7 @@ public class IssueController {
 //						jsonObject.put("id", uploadedContenido.getId().toString());
 						jsonObject.put("name", uploadedContenido.getNombreConExtension());
 						jsonObject.put("format", uploadedContenido.getExtension());
-						jsonObject.put("url", UPLOAD_DIRECTORY_MAC);
+						jsonObject.put("url", UPLOAD_DIRECTORY_WIN);
 						jsonObject.put("thumbnailUrl", "UPLOAD_DIRECTORY_MAC");
 						jsonObject.put("size", Double.valueOf(uploadedContenido.getFile().length()));
 						jsonObject.put("error", StringUtils.EMPTY);
@@ -371,11 +376,10 @@ public class IssueController {
 					revision.setObservaciones(Messages.ISSUE_CREATE_OBS);					
 					revision.setEstado(issue.getStatus());	
 					
-//					issue.getHistorial().add(revision);			
+					issue.getHistorial().add(revision);	
+					
 					issueService.updateIssue(issue); //NO ANDA BIEN > duplica los registros del historial
-					
-					issueService.addHistoryUpdate(revision);
-					
+										
 					return response;
 					
 				}
@@ -415,7 +419,7 @@ public class IssueController {
 				this.setUploadedFile(nuevoContenido);
 			}
 			
-			return new ContenidoResponse(true, "La foto se cargo exitosamente.");
+			return new ContenidoResponse(true, "La foto se carg&oacute; exitosamente.");
 	    
 	    } catch (IOException e) {
 	    	return new ContenidoResponse(false, "No se pudo cargar el archivo.");
@@ -499,7 +503,8 @@ public class IssueController {
 					
 					Random generator = new Random(); 
 					int idIssue = generator.nextInt(100000) + 1000;
-									
+								
+					//issue data
 					UserDTO userDTO = new UserDTO();
 					userDTO.setUsername(userDB.getUsername());					
 					issue.setCreationDate(new Date());
@@ -507,7 +512,8 @@ public class IssueController {
 					issue.setStatus(IssueStatus.OPEN);		
 					issue.setUser(userDTO);			
 					issue.setId(String.valueOf(idIssue));	
-							
+						
+					//history
 					IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
 					revision.setFecha(new Date());
 					revision.setUsername(userDTO.getUsername());	
@@ -515,24 +521,23 @@ public class IssueController {
 					revision.setMotivo(Messages.ISSUE_CREATION + " el reclamo.");
 					revision.setObservaciones(Messages.ISSUE_CREATE_OBS);
 					revision.setEstado(issue.getStatus());
+										
+					issue.getHistorial().add(revision);
+					issue.setLicitacion(null);
 					
 					//random id
-					issue.setId(String.valueOf(issue.getId()));
-					revision.setNroReclamo(Long.valueOf(issue.getId()));	
-					issue.setLicitacion(null);
-					issue.getHistorial().add(revision);
-										
+//					issue.setId(String.valueOf(issue.getId()));
+//					revision.setNroReclamo(Long.valueOf(issue.getId()));	
+							
 				    //contenido
-					MediaContentDTO contenido = this.getUploadedFile();
-					
+					MediaContentDTO contenido = this.getUploadedFile();					
 					if(contenido != null){
-						contenido.setNroReclamo(String.valueOf(issue.getId()));
+//						contenido.setNroReclamo(String.valueOf(issue.getId()));
 					    issue.setUploadedFile(contenido);
 					}					
+					this.setUploadedFile(null);
 					
 					issueService.reportIssue(issue);	
-					
-					this.setUploadedFile(null);
 					
 					return new AlertStatus(true, "Su reclamo ha sido registrado.");			
 			}				
@@ -545,12 +550,11 @@ public class IssueController {
 	
 	@RequestMapping(value="/issues/sendTags", method = RequestMethod.POST)
 	public @ResponseBody List<String> sendTags(@RequestParam List<String> tags){
-		int i = tags.size();
 		return tags;
 	}
 	
 	@RequestMapping(value="/issues/updateIssue", method = RequestMethod.POST)
-	public @ResponseBody AlertStatus doUpdatetIssue(@ModelAttribute("issue") IssueDTO issue, 
+	public @ResponseBody AlertStatus doUpdatetIssue(@ModelAttribute("issue") IssueDTO issue, @RequestParam("fields") String[] fieldChanges,
 			HttpServletRequest request) throws ParseException{
 		
 		try {			
@@ -563,48 +567,34 @@ public class IssueController {
 			
 				//user is logged-in
 				else{
-									
-					//se actualizan los datos del reclamo
 					
-					
-					//se actualiza el historial de revisiones
-			
-					UserDTO userDTO = new UserDTO();
-					userDTO.setUsername(userDB.getUsername());					
-					List<String> authorities = new ArrayList<String>();
-					authorities.add("ROLE_USER");		
-					userDTO.setAuthorities(authorities);	
-					issue.setUser(userDTO);	
-					
+				
+					//tags
 					Object[] tagMapValues = (Object[]) issue.getTagsMap().values().toArray();
 					String[] tagsArray = new String[tagMapValues.length];
 					
-					if(tagMapValues.length > 0){
-						
+					if(tagMapValues.length > 0){						
 						if(tagMapValues[0] instanceof String){
 							for(int i = 0 ; i < tagMapValues.length ; i++)
 								tagsArray[i] = (String)tagMapValues[i];
 						}
 						else					
-							tagsArray = (String[]) tagMapValues[0];
-						
-					}
-				
+							tagsArray = (String[]) tagMapValues[0];						
+					}	
 					
-					issue.setTags(Arrays.asList(tagsArray)); 
-					
+					//history
 					IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
 					revision.setFecha(new Date());
-					revision.setUsername(userDTO.getUsername());			
-					revision.setNroReclamo(Long.valueOf(issue.getId()));			
+					revision.setUsername(userDB.getUsername());	
 					revision.setOperacion(Operation.UPDATE);			
 					revision.setMotivo(Messages.ISSUE_UPDATE_FIELDS + " el reclamo.");			
 					revision.setEstado(issue.getStatus());
 					revision.setObservaciones(Messages.ISSUE_UPDATE_OBS);
 					
+					issue.setUsername(userDB.getUsername());
 					issue.setLastUpdateDate(revision.getFecha());
+					issue.setTags(Arrays.asList(tagsArray)); 				
 					issue.getHistorial().add(revision);
-//					issue.setAssignedArea(issueService.getAreaByName("Comuna 1"));
 					
 					issueService.updateIssue(issue);	
 					
@@ -632,7 +622,7 @@ public class IssueController {
 		
 			else{
 				issueService.updateIssueStatus(issueID, newStatus);					
-				return new AlertStatus(true, "El reclamo ha sido actualizado.");			
+				return new AlertStatus(true, "El estado reclamo ha sido actualizado.");			
 			}
 			
 		}catch(AccessDeniedException e){
