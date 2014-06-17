@@ -323,12 +323,12 @@ public class Issue implements Serializable  {
 
 
 	public void addTag(Tag tag) {	
-			if (!getTagsList().contains(tag)) {
-				getTagsList().add(tag);
-			}
-		    if (!tag.getIssueList().contains(this)) {
-		        tag.getIssueList().add(this);
-		    }			
+		if (!getTagsList().contains(tag)) {
+			getTagsList().add(tag);
+		}
+	    if (!tag.getIssueList().contains(this)) {
+	        tag.getIssueList().add(this);
+	    }				   
 	}	
 	
 	public void removeTag(Tag tag) {	
@@ -340,32 +340,34 @@ public class Issue implements Serializable  {
 	    }			
 	}	
 	
-	public void addRevision(IssueUpdateHistory revision) {	
-		if (!getRevisiones().contains(revision)) {
-			getRevisiones().add(revision);
-		}
+	public void addRevision(IssueUpdateHistory update) {		
+		if (update != null) {
+	        if (revisiones == null) {
+	        	revisiones = new HashSet<IssueUpdateHistory>();          
+	        }
+	        revisiones.add(update);
+	        update.setIssue(this);
+	     }			
 	}
 	
 	public void addComment(Comment comment) {	
-		if (!getComentarios().contains(comment)) {
-			getComentarios().add(comment);
-		}
+		if (comment != null) {
+	        if (comentarios == null) {
+	        	comentarios = new HashSet<Comment>();          
+	        }
+	        comentarios.add(comment);
+	        comment.setIssue(this);
+	     }		
 	}
 	
 	public void addMediaContent(MediaContent contenido) {	
-//		if (!getContenidos().contains(contenido)) {
-//			getContenidos().add(contenido);
-//		}
-		
-		
 		if (contenido != null) {
 	        if (contenidos == null) {
 	        	contenidos = new HashSet<MediaContent>();          
 	        }
 	        contenidos.add(contenido);
 	        contenido.setIssue(this);
-	     }
-		
+	     }		
 	}
 	
 	@Override

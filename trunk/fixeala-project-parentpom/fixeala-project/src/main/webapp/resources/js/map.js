@@ -19,13 +19,14 @@ var componentForm = {
 
 var isFormOpen;
 var isAnimating;
+
 /**************************************************************************************************/
 
 $(document).ready(function(){		
-	 var geocoder;		 	
-	 
+	 var geocoder;			 
 	 google.maps.event.addDomListener(window, 'load', initMap);  	 
  });
+
 
 
 function initMap() {
@@ -39,13 +40,14 @@ function initMap() {
     };
    
     map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
-      
+          
     /**** ADDRESS AUTOCOMPLETE ****/ 
     initAutocomplete();
+   
  
-    /**** SET MARKER ON CLICK EVENT ****/	    
+    /**** SET MARKER ON CLICK EVENT ****/	 
     google.maps.event.addListener(map, 'click', function(e) {	
-    	
+    
     	//open form
     	if(isFormOpen){	    		
     		mapTimesClicked++;
@@ -59,9 +61,9 @@ function initMap() {
  	    		if(!isAnimating){ 	       	   	 
  	            	if($("#tab1").hasClass("active")){
  	            		blockIssueForm(); 	            	
- 	            		if( $("#btnIssue").hasClass('active') ){ 	            			
- 	            			setTimeout(function(){    	
- 	            				getAddressOnMapClick(e.latLng);
+ 	            		if( $("#btnIssue").hasClass('active') ){ 	
+ 	            			setTimeout(function(){   
+ 	            				getAddressOnMapClick(e.latLng); 	            				
  	            				enableNexButton();		
  	            				unBlockIssueForm();
  	            			}, 1500);		
@@ -387,6 +389,8 @@ function addMarkerListener (marker, infowindow){
     });
 }
 
+
+
 function getAddressOnMapClick(latLng) {
 	 
 	 var geocoder;
@@ -443,7 +447,6 @@ function getAddressOnMapClick(latLng) {
 					
               	 }
 					
-			
 					
 				  if(province == "Ciudad Autónoma de Buenos Aires" && city == "Buenos Aires"){
 					  province = "Buenos Aires";
@@ -492,10 +495,10 @@ function getAddressOnMapClick(latLng) {
         	 infowindow.setContent('<div><strong>' + streetName + " " + streetNumber + '</strong><br>' + address);
         	 infowindow.open(map, initMarker);   
         	 addMarkerListener(initMarker, infowindow);
-        	 
+        	
        		  google.maps.event.addListener(initMarker, 'dragend', function(e) {
        			 blockIssueForm();
-       			 
+       			
        			 setTimeout(function(){    			
        				 getAddressOnMapClick(e.latLng); 
        				 enableNexButton();		
@@ -507,11 +510,10 @@ function getAddressOnMapClick(latLng) {
 				
 				
 			
-		} 
-		else { 
-			content += '<p>No address could be found. Status = ' + status + '</p>'; 
-		} 
-
+		} else {
+					bootbox.alert("Geocode was not successful for the following reason: " + status);
+		}
+	
 
 	}); 
 }//map clic	

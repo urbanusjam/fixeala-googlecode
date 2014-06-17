@@ -126,8 +126,11 @@ public class IssueServiceImpl implements IssueService {
 		Issue issue = new Issue();
 		issue = this.convertTo(issueDTO);
 		User u = userDAO.loadUserByUsername(issueDTO.getUser().getUsername());
-		issue.setReporter(u);
-		issue.addMediaContent(contenidoService.convertirAContenido(issueDTO.getUploadedFile()));
+		issue.setReporter(u);		
+		
+		if(issueDTO.getUploadedFile() != null){
+			issue.addMediaContent(contenidoService.convertirAContenido(issueDTO.getUploadedFile()));
+		}		
 		issueDAO.saveIssue(issue);	
 	}
 	
@@ -168,9 +171,10 @@ public class IssueServiceImpl implements IssueService {
 		
 		IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
 		revision.setFecha(new Date());
-		revision.setUsername(issue.getReporter().getUsername());			
-		revision.setNroReclamo(issue.getId());			
+		revision.setUsername(issue.getReporter().getUsername());
 		revision.setOperacion(Operation.UPDATE);	
+		revision.setEstado(issue.getStatus());
+		revision.setObservaciones("El reclamo ha sido " + newStatus + ".");
 		
 //		if(newStatus.equals(IssueStatus.ACKNOWLEDGED))
 //			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_ACKNOWLEDGE + " el reclamo.");			
@@ -183,11 +187,8 @@ public class IssueServiceImpl implements IssueService {
 		if(newStatus.equals(IssueStatus.REOPENED))	
 			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_REOPEN + " el reclamo.");				
 		
-		revision.setEstado(issue.getStatus());
-		revision.setObservaciones("El reclamo ha sido " + newStatus + ".");
-		issue.getRevisiones().add(convertTo(revision));		
-		issue.setLastUpdateDate(this.getCurrentCalendar(revision.getFecha()));
-		
+		issue.addRevision(this.convertTo(revision));		
+		issue.setLastUpdateDate(this.getCurrentCalendar(revision.getFecha()));		
 		issueDAO.updateIssue(issue);
 	}
 	
@@ -390,6 +391,7 @@ public class IssueServiceImpl implements IssueService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public void postComment(CommentDTO commentDTO) {
+		
 		Issue issue = issueDAO.findIssueById(commentDTO.getNroReclamo());
 		User user = userDAO.loadUserByUsername(commentDTO.getUsuario());
 		
@@ -400,16 +402,15 @@ public class IssueServiceImpl implements IssueService {
 		IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
 		revision.setFecha(new Date());
 		revision.setUsername(comment.getUsuario().getUsername());			
-		revision.setNroReclamo(issue.getId());			
 		revision.setOperacion(Operation.UPDATE);			
 		revision.setMotivo(Messages.ISSUE_UPDATE_COMMENT);			
 		revision.setEstado(issue.getStatus());
 		revision.setObservaciones(Messages.ISSUE_UPDATE_OBS);	
 			
-		issue.setLastUpdateDate(this.getCurrentCalendar(revision.getFecha()));
-		
-		commentDAO.saveComment(comment);	
-		issueUpdateDAO.saveHistorial(convertTo(revision));
+		issue.setLastUpdateDate(this.getCurrentCalendar(revision.getFecha()));		
+		issue.addComment(comment);
+		issue.addRevision(convertTo(revision));
+
 		issueDAO.updateIssue(issue);
 	}
 
@@ -419,7 +420,7 @@ public class IssueServiceImpl implements IssueService {
 		List<CommentDTO> comentariosDTO = new ArrayList<CommentDTO>();
 		comentarios = commentDAO.findCommentsByIssueId(Long.valueOf(issueID));
 		for(Comment c : comentarios){
-			comentariosDTO.add(convertTo(c));
+			comentariosDTO.add(convertToDTO(c));
 		}		
 		return comentariosDTO;
 	}
@@ -518,12 +519,8 @@ public class IssueServiceImpl implements IssueService {
 	public IssueUpdateHistory convertTo(IssueUpdateHistoryDTO historialDTO){
 		
 		IssueUpdateHistory historial = new IssueUpdateHistory();	
-		Issue issue = new Issue();		
-		issue.setId(Long.valueOf(historialDTO.getNroReclamo()));
-		
 		historial.setFecha(this.getCurrentCalendar(historialDTO.getFecha()));	
 		historial.setUsuario(userDAO.loadUserByUsername(historialDTO.getUsername()));
-		historial.setIssue(issue);
 		historial.setOperacion(Operation.UPDATE);
 		historial.setMotivo(historialDTO.getMotivo());
 		historial.setEstado(historialDTO.getEstado());		
@@ -565,21 +562,22 @@ public class IssueServiceImpl implements IssueService {
 		issue.setTitle(issueDTO.getTitle());
 		issue.setDescription(issueDTO.getDescription());
 		
-		//licitacion
-//		if(issueDTO.getLicitacion() != null)
-//			issue.setLicitacion(convertTo(issueDTO.getLicitacion()));
-//		else
-//			issue.setLicitacion(null);
-	
-		//historial de revisiones
+		//history
 		for(IssueUpdateHistoryDTO historial : issueDTO.getHistorial()){
-			issue.getRevisiones().add(convertTo(historial));
+			issue.addRevision(convertTo(historial));
 		}
 		
+		//licitacion
+		/*if(issueDTO.getLicitacion() != null)
+			issue.setLicitacion(convertTo(issueDTO.getLicitacion()));
+		else
+			issue.setLicitacion(null);*/
+	
+		
 		//contenidos
-//		for(MediaContentDTO contenido : issueDTO.getContenidos()){			
-//			issue.getContenidos().add(contenidoService.convertirAContenido(contenido));
-//		}
+		/*for(MediaContentDTO contenido : issueDTO.getContenidos()){			
+			issue.getContenidos().add(contenidoService.convertirAContenido(contenido));
+		}*/
 		
 		//tags
 		List<String> tagList = issueDTO.getTags();
@@ -708,7 +706,7 @@ public class IssueServiceImpl implements IssueService {
 		List<CommentDTO> comentariosDTO = new ArrayList<CommentDTO>();
 		
 		for(Comment comentario : issue.getComentarios()){
-			comentariosDTO.add(convertTo(comentario));
+			comentariosDTO.add(convertToDTO(comentario));
 		}
 		
 		issueDTO.setComentarios(comentariosDTO);
@@ -716,7 +714,7 @@ public class IssueServiceImpl implements IssueService {
 		return issueDTO;
 	}
 	
-	public CommentDTO convertTo(Comment comment){
+	public CommentDTO convertToDTO(Comment comment){
 		CommentDTO commentDTO = new CommentDTO();
 		commentDTO.setUsuario(comment.getUsuario().getUsername());
 		commentDTO.setNroReclamo(String.valueOf(comment.getIssue().getId()));

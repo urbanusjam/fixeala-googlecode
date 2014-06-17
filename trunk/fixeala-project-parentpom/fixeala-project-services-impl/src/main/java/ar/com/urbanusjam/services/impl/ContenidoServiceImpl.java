@@ -45,11 +45,7 @@ public class ContenidoServiceImpl implements ContenidoService {
  
     private ContenidoDAO contenidoDAO;
 
-    private IssueDAO issueDAO;
-    
-  
-
-	public void setPathImagenes(String pathImagenes) {
+    public void setPathImagenes(String pathImagenes) {
 		this.pathImagenes = pathImagenes;
 	}
 
@@ -60,7 +56,6 @@ public class ContenidoServiceImpl implements ContenidoService {
 
 
 	public void setIssueDAO(IssueDAO issueDAO) {
-		this.issueDAO = issueDAO;
 	}
 
 
