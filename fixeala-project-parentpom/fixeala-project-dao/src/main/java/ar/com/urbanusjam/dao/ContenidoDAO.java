@@ -23,4 +23,6 @@ public interface ContenidoDAO extends GenericDAO<MediaContent, Serializable> {
 	
 	public boolean existe(Long idContenido);
 	
+	public void saveContenido(MediaContent contenido);
+	
 }

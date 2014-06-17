@@ -146,17 +146,21 @@ public class ContenidoServiceImpl implements ContenidoService {
      
    
    @Override
-   public MediaContentDTO uploadFile(InputStream inputStream, MediaContentDTO fileWrapper) {		
+   public MediaContentDTO uploadFile(InputStream inputStream, MediaContentDTO contenidoDTO) {		
 		
 		if(inputStream == null)		
-			throw new BusinessException("archivo no encontrado");			
+			throw new BusinessException("Archivo no encontrado");			
 	    
        /** Archivo random a generar **/
        String nombreArchivoHash = UUID.randomUUID().toString();
        
        int inicioCadena = nombreArchivoHash.length() - LONGITUD_MAXIMA_NOMBRE_ARCHIVO_HASH;
       
-       File file = new File( this.pathImagenes + "IMG-" + DateUtils.generateTimestamp() + "-FXL-" +  nombreArchivoHash.substring(inicioCadena) + "." + fileWrapper.getExtension().toLowerCase());
+       File file = new File( this.pathImagenes 
+    		   						+ "IMG-" 
+					    		   	+ DateUtils.generateTimestamp() + "-FXL-" 
+					    		   	+  nombreArchivoHash.substring(inicioCadena) 
+					    		   	+ "." + contenidoDTO.getExtension().toLowerCase());
        
        try {
            FileOutputStream fileOutputStream;
@@ -175,39 +179,41 @@ public class ContenidoServiceImpl implements ContenidoService {
            BufferedImage readImage = null;           
            readImage = ImageIO.read(file);   
            
-           fileWrapper.setInputStream(inputStream);
-           fileWrapper.setFile(file);
-           fileWrapper.setNombre(FileUploadUtils.getNombreArchivoSinExtension(file.getName()));
-           fileWrapper.setNombreConExtension(file.getName());
-           fileWrapper.setExtension(FileUploadUtils.getExtensionArchivo(file.getName()));	
-           fileWrapper.setPathRelativo("/" + file.getName());
-           fileWrapper.setAlto(readImage.getHeight());
-           fileWrapper.setAncho(readImage.getWidth());
+           contenidoDTO.setInputStream(inputStream);
+           contenidoDTO.setFile(file);
+           contenidoDTO.setNombre(FileUploadUtils.getNombreArchivoSinExtension(file.getName()));
+           contenidoDTO.setNombreConExtension(file.getName());
+           contenidoDTO.setExtension(FileUploadUtils.getExtensionArchivo(file.getName()));	
+           contenidoDTO.setPathRelativo("/" + file.getName());
+           contenidoDTO.setAlto(readImage.getHeight());
+           contenidoDTO.setAncho(readImage.getWidth());
 
            fileOutputStream.close();
            inputStream.close();
          
        }
        catch (FileNotFoundException e) {
-    	   throw new BusinessException("archivo no encontrado");
+    	   throw new BusinessException("Archivo no encontrado");
        } 
        catch (IOException e) {
-    	   throw new BusinessException("archivo no encontrado");       		
+    	   throw new BusinessException("Archivo no encontrado");       		
        }
      
-       return fileWrapper;
+       return contenidoDTO;
    }   
    
    private void grabarContenido(MediaContentDTO contenidoDTO) {	
        try {
        	 	MediaContent contenido = convertirAContenido(contenidoDTO);      
-       	 	contenido.setIssue(issueDAO.findIssueById(contenidoDTO.getNroReclamo()));
+//       	 	contenido.setIssue(issueDAO.findIssueById(contenidoDTO.getNroReclamo()));
             contenidoDAO.save(contenido);
             contenidoDTO.setId(contenido.getId());   
 		} catch (BusinessException e) {		
 			e.printStackTrace();
 		}        
-   }	   
+   }	
+   
+   
    
    private boolean deleteFile(String filePath) throws BusinessException {
 		boolean isDeleted = false;

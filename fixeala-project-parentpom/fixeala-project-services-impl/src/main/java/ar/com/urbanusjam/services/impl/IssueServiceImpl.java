@@ -64,7 +64,6 @@ public class IssueServiceImpl implements IssueService {
 	private ContenidoService contenidoService;
 	private IssueDAO issueDAO;
 	private UserDAO userDAO;
-//	private AreaDAO areaDAO;
 	private TagDAO tagDAO;
 	private CommentDAO commentDAO;
 	private IssueFollowDAO issueFollowDAO;
@@ -94,10 +93,6 @@ public class IssueServiceImpl implements IssueService {
 		this.userDAO = userDAO;
 	}
 
-//	public void setAreaDAO(AreaDAO areaDAO) {
-//		this.areaDAO = areaDAO;
-//	}
-
 	public void setTagDAO(TagDAO tagDAO) {
 		this.tagDAO = tagDAO;
 	}
@@ -121,20 +116,19 @@ public class IssueServiceImpl implements IssueService {
 	public void setIssueUpdateDAO(IssueHistorialRevisionDAO issueUpdateDAO) {
 		this.issueUpdateDAO = issueUpdateDAO;
 	}
+	
+	
+
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public void reportIssue(IssueDTO issueDTO) {
-//		Area area = areaDAO.getAreaById("1"); 
 		Issue issue = new Issue();
 		issue = this.convertTo(issueDTO);
 		User u = userDAO.loadUserByUsername(issueDTO.getUser().getUsername());
 		issue.setReporter(u);
-//		issue.setAssignedArea(area);
-//		asignarUsuarioDefault(issue);
-		contenidoService.subirContenido(issueDTO.getUploadedFile());
-		issueDAO.saveIssue(issue);		
-		
+		issue.addMediaContent(contenidoService.convertirAContenido(issueDTO.getUploadedFile()));
+		issueDAO.saveIssue(issue);	
 	}
 	
 	@Override
@@ -156,7 +150,11 @@ public class IssueServiceImpl implements IssueService {
 				issue.getTagsList().removeAll(removeTags);	
 				tag.getIssueList().remove(issue);
 			}
-		}			
+		}		
+		
+		for(MediaContentDTO contenidoDTO : issueDTO.getContenidos()){
+			issue.addMediaContent(contenidoService.convertirAContenido(contenidoDTO));
+		}
 		
 		issueDAO.updateIssue(issue);
 	}
@@ -989,6 +987,7 @@ public class IssueServiceImpl implements IssueService {
 		return convertTo(licitacion);
 	}
 
+	
 	
 	
 }

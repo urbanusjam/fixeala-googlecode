@@ -71,7 +71,8 @@ public class IssueController {
 	@Autowired
 	private ContenidoService contenidoService;
 	
-	private static final String UPLOAD_DIRECTORY = "C:\\temp\\fixeala\\uploads\\";
+	private static final String UPLOAD_DIRECTORY_WIN = "C:\\temp\\fixeala\\uploads\\";
+	private static final String UPLOAD_DIRECTORY_MAC = "file:///Users/cora/Documents/dev/temp/fixeala/uploads/";
 	private MediaContentDTO uploadedFile = null;
 	
 	@Autowired
@@ -318,6 +319,8 @@ public class IssueController {
 		JSONArray jsonArray = new JSONArray();
 	    
 		try {			
+			
+				IssueDTO issue = issueService.getIssueById(issueID);	
 				
 				if(issueID.isEmpty()){
 		    		return new ContenidoResponse(false, "No se pudo cargar el archivo.");
@@ -334,21 +337,23 @@ public class IssueController {
 						newContenido.setNroReclamo(issueID);							
 						newContenido.setOrden(String.valueOf(0));			
 						
-						newContenido = contenidoService.subirContenido(newContenido);							
-						uploadedFiles.add(newContenido);
+						MediaContentDTO uploadedContenido = contenidoService.subirContenido(newContenido);							
+						uploadedFiles.add(uploadedContenido);
 						
 						JSONObject jsonObject = new JSONObject();
-						jsonObject.put("id", newContenido.getId().toString());
-						jsonObject.put("name", newContenido.getNombreConExtension());
-						jsonObject.put("format", newContenido.getExtension());
-						jsonObject.put("url", UPLOAD_DIRECTORY);
-						jsonObject.put("thumbnailUrl", "UPLOAD_DIRECTORY");
-						jsonObject.put("size", Double.valueOf(newContenido.getFile().length()));
+//						jsonObject.put("id", uploadedContenido.getId().toString());
+						jsonObject.put("name", uploadedContenido.getNombreConExtension());
+						jsonObject.put("format", uploadedContenido.getExtension());
+						jsonObject.put("url", UPLOAD_DIRECTORY_MAC);
+						jsonObject.put("thumbnailUrl", "UPLOAD_DIRECTORY_MAC");
+						jsonObject.put("size", Double.valueOf(uploadedContenido.getFile().length()));
 						jsonObject.put("error", StringUtils.EMPTY);
 						
 						jsonArray.put(jsonObject);
+						
+						issue.getContenidos().add(uploadedContenido);
 					}
-
+				
 					List<MediaContentDTO> contenidos = contenidoService.listarContenidos(Long.valueOf(issueID));
 					model.addAttribute("contenidos", contenidos);
 					model.addAttribute("cantidadContenidos", contenidos.size());
@@ -356,8 +361,6 @@ public class IssueController {
 					response.setStatus(true);
 					response.setTotalUploadedFiles(contenidos.size());
 					response.setUploadedFiles(jsonArray.toString());		
-					
-					IssueDTO issue = issueService.getIssueById(issueID);	
 					
 					IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
 					revision.setNroReclamo(Long.valueOf(issueID));	
@@ -369,7 +372,7 @@ public class IssueController {
 					revision.setEstado(issue.getStatus());	
 					
 //					issue.getHistorial().add(revision);			
-//					issueService.updateIssue(issue); NO ANDA BIEN > duplica los registros del historial
+					issueService.updateIssue(issue); //NO ANDA BIEN > duplica los registros del historial
 					
 					issueService.addHistoryUpdate(revision);
 					
