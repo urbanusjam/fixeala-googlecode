@@ -2,6 +2,7 @@ package ar.com.urbanusjam.web.controllers;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,12 +10,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,6 +35,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -156,6 +162,14 @@ public class IssueController {
 		try{
 				request.getSession().setAttribute("issueID", issueID);
 			 	issue = issueService.getIssueById(issueID);	
+			 	
+			 	
+				JSONObject oldFields = new JSONObject();
+				oldFields.put("title", issue.getTitle());
+				oldFields.put("desc", issue.getDescription());
+				oldFields.put("barrio", issue.getNeighborhood());
+
+				model.addAttribute("oldFields", oldFields.toString());
 			 	
 			 	model.addAttribute("titulo", issue.getTitle());
 			 	model.addAttribute("tituloCss", issue.getTitleCss());
@@ -554,10 +568,15 @@ public class IssueController {
 	}
 	
 	@RequestMapping(value="/issues/updateIssue", method = RequestMethod.POST)
-	public @ResponseBody AlertStatus doUpdatetIssue(@ModelAttribute("issue") IssueDTO issue, @RequestParam("fields") String[] fieldChanges,
-			HttpServletRequest request) throws ParseException{
+	public @ResponseBody AlertStatus doUpdatetIssue(@ModelAttribute("issue") IssueDTO issue, @RequestParam("fields")  String fieldChanges,
+			HttpServletRequest request) throws ParseException, JsonParseException, JsonMappingException, IOException{
 		
 		try {			
+//			JSONObject jsonObject = (JSONObject) JSONSerializer.toJSON( fieldChanges );
+			
+			
+			
+			
 				User user =  getCurrentUser(SecurityContextHolder.getContext().getAuthentication());
 				UserDetails userDB = userService.loadUserByUsername(user.getUsername());		
 				
@@ -568,7 +587,9 @@ public class IssueController {
 				//user is logged-in
 				else{
 					
-				
+					 
+					 
+					 
 					//tags
 					Object[] tagMapValues = (Object[]) issue.getTagsMap().values().toArray();
 					String[] tagsArray = new String[tagMapValues.length];
@@ -582,23 +603,60 @@ public class IssueController {
 							tagsArray = (String[]) tagMapValues[0];						
 					}	
 					
-					//history
-					IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
-					revision.setFecha(new Date());
-					revision.setUsername(userDB.getUsername());	
-					revision.setOperacion(Operation.UPDATE);			
-					revision.setMotivo(Messages.ISSUE_UPDATE_FIELDS + " el reclamo.");			
-					revision.setEstado(issue.getStatus());
-					revision.setObservaciones(Messages.ISSUE_UPDATE_OBS);
+					UpdatedFields updatedFields = new Gson().fromJson(fieldChanges, UpdatedFields.class);
+					String campos = "";
+					String plural = "el campo";
+					String detalle =  "";
+					int counter = 0;
+					if(updatedFields.getTitle() == 1){
+						campos += "TITULO, ";
+						counter++;
+					}
 					
-					issue.setUsername(userDB.getUsername());
-					issue.setLastUpdateDate(revision.getFecha());
-					issue.setTags(Arrays.asList(tagsArray)); 				
-					issue.getHistorial().add(revision);
+					if(updatedFields.getBarrio() == 1){
+						campos += "BARRIO, ";
+						counter++;
+					}
 					
-					issueService.updateIssue(issue);	
+					if(updatedFields.getDesc() == 1){
+						campos += "DESCRIPCION";
+						counter++;
+					}
 					
-					return new AlertStatus(true, "El reclamo ha sido actualizado.");			
+					if(counter == 1){
+						detalle = Messages.ISSUE_UPDATE_FIELDS + " el campo " + campos + ".";
+					}
+					if(counter > 1){
+						detalle = Messages.ISSUE_UPDATE_FIELDS + " los campos " + campos + ".";
+					}
+					
+				    if(counter == 0){
+				    	return new AlertStatus(false, "No se realizaron cambios.");			
+				    }
+				    
+				    else{
+				    	
+				    	//history
+						IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
+						revision.setFecha(new Date());
+						revision.setUsername(userDB.getUsername());	
+						revision.setOperacion(Operation.UPDATE);			
+						revision.setMotivo(detalle);			
+						revision.setEstado(issue.getStatus());
+						revision.setObservaciones(Messages.ISSUE_UPDATE_OBS);
+						
+						issue.setUsername(userDB.getUsername());
+						issue.setLastUpdateDate(revision.getFecha());
+						issue.setTags(Arrays.asList(tagsArray)); 				
+						issue.getHistorial().add(revision);
+						
+						issueService.updateIssue(issue);	
+						
+						return new AlertStatus(true, "El reclamo ha sido actualizado.");	
+				    	
+				    }
+					
+							
 			}
 		}			
 		catch(AccessDeniedException e){
@@ -1007,6 +1065,38 @@ public class IssueController {
 
 	    return randomNum;
 	}
+	
+	
+	public class UpdatedFields  implements Serializable{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		private int title;
+		private int desc;
+		private int barrio;
+		public int getTitle() {
+			return title;
+		}
+		public void setTitle(int title) {
+			this.title = title;
+		}
+		public int getDesc() {
+			return desc;
+		}
+		public void setDesc(int desc) {
+			this.desc = desc;
+		}
+		public int getBarrio() {
+			return barrio;
+		}
+		public void setBarrio(int barrio) {
+			this.barrio = barrio;
+		}
+		
+		
+	}
+	
 	
 	
 }
