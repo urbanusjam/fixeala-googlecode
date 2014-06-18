@@ -214,14 +214,15 @@
 			  
 			  //--EDITABLE FIELDS
 			  
-			  var updatedFields =  [];	
+			  var updatedFields =  { "title": 0 , "desc": 0, "barrio": 0};
 			  
-			  var titleChange = {};
-			  var barrioChange = {};
-			  var descriptionChange = {};
-			  var tagsChange = {};
-			  
-			  var oldTitle;
+// 			  updatedFields['title'] = 0;
+// 			  updatedFields['desc'] = 0;
+// 			  updatedFields['barrio'] = 0;
+			 
+			  var oldFields = $.parseJSON('${oldFields}');
+			 
+			 
 			  
 			  
 			  $("#issue-title").editable({
@@ -250,16 +251,12 @@
 					    }
 					    
 				  },
-				  display: function(value) {
-					  currentTitle =  value;
-					  titleChange['value'] = value;	
-				  },
 				  success: function(response, newValue) {	
 		               newTitle =  newValue;
-		               titleChange['field'] = 'title';		
-		               titleChange['newValue'] = newValue;	
-					   if(newValue != oldTitle)
-						   updatedFields.push("title");
+					   if(newValue != oldFields.title)
+						   updatedFields.title = 1;
+					   else
+					   	updatedFields.title = 0;
 		          }
 				
 			  });
@@ -290,13 +287,11 @@
 					    	return 'No se permiten comillas simples o dobles.';
 					    }
 				  },
-				  display: function(value) {
-					  descriptionChange['value'] = value;	
-				  },
 				  success: function(response, newValue) {
-					  descriptionChange['field'] = 'description';		
-					  descriptionChange['newValue'] = newValue;	
-				      fieldChanges.push(descriptionChange);
+					  if(newValue != oldFields.desc)
+						   updatedFields.desc = 1;
+					  else
+						  updatedFields.desc = 0;
 				     
 		          }			  	
 			  });
@@ -324,13 +319,11 @@
 					    	return 'No se permiten caracteres especiales.';
 					    }
 				  },
-				  display: function(value) {
-					  barrioChange['value'] = value;	
-				  },
 				  success: function(response, newValue) {
-					  barrioChange['field'] = 'barrio';		
-					  barrioChange['newValue'] = newValue;	
-				      fieldChanges.push(barrioChange);
+					  if(newValue != oldFields.barrio)
+						   updatedFields.barrio = 1;
+					  else
+						  updatedFields.barrio = 0;
 				     
 		          }
 			  });
@@ -667,14 +660,14 @@
 				  var id = ${id};
 				 				  
 				  bootbox.confirm("&iquest;Desea confirmar los cambios?", function(result){
-					  
+					 
 					  if(result){
 						  
 						  $('#tbl-issue .editable, #issue-header .editable').editable('submit', {
 							  
 						       url: './updateIssue.html', 
-// 						       data:   {fields: JSON.stringify(fieldChanges)}, //additional data
- 								data:   {fields: fieldChanges}, //additional data
+ 						      data:   {fields: JSON.stringify(updatedFields)}, //additional data
+					
 						     
 						       ajaxOptions: {
 						           dataType: 'json'
@@ -903,7 +896,6 @@
 						 imageCrop: false						
 				    }).bind('fileuploaddone', function(e, data){				    	
 				    	console.log(data);		
-				    	var parsedResult = $.parseJSON(data.result.uploadedFiles);	
 					    data.files = parsedResult;					    
 					    updateFilesInfo(data.result.totalUploadedFiles);
  					});
