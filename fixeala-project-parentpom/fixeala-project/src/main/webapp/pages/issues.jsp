@@ -10,12 +10,25 @@
 </sec:authorize>
 
 
+	
 <div id="content">	
 
 
 		<!-- Issue -->
 		
 		<script type="text/javascript">
+		
+			var issueID = ${id};
+		  	var updatedFields =  { "title": 0 , "desc": 0, "barrio": 0};			 
+		  	var oldFields = $.parseJSON('${oldFields}');
+		  	
+		  	var idIssue = '${id}'; //duplicado
+			var loggedUser = '${loggedUser}';
+	   		var latitud = '${latitud}';
+	   		var longitud = '${longitud}';
+			var newTitle = "";		
+			
+			
 		
 		
 		
@@ -32,6 +45,27 @@
 		});
 		
 		$(function(e){	
+			
+			//collapse 
+			$('#btn-collapse').on('click', function(e) {			
+			    e.preventDefault();
+			    var $this = $(this);
+			    var $collapse = $this.closest('.collapse-group').find('.collapse');
+			    $collapse.collapse('toggle');
+			    
+// 			    if ( $collapse.is(":hidden")) {
+			    	
+// 			    	$("#tbl-issue-updates tr td .row").css('height', '0px');
+// 			    	$collapse.css('height', '0px');
+			    	
+// 			    }
+// 			    else{
+			    
+// 			    	$("#tbl-issue-updates tr td .row").css('height', '100%');
+// 			    	$collapse.css('height', '100%');
+// 			    }
+			  ;
+			});
 			
 
 			$('#fecha-estimada-from').datetimepicker({		  
@@ -115,11 +149,7 @@
 		            		 ); 
 		        });
 		   
-			var idIssue = '${id}';
-			var loggedUser = '${loggedUser}';
-	   		var latitud = '${latitud}';
-	   		var longitud = '${longitud}';
-			var newTitle = "";				
+				
 			
 			var issueLocation = [];		
 			issueLocation.id = idIssue;
@@ -146,6 +176,37 @@
 			
 			$('.editableField').hide();
 			
+			
+			/**
+			function enableDisableFields(){
+				   
+				   $('#issue-title').editable('toggleDisabled');
+			       $('#issue-barrio').editable('toggleDisabled');
+			       $('#issue-desc').editable('toggleDisabled');
+			       $('#issue-tags').editable('toggleDisabled');
+			       
+			       var iconTags =  $('#edit-tags');
+			       var iconEditable = $('.editableField');
+			       
+			       if(iconEditable.is(':visible')){
+			    	   $('.editableField').hide();
+			       }
+			       else{
+			    	   $('.editableField').show();
+			       }
+			       
+			      
+			       if(iconTags.is(':visible')){
+			    	   $('#edit-tags').hide();
+			    	   
+			       }
+			       else{
+			    	   $('#edit-tags').show();		    	  
+			       }
+			       
+			    }
+					
+		    		
 		    $('#btn-edit').click(function() {
 		    	enableDisableFields();
 		    	if( $('#btn-update').is(":disabled") == true ){		    	
@@ -155,6 +216,7 @@
 		    		$('#btn-update').attr('disabled', true);
 		    }); 
 			
+		    /*
 		    $('#btn-edit-repair').click(function() {
 		    	if( $('#btn-update-repair').is(":disabled") == true ){		    	
 					$('#btn-update-repair').attr('disabled', false);
@@ -169,34 +231,9 @@
 		    	$('#tbl-licitacion .editable').editable('toggleDisabled');
 		    	
 		    }); 
+		    */
 			  
-		    function enableDisableFields(){
-			   $('#issue-title').editable('toggleDisabled');
-		       $('#issue-barrio').editable('toggleDisabled');
-		       $('#issue-desc').editable('toggleDisabled');
-		       $('#issue-tags').editable('toggleDisabled');
-		       
-		       var iconTags =  $('#edit-tags');
-		       var iconEditable = $('.editableField');
-		       
-		       if(iconEditable.is(':visible')){
-		    	   $('.editableField').hide();
-		       }
-		       else{
-		    	   $('.editableField').show();
-		       }
-		       
-		      
-		       if(iconTags.is(':visible')){
-		    	   $('#edit-tags').hide();
-		    	   
-		       }
-		       else{
-		    	   $('#edit-tags').show();
-		    	  
-		       }
-		       
-		    }
+		    
 	
 			  //--NON-EDITABLE FIELDS
 			  
@@ -214,17 +251,8 @@
 			  
 			  //--EDITABLE FIELDS
 			  
-			  var updatedFields =  { "title": 0 , "desc": 0, "barrio": 0};
-			  
-// 			  updatedFields['title'] = 0;
-// 			  updatedFields['desc'] = 0;
-// 			  updatedFields['barrio'] = 0;
+			
 			 
-			  var oldFields = $.parseJSON('${oldFields}');
-			 
-			 
-			  
-			  
 			  $("#issue-title").editable({
 				  pk: 1,  
 				  name: 'title', 
@@ -357,15 +385,6 @@
 				    }			 
 		                    
   			  }); 
-			  
-// 			  $('#issue-tags').on('shown', function() {
-// 				    var editable = $(this).data('editable');
-// 				    value = editable.value
-// 				    $.each(value,function(i){
-// 				       value[i] = $(value[i]).text()
-// 				    });
-// 				});
-
 			 
 			  
 			//---- CAMPOS LICITACION
@@ -655,6 +674,7 @@
 			  });
 			   			   
 			
+			  /**
 			  $('#btn-update').click(function() {			
 				  
 				  var id = ${id};
@@ -747,7 +767,7 @@
 					
 						  
 				});
-			  	
+			  	**/
 			  	
 			  
 				
@@ -1315,8 +1335,7 @@
 	      	</li>
       	</ul>
    
-			<div id="userIssueActions" class="user-action-btns">
-			
+			<div id="userIssueActions" class="user-action-btns">						
 				<sec:authorize access="hasRole('ROLE_USER')">
 					<div class="btn-group" style="float:right;">
 						<button id="btn-update" class="btn btn-info" title="Guardar cambios"><i class="icon-ok icon-large"></i></button>			
@@ -1325,7 +1344,7 @@
 						<button id="btn-edit" class="btn" title="Editar"><i class="icon-pencil icon-large"></i></button>			
 					</div>	
 					<c:if test="${estado eq 'ABIERTO' || estado eq 'REABIERTO'}">
-						<div id="btn-status" class="btn-group" style="float:right;">			
+						<div id="btn-status" href="#mdl-status" data-toggle="modal"  class="btn-group" style="float:right; ">			
 							<button class="btn btn-success" title="Resolver"><i class="icon-wrench icon-large"></i></button>
 						</div>
 					</c:if>
@@ -1333,10 +1352,11 @@
 						<div id="btn-status" class="btn-group" style="float:right;">			
 							<button class="btn btn-warning" title="Reabrir"><i class="icon-rotate-right icon-large"></i></button>
 						</div>
-					</c:if>	
-										
-				</sec:authorize>
-			
+					</c:if>						
+					<script type="text/javascript">
+						userActionsController.enableUserActions();
+					</script>										
+				</sec:authorize>			
 			</div>
 			
 	
@@ -1389,7 +1409,7 @@
 						 </tr>
 						  <tr>
 						    <th>Informante:</th>
-						    <td><script type="text/javascript">document.write( getUserURL('${usuario}') );</script></td>							    		   
+						    <td><script type="text/javascript">document.write( getUserURL('${usuario}') );</script></td>						    		    
 						 </tr>
 <!-- 						 <tr> -->
 <!-- 						    <th>Responsable:</th> -->
@@ -1451,9 +1471,8 @@
 			      </a>
 			    </div>
 			    <div id="collapseThree" class="accordion-body collapse">
-			      <div class="accordion-inner">
-			      	
-			      	<table class="table table-hover" style="width:100%">
+			      <div class="accordion-inner">			      	
+			      	<table class="table table-hover" style="width:100%" id="tbl-issue-updates">
 			      		<c:forEach items="${historial}" var="revision">					        
 					    	<c:set var="count" value="${count + 1}" scope="page"/>	
 					        <tr>
@@ -1462,10 +1481,21 @@
 					    		<td style="border-top:none; ">
 					    			<a href="#"><script type="text/javascript">document.write( getUserURL('${revision.username}') );</script></a>
 					    		</td>
-					    		<td style="border-top:none; width:70%">${revision.motivo}</td>	
+					    		<td style="border-top:none; width:40%">${revision.detalle}</td>
+					    		<td style="border-top:none; width:30%">					   
+					    			<c:if test="${not empty revision.observaciones}">		
+						    			 <div class="row" style="height:0">
+											<div class="collapse-group">
+												<p><a id="btn-collapse" class="link" href="javascript:;">Ver detalle &raquo;</a></p>
+											    <p class="collapse" >${revision.observaciones}</p>
+											</div>
+	      								</div>
+      								</c:if> 
+      							</td>				    		
 					    	</tr>					    
 						 </c:forEach>
 					</table>
+			
 			      
 <!-- 			        <table class="table table-hover table-bordered table-striped">			        	 -->
 <!-- 			        	<thead>			         -->
@@ -1751,6 +1781,50 @@
 	</div><!-- CONTAINER FLUID -->
 	
 	
+	<div id="mdl-status" class="modal hide fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+	  	<div class="modal-header">
+		    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>		    	
+		    	<h4 id="fileUploadLabel"> 
+			    	Actualizar estado
+		    	</h4>
+	  	</div>
+	  	<form  enctype="multipart/form-data"  class="form-horizontal form-inline" >
+  				<div class="modal-body">
+  				
+  				<div class="control-group">  			
+        			<label class="control-label">Resoluci&oacute;n</label>
+        			<div class="controls">
+           				<select id="tipoResolucion" name="tipoResolucion">		
+	    	   				<option value="Arreglado">Arreglado</option>
+	    	   				<option value="Duplicado">Duplicado</option>
+	    	   				<option value="Invalido">Inv&aacute;lido</option>		    	   			 	
+				 		</select>	
+				 		<label class="control-label">Reapertura</label>
+				 		<select id="tipoResolucion" name="tipoResolucion">		
+	    	   				<option value="No arreglado">No arreglado</option>
+	    	   				<option value="Hubo deterioro">Hubo deterioro</option>	    	   				   			 	
+				 		</select>	
+				 		
+        			</div>
+    			</div>    			
+			    <div class="control-group">
+			        <label class="control-label">Comentario</label>
+			        <div class="controls">
+			        	<textarea id="observacion" name="observacion" style="width:300px; height: 200px" ></textarea>
+			        </div>
+			    </div>
+  				
+  				</div>
+			<div class="modal-footer"> 
+				<button class="btn btn-info" data-dismiss="modal" aria-hidden="true">
+			    		<i class="icon-ok icon-large"></i>&nbsp;&nbsp;&nbsp;Aceptar
+			    </button>	  		  		
+		  		<button class="btn" data-dismiss="modal" aria-hidden="true">
+			    		<i class="icon-remove icon-large"></i>&nbsp;&nbsp;&nbsp;Cancelar
+			    </button>	 
+		  	</div>
+	  	</form>
+	</div>
 	
 	<div id="mdl-fileupload" class="modal hide fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="fileUploadLabel" aria-hidden="true">
 	  	<div class="modal-header">
@@ -2027,4 +2101,6 @@
 {% } %}
 </script>
 	
+		
+		
 </div><!-- CONTENT -->

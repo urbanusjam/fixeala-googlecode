@@ -11,5 +11,7 @@ public interface MailService {
 	public void sendPasswordResetSuccessEmail(String username, String email) throws Exception;	
 	
 	public void sendClosedAccountEmail(String username, String email) throws Exception;	
+	
+	public void sendIssueUpdateEmail() throws Exception;	
 
 }

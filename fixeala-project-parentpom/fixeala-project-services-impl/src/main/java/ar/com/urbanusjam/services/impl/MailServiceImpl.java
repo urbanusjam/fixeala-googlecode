@@ -42,7 +42,7 @@ public class MailServiceImpl implements MailService {
 		  helper.setFrom(from);
 	      //helper.setTo(email);
 		  helper.setTo(to);
-		  helper.setSubject("Fixeala - Activaci梟 de cuenta");
+		  helper.setSubject("Fixeala - Activaci锟絥 de cuenta");
 		
 	      String link = "<a target='_blank' href='http://localhost:8080/fixeala/account/activation/" + token + ".html' > link </a>";
 	    
@@ -180,6 +180,22 @@ public class MailServiceImpl implements MailService {
 	}
 	
 	
+	//<username> coment贸 en "<issue_title>"
+	
+	//<username> adjunt贸 X archivos a "<issue_title>"
+	
+	//<username> resolvi贸 "<issue_title>"
+	
+	//<username> reabri贸 "<issue_title>"
+	
+	//<username> actualiz贸 campos en "<issue_title>"
+	
+	@Override
+	public void sendIssueUpdateEmail()
+			throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 	

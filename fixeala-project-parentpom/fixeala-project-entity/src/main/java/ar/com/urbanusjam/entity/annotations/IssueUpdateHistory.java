@@ -41,14 +41,14 @@ public class IssueUpdateHistory implements Serializable {
 	@Column(name = "operation")
 	private String operacion;
 
-	@Column(name = "user_action")
+	@Column(name = "motive")
 	private String motivo;
 	
 	@Column(name = "observations")
 	private String observaciones;
 	
-	@Column(name = "modified_fields") 
-	private String[] camposModificados;
+	@Column(name = "resolution") 
+	private String resolucion;
 
 	
 	public IssueUpdateHistory(){ }
@@ -131,13 +131,14 @@ public class IssueUpdateHistory implements Serializable {
 		this.observaciones = observaciones;
 	}
 
-	public String[] getCamposModificados() {
-		return camposModificados;
+	public String getResolucion() {
+		return resolucion;
+	}    
+
+	public void setResolucion(String resolucion) {
+		this.resolucion = resolucion;
 	}
 
-	public void setCamposModificados(String[] camposModificados) {
-		this.camposModificados = camposModificados;
-	}
 	
 	
 	

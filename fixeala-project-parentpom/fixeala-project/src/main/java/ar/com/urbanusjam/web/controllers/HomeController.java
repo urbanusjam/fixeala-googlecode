@@ -16,7 +16,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -573,7 +576,7 @@ public class HomeController {
 				HttpServletRequest request){
 		
 		try{
-				User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();	
+				User loggedUser =  getCurrentUser(SecurityContextHolder.getContext().getAuthentication());
 				UserDTO user = new UserDTO();
 				boolean isSameUser = false;
 			
@@ -660,5 +663,18 @@ public class HomeController {
 		   return null;
 		  }
 	}
+	
+	
+	private User getCurrentUser(Authentication auth) {
+        User currentUser;
+        if (auth.getPrincipal() instanceof UserDetails) {
+            currentUser = (User) auth.getPrincipal();
+        } else if (auth.getDetails() instanceof UserDetails) {
+            currentUser = (User) auth.getDetails();
+        } else {
+        	currentUser = null;
+        }
+        return currentUser;
+    }
 	
 }

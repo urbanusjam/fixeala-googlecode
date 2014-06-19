@@ -25,6 +25,8 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/d3.min.js"></script>	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/topojson.v1.min.js"></script>	 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/map.js"></script>
+  	
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala.issue.editable.js"></script>
   		
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-editable.js"></script>
@@ -508,7 +510,8 @@ path:hover {
             // USER LOGIN
             //-------------------------------
 			
-			var loginFailed = function(data, status) {
+			var loginFailed = function(data, status, e) {
+		
 		        $(".alert").remove();
 		        $('#username').before('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times;</a>El usuario y/o la contrase&ntildea <br>son incorrectos.</div>');
 		        $('.ajax_loading').hide();
@@ -516,6 +519,8 @@ path:hover {
 		        $('#loginForm').each(function(){
                     this.reset();   //Here form fields will be cleared.
                 });
+		        
+		     
 		              
 			};
 			
@@ -543,7 +548,7 @@ path:hover {
 		 			    },
 		 						 			    
 		 			 	submitHandler: function() {
-		 			 		
+		 			 				 			 		
 		 			 		 // Hide 'Submit' Button
 		 			        $('#btnLogin').hide();
 
@@ -567,18 +572,29 @@ path:hover {
 								            			
 								            			$('#loginNav').load(location.href + " #loginNav > *");	
 								            			
-								            			var pathArray = window.location.pathname.split( '/' );								            			
+								            			var pathArray = window.location.pathname.split( '/' );	
+								            											            			
 														if(pathArray.indexOf("issues") != -1){
-															$('#userIssueActions').load(location.href + " #userIssueActions > *");	
-														}//al recargar DES-bindea los eventos on click
+															
+															var target = $('#userIssueActions');
+															var url = location.href + " #userIssueActions > *";
+															
+															 target.load(url, function(){
+																 
+																 userActionsController.enableUserActions();							
+															 });
+																								
+														   
+															
+														}
 															
 														
-									                	return false;
-											          
 		 							                } else {							                
 									                    loginFailed(data);							                    
 									                }				            				
-						            		},2000);	
+						            		},2000);
+						            		
+						            		return false;				
 						            		
 						            },
 						            						           
@@ -589,10 +605,40 @@ path:hover {
 		        });
 		       
 		    });
+		    
 		    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */ 
+		   
+		    
+			
+		
+				var gotoHashTab = function (customHash) {
+		        var hash = customHash || location.hash;
+		        var hashPieces = hash.split('?'),
+		            activeTab = $('[href=' + hashPieces[0] + ']');
+		       		activeTab && activeTab.tab('show');
+		    	}
+		 
+			    // onready go to the tab requested in the page hash
+			    gotoHashTab();
+			 
+			    // when the nav item is selected update the page hash
+			    $('.nav a').on('shown', function (e) {
+			        window.location.hash = e.target.hash;
+			    })
+			 
+			    // when a link within a tab is clicked, go to the tab requested
+			    $('.tab-pane a').click(function (event) {
+			    	
+			        if (event.target.hash) {
+			       
+			            gotoHashTab(event.target.hash);
+			        }
+			    });
+				
+		
+ 			/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */ 
 			
 			
-					
 			//-------------------------------
             // Tag events
             //-------------------------------

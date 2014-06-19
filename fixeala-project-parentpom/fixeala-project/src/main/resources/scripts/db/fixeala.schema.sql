@@ -222,11 +222,12 @@ CREATE TABLE issue_update_history (
 	   id_issue BIGINT(20) NOT NULL, 	   
 	   id_user BIGINT(20) NOT NULL,	   
 	   update_date DATETIME NOT NULL,    	   
-	   status VARCHAR(30) NOT NULL, 	    
-	   operation_type VARCHAR(1) NOT NULL,
+	   status VARCHAR(30) NOT NULL, 
+	   priority VARCHAR(30) NULL,
+	   operation VARCHAR(1) NOT NULL,
+	   resolution VARCHAR(255) NULL, 
 	   motive VARCHAR(255) NOT NULL, 	
-	   observations VARCHAR(500) NULL,  
-	   modified_fields VARCHAR(255) NULL, 
+	   observations VARCHAR(500) NULL	   
 	   
 	   PRIMARY KEY(id_issue_history),
 	   KEY(id_issue),
