@@ -75,13 +75,13 @@
 		              			<!-- ANONYMOUS -->
 		              			<sec:authorize access="isAnonymous()">
     									<li class="nav-header active">
-					              			<a  href="#profile" data-toggle="tab">
+					              			<a  href="#profileTab" data-toggle="tab">
 					              				<i class="icon-caret-right"></i>PERFIL
 					              			</a>
 					              		</li>
 					              		<li class="nav-header"><i class="icon-caret-right"></i>CONTENIDO</li>						               
-						                <li><a href="#issues" data-toggle="tab"><i class="icon-pushpin"></i>Reclamos</a></li>
-						                <li><a href="#comments" data-toggle="tab"><i class="icon-comments-alt"></i>Comentarios</a></li>							           	    
+						                <li><a href="#issuesTab" data-toggle="tab"><i class="icon-pushpin"></i>Reclamos</a></li>
+						                <li><a href="#commentsTab" data-toggle="tab"><i class="icon-comments-alt"></i>Comentarios</a></li>							           	    
     							</sec:authorize>			              
 			              								              	
 				              	<!-- AUTHENTICATED -->
@@ -90,26 +90,26 @@
 				              		<!-- MENU USER -->
 				              		<c:if test="${ loggedMatchesProfile }">
 					              		<li class="nav-header active">
-					              			<a  href="#profile" data-toggle="tab">
+					              			<a  href="#profileTab" data-toggle="tab">
 					              				<i class="icon-caret-right"></i>PERFIL
 					              			</a>
 					              		</li>
 					              		<li class="nav-header">
-					              			<a  href="#dashboard" data-toggle="tab">
+					              			<a  href="#dashboardTab" data-toggle="tab">
 					              				<i class="icon-caret-right"></i>DASHBOARD
 					              			</a>
 					              		</li>
 					              		<li class="nav-header"><i class="icon-caret-right"></i>CONTENIDO</li>
-						                <li><a href="#notifications" data-toggle="tab"><i class="icon-bell"></i>Notificaciones</a></li>
-						                <li><a href="#activity" data-toggle="tab"><i class="icon-check"></i>Actividad</a></li>
-						                <li><a href="#issues" data-toggle="tab"><i class="icon-pushpin"></i>Reclamos</a></li>
-						                <li><a href="#comments" data-toggle="tab"><i class="icon-comments-alt"></i>Comentarios</a></li>
-						                <li><a href="#widgets" data-toggle="tab"><i class="icon-cogs"></i>Widgets</a></li>
+						                <li><a href="#notificationsTab" data-toggle="tab"><i class="icon-bell"></i>Notificaciones</a></li>
+						                <li><a href="#activityTab" data-toggle="tab"><i class="icon-check"></i>Actividad</a></li>
+						                <li><a href="#issuesTab" data-toggle="tab"><i class="icon-pushpin"></i>Reclamos</a></li>
+						                <li><a href="#commentsTab" data-toggle="tab"><i class="icon-comments-alt"></i>Comentarios</a></li>
+						                <li><a href="#widgetsTab" data-toggle="tab"><i class="icon-cogs"></i>Widgets</a></li>
 
 						                <li class="nav-header"><i class="icon-caret-right"></i>CUENTA</li>
-						                <li><a href="#editAccount" data-toggle="tab"><i class="icon-edit-sign"></i>Datos personales</a></li>
-						                <li><a href="#changePassword" data-toggle="tab"><i class="icon-unlock"></i>Cambio de clave</a></li>
-						                <li><a href="#closeAccount" data-toggle="tab"><i class="icon-ban-circle"></i>Desactivación</a></li>
+						                <li><a href="#editAccountTab" data-toggle="tab"><i class="icon-edit-sign"></i>Datos personales</a></li>
+						                <li><a href="#changePasswordTab" data-toggle="tab"><i class="icon-unlock"></i>Cambio de clave</a></li>
+						                <li><a href="#closeAccountTab" data-toggle="tab"><i class="icon-ban-circle"></i>Desactivación</a></li>
 				              		</c:if>
 				              		
 				              		<!-- MENU ANONYMOUS -->
@@ -134,7 +134,7 @@
 			    <div class="tab-content">			    
 			    
 		    		<!-- TAB PROFILE -->
-         			<div class="tab-pane fade in active" id="profile"> 	         			
+         			<div class="tab-pane fade in active" id="profileTab"> 	         			
          				<div class="page-header">
 				    		<h3>Perfil p&uacute;blico</h3>
 				    	</div>				    	
@@ -191,7 +191,7 @@
 					
 										
 					<!-- TAB RECLAMOS -->
-					<div class="tab-pane fade in" id="issues">
+					<div class="tab-pane fade in" id="issuesTab">
 					    	<div class="page-header">
 					    		<h3>Reclamos</h3>
 					    	</div>
@@ -277,7 +277,7 @@
 					  
 			         	
 			         	<!-- TAB COMENTARIOS -->   
-			         	<div class="tab-pane fade" id="comments">
+			         	<div class="tab-pane fade" id="commentsTab">
 			         		<div class="page-header">
 					    		<h3>Comentarios</h3>
 					    	</div>
@@ -316,7 +316,7 @@
 					    <sec:authorize access="isAuthenticated() and hasRole('ROLE_USER')">
 					    
 						    <!-- TAB DASHBOARD -->
-		         			<div class="tab-pane fade in" id="dashboard"> 	
+		         			<div class="tab-pane fade in" id="dashboardTab"> 	
 				         		<div class="page-header">
 						    		<h3>Dashboard</h3>
 						    	</div>
@@ -382,7 +382,7 @@
 					    	
 					    	
 					    	<!-- ACTIVIDAD -->
-		         			<div class="tab-pane fade" id="activity"> 	
+		         			<div class="tab-pane fade" id="activityTab"> 	
 				         		<div class="page-header">
 						    		<h3>Actividad</h3>
 						    	</div>
@@ -391,7 +391,7 @@
 							
 						    
 						    <!-- TAB WIDGETS -->   
-				         	<div class="tab-pane fade" id="widgets">
+				         	<div class="tab-pane fade" id="widgetsTab">
 				         		<div class="page-header">
 						    		<h3>Widgets</h3>
 						    	</div>
@@ -400,7 +400,7 @@
 						     
 						    
 						    <!-- TAB DATOS PERSONALES -->
-							<div class="tab-pane fade in" id="editAccount">						
+							<div class="tab-pane fade in" id="editAccountTab">						
 								<div class="page-header">
 						    		<h3>Datos personales</h3>
 						    	</div>	
@@ -458,7 +458,7 @@
 							
 							
 							<!-- TAB CAMBIO DE CLAVE -->
-							<div class="tab-pane fade in" id="changePassword">
+							<div class="tab-pane fade in" id="changePasswordTab">
 								<div class="page-header">
 						    		<h3>Cambio de clave</h3>
 						    	</div>
@@ -495,7 +495,7 @@
 							
 							
 							<!-- TAB DESACTIVACION -->  
-							<div class="tab-pane fade in" id="closeAccount">
+							<div class="tab-pane fade in" id="closeAccountTab">
 							
 								<div class="page-header">
 						    		<h3>Desactivaci&oacute;n de cuenta</h3>

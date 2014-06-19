@@ -163,29 +163,29 @@ public class IssueServiceImpl implements IssueService {
 	}
 	
 	@Override
-	public void updateIssueStatus(String issueID, String newStatus) {
+	public void updateIssueStatus(String issueID, String newStatus, String resolution, String obs) {
 	
 		Issue issue = new Issue();
-		issue = issueDAO.findIssueById(issueID);
 		issue.setStatus(newStatus);
 		
 		IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
 		revision.setFecha(new Date());
 		revision.setUsername(issue.getReporter().getUsername());
-		revision.setOperacion(Operation.UPDATE);	
-		revision.setEstado(issue.getStatus());
-		revision.setObservaciones("El reclamo ha sido " + newStatus + ".");
-		
+		revision.setOperacion(Operation.UPDATE);			
+		revision.setResolucion(resolution);
+		revision.setEstado(issue.getStatus());			
+		revision.setObservaciones(obs);
+				
 //		if(newStatus.equals(IssueStatus.ACKNOWLEDGED))
 //			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_ACKNOWLEDGE + " el reclamo.");			
 		if(newStatus.equals(IssueStatus.IN_PROGRESS))	
-			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_PROGRESS + " el reclamo.");			
+			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_PROGRESS + " el reclamo");			
 		if(newStatus.equals(IssueStatus.SOLVED))
-			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_RESOLVE + " el reclamo.");			
+			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_RESOLVE + " el reclamo");			
 		if(newStatus.equals(IssueStatus.CLOSED))
-			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_CLOSE + " el reclamo.");	
+			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_CLOSE + " el reclamo");	
 		if(newStatus.equals(IssueStatus.REOPENED))	
-			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_REOPEN + " el reclamo.");				
+			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_REOPEN + " el reclamos");				
 		
 		issue.addRevision(this.convertTo(revision));		
 		issue.setLastUpdateDate(this.getCurrentCalendar(revision.getFecha()));		
@@ -523,6 +523,7 @@ public class IssueServiceImpl implements IssueService {
 		historial.setUsuario(userDAO.loadUserByUsername(historialDTO.getUsername()));
 		historial.setOperacion(Operation.UPDATE);
 		historial.setMotivo(historialDTO.getMotivo());
+		historial.setResolucion(historialDTO.getResolucion());		
 		historial.setEstado(historialDTO.getEstado());		
 		historial.setObservaciones(historialDTO.getObservaciones());		
 		
@@ -540,7 +541,16 @@ public class IssueServiceImpl implements IssueService {
 		historialDTO.setOperacion(Operation.UPDATE);
 		historialDTO.setMotivo(historial.getMotivo());
 		historialDTO.setEstado(historial.getEstado());		
-		historialDTO.setObservaciones(historial.getObservaciones());		
+		historialDTO.setObservaciones(historial.getObservaciones());	
+		historialDTO.setResolucion(historial.getResolucion());
+		
+		if(historialDTO.getResolucion() != null && historial.getResolucion() != ""){
+			historialDTO.setDetalle(historialDTO.getMotivo() + " como &laquo;" + historialDTO.getResolucion().toUpperCase() + "&raquo;" );	
+		}
+		else{
+			historialDTO.setDetalle(historialDTO.getMotivo());
+		}
+		
 		
 		return historialDTO;
 		

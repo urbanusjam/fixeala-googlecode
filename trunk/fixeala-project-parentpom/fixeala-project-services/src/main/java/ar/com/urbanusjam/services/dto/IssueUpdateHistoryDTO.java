@@ -16,7 +16,8 @@ public class IssueUpdateHistoryDTO implements Serializable {
 	private String operacion;
 	private String motivo;
 	private String estado;
-	private String[] camposModificados;
+	private String resolucion;
+	private String detalle;
 	
 	
 	public Date getFecha() {
@@ -74,15 +75,23 @@ public class IssueUpdateHistoryDTO implements Serializable {
 	public void setOperacion(String operacion) {
 		this.operacion = operacion;
 	}
-
-	public String[] getCamposModificados() {
-		return camposModificados;
-	}
-
-	public void setCamposModificados(String[] camposModificados) {
-		this.camposModificados = camposModificados;
-	}
 	
+	public String getResolucion() {
+		return resolucion;
+	}
+
+	public void setResolucion(String resolucion) {
+		this.resolucion = resolucion;
+	}	
+
+	public String getDetalle() {
+		return detalle;
+	}
+
+	public void setDetalle(String detalle) {
+		this.detalle = detalle;
+	}
+
 	public String getFechaFormateada(){	
 		
 		String formattedDate = "";	

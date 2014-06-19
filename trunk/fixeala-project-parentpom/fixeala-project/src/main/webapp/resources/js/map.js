@@ -594,7 +594,7 @@ function getUserURL(userID){
 	var context = "fixeala";
 	var subcontext = "users/" + userID;	
 	var url = protocol + "//" + host + "/" + context + "/" + subcontext + ".html";	
-	var urlLink = '<a style="cursor:pointer" id="issue-user" href="'+ url +'">' + userID + '</a>';	
+	var urlLink = '<a id="issue-user" style="cursor:pointer" class="link" href="'+ url +'">' + userID + '</a>';	
 	return urlLink;
 }
 

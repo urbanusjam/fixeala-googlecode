@@ -78,8 +78,8 @@
 	               	  
 						 
 						  <ul class="dropdown-menu user-menu dropdown-yellow dropdown-caret dropdown-close">
-						  	<li><a href="${pageContext.request.contextPath}/users/<sec:authentication property="principal.username"/>.html"><i class="icon-user"></i>Perfil</a></li>
-						   	<li><a href="${pageContext.request.contextPath}/users.html"><i class="icon-cog"></i>Mi cuenta</a></li>
+						  	<li><a href="${pageContext.request.contextPath}/users/<sec:authentication property="principal.username"/>.html#profileTab"><i class="icon-user"></i>Perfil</a></li>
+						   	<li><a href="${pageContext.request.contextPath}/users/<sec:authentication property="principal.username"/>.html#editAccountTab"><i class="icon-cog"></i>Mi cuenta</a></li>
 <%-- 						   	<li><a href="${pageContext.request.contextPath}/users.html"><i class="icon-map-marker"></i>Reclamos</a></li> --%>
 <%-- 						   	<li><a href="${pageContext.request.contextPath}/users.html"><i class="icon-envelope"></i>Mensajes</a></li> --%>
 						    <li class="divider"></li>

@@ -61,6 +61,7 @@ import ar.com.urbanusjam.services.utils.FileUploadUtils;
 import ar.com.urbanusjam.services.utils.IssueStatus;
 import ar.com.urbanusjam.services.utils.Messages;
 import ar.com.urbanusjam.services.utils.Operation;
+import ar.com.urbanusjam.services.utils.Resolution;
 import ar.com.urbanusjam.web.domain.AlertStatus;
 import ar.com.urbanusjam.web.domain.ContenidoResponse;
 import ar.com.urbanusjam.web.utils.StatusList;
@@ -162,8 +163,7 @@ public class IssueController {
 		try{
 				request.getSession().setAttribute("issueID", issueID);
 			 	issue = issueService.getIssueById(issueID);	
-			 	
-			 	
+			 				 	
 				JSONObject oldFields = new JSONObject();
 				oldFields.put("title", issue.getTitle());
 				oldFields.put("desc", issue.getDescription());
@@ -572,11 +572,7 @@ public class IssueController {
 			HttpServletRequest request) throws ParseException, JsonParseException, JsonMappingException, IOException{
 		
 		try {			
-//			JSONObject jsonObject = (JSONObject) JSONSerializer.toJSON( fieldChanges );
-			
-			
-			
-			
+
 				User user =  getCurrentUser(SecurityContextHolder.getContext().getAuthentication());
 				UserDetails userDB = userService.loadUserByUsername(user.getUsername());		
 				
@@ -587,9 +583,6 @@ public class IssueController {
 				//user is logged-in
 				else{
 					
-					 
-					 
-					 
 					//tags
 					Object[] tagMapValues = (Object[]) issue.getTagsMap().values().toArray();
 					String[] tagsArray = new String[tagMapValues.length];
@@ -604,34 +597,31 @@ public class IssueController {
 					}	
 					
 					UpdatedFields updatedFields = new Gson().fromJson(fieldChanges, UpdatedFields.class);
-					String campos = "";
-					String plural = "el campo";
-					String detalle =  "";
-					int counter = 0;
+					String fields = "";				
+					String motive =  "";
+					int fieldCounter = 0;
+					
 					if(updatedFields.getTitle() == 1){
-						campos += "TITULO, ";
-						counter++;
-					}
-					
+						fields += " &laquo;TITULO&raquo; ";
+						fieldCounter++;
+					}					
 					if(updatedFields.getBarrio() == 1){
-						campos += "BARRIO, ";
-						counter++;
-					}
-					
+						fields += " &laquo;BARRIO&raquo; ";
+						fieldCounter++;
+					}					
 					if(updatedFields.getDesc() == 1){
-						campos += "DESCRIPCION";
-						counter++;
+						fields += " &laquo;DESCRIPCION&raquo;";
+						fieldCounter++;
 					}
 					
-					if(counter == 1){
-						detalle = Messages.ISSUE_UPDATE_FIELDS + " el campo " + campos + ".";
+					if(fieldCounter == 1){
+						motive = Messages.ISSUE_UPDATE_FIELDS + " el campo " + fields;
 					}
-					if(counter > 1){
-						detalle = Messages.ISSUE_UPDATE_FIELDS + " los campos " + campos + ".";
-					}
-					
-				    if(counter == 0){
-				    	return new AlertStatus(false, "No se realizaron cambios.");			
+					if(fieldCounter > 1){
+						motive = Messages.ISSUE_UPDATE_FIELDS + " los campos " + fields;
+					}					
+				    if(fieldCounter == 0){
+				    	return new AlertStatus(false, "No se realizaron cambios porque ning&uacute;n campo fue modificado.");			
 				    }
 				    
 				    else{
@@ -641,7 +631,7 @@ public class IssueController {
 						revision.setFecha(new Date());
 						revision.setUsername(userDB.getUsername());	
 						revision.setOperacion(Operation.UPDATE);			
-						revision.setMotivo(detalle);			
+						revision.setMotivo(motive);			
 						revision.setEstado(issue.getStatus());
 						revision.setObservaciones(Messages.ISSUE_UPDATE_OBS);
 						
@@ -679,7 +669,7 @@ public class IssueController {
 			}						
 		
 			else{
-				issueService.updateIssueStatus(issueID, newStatus);					
+				issueService.updateIssueStatus(issueID, newStatus, Resolution.RESOLVED_FIXED, "Arreglado por la empresa AySA.");					
 				return new AlertStatus(true, "El estado reclamo ha sido actualizado.");			
 			}
 			
@@ -1068,13 +1058,12 @@ public class IssueController {
 	
 	
 	public class UpdatedFields  implements Serializable{
-		/**
-		 * 
-		 */
+		
 		private static final long serialVersionUID = 1L;
 		private int title;
 		private int desc;
 		private int barrio;
+		
 		public int getTitle() {
 			return title;
 		}
