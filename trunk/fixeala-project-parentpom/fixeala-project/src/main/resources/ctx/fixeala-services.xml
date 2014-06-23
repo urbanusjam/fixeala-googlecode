@@ -28,6 +28,7 @@
 		<property name="issueVoteDAO" ref="issueVoteDAO" />
 		<property name="issueUpdateDAO" ref="issueUpdateDAO" />
 		<property name="issueRepairDAO" ref="issueLicitacionDAO" />
+		<property name="mailService" ref="mailService" />
 	</bean>
 	
 	<bean name="exportService" class="ar.com.urbanusjam.services.impl.ExportServiceImpl" >
