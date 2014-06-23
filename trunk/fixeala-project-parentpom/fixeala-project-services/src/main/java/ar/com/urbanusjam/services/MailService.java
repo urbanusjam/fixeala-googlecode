@@ -1,5 +1,7 @@
 package ar.com.urbanusjam.services;
 
+import ar.com.urbanusjam.services.dto.EmailDTO;
+
 public interface MailService {
 	
 	public void sendActivationRequestEmail(String username, String token, String email) throws Exception;
@@ -12,6 +14,6 @@ public interface MailService {
 	
 	public void sendClosedAccountEmail(String username, String email) throws Exception;	
 	
-	public void sendIssueUpdateEmail() throws Exception;	
+	public void sendIssueUpdateEmail(EmailDTO email) throws Exception;	
 
 }

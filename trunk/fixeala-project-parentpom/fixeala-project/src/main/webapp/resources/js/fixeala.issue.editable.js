@@ -5,7 +5,8 @@ var userActionsController = {
 		    	
 		    	  $('#userIssueActions').find("#btn-edit").bind('click', userActionsController.enableDisableFields);
 				  $('#userIssueActions').find("#btn-update").bind('click', userActionsController.editIssueFields);
-//				  $('#userIssueActions').find("#btn-status").bind('click', userActionsController.editIssueStatus);
+				  $('#userIssueActions').find("#btn-status").bind('click', userActionsController.initStatusModal);
+				  
 		    	
 		    },
 		    
@@ -90,51 +91,96 @@ var userActionsController = {
 			
 					   
 				  });//bootbox   
-				},
+			},
 			  
 			  
-			  	//UPDATE ISSUE STATUS
+			//UPDATE ISSUE STATUS
 			editIssueStatus : function(){
-			  		
+				
+				event.preventDefault();
+				
+					blockPage("html");
+					
 					var label = $("#btn-status").find('button').attr('title').trim();
-								
-					bootbox.confirm("&iquest;Confirma que desea <b>"+ label +" </b>el reclamo?", function(result){
-						  if(result){
-							  
-							  var status = "";
-								
-								var title = '${titulo}';
-								
-								if(label == 'Resolver')
-									status = 'RESUELTO';
-								
-								if(label == 'Reabrir')
-									status = "REABIERTO";
-								
-								var data = 'issueID='+ issueID + '&newStatus='+ status;
-								
-								$.ajax({
-			        			    url: "./updateIssueStatus.html",
-							 		type: "POST",	
-							 		data: data,
-							 		dataType: "json",									 
-							        success: function(data){		
-							        	if(data.result){		
-							        			bootbox.alert(data.message); 				        			
-								    			setTimeout(function () {
-								    				var url = getIssueURL(issueID, title, 'plain');
-									    			window.location.href= url;	
-								    			}, 2000);						    			
-
-								    	   }
-								    	   
-								    	   else{
-								    		   bootbox.alert(data.message);		
-								    	   }
-				            		}
-			        			});
-							  
-						  }
-					 });						  
+					var resolution = $("#tipoResolucion :selected").text();
+					var obs = $("#observacion").val();
+			
+					var status = "";
+					
+					var title = '${titulo}';
+					
+					if(label == 'Resolver')
+						status = 'RESUELTO';
+					
+					if(label == 'Reabrir')
+						status = "REABIERTO";
+					
+					var data = 'issueID='+ issueID + '&newStatus='+ status + '&resolution=' + resolution + '&obs=' + obs;
+					
+					$("#mdl-status").modal('hide');
+					
+				
+					$.ajax({
+	    			    url: "./updateIssueStatus.html",
+				 		type: "POST",	
+				 		data: data,
+				 		dataType: "json",									 
+				        success: function(data){		
+				        	if(data.result){
+				        		
+				        		unBlockPage("html");
+				        		setTimeout(function(){
+				        			bootbox.alert(data.message, function(){
+				        				var url = getIssueURL(issueID, title, 'plain');
+						    			window.location.href= url;	
+				        			}); 	
+				        		
+				        		}, 1000); 
+				        		
+//				        		setTimeout(function(){
+//				        		
+//				        		}, 1000); 
+				        		
+//				        			bootbox.alert(data.message); 				        			
+//					    			setTimeout(function () {
+//					    				var url = getIssueURL(issueID, title, 'plain');
+//						    			window.location.href= url;	
+//					    			}, 2000);						    			
+	
+					    	   }
+					    	   
+					    	   else{
+					    		   $.unblockUI;
+					    	    	setTimeout(function(){
+					    	    		 bootbox.alert(data.message);	
+					        		}, 1000);
+					    		  	
+					    	   }
+	            		}
+	    			});
+			
+				
+			},
+			
+			initStatusModal : function(){
+			
+				statusLabel = $(this).find('button').attr('title').trim();
+				var options = $("#tipoResolucion");
+				
+				if(statusLabel == 'Resolver'){
+					 options.append($("<option />").val("Arreglado").text("Arreglado"));
+					 options.append($("<option />").val("Duplicado").text("Duplicado"));
+					 options.append($("<option />").val("Invalido").text("Invalido"));
 				}
+			
+				
+				else{
+					 options.append($("<option />").val("No").text("No arreglado"));
+					 options.append($("<option />").val("Deteioro").text("Hubo deterioro"));
+				}
+			
+				$("#mdl-status").modal('show');
+		}
 }
+
+

@@ -533,7 +533,7 @@ public class IssueController {
 					revision.setUsername(userDTO.getUsername());	
 					revision.setOperacion(Operation.CREATE);			
 					revision.setMotivo(Messages.ISSUE_CREATION + " el reclamo.");
-					revision.setObservaciones(Messages.ISSUE_CREATE_OBS);
+					revision.setObservaciones("");
 					revision.setEstado(issue.getStatus());
 										
 					issue.getHistorial().add(revision);
@@ -602,15 +602,15 @@ public class IssueController {
 					int fieldCounter = 0;
 					
 					if(updatedFields.getTitle() == 1){
-						fields += " &laquo;TITULO&raquo; ";
+						fields += " &laquo;T&iacute;tulo&raquo; ";
 						fieldCounter++;
 					}					
 					if(updatedFields.getBarrio() == 1){
-						fields += " &laquo;BARRIO&raquo; ";
+						fields += " &laquo;Barrio&raquo; ";
 						fieldCounter++;
 					}					
 					if(updatedFields.getDesc() == 1){
-						fields += " &laquo;DESCRIPCION&raquo;";
+						fields += " &laquo;Descripci&oacute;n&raquo;";
 						fieldCounter++;
 					}
 					
@@ -633,7 +633,7 @@ public class IssueController {
 						revision.setOperacion(Operation.UPDATE);			
 						revision.setMotivo(motive);			
 						revision.setEstado(issue.getStatus());
-						revision.setObservaciones(Messages.ISSUE_UPDATE_OBS);
+						revision.setObservaciones("");
 						
 						issue.setUsername(userDB.getUsername());
 						issue.setLastUpdateDate(revision.getFecha());
@@ -658,7 +658,8 @@ public class IssueController {
 	
 	@RequestMapping(value="/issues/updateIssueStatus", method = RequestMethod.POST)
 	public @ResponseBody AlertStatus doUpdatetIssueStatus(@RequestParam("issueID") String issueID, 
-			@RequestParam("newStatus") String newStatus, HttpServletRequest request) throws ParseException {
+			@RequestParam("newStatus") String newStatus, @RequestParam("resolution") String resolution, @RequestParam("obs") String obs,  
+			HttpServletRequest request) throws Exception {
 		
 		try {			
 			User user =  getCurrentUser(SecurityContextHolder.getContext().getAuthentication());
@@ -669,12 +670,15 @@ public class IssueController {
 			}						
 		
 			else{
-				issueService.updateIssueStatus(issueID, newStatus, Resolution.RESOLVED_FIXED, "Arreglado por la empresa AySA.");					
+				issueService.updateIssueStatus(userDB.getUsername(), issueID, newStatus, resolution, obs);					
 				return new AlertStatus(true, "El estado reclamo ha sido actualizado.");			
 			}
 			
-		}catch(AccessDeniedException e){
-			return new AlertStatus(false, "Debe estar logueado para ingresar un nuevo reclamo.");
+		}catch(Exception e){
+			if(e instanceof AccessDeniedException)
+				return new AlertStatus(false, "Debe estar logueado para ingresar un nuevo reclamo.");
+			else
+				return new AlertStatus(false, "No ha sido posible actualizar el reclamo. Intente de nuevo.");
 		}		
 	}
 	
@@ -881,7 +885,7 @@ public class IssueController {
 	
 	@RequestMapping(value="/issues/addComment", method = RequestMethod.POST)
 	public @ResponseBody AlertStatus doAddComent(@RequestParam("issueID") String issueID, 
-			@RequestParam("comment") String mensaje, HttpServletRequest request, Model model) throws ParseException {
+			@RequestParam("comment") String mensaje, HttpServletRequest request, Model model) throws Exception {
 		
 		try {			
 			User user =  getCurrentUser(SecurityContextHolder.getContext().getAuthentication());
@@ -910,9 +914,12 @@ public class IssueController {
 				return new AlertStatus(true, "El comentario ha sido publicado.");			
 			}
 			
-		}catch(AccessDeniedException e){
-			return new AlertStatus(false, "Debe estar logueado para publicar un nuevo comentario.");
-		}		
+		}catch(Exception e){
+			if(e instanceof AccessDeniedException)
+				return new AlertStatus(false, "Debe estar logueado para publicar un nuevo comentario.");
+			else
+				return new AlertStatus(false, "No ha sido posible publicar el comentario. Intente de nuevo.");
+		}	
 	}
 	
 	

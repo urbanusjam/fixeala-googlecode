@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ar.com.urbanusjam.services.MailService;
+import ar.com.urbanusjam.services.dto.EmailDTO;
 
 @Service
 @Transactional
@@ -180,69 +181,38 @@ public class MailServiceImpl implements MailService {
 	}
 	
 	
-	//<username> comentó en "<issue_title>"
+	//<username> comento en "<issue_title>" [OK]
 	
-	//<username> adjuntó X archivos a "<issue_title>"
+	//<username> resolvio el reclamo #<issue_id> "<issue_title>" [OK]
 	
-	//<username> resolvió "<issue_title>"
+	//<username> reabrio el reclamo #<issue_id> "<issue_title>" [OK]
 	
-	//<username> reabrió "<issue_title>"
+	//<username> actualizo el reclamo #<issue_id> "<issue_title>"
 	
-	//<username> actualizó campos en "<issue_title>"
+	//<username> adjunto X archivos a "<issue_title>"
 	
 	@Override
-	public void sendIssueUpdateEmail()
+	public void sendIssueUpdateEmail(EmailDTO email)
 			throws Exception {
-		// TODO Auto-generated method stub
 		
-	}
-	
-	
-	
-	
-	
-	private MimeMessage initSession(String email){
-		
-		 	String to = "coripel@gmail.com";
-		   
-//			Properties props = new Properties();
-//			props.put("mail.smtp.host", "smtp.gmail.com");
-//			props.put("mail.smtp.auth", "true");
-//			props.put("mail.smtp.starttls.enable", "true");
-//			props.put("mail.smtp.socketFactory.port", "465");
-//			props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");		
-//			
-//			Session session = Session.getInstance(props,
-//					  new javax.mail.Authenticator() {
-//						protected PasswordAuthentication getPasswordAuthentication() {
-//							return new PasswordAuthentication(mailuser, mailpassword);
-//						}
-//					  });
+		  MimeMessage message = this.mailSender.createMimeMessage();
+		  MimeMessageHelper helper = new MimeMessageHelper(message, true);
+		  
+		  helper.setFrom(from);
+	      //helper.setTo(email);
+		  helper.setTo(to);
+		  helper.setSubject(email.getSubject());
 			
-
+	      String text = email.getMessage();
+	      text += "<br><br>";
+	      text += "Atentamente,";
+	      text += "<br>";
+	      text += "<b>El equipo de Fixeala</b>";
+	      
+	      helper.setText(text, true);
+	      mailSender.send(message);
 		
-		   String from = "fixeala@gmail.com";
-		   String host = "127.0.0.1";
-		   Properties properties = System.getProperties();
-		   properties.setProperty("mail.smtp.host", host);
-
-		   // Get the default Session object.
-		   Session session = Session.getDefaultInstance(properties);
-		 
-		   MimeMessage message = new MimeMessage(session);
-		   
-		   try {
-//				message.setFrom(new InternetAddress(mailuser));
-				message.setFrom(new InternetAddress(from));
-				message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));	
-				message.setRecipients(Message.RecipientType.TO,
-						InternetAddress.parse(to));
-		   } catch (MessagingException e) {
-				throw new RuntimeException(e);
-			}
-		   
-		   return message;
 	}
-
+	
 	
 }

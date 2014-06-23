@@ -17,54 +17,81 @@
 		<!-- Issue -->
 		
 		<script type="text/javascript">
-		
+	
+		jQuery.extend(jQuery.validator.messages, {
+		    required: "Campo obligatorio."//,
+// 		    remote: "Please fix this field.",
+// 		    email: "Please enter a valid email address.",
+// 		    url: "Please enter a valid URL.",
+// 		    date: "Please enter a valid date.",
+// 		    dateISO: "Please enter a valid date (ISO).",
+// 		    number: "Please enter a valid number.",
+// 		    digits: "Please enter only digits.",
+// 		    creditcard: "Please enter a valid credit card number.",
+// 		    equalTo: "Please enter the same value again.",
+// 		    accept: "Please enter a value with a valid extension.",
+// 		    maxlength: jQuery.validator.format("Please enter no more than {0} characters."),
+// 		    minlength: jQuery.validator.format("Please enter at least {0} characters."),
+// 		    rangelength: jQuery.validator.format("Please enter a value between {0} and {1} characters long."),
+// 		    range: jQuery.validator.format("Please enter a value between {0} and {1}."),
+// 		    max: jQuery.validator.format("Please enter a value less than or equal to {0}."),
+// 		    min: jQuery.validator.format("Please enter a value greater than or equal to {0}.")
+		});
+			
 			var issueID = ${id};
 		  	var updatedFields =  { "title": 0 , "desc": 0, "barrio": 0};			 
 		  	var oldFields = $.parseJSON('${oldFields}');
-		  	
+		  
 		  	var idIssue = '${id}'; //duplicado
 			var loggedUser = '${loggedUser}';
 	   		var latitud = '${latitud}';
 	   		var longitud = '${longitud}';
-			var newTitle = "";		
+			var newTitle = "";	
 			
+			var statusLabel = "";
 			
+			$('[data-toggle="popover"]').popover();
+	
+			$('body').on('click', function (e) {
+			    $('[data-toggle="popover"]').each(function () {
+			        //the 'is' for buttons that trigger popups
+			        //the 'has' for icons within a button that triggers a popup
+			        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+			            $(this).popover('hide');
+			        }
+			    });
+			});
+			
+		//////////////////////////////////////////////////////////////////////	
 		
-		
-		
-		$('[data-toggle="popover"]').popover();
+			$(function(e){	
+				
+			
+			$("#btn-update-status").click(function(event){
+				
 
-		$('body').on('click', function (e) {
-		    $('[data-toggle="popover"]').each(function () {
-		        //the 'is' for buttons that trigger popups
-		        //the 'has' for icons within a button that triggers a popup
-		        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
-		            $(this).popover('hide');
-		        }
-		    });
-		});
-		
-		$(function(e){	
-			
+				var statusForm =  $("#modalStatusForm");
+				statusForm.validate();
+				
+				if(!statusForm.valid()){
+					return false;
+				}
+				
+				else{
+					userActionsController.editIssueStatus(event);
+				}
+				
+				
+			});
+				
 			//collapse 
-			$('#btn-collapse').on('click', function(e) {			
+			$('.btn-collapse').on('click', function(e) {			
 			    e.preventDefault();
 			    var $this = $(this);
 			    var $collapse = $this.closest('.collapse-group').find('.collapse');
 			    $collapse.collapse('toggle');
-			    
-// 			    if ( $collapse.is(":hidden")) {
-			    	
-// 			    	$("#tbl-issue-updates tr td .row").css('height', '0px');
-// 			    	$collapse.css('height', '0px');
-			    	
-// 			    }
-// 			    else{
-			    
-// 			    	$("#tbl-issue-updates tr td .row").css('height', '100%');
-// 			    	$collapse.css('height', '100%');
-// 			    }
-			  ;
+			   
+			 
 			});
 			
 
@@ -176,46 +203,7 @@
 			
 			$('.editableField').hide();
 			
-			
-			/**
-			function enableDisableFields(){
-				   
-				   $('#issue-title').editable('toggleDisabled');
-			       $('#issue-barrio').editable('toggleDisabled');
-			       $('#issue-desc').editable('toggleDisabled');
-			       $('#issue-tags').editable('toggleDisabled');
-			       
-			       var iconTags =  $('#edit-tags');
-			       var iconEditable = $('.editableField');
-			       
-			       if(iconEditable.is(':visible')){
-			    	   $('.editableField').hide();
-			       }
-			       else{
-			    	   $('.editableField').show();
-			       }
-			       
-			      
-			       if(iconTags.is(':visible')){
-			    	   $('#edit-tags').hide();
-			    	   
-			       }
-			       else{
-			    	   $('#edit-tags').show();		    	  
-			       }
-			       
-			    }
-					
-		    		
-		    $('#btn-edit').click(function() {
-		    	enableDisableFields();
-		    	if( $('#btn-update').is(":disabled") == true ){		    	
-					$('#btn-update').attr('disabled', false);
-		    	}
-		    	else
-		    		$('#btn-update').attr('disabled', true);
-		    }); 
-			
+		
 		    /*
 		    $('#btn-edit-repair').click(function() {
 		    	if( $('#btn-update-repair').is(":disabled") == true ){		    	
@@ -274,9 +262,9 @@
 					        return 'La longitud m&aacute;xima del campo es de 80 caracteres.';
 					    }
 					    
-					    if(!pattern.test(value)){
-					    	return 'No se permiten caracteres especiales.';
-					    }
+// 					    if(!pattern.test(value)){
+// 					    	return 'No se permiten caracteres especiales.';
+// 					    }
 					    
 				  },
 				  success: function(response, newValue) {	
@@ -343,9 +331,9 @@
 					        return 'La longitud m&aacute;xima del campo es de 30 caracteres.';
 					    }
 					   					   
-					    if(!pattern.test(value)){
-					    	return 'No se permiten caracteres especiales.';
-					    }
+// 					    if(!pattern.test(value)){
+// 					    	return 'No se permiten caracteres especiales.';
+// 					    }
 				  },
 				  success: function(response, newValue) {
 					  if(newValue != oldFields.barrio)
@@ -653,6 +641,8 @@
 			  /*******************************************/
 			
 			  $('#btn-comment').click(function() {
+				  
+				  	blockPage("#collapseSix");
 					var message = $("#comment-text").val();
 					var id = ${id};					
 					var data = 'issueID='+ id + '&comment='+ message;		
@@ -662,115 +652,24 @@
 				 		type: "POST",	
 				 		data: data,
 				 		dataType: "json",									 
-				        success: function(data){		
-				        	if(data.result){				
-						    	window.location.reload();
+				        success: function(data){
+				        	if(data.result){
+				        		unBlockPage("#collapseSix");
+				        		setTimeout(function(){
+				        			window.location.reload();
+				        		}, 1000); 
 						    }					    	   
 				    	    else{
-				    		    bootbox.alert(data.message);		
+				    	    	unBlockPage("#collapseSix");
+				    	    	setTimeout(function(){
+				        			bootbox.alert(data.message);	
+				        		}, 1000);
 				    	    }
 	            		}
         			});
+
 			  });
-			   			   
-			
-			  /**
-			  $('#btn-update').click(function() {			
-				  
-				  var id = ${id};
-				 				  
-				  bootbox.confirm("&iquest;Desea confirmar los cambios?", function(result){
-					 
-					  if(result){
-						  
-						  $('#tbl-issue .editable, #issue-header .editable').editable('submit', {
-							  
-						       url: './updateIssue.html', 
- 						      data:   {fields: JSON.stringify(updatedFields)}, //additional data
-					
-						     
-						       ajaxOptions: {
-						           dataType: 'json'
-						       },  				       
-						       success: function(data) {	
-						    	  
-						    	   
-						    	   if(data.result){		
-						    		   bootbox.alert(data.message); 
-						    		  
-						    			setTimeout(function () {	
-						    				var url = getIssueURL(id, newTitle, 'plain');						    				
-							    			window.location.href= url;	
-						    			}, 1000);		
-						    	   }						    	   
-						    	   else{
-						    		   bootbox.alert(data.message);		
-						    	   }						    	
-						       },
-						       error: function (response) {
-						           console.log(response);
-						       }
-
-						   });//editable 
-						  
-					  }
-			
-					   
-				  });//bootbox   
-				});
-			  
-			  
-			  	//update status only
-				$('#btn-status').click(function(e) {
-					var label = $(this).find('button').attr('title').trim();
-								
-					bootbox.confirm("&iquest;Confirma que desea <b>"+ label +" </b>el reclamo?", function(result){
-						  if(result){
-							  
-							  var status = "";
-								var id = ${id};
-								var title = '${titulo}';
-								
-								if(label == 'Resolver')
-									status = 'RESUELTO';
-								
-								if(label == 'Reabrir')
-									status = "REABIERTO";
-								
-								var data = 'issueID='+ id + '&newStatus='+ status;
-								
-								$.ajax({
-			        			    url: "./updateIssueStatus.html",
-							 		type: "POST",	
-							 		data: data,
-							 		dataType: "json",									 
-							        success: function(data){		
-							        	if(data.result){		
-							        			bootbox.alert(data.message); 				        			
-								    			setTimeout(function () {
-								    				var url = getIssueURL(id, title, 'plain');
-									    			window.location.href= url;	
-								    			}, 2000);						    			
-
-								    	   }
-								    	   
-								    	   else{
-								    		   bootbox.alert(data.message);		
-								    	   }
-				            		}
-			        			});
-							  
-						  }
-					 });
-							  
-					
-					
-						  
-				});
-			  	**/
-			  	
-			  
-				
+			   
 			  	
 				$("#repairForm").validate({				
 					
@@ -1344,12 +1243,12 @@
 						<button id="btn-edit" class="btn" title="Editar"><i class="icon-pencil icon-large"></i></button>			
 					</div>	
 					<c:if test="${estado eq 'ABIERTO' || estado eq 'REABIERTO'}">
-						<div id="btn-status" href="#mdl-status" data-toggle="modal"  class="btn-group" style="float:right; ">			
+						<div id="btn-status" data-toggle="modal" class="btn-group" style="float:right; ">			
 							<button class="btn btn-success" title="Resolver"><i class="icon-wrench icon-large"></i></button>
 						</div>
 					</c:if>
 					<c:if test="${estado eq 'RESUELTO' || estado eq 'CERRADO'}">
-						<div id="btn-status" class="btn-group" style="float:right;">			
+						<div id="btn-status" data-toggle="modal" class="btn-group" style="float:right;">			
 							<button class="btn btn-warning" title="Reabrir"><i class="icon-rotate-right icon-large"></i></button>
 						</div>
 					</c:if>						
@@ -1481,12 +1380,12 @@
 					    		<td style="border-top:none; ">
 					    			<a href="#"><script type="text/javascript">document.write( getUserURL('${revision.username}') );</script></a>
 					    		</td>
-					    		<td style="border-top:none; width:40%">${revision.detalle}</td>
-					    		<td style="border-top:none; width:30%">					   
+					    		<td style="border-top:none; width:35%">${revision.detalle}</td>
+					    		<td style="border-top:none; width:35%">					   
 					    			<c:if test="${not empty revision.observaciones}">		
-						    			 <div class="row" style="height:0">
+						    			 <div class="row" >
 											<div class="collapse-group">
-												<p><a id="btn-collapse" class="link" href="javascript:;">Ver detalle &raquo;</a></p>
+												<p><a class="btn-collapse" class="link" href="javascript:;">Ver detalle &raquo;</a></p>
 											    <p class="collapse" >${revision.observaciones}</p>
 											</div>
 	      								</div>
@@ -1496,32 +1395,6 @@
 						 </c:forEach>
 					</table>
 			
-			      
-<!-- 			        <table class="table table-hover table-bordered table-striped">			        	 -->
-<!-- 			        	<thead>			         -->
-<!-- 					        <tr> -->
-<!-- 					        	<th>#</th> -->
-<!-- 					        	<th>Fecha y Hora</th> -->
-<!-- 					        	<th>Usuario</th> -->
-<!-- 					        	<th>Acci&oacute;n</th> -->
-<!-- 					        	<th>Estado del reclamo</th> -->
-					        
-<!-- 					        </tr> -->
-<!-- 				        </thead>	 -->
-<%-- 				        <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> --%>
-				      
-<%-- 				         <c:forEach items="${historial}" var="revision">					         --%>
-<%-- 					         <c:set var="count" value="${count + 1}" scope="page"/>		 --%>
-<!-- 							 <tr>		 -->
-<%-- 							 	<td><c:out value="${count}" /></td>						 	 --%>
-<%-- 							    <td>${revision.fechaFormateada}</td> --%>
-<!-- 							    <td><script type="text/javascript">document.write( getUserURL('${revision.username}') );</script></td> -->
-<%-- 							    <td>${revision.motivo}</td> --%>
-<%-- 							    <td>${revision.estado}</td> --%>
-							  
-<!-- 							 </tr> -->
-<%-- 						 </c:forEach> --%>
-<!-- 					</table> -->
 			      </div>
 			    </div>
 			  </div>
@@ -1788,35 +1661,25 @@
 			    	Actualizar estado
 		    	</h4>
 	  	</div>
-	  	<form  enctype="multipart/form-data"  class="form-horizontal form-inline" >
+	  	<form id="modalStatusForm" enctype="multipart/form-data"  class="form-horizontal form-inline">
   				<div class="modal-body">
   				
   				<div class="control-group">  			
         			<label class="control-label">Resoluci&oacute;n</label>
         			<div class="controls">
-           				<select id="tipoResolucion" name="tipoResolucion">		
-	    	   				<option value="Arreglado">Arreglado</option>
-	    	   				<option value="Duplicado">Duplicado</option>
-	    	   				<option value="Invalido">Inv&aacute;lido</option>		    	   			 	
-				 		</select>	
-				 		<label class="control-label">Reapertura</label>
-				 		<select id="tipoResolucion" name="tipoResolucion">		
-	    	   				<option value="No arreglado">No arreglado</option>
-	    	   				<option value="Hubo deterioro">Hubo deterioro</option>	    	   				   			 	
-				 		</select>	
-				 		
+           				<select id="tipoResolucion" name="tipoResolucion"></select>		
         			</div>
     			</div>    			
 			    <div class="control-group">
-			        <label class="control-label">Comentario</label>
+			        <label class="control-label" for="observacion">Comentario</label>
 			        <div class="controls">
-			        	<textarea id="observacion" name="observacion" style="width:300px; height: 200px" ></textarea>
+			        	<textarea id="observacion"  class="form-control"  name="observacion" style="width:280px; height: 100px" required></textarea>
 			        </div>
 			    </div>
   				
   				</div>
 			<div class="modal-footer"> 
-				<button class="btn btn-info" data-dismiss="modal" aria-hidden="true">
+				<button id="btn-update-status" class="btn btn-info" aria-hidden="true">
 			    		<i class="icon-ok icon-large"></i>&nbsp;&nbsp;&nbsp;Aceptar
 			    </button>	  		  		
 		  		<button class="btn" data-dismiss="modal" aria-hidden="true">

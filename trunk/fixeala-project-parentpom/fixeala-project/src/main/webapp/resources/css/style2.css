@@ -11,8 +11,8 @@ html, body {
 
 html {
 	 position: relative;
-  min-height: 100%;
-	overflow-y: scroll;
+  	 min-height: 100%;
+	 overflow-y: scroll;
 	/* prevents scrollbar from repositioning web page */
 }
 
