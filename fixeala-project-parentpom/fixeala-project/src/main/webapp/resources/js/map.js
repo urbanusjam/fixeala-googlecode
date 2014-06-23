@@ -570,8 +570,9 @@ function getIssuePlainURL(issueID, issueTitle){
 	var host = window.location.host;
 	var context = "fixeala";
 	var subcontext = "issues/" + issueID;		
-	var parsedTitle = issueTitle.replace(/\s/g, '-').toLowerCase();	
-	var url = protocol + "//" + host + "/" + context + "/" + subcontext + "-" + parsedTitle + ".html";	
+//	var parsedTitle = issueTitle.replace(/\s/g, '-').toLowerCase();	
+//	var url = protocol + "//" + host + "/" + context + "/" + subcontext + "-" + parsedTitle + ".html";	
+	var url = protocol + "//" + host + "/" + context + "/" + subcontext + ".html";	
 	
 	return url;
 }
@@ -581,8 +582,9 @@ function getIssueURL(issueID, issueTitle, type){
 	var host = window.location.host;
 	var context = "fixeala";
 	var subcontext = "issues/" + issueID;		
-	var parsedTitle = issueTitle.replace(/\s/g, '-').toLowerCase();	
-	var url = protocol + "//" + host + "/" + context + "/" + subcontext + "-" + parsedTitle + ".html";	
+//	var parsedTitle = issueTitle.replace(/\s/g, '-').toLowerCase();	
+//	var url = protocol + "//" + host + "/" + context + "/" + subcontext + "-" + parsedTitle + ".html";	
+	var url = protocol + "//" + host + "/" + context + "/" + subcontext + ".html";	
 	
 	if(type == 'link')
 		return '<a href="'+ url +'">#' + issueID + " " + issueTitle + '</a>';		
