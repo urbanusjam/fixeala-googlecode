@@ -44,7 +44,7 @@
 							    		<input type="text" id="username" class="input-block-level" name="j_username" placeholder="Nombre de usuario">	
 							    	</div>	
 							    	<div class="control-group">				     
-							        	<input type="password" class="input-block-level" name="j_password" placeholder="Contraseña">
+							        	<input type="password" class="input-block-level" name="j_password" placeholder="Clave">
 							        </div>
 							      	<button type="submit" id="btnLogin" class="btn btn-primary">            						
 							           Login
@@ -56,7 +56,7 @@
 							         	<input type="checkbox" id="_spring_security_remember_me" name="_spring_security_remember_me" value="remember_me" > 
 					        			Recordarme
 									 </label>
-									<div align="center" class="forgotPassLink"><a class="link" href="${pageContext.request.contextPath}/account/forgotPassword.html">¿Olvidaste tu contraseña?</a></div>     
+									<div align="center" class="forgotPassLink"><a class="link" href="${pageContext.request.contextPath}/account/forgotPassword.html">Recuperar clave</a></div>     
 		     					</form>
 		     					<!-- /LOGIN FORM -->
 							</li>										 
@@ -78,8 +78,8 @@
 	               	  
 						 
 						  <ul class="dropdown-menu user-menu dropdown-yellow dropdown-caret dropdown-close">
-						  	<li><a href="${pageContext.request.contextPath}/users/<sec:authentication property="principal.username"/>.html#profileTab"><i class="icon-user"></i>Perfil</a></li>
-						   	<li><a href="${pageContext.request.contextPath}/users/<sec:authentication property="principal.username"/>.html#editAccountTab"><i class="icon-cog"></i>Mi cuenta</a></li>
+<%-- 						  	<li><a href="${pageContext.request.contextPath}/users/<sec:authentication property="principal.username"/>.html#profileTab"><i class="icon-user"></i>Perfil</a></li> --%>
+						   	<li><a href="${pageContext.request.contextPath}/users/<sec:authentication property="principal.username"/>.html"><i class="icon-user"></i>Mi cuenta</a></li>
 <%-- 						   	<li><a href="${pageContext.request.contextPath}/users.html"><i class="icon-map-marker"></i>Reclamos</a></li> --%>
 <%-- 						   	<li><a href="${pageContext.request.contextPath}/users.html"><i class="icon-envelope"></i>Mensajes</a></li> --%>
 						    <li class="divider"></li>

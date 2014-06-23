@@ -5,8 +5,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
-<head>
-	<meta http-equiv="content-type" content="text/html; charset=UTF8">
+<head>	
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title><tiles:insertAttribute name="title" ignore="true" /></title>	
 
   	<script type="text/javascript" src="http://maps.google.com/maps/api/js?libraries=geometry,places&components=country:ar&language=ES&sensor=false"></script> 

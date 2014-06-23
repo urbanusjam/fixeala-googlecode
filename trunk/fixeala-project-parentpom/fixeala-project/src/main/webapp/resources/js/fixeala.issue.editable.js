@@ -50,8 +50,6 @@ var userActionsController = {
 			
 			//UPDATE ISSUE FIELDS
 			 editIssueFields :  function(){
-				  
-				
 				 				  
 				  bootbox.confirm("&iquest;Desea confirmar los cambios?", function(result){
 					 
@@ -66,16 +64,14 @@ var userActionsController = {
 						       ajaxOptions: {
 						           dataType: 'json'
 						       },  				       
-						       success: function(data) {	
-						    	  
+						       success: function(data) {
 						    	   
 						    	   if(data.result){		
-						    		   bootbox.alert(data.message); 
-						    		  
-						    			setTimeout(function () {	
-						    				var url = getIssueURL(issueID, newTitle, 'plain');						    				
+						    		   bootbox.alert(data.message, function(){						    			 
+//							    			var url = getIssueURL(issueID, newTitle, 'plain');		
+						    				var url = getIssueURL(issueID, '', 'plain');		
 							    			window.location.href= url;	
-						    			}, 1000);		
+						    		   }); 
 						    	   }						    	   
 						    	   else{
 						    		   bootbox.alert(data.message);		
@@ -127,19 +123,23 @@ var userActionsController = {
 				 		dataType: "json",									 
 				        success: function(data){		
 				        	if(data.result){
-				        		
+				        		setTimeout(function(){	
 				        		unBlockPage("html");
+				        		}, 1000); 
+				        		
 				        		setTimeout(function(){
 				        			bootbox.alert(data.message, function(){
 				        				var url = getIssueURL(issueID, title, 'plain');
 						    			window.location.href= url;	
 				        			}); 	
-				        		
 				        		}, 1000); 
 				        		
-//				        		setTimeout(function(){
-//				        		
-//				        		}, 1000); 
+
+				        			
+				        		
+
+				        		
+
 				        		
 //				        			bootbox.alert(data.message); 				        			
 //					    			setTimeout(function () {
@@ -150,7 +150,7 @@ var userActionsController = {
 					    	   }
 					    	   
 					    	   else{
-					    		   $.unblockUI;
+					    		    unBlockPage("html");
 					    	    	setTimeout(function(){
 					    	    		 bootbox.alert(data.message);	
 					        		}, 1000);

@@ -155,10 +155,11 @@ public class IssueController {
 	public String showIssuePage(Model model, @PathVariable("issueToken") String issueToken, 
 				HttpServletRequest request){
 		
-		IssueDTO issue = new IssueDTO();
+		IssueDTO issue = new IssueDTO();		
+//		String[] parts = issueToken.split("-");
+//		String issueID = parts[0];
 		
-		String[] parts = issueToken.split("-");
-		String issueID = parts[0];
+		String issueID = issueToken;
 		
 		try{
 				request.getSession().setAttribute("issueID", issueID);
@@ -602,15 +603,15 @@ public class IssueController {
 					int fieldCounter = 0;
 					
 					if(updatedFields.getTitle() == 1){
-						fields += " &laquo;T&iacute;tulo&raquo; ";
+						fields += " « Título» ";
 						fieldCounter++;
 					}					
 					if(updatedFields.getBarrio() == 1){
-						fields += " &laquo;Barrio&raquo; ";
+						fields += " « Barrio » ";
 						fieldCounter++;
 					}					
 					if(updatedFields.getDesc() == 1){
-						fields += " &laquo;Descripci&oacute;n&raquo;";
+						fields += " « Descripción » ";
 						fieldCounter++;
 					}
 					

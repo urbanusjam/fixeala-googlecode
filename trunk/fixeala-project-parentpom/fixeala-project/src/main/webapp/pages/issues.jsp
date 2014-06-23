@@ -90,8 +90,6 @@
 			    var $this = $(this);
 			    var $collapse = $this.closest('.collapse-group').find('.collapse');
 			    $collapse.collapse('toggle');
-			   
-			 
 			});
 			
 
@@ -1380,15 +1378,11 @@
 					    		<td style="border-top:none; ">
 					    			<a href="#"><script type="text/javascript">document.write( getUserURL('${revision.username}') );</script></a>
 					    		</td>
-					    		<td style="border-top:none; width:35%">${revision.detalle}</td>
-					    		<td style="border-top:none; width:35%">					   
-					    			<c:if test="${not empty revision.observaciones}">		
-						    			 <div class="row" >
-											<div class="collapse-group">
-												<p><a class="btn-collapse" class="link" href="javascript:;">Ver detalle &raquo;</a></p>
-											    <p class="collapse" >${revision.observaciones}</p>
-											</div>
-	      								</div>
+					    		<td style="border-top:none; width:35%; border: 0px solid red">${revision.detalle}</td>
+					    		<td class="collapse-group" style="border-top:none; width:35%;" >					   
+					    			<c:if test="${not empty revision.observaciones}">	
+										<a class="btn-collapse" class="link" href="javascript:;">Ver detalle &raquo;</a>
+										<p class="collapse" >${revision.observaciones}</p>
       								</c:if> 
       							</td>				    		
 					    	</tr>					    
