@@ -38,8 +38,10 @@ import ar.com.urbanusjam.entity.annotations.Tag;
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.ContenidoService;
 import ar.com.urbanusjam.services.IssueService;
+import ar.com.urbanusjam.services.MailService;
 import ar.com.urbanusjam.services.UserService;
 import ar.com.urbanusjam.services.dto.CommentDTO;
+import ar.com.urbanusjam.services.dto.EmailDTO;
 import ar.com.urbanusjam.services.dto.IssueCriteriaSearch;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.IssueFollowDTO;
@@ -71,6 +73,7 @@ public class IssueServiceImpl implements IssueService {
 	private IssueVoteDAO issueVoteDAO;
 	private IssueHistorialRevisionDAO issueUpdateDAO;
 	private IssueLicitacionDAO issueRepairDAO;
+	private MailService mailService;
 	
 	
 	public void setUserService(UserService userService) {
@@ -118,6 +121,8 @@ public class IssueServiceImpl implements IssueService {
 	}
 	
 	
+	
+	
 
 
 	@Override
@@ -134,7 +139,12 @@ public class IssueServiceImpl implements IssueService {
 		issueDAO.saveIssue(issue);	
 	}
 	
+	public void setMailService(MailService mailService) {
+		this.mailService = mailService;
+	}
+
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
 	public void updateIssue(IssueDTO issueDTO) {
 		Issue issue = new Issue();
 		issue = this.convertTo(issueDTO);
@@ -163,21 +173,18 @@ public class IssueServiceImpl implements IssueService {
 	}
 	
 	@Override
-	public void updateIssueStatus(String issueID, String newStatus, String resolution, String obs) {
+	@Transactional(propagation = Propagation.REQUIRED)
+	public void updateIssueStatus(String username, String issueID, String newStatus, String resolution, String obs) throws Exception {
 	
-		Issue issue = new Issue();
-		issue.setStatus(newStatus);
-		
 		IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
+//		revision.setNroReclamo(Long.valueOf(issueID));
 		revision.setFecha(new Date());
-		revision.setUsername(issue.getReporter().getUsername());
+		revision.setUsername(username);
 		revision.setOperacion(Operation.UPDATE);			
 		revision.setResolucion(resolution);
-		revision.setEstado(issue.getStatus());			
+		revision.setEstado(newStatus);			
 		revision.setObservaciones(obs);
-				
-//		if(newStatus.equals(IssueStatus.ACKNOWLEDGED))
-//			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_ACKNOWLEDGE + " el reclamo.");			
+		
 		if(newStatus.equals(IssueStatus.IN_PROGRESS))	
 			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_PROGRESS + " el reclamo");			
 		if(newStatus.equals(IssueStatus.SOLVED))
@@ -185,11 +192,32 @@ public class IssueServiceImpl implements IssueService {
 		if(newStatus.equals(IssueStatus.CLOSED))
 			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_CLOSE + " el reclamo");	
 		if(newStatus.equals(IssueStatus.REOPENED))	
-			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_REOPEN + " el reclamos");				
+			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_REOPEN + " el reclamo");				
 		
-		issue.addRevision(this.convertTo(revision));		
-		issue.setLastUpdateDate(this.getCurrentCalendar(revision.getFecha()));		
+		Issue issue = issueDAO.findIssueById(issueID);
+		
+		//email notification
+		String link = "<a target='_blank' href='http://localhost:8080/fixeala/issues/" + issue.getId().toString() + ".html' >LINK</a>.";
+		String text = "El usuario <u>" + revision.getUsername() + "</u> ha cambiado el estado de tu reclamo <i>#" + issue.getId().toString() + " \"" + issue.getTitle() + "\"</i> de " + issue.getStatus().toUpperCase() + " a " + newStatus.toUpperCase() + ".";
+		text += "<br><br>";
+		text += "È Motivo: " + revision.getResolucion();
+		text += "<br>";
+		text += "È Observaciones: " + revision.getObservaciones();
+		text += "<br><br>";
+		text += "Para acceder al reclamo actualizado, hac&eacute; clic en el siguiente " + link;
+		
+		EmailDTO email = new EmailDTO();
+		email.setSubject(revision.getUsername() + " " + revision.getMotivo() + " #" + issue.getId().toString() + " \"" + issue.getTitle() + "\"" );
+		email.setTo(issue.getReporter().getUsername());
+		email.setUrl(link);
+		email.setMessage(text);
+		
+		issue.setStatus(newStatus);
+		issue.setLastUpdateDate(this.getCurrentCalendar(revision.getFecha()));
+		issue.addRevision(this.convertTo(revision));
+		
 		issueDAO.updateIssue(issue);
+		mailService.sendIssueUpdateEmail(email);
 	}
 	
 	
@@ -390,7 +418,7 @@ public class IssueServiceImpl implements IssueService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public void postComment(CommentDTO commentDTO) {
+	public void postComment(CommentDTO commentDTO) throws Exception {
 		
 		Issue issue = issueDAO.findIssueById(commentDTO.getNroReclamo());
 		User user = userDAO.loadUserByUsername(commentDTO.getUsuario());
@@ -405,13 +433,28 @@ public class IssueServiceImpl implements IssueService {
 		revision.setOperacion(Operation.UPDATE);			
 		revision.setMotivo(Messages.ISSUE_UPDATE_COMMENT);			
 		revision.setEstado(issue.getStatus());
-		revision.setObservaciones(Messages.ISSUE_UPDATE_OBS);	
+		revision.setObservaciones(commentDTO.getMensaje());	
 			
 		issue.setLastUpdateDate(this.getCurrentCalendar(revision.getFecha()));		
 		issue.addComment(comment);
 		issue.addRevision(convertTo(revision));
 
+		//email notification
+		String link = "<a target='_blank' href='http://localhost:8080/fixeala/issues/" + issue.getId().toString() + ".html' >LINK</a>.";
+		String text = "El usuario <i>" + commentDTO.getUsuario() + "</i> ha dejado un comentario en tu reclamo <i># \"" + issue.getTitle() + "\"</i>.";
+		text += "<br><br>";
+		text += "Para acceder al comentario publicado, hac&eacute; clic en el siguiente " + link;
+		
+		EmailDTO email = new EmailDTO();
+		email.setSubject("Nuevo comentario en el reclamo #" + issue.getId().toString() + " \"" + issue.getTitle() + "\"" );
+		email.setTo(issue.getReporter().getUsername());
+		email.setUrl(link);
+		email.setMessage(text);
+		
 		issueDAO.updateIssue(issue);
+		
+		if(!issue.getReporter().getUsername().equals(commentDTO.getUsuario()))
+			mailService.sendIssueUpdateEmail(email);
 	}
 
 	@Override
@@ -521,7 +564,7 @@ public class IssueServiceImpl implements IssueService {
 		IssueUpdateHistory historial = new IssueUpdateHistory();	
 		historial.setFecha(this.getCurrentCalendar(historialDTO.getFecha()));	
 		historial.setUsuario(userDAO.loadUserByUsername(historialDTO.getUsername()));
-		historial.setOperacion(Operation.UPDATE);
+		historial.setOperacion(historialDTO.getOperacion());
 		historial.setMotivo(historialDTO.getMotivo());
 		historial.setResolucion(historialDTO.getResolucion());		
 		historial.setEstado(historialDTO.getEstado());		
@@ -545,7 +588,7 @@ public class IssueServiceImpl implements IssueService {
 		historialDTO.setResolucion(historial.getResolucion());
 		
 		if(historialDTO.getResolucion() != null && historial.getResolucion() != ""){
-			historialDTO.setDetalle(historialDTO.getMotivo() + " como &laquo;" + historialDTO.getResolucion().toUpperCase() + "&raquo;" );	
+			historialDTO.setDetalle(historialDTO.getMotivo() + " como &laquo;" + historialDTO.getResolucion() + "&raquo;" );	
 		}
 		else{
 			historialDTO.setDetalle(historialDTO.getMotivo());

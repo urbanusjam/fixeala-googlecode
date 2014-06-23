@@ -162,10 +162,36 @@ path:hover {
             	$("#"+divId).html (captchaContent);
             }
             
-         
+          //BLOCKUI
+			function blockPage(containerID) {
+				$(containerID)
+						.block(
+								{
+									message : "<h4>Procesando...<br><br><img src=\".././resources/images/loader.gif\"/></h4>",
+									overlayCSS : {
+										backgroundColor : '#000',
+										opacity : 0.3,
+										cursor : 'wait'
+									},
+									css : {
+										'-webkit-border-radius' : '5px',
+										'-moz-border-radius' : '5px',
+										padding : 20,
+										margin : 0,
+										width : '250px',
+										textAlign : 'center',
+										color : '#000',
+										border : '0px solid #aaa',
+										cursor : 'wait'
+									}
+								});
+			}
+
+			function unBlockPage(containerID) {
+				$(containerID).unblock();
+			}
         
 		$(document).ready(function(){
-			
 			
 			
 			

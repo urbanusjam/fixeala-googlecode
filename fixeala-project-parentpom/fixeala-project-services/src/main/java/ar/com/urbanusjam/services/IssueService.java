@@ -14,7 +14,7 @@ import ar.com.urbanusjam.services.dto.IssueVoteDTO;
 public interface IssueService {
 	
 	public void reportIssue(IssueDTO issue);	
-	public void postComment(CommentDTO comment);
+	public void postComment(CommentDTO comment) throws Exception;
 	
 	//rever
 	public void addHistoryUpdate(IssueUpdateHistoryDTO update);
@@ -24,7 +24,7 @@ public interface IssueService {
 	public IssueRepairDTO getRepairInfoByIssue(String issueID);
 	
 	public void updateIssue(IssueDTO issue);		
-	public void updateIssueStatus(String issueID, String newStatus, String resolution, String obs);
+	public void updateIssueStatus(String username, String issueID, String newStatus, String resolution, String obs) throws Exception;
 		
 	public void assignUserToIssue(String issueID, String username);
 		

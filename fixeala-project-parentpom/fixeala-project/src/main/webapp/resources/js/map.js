@@ -68,7 +68,10 @@ function initMap() {
  	            				unBlockIssueForm();
  	            			}, 1500);		
  	            		}    
- 	            	} 	            	
+ 	            	}
+ 	            	else{
+ 	            		bootbox.alert("Para cambiar las coordenadas debe volver al Paso 1 (UBICACI&Oacute;N).");
+ 	            	}
  	    		}
  		   }//else    		
     	}
