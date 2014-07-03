@@ -167,6 +167,8 @@ var userActionsController = {
 				statusLabel = $(this).find('button').attr('title').trim();
 				var options = $("#tipoResolucion");
 				
+				options.empty();
+				
 				if(statusLabel == 'Resolver'){
 					 options.append($("<option />").val("Arreglado").text("Arreglado"));
 					 options.append($("<option />").val("Duplicado").text("Duplicado"));
