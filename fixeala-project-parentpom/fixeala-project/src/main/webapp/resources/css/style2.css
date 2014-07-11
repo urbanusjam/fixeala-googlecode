@@ -448,9 +448,11 @@ ul.thumbnails {
 #changePasswordForm label, 
 #closeAccountForm label { margin-bottom: 10px; }
 
-#updateAccountForm input, 
+#updateAccountForm input,  
 #changePasswordForm input, 
 #closeAccountForm input { height: 25px; line-height: 25px; width: 270px;  margin-bottom: 20px; }
+
+#updateAccountForm select { height: 35px; line-height: 25px; width: 280px;  margin-bottom: 20px; }
 
 #updateAccountForm .btn, 
 #changePasswordForm .btn, 

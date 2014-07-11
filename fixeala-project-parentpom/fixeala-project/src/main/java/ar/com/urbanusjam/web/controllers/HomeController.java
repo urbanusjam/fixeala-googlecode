@@ -109,7 +109,7 @@ public class HomeController {
         for(UserDTO c : dbUsers){
         	if( c.getUsername().toLowerCase().contains(param.sSearch.toLowerCase()) 
                ||
-	          ( c.getNeighborhood() != null && c.getNeighborhood().toLowerCase().contains(param.sSearch.toLowerCase())) )            
+	          ( c.getCity() != null && c.getCity().toLowerCase().contains(param.sSearch.toLowerCase())) )            
               {
         		users.add(c); // add users that matches given search criterion
               }
@@ -127,8 +127,8 @@ public class HomeController {
                 case 0:
                 	return c1.getUsername().compareTo(c2.getUsername()) * sortDirection;
                 case 1:
-            	    if(c1.getNeighborhood() != null && c2.getNeighborhood() != null)
-            		    return c1.getNeighborhood().compareTo(c2.getNeighborhood()) * sortDirection;		         
+            	    if(c1.getCity() != null && c2.getCity() != null)
+            		    return c1.getCity().compareTo(c2.getCity()) * sortDirection;		         
                 }
                 return 0;
            }
@@ -599,7 +599,8 @@ public class HomeController {
 				model.addAttribute("profileUser", user.getUsername());
 				model.addAttribute("profileRole", user.getAuthorities().get(0));				
 				model.addAttribute("email", user.getEmail());
-				model.addAttribute("neighborhood", user.getNeighborhood());			
+				model.addAttribute("city", user.getCity());			
+				model.addAttribute("province", user.getProvince());			
 				
 				List<IssueDTO> userIssues = issueService.loadIssuesByUser(userID);
 				List<IssueDTO> allIssues = issueService.loadAllIssues();

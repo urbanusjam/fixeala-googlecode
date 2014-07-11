@@ -1,16 +1,7 @@
 package ar.com.urbanusjam.services.impl;
 
-import java.util.Properties;
-
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -193,6 +184,30 @@ public class MailServiceImpl implements MailService {
 	
 	@Override
 	public void sendIssueUpdateEmail(EmailDTO email)
+			throws Exception {
+		
+		  MimeMessage message = this.mailSender.createMimeMessage();
+		  MimeMessageHelper helper = new MimeMessageHelper(message, true);
+		  
+		  helper.setFrom(from);
+	      //helper.setTo(email);
+		  helper.setTo(to);
+		  helper.setSubject(email.getSubject());
+			
+	      String text = email.getMessage();
+	      text += "<br><br>";
+	      text += "Atentamente,";
+	      text += "<br>";
+	      text += "<b>El equipo de Fixeala</b>";
+	      
+	      helper.setText(text, true);
+	      mailSender.send(message);
+		
+	}
+	
+	
+	@Override
+	public void sendEmailChangeNotification(EmailDTO email)
 			throws Exception {
 		
 		  MimeMessage message = this.mailSender.createMimeMessage();

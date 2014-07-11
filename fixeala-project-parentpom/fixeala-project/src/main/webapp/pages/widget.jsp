@@ -48,7 +48,7 @@
 			
 			<div class="span7">
 				<div class="page-header" style="text-align: left !important;"><h4>C&oacute;digo HTML y JavaScript</h4></div>
-				<p>Copie el siguiente código e insértelo en cualquier lugar de su sitio web para embeber el widget.</p>	
+				<p>Copie el siguiente c&oacute;digo e ins&eacute;rtelo en cualquier lugar de su sitio web para embeber el widget.</p>	
 				<br>
 				<textarea id="widgetScript" style="width: 560px; height: 150px; font-family: Courier New; font-size: 12px;"></textarea>				
 			</div>
@@ -155,7 +155,7 @@
 			
 			<div class="span4 pull-right">	 
 			
-				<div class="page-header"><h4>Previsualización</h4> </div>
+				<div class="page-header"><h4>Previsualizaci&oacute;n</h4> </div>
 				
 				<iframe style="width: 300px; border: none;" onload="resizeIframe(this)" src="http://localhost:8080/fixeala/widget-component.html"></iframe>
 			

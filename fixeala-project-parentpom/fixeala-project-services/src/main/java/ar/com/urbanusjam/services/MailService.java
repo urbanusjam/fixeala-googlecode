@@ -15,5 +15,7 @@ public interface MailService {
 	public void sendClosedAccountEmail(String username, String email) throws Exception;	
 	
 	public void sendIssueUpdateEmail(EmailDTO email) throws Exception;	
-
+	
+	public void sendEmailChangeNotification(EmailDTO email) throws Exception;	
+	
 }

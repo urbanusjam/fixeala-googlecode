@@ -22,7 +22,8 @@ public class UserDTO implements Serializable {
 	private String areaCiudad;
 	private String areaProvinciaSigla;
 	private String subarea;
-	private String neighborhood;
+	private String city;
+	private String province;
 	private Date registrationDate;
 	private Date lastLoginDate;
 	private List<String> authorities;	
@@ -169,12 +170,20 @@ public class UserDTO implements Serializable {
 		this.verifiedOfficial = verifiedOfficial;
 	}
 
-	public String getNeighborhood() {
-		return neighborhood;
+	public String getCity() {
+		return city;
 	}
 
-	public void setNeighborhood(String neighborhood) {
-		this.neighborhood = neighborhood;
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getProvince() {
+		return province;
+	}
+
+	public void setProvince(String province) {
+		this.province = province;
 	}
 
 	public Date getRegistrationDate() {

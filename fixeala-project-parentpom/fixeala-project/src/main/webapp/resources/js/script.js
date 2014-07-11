@@ -605,24 +605,28 @@ $(document).ready(function(){
 			  	
 			  	submitHandler: function() {
 			  		
-			  		bootbox.confirm("&iquest;Confirma que desea actualizar los datos?", function(result){
+//			  		bootbox.confirm("&iquest;Confirma que desea actualizar los datos?", function(result){
 						  
-						  if(result){
+//						  if(result){
+			  		blockPage("html");
 							  
 						  	 var newEmail = $('#updateAccountForm input#email').val();
-						  	 var newBarrio = $('#updateAccountForm input#neighborhood').val();
+						  	 var newCity = $('#updateAccountForm #localidadList').val();
+						  	 var newProvince = $('#updateAccountForm #provinciaList').val();
 						    
 					         $.ajax({
 					        	  type: "POST",
 					              url: "../account/updateAccount.html",
-					              data: "newEmail=" + newEmail + "&newBarrio=" + newBarrio,      
+					              data: "newEmail=" + newEmail + "&newCity=" + newCity + "&newProvince=" + newProvince,      
 					              success: function(data){  
 					            	
-					              	  if(data.result){
-					              		  
-					              		 bootbox.alert(data.message);
-					              		
-					              		
+					              	  if(data.status){
+					              		 setTimeout(function(){
+					              			unBlockPage("html");					              			
+					              			 setTimeout(function(){
+					              				location.reload();
+					              			 }, 500);	
+					              		 }, 1000);					              		 
 					              	  }
 					              	  else
 					              		  bootbox.alert(data.message); 
@@ -647,8 +651,8 @@ $(document).ready(function(){
 					               }
 					         });
 							  
-						  }
-			  		});
+//						  }
+//			  		});
 			  		
 			  		 
 			     }
