@@ -68,8 +68,11 @@ public class User implements UserDetails {
     @Column(name="gov_sub_area_acronym")
     private String siglaSubArea;
     
-    @Column(name="place_of_residence")
-    private String neighborhood;  
+    @Column(name="city_of_residence")
+    private String city;  
+    
+    @Column(name="province_of_residence")
+    private String province;
     
     @Column(name="is_area")
     private boolean isArea;
@@ -222,14 +225,22 @@ public class User implements UserDetails {
 		this.siglaSubArea = siglaSubArea;
 	}
 
-	public String getNeighborhood() {
-		return neighborhood;
+	public String getCity() {
+		return city;
 	}
 
-	public void setNeighborhood(String neighborhood) {
-		this.neighborhood = neighborhood;
+	public void setCity(String city) {
+		this.city = city;
 	}
-	
+
+	public String getProvince() {
+		return province;
+	}
+
+	public void setProvince(String province) {
+		this.province = province;
+	}
+
 	public boolean isArea() {
 		return isArea;
 	}

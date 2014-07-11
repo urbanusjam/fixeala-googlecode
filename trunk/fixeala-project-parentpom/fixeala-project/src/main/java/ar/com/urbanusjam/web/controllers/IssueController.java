@@ -603,15 +603,15 @@ public class IssueController {
 					int fieldCounter = 0;
 					
 					if(updatedFields.getTitle() == 1){
-						fields += " « Título» ";
+						fields += " «TITULO» ";
 						fieldCounter++;
 					}					
 					if(updatedFields.getBarrio() == 1){
-						fields += " « Barrio » ";
+						fields += " «BARRIO» ";
 						fieldCounter++;
 					}					
 					if(updatedFields.getDesc() == 1){
-						fields += " « Descripción » ";
+						fields += " «DESCRIPCION» ";
 						fieldCounter++;
 					}
 					
@@ -622,10 +622,11 @@ public class IssueController {
 						motive = Messages.ISSUE_UPDATE_FIELDS + " los campos " + fields;
 					}					
 				    if(fieldCounter == 0){
-				    	return new AlertStatus(false, "No se realizaron cambios porque ning&uacute;n campo fue modificado.");			
+				    	motive = "actualizó las CATEGORIAS del reclamo.";
+//				    	return new AlertStatus(false, "No se realizaron cambios porque ning&uacute;n campo fue modificado.");			
 				    }
-				    
-				    else{
+//				    
+//				    else{
 				    	
 				    	//history
 						IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
@@ -645,7 +646,7 @@ public class IssueController {
 						
 						return new AlertStatus(true, "El reclamo ha sido actualizado.");	
 				    	
-				    }
+//				    }
 					
 							
 			}
@@ -935,8 +936,8 @@ public class IssueController {
 			
 			if(userDB == null){
 				return new AlertStatus(false, "Debe estar logueado para observar el reclamo.");
-			}	
-			
+			}				
+		
 			follow.setIdIssue(issueID);
 			follow.setUsername(userDB.getUsername());
 			follow.setDate(new Date());

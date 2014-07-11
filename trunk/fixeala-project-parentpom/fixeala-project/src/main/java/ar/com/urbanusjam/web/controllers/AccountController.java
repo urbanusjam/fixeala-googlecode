@@ -313,9 +313,16 @@ public class AccountController extends AbstractController {
 
 	
 	@RequestMapping(value="/updateAccount", method = RequestMethod.POST)
-	public @ResponseBody ContenidoResponse doUpdateAccount(@RequestParam ("newEmail") String newEmail, @RequestParam ("newBarrio") String newBarrio, HttpServletRequest request) {
+	public @ResponseBody ContenidoResponse doUpdateAccount(@RequestParam ("newEmail") String newEmail, 
+			@RequestParam ("newCity") String newCity, @RequestParam ("newProvince") String newProvince, HttpServletRequest request) {
 		
 		User loggedUser = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();	
+		
+		if(newProvince.equals("none")){
+			newProvince = null;
+			newCity = null;
+		}
+			
 		
 		try {		
 		
@@ -325,7 +332,8 @@ public class AccountController extends AbstractController {
 			
 			UserDTO userDTO = userService.getUserByUsername(loggedUser.getUsername());		
 			userDTO.setEmail(newEmail);
-			userDTO.setNeighborhood(newBarrio);
+			userDTO.setCity(newCity);
+			userDTO.setProvince(newProvince);
 			userService.updateAccount(userDTO);
 			
 		    return new ContenidoResponse(true, "Los datos de la cuenta han sido actualizados.");

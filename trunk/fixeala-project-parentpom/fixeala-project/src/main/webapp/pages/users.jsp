@@ -8,13 +8,74 @@
 	
 </style>
 
+<script>
+
+
+var xmlhttp;
+
+
+
+function provinciaListOnChange() {
+
+    var provinciaList = document.getElementById("provinciaList"); 
+    var selectedprovincia = provinciaList.options[provinciaList.selectedIndex].value;
+    var localidadSelect = $('#localidadList');
+   
+    if (window.XMLHttpRequest){	// code for IE7+, Firefox, Chrome, Opera, Safari
+    	xmlhttp = new XMLHttpRequest();
+    }
+ 	
+    else{	// code for IE6, IE5
+    	xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+	
+    xmlhttp.open("GET", "../resources/data/provincias_localidades.xml", false);
+	xmlhttp.send();
+	xmlDoc=xmlhttp.responseXML;
+	
+	localidadSelect.empty();
+     	
+     $(xmlDoc).find('lista provincia').each(function(){
+   		  if($(this).attr('id').trim() === selectedprovincia){
+   		       $(this).find('localidades localidad').each(function(){  
+   		              var label = $(this).text();
+   		              localidadSelect.append("<option value='"+ label +"'>"+label+"</option>");
+   		       });
+   		  }
+    });
+
+}
+
+
+
+
+
+
+</script>
+
 
 	<script type="text/javascript">
+	
+	$(document).ready(function(){
+		var prov = '${province}';
+		var city = '${city}';
+		
+		if(prov == null || prov == ''){
+			$('#provinciaList').val("none");
+		}
+		else{
+			$('#provinciaList').val(prov);
+			$('#localidadList').append("<option value='"+ city +"'>"+city+"</option>");
+		}
+			
+	});
 	
 	var rowId;
 	var rowTitle;
 	var selectedUser;
 	var currentUser = '${profileUser}';
+	
+
 	
 	function errorHandler (jqXHR, exception) {
         if (jqXHR.status === 0) {
@@ -62,7 +123,15 @@
 					        <c:if test="${ !isActiveUser }">
 					        	<span class="label" style="vertical-align:super;">Este usuario ya no forma parte de Fixeala</span>
 					        </c:if> 
-					        <small><cite>Vecino de <i>${neighborhood}</i>&nbsp;&nbsp;<i class="icon-map-marker"></i></cite></small>			
+					        
+					          <c:if test="${ not empty province }">
+					           <small><cite>Vecino de <i>${city}, ${province}</i>&nbsp;&nbsp;<i class="icon-map-marker"></i></cite></small>
+					          </c:if>
+					          
+					          <c:if test="${ empty province }">
+					           <small><cite>Vecino de...</cite></small>
+					          </c:if>
+					       			
 					    </blockquote>
 				</div>
 			</div>
@@ -109,7 +178,7 @@
 						                <li class="nav-header"><i class="icon-caret-right"></i>CUENTA</li>
 						                <li><a href="#editAccountTab" data-toggle="tab"><i class="icon-edit-sign"></i>Datos personales</a></li>
 						                <li><a href="#changePasswordTab" data-toggle="tab"><i class="icon-unlock"></i>Cambio de clave</a></li>
-						                <li><a href="#closeAccountTab" data-toggle="tab"><i class="icon-ban-circle"></i>Desactivación</a></li>
+						                <li><a href="#closeAccountTab" data-toggle="tab"><i class="icon-ban-circle"></i>Desactivaci&oacute;n</a></li>
 				              		</c:if>
 				              		
 				              		<!-- MENU ANONYMOUS -->
@@ -146,9 +215,9 @@
 								<div class="thumbnail" style="text-align:center; width:200px;">
               						<small style="text-align:center">Registrado el ${registrationDate}</small>		
     							</div>	    																
-								 <div class="thumbnail" style="text-align:center; width:200px;">	              						
-              						<small style="text-align:center">33 visitas</small>	
-    							</div>			
+<!-- 								<div class="thumbnail" style="text-align:center; width:200px;">	              						 -->
+<!--               						<small style="text-align:center">33 visitas</small>	 -->
+<!--     							</div>			 -->
 						    </div>
 							<div class="span2 thumbnail" style="text-align:center" title="Reclamos publicados">
              						<i class="icon-pushpin icon-4x"></i>
@@ -437,16 +506,19 @@
 					                		<form class="form-horizontal" id="updateAccountForm">					              
 											    <label for="email">Email</label>
 											    <input type="text" id="email" name="email" class="input-large" value="${email}">
-											  									
-											    <label for="neighborhood">Barrio</label>
-											    <input type="text" id="neighborhood" name="neighborhood" value="${neighborhood}" class="input-large"> 
-											  										
-<!-- 											    <label for="city">Ciudad</label> -->
-<%-- 											    <input type="text" id="city" name="city" class="input-large" value="${city}"> --%>
-											 										
-<!-- 											    <label for="province">Provincia</label> -->
-<%-- 											    <input type="text" id="province" name="province" class="input-large" value="${province}">  --%>
-											    
+
+
+
+												   <label for="province">Provincia</label>
+											       <select name="provinciaList" id="provinciaList" onchange="return provinciaListOnChange()">
+      													<option value="none">Ninguna</option>
+      													<option value="Gran Buenos Aires">Gran Buenos Aires</option><option value="Capital Federal">Capital Federal</option><option value="Catamarca">Catamarca</option><option value="Chaco">Chaco</option><option value="Chubut">Chubut</option><option value="Cordoba">Cordoba</option><option value="Corrientes">Corrientes</option><option value="Entre Rios">Entre Rios</option><option value="Formosa">Formosa</option><option value="Jujuy">Jujuy</option><option value="La Pampa">La Pampa</option><option value="La Rioja">La Rioja</option><option value="Mendoza">Mendoza</option><option value="Misiones">Misiones</option><option value="Neuquen">Neuquen</option><option value="Rio Negro">Rio Negro</option><option value="Salta">Salta</option><option value="San Juan">San Juan</option><option value="San Luis">San Luis</option><option value="Santa Cruz">Santa Cruz</option><option value="Santa Fe">Santa Fe</option><option value="Santiago Del Estero">Santiago Del Estero</option><option value="Tierra del Fuego">Tierra del Fuego</option><option value="Tucuman">Tucuman</option>    </select>
+											 				
+												
+										
+											 	<label for="city">Ciudad / Localidad</label>						
+											    <select name="localidadList" id="localidadList"></select>
+											
 											    <hr>
 											    <button id="btnUpdateAccount" class="btn btn-success"><i class="icon-ok"></i>&nbsp;&nbsp; Actualizar datos</button>								 
 										  	</form>

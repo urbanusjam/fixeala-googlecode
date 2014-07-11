@@ -249,7 +249,8 @@ CREATE TABLE user (
 	   email VARCHAR(255) NOT NULL,
 	   name VARCHAR(255) NULL,
 	   last_name VARCHAR(255) NULL,
-	   place_of_residence VARCHAR(64) NULL,  /* <neighborhood>, <city>, <province> */
+	   city_of_residence VARCHAR(64) NULL,
+	   province_of_residence VARCHAR(64) NULL,
 	   salt VARCHAR(25) NULL,	
 	   id_area BIGINT(20) NULL,
 	   gov_position VARCHAR(255) NULL,

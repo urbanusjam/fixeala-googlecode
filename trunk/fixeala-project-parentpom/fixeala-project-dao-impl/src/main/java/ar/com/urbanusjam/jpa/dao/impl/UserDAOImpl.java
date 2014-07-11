@@ -150,10 +150,10 @@ public class UserDAOImpl implements UserDAO, UserDetailsManager  {
 	@Override
 	public void updateAccount(User user) {
 		User userDB = (User) this.loadUserByUsername(user.getUsername());
-		userDB.setNeighborhood(user.getNeighborhood());
+		userDB.setCity(user.getCity());
+		userDB.setProvince(user.getProvince());
 		userDB.setEmail(user.getEmail());
 		entityManager.merge(userDB);
-		((Transaction) entityManager).commit();
 	}
 	
 	@Override

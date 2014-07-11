@@ -317,10 +317,10 @@
 				  name: 'neighborhood', 	
 				  mode: 'popup',	
 				  placement: 'right',
+				  emptytext: 'A definir',
 				  ajaxOptions: {
 					  dataType: 'json'
 				  },			
-				 
 				  validate: function(value) {		
 					  
 					 	var pattern = /^\s*[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9,\s]+\s*$/;
@@ -1033,32 +1033,42 @@
 				 		
 				 		else{
 				 			
-				 			$.ajax({
-		        			    url: "./watchIssue.html",
-						 		type: "POST",	
-						 		data: data,							 
-						        success: function(data){						        	
-						        	if(data.result){	
-						        		
-						        		$('#icon-watch').replaceWith(loader);
-						        		
-						        		$watchingLink.removeClass('unwatch');
-					 					$watchingLink.addClass('watching');
-						        		
-						        		setTimeout(function(){							 					
-						 					$('.loader').replaceWith(iconUnWatch);
-// 						 					$watchingLink.text('Observando');
-							 				$watchingLink.attr('title', 'Dejar de observar este reclamo');
-							 				$('#view-watcher-list').html(data.message);
-							 			
-						 				}, 1000);	
-						        	}
-						        	
-						        	else{
-						        		bootbox.alert(data.message);	
-						        	}	
-			            		}						  
-		        			});				 			
+				 			var reporter = '${usuario}';
+				 			
+				 			if(loggedUser == reporter){
+				 				
+				 				bootbox.alert("S&oacute;lo puede observar reclamos publicados por otros usuarios.");
+				 			}
+				 			
+				 			else{
+				 			
+					 			$.ajax({
+			        			    url: "./watchIssue.html",
+							 		type: "POST",	
+							 		data: data,							 
+							        success: function(data){						        	
+							        	if(data.result){	
+							        		
+							        		$('#icon-watch').replaceWith(loader);
+							        		
+							        		$watchingLink.removeClass('unwatch');
+						 					$watchingLink.addClass('watching');
+							        		
+							        		setTimeout(function(){							 					
+							 					$('.loader').replaceWith(iconUnWatch);
+	// 						 					$watchingLink.text('Observando');
+								 				$watchingLink.attr('title', 'Dejar de observar este reclamo');
+								 				$('#view-watcher-list').html(data.message);
+								 			
+							 				}, 1000);	
+							        	}
+							        	
+							        	else{
+							        		bootbox.alert(data.message);	
+							        	}	
+				            		}						  
+			        			});	
+				 			}
 				 		}
 				});//watching click
 				

@@ -92,7 +92,7 @@
 	              
 	            	//open form
 	            	if( isFormOpen ){
-	            		alert("paso")
+	            	
 	            		if(!emptyFields()){
 	            			
 	            			bootbox.confirm("Si cierra el formulario, se descartar&aacute; la informaci&oacute;n ingresada. &iquest;Desde continuar?", function(result){
@@ -190,7 +190,7 @@
 	            
 	            //sin caracteres especiales
 				$.validator.addMethod("titleCheck",function(value){
-					var pattern = /^\s*[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9,\s]+\s*$/;
+					var pattern = /^\s*[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿñÑ0-9,\s]+\s*$/;
 					return pattern.test(value);
 				},  "Formato no v&aacute;lido.");
 				

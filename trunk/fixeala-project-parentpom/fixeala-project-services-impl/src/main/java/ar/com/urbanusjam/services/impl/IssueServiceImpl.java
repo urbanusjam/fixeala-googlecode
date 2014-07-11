@@ -200,9 +200,9 @@ public class IssueServiceImpl implements IssueService {
 		String link = "<a target='_blank' href='http://localhost:8080/fixeala/issues/" + issue.getId().toString() + ".html' >LINK</a>.";
 		String text = "El usuario <u>" + revision.getUsername() + "</u> ha cambiado el estado de tu reclamo <i>#" + issue.getId().toString() + " \"" + issue.getTitle() + "\"</i> de " + issue.getStatus().toUpperCase() + " a " + newStatus.toUpperCase() + ".";
 		text += "<br><br>";
-		text += "� Motivo: " + revision.getResolucion();
+		text += "- Motivo: " + revision.getResolucion();
 		text += "<br>";
-		text += "� Observaciones: " + revision.getObservaciones();
+		text += "- Observaciones: " + revision.getObservaciones();
 		text += "<br><br>";
 		text += "Para acceder al reclamo actualizado, hac&eacute; clic en el siguiente " + link;
 		

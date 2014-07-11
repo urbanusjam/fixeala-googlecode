@@ -26,6 +26,7 @@ import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.MailService;
 import ar.com.urbanusjam.services.UserService;
 import ar.com.urbanusjam.services.dto.ActivationDTO;
+import ar.com.urbanusjam.services.dto.EmailDTO;
 import ar.com.urbanusjam.services.dto.PasswordChangeDTO;
 import ar.com.urbanusjam.services.dto.PasswordResetTokenDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
@@ -204,9 +205,21 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
 	public void updateAccount(UserDTO userDTO) {
 		User user = new User();
 		user = this.convertToUpdate(userDTO);
+		
+		String currentEmail = userDAO.findEmailbyUsername(userDTO.getUsername());
+		
+		if(!currentEmail.equals(userDTO.getEmail())){
+			EmailDTO email = new EmailDTO();
+			String message = "La direcci&oacute;n de email para tu cuenta de Fixeala ha sido correctamente actualizada.";
+			email.setSubject("Aviso de cambio de Email");
+			email.setMessage(message);
+			email.setTo(userDTO.getEmail());
+		}
+		
 		userDAO.updateAccount(user);			
 	}
 	
@@ -288,7 +301,8 @@ public class UserServiceImpl implements UserService {
 		user.setEmail(userDTO.getEmail());		
 		user.setRoles(convertToAuthority(userDTO.getAuthorities()));
 		user.setEnabled(userDTO.isEnabled());
-		user.setNeighborhood(userDTO.getNeighborhood());
+		user.setCity(userDTO.getCity());
+		user.setProvince(userDTO.getProvince());
 		user.setRegistrationDate(userDTO.getRegistrationDate());		
 		
 //		if(userDTO.isVerifiedOfficial()){
@@ -334,7 +348,8 @@ public class UserServiceImpl implements UserService {
 //		}
 //		
 //		else{
-			userDTO.setNeighborhood(user.getNeighborhood());
+			userDTO.setCity(user.getCity());
+			userDTO.setProvince(user.getProvince());
 //		}
 		
 		if(user.isEnabled())
@@ -349,7 +364,8 @@ public class UserServiceImpl implements UserService {
 		User user = new User();		
 		user.setUsername(userDTO.getUsername());
 		user.setEmail(userDTO.getEmail());	
-		user.setNeighborhood(userDTO.getNeighborhood());
+		user.setCity(userDTO.getCity());
+		user.setProvince(userDTO.getProvince());
 		return user;
 	}
 	
