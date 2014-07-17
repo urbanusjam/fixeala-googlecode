@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Fixeala</string>
+    <string name="hello_world">Hello world!</string>
+    
+    <string name="action_settings">Opciones</string>
+    <string name="action_help">Ayuda</string>
+    <string name="action_about">Acerca de</string>
+    <string name="action_quit">Salir</string>
+    
+    <string name="contact_email_one">coripel@gmail.com</string>
+    <string name="contact_email_two">urbanusjam@gmail.com</string> 
+    
+
+</resources>

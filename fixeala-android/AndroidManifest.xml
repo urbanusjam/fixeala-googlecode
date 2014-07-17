@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="ar.com.urbanusjam.android"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="11"
+        />
+
+    <application  
+        android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_ticket_icon"
+        android:label="@string/app_name">
+        
+         <!-- Splash screen -->
+        <activity
+            android:name="ar.com.urbanusjam.android.activity.SplashScreen"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+ 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <!-- Main -->
+        <activity
+            android:name="ar.com.urbanusjam.android.activity.MainActivity"
+            android:label="@string/app_name">
+        </activity>
+        
+        <!-- Settings -->
+        <activity
+            android:name="ar.com.urbanusjam.android.activity.SettingsScreen"
+            android:label="@string/action_settings"       
+            android:parentActivityName="ar.com.urbanusjam.android.activity.MainActivity" >
+        </activity>
+        
+        <!-- Help -->
+         <activity
+            android:name="ar.com.urbanusjam.android.activity.HelpScreen"
+            android:label="@string/action_help"
+            android:parentActivityName="ar.com.urbanusjam.android.activity.MainActivity" >
+        </activity>
+        
+    </application>
+
+</manifest>
