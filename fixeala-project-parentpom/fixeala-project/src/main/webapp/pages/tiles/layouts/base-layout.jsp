@@ -42,7 +42,7 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-paginator.min.js"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootbox.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/select2.js"></script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/typeahead.js"></script> 
+<%-- 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/typeahead.js"></script>  --%>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/hogan-2.0.0.js"></script> 
 		
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.hotkeys.js"></script>
@@ -198,8 +198,30 @@ path:hover {
 
 			 var query = "?issue=%QUERY";
 			
-			 window.localStorage.clear()
-			
+			 window.localStorage.clear();
+			 
+			 $('input[data-provide="typeahead"]').typeahead({
+				    source: function(q, process){
+				        searchAutoComplete(q, process);
+				    },
+				    updater: function(item) {
+				        var parts = item.split('#');
+				        return parts[1];
+				    }
+				});
+
+				var searchAutoComplete = function(q, process) {
+				    var data = new Array;
+				    
+				    // JUST FOR DEMO STATIC - you decide which data come in here based on the given searchstring "q"
+				    for(var i = 0; i < 10; i++)
+				    {
+				        data.push("Test " + i);
+				    }
+				    
+				    process(data);
+				};
+		/**
 			 $('#search').typeahead({                               
 		          name: "issues",   
 		          limit: 5,
@@ -223,7 +245,8 @@ path:hover {
 		                  	 	 '<span class="repo-title">{{issueTitle}}</span>',
 			                     '<p class="repo-address">{{issueAddress}}</p>'                  
 		                   ].join(''),
-		                   engine: Hogan
+		          engine: Hogan
+		    
 		     }).on('typeahead:selected', function(evt, item) {
 		    	 	console.log(item);
 		    	 	window.location.href = item.issueUrl;		    	    
@@ -233,10 +256,12 @@ path:hover {
 		     
 		     }).on('typeahead:rendered', function(evt, item) {
 		    		console.log(item);
+		    		  var parts = item.split('#');
+		    	        return parts[1];
 		    	 $(".tt-hint").removeClass("loading");    		    	    
 		     
 		     });
-			 
+			 **/
 			 function typeaheadFilterResponse(data){
 				 
 				 var dataset = [];

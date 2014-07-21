@@ -390,7 +390,9 @@
 		<div id="searchBar" class="row-fluid">
 		  	<div class="span8">
 				<div class="input-append">
-					<input id="search" type="text" placeholder="Buscar reclamos (ID, Estado, T&iacute;tulo, Direcci&oacute;n, Barrio, Ciudad o Provincia)" autocomplete="off">					
+<!-- 					<input id="search" type="text" placeholder="Buscar reclamos (ID, Estado, T&iacute;tulo, Direcci&oacute;n, Barrio, Ciudad o Provincia)" autocomplete="off">				 -->
+					
+						<input type="text" data-provide="typeahead">				
 <!-- 			        <button id="btnSearch" class='btn add-on' style="width:70px;"> -->
 <!-- 			            <i class="icon-search"></i> -->
 <!-- 			        </button>			         -->
