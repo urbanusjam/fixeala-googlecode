@@ -11,19 +11,19 @@
             <span class="icon-bar"></span>
           </a> 
           
-          <a class="brand" href="${pageContext.request.contextPath}">fixeala&nbsp;<i class=" icon-caret-right"></i></a>
+          <a class="brand" href="${pageContext.request.contextPath}">fixeala&nbsp;<img src="resources/images/fixeala_logo.png" width=32 height=32 /></a>
           <div class="nav-collapse collapse">
           
           	<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
           	<!-- MAIN NAV -->
             <ul id="menuNav" class="nav">
-				<li><a href="${pageContext.request.contextPath}/reclamos.html" title="Reclamos"><i class=" icon-pushpin icon-2x"></i></a></li>
-				<li><a href="${pageContext.request.contextPath}/usuarios.html" title="Usuarios"><i class="icon-group icon-2x"></i></a></li>				
-				<li><a href="${pageContext.request.contextPath}/dataset.html" title="Datasets"><i class="icon-tasks icon-2x"></i></a></li>		
-				<li><a href="${pageContext.request.contextPath}/widget.html" title="Widget"><i class="icon-cogs icon-2x"></i></a></li>	
-				<li><a href="#" title="Mobile App"><i class="icon-mobile-phone icon-2x"></i></a></li>			
-				<li><a href="#" title="Indicadores"><i class="icon-signal icon-2x"></i></a></li>		
-				<li><a href="#" title="Acerca del sitio"><i class="icon-question icon-2x"></i></a></li>			
+<%-- 				<li><a href="${pageContext.request.contextPath}/reclamos.html" title="Reclamos"><i class=" icon-pushpin icon-2x"></i></a></li> --%>
+<%-- 				<li><a href="${pageContext.request.contextPath}/usuarios.html" title="Usuarios"><i class="icon-group icon-2x"></i></a></li>				 --%>
+				<li><a href="dataset.html" title="Datasets"><i class="icon-tasks icon-2x"></i></a></li>		
+				<li><a href="widget.html" title="Widget"><i class="icon-cogs icon-2x"></i></a></li>	
+				<li><a href="#" title="Aplicaci&oacute;n M&oacute;vil"><i class="icon-mobile-phone icon-2x"></i></a></li>			
+				<li><a href="#" title="Gr&aacute;ficos"><i class="icon-signal icon-2x"></i></a></li>		
+				<li><a href="#" title="Ayuda"><i class="icon-question icon-2x"></i></a></li>			
         	</ul>
         	<!-- /MAIN NAV -->
         	

@@ -40,20 +40,14 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	
-<!-- 	<servlet-mapping> -->
-<!--         <servlet-name>fixeala</servlet-name> -->
-<!--         <url-pattern>/</url-pattern>    -->
-<!--     </servlet-mapping> -->
-	
 	<servlet-mapping>
         <servlet-name>fixeala</servlet-name>
-        <url-pattern>*.html</url-pattern> 
+        <url-pattern>/</url-pattern>   
     </servlet-mapping>
-    
-  
-<!--     <servlet-mapping> -->
+	
+<!-- 	<servlet-mapping> -->
 <!--         <servlet-name>fixeala</servlet-name> -->
-<!--         <url-pattern>/app/*</url-pattern>  -->
+<!--         <url-pattern>*.html</url-pattern>  -->
 <!--     </servlet-mapping> -->
     
 	<servlet-mapping>
