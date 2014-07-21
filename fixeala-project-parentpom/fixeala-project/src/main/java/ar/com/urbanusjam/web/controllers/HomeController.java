@@ -67,7 +67,7 @@ public class HomeController {
 	}	
 	
 	@RequestMapping(value="/autocomplete", produces="application/json", method = RequestMethod.GET)
-	public @ResponseBody String getCountries(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException { 
+	public @ResponseBody String getIssuesAutocomplete(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException { 
 		
 		List<IssueDTO> issues = issueService.loadAllIssues();
 		JSONArray array = new JSONArray();
@@ -84,7 +84,8 @@ public class HomeController {
 			obj.put("date", issue.getFechaFormateada());
 			obj.put("status", issue.getStatus());
 			obj.put("css", issue.getStatusCss());
-			obj.put("url", URISchemeUtils.CONN_RELATIVE_URL + "/" + issue.getId() + "-" + issue.getParsedTitle() + ".html");
+//			obj.put("url", URISchemeUtils.CONN_RELATIVE_URL + "/" + issue.getId() + "-" + issue.getParsedTitle() + ".html");
+			obj.put("url", URISchemeUtils.CONN_RELATIVE_URL + "/" + issue.getId());
 			array.put(obj);
 		}		
 	

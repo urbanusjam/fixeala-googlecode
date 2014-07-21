@@ -98,7 +98,8 @@ i[class^="icon-"] { margin: 0;}
 
 .navbar-inner {
 	/*background: #5095BE url("../images/header_bg.jpg") repeat-x;*/
-	background: #1FBBA6;
+/* 	background: #1FBBA6; */
+	background: #0C86AF; 
 	border: none;
 	-webkit-border-radius: 0;
 	-moz-border-radius: 0;
@@ -120,7 +121,8 @@ i[class^="icon-"] { margin: 0;}
 	line-height: 30px;
 	display: block;
 	float: left;
-	color: #333;
+/* 	color: #333; */
+	color: #fff;
 	text-shadow: none;
 	font-family: Graduate;
 	font-weight:bold;
@@ -137,14 +139,16 @@ ul#loginNav {
 }
 
 .navbar .nav > li {
-	line-height: 55px;
+	line-height: 60px;
 	margin: 0 0 0 60px;
+/* 	border: 1px solid #fff; */
 }
 
 .navbar .nav > li > a {
 	color: #fff;
 	text-shadow: none;
 	padding: 0;
+
 }
 
 .navbar .nav > li > a:focus, .navbar .nav > li > a:hover {

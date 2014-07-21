@@ -125,7 +125,7 @@ function provinciaListOnChange() {
 					        </c:if> 
 					        
 					          <c:if test="${ not empty province }">
-					           <small><cite>Vecino de <i>${city}, ${province}</i>&nbsp;&nbsp;<i class="icon-map-marker"></i></cite></small>
+					           <small><cite>Vecino de <i style="text-transform:uppercase;">${city}, ${province}</i>&nbsp;&nbsp;<i class="icon-map-marker"></i></cite></small>
 					          </c:if>
 					          
 					          <c:if test="${ empty province }">
@@ -163,17 +163,17 @@ function provinciaListOnChange() {
 					              				<i class="icon-caret-right"></i>PERFIL
 					              			</a>
 					              		</li>
-					              		<li class="nav-header">
-					              			<a  href="#dashboardTab" data-toggle="tab">
-					              				<i class="icon-caret-right"></i>DASHBOARD
-					              			</a>
-					              		</li>
+<!-- 					              		<li class="nav-header"> -->
+<!-- 					              			<a  href="#dashboardTab" data-toggle="tab"> -->
+<!-- 					              				<i class="icon-caret-right"></i>DASHBOARD -->
+<!-- 					              			</a> -->
+<!-- 					              		</li> -->
 					              		<li class="nav-header"><i class="icon-caret-right"></i>CONTENIDO</li>
-						                <li><a href="#notificationsTab" data-toggle="tab"><i class="icon-bell"></i>Notificaciones</a></li>
-						                <li><a href="#activityTab" data-toggle="tab"><i class="icon-check"></i>Actividad</a></li>
+<!-- 						                <li><a href="#notificationsTab" data-toggle="tab"><i class="icon-bell"></i>Notificaciones</a></li> -->
+<!-- 						                <li><a href="#activityTab" data-toggle="tab"><i class="icon-check"></i>Actividad</a></li> -->
 						                <li><a href="#issuesTab" data-toggle="tab"><i class="icon-pushpin"></i>Reclamos</a></li>
 						                <li><a href="#commentsTab" data-toggle="tab"><i class="icon-comments-alt"></i>Comentarios</a></li>
-						                <li><a href="#widgetsTab" data-toggle="tab"><i class="icon-cogs"></i>Widgets</a></li>
+<!-- 						                <li><a href="#widgetsTab" data-toggle="tab"><i class="icon-cogs"></i>Widgets</a></li> -->
 
 						                <li class="nav-header"><i class="icon-caret-right"></i>CUENTA</li>
 						                <li><a href="#editAccountTab" data-toggle="tab"><i class="icon-edit-sign"></i>Datos personales</a></li>

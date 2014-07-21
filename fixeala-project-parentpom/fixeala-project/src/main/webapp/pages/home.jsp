@@ -1,4 +1,5 @@
 
+  
 	<script type="text/javascript">    
 		$(document).ready(function(){
 			
@@ -80,14 +81,14 @@
 			 var timesClicked = 0;
 		
 			 
- 			 $( "#btnIssue" ).bind( "click", function( event ) {
+			 $( '#btnIssue' ).bind( 'click', function( event ) {
 		
 				 isAnimating = true;
 	           
-				  timesClicked++;
-				   if ( timesClicked >= 3 ) {
-				     $( this ).unbind( event );
-				   }
+// 				  timesClicked++;
+// 				   if ( timesClicked >= 3 ) {
+// 				     $( this ).unbind( event );
+// 				   }
 	
 	              
 	            	//open form
@@ -104,9 +105,9 @@
 	            		}
 	            		//empty form
 	            		else{             		
-	            		 	if( $(this).hasClass('btn-danger') ){                 	
-	                 			$(this).removeClass('btn-danger').addClass('btn-primary').html("<i class=\"icon-map-marker icon-large\"></i>&nbsp;&nbsp;&nbsp;PUBLICAR RECLAMO");
-	                 			toggleIssueForm();       
+	            		 	if( $(this).hasClass('btn-danger') ){  	            		 	
+	                 			$(this).removeClass('btn-danger').addClass('btn-success').html("<i class=\"icon-map-marker icon-large\"></i>&nbsp;&nbsp;&nbsp;PUBLICAR RECLAMO");
+	                  			toggleIssueForm();       
 	                 		}        		
 	            		}
 	            		
@@ -114,8 +115,8 @@
 	            	//closed form
 	            	else{
 	            		
-	            		if( $(this).hasClass('btn-primary') ){
-	                		$(this).removeClass('btn-primary').addClass('btn-danger').html("<i class=\"icon-remove-sign icon-large\"></i>&nbsp;&nbsp;&nbsp;CANCELAR RECLAMO");
+	            		if( $(this).hasClass('btn-success') ){
+	                		$(this).removeClass('btn-success').addClass('btn-danger').html("<i class=\"icon-remove-sign icon-large\"></i>&nbsp;&nbsp;&nbsp;CANCELAR RECLAMO");
 	                		toggleIssueForm();   
 	                	} 
 	            	
@@ -339,7 +340,7 @@
 					 						initMarker.setMap(null);
 					 						map.setCenter(location);
 					 						
-					 						$("#btnIssue").removeClass('btn-danger').addClass('btn-primary').html("<i class=\"icon-map-marker icon-large\"></i>&nbsp;&nbsp;&nbsp;PUBLICAR RECLAMO");
+					 						$('#btnIssue').removeClass('btn-danger').addClass('btn-success').html("<i class=\"icon-map-marker icon-large\"></i>&nbsp;&nbsp;&nbsp;PUBLICAR RECLAMO");
 					 						
 					 						toggleIssueForm();
 					 					
@@ -393,26 +394,26 @@
 <!-- 			        <button id="btnSearch" class='btn add-on' style="width:70px;"> -->
 <!-- 			            <i class="icon-search"></i> -->
 <!-- 			        </button>			         -->
-			        <button id="btnAdvancedSearch" class='btn add-on' title="B&uacute;squeda avanzada">
-			            <i class="icon-angle-down"></i>
-			        </button>  
+<!-- 			        <button id="btnAdvancedSearch" class='btn add-on' title="B&uacute;squeda avanzada"> -->
+<!-- 			            <i class="icon-angle-down"></i> -->
+<!-- 			        </button>   -->
 				</div>
 			</div>		
 			<div class="span3 pull-right" style="width:336px; border: 0px solid #000">	
-				<button id="btnIssue" class="btn btn-primary" data-toggle="button"> 
+				<button id="btnIssue" class="btn btn-success" data-toggle="button"> 
 					<i class="icon-map-marker icon-large"></i>&nbsp;&nbsp;&nbsp;PUBLICAR RECLAMO
 				</button>
 			</div>		
 		</div>	
 		
-		<div id="searchFilters">
-		Completar filtros de busqueda.
-		</div>	
+<!-- 		<div id="searchFilters"> -->
+<!-- 		Completar filtros de busqueda. -->
+<!-- 		</div>	 -->
 		
 		
 		
 		<!-- ROW 1 -->
-		
+		<div class="row-fluid" style="height:472px;">
 		<div class="container">
 		
   				<select id="cbxProvincias" name="cbxProvincias" onchange="findProvincia(value);return false" onfocus="">              	
@@ -541,39 +542,103 @@
 					</div><!-- issueFormWizard -->	
 					
 				</div><!-- mapFormContainer -->
-				
-				<div class="clearfix"></div>
-				
-				
-	<!-- ROW 2 -->
-
-		<!--Sidebar content-->
-		<div class="row-fluid" style="height:auto;margin-top:30px;">
+			 
+	
+				  
 		
-		 <div class="span3">
-			<div class="page-header">
-    	   		<h4><i class="icon-user icon-large"></i>&nbsp;&nbsp;Usuarios m&aacute;s activos</h4>    	 	
-    	   </div>    
-		      
-	      	<table class="table table-hover">
-				<tr>
-					<td style="border-top:none">
-						<div class="media">
-						  <a class="pull-left thumbnail" href="#">
-						    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
-						  </a>				
-						  <div class="media-body">
-						    <a href="#"><h5 class="media-heading">ariel_xyz</h5></a>				    
-						    <p style="font-size:11px">1101 reclamos <br>
-						    99 comentarios</p>			
-						 				
-						  </div>
+	</div>
+	</div>
+	
+	 <div class="clearfix"></div>
+       		<!-- ROW 2 new -->
+	<div class="row-fluid" style="height:auto; margin:30px 0 30px 0;">
+	
+	<div class="span7">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#latestIssues" data-toggle="tab">Recientes</a></li>
+			<li><a href="#hottestIssues" data-toggle="tab">Populares</a></li>
+			<li><a href="#topUsers" data-toggle="tab">Top Vecinos</a></li>
+		</ul>							
+														
+		<div class="tab-content">							
+			<!-- Publicados -->
+			<div class="tab-pane fade in active" id="latestIssues">		
+					<div class="row">
+						<div class="span5">
+							<div class="media">
+							  <a class="pull-left thumbnail" href="#">
+							    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
+							  </a>				
+							  <div class="media-body">
+							    <a href="#"><h5 class="media-heading">Ramas de arbol tapan semaforo</h5></a>		
+							    <p style="font-size:11px">10/06/13 en <a href="#">San Rafael, Mendoza</a><br>
+							    Reportado por: <a href="#">el_user_22</a>
+							     </p>	
+							  </div>
+							</div>
+						</div>					
+						<div class="span5">
+							<div class="media">
+							  <a class="pull-left thumbnail" href="#">
+							    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
+							  </a>				
+							  <div class="media-body">
+							    <a href="#"><h5 class="media-heading">Mamposteria de edificio deteriorada</h5></a>		
+							    <p style="font-size:11px">10/06/13 en <a href="#">Moreno, Buenos Aires</a><br>
+							    Reportado por: <a href="#">pablito-clavo-un-clavito</a>
+							     </p>	
+							  </div>
+							</div>
 						</div>
-					</td>				
-				</tr>	
-				<tr>
-					<td style="border-top:1px dashed #dddddd; border-bottom:1px dashed #dddddd">
-						<div class="media">
+					</div>
+						
+					<div class="row">
+						<div class="span5">
+							<div class="media">
+							  <a class="pull-left thumbnail" href="#">
+							    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
+							  </a>				
+							  <div class="media-body">
+							    <a href="#"><h5 class="media-heading">Ramas de arbol tapan semaforo</h5></a>		
+							    <p style="font-size:11px">10/06/13 en <a href="#">San Rafael, Mendoza</a><br>
+							    Reportado por: <a href="#">el_user_22</a>
+							     </p>	
+							  </div>
+							</div>
+						</div>						
+						<div class="span5">
+							<div class="media">
+							  <a class="pull-left thumbnail" href="#">
+							    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
+							  </a>				
+							  <div class="media-body">
+							    <a href="#"><h5 class="media-heading">Mamposteria de edificio deteriorada</h5></a>		
+							    <p style="font-size:11px">10/06/13 en <a href="#">Moreno, Buenos Aires</a><br>
+							    Reportado por: <a href="#">pablito-clavo-un-clavito</a>
+							     </p>	
+							  </div>
+							</div>
+						</div>
+					</div>
+						
+			</div>
+			
+			<div class="tab-pane fade" id="hottestIssues">		
+			Populares		
+			</div>
+			
+			<div class="tab-pane fade" id="topUsers">		
+				<div class="media">
+				  <a class="pull-left thumbnail" href="#">
+				    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
+				  </a>				
+				  <div class="media-body">
+				    <a href="#"><h5 class="media-heading">ariel_xyz</h5></a>				    
+				    <p style="font-size:11px">1101 reclamos <br>
+				    99 comentarios</p>	
+				  </div>
+				</div>
+				<div class="media">
 						  <a class="pull-left thumbnail" href="#">
 						    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
 						  </a>				
@@ -583,55 +648,13 @@
 						    142 comentarios</p>									 				
 						  </div>
 						</div>
-					</td>				
-				</tr>	
-			</table>		
-			<p style="text-align:center;"><a href="#" >ver m&aacute;s</a>	</p>	
+			</div>
 		</div>
-		
-		<div class="span5">
-		   <div class="page-header">
-    	   		<h4><i class="icon-map-marker icon-large"></i>&nbsp;&nbsp;&Uacute;ltimos reclamos</h4>    	 	
-    	   </div>    
-		      
-	      	<table class="table table-hover">
-				<tr>
-					<td style="border-top:none">
-						<div class="media">
-						  <a class="pull-left thumbnail" href="#">
-						    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
-						  </a>				
-						  <div class="media-body">
-						    <a href="#"><h5 class="media-heading">Ramas de �rbol tapan sem�foro</h5></a>		
-						    <p style="font-size:11px">10/06/13 en <a href="#">Mendoza</a><br>
-						    Reportado por: <a href="#">el_user_22</a>
-						     </p>	
-						  </div>
-						</div>
-					</td>				
-				</tr>	
-				<tr>
-					<td style="border-top:1px dashed #dddddd; border-bottom:1px dashed #dddddd">
-						<div class="media">
-						  <a class="pull-left thumbnail" href="#">
-						    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
-						  </a>				
-						  <div class="media-body">
-						    <a href="#"><h5 class="media-heading">Mamposter�a de edificio deteriorada</h5></a>		
-						    <p style="font-size:11px">10/06/13 en <a href="#">Buenos Aires</a><br>
-						    Reportado por: <a href="#">pablivo-clavo-un-clavito</a>
-						     </p>	
-						  </div>
-						</div>
-					</td>				
-				</tr>
-			</table>
-			<p style="text-align:center;"><a href="#" >ver m&aacute;s</a>	</p>	
-		</div>
-		
-		
-		 
-     </div>
+	
+      </div>
+      </div>
+       <div class="clearfix"></div>
+  
       
-	</div>
 	</div><!-- /CONTENT -->
+	

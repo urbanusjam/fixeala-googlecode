@@ -71,7 +71,7 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/markermanager.js"></script>	
   	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/select2.js"></script>	
-    	
+    
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.stepy.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.validate.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.blockUI.js"></script>
@@ -232,6 +232,7 @@ path:hover {
 		    		$(".tt-hint").addClass("loading");    	    
 		     
 		     }).on('typeahead:rendered', function(evt, item) {
+		    		console.log(item);
 		    	 $(".tt-hint").removeClass("loading");    		    	    
 		     
 		     });
