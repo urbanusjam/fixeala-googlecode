@@ -82,7 +82,7 @@ public class IssueController {
 	
 	private static final String UPLOAD_DIRECTORY_WIN = "C:\\temp\\fixeala\\uploads\\";
 //	private static final String UPLOAD_DIRECTORY_MAC = "file:///Users/cora/Documents/dev/temp/fixeala/uploads/";
-	private static final String UPLOAD_DIRECTORY_MAC = "file:///C:/temp/fixeala/uploads";
+
 	private MediaContentDTO uploadedFile = null;
 	
 	@Autowired

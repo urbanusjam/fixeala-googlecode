@@ -66,7 +66,40 @@ public class HomeController {
 		return "reclamos";			
 	}	
 	
-	@RequestMapping(value="/autocomplete", produces="application/json", method = RequestMethod.GET)
+	@RequestMapping(value="/loadmore/{page}", method = RequestMethod.GET)  
+	public @ResponseBody String getIssues(@PathVariable int page) throws JSONException{  
+	            //remember that toString() has been overridden  
+		
+		List<IssueDTO> issues = issueService.loadAllIssues();
+		int NUM_ISSUES = 5;
+		int from = (page-1)*NUM_ISSUES;
+		int to = (page+1)*NUM_ISSUES;
+	 
+		List<IssueDTO> sub = issues.subList(from, to);
+		
+			JSONArray array = new JSONArray();
+		
+		for(IssueDTO issue : sub){
+			JSONObject obj = new JSONObject();
+			obj.put("id", issue.getId());
+			obj.put("title", issue.getTitle());
+			obj.put("description", issue.getDescription());		
+			obj.put("address", issue.getFormattedAddress());	
+			obj.put("barrio", issue.getNeighborhood());	
+			obj.put("city", issue.getCity());	
+			obj.put("province", issue.getProvince());	
+			obj.put("date", issue.getFechaFormateada());
+			obj.put("status", issue.getStatus());
+			obj.put("css", issue.getStatusCss());		
+//			obj.put("url", URISchemeUtils.CONN_RELATIVE_URL + "/" + issue.getId() + "-" + issue.getParsedTitle() + ".html");
+			obj.put("url", URISchemeUtils.CONN_RELATIVE_URL + "/" + issue.getId());
+			array.put(obj);
+		}		
+	             
+	             return array.toString();
+	}  
+	
+	@RequestMapping(value="/autocomplete", produces={"application/json; charset=UTF-8"}, method = RequestMethod.GET)
 	public @ResponseBody String getIssuesAutocomplete(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException { 
 		
 		List<IssueDTO> issues = issueService.loadAllIssues();
@@ -83,7 +116,7 @@ public class HomeController {
 			obj.put("province", issue.getProvince());	
 			obj.put("date", issue.getFechaFormateada());
 			obj.put("status", issue.getStatus());
-			obj.put("css", issue.getStatusCss());
+			obj.put("css", issue.getStatusCss());		
 //			obj.put("url", URISchemeUtils.CONN_RELATIVE_URL + "/" + issue.getId() + "-" + issue.getParsedTitle() + ".html");
 			obj.put("url", URISchemeUtils.CONN_RELATIVE_URL + "/" + issue.getId());
 			array.put(obj);

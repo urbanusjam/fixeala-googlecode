@@ -3,6 +3,46 @@
 	<script type="text/javascript">    
 		$(document).ready(function(){
 			
+			var page = 1;
+			
+			$(window).scroll(function()
+					{
+					    if($(window).scrollTop() == $(document).height() - $(window).height())
+					    {
+					        $('div#loadmoreajaxloader').show();
+						        $.ajax({
+							        url: "./loadmore/" + page + ".html",
+							        type: 'GET',
+					            
+							        success: function(data)
+							        {
+							        	
+							        	console.log(page);
+							        	 var html =  [];
+							        	
+							        	data = JSON.parse(data);
+							       
+							        	
+							            if(data)
+							            {
+							            	$.each( data, function( i, value ) {
+								        		var item = "<h4> #"+value.id + " - "+ value.title+"</h4>";
+								        		 html.push(item);
+								        		});
+							            	
+							                $("#brickContainer").append(html);
+							                $('div#loadmoreajaxloader').hide();
+							            }else
+							            {
+							                $('div#loadmoreajaxloader').html('<center>No hay m&aacute;s reclamos para mostrar.</center>');
+							            }
+							            page++;
+							        }
+						        });
+					    }
+					});
+			
+			
 			var flag = 0;
 			/****** BOOTSTRAP WIZARD ******/
 			
@@ -122,7 +162,7 @@
 	            	
 	            	}
 	           
-	            });
+	            });//btnIssue
 	           
 	            function toggleIssueForm(){
 	            	
@@ -374,13 +414,13 @@
 					                   }
 					               }
 						 	
-						 	});
+						 	});//ajax
 						
 						
 						
 					}
 					return false;
-				});
+				});//rootwizard
 			
 		});
 	</script>
@@ -390,15 +430,7 @@
 		<div id="searchBar" class="row-fluid">
 		  	<div class="span8">
 				<div class="input-append">
-<!-- 					<input id="search" type="text" placeholder="Buscar reclamos (ID, Estado, T&iacute;tulo, Direcci&oacute;n, Barrio, Ciudad o Provincia)" autocomplete="off">				 -->
-					
-						<input type="text" data-provide="typeahead">				
-<!-- 			        <button id="btnSearch" class='btn add-on' style="width:70px;"> -->
-<!-- 			            <i class="icon-search"></i> -->
-<!-- 			        </button>			         -->
-<!-- 			        <button id="btnAdvancedSearch" class='btn add-on' title="B&uacute;squeda avanzada"> -->
-<!-- 			            <i class="icon-angle-down"></i> -->
-<!-- 			        </button>   -->
+					<input id="search" type="text" data-link="./autocomplete" data-provide="typeahead" placeholder="Busc&aacute; reclamos por ID, Estado, T&iacute;tulo o Direcci&oacute;n">				
 				</div>
 			</div>		
 			<div class="span3 pull-right" style="width:336px; border: 0px solid #000">	
@@ -407,13 +439,7 @@
 				</button>
 			</div>		
 		</div>	
-		
-<!-- 		<div id="searchFilters"> -->
-<!-- 		Completar filtros de busqueda. -->
-<!-- 		</div>	 -->
-		
-		
-		
+
 		<!-- ROW 1 -->
 		<div class="row-fluid" style="height:472px;">
 		<div class="container">
@@ -461,10 +487,7 @@
 									<li><a href="#tab2" data-toggle="tab">2. DATOS</a></li>
 									<li><a href="#tab3" data-toggle="tab">3. ARCHIVO</a></li>
 								</ul>
-								<hr>
-		<!-- 						<div id="bar" class="progress progress-striped active"> -->
-		<!-- 						  <div class="bar"></div> -->
-		<!-- 						</div> -->
+								<hr>		
 								<div class="tab-content">
 								 	<!-- TAB 1 -->
 								    <div class="tab-pane" id="tab1">
@@ -565,8 +588,8 @@
 		<div class="tab-content">							
 			<!-- Publicados -->
 			<div class="tab-pane fade in active" id="latestIssues">		
-					<div class="row">
-						<div class="span5">
+					<div id="brickContainer">
+						<div class="brick">
 							<div class="media">
 							  <a class="pull-left thumbnail" href="#">
 							    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
@@ -579,7 +602,7 @@
 							  </div>
 							</div>
 						</div>					
-						<div class="span5">
+						<div class="brick w2">
 							<div class="media">
 							  <a class="pull-left thumbnail" href="#">
 							    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
@@ -592,36 +615,128 @@
 							  </div>
 							</div>
 						</div>
+						<div class="brick">
+							<div class="media">
+							  <a class="pull-left thumbnail" href="#">
+							    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
+							  </a>				
+							  <div class="media-body">
+							    <a href="#"><h5 class="media-heading">Mamposteria de edificio deteriorada</h5></a>		
+							    <p style="font-size:11px">10/06/13 en <a href="#">Moreno, Buenos Aires</a><br>
+							    Reportado por: <a href="#">pablito-clavo-un-clavito</a>
+							     </p>	
+							  </div>
+							</div>
+						</div>
+						<div class="brick w2">
+							<div class="media">
+							  <a class="pull-left thumbnail" href="#">
+							    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
+							  </a>				
+							  <div class="media-body">
+							    <a href="#"><h5 class="media-heading">Mamposteria de edificio deteriorada</h5></a>		
+							    <p style="font-size:11px">10/06/13 en <a href="#">Moreno, Buenos Aires</a><br>
+							    Reportado por: <a href="#">pablito-clavo-un-clavito</a>
+							     </p>	
+							  </div>
+							</div>
+						</div>
+						<div class="brick">
+							<div class="media">
+							  <a class="pull-left thumbnail" href="#">
+							    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
+							  </a>				
+							  <div class="media-body">
+							    <a href="#"><h5 class="media-heading">Mamposteria de edificio deteriorada</h5></a>		
+							    <p style="font-size:11px">10/06/13 en <a href="#">Moreno, Buenos Aires</a><br>
+							    Reportado por: <a href="#">pablito-clavo-un-clavito</a>
+							     </p>	
+							  </div>
+							</div>
+						</div>
+							<div class="brick w2">
+							<div class="media">
+							  <a class="pull-left thumbnail" href="#">
+							    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
+							  </a>				
+							  <div class="media-body">
+							    <a href="#"><h5 class="media-heading">Mamposteria de edificio deteriorada</h5></a>		
+							    <p style="font-size:11px">10/06/13 en <a href="#">Moreno, Buenos Aires</a><br>
+							    Reportado por: <a href="#">pablito-clavo-un-clavito</a>
+							     </p>	
+							  </div>
+							</div>
+						</div>
+						<div class="brick">
+							<div class="media">
+							  <a class="pull-left thumbnail" href="#">
+							    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
+							  </a>				
+							  <div class="media-body">
+							    <a href="#"><h5 class="media-heading">Mamposteria de edificio deteriorada</h5></a>		
+							    <p style="font-size:11px">10/06/13 en <a href="#">Moreno, Buenos Aires</a><br>
+							    Reportado por: <a href="#">pablito-clavo-un-clavito</a>
+							     </p>	
+							  </div>
+							</div>
+						</div>
+							<div class="brick w2">
+							<div class="media">
+							  <a class="pull-left thumbnail" href="#">
+							    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
+							  </a>				
+							  <div class="media-body">
+							    <a href="#"><h5 class="media-heading">Mamposteria de edificio deteriorada</h5></a>		
+							    <p style="font-size:11px">10/06/13 en <a href="#">Moreno, Buenos Aires</a><br>
+							    Reportado por: <a href="#">pablito-clavo-un-clavito</a>
+							     </p>	
+							  </div>
+							</div>
+						</div>
+						<div class="brick">
+							<div class="media">
+							  <a class="pull-left thumbnail" href="#">
+							    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
+							  </a>				
+							  <div class="media-body">
+							    <a href="#"><h5 class="media-heading">Mamposteria de edificio deteriorada</h5></a>		
+							    <p style="font-size:11px">10/06/13 en <a href="#">Moreno, Buenos Aires</a><br>
+							    Reportado por: <a href="#">pablito-clavo-un-clavito</a>
+							     </p>	
+							  </div>
+							</div>
+						</div>
+							<div class="brick w2">
+							<div class="media">
+							  <a class="pull-left thumbnail" href="#">
+							    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
+							  </a>				
+							  <div class="media-body">
+							    <a href="#"><h5 class="media-heading">Mamposteria de edificio deteriorada</h5></a>		
+							    <p style="font-size:11px">10/06/13 en <a href="#">Moreno, Buenos Aires</a><br>
+							    Reportado por: <a href="#">pablito-clavo-un-clavito</a>
+							     </p>	
+							  </div>
+							</div>
+						</div>
+						<div class="brick">
+							<div class="media">
+							  <a class="pull-left thumbnail" href="#">
+							    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
+							  </a>				
+							  <div class="media-body">
+							    <a href="#"><h5 class="media-heading">Mamposteria de edificio deteriorada</h5></a>		
+							    <p style="font-size:11px">10/06/13 en <a href="#">Moreno, Buenos Aires</a><br>
+							    Reportado por: <a href="#">pablito-clavo-un-clavito</a>
+							     </p>	
+							  </div>
+							</div>
+						</div>
+						
+<div id="loadmoreajaxloader" style="display:none;"><center><img src="resources/images/loader.gif" /></center></div>			
 					</div>
 						
-					<div class="row">
-						<div class="span5">
-							<div class="media">
-							  <a class="pull-left thumbnail" href="#">
-							    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
-							  </a>				
-							  <div class="media-body">
-							    <a href="#"><h5 class="media-heading">Ramas de arbol tapan semaforo</h5></a>		
-							    <p style="font-size:11px">10/06/13 en <a href="#">San Rafael, Mendoza</a><br>
-							    Reportado por: <a href="#">el_user_22</a>
-							     </p>	
-							  </div>
-							</div>
-						</div>						
-						<div class="span5">
-							<div class="media">
-							  <a class="pull-left thumbnail" href="#">
-							    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
-							  </a>				
-							  <div class="media-body">
-							    <a href="#"><h5 class="media-heading">Mamposteria de edificio deteriorada</h5></a>		
-							    <p style="font-size:11px">10/06/13 en <a href="#">Moreno, Buenos Aires</a><br>
-							    Reportado por: <a href="#">pablito-clavo-un-clavito</a>
-							     </p>	
-							  </div>
-							</div>
-						</div>
-					</div>
+					
 						
 			</div>
 			
