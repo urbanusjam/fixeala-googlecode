@@ -1,5 +1,5 @@
 <%-- <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%> --%>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%-- <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%> --%>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
@@ -71,6 +71,9 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/markermanager.js"></script>	
   	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/select2.js"></script>	
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/masonry.pkgd.js"></script>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.infinitescroll.min.js"></script>
+  	
     
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.stepy.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.validate.js"></script>
@@ -193,100 +196,103 @@ path:hover {
         
 		$(document).ready(function(){
 			
-			
-			
-
-			 var query = "?issue=%QUERY";
-			
-			 window.localStorage.clear();
+				 window.localStorage.clear();
 			 
-			 $('input[data-provide="typeahead"]').typeahead({
-				    source: function(q, process){
-				        searchAutoComplete(q, process);
+				var issueNames;
+				var issueObjs;
+			
+			 
+			 $('#search').typeahead({
+				 	minLength: 3,
+				    items: 5,
+				    cache: false,
+				    source: function(query, process){				    	
+				    	 return $.ajax({
+				             url: $('#search').data('link'),
+				             type: 'GET',
+				             data: { query: query },
+				             dataType: 'json',
+				             success: function (data) {
+
+								issueNames = [];
+ 								issueObjs = {};				
+				            	 
+				            	 $.each( data, function ( i, item ) {				            		 
+				            		issueNames.push(item.title);
+				            		issueObjs[item.title] = item;
+				            	 });
+
+				                 return process(issueNames);
+				             }
+				         });
 				    },
-				    updater: function(item) {
-				        var parts = item.split('#');
-				        return parts[1];
-				    }
+				
+			        matcher: function(item) {
+			        
+			        	var issue = issueObjs[item];
+			        	var query = this.query.toLowerCase();
+			        	
+			            return issue.id.toLowerCase().indexOf(query) != -1 
+			            			|| issue.title.toLowerCase().indexOf(query) != -1 
+			            			|| issue.status.toLowerCase().indexOf(query) != -1
+			            			|| issue.address.toLowerCase().indexOf(query) != -1   ;
+			            	
+			        },
+				    updater: function(itemName) {
+				    	window.location.href = issueObjs[ itemName ].url;   
+// 				    	return itemName;					
+				    },
+				    sorter: function(items) {
+				    	console.log(items);
+				        if (items.length == 0) {
+				            var noResult = new Object();
+				            items.push(noResult);
+				        }
+				    	return items;    
+				    },
+				    highlighter: function (item) {				    	
+
+				    	 if( issueNames.indexOf(item) == -1 ) {				    		
+				    		 return '<h4>No se encontraron resultados.</h4>';
+				    	 }
+
+				    	 else{
+				    		 var issue = issueObjs[item];
+				    		 var q  = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&amp;');
+				    		
+					    	   return ''
+							       + "<div class='typeahead-container'>"
+				                   + "<div class='typeahead-status'>"
+				                   + 		"<p class='" +issue.css+ "'>" +issue.status+ "</p>"
+				                   + "</div>"
+				                   + "<div class='typeahead-content'>"
+				                   + "<span class='typeahead-id'>&#35;" +highlightQuery(issue.id, q)+  "&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;" +issue.date+ "</span>"				                   
+				                   + "<span class='typeahead-title'><strong>" + highlightQuery(item, q)+ "</strong></span>"
+				                   + "<span class='typeahead-address'>" +highlightQuery(issue.address, q) + "</span>"
+				                   + "</div></div>";	     
+				    	 }  
+				    	  
+				    }				  
 				});
-
-				var searchAutoComplete = function(q, process) {
-				    var data = new Array;
-				    
-				    // JUST FOR DEMO STATIC - you decide which data come in here based on the given searchstring "q"
-				    for(var i = 0; i < 10; i++)
-				    {
-				        data.push("Test " + i);
-				    }
-				    
-				    process(data);
-				};
-		/**
-			 $('#search').typeahead({                               
-		          name: "issues",   
-		          limit: 5,
-		          minLength: 2,
-		          cache: false,
-// 		          remote: {		        	
-// 		              url: './autocomplete.html?search=%QUERY',
-// 		              dataType: 'json',
-// 		              filter: typeaheadFilterResponse
-// 		          },
-		          prefetch: {
-		        	  url: './autocomplete.html',
-		        	  ttl_ms: 0,
-		              filter: typeaheadFilterResponse		             
-		          },		        
-		          template: [
-		                  	 	 '<p class="repo-status">',
-		                  	 		'<span class="{{issueCss}}">{{issueStatus}}</span>',
-		                  	 	 '</p>',
-		                  	 	 '<p class="repo-id">&#35;{{issueId}}&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;{{issueDate}}</p>',
-		                  	 	 '<span class="repo-title">{{issueTitle}}</span>',
-			                     '<p class="repo-address">{{issueAddress}}</p>'                  
-		                   ].join(''),
-		          engine: Hogan
-		    
-		     }).on('typeahead:selected', function(evt, item) {
-		    	 	console.log(item);
-		    	 	window.location.href = item.issueUrl;		    	    
-		     
-		     }).on('typeahead:remoteRequestSentOff', function(evt, item) {
-		    		$(".tt-hint").addClass("loading");    	    
-		     
-		     }).on('typeahead:rendered', function(evt, item) {
-		    		console.log(item);
-		    		  var parts = item.split('#');
-		    	        return parts[1];
-		    	 $(".tt-hint").removeClass("loading");    		    	    
-		     
-		     });
-			 **/
-			 function typeaheadFilterResponse(data){
-				 
-				 var dataset = [];
-				 
-				 for (var i = 0;  i < data.length;  i++) {	
-					 
-						 dataset.push({
-	                         value: data[i].title,
-	                         tokens: [data[i].id, data[i].title, 
-	                                  data[i].status, data[i].address, 
-	                                  data[i].barrio, data[i].city, 
-	                                  data[i].province],
-	                         issueId: data[i].id,
-	                         issueDate: data[i].date,
-	                         issueTitle: data[i].title,
-	                         issueStatus: data[i].status,	
-	                         issueCss: data[i].css,	
-	                         issueUrl: data[i].url,
-	                         issueAddress: data[i].address		  
-	                     });	
-                 }				 
-				 console.log(dataset);
-                 return dataset;
+			 
+			 function highlightQuery(data, query){
+				 return data.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
+		               return '<span style="background-color:yellow; display: inline;">' + match + '</span>';
+		         });
 			 }
+					
+			 //Remove forced selection of first item
+			 $.fn.typeahead.Constructor.prototype.render = function(items) {
+			     var that = this;
+			     items = $(items).map(function (i, item) {
+			       i = $(that.options.item).attr('data-value', item);
+			       i.find('a').html(that.highlighter(item));
+			       return i[0];
+			     });
 
+			     this.$menu.html(items);
+			     return this;
+			};
 			
 			var options = {
 	                currentPage: 1

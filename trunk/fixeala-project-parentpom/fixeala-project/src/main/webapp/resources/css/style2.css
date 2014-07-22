@@ -1087,128 +1087,79 @@ a.editable-click.editable-disabled {
 
 
 /***********************************************************************************************/
-/* TWITTER TYPEAHEAD */
+/* BOOTSTRAP TYPEAHEAD */
 #searchBar .span9, #searchBar .span3{ height: 42px; }
 
 #searchFilters { width: 755px;  border: 1px solid #000; display:none; margin-top:10px; }
 
 
-#search{font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+#search{
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 18px;
   line-height: 1.2;
-  color: #333;}
-
-.tt-dropdown-menu,
-.gist {
-  text-align: left;
-}
-
-/* base styles */
-/* ----------- */
-
-.typeahead,
-.tt-query,
-.tt-hint {
-  width: 396px;
-  height: 30px;
-  padding: 8px 12px;
-  font-size: 20px !important;
-  line-height: 30px;
-  border: 2px solid #ccc;
-  -webkit-border-radius: 8px;
-     -moz-border-radius: 8px;
-          border-radius: 8px;
-  outline: none;
-  color: #000;
+  color: #333;
 }
 
 .typeahead {
-  background-color: #fff;
+	height: auto;
+	width: 650px;  
 }
 
-.typeahead:focus {
-  border: 2px solid #0097cf;
+.typeahead li { 
+	border-bottom: 1px solid #DDDDDD;
+	background: #fff;
+	padding: none;
 }
 
-.tt-query {
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+.typeahead li:last-child { border: none; }
+
+
+.dropdown-menu > .active > a, 
+.dropdown-menu > .active > a:hover, 
+.dropdown-menu > .active > a:focus {
+    background: #31B0D5;
+    color: #fff;  
+	height: 100%; 
+	display: block;
+	border-bottom: none;
 }
 
-.tt-hint {
-  color: #999
+.dropdown-menu {  background: #fff; color: #000; }
+
+.typeahead-container  span { display: block;}
+
+.typeahead-container { height: 80px; margin: 10px 0 10px 0; border: 0px solid black;}
+
+.typeahead-content { width: 500px; height: 80px; float: left;  border: 0px solid red;}
+
+.typeahead-status {
+  	float: right;
+  	font-style: italic; 	
+	height: 80px; 
+	line-height: 80px; 
+	width: auto;
+	border: 0px solid red; 
 }
 
-/* added ! important because typeahead adding some styles to tt-hint that overrides background property.*/
-.tt-hint.loading {
-    background: transparent url('/images/loader5.gif') no-repeat scroll right center content-box !important;
-}
+.typeahead-status p {   width: 100px; height: 20px; line-height: 20px; text-align: center; }
 
-.tt-dropdown-menu {
-  width: 708px;
-  margin-top: 12px;
-  padding: 8px 0;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  -webkit-border-radius: 8px;
-     -moz-border-radius: 8px;
-          border-radius: 8px;
-  -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
-     -moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
-          box-shadow: 0 5px 10px rgba(0,0,0,.2);
-}
-
-.tt-suggestion {
-  padding: 3px 20px;
-  font-size: 18px;
-  line-height: 24px;
-}
-
-.tt-suggestion.tt-is-under-cursor {
-  color: #fff;
-  background-color: #0097cf;
-
-}
-
-.tt-suggestion p {
-  margin: 0;
-}
-
-.gist {
-  font-size: 14px;
-}
-
-/* example specific styles */
-/* ----------------------- */
-
-.tt-suggestion {
-  padding: 8px 20px;
-}
-
- .tt-suggestion + .tt-suggestion {
-  border-top: 1px solid #ccc;
-}
-
-.repo-status {
-  float: right;
-  font-style: italic;
-  vertical-align: middle;
-}
-
-.repo-id {
+.typeahead-id {
   font-size: 11px;  
+  padding: 0; margin: 0;
+ 
 }
-
-.repo-title {
+.typeahead-title {
   font-weight: bold;
+  font-size: 18px;  
+  padding: 10px 0 5px 0;
 }
 
-.repo-address {
-  font-size: 12px;
+.typeahead-address {
+  font-size: 11px;
 }
 
+.brick { width: 25%; background: #ccc; }
+.brick.w2 { width: 25%; background: #e3e3e3; }
 
 a.no-hover { text-decoration: none; color: #000;}
 
