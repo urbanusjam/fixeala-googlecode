@@ -1,46 +1,90 @@
 
   
-	<script type="text/javascript">    
+	<script type="text/javascript">   
+	
 		$(document).ready(function(){
 			
-			var page = 1;
+			var currentPage = 1,
+	        currentXHR;	
 			
-			$(window).scroll(function()
-					{
-					    if($(window).scrollTop() == $(document).height() - $(window).height())
-					    {
-					        $('div#loadmoreajaxloader').show();
-						        $.ajax({
-							        url: "./loadmore/" + page + ".html",
-							        type: 'GET',
-					            
-							        success: function(data)
-							        {
-							        	
-							        	console.log(page);
-							        	 var html =  [];
-							        	
-							        	data = JSON.parse(data);
-							       
-							        	
-							            if(data)
-							            {
-							            	$.each( data, function( i, value ) {
-								        		var item = "<h4> #"+value.id + " - "+ value.title+"</h4>";
-								        		 html.push(item);
-								        		});
-							            	
-							                $("#brickContainer").append(html);
-							                $('div#loadmoreajaxloader').hide();
-							            }else
-							            {
-							                $('div#loadmoreajaxloader').html('<center>No hay m&aacute;s reclamos para mostrar.</center>');
-							            }
-							            page++;
-							        }
-						        });
-					    }
-					});
+			var $container = $('#brickContainer');
+			
+			
+		
+// 			      $container.masonry({
+// 			        itemSelector: '.brick',
+// 			        columnWidth: 100
+// 			      });
+			 
+			 
+			 $(container).infinitescroll({
+
+  				binder: $container, // scroll on this element rather than on the window
+  				dataType: 'json',
+  				appendCallback: false
+  				
+  			 }, function(json, opts) {
+  				  // Get current page
+  				  var page = opts.state.currPage;
+  				  // Do something with JSON data, create DOM elements, etc ..
+  				});
+
+			});
+		
+			
+			$(window).scroll(function(){				
+				
+				if($(window).scrollTop() == $(document).height() - $(window).height()){
+				        	
+		    		if (currentXHR) {
+		                return;
+		         	}
+				    	
+				    $('div#loadmoreajaxloader').show();				        	
+				        	
+				  	currentXHR = $.ajax({
+				        url: "./loadmore/" + currentPage,
+				        type: 'GET',					            
+				        success: function(data){			
+				        	
+				        	var dataArray = JSON.parse(data);					        							        
+				            if(dataArray.length > 0){	
+				            	
+				            	var html =  [];	
+				            	
+				            	$.each( dataArray, function( i, value ) {
+					        		var item = ""					        		
+					        			+ "<div class='brick'>"
+										+	"<div class='media'>"
+										+ 		"<a class='pull-left thumbnail' href='#'>"
+										+    		"<img class='media-object' src='${pageContext.request.contextPath}/resources/images/nopic64.png'>"
+										+  		"</a>"				
+										+  	"<div class='media-body'>"
+										+    	"<a href='#'><h5 class='media-heading'>" +value.title+ "</h5></a>"		
+										+    "<p style='font-size:11px'>" +value.date+ " en <a href='#'>" +value.city+ ", " +value.province+ "</a><br></p>"
+										+ "</div></div></div><br>";
+								
+					        		html.push(item);
+					        	});
+				            								            		
+				                $("#brickContainer").append(html);
+// 				                $("#brickContainer").append(currentPage + "--------------------------------------------------");								            	
+				            	$('div#loadmoreajaxloader').hide();
+				            }						            
+				            else{  
+				            	$('#loadmoremsg').html("<center>No hay m&aacute;s resultados para mostrar.</center>");	
+				            	$('div#loadmoreajaxloader').hide();
+				            }					            
+				            currentPage++;
+				      	},
+				      	complete: function() {
+		                    currentXHR = null;
+		                }
+			      	});					      
+				}
+			});
+			
+			
 			
 			
 			var flag = 0;
@@ -588,156 +632,10 @@
 		<div class="tab-content">							
 			<!-- Publicados -->
 			<div class="tab-pane fade in active" id="latestIssues">		
-					<div id="brickContainer">
-						<div class="brick">
-							<div class="media">
-							  <a class="pull-left thumbnail" href="#">
-							    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
-							  </a>				
-							  <div class="media-body">
-							    <a href="#"><h5 class="media-heading">Ramas de arbol tapan semaforo</h5></a>		
-							    <p style="font-size:11px">10/06/13 en <a href="#">San Rafael, Mendoza</a><br>
-							    Reportado por: <a href="#">el_user_22</a>
-							     </p>	
-							  </div>
-							</div>
-						</div>					
-						<div class="brick w2">
-							<div class="media">
-							  <a class="pull-left thumbnail" href="#">
-							    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
-							  </a>				
-							  <div class="media-body">
-							    <a href="#"><h5 class="media-heading">Mamposteria de edificio deteriorada</h5></a>		
-							    <p style="font-size:11px">10/06/13 en <a href="#">Moreno, Buenos Aires</a><br>
-							    Reportado por: <a href="#">pablito-clavo-un-clavito</a>
-							     </p>	
-							  </div>
-							</div>
-						</div>
-						<div class="brick">
-							<div class="media">
-							  <a class="pull-left thumbnail" href="#">
-							    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
-							  </a>				
-							  <div class="media-body">
-							    <a href="#"><h5 class="media-heading">Mamposteria de edificio deteriorada</h5></a>		
-							    <p style="font-size:11px">10/06/13 en <a href="#">Moreno, Buenos Aires</a><br>
-							    Reportado por: <a href="#">pablito-clavo-un-clavito</a>
-							     </p>	
-							  </div>
-							</div>
-						</div>
-						<div class="brick w2">
-							<div class="media">
-							  <a class="pull-left thumbnail" href="#">
-							    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
-							  </a>				
-							  <div class="media-body">
-							    <a href="#"><h5 class="media-heading">Mamposteria de edificio deteriorada</h5></a>		
-							    <p style="font-size:11px">10/06/13 en <a href="#">Moreno, Buenos Aires</a><br>
-							    Reportado por: <a href="#">pablito-clavo-un-clavito</a>
-							     </p>	
-							  </div>
-							</div>
-						</div>
-						<div class="brick">
-							<div class="media">
-							  <a class="pull-left thumbnail" href="#">
-							    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
-							  </a>				
-							  <div class="media-body">
-							    <a href="#"><h5 class="media-heading">Mamposteria de edificio deteriorada</h5></a>		
-							    <p style="font-size:11px">10/06/13 en <a href="#">Moreno, Buenos Aires</a><br>
-							    Reportado por: <a href="#">pablito-clavo-un-clavito</a>
-							     </p>	
-							  </div>
-							</div>
-						</div>
-							<div class="brick w2">
-							<div class="media">
-							  <a class="pull-left thumbnail" href="#">
-							    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
-							  </a>				
-							  <div class="media-body">
-							    <a href="#"><h5 class="media-heading">Mamposteria de edificio deteriorada</h5></a>		
-							    <p style="font-size:11px">10/06/13 en <a href="#">Moreno, Buenos Aires</a><br>
-							    Reportado por: <a href="#">pablito-clavo-un-clavito</a>
-							     </p>	
-							  </div>
-							</div>
-						</div>
-						<div class="brick">
-							<div class="media">
-							  <a class="pull-left thumbnail" href="#">
-							    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
-							  </a>				
-							  <div class="media-body">
-							    <a href="#"><h5 class="media-heading">Mamposteria de edificio deteriorada</h5></a>		
-							    <p style="font-size:11px">10/06/13 en <a href="#">Moreno, Buenos Aires</a><br>
-							    Reportado por: <a href="#">pablito-clavo-un-clavito</a>
-							     </p>	
-							  </div>
-							</div>
-						</div>
-							<div class="brick w2">
-							<div class="media">
-							  <a class="pull-left thumbnail" href="#">
-							    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
-							  </a>				
-							  <div class="media-body">
-							    <a href="#"><h5 class="media-heading">Mamposteria de edificio deteriorada</h5></a>		
-							    <p style="font-size:11px">10/06/13 en <a href="#">Moreno, Buenos Aires</a><br>
-							    Reportado por: <a href="#">pablito-clavo-un-clavito</a>
-							     </p>	
-							  </div>
-							</div>
-						</div>
-						<div class="brick">
-							<div class="media">
-							  <a class="pull-left thumbnail" href="#">
-							    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
-							  </a>				
-							  <div class="media-body">
-							    <a href="#"><h5 class="media-heading">Mamposteria de edificio deteriorada</h5></a>		
-							    <p style="font-size:11px">10/06/13 en <a href="#">Moreno, Buenos Aires</a><br>
-							    Reportado por: <a href="#">pablito-clavo-un-clavito</a>
-							     </p>	
-							  </div>
-							</div>
-						</div>
-							<div class="brick w2">
-							<div class="media">
-							  <a class="pull-left thumbnail" href="#">
-							    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
-							  </a>				
-							  <div class="media-body">
-							    <a href="#"><h5 class="media-heading">Mamposteria de edificio deteriorada</h5></a>		
-							    <p style="font-size:11px">10/06/13 en <a href="#">Moreno, Buenos Aires</a><br>
-							    Reportado por: <a href="#">pablito-clavo-un-clavito</a>
-							     </p>	
-							  </div>
-							</div>
-						</div>
-						<div class="brick">
-							<div class="media">
-							  <a class="pull-left thumbnail" href="#">
-							    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
-							  </a>				
-							  <div class="media-body">
-							    <a href="#"><h5 class="media-heading">Mamposteria de edificio deteriorada</h5></a>		
-							    <p style="font-size:11px">10/06/13 en <a href="#">Moreno, Buenos Aires</a><br>
-							    Reportado por: <a href="#">pablito-clavo-un-clavito</a>
-							     </p>	
-							  </div>
-							</div>
-						</div>
-						
-<div id="loadmoreajaxloader" style="display:none;"><center><img src="resources/images/loader.gif" /></center></div>			
-					</div>
-						
-					
-						
+				<div id="brickContainer">
+					<div id="loadmoreajaxloader" style="display:none;"><center><img src="resources/images/loader.gif" /></center></div>		
+				</div>
+				<div id="loadmoremsg"></div>						
 			</div>
 			
 			<div class="tab-pane fade" id="hottestIssues">		
