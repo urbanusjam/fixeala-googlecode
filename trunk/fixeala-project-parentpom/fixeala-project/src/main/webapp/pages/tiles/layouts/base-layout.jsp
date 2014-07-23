@@ -72,7 +72,7 @@
   	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/select2.js"></script>	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/masonry.pkgd.js"></script>
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.infinitescroll.min.js"></script>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.infinitescroll.js"></script>
   	
     
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.stepy.js"></script>
