@@ -59,7 +59,7 @@ $(document).ready(function(){
 								 minlength: 4,
 			    				 maxlength: 20,
 			    				 remote: {
-						 	    		url: "./signup/checkUsernameAvailability.html", 
+						 	    		url: "account/signup/checkUsernameAvailability.html", 
 										type: "POST", 
 										data: {
 									        username: function(){ return $("#signupForm #username").val(); }
@@ -70,7 +70,7 @@ $(document).ready(function(){
 					 	    	 required : true,
 					 	    	 email : true,
 					 	    	 remote: {
-						 	    		url: "./signup/checkEmailAvailability.html", 
+						 	    		url: "account/signup/checkEmailAvailability.html", 
 										type: "POST", 
 										data: {
 									        email: function(){ return $("#signupForm #email").val(); }

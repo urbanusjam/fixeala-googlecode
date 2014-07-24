@@ -6,13 +6,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Change Password</title>
 				
-		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery-1.9.0.min.js"></script>
-		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.validate.min.js"></script>
-		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.json-2.4.min.js"></script>		
-		<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/script.js"></script>
+		<script type="text/javascript" src="resources/js/libs/jquery-1.9.0.min.js"></script>
+		<script type="text/javascript" src="resources/js/libs/jquery.validate.min.js"></script>
+		<script type="text/javascript" src="resources/js/libs/jquery.json-2.4.min.js"></script>		
+		<script type="text/javascript" src="resources/js/script.js"></script>
 		
-		<link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery-ui.css" rel="stylesheet" />
-		<link type="text/css" href="${pageContext.request.contextPath}/resources/css/ejemplos.css" rel="stylesheet" />
+		<link type="text/css" href="resources/css/jquery-ui.css" rel="stylesheet" />
+		<link type="text/css" href="resources/css/ejemplos.css" rel="stylesheet" />
 		
 </head>
 

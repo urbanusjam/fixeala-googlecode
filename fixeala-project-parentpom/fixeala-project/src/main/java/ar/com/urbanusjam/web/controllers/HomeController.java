@@ -67,7 +67,7 @@ public class HomeController {
 	}	
 	
 	@RequestMapping(value="/loadmore/{page}", method = RequestMethod.GET)  
-	public @ResponseBody String getIssues(@PathVariable int page) throws JSONException{  
+	public @ResponseBody String getIssues(@PathVariable int page, Model model) throws JSONException{  
 	            //remember that toString() has been overridden  
 		
 		List<IssueDTO> issues = issueService.loadAllIssues();
@@ -113,8 +113,9 @@ public class HomeController {
 				obj.put("url", URISchemeUtils.CONN_RELATIVE_URL + "/" + issue.getId());
 				array.put(obj);
 			}		
-		             
+//		    model.addAttribute("latestIssues", array);
 		    return array.toString();
+			
 			
 		}
 	}  

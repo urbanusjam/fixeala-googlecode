@@ -1158,7 +1158,7 @@ a.editable-click.editable-disabled {
   font-size: 11px;
 }
 
-.brick { width: 25%; background: #ccc; }
+.brick { width: 35%; border: 1px solid #ddd; margin-bottom: 20px; }
 .brick.w2 { width: 25%; background: #e3e3e3; }
 
 a.no-hover { text-decoration: none; color: #000;}

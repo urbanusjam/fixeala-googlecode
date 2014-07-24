@@ -304,7 +304,7 @@ path:hover {
 	                    $('.pag').text("Current page changed, old: "+oldPage+" new: "+newPage);
 	                }
 	              
-	            }
+	        }
 
 // 	        $('#comments-pag').bootstrapPaginator(options);
 			
@@ -569,7 +569,6 @@ path:hover {
             //-------------------------------
 			
 			var loginFailed = function(data, status, e) {
-		
 		        $(".alert").remove();
 		        $('#username').before('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times;</a>El usuario y/o la contrase&ntildea <br>son incorrectos.</div>');
 		        $('.ajax_loading').hide();
@@ -577,9 +576,6 @@ path:hover {
 		        $('#loginForm').each(function(){
                     this.reset();   //Here form fields will be cleared.
                 });
-		        
-		     
-		              
 			};
 			
 		    $("#btnLogin").click( function(e) {	
@@ -808,7 +804,7 @@ path:hover {
             	    else if (tag == 'select')
             	      this.selectedIndex = -1;
             	  });
-            	};
+            };
 
 
 		});
