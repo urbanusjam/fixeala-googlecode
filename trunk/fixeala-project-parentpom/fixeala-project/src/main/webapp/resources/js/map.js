@@ -584,7 +584,8 @@ function getIssueURL(issueID, issueTitle, type){
 	var subcontext = "issues/" + issueID;		
 //	var parsedTitle = issueTitle.replace(/\s/g, '-').toLowerCase();	
 //	var url = protocol + "//" + host + "/" + context + "/" + subcontext + "-" + parsedTitle + ".html";	
-	var url = protocol + "//" + host + "/" + context + "/" + subcontext + ".html";	
+//	var url = protocol + "//" + host + "/" + context + "/" + subcontext + ".html";	
+	var url = subcontext + ".html";	
 	
 	if(type == 'link')
 		return '<a href="'+ url +'">#' + issueID + " " + issueTitle + '</a>';		
@@ -705,7 +706,7 @@ function getClosestMarkersByIssue(location){
 	
 	$.ajax({
 		  type: "GET",
-		  url: "../loadMapMarkers.html",
+		  url: "./loadMapMarkers.html",
 		  dataType: "json",  	        
 		  success: function(data){
 			  

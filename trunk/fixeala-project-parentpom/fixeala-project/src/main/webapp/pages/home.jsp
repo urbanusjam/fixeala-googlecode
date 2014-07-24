@@ -1,37 +1,111 @@
-
-  
 	<script type="text/javascript">   
 	
+	
+
 		$(document).ready(function(){
+			
+			
 			
 			var currentPage = 1,
 	        currentXHR;	
+			var $container = $('#infinite-content');
 			
-			var $container = $('#brickContainer');
+			/** Load first page of issues **/
 			
+			var latest = '${latestIssues}';
+			var dataArray = JSON.parse(latest);		
 			
-		
-// 			      $container.masonry({
-// 			        itemSelector: '.brick',
-// 			        columnWidth: 100
-// 			      });
-			 
-			 
-			 $(container).infinitescroll({
+            if(dataArray.length > 0){
+            	var html =  [];	
+            	$.each( dataArray, function( i, value ) {
+	        		var item = ""					        		
+	        			+ "<div class='brick'>"
+						+	"<div class='media'>"
+						+ 		"<a class='pull-left thumbnail' href='#'>"
+						+    		"<img class='media-object' src='${pageContext.request.contextPath}/resources/images/nopic64.png'>"
+						+  		"</a>"				
+							+  	"<div class='media-body'>"
+							+    	"<a href='#'><h5 class='media-heading'>" +value.title+ "</h5></a>"		
+							+    	"<p style='font-size:11px'>" +value.date+ " en <a href='#'>" +value.city+ ", " +value.province+ "</a></p>"
+							+ 	"</div>"
+						+ "</div></div>";
+				
+	        		html.push(item);
+	        	});
+            	
+            	$container.append(html);
+            }
+			
+            $container.masonry({
+                itemSelector: '.brick',
+                columnWidth: 100
+              });
+			
+            var _renderItem = function(value) {
+        		
+//         		if(value.title.length > 24){
+//                     var titleCropped = value.title.substr(0,24) + '...';
+//                 } else { 
+//                     var titleCropped = value.title;
+//                 }
+        						        		
 
-  				binder: $container, // scroll on this element rather than on the window
+        		return 	
+        		
+        		"<div class='media'>"
+        			+ 		"<a class='pull-left thumbnail' href='#'>"
+        			+    		"<img class='media-object' src='${pageContext.request.contextPath}/resources/images/nopic64.png'>"
+        			+  		"</a>"				
+        				+  	"<div class='media-body'>"
+        				+    	"<a href='#'><h5 class='media-heading'>" +value.title+ "</h5></a>"		
+        				+    	"<p style='font-size:11px'>" +value.date+ " en <a href='#'>" +value.city+ ", " +value.province+ "</a></p>"
+        				+ 	"</div>"
+        			+ "</div>";
+                
+        };
+	 
+	    //http://www.sitepoint.com/implementing-infinite-scroll-jquery
+			 $container.infinitescroll({
+				navSelector  	: "#page-nav",
+  				nextSelector 	: "#page-nav a",
+				itemSelector 	: ".brick",  
+				debug: true,
   				dataType: 'json',
-  				appendCallback: false
-  				
-  			 }, function(json, opts) {
-  				  // Get current page
-  				  var page = opts.state.currPage;
-  				  // Do something with JSON data, create DOM elements, etc ..
-  				});
+  				appendCallback: false,
+  				loading: {
+  		           
+  		            finishedMsg: "<span class='label label-info'>No se encontraron m&aacute;s resultados.</span>",
+//   		            img: "assets/theme/img/loading.gif",
+//   		            msg: null,
+  		            msgText: "<span class='label label-warning'>Cargando reclamos...</span>"
+//   		            selector: null,
+//   		            speed: 'fast',
+//   		            start: undefined
+  		        },
 
-			});
-		
+			 }, function (newElements) {
 			
+			 		var $theCntr = $(".brick");
+			 		  for(var i=0;i<4;i++) {
+			 				var item =  $(_renderItem(newElements[i]));
+			 			   $theCntr.append(item);
+			 		  }
+// 			 		$.each( newElements, function( i, value ) {
+			 			
+// 			        	var item =  $(_renderItem(newElements[i]));
+			        	
+// 			        	$arr.append(item);
+// 			        });
+			 	
+// 			 		var $newElems = $( newElements );
+
+			 		$container.masonry( 'appended', $theCntr);
+
+// 			 		$container.masonry( 'appended', $newElems );
+              });
+	  
+	   
+			/*
 			$(window).scroll(function(){				
 				
 				if($(window).scrollTop() == $(document).height() - $(window).height()){
@@ -40,7 +114,7 @@
 		                return;
 		         	}
 				    	
-				    $('div#loadmoreajaxloader').show();				        	
+				    $('div#infinite-scroll-loader').show();				        	
 				        	
 				  	currentXHR = $.ajax({
 				        url: "./loadmore/" + currentPage,
@@ -69,11 +143,11 @@
 				            								            		
 				                $("#brickContainer").append(html);
 // 				                $("#brickContainer").append(currentPage + "--------------------------------------------------");								            	
-				            	$('div#loadmoreajaxloader').hide();
+				            	$('div#infinite-scroll-container').hide();
 				            }						            
 				            else{  
-				            	$('#loadmoremsg').html("<center>No hay m&aacute;s resultados para mostrar.</center>");	
-				            	$('div#loadmoreajaxloader').hide();
+				            	$('#infinite-scroll-message').html("<center>No hay m&aacute;s resultados para mostrar.</center>");	
+				            	$('div#infinite-scroll-container').hide();
 				            }					            
 				            currentPage++;
 				      	},
@@ -83,7 +157,7 @@
 			      	});					      
 				}
 			});
-			
+			*/
 			
 			
 			
@@ -632,38 +706,20 @@
 		<div class="tab-content">							
 			<!-- Publicados -->
 			<div class="tab-pane fade in active" id="latestIssues">		
-				<div id="brickContainer">
-					<div id="loadmoreajaxloader" style="display:none;"><center><img src="resources/images/loader.gif" /></center></div>		
-				</div>
-				<div id="loadmoremsg"></div>						
+				
+				<div id="infinite-content"></div>
+				
+				<nav id="page-nav" style="display: none;">
+  					<a href="loadmore/2"></a>
+				</nav>
+<!-- 				<div id="infinite-scroll-message"></div>	 -->
+								
 			</div>
 			
 			<div class="tab-pane fade" id="hottestIssues">		
 			Populares		
 			</div>
 			
-			<div class="tab-pane fade" id="topUsers">		
-				<div class="media">
-				  <a class="pull-left thumbnail" href="#">
-				    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
-				  </a>				
-				  <div class="media-body">
-				    <a href="#"><h5 class="media-heading">ariel_xyz</h5></a>				    
-				    <p style="font-size:11px">1101 reclamos <br>
-				    99 comentarios</p>	
-				  </div>
-				</div>
-				<div class="media">
-						  <a class="pull-left thumbnail" href="#">
-						    <img class="media-object" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
-						  </a>				
-						  <div class="media-body">
-						    <a href="#"><h5 class="media-heading">SuperUser</h5></a>				    
-						    <p style="font-size:11px">977 reclamos <br>
-						    142 comentarios</p>									 				
-						  </div>
-						</div>
-			</div>
 		</div>
 	
       </div>

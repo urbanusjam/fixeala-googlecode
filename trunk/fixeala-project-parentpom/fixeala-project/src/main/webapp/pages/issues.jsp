@@ -1182,9 +1182,21 @@
 			    	
 			    });
 			    
-			
-			  
-			
+ 				//adds tab href to url + opens tab based on hash on page load:
+ 				if (location.hash !== '') {
+ 					$('a[href="' + location.hash + '"]').tab('show');
+ 					
+ 				}
+ 				return $('a[data-toggle="tab"]').on('shown', function(e) {
+ 					
+					
+ 			    	return location.hash = $(e.target).attr('href').substr(1);
+ 			    });
+ 				
+ 				//Prevents Jump When Tabs Are Clicked
+//  				$('.nav-tabs li a').click( function(e) {
+//  					history.pushState( null, null, $(this).attr('href') );
+//  				});
 
 		});
 		
@@ -1364,44 +1376,108 @@
 	 	 	
 	 
       </div>
+      
+      <ul class="nav nav-tabs issue-tabs">
+		<li class="active"><a href="#issueHistory" data-toggle="tab"><i class="icon-time icon-large"></i>&nbsp;&nbsp;HISTORIAL DE CAMBIOS (${cantidadRevisiones})</a></li>
+		<li><a href="#issueFiles" data-toggle="tab"><i class="icon-picture icon-large"></i>&nbsp;&nbsp;IM&Aacute;GENES (<span class="cantidadContenidos">${cantidadContenidos}</span>)</a></li>
+		<li><a href="#issueComments" data-toggle="tab"><i class="icon-comments icon-large"></i>&nbsp;&nbsp;COMENTARIOS (${cantidadComentarios})</a></li>
+	  </ul>	
+	  
+	  <div class="tab-content">							
+	
+		<!-- 1 Historial -->
+		<div class="tab-pane fade in active" id="issueHistory">	
+			<table class="table table-hover" style="width:100%" id="tbl-issue-updates">
+	      		<c:forEach items="${historial}" var="revision">					        
+			    	<c:set var="count" value="${count + 1}" scope="page"/>	
+			        <tr>
+			        	<td style="border-top:none; width:5%"><c:out value="${count}" /></td>			
+			          	<td style="border-top:none; ">${revision.fechaFormateada}</td>				    		
+			    		<td style="border-top:none; ">
+			    			<a href="#"><script type="text/javascript">document.write( getUserURL('${revision.username}') );</script></a>
+			    		</td>
+			    		<td style="border-top:none; width:35%; border: 0px solid red">${revision.detalle}</td>
+			    		<td class="collapse-group" style="border-top:none; width:35%;" >					   
+			    			<c:if test="${not empty revision.observaciones}">	
+								<a class="btn-collapse" class="link" href="javascript:;">Ver detalle &raquo;</a>
+								<p class="collapse" >${revision.observaciones}</p>
+	   						</c:if> 
+	   					</td>				    		
+			    	</tr>					    
+				 </c:forEach>
+			</table>
+		</div>
+		
+		<!-- 2 Archivos -->							
+		<div class="tab-pane fade" id="issueFiles">				
+			<div class="row-fluid">			        
+		        <ul id="lst-file-thumnails" class="thumbnails" style="margin-top:30px;">
+		        	<c:forEach items="${contenidos}" var="contenido">	
+		        		<li style="margin-right:20px;">					                
+		                	<a class="thumbnail"  style="width:100px; height: 60px; max-height:60px; text-align: center" data-lightbox="issue-lightbox" href="${pageContext.request.contextPath}/uploads/${contenido.nombreConExtension}" >							  	  			  	   		
+			      				<img style="max-width:100px; max-height:60px;" src="${pageContext.request.contextPath}/uploads/${contenido.nombreConExtension}" > 
+			    			</a>
+	                	</li>
+		        	</c:forEach>
+      			</ul>
+	        </div>			
+		</div>								
+							
+		<!-- 3 Comentarios -->							
+		<div class="tab-pane fade" id="issueComments">			
+			<div style=" width:660px;margin:20px 0;">			   
+                <textarea class="span9" id="comment-text" name="comment-text"
+                	placeholder="Ingrese su comentario" rows="5"></textarea>
+           
+               	<button id="btn-comment" type="submit" style="float:right;margin-top:15px;margin-bottom:15px;" class="btn btn-info">Publicar</button>	
+        
+				<div id="content-comment">
+					<table id="tblComments" class="table table-hover">				        
+					   <c:forEach items="${comentarios}" var="comentario" varStatus="i" begin="0" end="2">	
+							<tr>
+								<td>
+									<div class="media">
+	
+										  <span class="pull-left">
+										  <img class="media-object thumbnail" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
+										 	<center><strong>${i.index + 1}</strong></center>
+										 </span>
+										  <div style="font-size:12px;margin-bottom:10px">
+										  	<a href="#"><strong>${comentario.usuario}</strong></a> &nbsp; &raquo;  &nbsp; 
+									    	${comentario.fechaFormateada}
+									      </div>
+								 		  <div class="media-body" style="display:block">				    	
+									    	
+									    	<p style="font-size:13px">${comentario.mensaje}</p>	 
+								  		</div>
+									</div>						
+								</td>
+							</tr>
+						</c:forEach>
+					 </table>						 
+				 </div>
+				 <div id="page-selection"></div>		
+			</div>					
+		</div>	
+								
+		</div>
      
 		
-		<div class="accordion" id="accordion2">
- 
- 			  <br>
-
+<!-- 		<div class="accordion" id="accordion2"> -->
+ 			
 			  <!-- 2 HISTORIAL -->
-			  <div class="accordion-group">
-			    <div class="accordion-heading">
-			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-			       <h4><i class="icon-time icon-large"></i>HISTORIAL DE CAMBIOS (${cantidadRevisiones})</h4>
-			      </a>
-			    </div>
-			    <div id="collapseThree" class="accordion-body collapse">
-			      <div class="accordion-inner">			      	
-			      	<table class="table table-hover" style="width:100%" id="tbl-issue-updates">
-			      		<c:forEach items="${historial}" var="revision">					        
-					    	<c:set var="count" value="${count + 1}" scope="page"/>	
-					        <tr>
-					        	<td style="border-top:none; width:5%"><c:out value="${count}" /></td>			
-					          	<td style="border-top:none; ">${revision.fechaFormateada}</td>				    		
-					    		<td style="border-top:none; ">
-					    			<a href="#"><script type="text/javascript">document.write( getUserURL('${revision.username}') );</script></a>
-					    		</td>
-					    		<td style="border-top:none; width:35%; border: 0px solid red">${revision.detalle}</td>
-					    		<td class="collapse-group" style="border-top:none; width:35%;" >					   
-					    			<c:if test="${not empty revision.observaciones}">	
-										<a class="btn-collapse" class="link" href="javascript:;">Ver detalle &raquo;</a>
-										<p class="collapse" >${revision.observaciones}</p>
-      								</c:if> 
-      							</td>				    		
-					    	</tr>					    
-						 </c:forEach>
-					</table>
-			
-			      </div>
-			    </div>
-			  </div>
+<!-- 			  <div class="accordion-group"> -->
+<!-- 			    <div class="accordion-heading"> -->
+<!-- 			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree"> -->
+<%-- 			       <h4><i class="icon-time icon-large"></i>HISTORIAL DE CAMBIOS (${cantidadRevisiones})</h4> --%>
+<!-- 			      </a> -->
+<!-- 			    </div> -->
+<!-- 			    <div id="collapseThree" class="accordion-body collapse"> -->
+<!-- 			      <div class="accordion-inner">			      	 -->
+			      	
+<!-- 			      </div> -->
+<!-- 			    </div> -->
+<!-- 			  </div> -->
 			  
 			  
 			  <!-- 3 REPARACION --> <!-- FUERA DEL ALCANCE -->
@@ -1551,79 +1627,34 @@
 <!-- 			  </div> -->
 			  			  
 			  <!-- 5 IMAGES & VIDEOS -->
-			  <div class="accordion-group">
-			    <div class="accordion-heading">
-			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFive">
-			       <h4><i class="icon-picture icon-large"></i>IM&Aacute;GENES (<span class="cantidadContenidos">${cantidadContenidos}</span>)</h4>			        
-			      </a>
-			    </div>
-			    <div id="collapseFive" class="accordion-body collapse">
-			      <div class="accordion-inner">
-			        <div class="row-fluid">			        
-				        <ul id="lst-file-thumnails" class="thumbnails" style="margin-top:30px;">
-				        	<c:forEach items="${contenidos}" var="contenido">	
-				        		<li style="margin-right:20px;">					                
-				                	<a class="thumbnail"  style="width:100px; height: 60px; max-height:60px; text-align: center" data-lightbox="issue-lightbox" href="${pageContext.request.contextPath}/uploads/${contenido.nombreConExtension}" >							  	  			  	   		
-					      				<img style="max-width:100px; max-height:60px;" src="${pageContext.request.contextPath}/uploads/${contenido.nombreConExtension}" > 
-					    			</a>
-			                	</li>
-				        	</c:forEach>
-		      			</ul>
-			        </div>
-			      </div>
-			    </div>
-			  </div>
+<!-- 			  <div class="accordion-group"> -->
+<!-- 			    <div class="accordion-heading"> -->
+<!-- 			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFive"> -->
+<%-- 			       <h4><i class="icon-picture icon-large"></i>IM&Aacute;GENES (<span class="cantidadContenidos">${cantidadContenidos}</span>)</h4>			         --%>
+<!-- 			      </a> -->
+<!-- 			    </div> -->
+<!-- 			    <div id="collapseFive" class="accordion-body collapse"> -->
+<!-- 			      <div class="accordion-inner"> -->
+			        
+<!-- 			      </div> -->
+<!-- 			    </div> -->
+<!-- 			  </div> -->
 				  
 			  <!-- 6 COMENTARIOS -->
-			  <div class="accordion-group">
-			    <div class="accordion-heading ">
-			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseSix">
-			       <h4><i class="icon-comments icon-large"></i>COMENTARIOS (${cantidadComentarios})</h4>
-			      </a>
-			    </div>
-			    <div id="collapseSix" class="accordion-body collapse">
-			      <div class="accordion-inner">
-			      			     
-			    <!-- EDITOR BOX-->   
-			    <div style=" width:660px;margin:20px 0;">			   
-		                <textarea class="span9" id="comment-text" name="comment-text"
-		                	placeholder="Ingrese su comentario" rows="5"></textarea>
-		           
-		               	<button id="btn-comment" type="submit" style="float:right;margin-top:15px;margin-bottom:15px;" class="btn btn-info">Publicar</button>	
-		        
-						<div id="content-comment">
-							<table id="tblComments" class="table table-hover">				        
-							   <c:forEach items="${comentarios}" var="comentario" varStatus="i" begin="0" end="2">	
-									<tr>
-										<td>
-											<div class="media">
-			
-												  <span class="pull-left">
-												  <img class="media-object thumbnail" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
-												 	<center><strong>${i.index + 1}</strong></center>
-												 </span>
-												  <div style="font-size:12px;margin-bottom:10px">
-												  	<a href="#"><strong>${comentario.usuario}</strong></a> &nbsp; &raquo;  &nbsp; 
-											    	${comentario.fechaFormateada}
-											      </div>
-										 		  <div class="media-body" style="display:block">				    	
-											    	
-											    	<p style="font-size:13px">${comentario.mensaje}</p>	 
-										  		</div>
-											</div>						
-										</td>
-									</tr>
-								</c:forEach>
-							 </table>						 
-						 </div>
-						 <div id="page-selection"></div>		
-					</div>
+<!-- 			  <div class="accordion-group"> -->
+<!-- 			    <div class="accordion-heading "> -->
+<!-- 			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseSix"> -->
+<%-- 			       <h4><i class="icon-comments icon-large"></i>COMENTARIOS (${cantidadComentarios})</h4> --%>
+<!-- 			      </a> -->
+<!-- 			    </div> -->
+<!-- 			    <div id="collapseSix" class="accordion-body collapse"> -->
+<!-- 			      <div class="accordion-inner"> -->
 			       
-			      </div>
-			    </div>
-			  </div>
+<!-- 			      </div> -->
+<!-- 			    </div> -->
+<!-- 			  </div> -->
 			  
-	    </div>
+<!-- 	    </div> -->
 		    </div>
 		    
 		    

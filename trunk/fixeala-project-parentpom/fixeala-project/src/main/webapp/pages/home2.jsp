@@ -42,7 +42,7 @@
 	      	   <!-- user NOT logged in -->
                <sec:authorize ifNotGranted="ROLE_USER, ROLE_ADMIN, ROLE_MANAGER">		      
 			      <ul id="user-menu" class="nav navbar-nav navbar-right">
-			        <li><a href="#" data-toggle="modal" data-target="#loginModal"><i class="fa fa-caret-right"></i>Iniciar sesión</a></li>
+			        <li><a href="#" data-toggle="modal" data-target="#loginModal"><i class="fa fa-caret-right"></i>Iniciar sesi&oacute;n</a></li>
 			        <li><a href="#" data-toggle="modal" data-target="#signupModal"><i class="fa fa-caret-right"></i>Registrarse</a></li>	
 			      </ul>
 		       </sec:authorize>
@@ -92,7 +92,7 @@
 				<ul id="myTab" class="nav nav-pills">
                		<li class="active"><a href="#tab-resumen" data-toggle="tab"><i class="fa fa-file-o"></i>Resumen</a></li>
                		<li><a href="#tab-data" data-toggle="tab"><i class="fa fa-plus-square"></i>Datos</a></li>
-               		<li><a href="#tab-graph" data-toggle="tab"><i class="fa fa-bar-chart-o"></i>Gráfico</a></li>
+               		<li><a href="#tab-graph" data-toggle="tab"><i class="fa fa-bar-chart-o"></i>Gr&aacute;fico</a></li>
                		<li  class="new-issue" ><a href="#tab-issue" data-toggle="tab"><i class="fa fa-map-marker"></i>Nuevo reclamo</a>
              		</ul>              
              		<div id="myTabContent" class="tab-content">              
@@ -118,7 +118,7 @@
                		<div class="tab-pane fade" id="tab-data">
                			
                			<br>                			
-               			<h3>Más datos...</h3>		
+               			<h3>Datos...</h3>		
                		
                		</div>                                
 	                <div class="tab-pane fade" id="tab-graph">
@@ -142,7 +142,7 @@
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-	        <h4 class="modal-title" id="myModalLabel">Iniciar sesión</h4>
+	        <h4 class="modal-title" id="myModalLabel">Iniciar sesi&oacute;n</h4>
 	      </div>
 	      <div class="modal-body">	      
 		      	<!-- LOGIN FORM -->
@@ -165,11 +165,11 @@
 	      <div class="modal-footer">
 	       	<div class="text-center forgotPassLink">
 				<a class="link" href="${pageContext.request.contextPath}/account/forgotPassword.html">
-					¿Olvidaste tu clave?
+					&iquest;Olvidaste tu clave?
 				</a>
 			</div>  
 			<div class="ajax_loading" style="display:none" >
-				<img src="${pageContext.request.contextPath}/resources/images/loader.gif" alt="Loading"/>&nbsp;Procesando...
+				<img src="resources/images/loader.gif" alt="Loading"/>&nbsp;Procesando...
 			</div>	
 			<button type="submit" id="btnLogin" class="btn btn-danger"><i class="fa fa-check"></i>Ingresar</button>      
 	       	<button type="submit" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i>Cancelar</button>      
@@ -205,7 +205,7 @@
 			  		</div>
 		  			<div class="input-prepend">
 		  				<span class="add-on"><i class="icon-lock"></i></span>
-		  				<input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirmación de clave">
+		  				<input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirmaci&oacute;n de clave">
 		  			</div>
 		  			
 		  			<!-- CAPTCHA -->
@@ -220,13 +220,13 @@
 					</script>
 	 				<div id="captchadiv"></div> 
 	 				
-					<div class="terms-conditions">
-					<label class="checkbox">									   
-	         			<input type="checkbox" id="terms_conditions" name="terms_conditions" value="terms_conditions" > 
-       					Aceptar Términos y Condiciones
-		    		</label>	
+<!-- 					<div class="terms-conditions"> -->
+<!-- 					<label class="checkbox">									    -->
+<!-- 	         			<input type="checkbox" id="terms_conditions" name="terms_conditions" value="terms_conditions" >  -->
+<!--        					Aceptar Términos y Condiciones -->
+<!-- 		    		</label>	 -->
 			  
-			</div>		 	
+<!-- 					</div>		 	 -->
 	   		</form>		
 	   		<!-- SIGNUP FORM --> 
 	        

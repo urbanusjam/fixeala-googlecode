@@ -26,7 +26,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.UserService;
+import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.web.domain.LoginStatus;
+import ar.com.urbanusjam.web.utils.URISchemeUtils;
  
 /**
  * LoginController manages LOGIN and LOGOUT requests
@@ -64,6 +66,42 @@ public class LoginController {
 		
 		allTags = array.toString();
 		model.addAttribute("allTags", allTags.length() == 0 ? "[{}]" : allTags);
+		
+		
+		List<IssueDTO> issues = issueService.loadAllIssues();
+		int page = 1; 
+		int itemsPerPage = 3;
+		int totalItems = issues.size();
+		int totalPages = (int) Math.ceil((double)totalItems / itemsPerPage);	
+		
+		JSONArray jsonArray = new JSONArray();
+		
+		if(page <= totalPages){ 
+		
+			int from = ( page - 1 ) * itemsPerPage;
+			int to = from + itemsPerPage - 1 ;	
+			
+			List<IssueDTO> sub = issues.subList(from, to + 1); //sublist toma el item en la posicion anterior al toIndex que se le pasa
+
+			for(IssueDTO issue : sub){
+				JSONObject obj = new JSONObject();
+				obj.put("id", issue.getId());
+				obj.put("title", issue.getTitle());
+				obj.put("description", issue.getDescription());		
+				obj.put("address", issue.getFormattedAddress());	
+				obj.put("barrio", issue.getNeighborhood());	
+				obj.put("city", issue.getCity());	
+				obj.put("province", issue.getProvince());	
+				obj.put("date", issue.getFechaFormateada());
+				obj.put("status", issue.getStatus());
+				obj.put("css", issue.getStatusCss());		
+				obj.put("url", URISchemeUtils.CONN_RELATIVE_URL + "/" + issue.getId());
+				jsonArray.put(obj);
+			}		
+		   
+		}
+		
+		 model.addAttribute("latestIssues", jsonArray);
 		
 		return "home";
 	}
