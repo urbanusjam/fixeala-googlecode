@@ -6,9 +6,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
+
+import ar.com.urbanusjam.services.utils.DateUtils;
 
 
 @XmlRootElement(name = "issue")
@@ -44,7 +47,9 @@ public class IssueDTO implements Serializable {
 	private String status;
 	private String statusCss;	
 	private String fechaFormateada;
-	private MediaContentDTO uploadedFile;
+	private String fechaFormateadaCompleta;
+	private MediaContentDTO uploadedFile;	
+	
 
 	
 	public String getId() {
@@ -251,7 +256,15 @@ public class IssueDTO implements Serializable {
 	}
 
 	public void setFechaFormateada(Date date) {
-		this.fechaFormateada = this.getFormattedDate(date);
+		this.fechaFormateada = this.getFormattedDate(date, DateUtils.DATE_TIME_PATTERN_SHORT);
+	}
+	
+	public String getFechaFormateadaCompleta() {
+		return fechaFormateadaCompleta;
+	}
+	
+	public void setFechaFormateadaCompleta(Date date) {
+		this.fechaFormateadaCompleta = this.getFormattedDate(date, DateUtils.DATE_TIME_PATTERN_LONG);
 	}
 
 	public List<IssueFollowDTO> getFollowers() {
@@ -262,15 +275,14 @@ public class IssueDTO implements Serializable {
 		this.followers = followers;
 	}
 
-	public String getFormattedDate(Date date){				
-		String formattedDate = "";
-		Date d = date;		
-        SimpleDateFormat df = new SimpleDateFormat();
-        df.applyPattern("dd/MM/yyyy HH:mm");
-        formattedDate = df.format(d.getTime());
+	public String getFormattedDate(Date date, String pattern){				
+		String formattedDate = "";	
+		Locale.setDefault(new Locale("es", "AR"));
+        SimpleDateFormat formatter = new SimpleDateFormat(pattern, Locale.getDefault());
+        formattedDate = formatter.format(date).toUpperCase();    
         return formattedDate;	
 	}
-	
+		
 	public String getParsedTitle() {	
 		return 	title.replaceAll("\\s", "-").toLowerCase();	
 	}

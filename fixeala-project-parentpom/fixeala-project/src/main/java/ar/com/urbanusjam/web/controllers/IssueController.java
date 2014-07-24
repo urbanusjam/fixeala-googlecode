@@ -57,6 +57,7 @@ import ar.com.urbanusjam.services.dto.IssueUpdateHistoryDTO;
 import ar.com.urbanusjam.services.dto.IssueVoteDTO;
 import ar.com.urbanusjam.services.dto.MediaContentDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
+import ar.com.urbanusjam.services.utils.DateUtils;
 import ar.com.urbanusjam.services.utils.FileUploadUtils;
 import ar.com.urbanusjam.services.utils.IssueStatus;
 import ar.com.urbanusjam.services.utils.Messages;
@@ -108,7 +109,7 @@ public class IssueController {
 			JSONObject obj = new JSONObject();
 			obj.put("id", issue.getId());
 			obj.put("title", issue.getTitle());
-			obj.put("date", issue.getFormattedDate(issue.getCreationDate()));
+			obj.put("date", issue.getFormattedDate(issue.getCreationDate(), DateUtils.DATE_TIME_PATTERN_SHORT));
 			obj.put("user", issue.getUsername());
 			obj.put("address", issue.getFormattedAddress());
 			obj.put("description", issue.getDescription());
@@ -178,8 +179,8 @@ public class IssueController {
 				model.addAttribute("estadoCss", issue.getStatusCss());
 				model.addAttribute("direccion", issue.getFormattedAddress());					
 				model.addAttribute("id", issue.getId());
-				model.addAttribute("fechaCreacion", issue.getFormattedDate(issue.getCreationDate()));
-				model.addAttribute("fechaUltimaActualizacion", issue.getFormattedDate(issue.getLastUpdateDate()));
+				model.addAttribute("fechaCreacion", issue.getFormattedDate(issue.getCreationDate(), DateUtils.DATE_TIME_PATTERN_SHORT));
+				model.addAttribute("fechaUltimaActualizacion", issue.getFormattedDate(issue.getLastUpdateDate(), DateUtils.DATE_TIME_PATTERN_SHORT));
 				model.addAttribute("calle", issue.getAddress());		
 				model.addAttribute("barrio", issue.getNeighborhood());
 				model.addAttribute("ciudad", issue.getCity());

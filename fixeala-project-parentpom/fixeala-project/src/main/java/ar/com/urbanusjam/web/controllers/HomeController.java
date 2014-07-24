@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
@@ -22,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -49,11 +51,73 @@ import com.google.gson.JsonObject;
 @Controller
 public class HomeController {
 	
+	private static int ITEMS_PER_PAGE = 4;
+	
 	@Autowired
 	private IssueService issueService;
 	
 	@Autowired
 	private UserService userService;
+	
+	@ModelAttribute("issuesDTO")
+	public @ResponseBody List<IssueDTO> getIssuesArray() {    
+		return issueService.loadAllIssues();
+	} 
+	
+	@RequestMapping(value="/home", method = RequestMethod.GET)
+	public String home(@ModelAttribute("issuesDTO")  List<IssueDTO> issues, Model model) throws JSONException{		
+		
+		List<String> dbTags = issueService.getTagList();
+		JSONArray array = new JSONArray();
+		String allTags = StringUtils.EMPTY;
+		
+		for(String s : dbTags){
+			JSONObject obj = new JSONObject();
+			obj.put("id", dbTags.indexOf(s));
+			obj.put("text", s);
+			array.put(obj);
+		}
+		
+		allTags = array.toString();
+		model.addAttribute("allTags", allTags.length() == 0 ? "[{}]" : allTags);
+		
+		//paginado 1
+		int page = 1; 
+		int itemsPerPage = ITEMS_PER_PAGE;
+		int totalItems = issues.size();
+		int totalPages = (int) Math.ceil((double)totalItems / itemsPerPage);	
+		
+		JSONArray jsonArray = new JSONArray();
+		
+		if(page <= totalPages){ 
+		
+			int from = ( page - 1 ) * itemsPerPage;
+			int to = from + itemsPerPage - 1 ;	
+			
+			List<IssueDTO> sub = issues.subList(from, to + 1); //sublist toma el item en la posicion anterior al toIndex que se le pasa
+
+			for(IssueDTO issue : sub){
+				JSONObject obj = new JSONObject();
+				obj.put("id", issue.getId());
+				obj.put("title", issue.getTitle());
+				obj.put("description", issue.getDescription());		
+				obj.put("address", issue.getFormattedAddress());	
+				obj.put("barrio", issue.getNeighborhood());	
+				obj.put("city", issue.getCity());	
+				obj.put("province", issue.getProvince());	
+				obj.put("date", issue.getFechaFormateadaCompleta());
+				obj.put("status", issue.getStatus());
+				obj.put("css", issue.getStatusCss());		
+				obj.put("url", URISchemeUtils.CONN_RELATIVE_URL + "/" + issue.getId());
+				jsonArray.put(obj);
+			}		
+		   
+		}
+		
+		 model.addAttribute("latestIssues", jsonArray);
+		
+		return "home";
+	}
 	
 	
 	@RequestMapping(value="/usuarios", method = RequestMethod.GET)
@@ -66,18 +130,16 @@ public class HomeController {
 		return "reclamos";			
 	}	
 	
-	@RequestMapping(value="/loadmore/{page}", method = RequestMethod.GET)  
-	public @ResponseBody String getIssues(@PathVariable int page, Model model) throws JSONException{  
-	            //remember that toString() has been overridden  
+	@RequestMapping(value="/loadmore/{page}", produces={"application/json; charset=UTF-8"}, method = RequestMethod.GET)  
+	public @ResponseBody String getIssues(@ModelAttribute("issuesDTO")  List<IssueDTO> issues, @PathVariable int page, Model model) throws JSONException{  
+	
 		
-		List<IssueDTO> issues = issueService.loadAllIssues();
-		
-		int itemsPerPage = 3;
+		int itemsPerPage = ITEMS_PER_PAGE;
 		int totalItems = issues.size();
 		int totalPages = (int) Math.ceil((double)totalItems / itemsPerPage);	
 		
 		if(page > totalPages){ 
-			return new JSONArray().toString(); 
+			return null;
 		}
 		
 		else{
@@ -107,16 +169,15 @@ public class HomeController {
 				obj.put("barrio", issue.getNeighborhood());	
 				obj.put("city", issue.getCity());	
 				obj.put("province", issue.getProvince());	
-				obj.put("date", issue.getFechaFormateada());
+				obj.put("date", issue.getFechaFormateadaCompleta());
 				obj.put("status", issue.getStatus());
 				obj.put("css", issue.getStatusCss());		
+				obj.put("colorCss", issue.getTitleCss());	
 				obj.put("url", URISchemeUtils.CONN_RELATIVE_URL + "/" + issue.getId());
 				array.put(obj);
 			}		
-//		    model.addAttribute("latestIssues", array);
+
 		    return array.toString();
-			
-			
 		}
 	}  
 	
@@ -138,7 +199,6 @@ public class HomeController {
 			obj.put("date", issue.getFechaFormateada());
 			obj.put("status", issue.getStatus());
 			obj.put("css", issue.getStatusCss());		
-//			obj.put("url", URISchemeUtils.CONN_RELATIVE_URL + "/" + issue.getId() + "-" + issue.getParsedTitle() + ".html");
 			obj.put("url", URISchemeUtils.CONN_RELATIVE_URL + "/" + issue.getId());
 			array.put(obj);
 		}		
@@ -673,7 +733,7 @@ public class HomeController {
 							commentsCounter++;
 				}
 													
-				model.addAttribute("registrationDate", DateUtils.getFechaFormateada(user.getRegistrationDate()));
+				model.addAttribute("registrationDate", DateUtils.getFechaFormateada(user.getRegistrationDate(), DateUtils.DATE_TIME_PATTERN_SHORT));
 				model.addAttribute("total_issues", userIssues.size());
 				model.addAttribute("total_solved", solvedIssues);
 				model.addAttribute("total_voted", "0");

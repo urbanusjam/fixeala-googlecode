@@ -19,6 +19,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -50,61 +52,39 @@ public class LoginController {
 	@Qualifier("issueService")
 	IssueService issueService;
 	
-	@RequestMapping(value="/home", method = RequestMethod.GET)
-	public String home(Model model) throws JSONException{		
-		
-		List<String> dbTags = issueService.getTagList();
-		JSONArray array = new JSONArray();
-		String allTags = StringUtils.EMPTY;
-		
-		for(String s : dbTags){
-			JSONObject obj = new JSONObject();
-			obj.put("id", dbTags.indexOf(s));
-			obj.put("text", s);
-			array.put(obj);
-		}
-		
-		allTags = array.toString();
-		model.addAttribute("allTags", allTags.length() == 0 ? "[{}]" : allTags);
-		
-		
+	
+	
+	@ModelAttribute("issuesJson")
+	public @ResponseBody String getIssuesJson() throws JSONException{  
+  
 		List<IssueDTO> issues = issueService.loadAllIssues();
-		int page = 1; 
-		int itemsPerPage = 3;
-		int totalItems = issues.size();
-		int totalPages = (int) Math.ceil((double)totalItems / itemsPerPage);	
-		
-		JSONArray jsonArray = new JSONArray();
-		
-		if(page <= totalPages){ 
-		
-			int from = ( page - 1 ) * itemsPerPage;
-			int to = from + itemsPerPage - 1 ;	
-			
-			List<IssueDTO> sub = issues.subList(from, to + 1); //sublist toma el item en la posicion anterior al toIndex que se le pasa
 
-			for(IssueDTO issue : sub){
-				JSONObject obj = new JSONObject();
-				obj.put("id", issue.getId());
-				obj.put("title", issue.getTitle());
-				obj.put("description", issue.getDescription());		
-				obj.put("address", issue.getFormattedAddress());	
-				obj.put("barrio", issue.getNeighborhood());	
-				obj.put("city", issue.getCity());	
-				obj.put("province", issue.getProvince());	
-				obj.put("date", issue.getFechaFormateada());
-				obj.put("status", issue.getStatus());
-				obj.put("css", issue.getStatusCss());		
-				obj.put("url", URISchemeUtils.CONN_RELATIVE_URL + "/" + issue.getId());
-				jsonArray.put(obj);
-			}		
-		   
-		}
-		
-		 model.addAttribute("latestIssues", jsonArray);
-		
-		return "home";
-	}
+		JSONArray array = new JSONArray();
+	
+		for(IssueDTO issue : issues){
+			JSONObject obj = new JSONObject();
+			obj.put("id", issue.getId());
+			obj.put("title", issue.getTitle());
+			obj.put("description", issue.getDescription());		
+			obj.put("address", issue.getFormattedAddress());	
+			obj.put("barrio", issue.getNeighborhood());	
+			obj.put("city", issue.getCity());	
+			obj.put("province", issue.getProvince());	
+			obj.put("date", issue.getFechaFormateada());
+			obj.put("status", issue.getStatus());
+			obj.put("css", issue.getStatusCss());		
+			obj.put("colorCss", issue.getTitleCss());	
+			obj.put("url", URISchemeUtils.CONN_RELATIVE_URL + "/" + issue.getId());
+			array.put(obj);
+		}		
+
+		return array.toString();
+
+	}  
+	
+	 
+	
+
 	
 	@RequestMapping(value="/home2", method = RequestMethod.GET, produces = "application/json")
 	public String home2(HttpServletRequest request, HttpServletResponse response){				

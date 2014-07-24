@@ -71,10 +71,12 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/markermanager.js"></script>	
   	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/select2.js"></script>	
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/masonry.pkgd.js"></script>
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.infinitescroll.js"></script>
   	
-    
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/masonry/masonry.pkgd.js"></script>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/masonry/infinitescroll.js"></script>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/masonry/imagesloaded.pkgd.js"></script>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/masonry/isotope.pkgd.js"></script>
+  	    
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.stepy.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.validate.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.blockUI.js"></script>
