@@ -1158,8 +1158,7 @@ a.editable-click.editable-disabled {
   font-size: 11px;
 }
 
-.brick { width: 35%; border: 1px solid #ddd; margin-bottom: 20px; }
-.brick.w2 { width: 25%; background: #e3e3e3; }
+
 
 a.no-hover { text-decoration: none; color: #000;}
 
@@ -1262,3 +1261,119 @@ a.no-hover { text-decoration: none; color: #000;}
 
 
 #tbl-issue-updates tr td { vertical-align: top; height: 26px; }
+
+
+/**** Infinite Scroll ****/
+
+#infinite-container {
+	background: #FFF;
+  	padding: 13px;
+  	margin: 0 auto;
+  	margin-bottom: 20px;
+  	border-radius: 5px;
+  	clear: both;
+   -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+           border-radius: 5px;           
+}
+#infscr-loading {
+  position: fixed;
+  text-align: center;
+  bottom: 30px;
+  left: 42%;
+  z-index: 100;
+  background: white;
+  background: hsla( 0, 0%, 100%, 0.9 );
+  border: 2px solid #DDD;
+  padding: 20px;
+  color: #222;
+  font-size: 15px;
+  font-weight: bold;
+  -webkit-border-radius: 10px;
+     -moz-border-radius: 10px;
+          border-radius: 10px;
+}
+.brick { 
+	width: 250px;
+  	position: relative;
+	margin: 10px 8px 15px 8px;
+	padding: 10px;
+  	background: #F5F5F5;
+  	border: 1px solid  #DDD;
+  	float: left;
+  	text-align: left; 
+  	-webkit-border-radius: 5px;
+     	-moz-border-radius: 5px;
+          	border-radius: 5px;
+}
+
+
+.brick .status  { display: block; text-align: center; margin-bottom: 10px; }
+.brick .title { font-size: 18px; margin: 0 0 5px; }
+.brick .thumbnail { margin-bottom: 15px; }
+.brick p.address, .brick p.date { color: #999;  margin: 10px 0 10px 0;  }
+.brick p.bottom { border-top: 1px solid #DDDDDD; }
+.brick span.date, .brick span.id, .brick span.id-char { padding-top: 5px; font-size: 11px;  }
+#sorts { margin: 5px 0 10px 0; }
+
+
+/* Start: Recommended Isotope styles */
+
+/**** Isotope Filtering ****/
+
+.isotope-item {
+  z-index: 2;
+}
+
+.isotope-hidden.isotope-item {
+  pointer-events: none;
+  z-index: 1;
+}
+
+/**** Isotope CSS3 transitions ****/
+
+.isotope,
+.isotope .isotope-item {
+  -webkit-transition-duration: 0.8s;
+     -moz-transition-duration: 0.8s;
+      -ms-transition-duration: 0.8s;
+       -o-transition-duration: 0.8s;
+          transition-duration: 0.8s;
+}
+
+.isotope {
+  -webkit-transition-property: height, width;
+     -moz-transition-property: height, width;
+      -ms-transition-property: height, width;
+       -o-transition-property: height, width;
+          transition-property: height, width;
+}
+
+.isotope .isotope-item {
+  -webkit-transition-property: -webkit-transform, opacity;
+     -moz-transition-property:    -moz-transform, opacity;
+      -ms-transition-property:     -ms-transform, opacity;
+       -o-transition-property:      -o-transform, opacity;
+          transition-property:         transform, opacity;
+}
+
+/**** disabling Isotope CSS3 transitions ****/
+
+.isotope.no-transition,
+.isotope.no-transition .isotope-item,
+.isotope .isotope-item.no-transition {
+  -webkit-transition-duration: 0s;
+     -moz-transition-duration: 0s;
+      -ms-transition-duration: 0s;
+       -o-transition-duration: 0s;
+          transition-duration: 0s;
+}
+
+/* End: Recommended Isotope styles */
+
+
+
+/* The Magnificent Clearfix: nicolasgallagher.com/micro-clearfix-hack/ */
+.clearfix:before, .clearfix:after { content: ""; display: table; }
+.clearfix:after { clear: both; }
+.clearfix { zoom: 1; }

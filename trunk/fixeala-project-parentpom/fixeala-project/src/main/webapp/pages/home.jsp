@@ -4,106 +4,135 @@
 
 		$(document).ready(function(){
 			
-			
-			
 			var currentPage = 1,
 	        currentXHR;	
-			var $container = $('#infinite-content');
+			var $container = $('#infinite-container');
+			
+			
+			var dummyText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum mattis fringilla nisl sed elementum. Maecenas congue aliquet lacinia. Sed diam ante, consectetur at imperdiet tristique, tincidunt vitae magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed vitae vestibulum orci, ut cursus libero. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam in lorem at sapien accumsan consequat ut eu purus. "
+			
+			var titleLimit = 40;
+			var descLimit = 150;
 			
 			/** Load first page of issues **/
 			
 			var latest = '${latestIssues}';
 			var dataArray = JSON.parse(latest);		
 			
+			function cropText(value, limit){
+				var cropped = '';
+				if(value.length > limit)
+					cropped = value.substr(0, limit) + '...';
+                else 
+                	cropped = value;	
+				
+				return cropped;
+			}
+			
             if(dataArray.length > 0){
             	var html =  [];	
             	$.each( dataArray, function( i, value ) {
-	        		var item = ""					        		
-	        			+ "<div class='brick'>"
-						+	"<div class='media'>"
-						+ 		"<a class='pull-left thumbnail' href='#'>"
-						+    		"<img class='media-object' src='${pageContext.request.contextPath}/resources/images/nopic64.png'>"
-						+  		"</a>"				
-							+  	"<div class='media-body'>"
-							+    	"<a href='#'><h5 class='media-heading'>" +value.title+ "</h5></a>"		
-							+    	"<p style='font-size:11px'>" +value.date+ " en <a href='#'>" +value.city+ ", " +value.province+ "</a></p>"
-							+ 	"</div>"
-						+ "</div></div>";
+            		var imgNum = Math.floor(Math.random() * 10);  //entre 0 y 9
+	        		var item = 	'<div class="brick">'
+	        			+ 			'<span class="status '+value.css+'">' +value.status+ '</span>'
+						+ 			'<a class="thumbnail" href="resources/images/samples/image' +imgNum+ '.jpg">'
+						+    			'<img class="media-object" src="resources/images/samples/image' +imgNum+ '.jpg">'
+						+  			'</a>'	
+						+   		'<a class="title" href="' +value.url+ '">' +cropText(value.title, titleLimit)+ '</a>'	
+						+			'<p class="address"><span class="city">' +value.city+ '</span>, <span class="province">' +value.province+ '</span></p>'
+						+           '<p>' +cropText(dummyText, descLimit)+ '</p>'
+						+ 			'<p class="bottom">'
+						+				'<span class="id-char pull-left"><b>#</b></span>'
+						+ 				'<span class="pull-right" style="width:95%">'
+						+ 					'<b><span class="id pull-left">' +value.id+ '</span></b>'
+						+ 					'<span class="date pull-right">' +value.date+ '</span>'
+						+				'</span>'
+						+ 			'</p>'
+						+   '</div>';
 				
 	        		html.push(item);
 	        	});
             	
             	$container.append(html);
             }
-			
-            $container.masonry({
-                itemSelector: '.brick',
-                columnWidth: 100
-              });
-			
-            var _renderItem = function(value) {
-        		
-//         		if(value.title.length > 24){
-//                     var titleCropped = value.title.substr(0,24) + '...';
-//                 } else { 
-//                     var titleCropped = value.title;
-//                 }
-        						        		
+          
+            //http://isotope.metafizzy.co/sorting.html
+  			$container.imagesLoaded( function(){                
+                $container.isotope({
+                    itemSelector : '.brick',   
+                    sortBy: 'original-order',
+                    getSortData : {
+                        title    : '.title',
+                        id       : '.id parseInt',
+                        status   : '.status',
+                        city     : '.city',
+                        province : '.province' 
+                    },
+                    masonry : {
+                    	isFitWidth : true
+                    }
+                   
+                  });
+            });
+  			
+  		// sort items on button click
+  			$('#sorts').on( 'click', 'button', function() {
+  			  var sortByValue = $(this).attr('data-sort-by');
+  			  $container.isotope({ sortBy: sortByValue });
+  			});
 
-        		return 	
-        		
-        		"<div class='media'>"
-        			+ 		"<a class='pull-left thumbnail' href='#'>"
-        			+    		"<img class='media-object' src='${pageContext.request.contextPath}/resources/images/nopic64.png'>"
-        			+  		"</a>"				
-        				+  	"<div class='media-body'>"
-        				+    	"<a href='#'><h5 class='media-heading'>" +value.title+ "</h5></a>"		
-        				+    	"<p style='font-size:11px'>" +value.date+ " en <a href='#'>" +value.city+ ", " +value.province+ "</a></p>"
-        				+ 	"</div>"
-        			+ "</div>";
-                
-        };
-	 
-	    //http://www.sitepoint.com/implementing-infinite-scroll-jquery
+
+
+  			
 			 $container.infinitescroll({
 				navSelector  	: "#page-nav",
   				nextSelector 	: "#page-nav a",
 				itemSelector 	: ".brick",  
+				pixelsFromNavToBottom : "20",
 				debug: true,
   				dataType: 'json',
   				appendCallback: false,
   				loading: {
-  		           
-  		            finishedMsg: "<span class='label label-info'>No se encontraron m&aacute;s resultados.</span>",
-//   		            img: "assets/theme/img/loading.gif",
-//   		            msg: null,
-  		            msgText: "<span class='label label-warning'>Cargando reclamos...</span>"
-//   		            selector: null,
-//   		            speed: 'fast',
-//   		            start: undefined
-  		        },
-
+  		            finishedMsg: "<h4>No se encontraron m&aacute;s resultados.</h4>",
+  		            msgText: "<h4>Cargando reclamos...</h4>",
+  		            speed: 'slow',
+  		        }  		      
 			 }, function (newElements) {
-			
-			 		var $theCntr = $(".brick");
-			 		  for(var i=0;i<4;i++) {
-			 				var item =  $(_renderItem(newElements[i]));
-			 			   $theCntr.append(item);
-			 		  }
-// 			 		$.each( newElements, function( i, value ) {
-			 			
-// 			        	var item =  $(_renderItem(newElements[i]));
-			        	
-// 			        	$arr.append(item);
-// 			        });
-			 	
-// 			 		var $newElems = $( newElements );
+				 
+				 		var html = '';
+						
+	 			 		$.each( newElements, function( i, value ) {
+	 			 			imgNum = Math.floor(Math.random() * 10);  //entre 0 y 9
+	 			 			
+			 			 	  html +=		'<div class="brick">'
+			 			 	  		+ 			'<span class="status '+value.css+'">' +value.status+ '</span>'
+									+ 			'<a class="thumbnail" href="resources/images/samples/image' +imgNum+ '.jpg">'
+									+    			'<img class="media-object" src="resources/images/samples/image' +imgNum+ '.jpg">'
+									+  			'</a>'	
+									+   		'<a class="title" href="' +value.url+ '">' +cropText(value.title, titleLimit)+ '</a>'	
+									+			'<p class="address"><span class="city">' +value.city+ '</span>, <span class="province">' +value.province+ '</span></p>'
+									+           '<p>' +cropText(dummyText, descLimit)+ '</p>'
+									+ 			'<p class="bottom">'
+									+				'<span class="id-char pull-left"><b>#</b></span>'
+									+ 				'<span class="pull-right" style="width:95%">'
+									+ 					'<b><span class="id pull-left">' +value.id+ '</span></b>'
+									+ 					'<span class="date pull-right">' +value.date+ '</span>'
+									+				'</span>'
+									+ 			'</p>'
+									+   '</div>';
+	 			        });
+					 	
+	 			 		var $html = $( html );
 
-			 		$container.masonry( 'appended', $theCntr);
-
-// 			 		$container.masonry( 'appended', $newElems );
+		 			   $html.imagesLoaded(function(){
+		 				  $html.animate({ opacity: 1 });
+// 		 		      	$container.append( $html ).masonry( 'appended', $html );
+		 				 	$container.append( $html ).isotope( 'appended', $html );
+		 		        });
+		 			 	
+				 
               });
-	  
+ 
 	   
 			/*
 			$(window).scroll(function(){				
@@ -685,44 +714,54 @@
 					</div><!-- issueFormWizard -->	
 					
 				</div><!-- mapFormContainer -->
-			 
-	
-				  
-		
 	</div>
 	</div>
 	
 	 <div class="clearfix"></div>
        		<!-- ROW 2 new -->
-	<div class="row-fluid" style="height:auto; margin:30px 0 30px 0;">
-	
-	<div class="span7">
+       	
+
+	<div class="row" style="height:auto; margin:30px 0 30px 0; padding: 0">
+
 		<ul class="nav nav-tabs">
 			<li class="active"><a href="#latestIssues" data-toggle="tab">Recientes</a></li>
 			<li><a href="#hottestIssues" data-toggle="tab">Populares</a></li>
 			<li><a href="#topUsers" data-toggle="tab">Top Vecinos</a></li>
 		</ul>							
 														
-		<div class="tab-content">							
-			<!-- Publicados -->
-			<div class="tab-pane fade in active" id="latestIssues">		
+		<div class="tab-content">	
+		
+			<!-- Recientes -->
+			<div class="tab-pane fade in active" id="latestIssues">	
+			
+				<!-- sorting -->
+				<div id="sorts" class="button-group">
+	  				<button data-sort-by="original-order" class="btn btn-default">Fecha</button>
+					<button data-sort-by="title" class="btn btn-default">Titulo</button>
+					<button data-sort-by="status" class="btn btn-default">Estado</button>
+					<button data-sort-by="city" class="btn btn-default">Ciudad</button>
+					<button data-sort-by="province" class="btn btn-default">Provincia</button>
+	    			<button data-sort-by="id" class="btn btn-default">ID</button>
+				</div>					
 				
-				<div id="infinite-content"></div>
-				
+				<!-- infinite scroll -->
+				<div id="infinite-container"></div>				
 				<nav id="page-nav" style="display: none;">
   					<a href="loadmore/2"></a>
 				</nav>
-<!-- 				<div id="infinite-scroll-message"></div>	 -->
-								
+						
 			</div>
 			
 			<div class="tab-pane fade" id="hottestIssues">		
 			Populares		
 			</div>
 			
+			<div class="tab-pane fade" id="topUsers">		
+			Usuarios		
+			</div>
+			
 		</div>
-	
-      </div>
+
       </div>
        <div class="clearfix"></div>
   

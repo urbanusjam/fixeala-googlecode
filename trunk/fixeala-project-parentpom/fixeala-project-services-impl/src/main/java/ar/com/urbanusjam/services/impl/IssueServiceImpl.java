@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -343,6 +345,13 @@ public class IssueServiceImpl implements IssueService {
 		for(Issue issue : issues){		
 			issuesDTO.add(convertToDTO(issue));
 		}
+		
+		Collections.sort(issuesDTO, new Comparator<IssueDTO>() {
+		    public int compare(IssueDTO m1, IssueDTO m2) {
+		        return m2.getCreationDate().compareTo(m1.getCreationDate());
+		    }
+		});
+		
 		return issuesDTO;	
 	}
 	
@@ -698,6 +707,7 @@ public class IssueServiceImpl implements IssueService {
 		issueDTO.setStatusCss(cssStyle[0]);
 		issueDTO.setUsername(userDTO.getUsername());
 		issueDTO.setFechaFormateada(issue.getCreationDate().getTime());
+		issueDTO.setFechaFormateadaCompleta(issue.getCreationDate().getTime());
 		
 		//tags		
 		Set<Tag> tagList = issue.getTagsList();
