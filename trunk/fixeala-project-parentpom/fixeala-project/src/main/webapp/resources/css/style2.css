@@ -1266,16 +1266,15 @@ a.no-hover { text-decoration: none; color: #000;}
 /**** Infinite Scroll ****/
 
 #infinite-container, #infinite-container-users {
-	background: #FFF;
-  	padding: 13px;
-  	margin: 0 auto;
-  	margin-bottom: 20px;
-  	border-radius: 5px;
-  	clear: both;
-   -webkit-border-radius: 5px;
-      -moz-border-radius: 5px;
-           border-radius: 5px;           
+	background: #FFF;	
+  	padding: 0 0 10px 0;
+  	margin: 15px 0 20px 0;
+  	clear: both;   
+  	height: 500px;
+  	overflow: hidden; 
+  	border: 0px solid #000;
 }
+
 #infscr-loading {
   position: fixed;
   text-align: center;
@@ -1293,10 +1292,13 @@ a.no-hover { text-decoration: none; color: #000;}
      -moz-border-radius: 10px;
           border-radius: 10px;
 }
-.brick { 
-	width: 250px;
+
+.brick { width: 250px; }
+.brick-user { width: 180px; }
+
+.brick, .brick-user { 	 	
   	position: relative;
-	margin: 10px 8px 10px 8px;
+	margin: 0 15px 10px 0;
 	padding: 10px;
   	background: #F5F5F5;
   	border: 1px solid  #DDD;
@@ -1306,6 +1308,7 @@ a.no-hover { text-decoration: none; color: #000;}
      	-moz-border-radius: 5px;
           	border-radius: 5px;
 }
+
 .brick .status  { display: block; text-align: center; margin-bottom: 10px; padding: 5px 0 5px 0; }
 .brick .title { font-size: 18px; margin: 0 0 5px; }
 .brick .thumbnail { margin-bottom: 15px; }
@@ -1315,34 +1318,24 @@ a.no-hover { text-decoration: none; color: #000;}
 .brick span.date, .brick span.id, .brick span.id-char { padding-top: 5px; font-size: 11px;  }
 .brick span.id { font-weight: bold; }
 .brick span.date-box { width: 96%; display: block; }
-#sorts { margin: 5px 0 10px 0; display: inline-block; }
+
+#sorts, #sorts-users { margin: 5px 0 10px 0;  }
+
+.btn-more {  width: 350px; text-align: center;  font-size: 11px; color: #000; border: 1px solid #C6C6C6; font-weight: bold;} 
 
 
-
-.brick-user { 
-	width: 180px;
-  	position: relative;
-	margin: 10px 8px 10px 8px;
-	padding: 10px;
-  	background: #F5F5F5;
-  	border: 1px solid  #DDD;
-  	float: left;
-  	text-align: left; 
-  	-webkit-border-radius: 5px;
-     	-moz-border-radius: 5px;
-          	border-radius: 5px;
-}
 
 .brick-user .username { font-size: 18px; }
 .brick-user .thumbnail { margin: 10px 0 15px 0; }
-.brick-user p.address  { margin: 10px 0 10px 0; }
+.brick-user p.address  { margin: 10px 0 10px 0; text-align: center; }
 .brick-user span.city, .brick-user span.province { text-transform: uppercase;  font-size: 11px; } 
-.brick-user p.bottom {  color : #999; }
-.brick-user .stats { width: 100%; height: auto; border:1px solid black; }
-.brick-user .stats span.counter { border: 0px solid black; margin: 0 10px 0 10px; font-size: 14px;}
+.brick-user p.bottom {  text-align: center; font-size: 11px; }
+.brick-user .stats { width: 100%; height: auto; border:0px solid black; }
+.brick-user .stats span.counter { border: 0px solid black; margin: 0 5px 0 5px; font-size: 14px;}
 
 
-
+.btn-group .btn i { border: 0px solid #000; padding: 0; vertical-align: middle;}
+.btn-group .btn { font-size: 12px; }
 /* Start: Recommended Isotope styles */
 
 /**** Isotope Filtering ****/

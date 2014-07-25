@@ -182,7 +182,13 @@ var userActionsController = {
 				}
 			
 				$("#mdl-status").modal('show');
-		}
+		},
+		loadDetailModal : function(value){
+			
+//			$("#mdl-detail .modal-header").html('<h4>' +title+ '</h4>');
+			$("#mdl-detail .modal-body").html('<p>' +value+ '</p>');
+			$("#mdl-detail").modal('show');
+	}
 }
 
 

@@ -84,13 +84,13 @@
 				
 			});
 				
-			//collapse 
-			$('.btn-collapse').on('click', function(e) {			
-			    e.preventDefault();
-			    var $this = $(this);
-			    var $collapse = $this.closest('.collapse-group').find('.collapse');
-			    $collapse.collapse('toggle');
-			});
+			//collapse detalle resolucion (reemplazado por MODAL)
+// 			$('.btn-collapse').on('click', function(e) {			
+// 			    e.preventDefault();
+// 			    var $this = $(this);
+// 			    var $collapse = $this.closest('.collapse-group').find('.collapse');
+// 			    $collapse.collapse('toggle');
+// 			});
 			
 
 			$('#fecha-estimada-from').datetimepicker({		  
@@ -1399,8 +1399,8 @@
 			    		<td style="border-top:none; width:35%; border: 0px solid red">${revision.detalle}</td>
 			    		<td class="collapse-group" style="border-top:none; width:35%;" >					   
 			    			<c:if test="${not empty revision.observaciones}">	
-								<a class="btn-collapse" class="link" href="javascript:;">Ver detalle &raquo;</a>
-								<p class="collapse" >${revision.observaciones}</p>
+								<a class="btn-collapse link" href="#" onclick="javascrip:userActionsController.loadDetailModal('${revision.observaciones}');" data-toggle="modal" >Ver detalle &raquo;</a>
+<%-- 								<p class="collapse" >${revision.observaciones}</p> --%>
 	   						</c:if> 
 	   					</td>				    		
 			    	</tr>					    
@@ -1688,6 +1688,26 @@
   		</div><!-- ROW FLUID -->
 	</div><!-- CONTAINER FLUID -->
 	
+	
+	<div id="mdl-detail" class="modal hide fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+	  	<div class="modal-header">
+		    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>		    	
+		   
+			    <h4>Detalle</h4>
+		    	
+	  	</div>
+	  
+		<div class="modal-body">
+		
+		
+		</div>
+			<div class="modal-footer"> 				 		  		
+		  		<button class="btn" data-dismiss="modal" aria-hidden="true">
+			    		<i class="icon-remove icon-large"></i>&nbsp;&nbsp;&nbsp;Cerrar
+			    </button>	 
+		  	</div>
+	  
+	</div>
 	
 	<div id="mdl-status" class="modal hide fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
 	  	<div class="modal-header">
