@@ -51,7 +51,7 @@ import com.google.gson.JsonObject;
 @Controller
 public class HomeController {
 	
-	private static int ITEMS_PER_PAGE = 4;
+	private static int ITEMS_PER_PAGE = 5;
 	
 	@Autowired
 	private IssueService issueService;
@@ -59,13 +59,15 @@ public class HomeController {
 	@Autowired
 	private UserService userService;
 	
-	@ModelAttribute("issuesDTO")
-	public @ResponseBody List<IssueDTO> getIssuesArray() {    
-		return issueService.loadAllIssues();
-	} 
+//	@ModelAttribute("issuesDTO")
+//	public @ResponseBody List<IssueDTO> getIssuesArray() {    
+//		return issueService.loadAllIssues();
+//	} 
 	
 	@RequestMapping(value="/home", method = RequestMethod.GET)
-	public String home(@ModelAttribute("issuesDTO") List<IssueDTO> issues, Model model) throws JSONException{		
+	public String home(Model model) throws JSONException{		
+		
+		List<IssueDTO> issues = issueService.loadAllIssues();
 		
 		List<String> dbTags = issueService.getTagList();
 		JSONArray array = new JSONArray();
@@ -81,51 +83,42 @@ public class HomeController {
 		allTags = array.toString();
 		model.addAttribute("allTags", allTags.length() == 0 ? "[{}]" : allTags);
 		
+		//page 1
 		JSONArray issuePagesArray = new JSONArray();
-		issuePagesArray = paginateToArray(issues, 1, "ISSUE");
+		issuePagesArray = paginateToArray(issues, 1, "issue");
 		
 		JSONArray userPagesArray = new JSONArray();
-		userPagesArray = paginateToArray(userService.loadAllActiveUsers(), 1, "USER");
+		userPagesArray = paginateToArray(userService.loadAllActiveUsers(), 1, "user");
 		
-		/**
-		//paginado 1
-		int page = 1; 
-		int itemsPerPage = ITEMS_PER_PAGE;
-		int totalItems = issues.size();
-		int totalPages = (int) Math.ceil((double)totalItems / itemsPerPage);	
-		
-		JSONArray jsonArray = new JSONArray();
-		
-		if(page <= totalPages){ 
-		
-			int from = ( page - 1 ) * itemsPerPage;
-			int to = from + itemsPerPage - 1 ;	
-			
-			List<IssueDTO> sub = issues.subList(from, to + 1); //sublist toma el item en la posicion anterior al toIndex que se le pasa
-
-			for(IssueDTO issue : sub){
-				JSONObject obj = new JSONObject();
-				obj.put("id", issue.getId());
-				obj.put("title", issue.getTitle());
-				obj.put("description", issue.getDescription());		
-				obj.put("address", issue.getFormattedAddress());	
-				obj.put("barrio", issue.getNeighborhood());	
-				obj.put("city", issue.getCity());	
-				obj.put("province", issue.getProvince());	
-				obj.put("date", issue.getFechaFormateadaCompleta());
-				obj.put("status", issue.getStatus());
-				obj.put("css", issue.getStatusCss());		
-				obj.put("url", URISchemeUtils.CONN_RELATIVE_URL + "/" + issue.getId());
-				jsonArray.put(obj);
-			}		
-		   
-		}**/
-		
-		 model.addAttribute("jsonIssues", issuePagesArray);
-		 model.addAttribute("jsonUsers", userPagesArray);
+		model.addAttribute("jsonIssues", issuePagesArray);
+		model.addAttribute("jsonUsers", userPagesArray);
 		
 		return "home";
 	}
+	
+	@RequestMapping(value="/usuarios", method = RequestMethod.GET)
+	public String showUsersPage() { 	
+		return "usuarios";			
+	}	
+	
+	@RequestMapping(value="/reclamos", method = RequestMethod.GET)
+	public String showIssuesPage() { 	
+		return "reclamos";			
+	}	
+	
+	@RequestMapping(value="/loadmore/{type}/{page}", produces={"application/json; charset=UTF-8"}, method = RequestMethod.GET)  
+	public @ResponseBody String loadMorePages(@PathVariable String type, @PathVariable int page) throws JSONException{  
+			
+		JSONArray pagesArray = new JSONArray();
+		
+		if(type.equals("issue"))
+			pagesArray = paginateToArray(issueService.loadAllIssues(), page, type);
+					
+		else
+			pagesArray = paginateToArray(userService.loadAllActiveUsers(), page, type);		
+	
+		return pagesArray != null ? pagesArray.toString() :  null;
+	}  
 	
 	@SuppressWarnings("unchecked")
 	private JSONArray paginateToArray(List<?> elements, int currentPage, String type) throws JSONException{
@@ -156,7 +149,7 @@ public class HomeController {
 	    	}	
 	    	
 			//issue type
-			if(type.equals("ISSUE")){
+			if(type.equals("issue")){
 				
 				jsonArray = new JSONArray();
 				
@@ -180,7 +173,7 @@ public class HomeController {
 				
 			}
 			
-			else if(type.equals("USER")){
+			else if(type.equals("user")){
 			
 				jsonArray = new JSONArray();
 				
@@ -193,88 +186,16 @@ public class HomeController {
 					obj.put("city", user.getCity());	
 					obj.put("province", user.getProvince());	
 					obj.put("registration", DateUtils.getFechaFormateada(user.getRegistrationDate(), DateUtils.DATE_PATTERN_LONG));
-					obj.put("reportedIssues", 0);
-					obj.put("postedComments", 0);
-					obj.put("fixedIssues", 0);
+					obj.put("reportedIssues", Math.floor(Math.random() * 50));
+					obj.put("postedComments", Math.floor(Math.random() * 99));
+					obj.put("fixedIssues", Math.floor(Math.random() * 15));
 					obj.put("url", URISchemeUtils.CONN_RELATIVE_URL_USERS + "/" + user.getUsername());
 					jsonArray.put(obj);
-				}
-				
-			}
-			
-			return jsonArray;
-		   
+				}				
+			}						
+			return jsonArray;		   
 		}
-		
-		
-		
 	}
-	
-	
-	@RequestMapping(value="/usuarios", method = RequestMethod.GET)
-	public String showUsersPage() { 	
-		return "usuarios";			
-	}	
-	
-	@RequestMapping(value="/reclamos", method = RequestMethod.GET)
-	public String showIssuesPage() { 	
-		return "reclamos";			
-	}	
-	
-	@RequestMapping(value="/loadmore/{page}", produces={"application/json; charset=UTF-8"}, method = RequestMethod.GET)  
-	public @ResponseBody String getIssues(@ModelAttribute("issuesDTO") List<IssueDTO> issues, @PathVariable int page) throws JSONException{  
-	
-		JSONArray pagesArray = new JSONArray();
-		pagesArray = paginateToArray(issues, page, "ISSUE");
-		
-		/**
-		int itemsPerPage = ITEMS_PER_PAGE;
-		int totalItems = issues.size();
-		int totalPages = (int) Math.ceil((double)totalItems / itemsPerPage);	
-		
-		if(page > totalPages){ 
-			return null;
-		}
-		
-		else{
-		
-			int from = ( page - 1 ) * itemsPerPage;
-			int to = from + itemsPerPage - 1 ;		
-			int lastPage = totalPages - page;
-			
-			//is last page
-	    	if(lastPage == 0){
-				int itemsLeft = totalItems - (page-1) * itemsPerPage ; 
-			
-	    		if( itemsLeft < itemsPerPage )
-	    			to = (page-1) * itemsPerPage + itemsLeft-1;
-	    	}			
-		 
-			List<IssueDTO> sub = issues.subList(from, to + 1); //sublist toma el item en la posicion anterior al toIndex que se le pasa
-
-			JSONArray array = new JSONArray();
-			
-			for(IssueDTO issue : sub){
-				JSONObject obj = new JSONObject();
-				obj.put("id", issue.getId());
-				obj.put("title", issue.getTitle());
-				obj.put("description", issue.getDescription());		
-				obj.put("address", issue.getFormattedAddress());	
-				obj.put("barrio", issue.getNeighborhood());	
-				obj.put("city", issue.getCity());	
-				obj.put("province", issue.getProvince());	
-				obj.put("date", issue.getFechaFormateadaCompleta());
-				obj.put("status", issue.getStatus());
-				obj.put("css", issue.getStatusCss());		
-				obj.put("colorCss", issue.getTitleCss());	
-				obj.put("url", URISchemeUtils.CONN_RELATIVE_URL + "/" + issue.getId());
-				array.put(obj);
-			}		
-
-		  
-		}**/
-	  return pagesArray.toString();
-	}  
 	
 	@RequestMapping(value="/autocomplete", produces={"application/json; charset=UTF-8"}, method = RequestMethod.GET)
 	public @ResponseBody String getIssuesAutocomplete(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException { 

@@ -24,6 +24,7 @@
 			/* LOAD FIRST PAGE */
 			loadFirstPage(issuesArray, usersArray);
 			
+		
 			
 			function cropText(value, limit){
 				var cropped = '';
@@ -39,7 +40,7 @@
 				
 				var html = '';
 					
-				if(type == "ISSUE"){
+				if(type == "issue"){
 					
 					imgNum = Math.floor(Math.random() * 10);  //entre 0 y 9
 					
@@ -61,10 +62,10 @@
 						+   '</div>';
 				}
 				
-				else if(type == "USER"){
+				else if(type == "user"){
 					
-					imgNum = 9
-					
+					imgNum = 9;
+				
 					var html = 	'<div class="brick-user">'
 						+   		'<a class="username" href="' +element.url+ '">' +element.username+ '</a>'	
 						+ 			'<a class="thumbnail" href="resources/images/samples/image' +imgNum+ '.jpg">'
@@ -78,9 +79,8 @@
 						+ 					'<span class="counter label label-info"><i class="icon icon-map-marker icon-small"></i><span class="numIssues">' +element.reportedIssues+ '</span></span>'
 						+ 					'<span class="counter label label-default"><i class="icon icon-comments-alt icon-small"></i><span class="numComments">' +element.postedComments+ '</span></span>'
 						+ 					'<span class="counter label label-success"><i class="icon icon-ok icon-small"></i><span class="numFixes">' +element.fixedIssues+ '</span></span>'
-						+ 			'</p>'
-					
-						+   '</div>';
+						+ 			'</p>'					
+						+   	'</div>';
 				}
 				
 				return html;
@@ -92,7 +92,7 @@
 	            	var html =  [];	
 	            	$.each( issuesArray, function( i, value ) {
 	            		var imgNum = Math.floor(Math.random() * 10);  //entre 0 y 9
-	            		var item = renderToHtml(value, "ISSUE");
+	            		var item = renderToHtml(value, "issue");
 		        		html.push(item);
 		        	});
 	            	$container.append(html);
@@ -102,7 +102,7 @@
 	            	var html =  [];	
 	            	$.each( usersArray, function( i, value ) {
 	            		var imgNum = Math.floor(Math.random() * 10);  //entre 0 y 9
-	            		var item = renderToHtml(value, "USER");
+	            		var item = renderToHtml(value, "user");
 		        		html.push(item);
 		        	});
 	            	$containerUsers.append(html);
@@ -110,6 +110,7 @@
 			}
 			
            
+			/** INFINITE-SCROLL ISSUES **/
           
             //http://isotope.metafizzy.co/sorting.html
   			$container.imagesLoaded( function(){                
@@ -121,12 +122,23 @@
                         id       : '.id parseInt',
                         status   : '.status',
                         province : '.province' 
-                    },
-                    masonry : {
-                    	isFitWidth : true
                     }
                 });
             });
+			
+	
+  			$containerUsers.imagesLoaded( function(){     
+                 $containerUsers.isotope({
+                     itemSelector : '.brick-user',   
+                     sortBy: 'original-order',
+                     sortAscending : false,
+                     getSortData : {
+                     	issues    : '.numIssues parseInt',
+                         comments       : '.numComments parseInt',
+                         fixes   : '.numFixes parseInt'
+                     }                
+                 });
+  			});
   			
   			// sort items on button click
   			$('#sorts  > .btn').on( 'click',  function() {
@@ -146,23 +158,100 @@
   				loading: {
   		            finishedMsg: "<h4>No se encontraron m&aacute;s resultados.</h4>",
   		            msgText: "<h4>Cargando reclamos...</h4>",
-  		            speed: 'slow',
+  		            speed: 'slow'
   		        }  		      
 			 }, function (newElements) {
 			 		var html = '';
  			 		$.each( newElements, function( i, value ) {
- 			 			 html += renderToHtml(value);
+ 			 			 html += renderToHtml(value, 'issue');
  			        });
 					 	
  			 		var $html = $( html );
 
 	 			    $html.imagesLoaded(function(){
-	 				$html.animate({ opacity: 1 });
-	 				$container.append( $html ).isotope( 'appended', $html );
-		 		});
-              });
+	 					$html.animate({ opacity: 1 });
+	 					$container.append( $html ).isotope( 'appended', $html );
+		 			});
+             });
+			
+			 $container.infinitescroll('pause');
+			
+			 
+			 /** INFINITE-SCROLL USERS **/
+			 
+			
+  			
+  			// sort items on button click
+  			$('#sorts-users  > .btn').on( 'click',  function() {
+  				var sortByValue = $(this).attr('data-sort-by');
+  			  	$containerUsers.isotope({ sortBy: sortByValue });
+  			 	$(this).addClass("active").siblings().removeClass("active");
+  			});
+
+			$containerUsers.infinitescroll({
+				navSelector  	: "#page-nav-user",
+  				nextSelector 	: "#page-nav-user a",
+				itemSelector 	: ".brick-user",  
+				pixelsFromNavToBottom : "20",
+				debug: true,
+  				dataType: 'json',
+  				appendCallback: false,
+  				loading: {
+  		            finishedMsg: "<h4>No se encontraron m&aacute;s resultados.</h4>",
+  		            msgText: "<h4>Cargando reclamos...</h4>",
+  		            speed: 'slow',
+  		        }  		      
+			 }, function (newElements) {
+			 		var html = '';
+ 			 		$.each( newElements, function( i, value ) {
+ 			 			 html += renderToHtml(value, 'user');
+ 			        });
+					 	
+ 			 		var $html = $( html );
+
+	 			    $html.imagesLoaded(function(){
+	 					$html.animate({ opacity: 1 });
+	 					$containerUsers.append( $html ).isotope( 'appended', $html );
+		 			});
+             });
+						
+			$containerUsers.infinitescroll('pause');
  
 	   
+			// sort items on button click
+  			/**$('.nav-tabs li').on('click', function (e) {
+  				 var clickedTab = $(this).find('a').attr('href');
+			
+  				 if(clickedTab == "#topUsers"){
+  					 console.log("sss");
+  					$container.infinitescroll('pause');
+  					$containerUsers.infinitescroll('resume');
+  				 }
+  						
+//   				 $('.nav-tabs .active').text() //active tab
+			});
+			**/
+			
+			
+			
+			$(' .btn-more ').click(function(e){
+  			     // call this whenever you want to retrieve the next page of content
+  			     // likely this would go in a click handler of some sort
+  			     e.preventDefault();
+  			    
+  			    if( $(this).hasClass( 'issue' ) ){
+  					$container.infinitescroll('retrieve');
+  				  $('#page-nav').hide(); 
+  			   	}  				
+  			    else{
+  			    	$containerUsers.infinitescroll('retrieve');
+  			      $('#page-nav-users').hide(); 
+  			    }
+  			  
+  			    return false;
+  			  });
+			
+			
 			/*
 			$(window).scroll(function(){				
 				
@@ -772,12 +861,15 @@
 					<button data-sort-by="province" class="btn btn-default">Provincia</button>
 	    			<button data-sort-by="id" class="btn btn-default">ID</button>
 				</div>					
-				
+					
 				<!-- infinite scroll -->
 				<div id="infinite-container"></div>				
 				<nav id="page-nav" style="display: none;">
-  					<a href="loadmore/2"></a>
+  					<a href="loadmore/issue/2"></a>
 				</nav>
+				
+				<center><a href="#" class="btn btn-default btn-more issue">Mostrar m&aacute;s resultados</a></center>
+			
 						
 			</div>
 			
@@ -790,7 +882,7 @@
 				<!-- sorting -->
 				<span>Ordenar por: </span>
 				<div id="sorts-users" class="btn-group">
-	  				<button data-sort-by="original-order" class="btn btn-default"><i class="icon icon-star"></i>Mejor reputaci&oacute;n</button>
+	  				<button data-sort-by="original-order" class="btn btn-default active"><i class="icon icon-star"></i>Mejor reputaci&oacute;n</button>
 	  				<button data-sort-by="issues" class="btn btn-default"><i class="icon icon-map-marker"></i>Publicaciones</button>
 					<button data-sort-by="comments" class="btn btn-default"><i class="icon icon-comment-alt"></i>Comentarios</button>
 					<button data-sort-by="fixes" class="btn btn-default"><i class="icon icon-ok"></i>Reclamos resueltos</button>
@@ -798,9 +890,12 @@
 				</div>		
 				
 				<div id="infinite-container-users"></div>				
-				<nav id="page-nav" style="display: none;">
-  					<a href="loadmore/2"></a>
+				<nav id="page-nav-user" style="display: none;">
+  					<a href="loadmore/user/2"></a>
 				</nav>	
+				
+				<center><a href="#" class="btn btn-default btn-more user">Mostrar m&aacute;s resultados</a></center>
+				
 			</div>
 			
 		</div>
