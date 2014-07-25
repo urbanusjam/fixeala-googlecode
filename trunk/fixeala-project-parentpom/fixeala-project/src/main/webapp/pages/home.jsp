@@ -7,17 +7,23 @@
 			var currentPage = 1,
 	        currentXHR;	
 			var $container = $('#infinite-container');
-			
-			
-			var dummyText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum mattis fringilla nisl sed elementum. Maecenas congue aliquet lacinia. Sed diam ante, consectetur at imperdiet tristique, tincidunt vitae magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed vitae vestibulum orci, ut cursus libero. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam in lorem at sapien accumsan consequat ut eu purus. "
+			var $containerUsers = $('#infinite-container-users');
 			
 			var titleLimit = 40;
 			var descLimit = 150;
+			var dummyText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum mattis fringilla nisl sed elementum. Maecenas congue aliquet lacinia. Sed diam ante, consectetur at imperdiet tristique, tincidunt vitae magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed vitae vestibulum orci, ut cursus libero. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam in lorem at sapien accumsan consequat ut eu purus. "
 			
 			/** Load first page of issues **/
 			
-			var latest = '${latestIssues}';
-			var dataArray = JSON.parse(latest);		
+			var issueJson = '${jsonIssues}';
+			var issuesArray = JSON.parse(issueJson);	
+			
+			var usersJson = '${jsonUsers}';
+			var usersArray = JSON.parse(usersJson);	
+			
+			/* LOAD FIRST PAGE */
+			loadFirstPage(issuesArray, usersArray);
+			
 			
 			function cropText(value, limit){
 				var cropped = '';
@@ -29,32 +35,81 @@
 				return cropped;
 			}
 			
-            if(dataArray.length > 0){
-            	var html =  [];	
-            	$.each( dataArray, function( i, value ) {
-            		var imgNum = Math.floor(Math.random() * 10);  //entre 0 y 9
-	        		var item = 	'<div class="brick">'
-	        			+ 			'<span class="status '+value.css+'">' +value.status+ '</span>'
+			function renderToHtml(element, type){
+				
+				var html = '';
+					
+				if(type == "ISSUE"){
+					
+					imgNum = Math.floor(Math.random() * 10);  //entre 0 y 9
+					
+					var html = 	'<div class="brick">'
+	        			+ 			'<p class="top">'
+						+				'<span class="id-char pull-left"><b>#</b></span>'
+						+ 				'<span class="date-box pull-right">'
+						+ 					'<span class="id pull-left">' +element.id+ '</span>'
+						+ 					'<span class="date pull-right">' +element.date+ '</span>'
+						+				'</span>'
+						+ 			'</p>'
 						+ 			'<a class="thumbnail" href="resources/images/samples/image' +imgNum+ '.jpg">'
 						+    			'<img class="media-object" src="resources/images/samples/image' +imgNum+ '.jpg">'
 						+  			'</a>'	
-						+   		'<a class="title" href="' +value.url+ '">' +cropText(value.title, titleLimit)+ '</a>'	
-						+			'<p class="address"><span class="city">' +value.city+ '</span>, <span class="province">' +value.province+ '</span></p>'
-						+           '<p>' +cropText(dummyText, descLimit)+ '</p>'
-						+ 			'<p class="bottom">'
-						+				'<span class="id-char pull-left"><b>#</b></span>'
-						+ 				'<span class="pull-right" style="width:95%">'
-						+ 					'<b><span class="id pull-left">' +value.id+ '</span></b>'
-						+ 					'<span class="date pull-right">' +value.date+ '</span>'
-						+				'</span>'
-						+ 			'</p>'
+						+   		'<a class="title" href="' +element.url+ '">' +cropText(element.title, titleLimit)+ '</a>'	
+						+			'<p class="address"><span class="city">' +element.city+ '</span>, <span class="province">' +element.province+ '</span></p>'
+						+           '<p class="desc">' +cropText(dummyText, descLimit)+ '</p>'
+						+ 			'<span class="status '+element.css+'">' +element.status+ '</span>'
 						+   '</div>';
+				}
 				
-	        		html.push(item);
-	        	});
-            	
-            	$container.append(html);
-            }
+				else if(type == "USER"){
+					
+					imgNum = 9
+					
+					var html = 	'<div class="brick-user">'
+						+   		'<a class="username" href="' +element.url+ '">' +element.username+ '</a>'	
+						+ 			'<a class="thumbnail" href="resources/images/samples/image' +imgNum+ '.jpg">'
+						+    			'<img class="media-object" src="resources/images/samples/image' +imgNum+ '.jpg">'
+						+  			'</a>'	
+						+			'<p class="address">De <span class="city">' +element.city+ '</span>, <span class="province">' +element.province+ '</span></p>'
+						+			'<p class="bottom">'
+						+ 					'Registrado el <span >' +element.registration+ '</span>'
+						+ 			'</p>'
+						+ 			'<p class="stats">'
+						+ 					'<span class="counter label label-info"><i class="icon icon-map-marker icon-small"></i><span class="numIssues">' +element.reportedIssues+ '</span></span>'
+						+ 					'<span class="counter label label-default"><i class="icon icon-comments-alt icon-small"></i><span class="numComments">' +element.postedComments+ '</span></span>'
+						+ 					'<span class="counter label label-success"><i class="icon icon-ok icon-small"></i><span class="numFixes">' +element.fixedIssues+ '</span></span>'
+						+ 			'</p>'
+					
+						+   '</div>';
+				}
+				
+				return html;
+				
+			}
+			
+			function loadFirstPage(issuesArray, usersArray){
+				 if(issuesArray.length > 0){
+	            	var html =  [];	
+	            	$.each( issuesArray, function( i, value ) {
+	            		var imgNum = Math.floor(Math.random() * 10);  //entre 0 y 9
+	            		var item = renderToHtml(value, "ISSUE");
+		        		html.push(item);
+		        	});
+	            	$container.append(html);
+		         }
+				 
+				 if(usersArray.length > 0){
+	            	var html =  [];	
+	            	$.each( usersArray, function( i, value ) {
+	            		var imgNum = Math.floor(Math.random() * 10);  //entre 0 y 9
+	            		var item = renderToHtml(value, "USER");
+		        		html.push(item);
+		        	});
+	            	$containerUsers.append(html);
+			     }
+			}
+			
+           
           
             //http://isotope.metafizzy.co/sorting.html
   			$container.imagesLoaded( function(){                
@@ -65,26 +120,22 @@
                         title    : '.title',
                         id       : '.id parseInt',
                         status   : '.status',
-                        city     : '.city',
                         province : '.province' 
                     },
                     masonry : {
                     	isFitWidth : true
                     }
-                   
-                  });
+                });
             });
   			
-  		// sort items on button click
-  			$('#sorts').on( 'click', 'button', function() {
-  			  var sortByValue = $(this).attr('data-sort-by');
-  			  $container.isotope({ sortBy: sortByValue });
+  			// sort items on button click
+  			$('#sorts  > .btn').on( 'click',  function() {
+  				var sortByValue = $(this).attr('data-sort-by');
+  			  	$container.isotope({ sortBy: sortByValue });
+  			 	$(this).addClass("active").siblings().removeClass("active");
   			});
 
-
-
-  			
-			 $container.infinitescroll({
+			$container.infinitescroll({
 				navSelector  	: "#page-nav",
   				nextSelector 	: "#page-nav a",
 				itemSelector 	: ".brick",  
@@ -98,39 +149,17 @@
   		            speed: 'slow',
   		        }  		      
 			 }, function (newElements) {
-				 
-				 		var html = '';
-						
-	 			 		$.each( newElements, function( i, value ) {
-	 			 			imgNum = Math.floor(Math.random() * 10);  //entre 0 y 9
-	 			 			
-			 			 	  html +=		'<div class="brick">'
-			 			 	  		+ 			'<span class="status '+value.css+'">' +value.status+ '</span>'
-									+ 			'<a class="thumbnail" href="resources/images/samples/image' +imgNum+ '.jpg">'
-									+    			'<img class="media-object" src="resources/images/samples/image' +imgNum+ '.jpg">'
-									+  			'</a>'	
-									+   		'<a class="title" href="' +value.url+ '">' +cropText(value.title, titleLimit)+ '</a>'	
-									+			'<p class="address"><span class="city">' +value.city+ '</span>, <span class="province">' +value.province+ '</span></p>'
-									+           '<p>' +cropText(dummyText, descLimit)+ '</p>'
-									+ 			'<p class="bottom">'
-									+				'<span class="id-char pull-left"><b>#</b></span>'
-									+ 				'<span class="pull-right" style="width:95%">'
-									+ 					'<b><span class="id pull-left">' +value.id+ '</span></b>'
-									+ 					'<span class="date pull-right">' +value.date+ '</span>'
-									+				'</span>'
-									+ 			'</p>'
-									+   '</div>';
-	 			        });
+			 		var html = '';
+ 			 		$.each( newElements, function( i, value ) {
+ 			 			 html += renderToHtml(value);
+ 			        });
 					 	
-	 			 		var $html = $( html );
+ 			 		var $html = $( html );
 
-		 			   $html.imagesLoaded(function(){
-		 				  $html.animate({ opacity: 1 });
-// 		 		      	$container.append( $html ).masonry( 'appended', $html );
-		 				 	$container.append( $html ).isotope( 'appended', $html );
-		 		        });
-		 			 	
-				 
+	 			    $html.imagesLoaded(function(){
+	 				$html.animate({ opacity: 1 });
+	 				$container.append( $html ).isotope( 'appended', $html );
+		 		});
               });
  
 	   
@@ -724,9 +753,9 @@
 	<div class="row" style="height:auto; margin:30px 0 30px 0; padding: 0">
 
 		<ul class="nav nav-tabs">
-			<li class="active"><a href="#latestIssues" data-toggle="tab">Recientes</a></li>
-			<li><a href="#hottestIssues" data-toggle="tab">Populares</a></li>
-			<li><a href="#topUsers" data-toggle="tab">Top Vecinos</a></li>
+			<li class="active"><a href="#latestIssues" data-toggle="tab">&Uacute;ltimos publicados</a></li>
+			<li><a href="#hottestIssues" data-toggle="tab">M&aacute;s votados</a></li>
+			<li><a href="#topUsers" data-toggle="tab">Ranking usuarios</a></li>
 		</ul>							
 														
 		<div class="tab-content">	
@@ -735,11 +764,11 @@
 			<div class="tab-pane fade in active" id="latestIssues">	
 			
 				<!-- sorting -->
-				<div id="sorts" class="button-group">
-	  				<button data-sort-by="original-order" class="btn btn-default">Fecha</button>
+				<span>Ordenar por: </span>
+				<div id="sorts" class="btn-group">
+	  				<button data-sort-by="original-order" class="btn btn-default active">Fecha</button>
+	  				<button data-sort-by="status" class="btn btn-default">Estado</button>
 					<button data-sort-by="title" class="btn btn-default">Titulo</button>
-					<button data-sort-by="status" class="btn btn-default">Estado</button>
-					<button data-sort-by="city" class="btn btn-default">Ciudad</button>
 					<button data-sort-by="province" class="btn btn-default">Provincia</button>
 	    			<button data-sort-by="id" class="btn btn-default">ID</button>
 				</div>					
@@ -753,11 +782,25 @@
 			</div>
 			
 			<div class="tab-pane fade" id="hottestIssues">		
-			Populares		
+			M&acute;s votados		
 			</div>
 			
 			<div class="tab-pane fade" id="topUsers">		
-			Usuarios		
+			
+				<!-- sorting -->
+				<span>Ordenar por: </span>
+				<div id="sorts-users" class="btn-group">
+	  				<button data-sort-by="original-order" class="btn btn-default"><i class="icon icon-star"></i>Mejor reputaci&oacute;n</button>
+	  				<button data-sort-by="issues" class="btn btn-default"><i class="icon icon-map-marker"></i>Publicaciones</button>
+					<button data-sort-by="comments" class="btn btn-default"><i class="icon icon-comment-alt"></i>Comentarios</button>
+					<button data-sort-by="fixes" class="btn btn-default"><i class="icon icon-ok"></i>Reclamos resueltos</button>
+<!-- 				<button data-sort-by="votes" class="btn btn-default"><i class="icon icon-thumbs-up-alt"></i>Votos recibidos</button> -->
+				</div>		
+				
+				<div id="infinite-container-users"></div>				
+				<nav id="page-nav" style="display: none;">
+  					<a href="loadmore/2"></a>
+				</nav>	
 			</div>
 			
 		</div>

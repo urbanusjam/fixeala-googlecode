@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
@@ -14,7 +15,7 @@ import ar.com.urbanusjam.dao.TagDAO;
 import ar.com.urbanusjam.entity.annotations.Tag;
 
 @Repository
-@Transactional(propagation= Propagation.REQUIRED, readOnly=false)
+//@Transactional(propagation= Propagation.REQUIRED, readOnly=false)
 public class TagDAOImpl implements TagDAO {
 	
 	@PersistenceContext(unitName = "fixealaPU")
@@ -24,8 +25,12 @@ public class TagDAOImpl implements TagDAO {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Tag> getTags() {
-		return (List<Tag>)entityManager.createQuery("SELECT t FROM Tag t").getResultList();
+	public List<Tag> getTags() throws PersistenceException {
+		try{
+			return (List<Tag>)entityManager.createQuery("SELECT t FROM Tag t").getResultList();
+		}catch(PersistenceException e){
+			return null;
+		}
 	}
 
 	@Override

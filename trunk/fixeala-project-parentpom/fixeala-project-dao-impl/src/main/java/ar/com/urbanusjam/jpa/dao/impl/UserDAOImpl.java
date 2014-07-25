@@ -42,7 +42,7 @@ public class UserDAOImpl implements UserDAO, UserDetailsManager  {
 	public User loadUserByUsername(String username) throws UsernameNotFoundException {	
 		try{
 			User user = entityManager.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
-					  .setParameter("username", username)			
+					  .setParameter("username", username)	
  					  .getSingleResult();	
 			return user;	
 		} catch(NoResultException e){
@@ -52,8 +52,9 @@ public class UserDAOImpl implements UserDAO, UserDetailsManager  {
 	
 	@Override
 	public List<User> findAllActiveUsers() {		
-		List<User> users = entityManager.createQuery("SELECT u FROM User u WHERE u.enabled = :enabled", User.class)
+		List<User> users = entityManager.createQuery("SELECT u FROM User u INNER JOIN u.roles r WHERE r.authority = :role AND u.enabled = :enabled", User.class)
 										.setParameter("enabled", true)
+										.setParameter("role", "ROLE_USER")	
 									    .getResultList();
 		return users;
 	}
