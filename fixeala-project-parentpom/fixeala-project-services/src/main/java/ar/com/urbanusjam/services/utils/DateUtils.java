@@ -17,6 +17,7 @@ public class DateUtils {
 	public static final String FORMAT_DATETIME_SECONDS = "dd/MM/yyyy hh:mm a";
 	public static final String DATE_TIME_PATTERN_SHORT = "dd/MM/yyyy HH:mm";
 	public static final String DATE_TIME_PATTERN_LONG = "dd MMM yyyy HH:mm";
+	public static final String DATE_PATTERN_LONG = "dd MMM yyyy";
 
 	
 	public static String getFechaFormateada(Date date, String pattern){				

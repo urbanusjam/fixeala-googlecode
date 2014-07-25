@@ -1265,7 +1265,7 @@ a.no-hover { text-decoration: none; color: #000;}
 
 /**** Infinite Scroll ****/
 
-#infinite-container {
+#infinite-container, #infinite-container-users {
 	background: #FFF;
   	padding: 13px;
   	margin: 0 auto;
@@ -1296,7 +1296,33 @@ a.no-hover { text-decoration: none; color: #000;}
 .brick { 
 	width: 250px;
   	position: relative;
-	margin: 10px 8px 15px 8px;
+	margin: 10px 8px 10px 8px;
+	padding: 10px;
+  	background: #F5F5F5;
+  	border: 1px solid  #DDD;
+  	float: left;
+  	text-align: left; 
+  	-webkit-border-radius: 5px;
+     	-moz-border-radius: 5px;
+          	border-radius: 5px;
+}
+.brick .status  { display: block; text-align: center; margin-bottom: 10px; padding: 5px 0 5px 0; }
+.brick .title { font-size: 18px; margin: 0 0 5px; }
+.brick .thumbnail { margin-bottom: 15px; }
+.brick p.address, .brick p.date { color: #999;  margin: 10px 0 10px 0;  }
+.brick p.desc { padding-bottom: 10px; }
+.brick p.top {  height: 30px; }
+.brick span.date, .brick span.id, .brick span.id-char { padding-top: 5px; font-size: 11px;  }
+.brick span.id { font-weight: bold; }
+.brick span.date-box { width: 96%; display: block; }
+#sorts { margin: 5px 0 10px 0; display: inline-block; }
+
+
+
+.brick-user { 
+	width: 180px;
+  	position: relative;
+	margin: 10px 8px 10px 8px;
 	padding: 10px;
   	background: #F5F5F5;
   	border: 1px solid  #DDD;
@@ -1307,14 +1333,14 @@ a.no-hover { text-decoration: none; color: #000;}
           	border-radius: 5px;
 }
 
+.brick-user .username { font-size: 18px; }
+.brick-user .thumbnail { margin: 10px 0 15px 0; }
+.brick-user p.address  { margin: 10px 0 10px 0; }
+.brick-user span.city, .brick-user span.province { text-transform: uppercase;  font-size: 11px; } 
+.brick-user p.bottom {  color : #999; }
+.brick-user .stats { width: 100%; height: auto; border:1px solid black; }
+.brick-user .stats span.counter { border: 0px solid black; margin: 0 10px 0 10px; font-size: 14px;}
 
-.brick .status  { display: block; text-align: center; margin-bottom: 10px; }
-.brick .title { font-size: 18px; margin: 0 0 5px; }
-.brick .thumbnail { margin-bottom: 15px; }
-.brick p.address, .brick p.date { color: #999;  margin: 10px 0 10px 0;  }
-.brick p.bottom { border-top: 1px solid #DDDDDD; }
-.brick span.date, .brick span.id, .brick span.id-char { padding-top: 5px; font-size: 11px;  }
-#sorts { margin: 5px 0 10px 0; }
 
 
 /* Start: Recommended Isotope styles */

@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
@@ -19,7 +20,7 @@ import ar.com.urbanusjam.entity.annotations.Issue;
 import ar.com.urbanusjam.entity.annotations.Tag;
 
 @Repository
-@Transactional(propagation= Propagation.REQUIRED, readOnly=false)
+//@Transactional(propagation= Propagation.REQUIRED, readOnly=false)
 public class IssueDAOImpl implements IssueDAO {	
 	
 	@PersistenceContext(unitName = "fixealaPU")
@@ -39,8 +40,15 @@ public class IssueDAOImpl implements IssueDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Issue> getAllIssues() throws NoResultException {
-		return (List<Issue>) entityManager.createQuery("SELECT i FROM Issue i ORDER BY i.creationDate DESC").getResultList();
+	public List<Issue> getAllIssues() throws NoResultException, PersistenceException {
+		try{
+			return (List<Issue>) entityManager.createQuery("SELECT i FROM Issue i ORDER BY i.creationDate DESC").getResultList();
+		}catch(NoResultException e){
+			return null;
+		}catch(PersistenceException e){
+			return null;
+		}
+	
 	}
 	
 	@SuppressWarnings("unchecked")

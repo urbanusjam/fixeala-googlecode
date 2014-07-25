@@ -65,7 +65,7 @@ public class HomeController {
 	} 
 	
 	@RequestMapping(value="/home", method = RequestMethod.GET)
-	public String home(@ModelAttribute("issuesDTO")  List<IssueDTO> issues, Model model) throws JSONException{		
+	public String home(@ModelAttribute("issuesDTO") List<IssueDTO> issues, Model model) throws JSONException{		
 		
 		List<String> dbTags = issueService.getTagList();
 		JSONArray array = new JSONArray();
@@ -81,6 +81,13 @@ public class HomeController {
 		allTags = array.toString();
 		model.addAttribute("allTags", allTags.length() == 0 ? "[{}]" : allTags);
 		
+		JSONArray issuePagesArray = new JSONArray();
+		issuePagesArray = paginateToArray(issues, 1, "ISSUE");
+		
+		JSONArray userPagesArray = new JSONArray();
+		userPagesArray = paginateToArray(userService.loadAllActiveUsers(), 1, "USER");
+		
+		/**
 		//paginado 1
 		int page = 1; 
 		int itemsPerPage = ITEMS_PER_PAGE;
@@ -112,11 +119,95 @@ public class HomeController {
 				jsonArray.put(obj);
 			}		
 		   
-		}
+		}**/
 		
-		 model.addAttribute("latestIssues", jsonArray);
+		 model.addAttribute("jsonIssues", issuePagesArray);
+		 model.addAttribute("jsonUsers", userPagesArray);
 		
 		return "home";
+	}
+	
+	@SuppressWarnings("unchecked")
+	private JSONArray paginateToArray(List<?> elements, int currentPage, String type) throws JSONException{
+		
+		int itemsPerPage = ITEMS_PER_PAGE;
+		int totalItems = elements.size();
+		int totalPages = (int) Math.ceil((double)totalItems / itemsPerPage);	
+		
+		JSONArray jsonArray = null;
+		
+		if(currentPage > totalPages){ 
+			return jsonArray;
+		}
+		
+		else{
+		
+			int from = ( currentPage - 1 ) * itemsPerPage;
+			int to = from + itemsPerPage - 1 ;	
+			
+			int lastPage = totalPages - currentPage;
+			
+			//is last page
+	    	if(lastPage == 0){
+				int itemsLeft = totalItems - ( currentPage - 1 ) * itemsPerPage ; 
+			
+	    		if( itemsLeft < itemsPerPage )
+	    			to = ( currentPage -1 ) * itemsPerPage + itemsLeft-1;
+	    	}	
+	    	
+			//issue type
+			if(type.equals("ISSUE")){
+				
+				jsonArray = new JSONArray();
+				
+				List<IssueDTO> sub = (List<IssueDTO>) elements.subList(from, to + 1); //sublist toma el item en la posicion anterior al toIndex que se le pasa
+				
+				for(IssueDTO issue : sub){
+					JSONObject obj = new JSONObject();
+					obj.put("id", issue.getId());
+					obj.put("title", issue.getTitle());
+					obj.put("description", issue.getDescription());		
+					obj.put("address", issue.getFormattedAddress());	
+					obj.put("barrio", issue.getNeighborhood());	
+					obj.put("city", issue.getCity());	
+					obj.put("province", issue.getProvince());	
+					obj.put("date", issue.getFechaFormateadaCompleta());
+					obj.put("status", issue.getStatus());
+					obj.put("css", issue.getStatusCss());		
+					obj.put("url", URISchemeUtils.CONN_RELATIVE_URL_ISSUES + "/" + issue.getId());
+					jsonArray.put(obj);
+				}		
+				
+			}
+			
+			else if(type.equals("USER")){
+			
+				jsonArray = new JSONArray();
+				
+				//user type
+				List<UserDTO> sub = (List<UserDTO>) elements.subList(from, to + 1); //sublist toma el item en la posicion anterior al toIndex que se le pasa
+				
+				for(UserDTO user : sub){
+					JSONObject obj = new JSONObject();
+					obj.put("username", user.getUsername());
+					obj.put("city", user.getCity());	
+					obj.put("province", user.getProvince());	
+					obj.put("registration", DateUtils.getFechaFormateada(user.getRegistrationDate(), DateUtils.DATE_PATTERN_LONG));
+					obj.put("reportedIssues", 0);
+					obj.put("postedComments", 0);
+					obj.put("fixedIssues", 0);
+					obj.put("url", URISchemeUtils.CONN_RELATIVE_URL_USERS + "/" + user.getUsername());
+					jsonArray.put(obj);
+				}
+				
+			}
+			
+			return jsonArray;
+		   
+		}
+		
+		
+		
 	}
 	
 	
@@ -131,9 +222,12 @@ public class HomeController {
 	}	
 	
 	@RequestMapping(value="/loadmore/{page}", produces={"application/json; charset=UTF-8"}, method = RequestMethod.GET)  
-	public @ResponseBody String getIssues(@ModelAttribute("issuesDTO")  List<IssueDTO> issues, @PathVariable int page, Model model) throws JSONException{  
+	public @ResponseBody String getIssues(@ModelAttribute("issuesDTO") List<IssueDTO> issues, @PathVariable int page) throws JSONException{  
 	
+		JSONArray pagesArray = new JSONArray();
+		pagesArray = paginateToArray(issues, page, "ISSUE");
 		
+		/**
 		int itemsPerPage = ITEMS_PER_PAGE;
 		int totalItems = issues.size();
 		int totalPages = (int) Math.ceil((double)totalItems / itemsPerPage);	
@@ -177,8 +271,9 @@ public class HomeController {
 				array.put(obj);
 			}		
 
-		    return array.toString();
-		}
+		  
+		}**/
+	  return pagesArray.toString();
 	}  
 	
 	@RequestMapping(value="/autocomplete", produces={"application/json; charset=UTF-8"}, method = RequestMethod.GET)
@@ -199,7 +294,7 @@ public class HomeController {
 			obj.put("date", issue.getFechaFormateada());
 			obj.put("status", issue.getStatus());
 			obj.put("css", issue.getStatusCss());		
-			obj.put("url", URISchemeUtils.CONN_RELATIVE_URL + "/" + issue.getId());
+			obj.put("url", URISchemeUtils.CONN_RELATIVE_URL_ISSUES + "/" + issue.getId());
 			array.put(obj);
 		}		
 	

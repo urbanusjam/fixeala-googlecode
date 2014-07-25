@@ -74,7 +74,7 @@ public class LoginController {
 			obj.put("status", issue.getStatus());
 			obj.put("css", issue.getStatusCss());		
 			obj.put("colorCss", issue.getTitleCss());	
-			obj.put("url", URISchemeUtils.CONN_RELATIVE_URL + "/" + issue.getId());
+			obj.put("url", URISchemeUtils.CONN_RELATIVE_URL_ISSUES + "/" + issue.getId());
 			array.put(obj);
 		}		
 
