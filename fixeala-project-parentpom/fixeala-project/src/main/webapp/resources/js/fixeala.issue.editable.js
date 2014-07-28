@@ -3,16 +3,12 @@ var userActionsController = {
 		
 		enableUserActions :  function(){
 		    	
+			$('#userIssueActions').show;
 		    	  $('#userIssueActions').find("#btn-edit").bind('click', userActionsController.enableDisableFields);
 				  $('#userIssueActions').find("#btn-update").bind('click', userActionsController.editIssueFields);
 				  $('#userIssueActions').find("#btn-status").bind('click', userActionsController.initStatusModal);
-				  
-		    	
 		    },
 		    
-		  
-		   
-				
 		enableDisableFields : function(){
 				
 				if( $('#btn-update').is(":disabled") == true ){		    	
@@ -36,7 +32,6 @@ var userActionsController = {
 			       else{
 			    	   $('.editableField').show();
 			       }
-			       
 			      
 			       if(iconTags.is(':visible')){
 			    	   $('#edit-tags').hide();
@@ -184,8 +179,6 @@ var userActionsController = {
 				$("#mdl-status").modal('show');
 		},
 		loadDetailModal : function(value){
-			
-//			$("#mdl-detail .modal-header").html('<h4>' +title+ '</h4>');
 			$("#mdl-detail .modal-body").html('<p>' +value+ '</p>');
 			$("#mdl-detail").modal('show');
 	}

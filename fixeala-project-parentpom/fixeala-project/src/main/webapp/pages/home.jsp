@@ -4,6 +4,11 @@
 
 		$(document).ready(function(){
 			
+			/*** INIT GOOGLE MAPS ***/
+			var geocoder;			 
+			google.maps.event.addDomListener(window, 'load', initMap);  	 
+			
+			
 			var currentPage = 1,
 	        currentXHR;	
 			var $container = $('#infinite-container');
@@ -23,8 +28,6 @@
 			
 			/* LOAD FIRST PAGE */
 			loadFirstPage(issuesArray, usersArray);
-			
-		
 			
 			function cropText(value, limit){
 				var cropped = '';
@@ -77,8 +80,8 @@
 						+ 			'</p>'
 						+ 			'<p class="stats">'
 						+ 					'<span class="counter label label-info"><i class="icon icon-map-marker icon-small"></i><span class="numIssues">' +element.reportedIssues+ '</span></span>'
-						+ 					'<span class="counter label label-default"><i class="icon icon-comments-alt icon-small"></i><span class="numComments">' +element.postedComments+ '</span></span>'
 						+ 					'<span class="counter label label-success"><i class="icon icon-ok icon-small"></i><span class="numFixes">' +element.fixedIssues+ '</span></span>'
+						+ 					'<span class="counter label label-default"><i class="icon icon-comments-alt icon-small"></i><span class="numComments">' +element.postedComments+ '</span></span>'
 						+ 			'</p>'					
 						+   	'</div>';
 				}
@@ -198,7 +201,7 @@
   				appendCallback: false,
   				loading: {
   		            finishedMsg: "<h4>No se encontraron m&aacute;s resultados.</h4>",
-  		            msgText: "<h4>Cargando reclamos...</h4>",
+  		            msgText: "<h4>Cargando usuarios...</h4>",
   		            speed: 'slow',
   		        }  		      
 			 }, function (newElements) {
@@ -370,7 +373,7 @@
 			//init limit conter
 			var elemTitle = $(".titleCounter");
 			var elemDesc = $(".descCounter");
-			$(".formTitle").limiter(80, elemTitle);
+			$(".formTitle").limiter(100, elemTitle);
 			$(".formDescription").limiter(600, elemDesc);
 			
 			 function emptyFields(){
@@ -785,7 +788,7 @@
 								    	<div class="form-group" style="margin-bottom: 40px;">
 								    		<label>T&iacute;tulo *</label>
 											<input type="text" id="formTitle" class="formTitle" name="formTitle" required>	
-											<small><span class="pull-left">S&oacute;lo letras, n&uacute;meros, acentos y espacios.</span><span class="titleCounter pull-right"></span></small>
+											<small><span class="pull-left">S&oacute;lo letras, n&uacute;meros, acentos, espacios y comas.</span><span class="titleCounter pull-right"></span></small>
 										</div>
 										<div class="form-group">
 											<label>Descripci&oacute;n *</label>
@@ -883,9 +886,9 @@
 				<span>Ordenar por: </span>
 				<div id="sorts-users" class="btn-group">
 	  				<button data-sort-by="original-order" class="btn btn-default active"><i class="icon icon-star"></i>Mejor reputaci&oacute;n</button>
-	  				<button data-sort-by="issues" class="btn btn-default"><i class="icon icon-map-marker"></i>Publicaciones</button>
-					<button data-sort-by="comments" class="btn btn-default"><i class="icon icon-comment-alt"></i>Comentarios</button>
+	  				<button data-sort-by="issues" class="btn btn-default"><i class="icon icon-map-marker"></i>Reclamos publicados</button>
 					<button data-sort-by="fixes" class="btn btn-default"><i class="icon icon-ok"></i>Reclamos resueltos</button>
+					<button data-sort-by="comments" class="btn btn-default"><i class="icon icon-comment-alt"></i>Comentarios</button>
 <!-- 				<button data-sort-by="votes" class="btn btn-default"><i class="icon icon-thumbs-up-alt"></i>Votos recibidos</button> -->
 				</div>		
 				
@@ -905,4 +908,7 @@
   
       
 	</div><!-- /CONTENT -->
+	
+	
+  	
 	

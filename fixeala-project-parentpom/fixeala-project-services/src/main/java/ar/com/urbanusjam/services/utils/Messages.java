@@ -5,21 +5,21 @@ public final class Messages {
 	public static final String ISSUE_CREATE_OBS = "Se registra el reclamo.";
 	public static final String ISSUE_UPDATE_OBS = "Se actualiza el reclamo.";
 	
-	public static final String ISSUE_CREATION = "public√≥";
+	public static final String ISSUE_CREATION = "publicó";
 	
-	public static final String ISSUE_UPDATE_STATUS_ACKNOWLEDGE = "admitio;";
-	public static final String ISSUE_UPDATE_STATUS_PROGRESS = "inici√≥ progreso";
-	public static final String ISSUE_UPDATE_STATUS_RESOLVE = "resolvi√≥";
-	public static final String ISSUE_UPDATE_STATUS_REOPEN = "reabri√≥";
-	public static final String ISSUE_UPDATE_STATUS_CLOSE = "cerr√≥";
+	public static final String ISSUE_UPDATE_STATUS_ACKNOWLEDGE = "admitió;";
+	public static final String ISSUE_UPDATE_STATUS_PROGRESS = "inició progreso";
+	public static final String ISSUE_UPDATE_STATUS_RESOLVE = "resolvió";
+	public static final String ISSUE_UPDATE_STATUS_REOPEN = "reabrió";
+	public static final String ISSUE_UPDATE_STATUS_CLOSE = "cerró";
 	
-	public static final String ISSUE_UPDATE_COMMENT = "agreg√≥ un comentario.";
-	public static final String ISSUE_UPDATE_ATTACH_FILES = "adjunt√≥";
-	public static final String ISSUE_UPDATE_REMOVE_FILES = "elimin√≥";
-	public static final String ISSUE_UPDATE_FIELDS = "actualiz√≥";
+	public static final String ISSUE_UPDATE_COMMENT = "agregó un comentario.";
+	public static final String ISSUE_UPDATE_ATTACH_FILES = "adjuntó";
+	public static final String ISSUE_UPDATE_REMOVE_FILES = "eliminó";
+	public static final String ISSUE_UPDATE_FIELDS = "actualizó";
 	
-	public static final String ISSUE_REPAIR_INFO_ADD = "agreg√≥ informaci√≥n sobre la reparaci√≥n del reclamo.";	
-	public static final String ISSUE_REPAIR_INFO_UPDATE = "modific√≥ informaci√≥n sobre la reparaci√≥n del reclamo.";
-	public static final String ISSUE_REPAIR_INFO_DELETE = "elimin√≥ informaci√≥n sobre la reparaci√≥n del reclamo.";
+	public static final String ISSUE_REPAIR_INFO_ADD = "agregó información sobre la reparación del reclamo.";	
+	public static final String ISSUE_REPAIR_INFO_UPDATE = "modificó información sobre la reparación del reclamo.";
+	public static final String ISSUE_REPAIR_INFO_DELETE = "eliminó información sobre la reparación del reclamo.";
 
 }

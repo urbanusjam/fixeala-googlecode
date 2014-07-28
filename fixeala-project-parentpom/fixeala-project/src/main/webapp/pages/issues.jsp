@@ -17,7 +17,7 @@
 		<!-- Issue -->
 		
 		<script type="text/javascript">
-	
+		
 		jQuery.extend(jQuery.validator.messages, {
 		    required: "Campo obligatorio."//,
 // 		    remote: "Please fix this field.",
@@ -114,6 +114,9 @@
 			      pickTime: false
 			 });
 			
+			//paginacion comentarios
+			
+			/*
 			var comentarios = $.parseJSON('${comentariosJson}');				
 			var totalItems = comentarios.length;		  
         	var itemsPerPage = 3;
@@ -173,16 +176,10 @@
 		            		 
 		            		 ); 
 		        });
-		   
+		   */
 				
 			
-			var issueLocation = [];		
-			issueLocation.id = idIssue;
-			issueLocation.latitude = latitud;
-			issueLocation.longitude = longitud;		
-			
-			getClosestMarkersByIssue(issueLocation);			
-			
+		
 			//default config
 			$.fn.editable.defaults.mode = 'popup';	
 			$.fn.editable.defaults.disabled = true;
@@ -225,7 +222,7 @@
 			  
 			  $("#issue-id").editable({name: 'id',  disabled: true});			  
 			  $("#issue-date").editable({name: 'creationDate', disabled: true});
-			  $("#issue-last-update").editable({name: 'lastUpdate', disabled: true});				  
+// 			  $("#issue-last-update").editable({name: 'lastUpdate', disabled: true});				  
 			  $("#issue-street").editable({name: 'address', disabled: true});		
 			  $("#issue-city").editable({name: 'city', disabled: true});			  
 			  $("#issue-province").editable({name: 'province', disabled: true});
@@ -926,7 +923,16 @@
 				    }
 				    
 				    
+				    /*** RECLAMOS CERCANOS ***/
 				    
+					var issueLocation = [];		
+					issueLocation.id = idIssue;
+					issueLocation.latitude = latitud;
+					issueLocation.longitude = longitud;		
+					
+					console.log(issueLocation);
+					getClosestMarkersByIssue(issueLocation);			
+					
 				    
 				    
 				  //Add to Favorites
@@ -947,181 +953,145 @@
 			        });
 			        
 			        
-			        ///*******/////
+			        ///*** WATCH ***/////
 			        
 			        var isWatching = '${isUserWatching}';
-			         
-			        var $watcherDiv = $('#watchers');
-		        	var $watchingLink = $('#watching-toggle');
-		        	var $watcherList = $('#view-watcher-list');	       
-			    	var iconUnWatch = '<i class="icon-frown" id="icon-unwatch" style="color:#0088CC"></i>';
-		        	var iconWatch = '<i class="icon-smile" id="icon-watch"></i>';		        	
+		        	var $watcherList = $('#followers-list');	 
 		        	var numberOfWatchers = '${cantidadObservadores}';		        	
 		        	var data = "issueID=" + idIssue;		        
-		        	var loader = '<span class="loader"><img src="${pageContext.request.contextPath}/resources/images/loader.gif" style="margin-left:10px; alt="Loading"/></span>';	  
-		        		        	
-			        if(isWatching == 'true'){	
-			        	$watchingLink.addClass('watching');
-			        	$watchingLink.append(iconUnWatch);
-// 			        	$(iconUnWatch).insertBefore($watchingLink);
-// 			        	$watchingLink.text('Observando');
-			        	$watchingLink.attr('title', 'Dejar de observar este reclamo');
-			        	$watcherList.html(numberOfWatchers); 
-			        }
-			        
-			        else {
-			        	$watchingLink.addClass('unwatch');
-// 			        	$(iconWatch).insertBefore($watchingLink);
-			        	$watchingLink.append(iconWatch);
-// 			        	$watchingLink.text('Observar');
-			        	$watchingLink.attr('title', 'Observar este reclamo');
-			        	$watcherList.html(numberOfWatchers); 
-			        }			        
-			      
-			       $watcherList.popover({trigger: 'manual', title: '', html : true})
-						       .click(function(e){
-						           var element = $(this);
-						           $.ajax({
-						        	   url: './displayIssueFollowers.html',
-						               type: 'POST',
-						               dataType: 'json',
-						               data: data,
-						               success: function(response){						            	   
-							    	        var f = '';				             
+		        	var loader = '<button class="btn btn-default pull-right loader"><img src="${pageContext.request.contextPath}/resources/images/loader6.gif" alt="Loading" height=15 width=15 /></button>';	  
+		        	
+			        $watcherList.html(numberOfWatchers); 
+
+					$watcherList.live('click', function(){
+						
+							$.ajax({
+					        	   url: './displayIssueFollowers.html',
+					               type: 'POST',
+					               dataType: 'json',
+					               data: data,
+					               success: function(response){		
+					            	   
+					            	   if(response.length == 0 ){
+					            		   $('#mdl-followers .modal-body').text('No hay usuarios siguiendo este reclamo.');
+					            	   }
+					            	   
+					            	   else{
+					            		   var followers = '';				             
 										    $.each(response, function(i, follower){	
-										    	f += '<i class="icon-angle-right" style="margin-right: 5px;"></i>&nbsp;';
-										    	f += getUserURL(follower);
-										    	f += '<br>';
+										    	followers += '<i class="icon-angle-right" style="margin-right: 5px;"></i>&nbsp;';
+										    	followers += getUserURL(follower);
+										    	followers += '<br>';
 										    });
-						                   $(element).attr('data-content',f).popover('show');
-						               }
-						           });
-						           e.preventDefault();
-						       });
-	        	
-			    
-			        $('#watching-toggle').click(function() {
+										    
+						                   $('#mdl-followers .modal-body').html(followers);
+						               
+					            	   }
+					            	   
+					            	    $('#mdl-followers').modal('show');	
+					               }
+					           });
+					
+					});
+						
+				 		
+			        $('#btn-watch-issue').live('click', function() {
 			        	
-				 		if($watchingLink.hasClass('watching')){
-				 			
+			 			var reporter = '${usuario}';
+			 			
+			 			if(loggedUser == reporter){
+			 				bootbox.alert("S&oacute;lo puede seguir reclamos publicados por otros usuarios.");
+			 			}
+			 			
+			 			else{
+			 				
+			 				$(this).replaceWith(loader);
+			 				
 				 			$.ajax({
-		        			    url: "./unwatchIssue.html",
+		        			    url: "./watch/",
 						 		type: "POST",	
 						 		data: data,							 
-						        success: function(data){							        	
-						        	if(data.result){
-						        		
-						        		$watchingLink.removeClass('watching');
-						 				$watchingLink.addClass('unwatch');
-						 				
-						 			    $('#icon-unwatch').replaceWith(loader);
-						 										 				
-						 				setTimeout(function(){
-						 					$('.loader').replaceWith(iconWatch);
-// 						 					$watchingLink.text('Observar');
-							 				$watchingLink.attr('title', 'Observar este reclamo');							 		
-							 				$('#view-watcher-list').html(data.message);							 					 						      
+						        success: function(data){						        	
+						        	if(data.result){	
+						        		setTimeout(function(){							 					
+						        			$('.loader').replaceWith('<button id="btn-unwatch-issue" class="btn btn-info pull-right">Siguiendo</button>');
+						        			$watcherList.html(data.message);
 						 				}, 1000);
 						        	}
-						        	
 						        	else{
 						        		bootbox.alert(data.message);	
+						        		$('.loader').replaceWith('<button id="btn-watch-issue" class="btn btn-default pull-right">@ Segu&iacute; el reclamo</button>');
 						        	}	
 			            		}						  
-		        			});				 				
-				 		}
-				 		
-				 		else{
-				 			
-				 			var reporter = '${usuario}';
-				 			
-				 			if(loggedUser == reporter){
-				 				
-				 				bootbox.alert("S&oacute;lo puede observar reclamos publicados por otros usuarios.");
-				 			}
-				 			
-				 			else{
-				 			
-					 			$.ajax({
-			        			    url: "./watchIssue.html",
-							 		type: "POST",	
-							 		data: data,							 
-							        success: function(data){						        	
-							        	if(data.result){	
-							        		
-							        		$('#icon-watch').replaceWith(loader);
-							        		
-							        		$watchingLink.removeClass('unwatch');
-						 					$watchingLink.addClass('watching');
-							        		
-							        		setTimeout(function(){							 					
-							 					$('.loader').replaceWith(iconUnWatch);
-	// 						 					$watchingLink.text('Observando');
-								 				$watchingLink.attr('title', 'Dejar de observar este reclamo');
-								 				$('#view-watcher-list').html(data.message);
-								 			
-							 				}, 1000);	
-							        	}
-							        	
-							        	else{
-							        		bootbox.alert(data.message);	
-							        	}	
-				            		}						  
-			        			});	
-				 			}
-				 		}
-				});//watching click
+		        			});	
+			 			}
+					});
 				
 				
+			        $('#btn-unwatch-issue')
+		        	.live('mouseover', function(){
+		        		$(this).removeClass('btn-info').addClass('btn-inverse').text('DEJAR DE SEGUIR');
+		        	})
+		        	.live('mouseleave', function(){
+		        		$(this).removeClass('btn-inverse').addClass('btn-info').text('@ SIGUIENDO');  
+		        	})
+		        	.live('click', function() {
+		        		
+		        		$(this).replaceWith(loader);
+		        	
+			 			$.ajax({
+	        			    url: "./unwatch",
+					 		type: "POST",	
+					 		data: data,							 
+					        success: function(data){							        	
+					        	if(data.result){
+					        		setTimeout(function(){							 					
+					        			$('.loader').replaceWith('<button id="btn-watch-issue" class="btn btn-default pull-right">@ Segu&iacute; el reclamo</button>');
+					        			$watcherList.html(data.message);	
+					        		}, 1000);
+					        	}
+					        	else{
+					        		bootbox.alert(data.message);	
+					        		
+					        	}	
+		            		}						  
+	        			});				 				
+		        	});
+				
+				
+			    //*** VOTE ***//
+			    
 			    var isVoted = '${isCurrentlyVoted}';
 			    var isVoteUp = '${isVoteUp}';
 			    
-			    var $voteUp = $('.vote-up');
-			    var $voteDown = $('.vote-down');
-			    
-			    var iconUp = '<i id="icon-up" class="icon-thumbs-up"></i>';
-			    var iconDown = '<i id="icon-up" class="icon-thumbs-up"></i>';
-			    
-			    console.log(isVoted);
+			    var $voteUp = $('#vote-up');
+			    var $voteDown = $('#vote-down');
 			    
 			    if(isVoted == 'true'){
+			    	$voteUp.prop('disabled', true);
+		    		$voteDown.prop('disabled', true);
+		    		
 			    	if(isVoteUp == 'true'){
-// 			    		$voteUp.addClass('btn btn-success');
-// 				    	$voteDown.addClass('btn disabled');		
-				    	$voteUp.addClass('voteActive');
-				    	$voteDown.addClass('voteInactive');		
+			    		$voteDown.removeClass('btn-danger').addClass('btn-default');
 			    	}
-			    	else{
-// 			    		$voteDown.addClass('btn btn-success');
-// 				    	$voteUp.addClass('btn disabled');	
-			    		$voteUp.addClass('voteActive');
-				    	$voteDown.addClass('voteInactive');		
+			    	else{	
+			    		$voteDown.removeClass('btn-success').addClass('btn-default');
 			    	}
-			    	
 			    }
-// 			    else{
-// 			    	$voteUp.addClass('btn btn-info');
-// 			    	$voteDown.addClass('btn btn-danger');
-// 			    }
-			    
 			 
-			    $('#votes a').click(function(e) {
+			    $('#votes button').click(function(e) {
 			    	
-			    	var thumb = $(this);
+			    	var thumb = $(this).attr('id');
 			    	
-			    	if(thumb.hasClass('btn disabled'))
-			    		e.preventDefault();
-			    	
-			    	else {
 			    		
 				    	var voteValue;
 				    	var voteUp = false;
 				    	
-				    	if(thumb.hasClass('vote-up')){
+				    	if(thumb == 'vote-up'){
 				    		voteValue = 1;
 					    	voteUp = true;
 				    	}			    		
-				    	else if(thumb.hasClass('vote-down'))
+				    	else
 				    		voteValue =  -1;
 				    	
 				    	if(isVoted == 'true'){
@@ -1135,30 +1105,19 @@
 						 		type: "POST",	
 						 		data: "issueID=" + idIssue + "&vote=" + voteValue,							 
 						        success: function(data){						        	
-						        	if(data.result){	
+						        	if(data.result){
 						        		
-						        		if(voteUp){						        			
-// 						        			$voteUp.removeClass('btn btn-info');
-// 						 					$voteUp.addClass('btn btn-success');
-// 					        				$voteDown.removeClass('btn btn-danger');
-// 									    	$voteDown.addClass('btn disabled');	
-									    	
-									    	$voteUp.removeClass('voteInactive');
-									    	$voteUp.addClass('voteActive');
-									    	$voteDown.addClass('voteActive');		
-									    	$voteDown.addClass('voteInactive');		
+						        		$voteUp.prop('disabled', true);
+							    		$voteDown.prop('disabled', true);
+						        		
+						        		if(voteUp){	
+									    	$voteDown.removeClass('btn-danger').addClass('btn-default');
 						        		}
 						        		
-						        		else{						        			
-// 						        			$voteDown.removeClass('btn btn-danger');
-// 						 					$voteDown.addClass('btn btn-success');	
-// 					        				$voteUp.removeClass('btn btn-info');
-// 									    	$voteUp.addClass('btn disabled');	
-											$voteDown.removeClass('voteInactive');
-						        			$voteDown.addClass('voteActive');
-						        			$voteUp.removeClass('voteActive');
-									    	$voteUp.addClass('voteInactive');
+						        		else{
+						        			$voteDown.removeClass('btn-success').addClass('btn-default');
 						        		}
+						        			
 						        		
 						        		$('#voteCount').html(data.message); 
 						        				
@@ -1171,15 +1130,6 @@
 		        			});
 				    	
 				    	}
-			    		
-			    	}
-			    	
-			    	
-			    	
-			    });
-			    
- 				$voteDown.click(function() {
-			    	
 			    });
 			    
  				//adds tab href to url + opens tab based on hash on page load:
@@ -1188,8 +1138,6 @@
  					
  				}
  				return $('a[data-toggle="tab"]').on('shown', function(e) {
- 					
-					
  			    	return location.hash = $(e.target).attr('href').substr(1);
  			    });
  				
@@ -1197,8 +1145,156 @@
 //  				$('.nav-tabs li a').click( function(e) {
 //  					history.pushState( null, null, $(this).attr('href') );
 //  				});
+ 				
+ 				
+ 				
+ 	  			
+ 	  			
+ 	  		
+ 				
 
 		});
+		
+		
+		
+	
+			
+		$(document).ready(function(){
+			
+			
+			//*** INFINITE SCROLL ***//
+			
+			/** Load first page of issues **/
+
+		
+		var commentsJson = '${jsonComments}';
+		var commentsArray = JSON.parse(commentsJson);	
+	
+		var $containerComments = $('#infinite-container-comments');
+		
+		$containerComments.imagesLoaded( function(){                
+            $containerComments.masonry({
+                itemSelector : '.brick-comment'
+            });
+        });
+		
+		/* LOAD FIRST PAGE */
+		loadFirstPage(commentsArray);
+
+			
+			function renderToHtml(element, type){
+		
+				var html = 	'<div class="brick-comment"><div class="media">'
+					+		'<span class="pull-left">'
+					+	  		'<img class="media-object thumbnail" src="${pageContext.request.contextPath}/resources/images/nopic64.png">'
+					+	 		'<center><strong>1</strong></center>'
+					+	 	'</span>'
+					+	    '<div style="font-size:12px;margin-bottom:10px">'
+					+	  		'<a href="#"><strong>' +element.username+ '</strong></a> &nbsp; &raquo;  &nbsp;' +element.date+ '</div>'
+	 				+	  '<div class="media-body" style="display:block">'		
+					+     		'<p style="font-size:13px">' +element.message+ '</p>'	 
+	  				+	  '</div>'
+					+	'</div></div>';
+
+// 				var html = '<div class="brick"><p>Prueba de infinite scroll</p></div>';
+					
+			}
+			
+			
+			
+			
+			function loadFirstPage(commentsArray){
+				 if(commentsArray.length > 0){
+				
+	            	var html =  [];	
+	            	$.each( commentsArray, function( i, element ) {
+
+// 	            		var item = renderToHtml(value, 'comment');
+
+ 					var item = 	'<div class="brick-comment"><div class="media">'
+					+		'<span class="pull-left">'
+					+	  		'<img class="media-object thumbnail" src="${pageContext.request.contextPath}/resources/images/nopic64.png">'
+					+	 		'<center><strong>' +i+'</strong></center>'
+					+	 	'</span>'
+					+	    '<div style="font-size:12px;margin-bottom:10px">'
+					+	  		'<a href="#"><strong>' +element.username+ '</strong></a> &nbsp; &raquo;  &nbsp;' +element.date+ '</div>'
+	 				+	  '<div class="media-body" style="display:block">'		
+					+     		'<p style="font-size:13px">' +element.message+ '</p>'	 
+	  				+	  '</div>'
+					+	'</div></div>	';
+		        		html.push(item);
+		        	});
+	            	$containerComments.append(html);
+			     }
+			}
+			
+  			$containerComments.infinitescroll({
+				navSelector  	: "#page-nav-comment",
+  				nextSelector 	: "#page-nav-comment a",
+				itemSelector 	: ".brick-comment",  
+				pixelsFromNavToBottom : "20",
+				debug: true,
+  				dataType: 'json',
+  				appendCallback: false,
+  				loading: {
+  		            finishedMsg: "<h4>No se encontraron m&aacute;s resultados.</h4>",
+  		            msgText: "<h4>Cargando comentarios...</h4>",
+  		            speed: 'slow'
+  		        }  		      
+			 }, function (newElements) {
+			 		var html = '';
+			 		
+			 	
+ 			 		$.each( newElements, function( i, element ) {
+//  			 			 html += renderToHtml(value, 'comment');
+							var index = i+1;
+ 			 			 html = 	'<div class="brick-comment"><div class="media">'
+ 							+		'<span class="pull-left">'
+ 							+	  		'<img class="media-object thumbnail" src="${pageContext.request.contextPath}/resources/images/nopic64.png">'
+ 							+	 		'<center><strong>' + index +'</strong></center>'
+ 							+	 	'</span>'
+ 							+	    '<div style="font-size:12px;margin-bottom:10px">'
+ 							+	  		'<a href="#"><strong>' +element.username+ '</strong></a> &nbsp; &raquo;  &nbsp;' +element.date+ '</div>'
+ 			 				+	  '<div class="media-body" style="display:block">'		
+ 							+     		'<p style="font-size:13px">' +element.message+ '</p>'	 
+ 			  				+	  '</div>'
+ 							+	'</div></div>	';
+ 			        });
+					 	
+ 			 		var $html = $( html );
+
+	 			    $html.imagesLoaded(function(){
+	 					$html.animate({ opacity: 1 });
+	 					$containerComments.append( $html ).masonry( 'appended', $html );
+		 			});
+           
+		
+			});
+  			
+  			$containerComments.infinitescroll('pause');
+  			
+  			
+  			$(' .btn-more ').click(function(e){
+ 			     // call this whenever you want to retrieve the next page of content
+ 			     // likely this would go in a click handler of some sort
+ 			     e.preventDefault();
+ 			    
+ 			    if( $(this).hasClass( 'comment' ) ){
+ 					$containerComments.infinitescroll('retrieve');
+ 				  $('#page-nav-comments').hide(); 
+ 			   	}  				
+ 			    else{
+ 			    	$containerUpdates.infinitescroll('retrieve');
+ 			      $('#page-nav-updates').hide(); 
+ 			    }
+ 			  
+ 			    return false;
+ 			  });
+			
+		});
+				
+	  			
+	  			
 		
 		
 	
@@ -1206,178 +1302,97 @@
 
 	
 	<div class="container-fluid">
-	  	<div class="row-fluid">
+	  	<div class="row-fluid" >
 	   
 		    <div class="span9">
 		      <!--Body content-->
 		     
-  	  <div id="issue-header" class="hero-unit" style="padding:20px; margin-bottom:15px">	  
-        <h3 style="display:inline">
-        	<a href="#" id="issue-title">${titulo}</a>&nbsp;<i class="icon-pencil editableField"></i>
-        	&nbsp;&nbsp;
-        	<i class="icon-chevron-right icon-large"></i>&nbsp;&nbsp;<span style="color:${tituloCss}">${estado}</span></h3>
-        <p>${direccion}</p>       
-      </div>
-      
-<!--      <hr> -->
-      
-      <div class="row" style="border: 0px solid #000; height: 40px; padding: 10px 0 10px 0; 
-      				border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; margin-bottom: 20px;">
-      
-      	<ul class="user-action-nav">
-      		<li class="withText" title="Visitas"><span>${cantidadVisitas}</span><i class="icon-eye-open"></i></li>
-      		<li class="withText" id="votes">
-      			<div class="text" title="Votos"><span id="voteCount">${cantidadVotos}</span></div>
-      			<div class="arrows">
-      				<a href="#" class="vote-up" id="icon-up" title="Voto positivo"><i class="icon-caret-up "></i></a>
-      				<a href="#" class="vote-down" id="icon-down" title="Voto negativo"><i class="icon-caret-down "></i></a>
-      			</div>      			
-      		</li>
-      		<li class="withText">
-      			<div id="watchers" style="display:inline-block">      			
-				(<a href="#" id="view-watcher-list" data-toggle="popover"></a>)
-				<a href="#" id="watching-toggle"></a>
-				</div>
-			</li>
-      		<li class="withText" title="Comentarios"><span>${cantidadComentarios}</span><i class="icon-comments"></i></li>
-      		<li>      			
-      			<a id="bookmarkme" href="#" rel="sidebar" title="Agregar a Favoritos"><i class="icon-star"></i></a>
-      		</li>
-      		<li>
-      			<a href="#" onclick="javascript:window.print();" title="Imprimir"><i class="icon-print"></i></a>
-      		</li>
-<!--       		<li> -->
-<!--       			<a href="#" onclick="javascript:;" title="Denunciar reclamo"><i class="icon-flag"></i></a> -->
-<!--       		</li> -->
-      		<li>
-	      		<a href="#" onclick="javascript:;" title="Compartir"><i class="icon-share"></i></a>
-	      	</li>
-      	</ul>
-   
-			<div id="userIssueActions" class="user-action-btns">						
-				<sec:authorize access="hasRole('ROLE_USER')">
-					<div class="btn-group" style="float:right;">
-						<button id="btn-update" class="btn btn-info" title="Guardar cambios"><i class="icon-ok icon-large"></i></button>			
-					</div>
-					<div class="btn-group" style="float:right;margin-right:5px;">
-						<button id="btn-edit" class="btn" title="Editar"><i class="icon-pencil icon-large"></i></button>			
-					</div>	
-					<c:if test="${estado eq 'ABIERTO' || estado eq 'REABIERTO'}">
-						<div id="btn-status" data-toggle="modal" class="btn-group" style="float:right; ">			
-							<button class="btn btn-success" title="Resolver"><i class="icon-wrench icon-large"></i></button>
-						</div>
-					</c:if>
-					<c:if test="${estado eq 'RESUELTO' || estado eq 'CERRADO'}">
-						<div id="btn-status" data-toggle="modal" class="btn-group" style="float:right;">			
-							<button class="btn btn-warning" title="Reabrir"><i class="icon-rotate-right icon-large"></i></button>
-						</div>
-					</c:if>						
-					<script type="text/javascript">
-						userActionsController.enableUserActions();
-					</script>										
-				</sec:authorize>			
-			</div>
-			
-	
-	   </div>
-	 
-	  <div class="row">
-	  
-	 
-	  <div class="row-fluid">
-	   
-		 <div class="span4">  
+		  	  <div id="issue-header" class="hero-unit" style="padding:20px; margin-bottom:15px">	  
+		        <h3 style="display:inline">
+		        	<a href="#" id="issue-title">${titulo}</a>&nbsp;<i class="icon-pencil editableField"></i>
+		        	&nbsp;&nbsp;
+		        	<i class="icon-chevron-right icon-large"></i>&nbsp;&nbsp;<span style="color:${tituloCss}">${estado}</span></h3>
+		        <p>${direccion}</p>       
+		      </div>
 
-		 <ul class="thumbnails">
-	  	   		<li style="margin-left:0">		
-		    		<c:if test="${not empty image}">
-		    			<a data-lightbox="issue-lightbox2" class="thumbnail" href="${imageUrl}">							  	  			  	   		
-							<img src="${imageUrl}" alt="${imageName}">	 
-						</a>		
-		    		</c:if>
-		    		<c:if test="${empty image}">
-		    			<a data-lightbox="issue-lightbox2" class="thumbnail" href="${pageContext.request.contextPath}/resources/images/nopic.png" >							  	  			  	   		
-							<img src="${pageContext.request.contextPath}/resources/images/nopic.png" alt="">	
-						</a>
-		    		</c:if>
-		    	
-	    			<br>
-	    			<div class="caption">
-	    				<a id="btnAddFiles" href="#mdl-fileupload" data-toggle="modal" class="btn btn-info">
-	    				<i class="icon-upload-alt"></i>&nbsp;&nbsp;&nbsp;Agregar imagenes
-	    				</a>
-	    			</div>
-	  			</li>	
-	      </ul>
-	 
-	 	</div>
-	 
-	 	<div class="span8">  	 	
-	 				<table id="tbl-issue" class="table table-hover table-bordered table-striped">			        					
-						 <tr>
-						    <th>ID:</th>
-						    <td><a href="#" id="issue-id">${id}</a></td>						  
-						 </tr>
-						 <tr>
-						    <th>Fecha de publicaci&oacute;n:</th>
-						    <td><a href="#" id="issue-date">${fechaCreacion}</a></td>						   
-						 </tr>
-						 <tr>
-						    <th>&Uacute;ltima actualizaci&oacute;n:</th>
-						    <td><a href="#" id="issue-last-update">${fechaUltimaActualizacion}</a></td>						   
-						 </tr>
-						  <tr>
-						    <th>Informante:</th>
-						    <td><script type="text/javascript">document.write( getUserURL('${usuario}') );</script></td>						    		    
-						 </tr>
-<!-- 						 <tr> -->
-<!-- 						    <th>Responsable:</th> -->
-<%-- 						    <td><a href="#" id="issue-area">${area}</a></td>						    --%>
-<!-- 						 </tr> -->
-						 <tr>
-						    <th>Direcci&oacute;n:</th>
-						    <td><a href="#" id="issue-street">${calle}</a></td>						   
-						 </tr>
-						 <tr>
-						    <th>Barrio:</th>
-						    <td><a href="#" id="issue-barrio">${barrio}</a>&nbsp;<i class="icon-pencil editableField"></i></td>						   
-						 </tr>
-						 <tr>
-						    <th>Ciudad / Localidad:</th>
-						    <td><a href="#" id="issue-city">${ciudad}</a></td>						   
-						 </tr>
-						 <tr>
-						    <th>Provincia</th>
-						    <td><a href="#" id="issue-province">${provincia}</a></td>						   
-						 </tr>
-						 <tr>
-						    <th>Coordenadas:</th>
-						    <td><a href="#" id="issue-lat">${latitud}</a>, <a href="#" id="issue-lng">${longitud}</a></td>						   
-						 </tr>
-						  <tr>
-						    <th>Descripci&oacute;n:</th>
-						    <td><a href="#" id="issue-desc">${descripcion}</a>&nbsp;<i class="icon-pencil editableField"></i></td>						   
-						 </tr>
-						 <tr>
-						    <th>Estado:</th>
-						    <td><a class="taglink" href="./search.html?type=status&value=${estado}" id="issue-status" data-type="text"><span class="${estadoCss}">${estado}</span></a></td>						   
-						 </tr>
-						  <tr>
-						    <th>Categor&iacute;as:</th>
-						    <td>
-       							<a id="issue-tags" href="#" data-type="select2">${tagsByIssue}</a>&nbsp;<i class="icon-pencil editableField"></i>
-						    </td>						   
-						 </tr>
-					</table>	 	
-	 		</div>
-	 		
-	 	
-	 	 </div><!-- fluid -->
-	 	 	
-	 
-      </div>
+			  <div class="row">
+			  	<div class="row-fluid" style="margin-bottom: 30px;">
+					 <div class="span4">  
+						 <ul class="thumbnails">
+					  	   		<li style="margin-left:0">		
+						    		<c:if test="${not empty image}">
+						    			<a data-lightbox="issue-lightbox2" class="thumbnail" href="${imageUrl}">							  	  			  	   		
+											<img src="${imageUrl}" alt="${imageName}">	 
+										</a>		
+						    		</c:if>
+						    		<c:if test="${empty image}">
+						    			<a data-lightbox="issue-lightbox2" class="thumbnail" href="${pageContext.request.contextPath}/resources/images/nopic.png" >							  	  			  	   		
+											<img src="${pageContext.request.contextPath}/resources/images/nopic.png" alt="">	
+										</a>
+						    		</c:if>
+					    			<br>
+					    			<div class="caption">
+					    				<a id="btnAddFiles" href="#mdl-fileupload" data-toggle="modal" class="btn btn-info">
+					    				<i class="icon-upload-alt"></i>&nbsp;&nbsp;&nbsp;Agregar imagenes
+					    				</a>
+					    			</div>
+					  			</li>	
+					      </ul>
+				 	</div>
+			 		<div class="span8">  	 	
+		 				<table id="tbl-issue" class="table table-hover table-bordered table-striped">			        					
+							 <tr>
+							    <th>ID:</th>
+							    <td><a href="#" id="issue-id">${id}</a></td>						  
+							 </tr>
+							 <tr>
+							    <th>Fecha de publicaci&oacute;n:</th>
+							    <td><a href="#" id="issue-date">${fechaCreacion}</a></td>						   
+							 </tr>
+							  <tr>
+							    <th>Informante:</th>
+							    <td><script type="text/javascript">document.write( getUserURL('${usuario}') );</script></td>						    		    
+							 </tr>
+							 <tr>
+							    <th>Direcci&oacute;n:</th>
+							    <td><a href="#" id="issue-street">${calle}</a></td>						   
+							 </tr>
+							 <tr>
+							    <th>Barrio:</th>
+							    <td><a href="#" id="issue-barrio">${barrio}</a>&nbsp;<i class="icon-pencil editableField"></i></td>						   
+							 </tr>
+							 <tr>
+							    <th>Ciudad / Localidad:</th>
+							    <td><a href="#" id="issue-city">${ciudad}</a></td>						   
+							 </tr>
+							 <tr>
+							    <th>Provincia</th>
+							    <td><a href="#" id="issue-province">${provincia}</a></td>						   
+							 </tr>
+							 <tr>
+							    <th>Coordenadas:</th>
+							    <td><a href="#" id="issue-lat">${latitud}</a>, <a href="#" id="issue-lng">${longitud}</a></td>						   
+							 </tr>
+							  <tr>
+							    <th>Descripci&oacute;n:</th>
+							    <td><a href="#" id="issue-desc">${descripcion}</a>&nbsp;<i class="icon-pencil editableField"></i></td>						   
+							 </tr>
+							 <tr>
+							    <th>Estado:</th>
+							    <td><a class="taglink" href="./search.html?type=status&value=${estado}" id="issue-status" data-type="text"><span class="${estadoCss}">${estado}</span></a></td>						   
+							 </tr>
+							 <tr>
+							    <th>Categor&iacute;as:</th>
+							    <td>
+		      						<a id="issue-tags" href="#" data-type="select2">${tagsByIssue}</a>&nbsp;<i class="icon-pencil editableField"></i>
+							    </td>						   
+							 </tr>
+						</table>	 	
+			 		</div>
+			 	 </div>
+		      </div><!-- row -->
       
-      <ul class="nav nav-tabs issue-tabs">
+      <ul id="issue-tabs" class="nav nav-tabs">
 		<li class="active"><a href="#issueHistory" data-toggle="tab"><i class="icon-time icon-large"></i>&nbsp;&nbsp;HISTORIAL DE CAMBIOS (${cantidadRevisiones})</a></li>
 		<li><a href="#issueFiles" data-toggle="tab"><i class="icon-picture icon-large"></i>&nbsp;&nbsp;IM&Aacute;GENES (<span class="cantidadContenidos">${cantidadContenidos}</span>)</a></li>
 		<li><a href="#issueComments" data-toggle="tab"><i class="icon-comments icon-large"></i>&nbsp;&nbsp;COMENTARIOS (${cantidadComentarios})</a></li>
@@ -1400,7 +1415,6 @@
 			    		<td class="collapse-group" style="border-top:none; width:35%;" >					   
 			    			<c:if test="${not empty revision.observaciones}">	
 								<a class="btn-collapse link" href="#" onclick="javascrip:userActionsController.loadDetailModal('${revision.observaciones}');" data-toggle="modal" >Ver detalle &raquo;</a>
-<%-- 								<p class="collapse" >${revision.observaciones}</p> --%>
 	   						</c:if> 
 	   					</td>				    		
 			    	</tr>					    
@@ -1410,76 +1424,85 @@
 		
 		<!-- 2 Archivos -->							
 		<div class="tab-pane fade" id="issueFiles">				
-			<div class="row-fluid">			        
-		        <ul id="lst-file-thumnails" class="thumbnails" style="margin-top:30px;">
-		        	<c:forEach items="${contenidos}" var="contenido">	
-		        		<li style="margin-right:20px;">					                
-		                	<a class="thumbnail"  style="width:100px; height: 60px; max-height:60px; text-align: center" data-lightbox="issue-lightbox" href="${pageContext.request.contextPath}/uploads/${contenido.nombreConExtension}" >							  	  			  	   		
-			      				<img style="max-width:100px; max-height:60px;" src="${pageContext.request.contextPath}/uploads/${contenido.nombreConExtension}" > 
-			    			</a>
-	                	</li>
-		        	</c:forEach>
-      			</ul>
+			<div class="row-fluid">			
+				<c:if test="${fn:length(contenidos) eq 0}">
+					<h4 style="padding-bottom: 20px; text-align: center">No hay archivos subidos.</h4>
+				</c:if>
+			    <c:if test="${fn:length(contenidos) gt 0}">
+			        <ul id="lst-file-thumnails" class="thumbnails" style="margin-top:30px;">
+			        	<c:forEach items="${contenidos}" var="contenido">	
+			        		<li style="margin-right:20px;">					                
+			                	<a class="thumbnail"  style="width:100px; height: 60px; max-height:60px; text-align: center" data-lightbox="issue-lightbox" href="${pageContext.request.contextPath}/uploads/${contenido.nombreConExtension}" >							  	  			  	   		
+				      				<img style="max-width:100px; max-height:60px;" src="${pageContext.request.contextPath}/uploads/${contenido.nombreConExtension}" > 
+				    			</a>
+		                	</li>
+			        	</c:forEach>
+	      			</ul>
+      			</c:if>
 	        </div>			
 		</div>								
 							
 		<!-- 3 Comentarios -->							
 		<div class="tab-pane fade" id="issueComments">			
-			<div style=" width:660px;margin:20px 0;">			   
-                <textarea class="span9" id="comment-text" name="comment-text"
+		 	
+		 	<div class="row">	
+		 	
+				 <textarea id="comment-text" name="comment-text"
                 	placeholder="Ingrese su comentario" rows="5"></textarea>
-           
-               	<button id="btn-comment" type="submit" style="float:right;margin-top:15px;margin-bottom:15px;" class="btn btn-info">Publicar</button>	
-        
-				<div id="content-comment">
-					<table id="tblComments" class="table table-hover">				        
-					   <c:forEach items="${comentarios}" var="comentario" varStatus="i" begin="0" end="2">	
-							<tr>
-								<td>
-									<div class="media">
+		<button id="btn-comment" class="btn btn-info" type="submit" style="float:right;margin-top:15px;margin-bottom:15px;">Publicar</button>	
+       
+		 	
+		 	</div>
+			
+				
+<!-- 				<div id="content-comment"> -->
+<!-- 					<table id="tblComments" class="table table-hover">				         -->
+<%-- 					   <c:forEach items="${comentarios}" var="comentario" varStatus="i" begin="0" end="2">	 --%>
+<!-- 							<tr> -->
+<!-- 								<td> -->
+<!-- 									<div class="media"> -->
 	
-										  <span class="pull-left">
-										  <img class="media-object thumbnail" src="${pageContext.request.contextPath}/resources/images/nopic64.png">
-										 	<center><strong>${i.index + 1}</strong></center>
-										 </span>
-										  <div style="font-size:12px;margin-bottom:10px">
-										  	<a href="#"><strong>${comentario.usuario}</strong></a> &nbsp; &raquo;  &nbsp; 
-									    	${comentario.fechaFormateada}
-									      </div>
-								 		  <div class="media-body" style="display:block">				    	
+<!-- 										  <span class="pull-left"> -->
+<%-- 										  <img class="media-object thumbnail" src="${pageContext.request.contextPath}/resources/images/nopic64.png"> --%>
+<%-- 										 	<center><strong>${i.index + 1}</strong></center> --%>
+<!-- 										 </span> -->
+<!-- 										  <div style="font-size:12px;margin-bottom:10px"> -->
+<%-- 										  	<a href="#"><strong>${comentario.usuario}</strong></a> &nbsp; &raquo;  &nbsp;  --%>
+<%-- 									    	${comentario.fechaFormateada} --%>
+<!-- 									      </div> -->
+<!-- 								 		  <div class="media-body" style="display:block">				    	 -->
 									    	
-									    	<p style="font-size:13px">${comentario.mensaje}</p>	 
-								  		</div>
-									</div>						
-								</td>
-							</tr>
-						</c:forEach>
-					 </table>						 
-				 </div>
-				 <div id="page-selection"></div>		
-			</div>					
+<%-- 									    	<p style="font-size:13px">${comentario.mensaje}</p>	  --%>
+<!-- 								  		</div> -->
+<!-- 									</div>						 -->
+<!-- 								</td> -->
+<!-- 							</tr> -->
+<%-- 						</c:forEach> --%>
+<!-- 					 </table>						  -->
+
+
+
+			
+
+<!-- 				 </div> -->
+<!-- 				 <div id="page-selection"></div>	 -->
+				 
+				 <!-- infinite scroll -->
+					 <div id="infinite-container-comments"></div>
+				 <nav id="page-nav-comment" style="display: none;">
+  					<a href="loadmoreByIssue/${id}/comment/2.html"></a>
+				 </nav>
+				<center><a href="#" class="btn btn-default btn-more comment">Mostrar m&aacute;s resultados</a></center>
+			
+				
+				 	
+<!-- 			</div>					 -->
 		</div>	
 								
 		</div>
      
 		
 <!-- 		<div class="accordion" id="accordion2"> -->
- 			
-			  <!-- 2 HISTORIAL -->
-<!-- 			  <div class="accordion-group"> -->
-<!-- 			    <div class="accordion-heading"> -->
-<!-- 			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree"> -->
-<%-- 			       <h4><i class="icon-time icon-large"></i>HISTORIAL DE CAMBIOS (${cantidadRevisiones})</h4> --%>
-<!-- 			      </a> -->
-<!-- 			    </div> -->
-<!-- 			    <div id="collapseThree" class="accordion-body collapse"> -->
-<!-- 			      <div class="accordion-inner">			      	 -->
-			      	
-<!-- 			      </div> -->
-<!-- 			    </div> -->
-<!-- 			  </div> -->
-			  
-			  
 			  <!-- 3 REPARACION --> <!-- FUERA DEL ALCANCE -->
 <!-- 			  <div class="accordion-group"> -->
 <!-- 			    <div class="accordion-heading"> -->
@@ -1583,78 +1606,8 @@
 <!-- 			    </div> -->
 <!-- 			  </div>		 -->
 			  <!-- 3 REPARACION --> <!-- FUERA DEL ALCANCE -->	  
-			  
-		
-			  <!-- 4 RECLAMOS SIMILARES -->
-<!-- 			  <div class="accordion-group"> -->
-<!-- 			    <div class="accordion-heading"> -->
-<!-- 			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour"> -->
-<%-- 			        <h4><i class="icon-pushpin icon-large"></i>RECLAMOS SIMILARES (${cantidadReclamosSimilares})</h4> --%>
-<!-- 			      </a> -->
-<!-- 			    </div> -->
-<!-- 			    <div id="collapseFour" class="accordion-body collapse"> -->
-<!-- 			      <div class="accordion-inner"> -->
-<!-- 			       	<div class="row-fluid"> -->
-<!-- 			            <ul class="thumbnails"> -->
-<!-- 			              <li class="span3"> -->
-<!-- 			                <div class="thumbnail"> -->
-<%-- 			                  <img style="width: 200px; height: 150px;" src="${pageContext.request.contextPath}/resources/images/nopicsmall.png" alt=""> --%>
-<!-- 			                  <div class="caption"> -->
-<!-- 			                  	<h5>Thumbnail label</h5>		                    -->
-<!-- 			                  </div> -->
-<!-- 			                </div> -->
-<!-- 			              </li> -->
-<!-- 			              <li class="span3"> -->
-<!-- 			                <div class="thumbnail"> -->
-<%-- 			                  <img style="width: 200px; height: 150px;" src="${pageContext.request.contextPath}/resources/images/nopicsmall.png" alt=""> --%>
-<!-- 			                  <div class="caption"> -->
-<!-- 			                     <h5>Thumbnail label</h5>		                    -->
-<!-- 			                  </div> -->
-<!-- 			                </div> -->
-<!-- 			              </li> -->
-<!-- 			              <li class="span3"> -->
-<!-- 			                <div class="thumbnail"> -->
-<%-- 			                 <img style="width: 200px; height: 150px;" src="${pageContext.request.contextPath}/resources/images/nopicsmall.png" alt=""> --%>
-<!-- 			                  <div class="caption"> -->
-<!-- 			                      <h5>Thumbnail label</h5>		                   -->
-<!-- 			                  </div> -->
-<!-- 			                </div> -->
-<!-- 			              </li> -->
-<!-- 			            </ul> -->
-<!-- 		        	</div>		   	 -->
-<!-- 			      </div> -->
-<!-- 			    </div> -->
-<!-- 			  </div> -->
-			  			  
-			  <!-- 5 IMAGES & VIDEOS -->
-<!-- 			  <div class="accordion-group"> -->
-<!-- 			    <div class="accordion-heading"> -->
-<!-- 			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFive"> -->
-<%-- 			       <h4><i class="icon-picture icon-large"></i>IM&Aacute;GENES (<span class="cantidadContenidos">${cantidadContenidos}</span>)</h4>			         --%>
-<!-- 			      </a> -->
-<!-- 			    </div> -->
-<!-- 			    <div id="collapseFive" class="accordion-body collapse"> -->
-<!-- 			      <div class="accordion-inner"> -->
-			        
-<!-- 			      </div> -->
-<!-- 			    </div> -->
-<!-- 			  </div> -->
-				  
-			  <!-- 6 COMENTARIOS -->
-<!-- 			  <div class="accordion-group"> -->
-<!-- 			    <div class="accordion-heading "> -->
-<!-- 			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseSix"> -->
-<%-- 			       <h4><i class="icon-comments icon-large"></i>COMENTARIOS (${cantidadComentarios})</h4> --%>
-<!-- 			      </a> -->
-<!-- 			    </div> -->
-<!-- 			    <div id="collapseSix" class="accordion-body collapse"> -->
-<!-- 			      <div class="accordion-inner"> -->
-			       
-<!-- 			      </div> -->
-<!-- 			    </div> -->
-<!-- 			  </div> -->
-			  
 <!-- 	    </div> -->
+
 		    </div>
 		    
 		    
@@ -1663,6 +1616,67 @@
 		<!-- COLUMNA 2 -->    
 		<div class="span3">
 		<!--Sidebar content-->
+		
+			<div id="issue-stats" class="stats-container">
+				<div class="stats-box">
+					<span id="voteCount" class="text-big">${cantidadVotos}</span><span class="text-small">votos totales</span>
+<!-- 					<button class="btn btn-danger pull-right"><i class="icon icon-thumbs-up"></i>&iexcl;Vot&aacute;!</button> -->
+					
+					<span id="votes" class="pull-right">
+						<button id="vote-up" class="btn btn-success" title="Voto positivo"><i class="icon-thumbs-up "></i></button>
+						<button id="vote-down" class="btn btn-danger" title="Voto negativo"><i class="icon-thumbs-down "></i></button>
+					</span>
+					
+				</div>
+		
+				<div class="stats-box"><span class="text-big">${cantidadVisitas}</span> <span class="text-small">visitas</span></div>
+				<div class="stats-box"><span class="text-big">${cantidadComentarios}</span> <span class="text-small">comentarios</span></div>
+				<div id="watchers" class="stats-box">
+					<span class="text-big"><a href="#mdl-followers" id="followers-list" data-toggle="modal"></a></span> 
+					<span class="text-small">seguidores</span>
+					<c:if test="${isUserWatching}">
+						<button id="btn-unwatch-issue" class="btn btn-info pull-right">@ Siguiendo</button>
+					</c:if>
+					<c:if test="${!isUserWatching}">
+						<button id="btn-watch-issue" class="btn pull-right">@ Segu&iacute; el reclamo</button>
+					</c:if>
+				</div>
+			</div>
+			
+			<div class="stats-container">
+				&Uacute;ltima actualización: <span class="pull-right"><b>${fechaUltimaActualizacion}</b></span>
+			</div>
+			
+			<div id="userIssueActions" >
+				<sec:authorize access="hasRole('ROLE_USER')">
+					<div class="stats-container">
+						<button id="btn-edit" class="btn" title="Editar"><i class="icon-pencil icon-large"></i></button>	
+						<button id="btn-update" class="btn btn-primary" title="Guardar cambios"><i class="icon-save icon-large"></i></button>	
+						<c:if test="${estado eq 'ABIERTO' || estado eq 'REABIERTO'}">
+							<div id="btn-status" data-toggle="modal" class="pull-right">			
+								<button class="btn btn-success" title="Resolver"><i class="icon-ok icon-large"></i> RESOLVER</button>
+							</div>
+						</c:if>
+						<c:if test="${estado eq 'RESUELTO' || estado eq 'CERRADO'}">
+							<div id="btn-status" data-toggle="modal" class="pull-right">			
+								<button class="btn btn-warning" title="Reabrir"><i class="icon-rotate-right icon-large"></i> REABRIR</button>
+							</div>
+						</c:if>						
+						<script type="text/javascript">
+							userActionsController.enableUserActions();
+						</script>	
+					</div>	
+				</sec:authorize>	
+			</div>
+<!--       			<a id="bookmarkme" href="#" rel="sidebar" title="Agregar a Favoritos"><i class="icon-star"></i></a> -->
+<!--       			<a href="#" onclick="javascript:window.print();" title="Imprimir"><i class="icon-print"></i></a> -->
+
+
+      			
+
+
+
+	
 		
 		   <div class="page-header">
     	   		<h4><i class="icon-globe icon-large"></i>&nbsp;&nbsp;Vista en el mapa</h4>    	 	
@@ -1689,24 +1703,33 @@
 	</div><!-- CONTAINER FLUID -->
 	
 	
+	
+	
+	
 	<div id="mdl-detail" class="modal hide fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
 	  	<div class="modal-header">
-		    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>		    	
-		   
+		    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>	
 			    <h4>Detalle</h4>
-		    	
 	  	</div>
-	  
-		<div class="modal-body">
-		
-		
-		</div>
-			<div class="modal-footer"> 				 		  		
-		  		<button class="btn" data-dismiss="modal" aria-hidden="true">
-			    		<i class="icon-remove icon-large"></i>&nbsp;&nbsp;&nbsp;Cerrar
-			    </button>	 
-		  	</div>
-	  
+		<div class="modal-body"></div>
+		<div class="modal-footer"> 				 		  		
+	  		<button class="btn" data-dismiss="modal" aria-hidden="true">
+		    		<i class="icon-remove icon-large"></i>&nbsp;&nbsp;&nbsp;Cerrar
+		    </button>	 
+	  	</div>
+	</div>
+	
+	<div id="mdl-followers" class="modal hide fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+	  	<div class="modal-header">
+		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>	
+			<h4>Usuarios que siguen este reclamo</h4>
+	  	</div>
+		<div class="modal-body"></div>
+		<div class="modal-footer"> 				 		  		
+	  		<button class="btn" data-dismiss="modal" aria-hidden="true">
+		    		<i class="icon-remove icon-large"></i>&nbsp;&nbsp;&nbsp;Cerrar
+		    </button>	 
+	  	</div>
 	</div>
 	
 	<div id="mdl-status" class="modal hide fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">

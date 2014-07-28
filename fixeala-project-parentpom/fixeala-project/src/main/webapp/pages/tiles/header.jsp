@@ -11,7 +11,7 @@
             <span class="icon-bar"></span>
           </a> 
           
-          <a class="brand" href="${pageContext.request.contextPath}">fixeala&nbsp;<img src="resources/images/fixeala_logo.png" width=32 height=32 /></a>
+          <a class="brand" href="${pageContext.request.contextPath}">fixeala&nbsp;<img src="${pageContext.request.contextPath}/resources/images/fixeala_logo.png" width=32 height=32 /></a>
           <div class="nav-collapse collapse">
           
           	<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>

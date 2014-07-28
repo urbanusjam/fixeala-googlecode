@@ -106,6 +106,7 @@ public class HomeController {
 		return "reclamos";			
 	}	
 	
+
 	@RequestMapping(value="/loadmore/{type}/{page}", produces={"application/json; charset=UTF-8"}, method = RequestMethod.GET)  
 	public @ResponseBody String loadMorePages(@PathVariable String type, @PathVariable int page) throws JSONException{  
 			
@@ -114,14 +115,15 @@ public class HomeController {
 		if(type.equals("issue"))
 			pagesArray = paginateToArray(issueService.loadAllIssues(), page, type);
 					
-		else
-			pagesArray = paginateToArray(userService.loadAllActiveUsers(), page, type);		
-	
+		else if (type.equals("user"))
+			pagesArray = paginateToArray(userService.loadAllActiveUsers(), page, type);	
+		
+				
 		return pagesArray != null ? pagesArray.toString() :  null;
 	}  
 	
 	@SuppressWarnings("unchecked")
-	private JSONArray paginateToArray(List<?> elements, int currentPage, String type) throws JSONException{
+	public <T> JSONArray paginateToArray(List<T> elements, int currentPage, String type) throws JSONException{
 		
 		int itemsPerPage = ITEMS_PER_PAGE;
 		int totalItems = elements.size();
@@ -192,7 +194,8 @@ public class HomeController {
 					obj.put("url", URISchemeUtils.CONN_RELATIVE_URL_USERS + "/" + user.getUsername());
 					jsonArray.put(obj);
 				}				
-			}						
+			}	
+			
 			return jsonArray;		   
 		}
 	}

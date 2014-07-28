@@ -184,13 +184,13 @@ function provinciaListOnChange() {
 				              		<!-- MENU ANONYMOUS -->
 				              		<c:if test="${ !loggedMatchesProfile }">				              	 	
 						              	<li class="nav-header active">
-					              			<a  href="#profile" data-toggle="tab">
+					              			<a  href="#profileTab" data-toggle="tab">
 					              				<i class="icon-caret-right"></i>PERFIL
 					              			</a>
 					              		</li>
 					              		<li class="nav-header"><i class="icon-caret-right"></i>CONTENIDO</li>						               
-						                <li><a href="#issues" data-toggle="tab"><i class="icon-pushpin"></i>Reclamos</a></li>
-						                <li><a href="#comments" data-toggle="tab"><i class="icon-comments-alt"></i>Comentarios</a></li>		
+						                <li><a href="#issuesTab" data-toggle="tab"><i class="icon-pushpin"></i>Reclamos</a></li>
+						                <li><a href="#commentsTab" data-toggle="tab"><i class="icon-comments-alt"></i>Comentarios</a></li>		
 				              	</c:if>
 				              	</sec:authorize>			              		
 			              </ul>
@@ -239,21 +239,21 @@ function provinciaListOnChange() {
              						<h2>${total_followings}</h2>
              						<strong>OBSERVANDO</strong>
    							</div>   							
-   							<div class="span2 thumbnail" style="text-align:center" title="Comentarios realizados">
-             						<i class="icon-warning-sign icon-4x"></i>
-             						<h2>${total_flagged}</h2>
-             						<strong>DENUNCIADOS</strong>
-   							</div>   							
+<!--    							<div class="span2 thumbnail" style="text-align:center" title="Comentarios realizados"> -->
+<!--              						<i class="icon-warning-sign icon-4x"></i> -->
+<%--              						<h2>${total_flagged}</h2> --%>
+<!--              						<strong>DENUNCIADOS</strong> -->
+<!--    							</div>   							 -->
    							<div class="span2 thumbnail" style="text-align:center" title="Comentarios realizados">
              						<i class="icon-comments icon-4x"></i>
              						<h2>${total_comments}</h2>
              						<strong>COMENTARIOS</strong>
    							</div> 
-   							<div class="span2 thumbnail" style="text-align:center">
-             						<i class="icon-cogs icon-4x"></i>
-             						<h2>${total_widgets}</h2>
-             						<strong>WIDGETS</strong>
-   							</div>   						
+<!--    							<div class="span2 thumbnail" style="text-align:center"> -->
+<!--              						<i class="icon-cogs icon-4x"></i> -->
+<%--              						<h2>${total_widgets}</h2> --%>
+<!--              						<strong>WIDGETS</strong> -->
+<!--    							</div>   						 -->
    						</div>				    	
 			    	</div>
 					<!-- fin TAB PROFILE -->
@@ -267,8 +267,8 @@ function provinciaListOnChange() {
 					    	
 					    	<ul class="nav nav-tabs">
 								<li class="active"><a href="#issuesPublished" data-toggle="tab">Publicados (${total_issues})</a></li>
-								<li><a href="#issuesFollowing" data-toggle="tab">Siguiendo (0)</a></li>
-								<li><a href="#issuesVoted" data-toggle="tab">Votados (0)</a></li>
+<!-- 								<li><a href="#issuesFollowing" data-toggle="tab">Siguiendo (0)</a></li> -->
+<!-- 								<li><a href="#issuesVoted" data-toggle="tab">Votados (0)</a></li> -->
 							</ul>							
 														
 							<div class="tab-content">							
@@ -353,7 +353,7 @@ function provinciaListOnChange() {
 					    	
 					    	<ul class="nav nav-tabs">
 						    	<li class="active"><a href="#commentsPublicados" data-toggle="tab">Publicados (${total_comments})</a></li>
-							  	<li><a href="#commentsRecibidos" data-toggle="tab">Recibidos (0)</a></li>
+<!-- 							  	<li><a href="#commentsRecibidos" data-toggle="tab">Recibidos (0)</a></li> -->
 							</ul>
 							
 							<div class="tab-content">
@@ -506,20 +506,17 @@ function provinciaListOnChange() {
 					                		<form class="form-horizontal" id="updateAccountForm">					              
 											    <label for="email">Email</label>
 											    <input type="text" id="email" name="email" class="input-large" value="${email}">
-
-
-
-												   <label for="province">Provincia</label>
-											       <select name="provinciaList" id="provinciaList" onchange="return provinciaListOnChange()">
-      													<option value="none">Ninguna</option>
-      													<option value="Gran Buenos Aires">Gran Buenos Aires</option><option value="Capital Federal">Capital Federal</option><option value="Catamarca">Catamarca</option><option value="Chaco">Chaco</option><option value="Chubut">Chubut</option><option value="Cordoba">Cordoba</option><option value="Corrientes">Corrientes</option><option value="Entre Rios">Entre Rios</option><option value="Formosa">Formosa</option><option value="Jujuy">Jujuy</option><option value="La Pampa">La Pampa</option><option value="La Rioja">La Rioja</option><option value="Mendoza">Mendoza</option><option value="Misiones">Misiones</option><option value="Neuquen">Neuquen</option><option value="Rio Negro">Rio Negro</option><option value="Salta">Salta</option><option value="San Juan">San Juan</option><option value="San Luis">San Luis</option><option value="Santa Cruz">Santa Cruz</option><option value="Santa Fe">Santa Fe</option><option value="Santiago Del Estero">Santiago Del Estero</option><option value="Tierra del Fuego">Tierra del Fuego</option><option value="Tucuman">Tucuman</option>    </select>
-											 				
-												
+				   								
+				   								<label for="province">Provincia</label>
+											    <select name="provinciaList" id="provinciaList" onchange="return provinciaListOnChange()">
+      												<option value="none">Ninguna</option>
+      												<option value="Gran Buenos Aires">Gran Buenos Aires</option><option value="Capital Federal">Capital Federal</option><option value="Catamarca">Catamarca</option><option value="Chaco">Chaco</option><option value="Chubut">Chubut</option><option value="Cordoba">Cordoba</option><option value="Corrientes">Corrientes</option><option value="Entre Rios">Entre Rios</option><option value="Formosa">Formosa</option><option value="Jujuy">Jujuy</option><option value="La Pampa">La Pampa</option><option value="La Rioja">La Rioja</option><option value="Mendoza">Mendoza</option><option value="Misiones">Misiones</option><option value="Neuquen">Neuquen</option><option value="Rio Negro">Rio Negro</option><option value="Salta">Salta</option><option value="San Juan">San Juan</option><option value="San Luis">San Luis</option><option value="Santa Cruz">Santa Cruz</option><option value="Santa Fe">Santa Fe</option><option value="Santiago Del Estero">Santiago Del Estero</option><option value="Tierra del Fuego">Tierra del Fuego</option><option value="Tucuman">Tucuman</option>    
+      											</select>
 										
 											 	<label for="city">Ciudad / Localidad</label>						
 											    <select name="localidadList" id="localidadList"></select>
 											
-											    <hr>
+											    <hr> 
 											    <button id="btnUpdateAccount" class="btn btn-success"><i class="icon-ok"></i>&nbsp;&nbsp; Actualizar datos</button>								 
 										  	</form>
 										</div>

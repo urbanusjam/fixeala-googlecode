@@ -113,8 +113,8 @@ public class Issue implements Serializable  {
 	@OrderBy("fecha DESC")
 	private Set<Comment> comentarios;
 	
-//	@OneToMany(mappedBy="issue", fetch = FetchType.LAZY, cascade = CascadeType.ALL) 
-//	private Set<IssueVote> votes;
+	@OneToMany(mappedBy="issue", fetch = FetchType.LAZY, cascade = CascadeType.ALL) 
+	private Set<IssueVote> votes;
 	
 	@OneToMany(mappedBy="issue", fetch = FetchType.LAZY) 
 	private Set<IssueFollow> followers;
@@ -128,7 +128,7 @@ public class Issue implements Serializable  {
 		revisiones = new HashSet<IssueUpdateHistory>();
 		contenidos = new HashSet<MediaContent>();
 		comentarios = new HashSet<Comment>();
-//		votes = new HashSet<IssueVote>();
+		votes = new HashSet<IssueVote>();
 		followers = new HashSet<IssueFollow>();
 	}	
 		
@@ -298,7 +298,6 @@ public class Issue implements Serializable  {
 		return contenidos;
 	}
 
-
 	public void setContenidos(Set<MediaContent> contenidos) {
 		this.contenidos = contenidos;
 	}
@@ -307,20 +306,25 @@ public class Issue implements Serializable  {
 		return comentarios;
 	}
 
-
 	public void setComentarios(Set<Comment> comentarios) {
 		this.comentarios = comentarios;
 	}
 	
+	public Set<IssueVote> getVotes() {
+		return votes;
+	}
+
+	public void setVotes(Set<IssueVote> votes) {
+		this.votes = votes;
+	}
+
 	public Set<IssueFollow> getFollowers() {
 		return followers;
 	}
 
-
 	public void setFollowers(Set<IssueFollow> followers) {
 		this.followers = followers;
 	}
-
 
 	public void addTag(Tag tag) {	
 		if (!getTagsList().contains(tag)) {
@@ -339,6 +343,16 @@ public class Issue implements Serializable  {
 	        tag.getIssueList().remove(this);
 	    }			
 	}	
+	
+	public void addVote(IssueVote vote) {		
+		if (vote != null) {
+	        if (votes == null) {
+	        	votes = new HashSet<IssueVote>();          
+	        }
+	        votes.add(vote);
+	        vote.setIssue(this);
+	     }			
+	}
 	
 	public void addRevision(IssueUpdateHistory update) {		
 		if (update != null) {
