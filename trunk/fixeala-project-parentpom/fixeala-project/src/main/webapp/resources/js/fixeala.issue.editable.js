@@ -157,6 +157,25 @@ var userActionsController = {
 				
 			},
 			
+			setCurrentVote : function (isVoted, isVoteUp){
+			
+			    var $voteUp = $('#vote-up');
+			    var $voteDown = $('#vote-down');
+			 
+			    if(isVoted == 'true'){
+		    		
+			    	if(isVoteUp == 'true'){
+			    		$voteDown.removeClass('btn-danger').addClass('btn-default');
+			    	}
+			    	else{	
+			    		$voteDown.removeClass('btn-success').addClass('btn-default');
+			    	}
+			    	
+			    	$voteUp.prop('disabled', true);
+		    		$voteDown.prop('disabled', true);
+			    }
+		    },
+			
 			initStatusModal : function(){
 			
 				statusLabel = $(this).find('button').attr('title').trim();

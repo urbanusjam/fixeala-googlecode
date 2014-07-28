@@ -11,34 +11,29 @@
 			
 			var currentPage = 1,
 	        currentXHR;	
-			var $container = $('#infinite-container');
-			var $containerUsers = $('#infinite-container-users');
+			
 			
 			var titleLimit = 40;
 			var descLimit = 150;
 			var dummyText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum mattis fringilla nisl sed elementum. Maecenas congue aliquet lacinia. Sed diam ante, consectetur at imperdiet tristique, tincidunt vitae magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed vitae vestibulum orci, ut cursus libero. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam in lorem at sapien accumsan consequat ut eu purus. "
 			
+			
+			var $container = $('#infinite-container');
+			var $containerUsers = $('#infinite-container-users');
+			
 			/** Load first page of issues **/
 			
 			var issueJson = '${jsonIssues}';
-			var issuesArray = JSON.parse(issueJson);	
-			
 			var usersJson = '${jsonUsers}';
+			var issuesArray = JSON.parse(issueJson);	
 			var usersArray = JSON.parse(usersJson);	
 			
 			/* LOAD FIRST PAGE */
 			loadFirstPage(issuesArray, usersArray);
 			
-			function cropText(value, limit){
-				var cropped = '';
-				if(value.length > limit)
-					cropped = value.substr(0, limit) + '...';
-                else 
-                	cropped = value;	
-				
-				return cropped;
-			}
+			/*** INFINITE-SCROLL ***/
 			
+		
 			function renderToHtml(element, type){
 				
 				var html = '';
@@ -69,7 +64,7 @@
 					
 					imgNum = 9;
 				
-					var html = 	'<div class="brick-user">'
+					var html = 	'<div class="brick brick-user">'
 						+   		'<a class="username" href="' +element.url+ '">' +element.username+ '</a>'	
 						+ 			'<a class="thumbnail" href="resources/images/samples/image' +imgNum+ '.jpg">'
 						+    			'<img class="media-object" src="resources/images/samples/image' +imgNum+ '.jpg">'
@@ -81,7 +76,7 @@
 						+ 			'<p class="stats">'
 						+ 					'<span class="counter label label-info"><i class="icon icon-map-marker icon-small"></i><span class="numIssues">' +element.reportedIssues+ '</span></span>'
 						+ 					'<span class="counter label label-success"><i class="icon icon-ok icon-small"></i><span class="numFixes">' +element.fixedIssues+ '</span></span>'
-						+ 					'<span class="counter label label-default"><i class="icon icon-comments-alt icon-small"></i><span class="numComments">' +element.postedComments+ '</span></span>'
+						+ 					'<span class="counter label label-warning"><i class="icon icon-comments-alt icon-small"></i><span class="numComments">' +element.postedComments+ '</span></span>'
 						+ 			'</p>'					
 						+   	'</div>';
 				}
@@ -112,10 +107,11 @@
 			     }
 			}
 			
-           
-			/** INFINITE-SCROLL ISSUES **/
-          
-            //http://isotope.metafizzy.co/sorting.html
+		          
+			//bootstrap tabs + multiple isotope instances = overlapping [FIXED] 
+				// http://stackoverflow.com/questions/19214362/making-a-jquery-isotope-layout-initialize-inside-a-bootstrap-tab
+				// https://github.com/metafizzy/isotope/issues/458
+			
   			$container.imagesLoaded( function(){                
                 $container.isotope({
                     itemSelector : '.brick',   
@@ -129,34 +125,13 @@
                 });
             });
 			
-	
-  			$containerUsers.imagesLoaded( function(){     
-                 $containerUsers.isotope({
-                     itemSelector : '.brick-user',   
-                     sortBy: 'original-order',
-                     sortAscending : false,
-                     getSortData : {
-                     	issues    : '.numIssues parseInt',
-                         comments       : '.numComments parseInt',
-                         fixes   : '.numFixes parseInt'
-                     }                
-                 });
-  			});
-  			
-  			// sort items on button click
-  			$('#sorts  > .btn').on( 'click',  function() {
-  				var sortByValue = $(this).attr('data-sort-by');
-  			  	$container.isotope({ sortBy: sortByValue });
-  			 	$(this).addClass("active").siblings().removeClass("active");
-  			});
-
-			$container.infinitescroll({
+  			$container.infinitescroll({
 				navSelector  	: "#page-nav",
   				nextSelector 	: "#page-nav a",
 				itemSelector 	: ".brick",  
 				pixelsFromNavToBottom : "20",
 				debug: true,
-  				dataType: 'json',
+				dataType: 'json',
   				appendCallback: false,
   				loading: {
   		            finishedMsg: "<h4>No se encontraron m&aacute;s resultados.</h4>",
@@ -169,35 +144,38 @@
  			 			 html += renderToHtml(value, 'issue');
  			        });
 					 	
- 			 		var $html = $( html );
+ 			 		var $newElems = $( html );
 
-	 			    $html.imagesLoaded(function(){
-	 					$html.animate({ opacity: 1 });
-	 					$container.append( $html ).isotope( 'appended', $html );
+	 			    $newElems.imagesLoaded(function(){
+	 					$newElems.animate({ opacity: 1 });
+	 					$container.append( $newElems ).isotope( 'appended', $newElems );
 		 			});
+	 			    
              });
 			
 			 $container.infinitescroll('pause');
-			
+				
 			 
-			 /** INFINITE-SCROLL USERS **/
+			 $containerUsers.imagesLoaded( function(){   
+	                $containerUsers.isotope({
+	                    itemSelector : '.brick',
+	                    sortBy: 'original-order',
+	                    sortAscending : false,
+	                    getSortData : {
+	                    	issues    : '.numIssues parseInt',
+	                        comments       : '.numComments parseInt',
+	                        fixes   : '.numFixes parseInt'
+	                    }
+	                });
+	 			});
 			 
-			
-  			
-  			// sort items on button click
-  			$('#sorts-users  > .btn').on( 'click',  function() {
-  				var sortByValue = $(this).attr('data-sort-by');
-  			  	$containerUsers.isotope({ sortBy: sortByValue });
-  			 	$(this).addClass("active").siblings().removeClass("active");
-  			});
-
-			$containerUsers.infinitescroll({
+  			 $containerUsers.infinitescroll({
 				navSelector  	: "#page-nav-user",
   				nextSelector 	: "#page-nav-user a",
-				itemSelector 	: ".brick-user",  
+				itemSelector 	: ".brick",  
 				pixelsFromNavToBottom : "20",
 				debug: true,
-  				dataType: 'json',
+				dataType: 'json',
   				appendCallback: false,
   				loading: {
   		            finishedMsg: "<h4>No se encontraron m&aacute;s resultados.</h4>",
@@ -210,50 +188,72 @@
  			 			 html += renderToHtml(value, 'user');
  			        });
 					 	
- 			 		var $html = $( html );
-
-	 			    $html.imagesLoaded(function(){
-	 					$html.animate({ opacity: 1 });
-	 					$containerUsers.append( $html ).isotope( 'appended', $html );
+ 			 		var $newElems = $( html );
+ 			 		
+	 			    $newElems.imagesLoaded(function(){
+	 					$newElems.animate({ opacity: 1 });
+	 					$containerUsers.append( $newElems ).isotope( 'appended', $newElems );
 		 			});
              });
 						
 			$containerUsers.infinitescroll('pause');
- 
-	   
-			// sort items on button click
-  			/**$('.nav-tabs li').on('click', function (e) {
-  				 var clickedTab = $(this).find('a').attr('href');
 			
-  				 if(clickedTab == "#topUsers"){
-  					 console.log("sss");
-  					$container.infinitescroll('pause');
-  					$containerUsers.infinitescroll('resume');
-  				 }
-  						
-//   				 $('.nav-tabs .active').text() //active tab
+			
+			$('.nav-tabs li').on('shown.bs.tab', function (e) {
+				var clickedTab = $(this).find('a').attr('href');
+			 	if(clickedTab == "#topUsers"){
+				  	$containerUsers.isotope('layout');
+			 	}
+
 			});
-			**/
-			
 			
 			
 			$(' .btn-more ').click(function(e){
   			     // call this whenever you want to retrieve the next page of content
   			     // likely this would go in a click handler of some sort
   			     e.preventDefault();
-  			    
+  			
   			    if( $(this).hasClass( 'issue' ) ){
   					$container.infinitescroll('retrieve');
-  				  $('#page-nav').hide(); 
+  				    $('#page-nav').hide(); 
   			   	}  				
   			    else{
   			    	$containerUsers.infinitescroll('retrieve');
-  			      $('#page-nav-users').hide(); 
+  			        $('#page-nav-users').hide(); 
   			    }
   			  
   			    return false;
   			  });
 			
+			
+			
+			function cropText(value, limit){
+				var cropped = '';
+				if(value.length > limit)
+					cropped = value.substr(0, limit) + '...';
+                else 
+                	cropped = value;	
+				
+				return cropped;
+			}
+			
+			
+           
+			 // sort items on button click
+  			$('#sorts  > .btn').on( 'click',  function() {
+  				var sortByValue = $(this).attr('data-sort-by');
+  			  	$container.isotope({ sortBy: sortByValue });
+  			 	$(this).addClass("active").siblings().removeClass("active");
+  			});
+  			
+  			// sort items on button click
+  			$('#sorts-users  > .btn').on( 'click',  function() {
+  				var sortByValue = $(this).attr('data-sort-by');
+  			  	$containerUsers.isotope({ sortBy: sortByValue });
+  			 	$(this).addClass("active").siblings().removeClass("active");
+  			});
+
+		
 			
 			/*
 			$(window).scroll(function(){				
@@ -845,9 +845,10 @@
 	<div class="row" style="height:auto; margin:30px 0 30px 0; padding: 0">
 
 		<ul class="nav nav-tabs">
-			<li class="active"><a href="#latestIssues" data-toggle="tab">&Uacute;ltimos publicados</a></li>
-			<li><a href="#hottestIssues" data-toggle="tab">M&aacute;s votados</a></li>
-			<li><a href="#topUsers" data-toggle="tab">Ranking usuarios</a></li>
+			<li class="active"><a href="#latestIssues" data-toggle="tab"><i class="icon icon-tags icon-small"></i>&Uacute;ltimos publicados</a></li>
+			<li><a href="#hottestIssues" data-toggle="tab"><i class="icon icon-thumbs-up icon-small"></i>M&aacute;s votados</a></li>
+			<li><a href="#topUsers" data-toggle="tab"><i class="icon icon-user icon-small"></i>Ranking usuarios</a></li>
+			<li><a href="#graphs" data-toggle="tab"><i class="icon icon-signal icon-small"></i>Gráficos</a></li>
 		</ul>							
 														
 		<div class="tab-content">	
@@ -892,13 +893,18 @@
 <!-- 				<button data-sort-by="votes" class="btn btn-default"><i class="icon icon-thumbs-up-alt"></i>Votos recibidos</button> -->
 				</div>		
 				
-				<div id="infinite-container-users"></div>				
+				<div id="infinite-container-users"></div>
+					
 				<nav id="page-nav-user" style="display: none;">
   					<a href="loadmore/user/2"></a>
 				</nav>	
 				
 				<center><a href="#" class="btn btn-default btn-more user">Mostrar m&aacute;s resultados</a></center>
 				
+			</div>
+			
+			<div class="tab-pane fade" id="graphs">		
+			Graficos
 			</div>
 			
 		</div>
