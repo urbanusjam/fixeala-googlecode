@@ -20,12 +20,14 @@ var componentForm = {
 var isFormOpen;
 var isAnimating;
 
+var markerArray;      
+
 /**************************************************************************************************/
 
-$(document).ready(function(){		
-	 var geocoder;			 
-	 google.maps.event.addDomListener(window, 'load', initMap);  	 
- });
+//$(document).ready(function(){		
+//	 var geocoder;			 
+//	 google.maps.event.addDomListener(window, 'load', initMap);  	 
+// });
 
 
 
@@ -600,7 +602,7 @@ function getUserURL(userID){
 	var context = "fixeala";
 	var subcontext = "users/" + userID;	
 	var url = protocol + "//" + host + "/" + context + "/" + subcontext + ".html";	
-	var urlLink = '<a id="issue-user" style="cursor:pointer" class="link" href="'+ url +'">' + userID + '</a>';	
+	var urlLink = '<a id="issue-user" style="cursor:pointer" class="user-link" href="'+ url +'">' + userID + '</a>';	
 	return urlLink;
 }
 
@@ -624,8 +626,9 @@ function loadMarkers(map){
 	        url: "./loadMapMarkers.html",
 	        dataType: "json",  	        
 	        success: function(data){     
-	        
-	        	var markerArray = data;	        
+	        	
+	        	markerArray = data;	  
+	        	
 	        	var tempMarker;
 	        	var infowindow;
 	        	var textLimit = 500;	 
@@ -703,14 +706,14 @@ function getClosestMarkersByIssue(location){
 	
 	var markers, closestMarkers = [] ; 
 	var maxDistance = 3.00; //km
-	
-	$.ajax({
-		  type: "GET",
-		  url: "./loadMapMarkers.html",
-		  dataType: "json",  	        
-		  success: function(data){
-			  
-			   markers = data;
+
+	 $.ajax({
+	        type: "GET",
+	        url: "../loadMapMarkers",
+	        dataType: "json",  	        
+	        success: function(data){  
+	        	
+			    markers = data;
 			  
 			    var centerPosition = new google.maps.LatLng(location.latitude, location.longitude);
 				
@@ -736,7 +739,7 @@ function getClosestMarkersByIssue(location){
 			    	$table.append('No se encontraron resultados.');
 			    }
 			    else{
-			    	
+			    
 			    	if(closestMarkers.length > 5){
 			    		closestMarkers.splice(4, 4); //obtengo los 5 markers más cercanos al punto   
 			    	}			    	

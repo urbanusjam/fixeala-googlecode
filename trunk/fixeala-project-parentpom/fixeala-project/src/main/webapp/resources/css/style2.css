@@ -42,8 +42,6 @@ a.link {
 	color: #000 !important;
 }
 
-
-
 a.link:hover {
 	background: none !important;
 	text-decoration: underline;
@@ -58,7 +56,16 @@ a.tagLinkCloud:hover span { background-color: #333; }
 
 a.statusLinkCloud:hover span { background-color: #39B3D7; }
 
+a.user-link {
+	color: #5095BE !important;
+	font-weight: bold;
+}
 
+a.user-link:hover {
+	
+	text-decoration: underline;
+	
+}
 
 h4 {
 	font-weight: normal;
@@ -488,7 +495,6 @@ legend {
     height: 100%;
 	margin: 0 auto;
 	margin-top: 80px;
-	margin-bottom: 30px;
 	padding: 0;
 	clear: both;
 /* 	border: 1px solid #000; */
@@ -508,6 +514,7 @@ footer {
 	text-align: center;
 	background-color: #323A45;
 	clear: both;	
+	
 }
 
 
@@ -1265,15 +1272,15 @@ a.no-hover { text-decoration: none; color: #000;}
 
 /**** Infinite Scroll ****/
 
-#infinite-container, #infinite-container-users {
+#infinite-container, #infinite-container-users, #infinite-container-comments{
 	background: #FFF;	
   	padding: 0 0 10px 0;
-  	margin: 15px 0 20px 0;
-  	clear: both;   
-  	height: 500px;
+  	margin: 15px 0 20px 0;  
   	overflow: hidden; 
-  	border: 0px solid #000;
+  	border: 1px solid #000;   
 }
+
+#infinite-container-comments{ width: 660px; }
 
 #infscr-loading {
   position: fixed;
@@ -1291,22 +1298,26 @@ a.no-hover { text-decoration: none; color: #000;}
   -webkit-border-radius: 10px;
      -moz-border-radius: 10px;
           border-radius: 10px;
+       
 }
 
 .brick { width: 250px; }
 .brick-user { width: 180px; }
+.brick-comment { width: 500px; }
 
-.brick, .brick-user { 	 	
+.brick, .brick-user, .brick-comment  { 	 	
   	position: relative;
 	margin: 0 15px 10px 0;
 	padding: 10px;
   	background: #F5F5F5;
   	border: 1px solid  #DDD;
-  	float: left;
   	text-align: left; 
   	-webkit-border-radius: 5px;
      	-moz-border-radius: 5px;
           	border-radius: 5px;
+  
+    border: 1px solid red; 	
+ 
 }
 
 .brick .status  { display: block; text-align: center; margin-bottom: 10px; padding: 5px 0 5px 0; }
@@ -1396,3 +1407,36 @@ a.no-hover { text-decoration: none; color: #000;}
 .clearfix:before, .clearfix:after { content: ""; display: table; }
 .clearfix:after { clear: both; }
 .clearfix { zoom: 1; }
+
+
+ul.nav.nav-tabs li { margin-right: 15px; }
+ul.nav.nav-tabs li:not(.active) a { color: #999; }
+ul.nav.nav-tabs li a { border: none; }
+ul.nav.nav-tabs li.active a {
+	border-bottom: 3px solid #5095BE;
+	color: #000;
+	font-weight: bold;
+}
+ul.nav.nav-tabs li.active:hover a { border: none; border-bottom: 3px solid #5095BE;  }
+ul.nav.nav-tabs li:not(.active):hover a {
+	border-bottom: 3px solid #5095BE;
+	background-color: #FFF;
+	color: #333;
+	cursor: pointer;
+}
+
+.stats-container { margin-bottom: 10px; }
+.stats-container { width: 100%; padding: 10px; border: 1px dashed #DDD; border-radius: 5px} 
+#issue-stats .stats-box { padding: 5px 0; height: 25px;  }
+
+#issue-stats .stats-box span.text-big { font-size: 24px; font-weight: bold; margin-right: 5px; }
+#issue-stats  button { text-transform: uppercase; font-size: 11px; height: 25px;  line-height: 10px;}
+#issue-stats .stats-btn { border: 1px solid red;}
+
+#userIssueActions button { text-transform: uppercase; font-size: 11px; height: 25px;  line-height: 10px;}
+
+#btn-watch-issue, #btn-unwatch-issue, .loader  { width: 150px; }
+
+#votes a { font-size: 30px; }
+
+#profileTab .thumbnail { margin-bottom: 15px; }

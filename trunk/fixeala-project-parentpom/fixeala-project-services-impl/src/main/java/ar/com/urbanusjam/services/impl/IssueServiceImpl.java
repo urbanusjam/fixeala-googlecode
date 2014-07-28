@@ -629,6 +629,10 @@ public class IssueServiceImpl implements IssueService {
 			issue.addRevision(convertTo(historial));
 		}
 		
+		for(IssueVoteDTO vote : issueDTO.getVotes()){
+			issue.addVote(convertTo(vote));
+		}
+		
 		//licitacion
 		/*if(issueDTO.getLicitacion() != null)
 			issue.setLicitacion(convertTo(issueDTO.getLicitacion()));
@@ -798,6 +802,17 @@ public class IssueServiceImpl implements IssueService {
 		return following;
 	}
 	
+	public IssueVote convertTo(IssueVoteDTO voteDTO){
+		IssueVote vote = new IssueVote();		
+		IssueVotePK voteId = new IssueVotePK();		
+		voteId.setIssueID(Long.valueOf(voteDTO.getIdIssue()));	
+		voteId.setVoterID(userService.getUserId(voteDTO.getUsername()));
+		vote.setId(voteId);
+		vote.setVote(voteDTO.getVote());
+		vote.setDate(voteDTO.getDate() != null ? this.getCurrentCalendar(voteDTO.getDate()) : null);
+		return vote;
+	}
+	
 	
 	private GregorianCalendar getCurrentCalendar(Date date){		
 		Calendar calendar = new GregorianCalendar();
@@ -912,15 +927,27 @@ public class IssueServiceImpl implements IssueService {
 	}
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
 	public void voteIssue(IssueVoteDTO voteDTO) {
-		IssueVote vote = new IssueVote();		
-		IssueVotePK voteId = new IssueVotePK();		
-		voteId.setIssueID(Long.valueOf(voteDTO.getIdIssue()));	
-		voteId.setVoterID(userService.getUserId(voteDTO.getUsername()));
-		vote.setId(voteId);
-		vote.setVote(voteDTO.getVote());
-		vote.setDate(voteDTO.getDate() != null ? this.getCurrentCalendar(voteDTO.getDate()) : null);				
-		issueVoteDAO.saveIssueVote(vote);
+			
+		
+		IssueDTO issue = this.getIssueById(voteDTO.getIdIssue());
+		
+		/*
+		IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
+		revision.setFecha(new Date());
+		revision.setUsername(voteDTO.getUsername());	
+		revision.setOperacion(Operation.UPDATE);			
+		revision.setMotivo("vot— por el reclamo." );			
+		revision.setEstado(issue.getStatus());
+		revision.setObservaciones("");
+		
+		issue.getHistorial().add(revision); */ 			//--  votos anonimos ?
+		issue.getVotes().add(voteDTO);
+		
+//		issueVoteDAO.saveIssueVote(vote);
+		
+		issueDAO.updateIssue(convertTo(issue));
 	}
 
 	@Override
@@ -947,7 +974,7 @@ public class IssueServiceImpl implements IssueService {
 	public Long countIssueVotes(String issueID) {
 		return issueVoteDAO.getTotalVotesCount(Long.valueOf(issueID));
 	}
-
+	
 
 	@Override
 	public List<IssueDTO> findIssuesByCriteria(IssueCriteriaSearch search) {

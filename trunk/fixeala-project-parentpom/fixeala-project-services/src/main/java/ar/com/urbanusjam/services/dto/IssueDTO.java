@@ -44,6 +44,7 @@ public class IssueDTO implements Serializable {
 	private List<MediaContentDTO> contenidos = new ArrayList<MediaContentDTO>();
 	private List<CommentDTO> comentarios = new ArrayList<CommentDTO>();	
 	private List<IssueFollowDTO> followers = new ArrayList<IssueFollowDTO>();
+	private List<IssueVoteDTO> votes = new ArrayList<IssueVoteDTO>();
 	private String status;
 	private String statusCss;	
 	private String fechaFormateada;
@@ -179,6 +180,14 @@ public class IssueDTO implements Serializable {
 		this.historial = historial;
 	}
 		
+	public List<IssueVoteDTO> getVotes() {
+		return votes;
+	}
+
+	public void setVotes(List<IssueVoteDTO> votes) {
+		this.votes = votes;
+	}
+
 	public List<MediaContentDTO> getContenidos() {
 		return contenidos;
 	}

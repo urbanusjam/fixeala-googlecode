@@ -9,7 +9,8 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title><tiles:insertAttribute name="title" ignore="true" /></title>	
 
-  	<script type="text/javascript" src="http://maps.google.com/maps/api/js?libraries=geometry,places&components=country:ar&language=ES&sensor=false"></script> 
+  	<script type="text/javascript" src="http://maps.google.com/maps/api/js?libraries=geometry,places&components=country:ar&language=ES&sensor=false"></script>
+	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.jsonp-2.4.0.min.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery-ui-1.10.3.custom.js"></script>
@@ -24,8 +25,7 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/json.min.js"></script>	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/d3.min.js"></script>	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/topojson.v1.min.js"></script>	 
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/map.js"></script>
-  	
+  
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala.issue.editable.js"></script>
   		
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap.js"></script>
@@ -69,6 +69,7 @@
   	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/markerclusterer.js"></script>	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/markermanager.js"></script>	
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/map.js"></script>
   	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/select2.js"></script>	
   	
@@ -631,17 +632,11 @@ path:hover {
 								            			var pathArray = window.location.pathname.split( '/' );	
 								            											            			
 														if(pathArray.indexOf("issues") != -1){
-															
 															var target = $('#userIssueActions');
 															var url = location.href + " #userIssueActions > *";
-															
-															 target.load(url, function(){
-																 
-																 userActionsController.enableUserActions();							
-															 });
-																								
-														   
-															
+															target.load(url, function(){
+																userActionsController.enableUserActions();							
+															});			
 														}
 															
 														

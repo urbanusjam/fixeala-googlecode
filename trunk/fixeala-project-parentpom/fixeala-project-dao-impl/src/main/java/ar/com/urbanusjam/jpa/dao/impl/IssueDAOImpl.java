@@ -98,10 +98,14 @@ public class IssueDAOImpl implements IssueDAO {
 
 	@Override
 	public Issue findIssueById(String issueID) {
-		Issue issue = entityManager.createQuery("SELECT i FROM Issue i WHERE i.id = :issueID ", Issue.class)
-			     .setParameter("issueID", Long.valueOf(issueID))
-			     .getSingleResult();
-		return issue;
+		try{
+			Issue issue = entityManager.createQuery("SELECT i FROM Issue i WHERE i.id = :issueID ", Issue.class)
+				     .setParameter("issueID", Long.valueOf(issueID))
+				     .getSingleResult();
+			return issue;
+		}catch(NoResultException e){
+			return null;
+		}	
 	}
 
 	@Override
