@@ -634,9 +634,22 @@ path:hover {
 														if(pathArray.indexOf("issues") != -1){
 															var target = $('#userIssueActions');
 															var url = location.href + " #userIssueActions > *";
+															var urlVote = location.href + " #issue-stats > *";
 															target.load(url, function(){
 																userActionsController.enableUserActions();							
-															});			
+															});	
+															
+														    var isVoted = '${isCurrentlyVoted}';
+														    var isVoteUp = '${isVoteUp}';
+														    
+															$("#issue-stats").load(urlVote, function(){
+																userActionsController.setCurrentVote(isVoted, isVoteUp);					
+															});	
+															
+														
+														
+															//TODO
+																//load botones VOTE y WATCH
 														}
 															
 														

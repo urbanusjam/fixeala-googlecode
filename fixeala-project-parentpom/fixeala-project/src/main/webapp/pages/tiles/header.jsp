@@ -20,9 +20,9 @@
 <%-- 				<li><a href="${pageContext.request.contextPath}/reclamos.html" title="Reclamos"><i class=" icon-pushpin icon-2x"></i></a></li> --%>
 <%-- 				<li><a href="${pageContext.request.contextPath}/usuarios.html" title="Usuarios"><i class="icon-group icon-2x"></i></a></li>				 --%>
 				<li><a href="dataset.html" title="Datasets"><i class="icon-tasks icon-2x"></i></a></li>		
-				<li><a href="widget.html" title="Widget"><i class="icon-cogs icon-2x"></i></a></li>	
-				<li><a href="#" title="Aplicaci&oacute;n M&oacute;vil"><i class="icon-mobile-phone icon-2x"></i></a></li>			
-				<li><a href="#" title="Gr&aacute;ficos"><i class="icon-signal icon-2x"></i></a></li>		
+				<li><a href="widget.html" title="Gadget para tu sitio web"><i class="icon-cogs icon-2x"></i></a></li>	
+				<li><a href="#" title="Aplicaci&oacute;n M&oacute;vil"><i class="icon-android icon-2x"></i></a></li>			
+<!-- 				<li><a href="#" title="Gr&aacute;ficos"><i class="icon-signal icon-2x"></i></a></li>		 -->
 				<li><a href="#" title="Ayuda"><i class="icon-question icon-2x"></i></a></li>			
         	</ul>
         	<!-- /MAIN NAV -->

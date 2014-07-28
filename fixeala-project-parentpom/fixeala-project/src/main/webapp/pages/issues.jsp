@@ -1064,26 +1064,13 @@
 			    var isVoted = '${isCurrentlyVoted}';
 			    var isVoteUp = '${isVoteUp}';
 			    
-			    var $voteUp = $('#vote-up');
-			    var $voteDown = $('#vote-down');
+			    userActionsController.setCurrentVote(isVoted, isVoteUp);
 			    
-			    if(isVoted == 'true'){
-			    	$voteUp.prop('disabled', true);
-		    		$voteDown.prop('disabled', true);
-		    		
-			    	if(isVoteUp == 'true'){
-			    		$voteDown.removeClass('btn-danger').addClass('btn-default');
-			    	}
-			    	else{	
-			    		$voteDown.removeClass('btn-success').addClass('btn-default');
-			    	}
-			    }
 			 
-			    $('#votes button').click(function(e) {
+			    $('#votes button').live('click', function(e) {
 			    	
 			    	var thumb = $(this).attr('id');
 			    	
-			    		
 				    	var voteValue;
 				    	var voteUp = false;
 				    	
@@ -1107,9 +1094,6 @@
 						        success: function(data){						        	
 						        	if(data.result){
 						        		
-						        		$voteUp.prop('disabled', true);
-							    		$voteDown.prop('disabled', true);
-						        		
 						        		if(voteUp){	
 									    	$voteDown.removeClass('btn-danger').addClass('btn-default');
 						        		}
@@ -1118,7 +1102,8 @@
 						        			$voteDown.removeClass('btn-success').addClass('btn-default');
 						        		}
 						        			
-						        		
+						        		$voteUp.prop('disabled', true);
+							    		$voteDown.prop('disabled', true);
 						        		$('#voteCount').html(data.message); 
 						        				
 						        	}
@@ -1393,7 +1378,7 @@
 		      </div><!-- row -->
       
       <ul id="issue-tabs" class="nav nav-tabs">
-		<li class="active"><a href="#issueHistory" data-toggle="tab"><i class="icon-time icon-large"></i>&nbsp;&nbsp;HISTORIAL DE CAMBIOS (${cantidadRevisiones})</a></li>
+		<li class="active"><a href="#issueHistory" data-toggle="tab"><i class="icon-time icon-large"></i>&nbsp;&nbsp;ACTUALIZACIONES (${cantidadRevisiones})</a></li>
 		<li><a href="#issueFiles" data-toggle="tab"><i class="icon-picture icon-large"></i>&nbsp;&nbsp;IM&Aacute;GENES (<span class="cantidadContenidos">${cantidadContenidos}</span>)</a></li>
 		<li><a href="#issueComments" data-toggle="tab"><i class="icon-comments icon-large"></i>&nbsp;&nbsp;COMENTARIOS (${cantidadComentarios})</a></li>
 	  </ul>	
@@ -1620,26 +1605,26 @@
 			<div id="issue-stats" class="stats-container">
 				<div class="stats-box">
 					<span id="voteCount" class="text-big">${cantidadVotos}</span><span class="text-small">votos totales</span>
-<!-- 					<button class="btn btn-danger pull-right"><i class="icon icon-thumbs-up"></i>&iexcl;Vot&aacute;!</button> -->
-					
 					<span id="votes" class="pull-right">
-						<button id="vote-up" class="btn btn-success" title="Voto positivo"><i class="icon-thumbs-up "></i></button>
-						<button id="vote-down" class="btn btn-danger" title="Voto negativo"><i class="icon-thumbs-down "></i></button>
+						<sec:authorize access="hasRole('ROLE_USER')">
+							<button id="vote-up" class="btn btn-success" title="Voto positivo"><i class="icon-thumbs-up "></i></button>
+							<button id="vote-down" class="btn btn-danger" title="Voto negativo"><i class="icon-thumbs-down "></i></button>
+						</sec:authorize>
 					</span>
-					
-				</div>
-		
+				</div> 
 				<div class="stats-box"><span class="text-big">${cantidadVisitas}</span> <span class="text-small">visitas</span></div>
 				<div class="stats-box"><span class="text-big">${cantidadComentarios}</span> <span class="text-small">comentarios</span></div>
 				<div id="watchers" class="stats-box">
 					<span class="text-big"><a href="#mdl-followers" id="followers-list" data-toggle="modal"></a></span> 
 					<span class="text-small">seguidores</span>
-					<c:if test="${isUserWatching}">
-						<button id="btn-unwatch-issue" class="btn btn-info pull-right">@ Siguiendo</button>
-					</c:if>
-					<c:if test="${!isUserWatching}">
-						<button id="btn-watch-issue" class="btn pull-right">@ Segu&iacute; el reclamo</button>
-					</c:if>
+					<sec:authorize access="hasRole('ROLE_USER')">
+						<c:if test="${isUserWatching}">
+							<button id="btn-unwatch-issue" class="btn btn-info pull-right">@ Siguiendo</button>
+						</c:if>
+						<c:if test="${!isUserWatching}">
+							<button id="btn-watch-issue" class="btn pull-right">@ Segu&iacute; el reclamo</button>
+						</c:if>
+					</sec:authorize>
 				</div>
 			</div>
 			
