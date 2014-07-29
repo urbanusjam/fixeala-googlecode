@@ -45,6 +45,9 @@ public class IssueDTO implements Serializable {
 	private List<CommentDTO> comentarios = new ArrayList<CommentDTO>();	
 	private List<IssueFollowDTO> followers = new ArrayList<IssueFollowDTO>();
 	private List<IssueVoteDTO> votes = new ArrayList<IssueVoteDTO>();
+	private Long totalVotes;
+	private Long totalFollowers;
+	private Long totalViews;
 	private String status;
 	private String statusCss;	
 	private String fechaFormateada;
@@ -186,6 +189,30 @@ public class IssueDTO implements Serializable {
 
 	public void setVotes(List<IssueVoteDTO> votes) {
 		this.votes = votes;
+	}
+	
+	public Long getTotalFollowers() {
+		return totalFollowers;
+	}
+
+	public void setTotalFollowers(Long totalFollowers) {
+		this.totalFollowers = totalFollowers;
+	}
+
+	public Long getTotalVotes() {
+		return totalVotes;
+	}
+
+	public void setTotalVotes(Long totalVotes) {
+		this.totalVotes = totalVotes;
+	}
+	
+	public Long getTotalViews() {
+		return totalViews;
+	}
+
+	public void setTotalViews(Long totalViews) {
+		this.totalViews = totalViews;
 	}
 
 	public List<MediaContentDTO> getContenidos() {

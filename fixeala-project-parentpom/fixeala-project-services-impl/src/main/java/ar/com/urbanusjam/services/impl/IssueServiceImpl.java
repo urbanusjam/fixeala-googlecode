@@ -12,6 +12,8 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Set;
 
+import javax.mail.MessagingException;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -426,7 +428,7 @@ public class IssueServiceImpl implements IssueService {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor={MessagingException.class})
 	public void postComment(CommentDTO commentDTO) throws Exception {
 		
 		Issue issue = issueDAO.findIssueById(commentDTO.getNroReclamo());
@@ -462,8 +464,11 @@ public class IssueServiceImpl implements IssueService {
 		
 		issueDAO.updateIssue(issue);
 		
-		if(!issue.getReporter().getUsername().equals(commentDTO.getUsuario()))
-			mailService.sendIssueUpdateEmail(email);
+		if(!issue.getReporter().getUsername().equals(commentDTO.getUsuario())){
+			mailService.sendIssueUpdateEmail(email);		
+		}
+			
+		
 	}
 
 	@Override
@@ -629,10 +634,11 @@ public class IssueServiceImpl implements IssueService {
 			issue.addRevision(convertTo(historial));
 		}
 		
+		//votes
 		for(IssueVoteDTO vote : issueDTO.getVotes()){
 			issue.addVote(convertTo(vote));
 		}
-		
+				
 		//licitacion
 		/*if(issueDTO.getLicitacion() != null)
 			issue.setLicitacion(convertTo(issueDTO.getLicitacion()));
@@ -711,7 +717,9 @@ public class IssueServiceImpl implements IssueService {
 		issueDTO.setStatusCss(cssStyle[0]);
 		issueDTO.setUsername(userDTO.getUsername());
 		issueDTO.setFechaFormateada(issue.getCreationDate().getTime());
-		issueDTO.setFechaFormateadaCompleta(issue.getCreationDate().getTime());
+		issueDTO.setFechaFormateadaCompleta(issue.getCreationDate().getTime());		
+		issueDTO.setTotalVotes(this.countIssueVotes(String.valueOf(issue.getId())));
+		issueDTO.setTotalFollowers(Long.valueOf(issue.getFollowers().size()));
 		
 		//tags		
 		Set<Tag> tagList = issue.getTagsList();
@@ -938,7 +946,7 @@ public class IssueServiceImpl implements IssueService {
 		revision.setFecha(new Date());
 		revision.setUsername(voteDTO.getUsername());	
 		revision.setOperacion(Operation.UPDATE);			
-		revision.setMotivo("vot— por el reclamo." );			
+		revision.setMotivo("votï¿½ por el reclamo." );			
 		revision.setEstado(issue.getStatus());
 		revision.setObservaciones("");
 		
