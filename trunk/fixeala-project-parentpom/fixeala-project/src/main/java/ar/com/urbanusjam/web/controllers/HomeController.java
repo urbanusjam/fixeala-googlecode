@@ -168,6 +168,9 @@ public class HomeController {
 					obj.put("province", issue.getProvince());	
 					obj.put("date", issue.getFechaFormateadaCompleta());
 					obj.put("status", issue.getStatus());
+					obj.put("totalVotes", issue.getTotalVotes());	
+					obj.put("totalFollowers", issue.getTotalFollowers());	
+					obj.put("totalViews", "0");	
 					obj.put("css", issue.getStatusCss());		
 					obj.put("url", URISchemeUtils.CONN_RELATIVE_URL_ISSUES + "/" + issue.getId());
 					jsonArray.put(obj);

@@ -68,19 +68,15 @@
 				
 			
 			$("#btn-update-status").click(function(event){
-				
-
 				var statusForm =  $("#modalStatusForm");
 				statusForm.validate();
 				
 				if(!statusForm.valid()){
 					return false;
-				}
-				
+				}				
 				else{
 					userActionsController.editIssueStatus(event);
 				}
-				
 				
 			});
 				
@@ -1064,15 +1060,18 @@
 			    var isVoted = '${isCurrentlyVoted}';
 			    var isVoteUp = '${isVoteUp}';
 			    
+			  
+			    
 			    userActionsController.setCurrentVote(isVoted, isVoteUp);
 			    
 			 
 			    $('#votes button').live('click', function(e) {
 			    	
 			    	var thumb = $(this).attr('id');
-			    	
-				    	var voteValue;
-				    	var voteUp = false;
+			    	var $voteUp = $('#vote-up');
+					var $voteDown = $('#vote-down');				  
+				    var voteUp = false;
+				    var voteValue;
 				    	
 				    	if(thumb == 'vote-up'){
 				    		voteValue = 1;
@@ -1104,7 +1103,7 @@
 						        			
 						        		$voteUp.prop('disabled', true);
 							    		$voteDown.prop('disabled', true);
-						        		$('#voteCount').html(data.message); 
+						        		$('#voteCount').text(data.message); 
 						        				
 						        	}
 						        	
@@ -1132,11 +1131,6 @@
 //  				});
  				
  				
- 				
- 	  			
- 	  			
- 	  		
- 				
 
 		});
 		
@@ -1150,131 +1144,103 @@
 			//*** INFINITE SCROLL ***//
 			
 			/** Load first page of issues **/
-
 		
-		var commentsJson = '${jsonComments}';
-		var commentsArray = JSON.parse(commentsJson);	
+			var commentsJson = '${jsonComments}';
+			var commentsArray = JSON.parse(commentsJson);
+			
+			var $containerComments = $('#infinite-container-comments');
+			
+			/* LOAD FIRST PAGE */
+			loadFirstPage(commentsArray);
 	
-		var $containerComments = $('#infinite-container-comments');
-		
-		$containerComments.imagesLoaded( function(){                
-            $containerComments.masonry({
-                itemSelector : '.brick-comment'
-            });
-        });
-		
-		/* LOAD FIRST PAGE */
-		loadFirstPage(commentsArray);
-
-			
-			function renderToHtml(element, type){
-		
-				var html = 	'<div class="brick-comment"><div class="media">'
-					+		'<span class="pull-left">'
-					+	  		'<img class="media-object thumbnail" src="${pageContext.request.contextPath}/resources/images/nopic64.png">'
-					+	 		'<center><strong>1</strong></center>'
-					+	 	'</span>'
-					+	    '<div style="font-size:12px;margin-bottom:10px">'
-					+	  		'<a href="#"><strong>' +element.username+ '</strong></a> &nbsp; &raquo;  &nbsp;' +element.date+ '</div>'
-	 				+	  '<div class="media-body" style="display:block">'		
-					+     		'<p style="font-size:13px">' +element.message+ '</p>'	 
-	  				+	  '</div>'
-					+	'</div></div>';
-
-// 				var html = '<div class="brick"><p>Prueba de infinite scroll</p></div>';
-					
-			}
-			
-			
-			
-			
-			function loadFirstPage(commentsArray){
-				 if(commentsArray.length > 0){
 				
-	            	var html =  [];	
-	            	$.each( commentsArray, function( i, element ) {
-
-// 	            		var item = renderToHtml(value, 'comment');
-
- 					var item = 	'<div class="brick-comment"><div class="media">'
-					+		'<span class="pull-left">'
-					+	  		'<img class="media-object thumbnail" src="${pageContext.request.contextPath}/resources/images/nopic64.png">'
-					+	 		'<center><strong>' +i+'</strong></center>'
-					+	 	'</span>'
-					+	    '<div style="font-size:12px;margin-bottom:10px">'
-					+	  		'<a href="#"><strong>' +element.username+ '</strong></a> &nbsp; &raquo;  &nbsp;' +element.date+ '</div>'
-	 				+	  '<div class="media-body" style="display:block">'		
-					+     		'<p style="font-size:13px">' +element.message+ '</p>'	 
-	  				+	  '</div>'
-					+	'</div></div>	';
+				function renderToHtml(element, type){
+			
+					var html = 	'<div class="brick-comment"><div class="media">'
+						+		'<span class="pull-left">'
+						+	  		'<img class="media-object thumbnail" src="${pageContext.request.contextPath}/resources/images/nopic64.png">'
+						+	 		'<center><strong>1</strong></center>'
+						+	 	'</span>'
+						+	    '<div style="font-size:12px;margin-bottom:10px">'
+						+	  		'<a href="#"><strong>' +element.username+ '</strong></a> &nbsp; &raquo;  &nbsp;' +element.date+ '</div>'
+		 				+	  '<div class="media-body" style="display:block">'		
+						+     		'<p style="font-size:13px">' +element.message+ '</p>'	 
+		  				+	  '</div>'
+						+	'</div></div>';
+	
+					return html;
+						
+				}
+			
+				function loadFirstPage(commentsArray){
+					var html =  [];	
+	            	$.each( commentsArray, function( i, value ) {	            
+	            		var item = renderToHtml(value, "comment");
 		        		html.push(item);
 		        	});
 	            	$containerComments.append(html);
-			     }
-			}
+				}
+				
+				$containerComments.imagesLoaded( function(){                
+		            $containerComments.masonry({
+		                itemSelector : '.brick-comment'
+		            });
+		        });
 			
-  			$containerComments.infinitescroll({
-				navSelector  	: "#page-nav-comment",
-  				nextSelector 	: "#page-nav-comment a",
-				itemSelector 	: ".brick-comment",  
-				pixelsFromNavToBottom : "20",
-				debug: true,
-  				dataType: 'json',
-  				appendCallback: false,
-  				loading: {
-  		            finishedMsg: "<h4>No se encontraron m&aacute;s resultados.</h4>",
-  		            msgText: "<h4>Cargando comentarios...</h4>",
-  		            speed: 'slow'
-  		        }  		      
-			 }, function (newElements) {
-			 		var html = '';
-			 		
-			 	
- 			 		$.each( newElements, function( i, element ) {
-//  			 			 html += renderToHtml(value, 'comment');
-							var index = i+1;
- 			 			 html = 	'<div class="brick-comment"><div class="media">'
- 							+		'<span class="pull-left">'
- 							+	  		'<img class="media-object thumbnail" src="${pageContext.request.contextPath}/resources/images/nopic64.png">'
- 							+	 		'<center><strong>' + index +'</strong></center>'
- 							+	 	'</span>'
- 							+	    '<div style="font-size:12px;margin-bottom:10px">'
- 							+	  		'<a href="#"><strong>' +element.username+ '</strong></a> &nbsp; &raquo;  &nbsp;' +element.date+ '</div>'
- 			 				+	  '<div class="media-body" style="display:block">'		
- 							+     		'<p style="font-size:13px">' +element.message+ '</p>'	 
- 			  				+	  '</div>'
- 							+	'</div></div>	';
- 			        });
-					 	
- 			 		var $html = $( html );
-
-	 			    $html.imagesLoaded(function(){
-	 					$html.animate({ opacity: 1 });
-	 					$containerComments.append( $html ).masonry( 'appended', $html );
-		 			});
-           
-		
-			});
-  			
-  			$containerComments.infinitescroll('pause');
+	  			$containerComments.infinitescroll({
+					navSelector  	: "#page-nav-comment",
+	  				nextSelector 	: "#page-nav-comment a",
+					itemSelector 	: ".brick-comment",  
+					pixelsFromNavToBottom : "20",
+					debug: true,
+	  				dataType: 'json',
+	  				appendCallback: false,
+	  				loading: {
+	  		            finishedMsg: "<h4>No se encontraron m&aacute;s resultados.</h4>",
+	  		            msgText: "<h4>Cargando comentarios...</h4>",
+	  		            speed: 'slow'
+	  		        }  		      
+				 }, function (newElements) {
+				 		var html = '';
+	 			 		$.each( newElements, function( i, element ) {
+	 			 			 html += renderToHtml(value, 'comment');
+	 			        });
+						 	
+	 			 		var $newElems = $( html );
+	
+		 			    $newElems.imagesLoaded(function(){
+		 					$newElems.animate({ opacity: 1 });
+		 					$containerComments.append( $newElems ).masonry( 'appended', $newElems );
+			 			});
+				});
+	  			
+	  			$containerComments.infinitescroll('pause');
+	  			
+	  			
+	  			$('.nav-tabs li').on('shown.bs.tab', function (e) {
+					var clickedTab = $(this).find('a').attr('href');
+				 	if(clickedTab == "#issueComments"){
+					  	$containerComments.masonry('layout');
+				 	}				
+				});
   			
   			
-  			$(' .btn-more ').click(function(e){
- 			     // call this whenever you want to retrieve the next page of content
- 			     // likely this would go in a click handler of some sort
- 			     e.preventDefault();
- 			    
- 			    if( $(this).hasClass( 'comment' ) ){
- 					$containerComments.infinitescroll('retrieve');
- 				  $('#page-nav-comments').hide(); 
- 			   	}  				
- 			    else{
- 			    	$containerUpdates.infinitescroll('retrieve');
- 			      $('#page-nav-updates').hide(); 
- 			    }
- 			  
- 			    return false;
- 			  });
+	  			$(' .btn-more ').click(function(e){
+	 			     // call this whenever you want to retrieve the next page of content
+	 			     // likely this would go in a click handler of some sort
+	 			     e.preventDefault();
+	 			    
+	 			    if( $(this).hasClass( 'comment' ) ){
+	 					$containerComments.infinitescroll('retrieve');
+	 				  $('#page-nav-comments').hide(); 
+	 			   	}  				
+	 			    else{
+	 			    	$containerUpdates.infinitescroll('retrieve');
+	 			      $('#page-nav-updates').hide(); 
+	 			    }
+	 			  
+	 			    return false;
+	 			  });
 			
 		});
 				
@@ -1431,14 +1397,27 @@
 		<div class="tab-pane fade" id="issueComments">			
 		 	
 		 	<div class="row">	
-		 	
 				 <textarea id="comment-text" name="comment-text"
                 	placeholder="Ingrese su comentario" rows="5"></textarea>
-		<button id="btn-comment" class="btn btn-info" type="submit" style="float:right;margin-top:15px;margin-bottom:15px;">Publicar</button>	
-       
+				<button id="btn-comment" class="btn btn-info" type="submit" style="float:right;margin-top:15px;margin-bottom:15px;">Publicar</button>	
 		 	
 		 	</div>
 			
+			 <!-- infinite scroll -->
+			 <div id="infinite-container-comments"></div>
+			 
+			 <nav id="page-nav-comment" style="display: none;">
+ 			 	<a href="loadmoreByIssue/${id}/comment/2.html"></a>
+			 </nav>
+			 
+			 <c:if test="${ fn:length(commentsArray) qt 0 }">
+			 	<center><a href="#" class="btn btn-default btn-more comment">Mostrar m&aacute;s resultados</a></center>
+			 </c:if>
+<%-- 			 <c:if test="${ fn:length(commentsArray) == 0 }">			 	 --%>
+<!-- 			 	<div style="width: 660px; padding: 15px 0 15px 0;"><h4>A&uacute;n no se han recibido comentarios.</h4></div>			  -->
+<%-- 			 </c:if> --%>
+			
+				
 				
 <!-- 				<div id="content-comment"> -->
 <!-- 					<table id="tblComments" class="table table-hover">				         -->
@@ -1472,15 +1451,6 @@
 <!-- 				 </div> -->
 <!-- 				 <div id="page-selection"></div>	 -->
 				 
-				 <!-- infinite scroll -->
-					 <div id="infinite-container-comments"></div>
-				 <nav id="page-nav-comment" style="display: none;">
-  					<a href="loadmoreByIssue/${id}/comment/2.html"></a>
-				 </nav>
-				<center><a href="#" class="btn btn-default btn-more comment">Mostrar m&aacute;s resultados</a></center>
-			
-				
-				 	
 <!-- 			</div>					 -->
 		</div>	
 								

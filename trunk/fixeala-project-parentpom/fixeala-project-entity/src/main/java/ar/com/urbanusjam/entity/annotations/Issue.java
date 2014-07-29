@@ -22,6 +22,8 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 
 
@@ -86,7 +88,8 @@ public class Issue implements Serializable  {
 	@JoinColumn(name = "id_area")
 	private Area assignedArea;
 		
-    @OneToMany(mappedBy="issue", fetch = FetchType.EAGER)  
+    @OneToMany(mappedBy="issue", fetch = FetchType.LAZY)  
+    @Fetch(FetchMode.SELECT)
     @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.ALL})	
     @OrderBy("fecha DESC")
 	private Set<IssueUpdateHistory> revisiones;
@@ -98,7 +101,8 @@ public class Issue implements Serializable  {
 //	@ManyToMany(fetch = FetchType.EAGER, mappedBy="issueList") //inverse side
 //	private Set<Tag> tagsList;	
 	
-	@ManyToMany(fetch = FetchType.EAGER) //owner side
+	@ManyToMany(fetch = FetchType.LAZY) //owner side
+	@Fetch(FetchMode.SELECT)
     @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.ALL})	
 	@JoinTable(name = "issue_tag", 
 	         joinColumns = @JoinColumn(name = "id_issue"),
@@ -106,10 +110,12 @@ public class Issue implements Serializable  {
 	)
 	private Set<Tag> tagsList;	
 	
-	@OneToMany(mappedBy="issue", fetch = FetchType.EAGER, cascade = CascadeType.ALL)  
+	@OneToMany(mappedBy="issue", fetch = FetchType.LAZY, cascade = CascadeType.ALL)  
+	@Fetch(FetchMode.SELECT)
 	private Set<MediaContent> contenidos;
 	
-	@OneToMany(mappedBy="issue", fetch = FetchType.EAGER, cascade = CascadeType.ALL)  
+	@OneToMany(mappedBy="issue", fetch = FetchType.LAZY, cascade = CascadeType.ALL)  
+	@Fetch(FetchMode.SELECT)
 	@OrderBy("fecha DESC")
 	private Set<Comment> comentarios;
 	

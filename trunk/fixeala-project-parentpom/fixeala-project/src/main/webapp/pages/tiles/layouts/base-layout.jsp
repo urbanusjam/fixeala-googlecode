@@ -69,7 +69,8 @@
   	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/markerclusterer.js"></script>	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/markermanager.js"></script>	
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/map.js"></script>
+<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/map.js"></script> --%>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala.map.js"></script>
   	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/select2.js"></script>	
   	

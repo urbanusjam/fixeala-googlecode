@@ -1,8 +1,35 @@
 	<script type="text/javascript">   
 	
-	
+	google.maps.visualRefresh = true; 
 
+	var map;
+	var markerArray;
+	var initMarker;
+	var init_coord = new google.maps.LatLng(-34.599722, -58.381944);
+
+	var mapOptions = {
+			center: init_coord,
+			zoom: 12,
+			mapTypeId: google.maps.MapTypeId.ROADMAP,
+			mapTypeControl: true,
+			scrollwheel: false
+	};
+	var placeSearch, autocomplete;
+	var componentForm = {
+//			  street_number: 'short_name',
+//			  route: 'long_name',
+			  neighborhood: 'long_name',
+			  locality: 'long_name',
+			  administrative_area_level_1: 'long_name'
+			};
+	var isFormOpen;
+	var isAnimating = false; 
+	var mapTimesClicked = 0;
+	var autocompleteCalls = 0;
+	
 		$(document).ready(function(){
+			
+			mapController.initMap();
 			
 			/*** INIT GOOGLE MAPS ***/
 			var geocoder;			 
@@ -19,21 +46,27 @@
 			
 			
 			var $container = $('#infinite-container');
+			var $containerVotes = $('#infinite-container-votes');
 			var $containerUsers = $('#infinite-container-users');
 			
-			/** Load first page of issues **/
+			/*** Load first page of infinite scroll ***/
 			
 			var issueJson = '${jsonIssues}';
 			var usersJson = '${jsonUsers}';
 			var issuesArray = JSON.parse(issueJson);	
 			var usersArray = JSON.parse(usersJson);	
+			var votesArray = JSON.parse(issueJson);							
 			
-			/* LOAD FIRST PAGE */
-			loadFirstPage(issuesArray, usersArray);
+			//This will sort your array
+			function SortByVotes(a, b){
+			  var aVote = a.totalVotes;
+			  var bVote = b.totalVotes; 
+			  return bVote - aVote;
+			}
+
+			votesArray.sort(SortByVotes);
+			loadFirstPage(issuesArray, votesArray, usersArray);
 			
-			/*** INFINITE-SCROLL ***/
-			
-		
 			function renderToHtml(element, type){
 				
 				var html = '';
@@ -57,6 +90,11 @@
 						+			'<p class="address"><span class="city">' +element.city+ '</span>, <span class="province">' +element.province+ '</span></p>'
 						+           '<p class="desc">' +cropText(dummyText, descLimit)+ '</p>'
 						+ 			'<span class="status '+element.css+'">' +element.status+ '</span>'
+						+ 			'<div class="inline-container">'
+						+ 					'<div class="left"><i class="icon icon-thumbs-up icon-small"></i>' +element.totalVotes+ '</div>'
+						+					'<div class="right"><i class="icon icon-eye-open icon-small"></i>' +element.totalViews+ '</div>'
+						+ 					'<div class="center"><i class="icon icon-user icon-small"></i>' +element.totalFollowers+ '</div>'
+						+ 			'</div>'		
 						+   '</div>';
 				}
 				
@@ -69,15 +107,15 @@
 						+ 			'<a class="thumbnail" href="resources/images/samples/image' +imgNum+ '.jpg">'
 						+    			'<img class="media-object" src="resources/images/samples/image' +imgNum+ '.jpg">'
 						+  			'</a>'	
-						+			'<p class="address">De <span class="city">' +element.city+ '</span>, <span class="province">' +element.province+ '</span></p>'
+						+			'<p class="address"><span class="city">' +element.city+ '</span>, <span class="province">' +element.province+ '</span></p>'
 						+			'<p class="bottom">'
 						+ 					'Registrado el <span >' +element.registration+ '</span>'
 						+ 			'</p>'
-						+ 			'<p class="stats">'
-						+ 					'<span class="counter label label-info"><i class="icon icon-map-marker icon-small"></i><span class="numIssues">' +element.reportedIssues+ '</span></span>'
-						+ 					'<span class="counter label label-success"><i class="icon icon-ok icon-small"></i><span class="numFixes">' +element.fixedIssues+ '</span></span>'
-						+ 					'<span class="counter label label-warning"><i class="icon icon-comments-alt icon-small"></i><span class="numComments">' +element.postedComments+ '</span></span>'
-						+ 			'</p>'					
+						+ 			'<div class="inline-container">'
+						+ 					'<div class="left"><i class="icon icon-map-marker icon-small"></i><span class="numIssues">' +element.reportedIssues+ '</div>'
+						+ 					'<div class="right"><i class="icon icon-comments-alt icon-small"></i><span class="numComments">' +element.postedComments+ '</div>'
+						+ 					'<div class="center"><i class="icon icon-ok icon-small"></i><span class="numFixes">' +element.fixedIssues+ '</div>'
+						+ 			'</div>'						
 						+   	'</div>';
 				}
 				
@@ -85,7 +123,7 @@
 				
 			}
 			
-			function loadFirstPage(issuesArray, usersArray){
+			function loadFirstPage(issuesArray, votesArray, usersArray){
 				 if(issuesArray.length > 0){
 	            	var html =  [];	
 	            	$.each( issuesArray, function( i, value ) {
@@ -94,6 +132,16 @@
 		        		html.push(item);
 		        	});
 	            	$container.append(html);
+		         }
+				 
+				 if(votesArray.length > 0){
+	            	var html =  [];	
+	            	$.each( votesArray, function( i, value ) {
+	            		var imgNum = Math.floor(Math.random() * 10);  //entre 0 y 9
+	            		var item = renderToHtml(value, "issue");
+		        		html.push(item);
+		        	});
+	            	$containerVotes.append(html);
 		         }
 				 
 				 if(usersArray.length > 0){
@@ -107,10 +155,8 @@
 			     }
 			}
 			
-		          
-			//bootstrap tabs + multiple isotope instances = overlapping [FIXED] 
-				// http://stackoverflow.com/questions/19214362/making-a-jquery-isotope-layout-initialize-inside-a-bootstrap-tab
-				// https://github.com/metafizzy/isotope/issues/458
+			/*** INFINITE-SCROLL with ISOTOPE ***/
+			
 			
   			$container.imagesLoaded( function(){                
                 $container.isotope({
@@ -154,7 +200,42 @@
              });
 			
 			 $container.infinitescroll('pause');
+			 
+			 $containerVotes.imagesLoaded( function(){                
+	                $containerVotes.isotope({
+	                    itemSelector : '.brick'	                  
+	                });
+	            });
 				
+  			 $containerVotes.infinitescroll({
+				navSelector  	: "#page-nav-votes",
+  				nextSelector 	: "#page-nav-votes a",
+				itemSelector 	: ".brick",  
+				pixelsFromNavToBottom : "20",
+				debug: true,
+				dataType: 'json',
+  				appendCallback: false,
+  				loading: {
+  		            finishedMsg: "<h4>No se encontraron m&aacute;s resultados.</h4>",
+  		            msgText: "<h4>Cargando reclamos...</h4>",
+  		            speed: 'slow'
+  		        }  		      
+			 }, function (newElements) {
+			 		var html = '';
+ 			 		$.each( newElements, function( i, value ) {
+ 			 			 html += renderToHtml(value, 'issue');
+ 			        });
+					 	
+ 			 		var $newElems = $( html );
+
+	 			    $newElems.imagesLoaded(function(){
+	 					$newElems.animate({ opacity: 1 });
+	 					$containerVotes.append( $newElems ).isotope( 'appended', $newElems );
+		 			});
+	 			    
+             });
+				
+  			 $containerVotes.infinitescroll('pause');
 			 
 			 $containerUsers.imagesLoaded( function(){   
 	                $containerUsers.isotope({
@@ -163,8 +244,8 @@
 	                    sortAscending : false,
 	                    getSortData : {
 	                    	issues    : '.numIssues parseInt',
-	                        comments       : '.numComments parseInt',
-	                        fixes   : '.numFixes parseInt'
+	                        comments  : '.numComments parseInt',
+	                        fixes     : '.numFixes parseInt'
 	                    }
 	                });
 	 			});
@@ -198,11 +279,17 @@
 						
 			$containerUsers.infinitescroll('pause');
 			
+			//bootstrap tabs + multiple isotope instances = overlapping [FIXED] 
+			// http://stackoverflow.com/questions/19214362/making-a-jquery-isotope-layout-initialize-inside-a-bootstrap-tab
+			// https://github.com/metafizzy/isotope/issues/458
 			
 			$('.nav-tabs li').on('shown.bs.tab', function (e) {
 				var clickedTab = $(this).find('a').attr('href');
 			 	if(clickedTab == "#topUsers"){
 				  	$containerUsers.isotope('layout');
+			 	}
+			 	if(clickedTab == "#hottestIssues"){
+				  	$containerVotes.isotope('layout');
 			 	}
 
 			});
@@ -216,14 +303,17 @@
   			    if( $(this).hasClass( 'issue' ) ){
   					$container.infinitescroll('retrieve');
   				    $('#page-nav').hide(); 
-  			   	}  				
+  			   	}  	
+  			    else if( $(this).hasClass( 'vote' ) ){
+					$containerVotes.infinitescroll('retrieve');
+				    $('#page-nav-votes').hide(); 
+			   	}  	
   			    else{
   			    	$containerUsers.infinitescroll('retrieve');
   			        $('#page-nav-users').hide(); 
-  			    }
-  			  
+  			    } 			  
   			    return false;
-  			  });
+  			});
 			
 			
 			
@@ -878,7 +968,14 @@
 			</div>
 			
 			<div class="tab-pane fade" id="hottestIssues">		
-			M&acute;s votados		
+				
+				<!-- infinite scroll -->
+				<div id="infinite-container-votes"></div>				
+				<nav id="page-nav-votes" style="display: none;">
+  					<a href="loadmore/issue/2"></a>
+				</nav>
+				
+				<center><a href="#" class="btn btn-default btn-more vote">Mostrar m&aacute;s resultados</a></center>
 			</div>
 			
 			<div class="tab-pane fade" id="topUsers">		

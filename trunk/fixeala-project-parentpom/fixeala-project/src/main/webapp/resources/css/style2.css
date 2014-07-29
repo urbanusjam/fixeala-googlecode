@@ -910,9 +910,12 @@ input.repairDate { width:178px;  height:20px; }
 /* 		 } */
 /* .tbl-licitacion-form  tbody td.dynamic{height:30px;} */
 
+.table-hover tbody tr:hover>td, .table-hover tbody tr:hover>th { background-color: #DDD;}
+
+
 #tblUserIssues{table-layout:fixed;}
 #tblUserIssues thead th{cursor:pointer; }
-#tblUserIssues thead th:hover{background-color: #f1f1f1;}
+
 #tblUserIssues thead th i{float:right;margin-top: 4px;}
 
 #dashboard-box { border-right:1px solid #ccc;margin-left:0; width:200px; height: 470px; }
@@ -1273,7 +1276,8 @@ a.no-hover { text-decoration: none; color: #000;}
 
 /**** Infinite Scroll ****/
 
-#infinite-container, #infinite-container-users, #infinite-container-comments{
+#infinite-container, #infinite-container-users,  
+#infinite-container-votes, #infinite-container-comments{
 	background: #FFF;	
   	padding: 0 0 10px 0;
   	margin: 15px 0 20px 0;  
@@ -1302,11 +1306,11 @@ a.no-hover { text-decoration: none; color: #000;}
        
 }
 
-.brick { width: 250px; }
+.brick { width: 190px; }
 .brick-user { width: 180px; }
 .brick-comment { width: 500px; }
 
-.brick, .brick-comment  { 	 	
+.brick{ 	 	
   	position: relative;
 	margin: 0 15px 10px 0;
 	padding: 10px;
@@ -1315,37 +1319,52 @@ a.no-hover { text-decoration: none; color: #000;}
   	-webkit-border-radius: 5px;
      	-moz-border-radius: 5px;
           	border-radius: 5px;
-    border: 1px solid #DDD; 	
+    border: 1px solid #DDD; 	 
+}
+
+
+.brick-comment  { 	 	
+	width: 100%;
+  	position: relative;
+	margin: 0 15px 10px 0;
+	padding: 10px;
+/*   	background: #F5F5F5; */
+  	text-align: left;   
+    border-bottom: 1px solid #DDD; 	
+    border-top: 1px solid #DDD; 	
  
 }
 
 .brick .status  { display: block; text-align: center; margin-bottom: 10px; padding: 5px 0 5px 0; }
 .brick .title { font-size: 18px; margin: 0 0 5px; }
-/* .brick .thumbnail { margin-bottom: 15px; } */
-.brick p.address, .brick p.date { color: #999;  margin: 10px 0 10px 0;  }
-.brick p.desc { padding-bottom: 10px; }
+
 .brick p.top {  height: 30px; }
+.brick p.bottom {  text-align: center; font-size: 11px; }
+
+.brick p.date { color: #999;  margin: 10px 0 10px 0;  }
+.brick p.desc { padding-bottom: 10px; }
+.brick p.address  { margin: 10px 0 10px 0; text-align: center; border-top: 1px solid #DDD; border-bottom: 1px solid #DDD; }
+
 .brick span.date, .brick span.id, .brick span.id-char { padding-top: 5px; font-size: 11px;  }
-.brick span.id { font-weight: bold; }
+.brick span.city, .brick span.province { text-transform: uppercase;  font-size: 11px; }
 .brick span.date-box { width: 96%; display: block; }
-
-#sorts, #sorts-users { margin: 5px 0 10px 0;  }
-
-.btn-more {  width: 350px; text-align: center;  font-size: 11px; color: #000; border: 1px solid #C6C6C6; font-weight: bold;} 
-
-
+.brick span.id { font-weight: bold; }
 
 .brick .username { font-size: 18px; }
 .brick .thumbnail { margin: 10px 0 15px 0; }
-.brick p.address  { margin: 10px 0 10px 0; text-align: center; }
-.brick span.city, .brick-user span.province { text-transform: uppercase;  font-size: 11px; } 
-.brick p.bottom {  text-align: center; font-size: 11px; }
-.brick .stats { width: 100%; height: auto; border:0px solid black; }
-.brick .stats span.counter { border: 0px solid black; margin: 0 5px 0 5px; font-size: 14px;}
 
-
+.btn-more {  width: 350px; text-align: center;  font-size: 11px; color: #000; border: 1px solid #C6C6C6; font-weight: bold;} 
 .btn-group .btn i { border: 0px solid #000; padding: 0; vertical-align: middle;}
 .btn-group .btn { font-size: 12px; }
+
+#sorts, #sorts-users { margin: 5px 0 10px 0;  }
+
+/** alineacion centrada de tres divs **/
+.inline-container { width:100%; text-align:center; }
+.left { float: left; }
+.right { float: right; }
+.center { margin: 0 auto; display: inline-block; }
+
 /* Start: Recommended Isotope styles */
 
 /**** Isotope Filtering ****/

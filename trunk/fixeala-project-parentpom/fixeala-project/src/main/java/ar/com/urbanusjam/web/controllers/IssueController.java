@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
@@ -1112,17 +1113,17 @@ public class IssueController {
 				model.addAttribute("comentarios",
 						issueService.getCommentsByIssue(issueID));
 				model.addAttribute("cantidadComentarios", comments.size());
-				return new AlertStatus(true, "El comentario ha sido publicado.");
+				
 			}
 
 		} catch (Exception e) {
 			if (e instanceof AccessDeniedException)
 				return new AlertStatus(false,
-						"Debe estar logueado para publicar un nuevo comentario.");
-			else
+						"Debe estar logueado para publicar un nuevo comentario.");		
 				return new AlertStatus(false,
 						"No ha sido posible publicar el comentario. Intente de nuevo.");
 		}
+		return new AlertStatus(true, "El comentario ha sido publicado.");
 	}
 
 	@RequestMapping(value = "/issues/{watchOrUnwatch}", method = RequestMethod.POST)

@@ -44,7 +44,7 @@
 							    		<input type="text" id="username" class="input-block-level" name="j_username" placeholder="Nombre de usuario">	
 							    	</div>	
 							    	<div class="control-group">				     
-							        	<input type="password" class="input-block-level" name="j_password" placeholder="Clave">
+							        	<input type="password" class="input-block-level" name="j_password" placeholder="Contrase&ntilde;a">
 							        </div>
 							      	<button type="submit" id="btnLogin" class="btn btn-primary">            						
 							           Login
