@@ -237,17 +237,17 @@ public class IssueController {
 			model.addAttribute("allTags", allTags.length() == 0 ? "[{}]"
 					: allTags);
 
-			JSONArray jsonArray = new JSONArray();
+//			JSONArray jsonArray = new JSONArray();
 
-			for (CommentDTO c : issue.getComentarios()) {
-				JSONObject obj = new JSONObject();
-				obj.put("fecha", c.getFechaFormateada());
-				obj.put("usuario", c.getUsuario());
-				obj.put("mensaje", c.getMensaje());
-				jsonArray.put(obj);
-			}
-			model.addAttribute("comentariosJson", jsonArray);
-			model.addAttribute("comentarios", issue.getComentarios());
+//			for (CommentDTO c : issue.getComentarios()) {
+//				JSONObject obj = new JSONObject();
+//				obj.put("fecha", c.getFechaFormateada());
+//				obj.put("usuario", c.getUsuario());
+//				obj.put("mensaje", c.getMensaje());
+//				jsonArray.put(obj);
+//			}
+//			model.addAttribute("comentariosJson", jsonArray);
+//			model.addAttribute("comentarios", issue.getComentarios());
 			
 			List<MediaContentDTO> contenidos = new ArrayList<MediaContentDTO>();
 			contenidos = issue.getContenidos();
@@ -379,8 +379,8 @@ public class IssueController {
 	}
 	
 	
-	@RequestMapping(value="/issues/loadmoreByIssue/{issueID}/{type}/{page}", produces={"application/json; charset=UTF-8"}, method = RequestMethod.GET)  
-	public @ResponseBody String loadMorePagesByIssue(@PathVariable ("issueID") int issueID, @PathVariable ("type") String  type, @PathVariable ("page") int page) throws JSONException{  
+	@RequestMapping(value="/issues/{issueID}/loadmore/{type}/{page}", produces={"application/json; charset=UTF-8"}, method = RequestMethod.GET)  
+	public @ResponseBody String loadMorePagesByIssue(@PathVariable ("issueID") int issueID, @PathVariable ("type") String type, @PathVariable ("page") int page) throws JSONException{  
 		
 		JSONArray pagesArray = new JSONArray();
 		IssueDTO issue = issueService.getIssueById(String.valueOf(issueID));
@@ -412,8 +412,6 @@ public class IssueController {
 		int totalItems = elements.size();
 		int totalPages = (int) Math.ceil((double)totalItems / itemsPerPage);	
 		
-		
-		
 		if(currentPage > totalPages){ 
 			return jsonArray;
 		}
@@ -441,7 +439,10 @@ public class IssueController {
 				List<IssueUpdateHistoryDTO> sub = (List<IssueUpdateHistoryDTO>) elements.subList(from, to + 1); //sublist toma el item en la posicion anterior al toIndex que se le pasa
 				
 				for(IssueUpdateHistoryDTO update : sub){
+					int index = from + (sub.indexOf(update) + 1);
+					
 					JSONObject obj = new JSONObject();
+					obj.put("id", index);
 					obj.put("date", update.getFechaFormateada());
 					obj.put("username", update.getUsername());		
 					obj.put("motive", update.getMotivo());	

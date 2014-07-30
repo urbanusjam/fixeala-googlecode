@@ -216,6 +216,10 @@ path:hover {
 				             type: 'GET',
 				             data: { query: query },
 				             dataType: 'json',
+				             beforeSend: function() {
+				                 //that.$element is a variable that stores the element the plugin was called on
+				                 $('#search').addClass('loading');
+				             },
 				             success: function (data) {
 
 								issueNames = [];
@@ -227,6 +231,9 @@ path:hover {
 				            	 });
 
 				                 return process(issueNames);
+				             },
+				             complete: function() {
+				            	 $('#search').removeClass('loading');
 				             }
 				         });
 				    },

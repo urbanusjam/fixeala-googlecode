@@ -200,7 +200,7 @@ var userActionsController = {
 		loadDetailModal : function(value){
 			$("#mdl-detail .modal-body").html('<p>' +value+ '</p>');
 			$("#mdl-detail").modal('show');
-	}
+		}
 }
 
 

@@ -1,39 +1,14 @@
 	<script type="text/javascript">   
 	
-	google.maps.visualRefresh = true; 
-
-	var map;
-	var markerArray;
-	var initMarker;
-	var init_coord = new google.maps.LatLng(-34.599722, -58.381944);
-
-	var mapOptions = {
-			center: init_coord,
-			zoom: 12,
-			mapTypeId: google.maps.MapTypeId.ROADMAP,
-			mapTypeControl: true,
-			scrollwheel: false
-	};
-	var placeSearch, autocomplete;
-	var componentForm = {
-//			  street_number: 'short_name',
-//			  route: 'long_name',
-			  neighborhood: 'long_name',
-			  locality: 'long_name',
-			  administrative_area_level_1: 'long_name'
-			};
-	var isFormOpen;
-	var isAnimating = false; 
-	var mapTimesClicked = 0;
-	var autocompleteCalls = 0;
+	
 	
 		$(document).ready(function(){
 			
-			mapController.initMap();
+		
 			
 			/*** INIT GOOGLE MAPS ***/
 			var geocoder;			 
-			google.maps.event.addDomListener(window, 'load', initMap);  	 
+			google.maps.event.addDomListener(window, 'load', mapController.initMap);  	 
 			
 			
 			var currentPage = 1,
@@ -75,7 +50,7 @@
 					
 					imgNum = Math.floor(Math.random() * 10);  //entre 0 y 9
 					
-					var html = 	'<div class="brick">'
+					html = 	'<div class="brick">'
 	        			+ 			'<p class="top">'
 						+				'<span class="id-char pull-left"><b>#</b></span>'
 						+ 				'<span class="date-box pull-right">'
@@ -102,7 +77,7 @@
 					
 					imgNum = 9;
 				
-					var html = 	'<div class="brick brick-user">'
+					html = 	'<div class="brick brick-user">'
 						+   		'<a class="username" href="' +element.url+ '">' +element.username+ '</a>'	
 						+ 			'<a class="thumbnail" href="resources/images/samples/image' +imgNum+ '.jpg">'
 						+    			'<img class="media-object" src="resources/images/samples/image' +imgNum+ '.jpg">'
