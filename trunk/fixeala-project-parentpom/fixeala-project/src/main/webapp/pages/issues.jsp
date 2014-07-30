@@ -956,7 +956,7 @@
 		        	var data = "issueID=" + idIssue;		        
 		        	var loader = '<button class="btn btn-default pull-right loader"><img src="${pageContext.request.contextPath}/resources/images/loader6.gif" alt="Loading" height=15 width=15 /></button>';	  
 		        	
-			        $watcherList.html(numberOfWatchers); 
+// 			        $watcherList.html(numberOfWatchers); 
 
 					$watcherList.live('click', function(){
 						
@@ -1170,6 +1170,16 @@
 				
 				if(type == 'update'){
 					
+					var btnDisplay; 					
+					var obs = element.obs;
+					
+					if(obs == null || obs == ''){
+						btnDisplay =  'hide';
+					}
+					else{
+						btnDisplay = 'show';
+					}					
+					
 					html =  '<div class="brick-update">'
 						+		'<span class="index">'+element.id+'</span>'		
 						+		'<span class="date">'+element.date+'</span>'			    		
@@ -1178,9 +1188,7 @@
  						+		'</span>'
 					    +		'<span class="motive">'+element.motive+'</span>'
 					    +		'<span class="obs">'					   
-					    +		'<c:if test="${not empty '+element.obs+'}">'
-						+			'<button class="btn" onclick="userActionsController.loadDetailModal(\''+element.obs+'\')" data-toggle="modal">Ver detalle &raquo;</button>'
-			   			+		'</c:if>' 
+						+			'<button class="btn '+btnDisplay+'" onclick="userActionsController.loadDetailModal(\''+obs+'\')" data-toggle="modal">Ver detalle &raquo;</button>'
 						+		'</span>'
 						+ 	'</div>';
 				}

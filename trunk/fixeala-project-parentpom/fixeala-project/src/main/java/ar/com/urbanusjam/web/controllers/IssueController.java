@@ -196,8 +196,8 @@ public class IssueController {
 			model.addAttribute("barrio", issue.getNeighborhood());
 			model.addAttribute("ciudad", issue.getCity());
 			model.addAttribute("provincia", issue.getProvince());
-			model.addAttribute("usuario", issue.getUser().getUsername());
-			model.addAttribute("area", issue.getArea());
+			model.addAttribute("usuario", issue.getUsername());
+//			model.addAttribute("area", issue.getArea());
 			model.addAttribute("descripcion", issue.getDescription());
 			model.addAttribute("latitud", issue.getLatitude());
 			model.addAttribute("longitud", issue.getLongitude());
@@ -1029,54 +1029,6 @@ public class IssueController {
 
 		return array.toString();
 
-	}
-
-	@RequestMapping(value = "/loadMapMarkers", method = RequestMethod.GET)
-	public @ResponseBody List<IssueDTO> loadMapMarkers(HttpServletRequest request) throws JSONException {
-		
-		List<IssueDTO> issues = issueService.loadAllIssues();
-
-		JSONObject obj = new JSONObject();
-		JSONArray array = new JSONArray();
-
-		obj.put("type", "FeatureCollection");
-
-		for (IssueDTO s : issues) {
-			JSONObject feature = new JSONObject();
-
-			feature.put("type", "Feature");
-
-			JSONObject geometry = new JSONObject();
-			geometry.put("type", "Point");
-			geometry.put(
-					"coordinates",
-					new float[] {
-							// Float.parseFloat(s.getLatitude()),
-							// Float.parseFloat(s.getLongitude()) });
-							Float.parseFloat(s.getLongitude()),
-							Float.parseFloat(s.getLatitude()) });
-
-			feature.put("geometry", geometry);
-
-			JSONObject properties = new JSONObject();
-			properties.put("id", s.getId());
-			properties.put("address", s.getFormattedAddress());
-			properties.put("title", s.getTitle());
-			properties.put("status", s.getStatus());
-			properties.put("statusCss", s.getStatusCss());
-			properties.put("date", s.getFechaFormateada());
-			properties.put("description", s.getDescription());
-			properties.put("user", s.getUsername());
-
-			feature.put("properties", properties);
-			array.put(feature);
-		}
-
-		obj.put("features", array);
-
-		System.out.println(obj.toString());
-
-		return issues;
 	}
 
 	@RequestMapping(value = "/issues/addComment", method = RequestMethod.POST)

@@ -59,15 +59,15 @@ public class HomeController {
 	@Autowired
 	private UserService userService;
 	
-//	@ModelAttribute("issuesDTO")
-//	public @ResponseBody List<IssueDTO> getIssuesArray() {    
-//		return issueService.loadAllIssues();
-//	} 
+	@ModelAttribute("issues")
+	public @ResponseBody ArrayList<IssueDTO> getIssuesArray() {    
+		return (ArrayList<IssueDTO>) issueService.loadAllIssues();
+	} 
 	
 	@RequestMapping(value="/home", method = RequestMethod.GET)
-	public String home(Model model) throws JSONException{		
+	public String home(@ModelAttribute ("issues") ArrayList<IssueDTO> issues, Model model ) throws JSONException{		
 		
-		List<IssueDTO> issues = issueService.loadAllIssues();
+//		List<IssueDTO> issues = issueService.loadAllIssues();
 		
 		List<String> dbTags = issueService.getTagList();
 		JSONArray array = new JSONArray();
@@ -96,6 +96,54 @@ public class HomeController {
 		return "home";
 	}
 	
+	@RequestMapping(value = "/loadMapMarkers", method = RequestMethod.GET)
+	public @ResponseBody List<IssueDTO> loadMapMarkers(@ModelAttribute ("issues") ArrayList<IssueDTO> issues, HttpServletRequest request) throws JSONException {
+		
+//		List<IssueDTO> issues = issueService.loadAllIssues();
+
+		JSONObject obj = new JSONObject();
+		JSONArray array = new JSONArray();
+
+		obj.put("type", "FeatureCollection");
+
+		for (IssueDTO s : issues) {
+			JSONObject feature = new JSONObject();
+
+			feature.put("type", "Feature");
+
+			JSONObject geometry = new JSONObject();
+			geometry.put("type", "Point");
+			geometry.put(
+					"coordinates",
+					new float[] {
+							// Float.parseFloat(s.getLatitude()),
+							// Float.parseFloat(s.getLongitude()) });
+							Float.parseFloat(s.getLongitude()),
+							Float.parseFloat(s.getLatitude()) });
+
+			feature.put("geometry", geometry);
+
+			JSONObject properties = new JSONObject();
+			properties.put("id", s.getId());
+			properties.put("address", s.getFormattedAddress());
+			properties.put("title", s.getTitle());
+			properties.put("status", s.getStatus());
+			properties.put("statusCss", s.getStatusCss());
+			properties.put("date", s.getFechaFormateada());
+			properties.put("description", s.getDescription());
+			properties.put("user", s.getUsername());
+
+			feature.put("properties", properties);
+			array.put(feature);
+		}
+
+		obj.put("features", array);
+
+		System.out.println(obj.toString());
+
+		return issues;
+	}
+	
 	@RequestMapping(value="/usuarios", method = RequestMethod.GET)
 	public String showUsersPage() { 	
 		return "usuarios";			
@@ -108,12 +156,12 @@ public class HomeController {
 	
 
 	@RequestMapping(value="/loadmore/{type}/{page}", produces={"application/json; charset=UTF-8"}, method = RequestMethod.GET)  
-	public @ResponseBody String loadMorePages(@PathVariable String type, @PathVariable int page) throws JSONException{  
+	public @ResponseBody String loadMorePages(@ModelAttribute ("issues") ArrayList<IssueDTO> issues, @PathVariable String type, @PathVariable int page) throws JSONException{  
 			
 		JSONArray pagesArray = new JSONArray();
 		
 		if(type.equals("issue"))
-			pagesArray = paginateToArray(issueService.loadAllIssues(), page, type);
+			pagesArray = paginateToArray(issues, page, type);
 					
 		else if (type.equals("user"))
 			pagesArray = paginateToArray(userService.loadAllActiveUsers(), page, type);	

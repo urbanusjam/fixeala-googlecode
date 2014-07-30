@@ -36,16 +36,7 @@ public class Tag implements Serializable {
 	@Column(name = "tagname")
 	private String tagname;
 	
-//	@ManyToMany(fetch = FetchType.EAGER) //owner side
-//    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.ALL})	
-//	@JoinTable(name = "ISSUE_TAG", 
-//	         joinColumns = @JoinColumn(name = "ID_TAG"),
-//	         inverseJoinColumns = @JoinColumn(name = "ID_ISSUE") 
-//	)
-//	private Set<Issue> issueList;
-	
-	
-	@ManyToMany(fetch = FetchType.EAGER, mappedBy="tagsList") //inverse side
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy="tagsList") //inverse side
 	@Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
 	private Set<Issue> issueList;
 	
