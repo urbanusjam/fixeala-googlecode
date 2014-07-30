@@ -89,7 +89,6 @@ public class Issue implements Serializable  {
 	private Area assignedArea;
 		
     @OneToMany(mappedBy="issue", fetch = FetchType.LAZY)  
-    @Fetch(FetchMode.SELECT)
     @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.ALL})	
     @OrderBy("fecha DESC")
 	private Set<IssueUpdateHistory> revisiones;
@@ -102,7 +101,6 @@ public class Issue implements Serializable  {
 //	private Set<Tag> tagsList;	
 	
 	@ManyToMany(fetch = FetchType.LAZY) //owner side
-	@Fetch(FetchMode.SELECT)
     @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.ALL})	
 	@JoinTable(name = "issue_tag", 
 	         joinColumns = @JoinColumn(name = "id_issue"),
@@ -111,12 +109,9 @@ public class Issue implements Serializable  {
 	private Set<Tag> tagsList;	
 	
 	@OneToMany(mappedBy="issue", fetch = FetchType.LAZY, cascade = CascadeType.ALL)  
-	@Fetch(FetchMode.SELECT)
 	private Set<MediaContent> contenidos;
 	
 	@OneToMany(mappedBy="issue", fetch = FetchType.LAZY, cascade = CascadeType.ALL)  
-	@Fetch(FetchMode.SELECT)
-	@OrderBy("fecha DESC")
 	private Set<Comment> comentarios;
 	
 	@OneToMany(mappedBy="issue", fetch = FetchType.LAZY, cascade = CascadeType.ALL) 

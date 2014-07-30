@@ -49,7 +49,7 @@
 			var newTitle = "";	
 			
 			var statusLabel = "";
-			
+
 			$('[data-toggle="popover"]').popover();
 	
 			$('body').on('click', function (e) {
@@ -926,8 +926,7 @@
 					issueLocation.latitude = latitud;
 					issueLocation.longitude = longitud;		
 					
-					console.log(issueLocation);
-					getClosestMarkersByIssue(issueLocation);			
+					mapController.getClosestMarkersByIssue(issueLocation);			
 					
 				    
 				    
@@ -976,7 +975,7 @@
 					            		   var followers = '';				             
 										    $.each(response, function(i, follower){	
 										    	followers += '<i class="icon-angle-right" style="margin-right: 5px;"></i>&nbsp;';
-										    	followers += getUserURL(follower);
+										    	followers += mapController.getUserURL(follower);
 										    	followers += '<br>';
 										    });
 										    
@@ -1144,103 +1143,189 @@
 			//*** INFINITE SCROLL ***//
 			
 			/** Load first page of issues **/
+			
+			var $containerUpdates = $('#infinite-container-updates');
+			var $containerComments = $('#infinite-container-comments');
 		
+			var updatesJson = '${jsonUpdates}';
 			var commentsJson = '${jsonComments}';
+			var updatesArray = JSON.parse(updatesJson);
 			var commentsArray = JSON.parse(commentsJson);
 			
-			var $containerComments = $('#infinite-container-comments');
+			if(updatesJson.length > 0){
+				$('#btn-more-updates').show();
+			}
+			
+			if(commentsArray.length > 0){
+				$('#btn-more-comments').show();
+			}
 			
 			/* LOAD FIRST PAGE */
-			loadFirstPage(commentsArray);
-	
+			loadFirstPage(updatesArray, commentsArray);
 				
-				function renderToHtml(element, type){
-			
-					var html = 	'<div class="brick-comment"><div class="media">'
+			function renderToHtml(element, type){
+				
+				var html = '';
+				var userLink = mapController.getUserPlainURL(element.username);
+				
+				if(type == 'update'){
+					
+					html =  '<div class="brick-update">'
+						+		'<span class="index">'+element.id+'</span>'		
+						+		'<span class="date">'+element.date+'</span>'			    		
+						+		'<span class="user">'
+							+		'<a href="'+userLink+'">'+element.username+'</a>'
+ 						+		'</span>'
+					    +		'<span class="motive">'+element.motive+'</span>'
+					    +		'<span class="obs">'					   
+					    +		'<c:if test="${not empty '+element.obs+'}">'
+						+			'<button class="btn" onclick="userActionsController.loadDetailModal(\''+element.obs+'\')" data-toggle="modal">Ver detalle &raquo;</button>'
+			   			+		'</c:if>' 
+						+		'</span>'
+						+ 	'</div>';
+				}
+
+				else{
+					
+					html = '<div class="brick-comment"><div class="media">'
 						+		'<span class="pull-left">'
 						+	  		'<img class="media-object thumbnail" src="${pageContext.request.contextPath}/resources/images/nopic64.png">'
-						+	 		'<center><strong>1</strong></center>'
 						+	 	'</span>'
 						+	    '<div style="font-size:12px;margin-bottom:10px">'
-						+	  		'<a href="#"><strong>' +element.username+ '</strong></a> &nbsp; &raquo;  &nbsp;' +element.date+ '</div>'
-		 				+	  '<div class="media-body" style="display:block">'		
-						+     		'<p style="font-size:13px">' +element.message+ '</p>'	 
-		  				+	  '</div>'
+						+	  		'<a href="#"><strong>'+element.username+'</strong></a><span class="pull-right" style="margin-right: 30px">'+element.date+'</span></div>'
+	 					+	  '<div class="media-body" style="display:block">'		
+						+     		'<p style="font-size:13px">'+element.message+'</p>'	 
+	  					+	  '</div>'
 						+	'</div></div>';
-	
-					return html;
-						
+					
 				}
+		
+				return html;
+					
+			}
 			
-				function loadFirstPage(commentsArray){
+			function loadFirstPage(updatesArray, commentsArray){
+				
+				if(updatesArray.length > 0){
 					var html =  [];	
-	            	$.each( commentsArray, function( i, value ) {	            
+					$.each( updatesArray, function( i, value ) {	            
+	            		var item = renderToHtml(value, "update");
+		        		html.push(item);
+		        	});
+	            	$containerUpdates.append(html);
+	            	
+				}
+				
+				if(commentsArray.length > 0){
+					var html =  [];
+					$.each( commentsArray, function( i, value ) {	            
 	            		var item = renderToHtml(value, "comment");
 		        		html.push(item);
 		        	});
 	            	$containerComments.append(html);
 				}
-				
-				$containerComments.imagesLoaded( function(){                
-		            $containerComments.masonry({
-		                itemSelector : '.brick-comment'
-		            });
-		        });
+            
+			}
 			
-	  			$containerComments.infinitescroll({
-					navSelector  	: "#page-nav-comment",
-	  				nextSelector 	: "#page-nav-comment a",
-					itemSelector 	: ".brick-comment",  
-					pixelsFromNavToBottom : "20",
-					debug: true,
-	  				dataType: 'json',
-	  				appendCallback: false,
-	  				loading: {
-	  		            finishedMsg: "<h4>No se encontraron m&aacute;s resultados.</h4>",
-	  		            msgText: "<h4>Cargando comentarios...</h4>",
-	  		            speed: 'slow'
-	  		        }  		      
-				 }, function (newElements) {
-				 		var html = '';
-	 			 		$.each( newElements, function( i, element ) {
-	 			 			 html += renderToHtml(value, 'comment');
-	 			        });
-						 	
-	 			 		var $newElems = $( html );
-	
-		 			    $newElems.imagesLoaded(function(){
-		 					$newElems.animate({ opacity: 1 });
-		 					$containerComments.append( $newElems ).masonry( 'appended', $newElems );
-			 			});
-				});
+			/* updates */
+			$containerUpdates.imagesLoaded( function(){                
+	            $containerUpdates.masonry({
+	                itemSelector : '.brick-update'
+	            });
+	        });
+			
+  			$containerUpdates.infinitescroll({
+				navSelector  	: "#page-nav-update",
+  				nextSelector 	: "#page-nav-update a",
+				itemSelector 	: ".brick-update",  
+				pixelsFromNavToBottom : "20",
+				debug: true,
+  				dataType: 'json',
+  				appendCallback: false,
+  				loading: {
+  		            finishedMsg: "<h4>No se encontraron m&aacute;s resultados.</h4>",
+  		            msgText: "<h4>Cargando actualizaciones...</h4>",
+  		            speed: 'slow'
+  		        }  		      
+			 }, function (newElements) {
+			 		var html = '';
+ 			 		$.each( newElements, function( i, element ) {
+ 			 			 html += renderToHtml(element, 'update');
+ 			        });
+ 			 		var $newElems = $( html ).css({ opacity: 0 });
+ 			 		
+	 			    $newElems.imagesLoaded(function(){
+	 					$newElems.animate({ opacity: 1 });
+	 					$containerUpdates.append( $newElems ).masonry( 'appended', $newElems );
+		 			});
+			});
 	  			
-	  			$containerComments.infinitescroll('pause');
+  			$containerUpdates.infinitescroll('pause');
+			
+  			/* comments */
+			$containerComments.imagesLoaded( function(){                
+	            $containerComments.masonry({
+	                itemSelector : '.brick-comment'
+	            });
+	        });
+			
+  			$containerComments.infinitescroll({
+				navSelector  	: "#page-nav-comment",
+  				nextSelector 	: "#page-nav-comment a",
+				itemSelector 	: ".brick-comment",  
+				pixelsFromNavToBottom : "20",
+				debug: true,
+  				dataType: 'json',
+  				appendCallback: false,
+  				loading: {
+  		            finishedMsg: "<h4>No se encontraron m&aacute;s resultados.</h4>",
+  		            msgText: "<h4>Cargando comentarios...</h4>",
+  		            speed: 'slow'
+  		        }  		      
+			 }, function (newElements) {
+			 		var html = '';
+ 			 		$.each( newElements, function( i, element ) {
+ 			 			 html += renderToHtml(element, 'comment');
+ 			        });
+					 	
+ 			 		var $newElems = $( html ).css({ opacity: 0 });
+
+	 			    $newElems.imagesLoaded(function(){
+	 					$newElems.animate({ opacity: 1 });
+	 					$containerComments.append( $newElems ).masonry( 'appended', $newElems );
+		 			});
+			});
 	  			
-	  			
-	  			$('.nav-tabs li').on('shown.bs.tab', function (e) {
-					var clickedTab = $(this).find('a').attr('href');
-				 	if(clickedTab == "#issueComments"){
-					  	$containerComments.masonry('layout');
-				 	}				
-				});
+  			$containerComments.infinitescroll('pause');
   			
   			
-	  			$(' .btn-more ').click(function(e){
-	 			     // call this whenever you want to retrieve the next page of content
-	 			     // likely this would go in a click handler of some sort
-	 			     e.preventDefault();
-	 			    
-	 			    if( $(this).hasClass( 'comment' ) ){
-	 					$containerComments.infinitescroll('retrieve');
-	 				  $('#page-nav-comments').hide(); 
-	 			   	}  				
-	 			    else{
-	 			    	$containerUpdates.infinitescroll('retrieve');
-	 			      $('#page-nav-updates').hide(); 
-	 			    }
-	 			  
-	 			    return false;
-	 			  });
+  			$('.nav-tabs li').on('shown.bs.tab', function (e) {
+				var clickedTab = $(this).find('a').attr('href');
+			 	if(clickedTab == "#issueComments"){
+				  	$containerComments.masonry('layout');
+			 	}	
+			 	else{
+				  	$containerUpdates.masonry('layout');
+			 	}	
+			});
+  			
+ 			
+  			$(' .btn-more ').click(function(e){
+ 			     // call this whenever you want to retrieve the next page of content
+ 			     // likely this would go in a click handler of some sort
+ 			     e.preventDefault();
+ 			    
+ 			    if( $(this).hasClass( 'update' ) ){
+ 			    	$containerUpdates.infinitescroll('retrieve');
+ 				  	$('#page-nav-updates').hide(); 
+ 			   	}  				
+ 			    else{
+ 			    	$containerComments.infinitescroll('retrieve');
+ 			      	$('#page-nav-comments').hide(); 
+ 			    }
+ 			  
+ 			    return false;
+ 			  });
 			
 		});
 				
@@ -1302,7 +1387,7 @@
 							 </tr>
 							  <tr>
 							    <th>Informante:</th>
-							    <td><script type="text/javascript">document.write( getUserURL('${usuario}') );</script></td>						    		    
+							    <td><script type="text/javascript">document.write( mapController.getUserURL('${usuario}') );</script></td>						    		    
 							 </tr>
 							 <tr>
 							    <th>Direcci&oacute;n:</th>
@@ -1352,32 +1437,45 @@
 	  <div class="tab-content">							
 	
 		<!-- 1 Historial -->
-		<div class="tab-pane fade in active" id="issueHistory">	
-			<table class="table table-hover" style="width:100%" id="tbl-issue-updates">
-	      		<c:forEach items="${historial}" var="revision">					        
-			    	<c:set var="count" value="${count + 1}" scope="page"/>	
-			        <tr>
-			        	<td style="border-top:none; width:5%"><c:out value="${count}" /></td>			
-			          	<td style="border-top:none; ">${revision.fechaFormateada}</td>				    		
-			    		<td style="border-top:none; ">
-			    			<a href="#"><script type="text/javascript">document.write( getUserURL('${revision.username}') );</script></a>
-			    		</td>
-			    		<td style="border-top:none; width:35%; border: 0px solid red">${revision.detalle}</td>
-			    		<td class="collapse-group" style="border-top:none; width:35%;" >					   
-			    			<c:if test="${not empty revision.observaciones}">	
-								<a class="btn-collapse link" href="#" onclick="javascrip:userActionsController.loadDetailModal('${revision.observaciones}');" data-toggle="modal" >Ver detalle &raquo;</a>
-	   						</c:if> 
-	   					</td>				    		
-			    	</tr>					    
-				 </c:forEach>
-			</table>
+		<div class="tab-pane fade in active" id="issueHistory">
+		
+			<div class="row" style="margin-bottom: 30px;">	
+		 		<!-- infinite scroll -->
+				 <div id="infinite-container-updates"></div>
+				 
+				 <nav id="page-nav-update" style="display: none;">
+	 			 	<a href="${id}/loadmore/update/2"></a>
+				 </nav>
+			 
+			 	<center><a href="#" id="btn-more-updates" class="btn btn-default btn-more update" style="display: none;">Mostrar m&aacute;s resultados</a></center>
+			</div>
+			
+				
+<!-- 			<table class="table table-hover" style="width:100%" id="tbl-issue-updates"> -->
+<%-- 	      		<c:forEach items="${historial}" var="revision">					         --%>
+<%-- 			    	<c:set var="count" value="${count + 1}" scope="page"/>	 --%>
+<!-- 			        <tr> -->
+<%-- 			        	<td style="border-top:none; width:5%"><c:out value="${count}" /></td>			 --%>
+<%-- 			          	<td style="border-top:none; ">${revision.fechaFormateada}</td>				    		 --%>
+<!-- 			    		<td style="border-top:none; "> -->
+<!-- 			    			<a href="#"><script type="text/javascript">document.write( mapController.getUserURL('${revision.username}') );</script></a> -->
+<!-- 			    		</td> -->
+<%-- 			    		<td style="border-top:none; width:35%; border: 0px solid red">${revision.detalle}</td> --%>
+<!-- 			    		<td class="collapse-group" style="border-top:none; width:35%;" >					    -->
+<%-- 			    			<c:if test="${not empty revision.observaciones}">	 --%>
+<%-- 								<a class="btn-collapse link" href="#" onclick="javascrip:userActionsController.loadDetailModal('${revision.observaciones}');" data-toggle="modal" >Ver detalle &raquo;</a> --%>
+<%-- 	   						</c:if>  --%>
+<!-- 	   					</td>				    		 -->
+<!-- 			    	</tr>					     -->
+<%-- 				 </c:forEach> --%>
+<!-- 			</table> -->
 		</div>
 		
 		<!-- 2 Archivos -->							
 		<div class="tab-pane fade" id="issueFiles">				
 			<div class="row-fluid">			
 				<c:if test="${fn:length(contenidos) eq 0}">
-					<h4 style="padding-bottom: 20px; text-align: center">No hay archivos subidos.</h4>
+					<h4 style="padding-bottom: 20px; margin-left: 15px;">No hay archivos subidos.</h4>
 				</c:if>
 			    <c:if test="${fn:length(contenidos) gt 0}">
 			        <ul id="lst-file-thumnails" class="thumbnails" style="margin-top:30px;">
@@ -1396,29 +1494,24 @@
 		<!-- 3 Comentarios -->							
 		<div class="tab-pane fade" id="issueComments">			
 		 	
-		 	<div class="row">	
-				 <textarea id="comment-text" name="comment-text"
+		 	<div class="row" style="margin-bottom: 30px;">	
+				<textarea id="comment-text" name="comment-text"
                 	placeholder="Ingrese su comentario" rows="5"></textarea>
 				<button id="btn-comment" class="btn btn-info" type="submit" style="float:right;margin-top:15px;margin-bottom:15px;">Publicar</button>	
 		 	
+		 		 <!-- infinite scroll -->
+				 <div id="infinite-container-comments"></div>
+				 
+				 <nav id="page-nav-comment" style="display: none;">
+	 			 	<a href="${id}/loadmore/comment/2"></a>
+				 </nav>
+			 
+			 	<center><a href="#" id="btn-more-comments" class="btn btn-default btn-more comment" style="display: none;">Mostrar m&aacute;s resultados</a></center>
+			
 		 	</div>
 			
-			 <!-- infinite scroll -->
-			 <div id="infinite-container-comments"></div>
-			 
-			 <nav id="page-nav-comment" style="display: none;">
- 			 	<a href="loadmoreByIssue/${id}/comment/2.html"></a>
-			 </nav>
-			 
-			 <c:if test="${ fn:length(commentsArray) qt 0 }">
-			 	<center><a href="#" class="btn btn-default btn-more comment">Mostrar m&aacute;s resultados</a></center>
-			 </c:if>
-<%-- 			 <c:if test="${ fn:length(commentsArray) == 0 }">			 	 --%>
-<!-- 			 	<div style="width: 660px; padding: 15px 0 15px 0;"><h4>A&uacute;n no se han recibido comentarios.</h4></div>			  -->
-<%-- 			 </c:if> --%>
 			
-				
-				
+			 
 <!-- 				<div id="content-comment"> -->
 <!-- 					<table id="tblComments" class="table table-hover">				         -->
 <%-- 					   <c:forEach items="${comentarios}" var="comentario" varStatus="i" begin="0" end="2">	 --%>
@@ -1639,7 +1732,7 @@
 		   		 
 		   	<script type="text/javascript">		
 			   $(document).ready(function(){
-			   		initializeMiniMap(${latitud}, ${longitud}, '${titulo}'); 
+			   		mapController.initMiniMap(${latitud}, ${longitud}, '${titulo}'); 
 			   });		   	
 		   	</script>
 		   	
@@ -1997,6 +2090,7 @@
 {% } %}
 </script>
 	
-		
+		<!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-53d8340b75bafe45"></script>
 		
 </div><!-- CONTENT -->

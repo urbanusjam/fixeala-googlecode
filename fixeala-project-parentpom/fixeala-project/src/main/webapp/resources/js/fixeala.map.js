@@ -45,7 +45,9 @@ var mapController = {
 	    });
 	},
 	
-	displayMarkers : function(map){		
+	displayMarkers : function(map){
+		
+		var markers = [];
 		
 		$.ajax({
 		        type: "GET",
@@ -67,7 +69,7 @@ var mapController = {
 		        	
 		        		var markerInfo = '<table border="0" cellpadding="0" cellspacing="0" width="380px" height="90px" style="background-color:white;font-family:Arial;">'
 							 +'   <tr>'
-							 +'	 	<td style="text-align:left;"><b><div style="color:#000;display:inline">'+getIssueURL(markerArray[i].id, markerArray[i].title, 'link')+'</div>' 
+							 +'	 	<td style="text-align:left;"><b><div style="color:#000;display:inline">'+mapController.getIssueURL(markerArray[i].id, markerArray[i].title, 'link')+'</div>' 
 							 +'                                     <div style="color:#ccc;display:inline;"> &nbsp;&nbsp; <i class="icon-chevron-right"></i> &nbsp;&nbsp; </div>'  
 							 +'										<span class="'+markerArray[i].statusCss+'">'+ markerArray[i].status +'</span></b></td>'				           
 							 +'	 </tr>'	
@@ -81,7 +83,7 @@ var mapController = {
 							 +'	 	<td>&nbsp;</td>'				
 							 +'	 </tr>'			
 							 +'	 <tr style="font-size:11px;padding-top:1px">'
-							 +'		<td style="text-align:left;color:grey;border-top:1px solid grey">Reportado por: '+getUserURL(markerArray[i].user.username)+' &nbsp; <div style="margin:0;padding:0;float:right;clear:both;display:inline">'+ markerArray[i].fechaFormateada +'</div></td>'
+							 +'		<td style="text-align:left;color:grey;border-top:1px solid grey">Reportado por: '+mapController.getUserURL(markerArray[i].user.username)+' &nbsp; <div style="margin:0;padding:0;float:right;clear:both;display:inline">'+ markerArray[i].fechaFormateada +'</div></td>'
 							 +'	 </tr>'				
 							 +'	 </table>';					 
 		        	
@@ -549,8 +551,8 @@ var mapController = {
 					    	tr += '<div class="media">';
 					    	tr += '<img class="media-object pull-left thumbnail" style="width:64px; height:64px" src="'+imageSrc+'">';
 					    	tr += '<div class="media-body">';
-					    	tr += '<a href="'+getIssuePlainURL(marker.id, marker.title)+'"><h5 class="media-heading">'+marker.title+'</h5></a>';
-					    	tr += '<p style="font-size:11px">Reportado por: '+getUserURL(marker.username)+'</p>';
+					    	tr += '<a href="'+mapController.getIssuePlainURL(marker.id, marker.title)+'"><h5 class="media-heading">'+marker.title+'</h5></a>';
+					    	tr += '<p style="font-size:11px">Reportado por: '+mapController.getUserURL(marker.username)+'</p>';
 					    	tr += '<a class=\"taglink\" href=\"./search.html?type=status&value='+marker.status+'\"><span class="label '+marker.statusCss+'">'+marker.status+'</a></span>';
 					    	tr += '</div>';	
 					    	tr += '</div>';
@@ -712,30 +714,30 @@ var mapController = {
 // GLOBAL VARIABLES					
 /**********************************************/
 
-//google.maps.visualRefresh = true; 
-//
-//var map;
-//var markerArray;
-//var initMarker;
-//var init_coord = new google.maps.LatLng(-34.599722, -58.381944);
-//
-//var mapOptions = {
-//		center: init_coord,
-//		zoom: 12,
-//		mapTypeId: google.maps.MapTypeId.ROADMAP,
-//		mapTypeControl: true,
-//		scrollwheel: false
-//};
-//var placeSearch, autocomplete;
-//var componentForm = {
-////		  street_number: 'short_name',
-////		  route: 'long_name',
-//		  neighborhood: 'long_name',
-//		  locality: 'long_name',
-//		  administrative_area_level_1: 'long_name'
-//		};
-//var isFormOpen;
-//var isAnimating = false; 
-//var mapTimesClicked = 0;
-//var autocompleteCalls = 0;
+google.maps.visualRefresh = true; 
+
+var map;
+var markerArray;
+var initMarker;
+var init_coord = new google.maps.LatLng(-34.599722, -58.381944);
+
+var mapOptions = {
+		center: init_coord,
+		zoom: 12,
+		mapTypeId: google.maps.MapTypeId.ROADMAP,
+		mapTypeControl: true,
+		scrollwheel: false
+};
+var placeSearch, autocomplete;
+var componentForm = {
+//		  street_number: 'short_name',
+//		  route: 'long_name',
+		  neighborhood: 'long_name',
+		  locality: 'long_name',
+		  administrative_area_level_1: 'long_name'
+		};
+var isFormOpen;
+var isAnimating = false; 
+var mapTimesClicked = 0;
+var autocompleteCalls = 0;
 

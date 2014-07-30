@@ -452,7 +452,7 @@ public class IssueServiceImpl implements IssueService {
 
 		//email notification
 		String link = "<a target='_blank' href='http://localhost:8080/fixeala/issues/" + issue.getId().toString() + ".html' >LINK</a>.";
-		String text = "El usuario <i>" + commentDTO.getUsuario() + "</i> ha dejado un comentario en tu reclamo <i># \"" + issue.getTitle() + "\"</i>.";
+		String text = "El usuario <i>" + commentDTO.getUsuario() + "</i> ha dejado un comentario en tu reclamo <i>#" +issue.getId()+ " \"" + issue.getTitle() + "\"</i>.";
 		text += "<br><br>";
 		text += "Para acceder al comentario publicado, hac&eacute; clic en el siguiente " + link;
 		

@@ -51,7 +51,7 @@ import com.google.gson.JsonObject;
 @Controller
 public class HomeController {
 	
-	private static int ITEMS_PER_PAGE = 5;
+	private static int ITEMS_PER_PAGE = 10;
 	
 	@Autowired
 	private IssueService issueService;

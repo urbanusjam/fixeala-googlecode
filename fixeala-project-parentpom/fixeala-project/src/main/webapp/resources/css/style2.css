@@ -910,7 +910,8 @@ input.repairDate { width:178px;  height:20px; }
 /* 		 } */
 /* .tbl-licitacion-form  tbody td.dynamic{height:30px;} */
 
-.table-hover tbody tr:hover>td, .table-hover tbody tr:hover>th { background-color: #DDD;}
+.table-hover tbody tr:hover > td, 
+.table-hover tbody tr:hover > th { background-color: #EFEFEF; }
 
 
 #tblUserIssues{table-layout:fixed;}
@@ -1111,6 +1112,11 @@ a.editable-click.editable-disabled {
   color: #333;
 }
 
+.loading {   
+	background: url(../../resources/images/loader.gif) no-repeat;
+  	background-position: 680px center;
+}
+
 .typeahead {
 	height: auto;
 	width: 650px;  
@@ -1163,6 +1169,8 @@ a.editable-click.editable-disabled {
   font-weight: bold;
   font-size: 18px;  
   padding: 10px 0 5px 0;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 
 .typeahead-address {
@@ -1277,7 +1285,7 @@ a.no-hover { text-decoration: none; color: #000;}
 /**** Infinite Scroll ****/
 
 #infinite-container, #infinite-container-users,  
-#infinite-container-votes, #infinite-container-comments{
+#infinite-container-votes, #infinite-container-updates, #infinite-container-comments{
 	background: #FFF;	
   	padding: 0 0 10px 0;
   	margin: 15px 0 20px 0;  
@@ -1285,7 +1293,6 @@ a.no-hover { text-decoration: none; color: #000;}
   	border: 0px solid #000;   
 }
 
-#infinite-container-comments{ width: 660px; }
 
 #infscr-loading {
   position: fixed;
@@ -1308,7 +1315,7 @@ a.no-hover { text-decoration: none; color: #000;}
 
 .brick { width: 190px; }
 .brick-user { width: 180px; }
-.brick-comment { width: 500px; }
+/* .brick-comment { width: 640px; } */
 
 .brick{ 	 	
   	position: relative;
@@ -1322,17 +1329,28 @@ a.no-hover { text-decoration: none; color: #000;}
     border: 1px solid #DDD; 	 
 }
 
+.brick-update  { 
+	width: 100%; 
+	position: relative; 
+	padding: 10px;
+	border-bottom: 1px dashed #DDD;
+}
+.brick-update:hover, .brick-comment:hover { background-color: #EEE; }
+
+.brick-update span { display: inline-block; margin-right: 5px;}
+.brick-update .index { width: 20px; }
+.brick-update .date { width: 120px; }
+.brick-update .user { width: 150px; }
+.brick-update .motive { width: auto; }
+.brick-update .obs { float: right; width: 100px; margin-right: 10px; }
+.brick-update .obs button { padding:0 5px 0 5px; text-transform: uppercase; font-size: 11px;}
 
 .brick-comment  { 	 	
 	width: 100%;
   	position: relative;
-	margin: 0 15px 10px 0;
-	padding: 10px;
-/*   	background: #F5F5F5; */
-  	text-align: left;   
+	padding: 15px 0 10px 15px;
+	margin-right: 10px;
     border-bottom: 1px solid #DDD; 	
-    border-top: 1px solid #DDD; 	
- 
 }
 
 .brick .status  { display: block; text-align: center; margin-bottom: 10px; padding: 5px 0 5px 0; }
