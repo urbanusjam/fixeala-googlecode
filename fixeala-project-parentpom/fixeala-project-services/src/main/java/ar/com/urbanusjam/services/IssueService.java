@@ -2,6 +2,7 @@ package ar.com.urbanusjam.services;
 
 import java.util.List;
 
+import ar.com.urbanusjam.entity.annotations.Issue;
 import ar.com.urbanusjam.services.dto.CommentDTO;
 import ar.com.urbanusjam.services.dto.IssueCriteriaSearch;
 import ar.com.urbanusjam.services.dto.IssueDTO;
@@ -55,5 +56,7 @@ public interface IssueService {
 	public Long countIssueVotes(String issueID);	
 	
 	public List<IssueDTO> searchByTagOrStatus(String searchType, String value);
+	
+
 		
 }

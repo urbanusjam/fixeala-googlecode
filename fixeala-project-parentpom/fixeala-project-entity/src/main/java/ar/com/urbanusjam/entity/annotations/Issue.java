@@ -96,9 +96,6 @@ public class Issue implements Serializable  {
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn  
 	private IssueRepair licitacion;
-
-//	@ManyToMany(fetch = FetchType.EAGER, mappedBy="issueList") //inverse side
-//	private Set<Tag> tagsList;	
 	
 	@ManyToMany(fetch = FetchType.LAZY) //owner side
     @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.ALL})	

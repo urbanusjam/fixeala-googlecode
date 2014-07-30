@@ -24,6 +24,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -55,7 +57,7 @@ public class User implements UserDetails {
     @Column(name="last_name")
     private String apellido;
     
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_area")
     private Area area;
     
@@ -110,7 +112,6 @@ public class User implements UserDetails {
 	         inverseJoinColumns = @JoinColumn(name = "id_role"))
     private Collection<Authority> roles;  
     
-  
 
 	//Constructors
 	public User() { }

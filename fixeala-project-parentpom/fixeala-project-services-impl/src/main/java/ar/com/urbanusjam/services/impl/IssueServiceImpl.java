@@ -345,7 +345,9 @@ public class IssueServiceImpl implements IssueService {
 		issues = issueDAO.getAllIssues();
 		List<IssueDTO> issuesDTO = new ArrayList<IssueDTO>();
 		for(Issue issue : issues){		
-			issuesDTO.add(convertToDTO(issue));
+//			issuesDTO.add(convertToDTO(issue));
+			issuesDTO.add(preloadIssues(issue));
+			
 		}
 		
 		Collections.sort(issuesDTO, new Comparator<IssueDTO>() {
@@ -406,7 +408,8 @@ public class IssueServiceImpl implements IssueService {
 	@Override
 	public IssueDTO getIssueById(String issueID){
 		Issue issue = issueDAO.findIssueById(issueID);
-		return convertToDTO(issue);		
+//		return convertToDTO(issue);		
+		return loadCompleteIssue(issue);		
 	}
 	
 //	@Override
@@ -692,12 +695,106 @@ public class IssueServiceImpl implements IssueService {
 		return issue;
 	}
 	
+	
+	private IssueDTO preloadIssues(Issue issue){
+			
+		String[] cssStyle = this.assignCSSbyStatus(issue.getStatus());
+		
+		IssueDTO issueDTO = new IssueDTO();
+		issueDTO.setId(String.valueOf(issue.getId()));
+		issueDTO.setUsername(issue.getReporter().getUsername());
+		issueDTO.setAddress(issue.getAddress());
+		issueDTO.setLatitude(String.valueOf(issue.getLatitude()));
+		issueDTO.setLongitude(String.valueOf(issue.getLongitude()));
+		issueDTO.setCity(issue.getCity());	
+		issueDTO.setProvince(issue.getProvince());	
+		issueDTO.setTitle(issue.getTitle());
+		issueDTO.setTitleCss(cssStyle[1]);
+		issueDTO.setDescription(issue.getDescription());	
+		issueDTO.setCreationDate(issue.getCreationDate().getTime());		
+		issueDTO.setStatus(issue.getStatus());
+		issueDTO.setStatusCss(cssStyle[0]);	
+		issueDTO.setFechaFormateada(issue.getCreationDate().getTime());
+		issueDTO.setFechaFormateadaCompleta(issue.getCreationDate().getTime());		
+		issueDTO.setTotalVotes(this.countIssueVotes(String.valueOf(issue.getId()))); // llamada al DAO
+		issueDTO.setTotalFollowers(Long.valueOf(issue.getFollowers().size()));
+		
+		return issueDTO;
+	}
+	
+	
+	private IssueDTO loadCompleteIssue(Issue issue){
+		
+		String[] cssStyle = this.assignCSSbyStatus(issue.getStatus());
+		
+		IssueDTO issueDTO = new IssueDTO();
+		issueDTO.setId(String.valueOf(issue.getId()));
+		issueDTO.setUsername(issue.getReporter().getUsername());
+		issueDTO.setAddress(issue.getAddress());
+		issueDTO.setLatitude(String.valueOf(issue.getLatitude()));
+		issueDTO.setLongitude(String.valueOf(issue.getLongitude()));
+		issueDTO.setNeighborhood(issue.getNeighborhood());
+		issueDTO.setCity(issue.getCity());	
+		issueDTO.setProvince(issue.getProvince());	
+		issueDTO.setTitle(issue.getTitle());
+		issueDTO.setTitleCss(cssStyle[1]);
+		issueDTO.setDescription(issue.getDescription());	
+		issueDTO.setCreationDate(issue.getCreationDate().getTime());		
+		issueDTO.setLastUpdateDate(issue.getLastUpdateDate().getTime());		
+		issueDTO.setStatus(issue.getStatus());
+		issueDTO.setStatusCss(cssStyle[0]);
+		issueDTO.setFechaFormateada(issue.getCreationDate().getTime());
+		issueDTO.setFechaFormateadaCompleta(issue.getCreationDate().getTime());		
+		issueDTO.setTotalVotes(this.countIssueVotes(String.valueOf(issue.getId()))); // llamada al DAO
+		issueDTO.setTotalFollowers(Long.valueOf(issue.getFollowers().size()));
+		
+		//tags		
+		Set<Tag> tagList = issue.getTagsList();
+		List<String> tagNames = new ArrayList<String>();
+		
+		if(tagList.size() > 0){
+			for(Tag t :  issue.getTagsList()){				
+				tagNames.add(t.getTagname().trim());
+			}
+		}
+		
+		issueDTO.setTags(tagNames);
+		
+//		issueDTO.setAssignedOfficial(null);
+	
+		//historial
+		List<IssueUpdateHistoryDTO> historialDTO = new ArrayList<IssueUpdateHistoryDTO>();		
+		for(IssueUpdateHistory revision : issue.getRevisiones()){
+			historialDTO.add(convertTo(revision));
+		}		
+		issueDTO.setHistorial(historialDTO);
+		
+		//comentarios
+		List<CommentDTO> comentariosDTO = new ArrayList<CommentDTO>();		
+		for(Comment comentario : issue.getComentarios()){
+			comentariosDTO.add(convertToDTO(comentario));
+		}		
+		issueDTO.setComentarios(comentariosDTO);
+						
+		//contenidos
+		List<MediaContentDTO> contenidosDTO = new ArrayList<MediaContentDTO>();		
+		for(MediaContent contenido : issue.getContenidos()){			
+			MediaContentDTO contenidoDTO = contenidoService.convertirAContenidoDTO(contenido);
+			contenidoDTO.setFile(contenidoService.abrirContenidoFile(contenidoDTO));
+			contenidosDTO.add(contenidoDTO);
+		}		
+		issueDTO.setContenidos(contenidosDTO);
+		
+		return issueDTO;
+
+	}
+	
 	public IssueDTO convertToDTO(Issue issue){
 		
 		UserDTO userDTO = new UserDTO();
 		userDTO.setUsername(issue.getReporter().getUsername());
 		
-		String[] cssStyle = assignCSSbyStatus(issue.getStatus());
+		String[] cssStyle = this.assignCSSbyStatus(issue.getStatus());
 		
 		IssueDTO issueDTO = new IssueDTO();
 		issueDTO.setId(String.valueOf(issue.getId()));
@@ -718,10 +815,11 @@ public class IssueServiceImpl implements IssueService {
 		issueDTO.setUsername(userDTO.getUsername());
 		issueDTO.setFechaFormateada(issue.getCreationDate().getTime());
 		issueDTO.setFechaFormateadaCompleta(issue.getCreationDate().getTime());		
-		issueDTO.setTotalVotes(this.countIssueVotes(String.valueOf(issue.getId())));
+		issueDTO.setTotalVotes(this.countIssueVotes(String.valueOf(issue.getId()))); // llamada al DAO
 		issueDTO.setTotalFollowers(Long.valueOf(issue.getFollowers().size()));
 		
 		//tags		
+		/**
 		Set<Tag> tagList = issue.getTagsList();
 		List<String> tagNames = new ArrayList<String>();
 		
@@ -732,24 +830,9 @@ public class IssueServiceImpl implements IssueService {
 		}
 		
 		issueDTO.setTags(tagNames);
+		**/
 		
-		//area asignada
-//		if(issue.getAssignedArea() != null){
-//			issueDTO.setAssignedArea(convertTo(issue.getAssignedArea()));
-//			issueDTO.setArea(issue.getAssignedArea().getNombre());
-//		}
-//		else{
-//			issueDTO.setAssignedArea(null);
-//			issueDTO.setArea("Comuna 1");
-//		}
-		
-//		if(issue.getAssignedOfficial() != null){
-//			UserDTO official = new UserDTO();
-//			official.setUsername(issue.getAssignedArea().getNombre());
-//			issueDTO.setAssignedOfficial(official);		
-//		}
-//		else
-			issueDTO.setAssignedOfficial(null);
+		issueDTO.setAssignedOfficial(null);
 		
 		//licitacion
 //		if(issue.getLicitacion() != null)
@@ -758,15 +841,17 @@ public class IssueServiceImpl implements IssueService {
 //			issueDTO.setLicitacion(null);
 		
 		//historial
+		/**
 		List<IssueUpdateHistoryDTO> historialDTO = new ArrayList<IssueUpdateHistoryDTO>();
 		
 		for(IssueUpdateHistory revision : issue.getRevisiones()){
 			historialDTO.add(convertTo(revision));
 		}
 		
-		issueDTO.setHistorial(historialDTO);
+		issueDTO.setHistorial(historialDTO);**/
 		
 		//contenidos
+		/**
 		List<MediaContentDTO> contenidosDTO = new ArrayList<MediaContentDTO>();
 		
 		for(MediaContent contenido : issue.getContenidos()){			
@@ -776,8 +861,10 @@ public class IssueServiceImpl implements IssueService {
 		}
 		
 		issueDTO.setContenidos(contenidosDTO);
+		**/
 		
 		//comentarios
+		/**
 		List<CommentDTO> comentariosDTO = new ArrayList<CommentDTO>();
 		
 		for(Comment comentario : issue.getComentarios()){
@@ -785,6 +872,7 @@ public class IssueServiceImpl implements IssueService {
 		}
 		
 		issueDTO.setComentarios(comentariosDTO);
+		**/
 		
 		return issueDTO;
 	}

@@ -7,7 +7,7 @@
 		
 			
 			/*** INIT GOOGLE MAPS ***/
-			var geocoder;			 
+					 
 			google.maps.event.addDomListener(window, 'load', mapController.initMap);  	 
 			
 			

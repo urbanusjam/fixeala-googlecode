@@ -23,14 +23,23 @@ var mapController = {
 	initMiniMap : function(lat, lng, titulo){
 		
 		var latlng = new google.maps.LatLng(lat, lng);
-		var miniMap = new google.maps.Map(document.getElementById("mini_map"), mapOptions);    
-
+		var miniMap = new google.maps.Map(document.getElementById("mini_map"), mapOptions); 
+		miniMap.setCenter(latlng);
+		
 	    var marker = new google.maps.Marker({ 
 			map: miniMap,
 	    	position: latlng,
 	    	title: titulo
 	    }); 	
-		
+	    	    
+	    var infowindow = new google.maps.InfoWindow();	
+	    var html = '<p>'+titulo+'</p>';
+	    infowindow.setContent(html);
+	    
+	    google.maps.event.addListener(marker, 'click', function () {	    
+			infowindow.open(miniMap, marker);			    			
+		});
+	    
 	},
 	
 	refreshMap : function(map, newLocation){	
@@ -83,7 +92,7 @@ var mapController = {
 							 +'	 	<td>&nbsp;</td>'				
 							 +'	 </tr>'			
 							 +'	 <tr style="font-size:11px;padding-top:1px">'
-							 +'		<td style="text-align:left;color:grey;border-top:1px solid grey">Reportado por: '+mapController.getUserURL(markerArray[i].user.username)+' &nbsp; <div style="margin:0;padding:0;float:right;clear:both;display:inline">'+ markerArray[i].fechaFormateada +'</div></td>'
+							 +'		<td style="text-align:left;color:grey;border-top:1px solid grey">Reportado por: '+mapController.getUserURL(markerArray[i].username)+' &nbsp; <div style="margin:0;padding:0;float:right;clear:both;display:inline">'+ markerArray[i].fechaFormateada +'</div></td>'
 							 +'	 </tr>'				
 							 +'	 </table>';					 
 		        	
@@ -741,3 +750,4 @@ var isAnimating = false;
 var mapTimesClicked = 0;
 var autocompleteCalls = 0;
 
+var geocoder;	

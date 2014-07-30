@@ -42,9 +42,9 @@
    	    		$(".issueList").append( "<article>" +
    	    			"<div class=\"row\" style=\"margin-bottom:20px;border-bottom:1px dashed #ccc;\">" +	    		
    			            "<header>" +
-   			                "<span class=\""+issues[i].statusCss+"\">" +issues[i].status+ "</span>&nbsp;&raquo;&nbsp;<small>"+issues[i].date+"</small><h1><small><a href=\"" +getIssuePlainURL(issues[i].id, issues[i].title)+ "\" title=\" "+issues[i].title+ "\">"+issues[i].title+"</a></small></h1>" +
+   			                "<span class=\""+issues[i].statusCss+"\">" +issues[i].status+ "</span>&nbsp;&raquo;&nbsp;<small>"+issues[i].date+"</small><h1><small><a href=\"" +mapController.getIssuePlainURL(issues[i].id, issues[i].title)+ "\" title=\" "+issues[i].title+ "\">"+issues[i].title+"</a></small></h1>" +
    			                "<p class=\"meta\"><small>" +
-   			                    issues[i].address + "&nbsp;|&nbsp; Publicado por: <a href=\"" +getUserPlainURL(issues[i].user)+ "\">"+issues[i].user+"</a>" +
+   			                    issues[i].address + "&nbsp;|&nbsp; Publicado por: <a href=\"" +mapController.getUserPlainURL(issues[i].user)+ "\">"+issues[i].user+"</a>" +
    			                "</small></p>"+
    			            "</header>"+
    	            		"<p>"+issues[i].description+"</p>" +
