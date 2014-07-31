@@ -24,7 +24,7 @@ public interface IssueService {
 	public void deleteRepairInfo(String issueID);
 	public IssueRepairDTO getRepairInfoByIssue(String issueID);
 	
-	public void updateIssue(IssueDTO issue);		
+	public void updateIssue(IssueDTO issue) throws Exception;		
 	public void updateIssueStatus(String username, String issueID, String newStatus, String resolution, String obs) throws Exception;
 		
 	public void assignUserToIssue(String issueID, String username);

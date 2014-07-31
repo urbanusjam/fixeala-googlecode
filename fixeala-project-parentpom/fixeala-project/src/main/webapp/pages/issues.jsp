@@ -951,12 +951,12 @@
 			        ///*** WATCH ***/////
 			        
 			        var isWatching = '${isUserWatching}';
-		        	var $watcherList = $('#followers-list');	 
+		        	var $watcherList = $('#numFollowers');	 
 		        	var numberOfWatchers = '${cantidadObservadores}';		        	
 		        	var data = "issueID=" + idIssue;		        
 		        	var loader = '<button class="btn btn-default pull-right loader"><img src="${pageContext.request.contextPath}/resources/images/loader6.gif" alt="Loading" height=15 width=15 /></button>';	  
 		        	
-// 			        $watcherList.html(numberOfWatchers); 
+			        $watcherList.html(numberOfWatchers); 
 
 					$watcherList.live('click', function(){
 						
@@ -1006,11 +1006,11 @@
 		        			    url: "./watch/",
 						 		type: "POST",	
 						 		data: data,							 
-						        success: function(data){						        	
+						        success: function(data){
 						        	if(data.result){	
-						        		setTimeout(function(){							 					
+						        		setTimeout(function(){		
 						        			$('.loader').replaceWith('<button id="btn-unwatch-issue" class="btn btn-info pull-right">Siguiendo</button>');
-						        			$watcherList.html(data.message);
+						        			$watcherList.text(data.message);
 						 				}, 1000);
 						        	}
 						        	else{
@@ -1040,9 +1040,9 @@
 					 		data: data,							 
 					        success: function(data){							        	
 					        	if(data.result){
-					        		setTimeout(function(){							 					
+					        		setTimeout(function(){
 					        			$('.loader').replaceWith('<button id="btn-watch-issue" class="btn btn-default pull-right">@ Segu&iacute; el reclamo</button>');
-					        			$watcherList.html(data.message);	
+					        			$watcherList.text(data.message);	
 					        		}, 1000);
 					        	}
 					        	else{
@@ -1059,11 +1059,8 @@
 			    var isVoted = '${isCurrentlyVoted}';
 			    var isVoteUp = '${isVoteUp}';
 			    
-			  
-			    
 			    userActionsController.setCurrentVote(isVoted, isVoteUp);
 			    
-			 
 			    $('#votes button').live('click', function(e) {
 			    	
 			    	var thumb = $(this).attr('id');
@@ -1457,26 +1454,7 @@
 			 
 			 	<center><a href="#" id="btn-more-updates" class="btn btn-default btn-more update" style="display: none;">Mostrar m&aacute;s resultados</a></center>
 			</div>
-			
-				
-<!-- 			<table class="table table-hover" style="width:100%" id="tbl-issue-updates"> -->
-<%-- 	      		<c:forEach items="${historial}" var="revision">					         --%>
-<%-- 			    	<c:set var="count" value="${count + 1}" scope="page"/>	 --%>
-<!-- 			        <tr> -->
-<%-- 			        	<td style="border-top:none; width:5%"><c:out value="${count}" /></td>			 --%>
-<%-- 			          	<td style="border-top:none; ">${revision.fechaFormateada}</td>				    		 --%>
-<!-- 			    		<td style="border-top:none; "> -->
-<!-- 			    			<a href="#"><script type="text/javascript">document.write( mapController.getUserURL('${revision.username}') );</script></a> -->
-<!-- 			    		</td> -->
-<%-- 			    		<td style="border-top:none; width:35%; border: 0px solid red">${revision.detalle}</td> --%>
-<!-- 			    		<td class="collapse-group" style="border-top:none; width:35%;" >					    -->
-<%-- 			    			<c:if test="${not empty revision.observaciones}">	 --%>
-<%-- 								<a class="btn-collapse link" href="#" onclick="javascrip:userActionsController.loadDetailModal('${revision.observaciones}');" data-toggle="modal" >Ver detalle &raquo;</a> --%>
-<%-- 	   						</c:if>  --%>
-<!-- 	   					</td>				    		 -->
-<!-- 			    	</tr>					     -->
-<%-- 				 </c:forEach> --%>
-<!-- 			</table> -->
+
 		</div>
 		
 		<!-- 2 Archivos -->							
@@ -1518,41 +1496,6 @@
 			
 		 	</div>
 			
-			
-			 
-<!-- 				<div id="content-comment"> -->
-<!-- 					<table id="tblComments" class="table table-hover">				         -->
-<%-- 					   <c:forEach items="${comentarios}" var="comentario" varStatus="i" begin="0" end="2">	 --%>
-<!-- 							<tr> -->
-<!-- 								<td> -->
-<!-- 									<div class="media"> -->
-	
-<!-- 										  <span class="pull-left"> -->
-<%-- 										  <img class="media-object thumbnail" src="${pageContext.request.contextPath}/resources/images/nopic64.png"> --%>
-<%-- 										 	<center><strong>${i.index + 1}</strong></center> --%>
-<!-- 										 </span> -->
-<!-- 										  <div style="font-size:12px;margin-bottom:10px"> -->
-<%-- 										  	<a href="#"><strong>${comentario.usuario}</strong></a> &nbsp; &raquo;  &nbsp;  --%>
-<%-- 									    	${comentario.fechaFormateada} --%>
-<!-- 									      </div> -->
-<!-- 								 		  <div class="media-body" style="display:block">				    	 -->
-									    	
-<%-- 									    	<p style="font-size:13px">${comentario.mensaje}</p>	  --%>
-<!-- 								  		</div> -->
-<!-- 									</div>						 -->
-<!-- 								</td> -->
-<!-- 							</tr> -->
-<%-- 						</c:forEach> --%>
-<!-- 					 </table>						  -->
-
-
-
-			
-
-<!-- 				 </div> -->
-<!-- 				 <div id="page-selection"></div>	 -->
-				 
-<!-- 			</div>					 -->
 		</div>	
 								
 		</div>
@@ -1686,7 +1629,11 @@
 				<div class="stats-box"><span class="text-big">${cantidadVisitas}</span> <span class="text-small">visitas</span></div>
 				<div class="stats-box"><span class="text-big">${cantidadComentarios}</span> <span class="text-small">comentarios</span></div>
 				<div id="watchers" class="stats-box">
-					<span class="text-big"><a href="#mdl-followers" id="followers-list" data-toggle="modal"></a></span> 
+					<span class="text-big">
+						<a href="#mdl-followers" id="followers-list" data-toggle="modal">
+							<span id="numFollowers"></span>
+						</a>
+					</span> 
 					<span class="text-small">seguidores</span>
 					<sec:authorize access="hasRole('ROLE_USER')">
 						<c:if test="${isUserWatching}">
@@ -1706,21 +1653,27 @@
 			<div id="userIssueActions" >
 				<sec:authorize access="hasRole('ROLE_USER')">
 					<div class="stats-container">
-						<button id="btn-edit" class="btn" title="Editar"><i class="icon-pencil icon-large"></i></button>	
-						<button id="btn-update" class="btn btn-primary" title="Guardar cambios"><i class="icon-save icon-large"></i></button>	
-						<c:if test="${estado eq 'ABIERTO' || estado eq 'REABIERTO'}">
-							<div id="btn-status" data-toggle="modal" class="pull-right">			
-								<button class="btn btn-success" title="Resolver"><i class="icon-ok icon-large"></i> RESOLVER</button>
-							</div>
+						<c:if test="${estado ne 'CERRADO'}">
+							<button id="btn-edit" class="btn" title="Editar"><i class="icon-pencil icon-large"></i></button>	
+							<button id="btn-update" class="btn btn-primary" title="Guardar cambios"><i class="icon-save icon-large"></i></button>	
+							<c:if test="${estado eq 'ABIERTO' || estado eq 'REABIERTO'}">
+								<div id="btn-status" data-toggle="modal" class="pull-right">			
+									<button class="btn btn-success" title="Resolver"><i class="icon-ok icon-large"></i> RESOLVER</button>
+								</div>
+							</c:if>
+							<c:if test="${estado eq 'RESUELTO'}">
+								<div id="btn-status" data-toggle="modal" class="pull-right">			
+									<button class="btn btn-warning" title="Reabrir"><i class="icon-rotate-right icon-large"></i> REABRIR</button>
+								</div>
+							</c:if>						
+							<script type="text/javascript">
+								userActionsController.enableUserActions();
+							</script>
 						</c:if>
-						<c:if test="${estado eq 'RESUELTO' || estado eq 'CERRADO'}">
-							<div id="btn-status" data-toggle="modal" class="pull-right">			
-								<button class="btn btn-warning" title="Reabrir"><i class="icon-rotate-right icon-large"></i> REABRIR</button>
-							</div>
-						</c:if>						
-						<script type="text/javascript">
-							userActionsController.enableUserActions();
-						</script>	
+						<c:if test="${estado eq 'CERRADO'}">
+						<div class="stats-box">
+							<span class="label label-inverse" style="width: 100%; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;box-sizing:border-box;padding:5px 0 5px 5px">Este reclamo ya no puede editarse.</span></div>
+						</c:if>
 					</div>	
 				</sec:authorize>	
 			</div>

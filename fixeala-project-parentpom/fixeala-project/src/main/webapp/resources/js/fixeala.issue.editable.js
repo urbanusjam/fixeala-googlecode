@@ -62,9 +62,8 @@ var userActionsController = {
 						       success: function(data) {
 						    	   
 						    	   if(data.result){		
-						    		   bootbox.alert(data.message, function(){						    			 
-//							    			var url = getIssueURL(issueID, newTitle, 'plain');		
-						    				var url = getIssueURL(issueID, '', 'plain');		
+						    		   bootbox.alert(data.message, function(){						    			 	
+						    				var url = mapController.getIssuePlainURL(issueID);		
 							    			window.location.href= url;	
 						    		   }); 
 						    	   }						    	   
@@ -128,13 +127,6 @@ var userActionsController = {
 						    			window.location.href= url;	
 				        			}); 	
 				        		}, 1000); 
-				        		
-
-				        			
-				        		
-
-				        		
-
 				        		
 //				        			bootbox.alert(data.message); 				        			
 //					    			setTimeout(function () {

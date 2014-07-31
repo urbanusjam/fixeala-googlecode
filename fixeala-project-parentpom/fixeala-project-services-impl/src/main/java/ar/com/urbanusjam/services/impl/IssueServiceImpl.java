@@ -148,8 +148,8 @@ public class IssueServiceImpl implements IssueService {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED)
-	public void updateIssue(IssueDTO issueDTO) {
+	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor={MessagingException.class})
+	public void updateIssue(IssueDTO issueDTO) throws Exception {
 		Issue issue = new Issue();
 		issue = this.convertTo(issueDTO);
 				
@@ -173,15 +173,31 @@ public class IssueServiceImpl implements IssueService {
 			issue.addMediaContent(contenidoService.convertirAContenido(contenidoDTO));
 		}
 		
+		//email notification
+		String link = "<a target='_blank' href='http://localhost:8080/fixeala/issues/" + issue.getId().toString() + ".html' >LINK</a>.";
+		String text = "El usuario <i>" + issueDTO.getUsername() + "</i> actualiz— la informaci—n del reclamo <i>#" +issue.getId()+ " \"" + issue.getTitle() + "\"</i>.";
+		text += "<br><br>";
+		text += "Para acceder al mismo, hac&eacute; clic en el siguiente " + link;
+		
+		EmailDTO email = new EmailDTO();
+		email.setSubject("Nueva actualizaci&oacute;n en el reclamo #" + issue.getId().toString() + " \"" + issue.getTitle() + "\"" );
+		email.setTo(issue.getReporter().getEmail());
+		email.setUrl(link);
+		email.setMessage(text);
+		
 		issueDAO.updateIssue(issue);
+		
+		Set<IssueFollow> followers = issue.getFollowers();
+		String reporterEmail = null;
+		
+		mailService.sendIssueUpdateEmail(this.getFollowersEmails(followers, reporterEmail), email);
 	}
 	
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor={MessagingException.class})
 	public void updateIssueStatus(String username, String issueID, String newStatus, String resolution, String obs) throws Exception {
 	
 		IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
-//		revision.setNroReclamo(Long.valueOf(issueID));
 		revision.setFecha(new Date());
 		revision.setUsername(username);
 		revision.setOperacion(Operation.UPDATE);			
@@ -202,7 +218,7 @@ public class IssueServiceImpl implements IssueService {
 		
 		//email notification
 		String link = "<a target='_blank' href='http://localhost:8080/fixeala/issues/" + issue.getId().toString() + ".html' >LINK</a>.";
-		String text = "El usuario <u>" + revision.getUsername() + "</u> ha cambiado el estado de tu reclamo <i>#" + issue.getId().toString() + " \"" + issue.getTitle() + "\"</i> de " + issue.getStatus().toUpperCase() + " a " + newStatus.toUpperCase() + ".";
+		String text = "El usuario <u>" + revision.getUsername() + "</u> ha cambiado el estado del reclamo <i>#" + issue.getId().toString() + " \"" + issue.getTitle() + "\"</i> de " + issue.getStatus().toUpperCase() + " a " + newStatus.toUpperCase() + ".";
 		text += "<br><br>";
 		text += "- Motivo: " + revision.getResolucion();
 		text += "<br>";
@@ -221,7 +237,14 @@ public class IssueServiceImpl implements IssueService {
 		issue.addRevision(this.convertTo(revision));
 		
 		issueDAO.updateIssue(issue);
-//		mailService.sendIssueUpdateEmail(email);
+		
+		Set<IssueFollow> followers = issue.getFollowers();
+		String reporterEmail = null;
+		
+		if(!username.equals(issue.getReporter().getUsername()))
+			reporterEmail = username;
+		
+		mailService.sendIssueUpdateEmail(this.getFollowersEmails(followers, reporterEmail), email);
 	}
 	
 	
@@ -455,7 +478,7 @@ public class IssueServiceImpl implements IssueService {
 
 		//email notification
 		String link = "<a target='_blank' href='http://localhost:8080/fixeala/issues/" + issue.getId().toString() + ".html' >LINK</a>.";
-		String text = "El usuario <i>" + commentDTO.getUsuario() + "</i> ha dejado un comentario en tu reclamo <i>#" +issue.getId()+ " \"" + issue.getTitle() + "\"</i>.";
+		String text = "El usuario <i>" + commentDTO.getUsuario() + "</i> ha dejado un comentario en el reclamo <i>#" +issue.getId()+ " \"" + issue.getTitle() + "\"</i>.";
 		text += "<br><br>";
 		text += "Para acceder al comentario publicado, hac&eacute; clic en el siguiente " + link;
 		
@@ -467,10 +490,13 @@ public class IssueServiceImpl implements IssueService {
 		
 		issueDAO.updateIssue(issue);
 		
-		if(!issue.getReporter().getUsername().equals(commentDTO.getUsuario())){
-			mailService.sendIssueUpdateEmail(email);		
-		}
-			
+		Set<IssueFollow> followers = issue.getFollowers();
+		String reporterEmail = null;
+		
+		if(!commentDTO.getUsuario().equals(issue.getReporter().getUsername()))
+			reporterEmail = comment.getUsuario().getEmail();
+		
+		mailService.sendIssueUpdateEmail(this.getFollowersEmails(followers, reporterEmail), email);
 		
 	}
 
@@ -1171,7 +1197,29 @@ public class IssueServiceImpl implements IssueService {
 		return convertTo(licitacion);
 	}
 
-	
-	
+	private String[] getFollowersEmails(Set<IssueFollow> followers, String reporterEmail){
+		String [] emails;
+		if(followers.size() > 0){
+			emails = new String[followers.size()];
+			int index = 0;
+			for(IssueFollow follower :  followers){
+				emails[index] = follower.getFollower().getEmail();
+				index++;
+			}
+			if(reporterEmail != null)
+				emails[followers.size()] = reporterEmail;
+		}
+		else{
+			
+			if(reporterEmail != null){
+				emails = new String[1];
+				emails[0] = reporterEmail;
+			}
+			else
+				emails = null;
+		}
+		
+		return emails;
+	}
 	
 }
