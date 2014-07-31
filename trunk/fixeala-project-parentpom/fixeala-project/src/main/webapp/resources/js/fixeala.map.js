@@ -635,7 +635,7 @@ var mapController = {
 		return (google.maps.geometry.spherical.computeDistanceBetween(pointA, pointB) / 1000).toFixed(2);
 	},
 	
-	getIssuePlainURL : function (issueID, issueTitle){
+	getIssuePlainURL : function (issueID){
 		var protocol = window.location.protocol;
 		var host = window.location.host;
 		var context = "fixeala";

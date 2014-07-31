@@ -651,11 +651,9 @@ path:hover {
 														    var isVoteUp = '${isVoteUp}';
 														    
 															$("#issue-stats").load(urlVote, function(){
-																userActionsController.setCurrentVote(isVoted, isVoteUp);					
+																userActionsController.setCurrentVote(isVoted, isVoteUp);	
 															});	
-															
-														
-														
+															$("#numFollowers").html('${cantidadObservadores}'); 
 															//TODO
 																//load botones VOTE y WATCH
 														}

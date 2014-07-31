@@ -1,5 +1,7 @@
 package ar.com.urbanusjam.services.impl;
 
+import java.util.List;
+
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.mail.javamail.JavaMailSender;
@@ -183,26 +185,26 @@ public class MailServiceImpl implements MailService {
 	//<username> adjunto X archivos a "<issue_title>"
 	
 	@Override
-	public void sendIssueUpdateEmail(EmailDTO email)
+	public void sendIssueUpdateEmail(String[] emailList, EmailDTO email)
 			throws Exception {
 		
-		  MimeMessage message = this.mailSender.createMimeMessage();
-		  MimeMessageHelper helper = new MimeMessageHelper(message, true);
-		  
-		  helper.setFrom(from);
-	      //helper.setTo(email);
-		  helper.setTo(to);
-		  helper.setSubject(email.getSubject());
-			
-	      String text = email.getMessage();
-	      text += "<br><br>";
-	      text += "Atentamente,";
-	      text += "<br>";
-	      text += "<b>El equipo de Fixeala</b>";
-	      
-	      helper.setText(text, true);
-	      mailSender.send(message);
-		
+		if(emailList != null && emailList.length > 0){
+			  MimeMessage message = this.mailSender.createMimeMessage();
+			  MimeMessageHelper helper = new MimeMessageHelper(message, true);
+			  
+			  helper.setFrom(from);
+		      helper.setTo(emailList);
+			  helper.setSubject(email.getSubject());
+				
+		      String text = email.getMessage();
+		      text += "<br><br>";
+		      text += "Atentamente,";
+		      text += "<br>";
+		      text += "<b>El equipo de Fixeala</b>";
+		      
+		      helper.setText(text, true);
+		      mailSender.send(message);
+		}
 	}
 	
 	
@@ -226,8 +228,21 @@ public class MailServiceImpl implements MailService {
 	      
 	      helper.setText(text, true);
 	      mailSender.send(message);
-		
 	}
+	
+//	@Override
+//	public void sendMultipleNotifications(String[] emailList, EmailDTO email)
+//			throws Exception {
+//		
+//		  MimeMessage message = this.mailSender.createMimeMessage();
+//		  MimeMessageHelper helper = new MimeMessageHelper(message, true);
+//		  
+//		  helper.setFrom(from);
+//		  helper.setTo(emailList);
+//		  helper.setSubject(email.getSubject());
+//	      helper.setText(email.getMessage(), true);
+//	      mailSender.send(message);
+//	}
 	
 	
 }

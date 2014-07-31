@@ -478,7 +478,7 @@ public class IssueController {
 			@RequestParam("issueID") String issueID,
 			@RequestParam("userID") String userID,
 			@RequestParam("files[]") List<MultipartFile> files,
-			HttpServletRequest request, Model model) throws JSONException {
+			HttpServletRequest request, Model model) throws Exception {
 
 		InputStream inputStream = null;
 		String fileName = StringUtils.EMPTY;
@@ -741,8 +741,7 @@ public class IssueController {
 	public @ResponseBody
 	AlertStatus doUpdatetIssue(@ModelAttribute("issue") IssueDTO issue,
 			@RequestParam("fields") String fieldChanges,
-			HttpServletRequest request) throws ParseException,
-			JsonParseException, JsonMappingException, IOException {
+			HttpServletRequest request) throws Exception {
 
 		try {
 
@@ -783,11 +782,11 @@ public class IssueController {
 					fieldCounter++;
 				}
 				if (updatedFields.getBarrio() == 1) {
-					fields += " «BARRIO» ";
+					fields += " BARRIO ";
 					fieldCounter++;
 				}
 				if (updatedFields.getDesc() == 1) {
-					fields += " «DESCRIPCION» ";
+					fields += " DESCRIPCION ";
 					fieldCounter++;
 				}
 
@@ -1070,11 +1069,15 @@ public class IssueController {
 			}
 
 		} catch (Exception e) {
-			if (e instanceof AccessDeniedException)
+			if (e instanceof AccessDeniedException){
 				return new AlertStatus(false,
 						"Debe estar logueado para publicar un nuevo comentario.");		
+			}
+			else{
 				return new AlertStatus(false,
 						"No ha sido posible publicar el comentario. Intente de nuevo.");
+			}
+				
 		}
 		return new AlertStatus(true, "El comentario ha sido publicado.");
 	}
