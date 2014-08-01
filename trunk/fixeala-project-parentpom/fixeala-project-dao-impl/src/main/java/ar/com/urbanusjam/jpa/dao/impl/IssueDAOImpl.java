@@ -20,7 +20,6 @@ import ar.com.urbanusjam.entity.annotations.Issue;
 import ar.com.urbanusjam.entity.annotations.Tag;
 
 @Repository
-//@Transactional(propagation= Propagation.REQUIRED, readOnly=false)
 public class IssueDAOImpl implements IssueDAO {	
 	
 	@PersistenceContext(unitName = "fixealaPU")
@@ -34,6 +33,7 @@ public class IssueDAOImpl implements IssueDAO {
 	}
 	
 	@Override
+	@Transactional(propagation= Propagation.REQUIRED, readOnly=false)
 	public void updateIssue(Issue issue) {
 		entityManager.merge(issue);		
 	}

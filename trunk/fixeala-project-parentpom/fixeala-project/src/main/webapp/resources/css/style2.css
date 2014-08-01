@@ -498,11 +498,7 @@ legend {
 	margin-top: 80px;
 	padding: 0;
 	clear: both;
-/* 	border: 1px solid #000; */
 }
-
-#content > .container { margin:0; }
-
 
 footer {
 	position: absolute;
@@ -517,9 +513,6 @@ footer {
 	clear: both;	
 	
 }
-
-
-
 
 #map_canvas {
 	position: relative;

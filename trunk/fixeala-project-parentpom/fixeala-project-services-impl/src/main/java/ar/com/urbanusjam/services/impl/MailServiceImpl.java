@@ -1,9 +1,10 @@
 package ar.com.urbanusjam.services.impl;
 
-import java.util.List;
-
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+import org.springframework.mail.MailException;
+import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,6 @@ import ar.com.urbanusjam.services.MailService;
 import ar.com.urbanusjam.services.dto.EmailDTO;
 
 @Service
-@Transactional
 public class MailServiceImpl implements MailService {
 	
 	final String from = "fixeala@gmail.com";
@@ -28,7 +28,7 @@ public class MailServiceImpl implements MailService {
 	public MailServiceImpl(){}
 	
 	@Override
-	public void sendActivationRequestEmail(String username, String token, String email) throws Exception {
+	public void sendActivationRequestEmail(String username, String token, String email) throws MessagingException, MailSendException {
 		
 		  MimeMessage message = this.mailSender.createMimeMessage();
 		  MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -60,7 +60,7 @@ public class MailServiceImpl implements MailService {
 	}
 	
 	@Override
-	public void sendActivationSuccessEmail(String username, String email) throws Exception {
+	public void sendActivationSuccessEmail(String username, String email) throws MessagingException, MailException {
 		
 		  MimeMessage message = this.mailSender.createMimeMessage();
 		  MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -85,7 +85,7 @@ public class MailServiceImpl implements MailService {
 	}
 	
 	@Override
-	public void sendPasswordResetEmail(String username, String token, String email) throws Exception{
+	public void sendPasswordResetEmail(String username, String token, String email) throws MessagingException, MailException {
 		 
 		  MimeMessage message = this.mailSender.createMimeMessage();
 		  MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -118,7 +118,7 @@ public class MailServiceImpl implements MailService {
 	}
 	
 	@Override
-	public void sendPasswordResetSuccessEmail(String username, String email) throws Exception {
+	public void sendPasswordResetSuccessEmail(String username, String email) throws MessagingException, MailException {
 		
 		  MimeMessage message = this.mailSender.createMimeMessage();
 		  MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -145,8 +145,7 @@ public class MailServiceImpl implements MailService {
 	}
 	
 	@Override
-	public void sendClosedAccountEmail(String username, String email)
-			throws Exception {
+	public void sendClosedAccountEmail(String username, String email) throws MessagingException, MailException {
 		
 		  MimeMessage message = this.mailSender.createMimeMessage();
 		  MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -186,7 +185,7 @@ public class MailServiceImpl implements MailService {
 	
 	@Override
 	public void sendIssueUpdateEmail(String[] emailList, EmailDTO email)
-			throws Exception {
+			throws MessagingException, MailException {
 		
 		if(emailList != null && emailList.length > 0){
 			  MimeMessage message = this.mailSender.createMimeMessage();
@@ -210,7 +209,7 @@ public class MailServiceImpl implements MailService {
 	
 	@Override
 	public void sendEmailChangeNotification(EmailDTO email)
-			throws Exception {
+			throws MessagingException, MailException {
 		
 		  MimeMessage message = this.mailSender.createMimeMessage();
 		  MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -229,20 +228,6 @@ public class MailServiceImpl implements MailService {
 	      helper.setText(text, true);
 	      mailSender.send(message);
 	}
-	
-//	@Override
-//	public void sendMultipleNotifications(String[] emailList, EmailDTO email)
-//			throws Exception {
-//		
-//		  MimeMessage message = this.mailSender.createMimeMessage();
-//		  MimeMessageHelper helper = new MimeMessageHelper(message, true);
-//		  
-//		  helper.setFrom(from);
-//		  helper.setTo(emailList);
-//		  helper.setSubject(email.getSubject());
-//	      helper.setText(email.getMessage(), true);
-//	      mailSender.send(message);
-//	}
 	
 	
 }

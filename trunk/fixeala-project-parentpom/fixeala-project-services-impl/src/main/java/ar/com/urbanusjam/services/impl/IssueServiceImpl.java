@@ -14,6 +14,8 @@ import java.util.Set;
 
 import javax.mail.MessagingException;
 
+import org.jfree.util.Log;
+import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,7 +67,7 @@ import ar.com.urbanusjam.services.utils.SortingDataUtils;
 @Service
 @Transactional
 public class IssueServiceImpl implements IssueService {
-	
+		
 	private UserService userService;
 	private ContenidoService contenidoService;
 	private IssueDAO issueDAO;
@@ -149,7 +151,7 @@ public class IssueServiceImpl implements IssueService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor={MessagingException.class})
-	public void updateIssue(IssueDTO issueDTO) throws Exception {
+	public void updateIssue(IssueDTO issueDTO) throws MessagingException{
 		Issue issue = new Issue();
 		issue = this.convertTo(issueDTO);
 				
@@ -173,29 +175,35 @@ public class IssueServiceImpl implements IssueService {
 			issue.addMediaContent(contenidoService.convertirAContenido(contenidoDTO));
 		}
 		
-		//email notification
-		String link = "<a target='_blank' href='http://localhost:8080/fixeala/issues/" + issue.getId().toString() + ".html' >LINK</a>.";
-		String text = "El usuario <i>" + issueDTO.getUsername() + "</i> actualiz— la informaci—n del reclamo <i>#" +issue.getId()+ " \"" + issue.getTitle() + "\"</i>.";
-		text += "<br><br>";
-		text += "Para acceder al mismo, hac&eacute; clic en el siguiente " + link;
-		
-		EmailDTO email = new EmailDTO();
-		email.setSubject("Nueva actualizaci&oacute;n en el reclamo #" + issue.getId().toString() + " \"" + issue.getTitle() + "\"" );
-		email.setTo(issue.getReporter().getEmail());
-		email.setUrl(link);
-		email.setMessage(text);
-		
 		issueDAO.updateIssue(issue);
 		
-		Set<IssueFollow> followers = issue.getFollowers();
-		String reporterEmail = null;
+		try{			
+			//email notification
+			String link = "<a target='_blank' href='http://localhost:8080/fixeala/issues/" + issue.getId().toString() + ".html' >LINK</a>.";
+			String text = "El usuario <i>" + issueDTO.getUsername() + "</i> actualizï¿½ la informaciï¿½n del reclamo <i>#" +issue.getId()+ " \"" + issue.getTitle() + "\"</i>.";
+			text += "<br><br>";
+			text += "Para acceder al mismo, hac&eacute; clic en el siguiente " + link;
+			
+			EmailDTO email = new EmailDTO();
+			email.setSubject("Nueva actualizaci&oacute;n en el reclamo #" + issue.getId().toString() + " \"" + issue.getTitle() + "\"" );
+			email.setTo(issue.getReporter().getEmail());
+			email.setUrl(link);
+			email.setMessage(text);
+			
+			Set<IssueFollow> followers = issue.getFollowers();
+			String reporterEmail = null;
+			
+			mailService.sendIssueUpdateEmail(this.getFollowersEmails(followers, reporterEmail), email);
+			
+		}catch(Exception e){			
+			Log.debug("Error en el envio del email a los seguidores del reclamo.");			
+		}
 		
-		mailService.sendIssueUpdateEmail(this.getFollowersEmails(followers, reporterEmail), email);
 	}
 	
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor={MessagingException.class})
-	public void updateIssueStatus(String username, String issueID, String newStatus, String resolution, String obs) throws Exception {
+	public void updateIssueStatus(String username, String issueID, String newStatus, String resolution, String obs) throws MessagingException {
 	
 		IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
 		revision.setFecha(new Date());
@@ -215,36 +223,43 @@ public class IssueServiceImpl implements IssueService {
 			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_REOPEN + " el reclamo");				
 		
 		Issue issue = issueDAO.findIssueById(issueID);
-		
-		//email notification
-		String link = "<a target='_blank' href='http://localhost:8080/fixeala/issues/" + issue.getId().toString() + ".html' >LINK</a>.";
-		String text = "El usuario <u>" + revision.getUsername() + "</u> ha cambiado el estado del reclamo <i>#" + issue.getId().toString() + " \"" + issue.getTitle() + "\"</i> de " + issue.getStatus().toUpperCase() + " a " + newStatus.toUpperCase() + ".";
-		text += "<br><br>";
-		text += "- Motivo: " + revision.getResolucion();
-		text += "<br>";
-		text += "- Observaciones: " + revision.getObservaciones();
-		text += "<br><br>";
-		text += "Para acceder al reclamo actualizado, hac&eacute; clic en el siguiente " + link;
-		
-		EmailDTO email = new EmailDTO();
-		email.setSubject(revision.getUsername() + " " + revision.getMotivo() + " #" + issue.getId().toString() + " \"" + issue.getTitle() + "\"" );
-		email.setTo(issue.getReporter().getUsername());
-		email.setUrl(link);
-		email.setMessage(text);
+		User user = userDAO.loadUserByUsername(username);
 		
 		issue.setStatus(newStatus);
 		issue.setLastUpdateDate(this.getCurrentCalendar(revision.getFecha()));
-		issue.addRevision(this.convertTo(revision));
+		issue.addRevision(this.convertTo(revision, user));
 		
 		issueDAO.updateIssue(issue);
 		
-		Set<IssueFollow> followers = issue.getFollowers();
-		String reporterEmail = null;
-		
-		if(!username.equals(issue.getReporter().getUsername()))
-			reporterEmail = username;
-		
-		mailService.sendIssueUpdateEmail(this.getFollowersEmails(followers, reporterEmail), email);
+		try{
+			
+			//email notification
+			String link = "<a target='_blank' href='http://localhost:8080/fixeala/issues/" + issue.getId().toString() + ".html' >LINK</a>.";
+			String text = "El usuario <u>" + revision.getUsername() + "</u> ha cambiado el estado del reclamo <i>#" + issue.getId().toString() + " \"" + issue.getTitle() + "\"</i> de " + issue.getStatus().toUpperCase() + " a " + newStatus.toUpperCase() + ".";
+			text += "<br><br>";
+			text += "- Motivo: " + revision.getResolucion();
+			text += "<br>";
+			text += "- Observaciones: " + revision.getObservaciones();
+			text += "<br><br>";
+			text += "Para acceder al reclamo actualizado, hac&eacute; clic en el siguiente " + link;
+			
+			EmailDTO email = new EmailDTO();
+			email.setSubject(revision.getUsername() + " " + revision.getMotivo() + " #" + issue.getId().toString() + " \"" + issue.getTitle() + "\"" );
+			email.setTo(issue.getReporter().getUsername());
+			email.setUrl(link);
+			email.setMessage(text);
+			
+			Set<IssueFollow> followers = issue.getFollowers();
+			String reporterEmail = null;
+			
+			if(!username.equals(issue.getReporter().getUsername()))
+				reporterEmail = username;
+			
+			mailService.sendIssueUpdateEmail(this.getFollowersEmails(followers, reporterEmail), email);
+			
+		}catch(Exception e){			
+			Log.debug("Error en el envio del email a los seguidores del reclamo.");			
+		}	
 	}
 	
 	
@@ -264,7 +279,7 @@ public class IssueServiceImpl implements IssueService {
 		revision.setMotivo("MODIFICACION");			
 		revision.setEstado(issue.getStatus());
 		revision.setObservaciones("El reclamo ha sido asignado a " + user.getUsername().toUpperCase() + ".");
-		issue.getRevisiones().add(convertTo(revision));
+		issue.getRevisiones().add(convertTo(revision, user));
 		
 		issueDAO.updateIssue(issue);
 	}
@@ -454,8 +469,8 @@ public class IssueServiceImpl implements IssueService {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor={MessagingException.class})
-	public void postComment(CommentDTO commentDTO) throws Exception {
+	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor={MessagingException.class, MailException.class})
+	public void postComment(CommentDTO commentDTO) throws MessagingException {
 		
 		Issue issue = issueDAO.findIssueById(commentDTO.getNroReclamo());
 		User user = userDAO.loadUserByUsername(commentDTO.getUsuario());
@@ -474,29 +489,34 @@ public class IssueServiceImpl implements IssueService {
 			
 		issue.setLastUpdateDate(this.getCurrentCalendar(revision.getFecha()));		
 		issue.addComment(comment);
-		issue.addRevision(convertTo(revision));
-
-		//email notification
-		String link = "<a target='_blank' href='http://localhost:8080/fixeala/issues/" + issue.getId().toString() + ".html' >LINK</a>.";
-		String text = "El usuario <i>" + commentDTO.getUsuario() + "</i> ha dejado un comentario en el reclamo <i>#" +issue.getId()+ " \"" + issue.getTitle() + "\"</i>.";
-		text += "<br><br>";
-		text += "Para acceder al comentario publicado, hac&eacute; clic en el siguiente " + link;
-		
-		EmailDTO email = new EmailDTO();
-		email.setSubject("Nuevo comentario en el reclamo #" + issue.getId().toString() + " \"" + issue.getTitle() + "\"" );
-		email.setTo(issue.getReporter().getUsername());
-		email.setUrl(link);
-		email.setMessage(text);
+		issue.addRevision(convertTo(revision, user));
 		
 		issueDAO.updateIssue(issue);
+
+		try{				
+			//email notification
+			String link = "<a target='_blank' href='http://localhost:8080/fixeala/issues/" + issue.getId().toString() + ".html' >LINK</a>.";
+			String text = "El usuario <i>" + commentDTO.getUsuario() + "</i> ha dejado un comentario en el reclamo <i>#" +issue.getId()+ " \"" + issue.getTitle() + "\"</i>.";
+			text += "<br><br>";
+			text += "Para acceder al comentario publicado, hac&eacute; clic en el siguiente " + link;
+			
+			EmailDTO email = new EmailDTO();
+			email.setSubject("Nuevo comentario en el reclamo #" + issue.getId().toString() + " \"" + issue.getTitle() + "\"" );
+			email.setTo(issue.getReporter().getUsername());
+			email.setUrl(link);
+			email.setMessage(text);		
+			
+			Set<IssueFollow> followers = issue.getFollowers();
+			String reporterEmail = null;
+			
+			if(!commentDTO.getUsuario().equals(issue.getReporter().getUsername()))
+				reporterEmail = comment.getUsuario().getEmail();
+			
+			mailService.sendIssueUpdateEmail(this.getFollowersEmails(followers, reporterEmail), email);
 		
-		Set<IssueFollow> followers = issue.getFollowers();
-		String reporterEmail = null;
-		
-		if(!commentDTO.getUsuario().equals(issue.getReporter().getUsername()))
-			reporterEmail = comment.getUsuario().getEmail();
-		
-		mailService.sendIssueUpdateEmail(this.getFollowersEmails(followers, reporterEmail), email);
+		}catch(Exception e){			
+			Log.debug("Error en el envio del email a los seguidores del reclamo.");			
+		}
 		
 	}
 
@@ -602,11 +622,11 @@ public class IssueServiceImpl implements IssueService {
 	}
 	
 	
-	public IssueUpdateHistory convertTo(IssueUpdateHistoryDTO historialDTO){
+	public IssueUpdateHistory convertTo(IssueUpdateHistoryDTO historialDTO, User user){
 		
 		IssueUpdateHistory historial = new IssueUpdateHistory();	
 		historial.setFecha(this.getCurrentCalendar(historialDTO.getFecha()));	
-		historial.setUsuario(userDAO.loadUserByUsername(historialDTO.getUsername()));
+		historial.setUsuario(user);
 		historial.setOperacion(historialDTO.getOperacion());
 		historial.setMotivo(historialDTO.getMotivo());
 		historial.setResolucion(historialDTO.getResolucion());		
@@ -660,7 +680,7 @@ public class IssueServiceImpl implements IssueService {
 		
 		//history
 		for(IssueUpdateHistoryDTO historial : issueDTO.getHistorial()){
-			issue.addRevision(convertTo(historial));
+			issue.addRevision(convertTo(historial, user));
 		}
 		
 		//votes
@@ -800,6 +820,13 @@ public class IssueServiceImpl implements IssueService {
 		for(Comment comentario : issue.getComentarios()){
 			comentariosDTO.add(convertToDTO(comentario));
 		}		
+		
+		//order comments by date DESC
+		Collections.sort(comentariosDTO, new Comparator<CommentDTO>() {
+			  public int compare(CommentDTO o1, CommentDTO o2) {
+			      return o2.getFecha().compareTo(o1.getFecha());
+			  }
+		});		
 		issueDTO.setComentarios(comentariosDTO);
 						
 		//contenidos
@@ -946,31 +973,31 @@ public class IssueServiceImpl implements IssueService {
 		
 		String[] css = new String[2];
 		
-		if(status.equals(IssueStatus.OPEN)){
+		if(status.equalsIgnoreCase(IssueStatus.OPEN)){
 			css[0] = "label label-important";
 			css[1] = "#B94A48";
 		}
 		
-		if(status.equals(IssueStatus.REOPENED)){
+		if(status.equalsIgnoreCase(IssueStatus.REOPENED)){
 			css[0] = "label label-info";
 			css[1] = "#39B3D7";
 		}
 		
-//		if(status.equals(IssueStatus.ACKNOWLEDGED)){
+//		if(status.equalsIgnoreCase(IssueStatus.ACKNOWLEDGED)){
 //			css = "label label-primary";
 //		}
 		
-		if(status.equals(IssueStatus.IN_PROGRESS)){
+		if(status.equalsIgnoreCase(IssueStatus.IN_PROGRESS)){
 			css[0] = "label label-warning";
 			css[1] = "#F89406";		
 		}
 		
-		if(status.equals(IssueStatus.SOLVED)){
+		if(status.equalsIgnoreCase(IssueStatus.SOLVED)){
 			css[0] = "label label-success";
 			css[1] = "#468847";			
 		}
 		
-		if(status.equals(IssueStatus.CLOSED)){
+		if(status.equalsIgnoreCase(IssueStatus.CLOSED)){
 			css[0] = "label label-inverse";
 			css[1] = "#333333";			
 		}
@@ -1173,7 +1200,7 @@ public class IssueServiceImpl implements IssueService {
 
 	@Override
 	public void addHistoryUpdate(IssueUpdateHistoryDTO update) {
-		issueUpdateDAO.saveHistorial(convertTo(update));		
+//		issueUpdateDAO.saveHistorial(convertTo(update));		
 	}
 
 	@Override
@@ -1200,14 +1227,14 @@ public class IssueServiceImpl implements IssueService {
 	private String[] getFollowersEmails(Set<IssueFollow> followers, String reporterEmail){
 		String [] emails;
 		if(followers.size() > 0){
-			emails = new String[followers.size()];
+			emails = new String[followers.size()+1];
 			int index = 0;
 			for(IssueFollow follower :  followers){
 				emails[index] = follower.getFollower().getEmail();
 				index++;
 			}
 			if(reporterEmail != null)
-				emails[followers.size()] = reporterEmail;
+				emails[index++] = reporterEmail;
 		}
 		else{
 			
@@ -1221,5 +1248,15 @@ public class IssueServiceImpl implements IssueService {
 		
 		return emails;
 	}
+	
+//	public void sendMailAfterCommit(final MailManager mail) { 	
+//		TransactionSynchronizationManager.registerSynchronization( 			
+//				new TransactionSynchronizationAdapter() { 		
+//					@Override 		
+//					public void afterCommit() { 			
+//						mailService.sendMail(mail); 		
+//					} 	
+//				}); 
+//	}
 	
 }

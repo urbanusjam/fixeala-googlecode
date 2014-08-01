@@ -2,7 +2,10 @@ package ar.com.urbanusjam.services;
 
 import java.util.List;
 
-import ar.com.urbanusjam.entity.annotations.Issue;
+import javax.mail.MessagingException;
+
+import org.springframework.mail.MailException;
+
 import ar.com.urbanusjam.services.dto.CommentDTO;
 import ar.com.urbanusjam.services.dto.IssueCriteriaSearch;
 import ar.com.urbanusjam.services.dto.IssueDTO;
@@ -15,7 +18,7 @@ import ar.com.urbanusjam.services.dto.IssueVoteDTO;
 public interface IssueService {
 	
 	public void reportIssue(IssueDTO issue);	
-	public void postComment(CommentDTO comment) throws Exception;
+	public void postComment(CommentDTO comment) throws MessagingException, MailException;
 	
 	//rever
 	public void addHistoryUpdate(IssueUpdateHistoryDTO update);
@@ -24,8 +27,8 @@ public interface IssueService {
 	public void deleteRepairInfo(String issueID);
 	public IssueRepairDTO getRepairInfoByIssue(String issueID);
 	
-	public void updateIssue(IssueDTO issue) throws Exception;		
-	public void updateIssueStatus(String username, String issueID, String newStatus, String resolution, String obs) throws Exception;
+	public void updateIssue(IssueDTO issue) throws MessagingException, MailException;		
+	public void updateIssueStatus(String username, String issueID, String newStatus, String resolution, String obs) throws MessagingException, MailException;
 		
 	public void assignUserToIssue(String issueID, String username);
 		
