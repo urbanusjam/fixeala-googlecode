@@ -1,5 +1,5 @@
 <%-- <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%> --%>
-<%-- <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%> --%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
@@ -25,9 +25,7 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/json.min.js"></script>	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/d3.min.js"></script>	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/topojson.v1.min.js"></script>	 
-  
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala.issue.editable.js"></script>
-  		
+    		
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-editable.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-datetimepicker.js"></script>
@@ -70,7 +68,10 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/markerclusterer.js"></script>	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/markermanager.js"></script>	
 <%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/map.js"></script> --%>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala.map.js"></script>
+
+	<!-- FIXEALA -->
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.map.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.issue.editable.js"></script>
   	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/select2.js"></script>	
   	
@@ -652,8 +653,9 @@ path:hover {
 														    
 															$("#issue-stats").load(urlVote, function(){
 																userActionsController.setCurrentVote(isVoted, isVoteUp);	
+	 															$("#numFollowers").text('${cantidadObservadores}'); 
 															});	
-															$("#numFollowers").html('${cantidadObservadores}'); 
+
 															//TODO
 																//load botones VOTE y WATCH
 														}

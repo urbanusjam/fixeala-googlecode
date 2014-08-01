@@ -1,10 +1,6 @@
 	<script type="text/javascript">   
 	
-	
-	
 		$(document).ready(function(){
-			
-		
 			
 			/*** INIT GOOGLE MAPS ***/
 					 
@@ -705,11 +701,11 @@
 						 		success : function(alertStatus){					 		
 						 			if(alertStatus.result){
 						 				
-						 				blockIssueForm();	 	
+						 				mapController.blockIssueForm();	 	
 						 				
 						 				bootbox.alert(alertStatus.message, function() {					 					
 						 								 					
-					 						loadMarkers(map);
+						 					mapController.displayMarkers(map);
 					 						initMarker.setMap(null);
 					 						map.setCenter(location);
 					 						
@@ -721,7 +717,7 @@
 						 				});		
 						 				
 						 				setTimeout(function(){   	
-					 						unBlockIssueForm();	   
+						 					mapController.unBlockIssueForm();	   
 					 					}, 2000);
 			 	    				}
 			 	    				else{	 	    			
@@ -766,7 +762,7 @@
 					<input id="search" type="text" data-link="./autocomplete" data-provide="typeahead" placeholder="Busc&aacute; reclamos por ID, Estado, T&iacute;tulo o Direcci&oacute;n">				
 				</div>
 			</div>		
-			<div class="span3 pull-right" style="width:336px; border: 0px solid #000">	
+			<div class="span3 pull-right" style="width:336px;">	
 				<button id="btnIssue" class="btn btn-success" data-toggle="button"> 
 					<i class="icon-map-marker icon-large"></i>&nbsp;&nbsp;&nbsp;PUBLICAR RECLAMO
 				</button>
@@ -775,8 +771,7 @@
 
 		<!-- ROW 1 -->
 		<div class="row-fluid" style="height:472px;">
-		<div class="container">
-		
+
   				<select id="cbxProvincias" name="cbxProvincias" onchange="findProvincia(value);return false" onfocus="">              	
 					<option value="BA">Buenos Aires</option>
 					<option value="CF">Capital Federal</option>
@@ -804,7 +799,7 @@
 					<option value="TM">Tucum&aacute;n</option>					
 		  		</select>
 		  		
-		  		<div id="mapFormContainer" style="position:absolute;  width:1180px; height:472px; border: 0px solid #000; padding: 0; margin-top: 0;"> 
+		  		<div id="mapFormContainer" style="position:absolute;  width:1180px; height:472px; padding: 0; margin-top: 0;"> 
 		  		
 		  			<!-- MAP -->
 			  		<div id="map_canvas"></div>	
@@ -900,7 +895,6 @@
 					</div><!-- issueFormWizard -->	
 					
 				</div><!-- mapFormContainer -->
-	</div>
 	</div>
 	
 	 <div class="clearfix"></div>

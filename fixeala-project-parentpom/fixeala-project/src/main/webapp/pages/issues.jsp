@@ -633,7 +633,10 @@
 			
 			  $('#btn-comment').click(function() {
 				  
-				  	blockPage("#collapseSix");
+				  	var $commentContainer = $("#issueComments");
+				  
+				  	blockPage($commentContainer);
+				  	
 					var message = $("#comment-text").val();
 					var id = ${id};					
 					var data = 'issueID='+ id + '&comment='+ message;		
@@ -645,13 +648,13 @@
 				 		dataType: "json",									 
 				        success: function(data){
 				        	if(data.result){
-				        		unBlockPage("#collapseSix");
+				        		unBlockPage($commentContainer);
 				        		setTimeout(function(){
 				        			window.location.reload();
 				        		}, 1000); 
 						    }					    	   
 				    	    else{
-				    	    	unBlockPage("#collapseSix");
+				    	    	unBlockPage($commentContainer);
 				    	    	setTimeout(function(){
 				        			bootbox.alert(data.message);	
 				        		}, 1000);
@@ -951,12 +954,9 @@
 			        ///*** WATCH ***/////
 			        
 			        var isWatching = '${isUserWatching}';
-		        	var $watcherList = $('#numFollowers');	 
-		        	var numberOfWatchers = '${cantidadObservadores}';		        	
+		        	var $watcherList = $('#followers-list');	 	        	
 		        	var data = "issueID=" + idIssue;		        
 		        	var loader = '<button class="btn btn-default pull-right loader"><img src="${pageContext.request.contextPath}/resources/images/loader6.gif" alt="Loading" height=15 width=15 /></button>';	  
-		        	
-			        $watcherList.html(numberOfWatchers); 
 
 					$watcherList.live('click', function(){
 						
@@ -1010,7 +1010,8 @@
 						        	if(data.result){	
 						        		setTimeout(function(){		
 						        			$('.loader').replaceWith('<button id="btn-unwatch-issue" class="btn btn-info pull-right">Siguiendo</button>');
-						        			$watcherList.text(data.message);
+						        		
+						        			$('#numFollowers').text(data.message);
 						 				}, 1000);
 						        	}
 						        	else{
@@ -1024,34 +1025,34 @@
 				
 				
 			        $('#btn-unwatch-issue')
-		        	.live('mouseover', function(){
-		        		$(this).removeClass('btn-info').addClass('btn-inverse').text('DEJAR DE SEGUIR');
-		        	})
-		        	.live('mouseleave', function(){
-		        		$(this).removeClass('btn-inverse').addClass('btn-info').text('@ SIGUIENDO');  
-		        	})
-		        	.live('click', function() {
-		        		
-		        		$(this).replaceWith(loader);
-		        	
-			 			$.ajax({
-	        			    url: "./unwatch",
-					 		type: "POST",	
-					 		data: data,							 
-					        success: function(data){							        	
-					        	if(data.result){
-					        		setTimeout(function(){
-					        			$('.loader').replaceWith('<button id="btn-watch-issue" class="btn btn-default pull-right">@ Segu&iacute; el reclamo</button>');
-					        			$watcherList.text(data.message);	
-					        		}, 1000);
-					        	}
-					        	else{
-					        		bootbox.alert(data.message);	
-					        		
-					        	}	
-		            		}						  
-	        			});				 				
-		        	});
+		        		.live('mouseover', function(){
+			        		$(this).removeClass('btn-info').addClass('btn-inverse').text('DEJAR DE SEGUIR');
+			        	})
+			        	.live('mouseleave', function(){
+			        		$(this).removeClass('btn-inverse').addClass('btn-info').text('@ SIGUIENDO');  
+			        	})
+			        	.live('click', function() {
+			        		
+			        		$(this).replaceWith(loader);
+			        	
+				 			$.ajax({
+		        			    url: "./unwatch",
+						 		type: "POST",	
+						 		data: data,							 
+						        success: function(data){							        	
+						        	if(data.result){
+						        		setTimeout(function(){
+						        			$('.loader').replaceWith('<button id="btn-watch-issue" class="btn btn-default pull-right">@ Segu&iacute; el reclamo</button>');
+						        			$watcherList.text(data.message);	
+						        		}, 1000);
+						        	}
+						        	else{
+						        		bootbox.alert(data.message);	
+						        		
+						        	}	
+			            		}						  
+		        			});				 				
+			        	});
 				
 				
 			    //*** VOTE ***//
@@ -1630,9 +1631,7 @@
 				<div class="stats-box"><span class="text-big">${cantidadComentarios}</span> <span class="text-small">comentarios</span></div>
 				<div id="watchers" class="stats-box">
 					<span class="text-big">
-						<a href="#mdl-followers" id="followers-list" data-toggle="modal">
-							<span id="numFollowers"></span>
-						</a>
+						<a href="#mdl-followers" id="followers-list" data-toggle="modal"><span id="numFollowers">${cantidadObservadores}</span></a>
 					</span> 
 					<span class="text-small">seguidores</span>
 					<sec:authorize access="hasRole('ROLE_USER')">
@@ -1651,9 +1650,9 @@
 			</div>
 			
 			<div id="userIssueActions" >
-				<sec:authorize access="hasRole('ROLE_USER')">
-					<div class="stats-container">
-						<c:if test="${estado ne 'CERRADO'}">
+				<sec:authorize access="hasRole('ROLE_USER')">				
+					<c:if test="${estado ne 'CERRADO'}">
+						<div class="stats-container">
 							<button id="btn-edit" class="btn" title="Editar"><i class="icon-pencil icon-large"></i></button>	
 							<button id="btn-update" class="btn btn-primary" title="Guardar cambios"><i class="icon-save icon-large"></i></button>	
 							<c:if test="${estado eq 'ABIERTO' || estado eq 'REABIERTO'}">
@@ -1669,12 +1668,13 @@
 							<script type="text/javascript">
 								userActionsController.enableUserActions();
 							</script>
-						</c:if>
-						<c:if test="${estado eq 'CERRADO'}">
-						<div class="stats-box">
-							<span class="label label-inverse" style="width: 100%; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;box-sizing:border-box;padding:5px 0 5px 5px">Este reclamo ya no puede editarse.</span></div>
-						</c:if>
-					</div>	
+						</div>
+					</c:if>
+					<c:if test="${estado eq 'CERRADO'}">
+						<div class="stats-container" style="color: #fff; background: #333; font-weight: bold; border: none; text-align: center;">
+							Este reclamo ya no puede editarse.
+						</div>
+					</c:if>
 				</sec:authorize>	
 			</div>
 <!--       			<a id="bookmarkme" href="#" rel="sidebar" title="Agregar a Favoritos"><i class="icon-star"></i></a> -->

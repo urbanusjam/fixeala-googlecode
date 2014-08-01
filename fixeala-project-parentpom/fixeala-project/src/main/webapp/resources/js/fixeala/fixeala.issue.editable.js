@@ -53,9 +53,7 @@ var userActionsController = {
 						  $('#tbl-issue .editable, #issue-header .editable').editable('submit', {
 							  
 						       url: './updateIssue.html', 
-						      data:   {fields: JSON.stringify(updatedFields)}, //additional data
-					
-						     
+						       data:   { fields: JSON.stringify(updatedFields) }, //additional data
 						       ajaxOptions: {
 						           dataType: 'json'
 						       },  				       
@@ -89,9 +87,7 @@ var userActionsController = {
 				
 				event.preventDefault();
 				
-					blockPage("html");
-					
-					var label = $("#btn-status").find('button').attr('title').trim();
+					var label = $("#btn-status").find('button').attr('title').trim();					
 					var resolution = $("#tipoResolucion :selected").text();
 					var obs = $("#observacion").val();
 			
@@ -114,36 +110,32 @@ var userActionsController = {
 	    			    url: "./updateIssueStatus.html",
 				 		type: "POST",	
 				 		data: data,
-				 		dataType: "json",									 
+				 		dataType: "json",	
+				 		beforeSend: function(){
+				 			blockPage("html");
+				 		},
 				        success: function(data){		
+				        	 unBlockPage("html");
+				        	 
 				        	if(data.result){
-				        		setTimeout(function(){	
-				        		unBlockPage("html");
-				        		}, 1000); 
-				        		
 				        		setTimeout(function(){
-				        			bootbox.alert(data.message, function(){
-				        				var url = getIssueURL(issueID, title, 'plain');
-						    			window.location.href= url;	
-				        			}); 	
-				        		}, 1000); 
-				        		
-//				        			bootbox.alert(data.message); 				        			
-//					    			setTimeout(function () {
-//					    				var url = getIssueURL(issueID, title, 'plain');
-//						    			window.location.href= url;	
-//					    			}, 2000);						    			
+			        				var url = mapController.getIssuePlainURL(issueID);
+					    			window.location.href= url;	
+				        		}, 1000);
 	
 					    	   }
 					    	   
 					    	   else{
-					    		    unBlockPage("html");
+					    		   
 					    	    	setTimeout(function(){
 					    	    		 bootbox.alert(data.message);	
 					        		}, 1000);
 					    		  	
 					    	   }
-	            		}
+	            		},
+	            		complete: function() {
+	            			 unBlockPage("html");
+		                }
 	    			});
 			
 				

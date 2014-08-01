@@ -6,9 +6,12 @@ var mapController = {
 	   
 	    map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
 	    		 
-	    mapController.displayMarkers(map);
-	    mapController.setMarkerOnClick(map);
+	    mapController.displayMarkers(map);	  
 	    mapController.initAutocomplete();
+	    
+	    google.maps.event.addListener(map, 'click', function(e) {	
+	    	  mapController.setMarkerOnClick(map, e);
+	    });
 	    
 	    $('#address').focusout(function(e) {
 			 if(autocompleteCalls == 1){
@@ -125,8 +128,8 @@ var mapController = {
 		
 	},
 	
-	setMarkerOnClick : function(map){
-		
+	setMarkerOnClick : function(map, e){
+	
 		//open form
     	if(isFormOpen){	    		
     		mapTimesClicked++;
@@ -139,10 +142,10 @@ var mapController = {
  			   mapTimesClicked = 0;	
  	    		if(!isAnimating){ 	       	   	 
  	            	if($("#tab1").hasClass("active")){
- 	            		blockIssueForm(); 	            	
+ 	            		mapController.blockIssueForm(); 	            	
  	            		if( $("#btnIssue").hasClass('active') ){ 	
  	            			setTimeout(function(){   
- 	            				mapController.geocodeOnClick(e.latLng); 	            				
+ 	            				mapController.geocodeAddressOnClick(e.latLng); 	            				
  	            				mapController.enableNexButton();		
  	            				mapController.unBlockIssueForm();
  	            			}, 1500);		
@@ -153,8 +156,7 @@ var mapController = {
  	            	}
  	    		}
  		   }//else    		
-    	}
-		
+    	}	
 	},
 	
 	initAutocomplete : function(){
@@ -396,7 +398,7 @@ var mapController = {
 		}	
 
 		var geocoderRequest = { 
-				latLng: latLng
+				latLng: location
 		} 
 			
 		geocoder.geocode(geocoderRequest, function(results, status) { 
@@ -411,7 +413,7 @@ var mapController = {
 								
 				var fullAddress = results[0].formatted_address;
 				
-				if(!isArgentina(fullAddress)){
+				if(!mapController.isArgentina(fullAddress)){
 					alert("Se encuentra fuera de los límites de la República Argentina.");	  
 				}	
 					
@@ -450,8 +452,8 @@ var mapController = {
 				$("#locality").val(city);
 				$("#administrative_area_level_1").val(province);
 				
-				$("#latitude").val(latLng.lat());
-				$("#longitude").val(latLng.lng());
+				$("#latitude").val(location.lat());
+				$("#longitude").val(location.lng());
 					
 				var formattedAddress;
 				
@@ -577,7 +579,7 @@ var mapController = {
 		
 	},
 	
-	isArgentinaAddress : function (fullAddress){
+	isArgentina : function (fullAddress){
 		
 		var addressArray = fullAddress.split(",");
 		var validCountry = false;

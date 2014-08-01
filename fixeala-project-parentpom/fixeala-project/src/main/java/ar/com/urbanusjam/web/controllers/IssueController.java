@@ -3,6 +3,7 @@ package ar.com.urbanusjam.web.controllers;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.mail.MailException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -132,7 +134,7 @@ public class IssueController {
 		List<String> allTags = issueService.getTagList();
 		JSONArray tagArray = new JSONArray();
 		for (String tag : allTags) {
-			String url = "./search.html?type=tag&value=" + tag.trim();
+			String url = "./search.html?type=tag&value=" + tag.trim().trim().toLowerCase();
 			JSONObject obj = new JSONObject();
 			obj.put("url", url);
 			obj.put("label", tag);
@@ -145,7 +147,7 @@ public class IssueController {
 		JSONArray statusArray = new JSONArray();
 		for (StatusList status : statusList) {
 			JSONObject obj = new JSONObject();
-			String url = "./search.html?type=status&value=" + status.getLabel();
+			String url = "./search.html?type=status&value=" + status.getLabel().trim().toLowerCase();
 			obj.put("url", url);
 			obj.put("text", status.getLabel());
 			obj.put("css", status.getCssClass());
@@ -689,6 +691,7 @@ public class IssueController {
 				// issue data
 				UserDTO userDTO = new UserDTO();
 				userDTO.setUsername(userDB.getUsername());
+				issue.setUsername(userDB.getUsername());
 				issue.setCreationDate(new Date());
 				issue.setLastUpdateDate(issue.getCreationDate());
 				issue.setStatus(IssueStatus.OPEN);
@@ -724,11 +727,14 @@ public class IssueController {
 				return new AlertStatus(true, "Su reclamo ha sido registrado.");
 			}
 
-		} catch (AccessDeniedException e) {
-			return new AlertStatus(false,
-					"Debe estar logueado para ingresar un nuevo reclamo.");
+		} catch (Exception e) {
+			if (e instanceof AccessDeniedException)
+				return new AlertStatus(false,
+						"Debe estar logueado para ingresar un nuevo reclamo.");
+			else
+				return new AlertStatus(false,
+						"No se pudo publicar el reclamo. Intente m&aacute;s tarde.");
 		}
-
 	}
 
 	@RequestMapping(value = "/issues/sendTags", method = RequestMethod.POST)
@@ -737,7 +743,7 @@ public class IssueController {
 		return tags;
 	}
 
-	@RequestMapping(value = "/issues/updateIssue", method = RequestMethod.POST)
+	@RequestMapping(value = "/issues/updateIssue", produces={"application/json; charset=UTF-8"},  method = RequestMethod.POST)
 	public @ResponseBody
 	AlertStatus doUpdatetIssue(@ModelAttribute("issue") IssueDTO issue,
 			@RequestParam("fields") String fieldChanges,
@@ -776,30 +782,35 @@ public class IssueController {
 				String fields = "";
 				String motive = "";
 				int fieldCounter = 0;
+				
+				if(fieldCounter > 0){
+					if (updatedFields.getTitle() == 1) {
+						fields += "Titulo, ";
+						fieldCounter++;
+					}
+					if (updatedFields.getBarrio() == 1) {
+						fields += "Barrio, ";
+						fieldCounter++;
+					}
+					if (updatedFields.getDesc() == 1) {
+						fields += "Descripcion, ";
+						fieldCounter++;
+					}
+					
+					fields = fields.substring(0, fields.length() - 2 ).trim();
 
-				if (updatedFields.getTitle() == 1) {
-					fields += " «TITULO» ";
-					fieldCounter++;
+					if (fieldCounter == 1) {
+						motive = Messages.ISSUE_UPDATE_FIELDS + " el campo "
+								+ fields;
+					}
+					if (fieldCounter > 1) {
+						motive = Messages.ISSUE_UPDATE_FIELDS + " los campos "
+								+ fields;
+					}
 				}
-				if (updatedFields.getBarrio() == 1) {
-					fields += " BARRIO ";
-					fieldCounter++;
-				}
-				if (updatedFields.getDesc() == 1) {
-					fields += " DESCRIPCION ";
-					fieldCounter++;
-				}
-
-				if (fieldCounter == 1) {
-					motive = Messages.ISSUE_UPDATE_FIELDS + " el campo "
-							+ fields;
-				}
-				if (fieldCounter > 1) {
-					motive = Messages.ISSUE_UPDATE_FIELDS + " los campos "
-							+ fields;
-				}
-				if (fieldCounter == 0) {
-					motive = "actualizo las CATEGORIAS del reclamo.";
+				
+				else{
+					motive = "actualizo las Categorias del reclamo.";
 				}
 
 				// history
@@ -821,14 +832,18 @@ public class IssueController {
 				return new AlertStatus(true, "El reclamo ha sido actualizado.");
 
 			}
-		} catch (AccessDeniedException e) {
-			return new AlertStatus(false,
-					"Debe estar logueado para ingresar un nuevo reclamo.");
+		} catch (Exception e) {
+			if (e instanceof AccessDeniedException)
+				return new AlertStatus(false,
+						"Debe estar logueado para ingresar un nuevo reclamo.");
+			else
+				return new AlertStatus(false,
+						"No ha sido posible actualizar el reclamo. Intente de nuevo.");
 		}
 
 	}
 
-	@RequestMapping(value = "/issues/updateIssueStatus", method = RequestMethod.POST)
+	@RequestMapping(value = "/issues/updateIssueStatus", produces={"application/json; charset=UTF-8"}, method = RequestMethod.POST)
 	public @ResponseBody
 	AlertStatus doUpdatetIssueStatus(@RequestParam("issueID") String issueID,
 			@RequestParam("newStatus") String newStatus,
@@ -1068,17 +1083,18 @@ public class IssueController {
 				
 			}
 
-		} catch (Exception e) {
-			if (e instanceof AccessDeniedException){
+		}catch (Exception e) {
+			if(e instanceof AccessDeniedException){
 				return new AlertStatus(false,
-						"Debe estar logueado para publicar un nuevo comentario.");		
+						"Debe estar logueado para publicar un nuevo comentario.");	
 			}
 			else{
 				return new AlertStatus(false,
 						"No ha sido posible publicar el comentario. Intente de nuevo.");
-			}
-				
-		}
+			} 
+			
+		}	
+	
 		return new AlertStatus(true, "El comentario ha sido publicado.");
 	}
 
