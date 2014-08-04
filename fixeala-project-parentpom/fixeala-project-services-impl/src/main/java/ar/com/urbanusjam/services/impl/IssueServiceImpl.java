@@ -216,16 +216,17 @@ public class IssueServiceImpl implements IssueService {
 		if(newStatus.equals(IssueStatus.IN_PROGRESS))	
 			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_PROGRESS + " el reclamo");			
 		if(newStatus.equals(IssueStatus.SOLVED))
-			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_RESOLVE + " el reclamo");			
+			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_RESOLVE + " el reclamo como " + resolution.toUpperCase());			
 		if(newStatus.equals(IssueStatus.CLOSED))
 			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_CLOSE + " el reclamo");	
 		if(newStatus.equals(IssueStatus.REOPENED))	
-			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_REOPEN + " el reclamo");				
+			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_REOPEN + " el reclamo porque " + resolution.toUpperCase());				
 		
 		Issue issue = issueDAO.findIssueById(issueID);
 		User user = userDAO.loadUserByUsername(username);
 		
 		issue.setStatus(newStatus);
+		issue.setResolution(resolution);
 		issue.setLastUpdateDate(this.getCurrentCalendar(revision.getFecha()));
 		issue.addRevision(this.convertTo(revision, user));
 		
@@ -383,9 +384,7 @@ public class IssueServiceImpl implements IssueService {
 		issues = issueDAO.getAllIssues();
 		List<IssueDTO> issuesDTO = new ArrayList<IssueDTO>();
 		for(Issue issue : issues){		
-//			issuesDTO.add(convertToDTO(issue));
-			issuesDTO.add(preloadIssues(issue));
-			
+			issuesDTO.add(preloadIssues(issue));			
 		}
 		
 		Collections.sort(issuesDTO, new Comparator<IssueDTO>() {
@@ -760,10 +759,11 @@ public class IssueServiceImpl implements IssueService {
 		issueDTO.setCreationDate(issue.getCreationDate().getTime());		
 		issueDTO.setStatus(issue.getStatus());
 		issueDTO.setStatusCss(cssStyle[0]);	
+		issueDTO.setResolution(issue.getResolution());
 		issueDTO.setFechaFormateada(issue.getCreationDate().getTime());
 		issueDTO.setFechaFormateadaCompleta(issue.getCreationDate().getTime());		
 		issueDTO.setTotalVotes(this.countIssueVotes(String.valueOf(issue.getId()))); // llamada al DAO
-		issueDTO.setTotalFollowers(Long.valueOf(issue.getFollowers().size()));
+		issueDTO.setTotalFollowers(issue.getFollowers().size());
 		
 		return issueDTO;
 	}
@@ -789,10 +789,11 @@ public class IssueServiceImpl implements IssueService {
 		issueDTO.setLastUpdateDate(issue.getLastUpdateDate().getTime());		
 		issueDTO.setStatus(issue.getStatus());
 		issueDTO.setStatusCss(cssStyle[0]);
+		issueDTO.setResolution(issue.getResolution());
 		issueDTO.setFechaFormateada(issue.getCreationDate().getTime());
 		issueDTO.setFechaFormateadaCompleta(issue.getCreationDate().getTime());		
 		issueDTO.setTotalVotes(this.countIssueVotes(String.valueOf(issue.getId()))); // llamada al DAO
-		issueDTO.setTotalFollowers(Long.valueOf(issue.getFollowers().size()));
+		issueDTO.setTotalFollowers(issue.getFollowers().size());
 		
 		//tags		
 		Set<Tag> tagList = issue.getTagsList();
@@ -869,7 +870,7 @@ public class IssueServiceImpl implements IssueService {
 		issueDTO.setFechaFormateada(issue.getCreationDate().getTime());
 		issueDTO.setFechaFormateadaCompleta(issue.getCreationDate().getTime());		
 		issueDTO.setTotalVotes(this.countIssueVotes(String.valueOf(issue.getId()))); // llamada al DAO
-		issueDTO.setTotalFollowers(Long.valueOf(issue.getFollowers().size()));
+		issueDTO.setTotalFollowers(issue.getFollowers().size());
 		
 		//tags		
 		/**
@@ -980,7 +981,7 @@ public class IssueServiceImpl implements IssueService {
 		
 		if(status.equalsIgnoreCase(IssueStatus.REOPENED)){
 			css[0] = "label label-info";
-			css[1] = "#39B3D7";
+			css[1] = "#3A87AD";
 		}
 		
 //		if(status.equalsIgnoreCase(IssueStatus.ACKNOWLEDGED)){
@@ -1162,12 +1163,12 @@ public class IssueServiceImpl implements IssueService {
 			 	String sortDirection = "";
 			 	
 			 	if(orden.equals("newest")){
-			 		sortField =  "date";
+			 		sortField =  "creationDate";
 			 		sortDirection = SortingDataUtils.SORT_DESC;
 			 		
 			 	}
 			 	else if(orden.equals("oldest")){
-			 		sortField =  "date";
+			 		sortField =  "creationDate";
 			 		sortDirection = SortingDataUtils.SORT_ASC;
 							 		
 				}
@@ -1248,6 +1249,17 @@ public class IssueServiceImpl implements IssueService {
 		
 		return emails;
 	}
+
+	@Override
+	public List<IssueDTO> loadIssuesByLocation(float latitude, float longitude,
+			int numberOfResults) {
+		List<Issue> reclamos = issueDAO.getIssuesByLocation(latitude, longitude, numberOfResults);
+		List<IssueDTO> reclamosDTO = new ArrayList<IssueDTO>();
+		for(Issue i : reclamos){
+			reclamosDTO.add(convertToDTO(i));
+		}
+		return reclamosDTO;
+	}
 	
 //	public void sendMailAfterCommit(final MailManager mail) { 	
 //		TransactionSynchronizationManager.registerSynchronization( 			
@@ -1258,5 +1270,7 @@ public class IssueServiceImpl implements IssueService {
 //					} 	
 //				}); 
 //	}
+	
+	
 	
 }

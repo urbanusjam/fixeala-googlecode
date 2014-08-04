@@ -75,7 +75,7 @@ public class Issue implements Serializable  {
 	private String priority;
 	
 	@Column(name = "resolution_type")
-	private String resolutionType;
+	private String resolution;
 	
 	@Column(name = "status")
 	private String status;
@@ -251,7 +251,23 @@ public class Issue implements Serializable  {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
+		
+	public String getPriority() {
+		return priority;
+	}
+
+	public void setPriority(String priority) {
+		this.priority = priority;
+	}
+
+	public String getResolution() {
+		return resolution;
+	}
+
+	public void setResolution(String resolution) {
+		this.resolution = resolution;
+	}
+
 	public User getAssignedOfficial() {
 		return assignedOfficial;
 	}

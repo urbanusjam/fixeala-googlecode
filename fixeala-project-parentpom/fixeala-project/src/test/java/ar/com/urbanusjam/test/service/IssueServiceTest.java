@@ -1,4 +1,4 @@
-package ar.com.urbanusjam.test.service;
+/***package ar.com.urbanusjam.test.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -205,3 +205,4 @@ public class IssueServiceTest {
 	}
 
 }
+***/

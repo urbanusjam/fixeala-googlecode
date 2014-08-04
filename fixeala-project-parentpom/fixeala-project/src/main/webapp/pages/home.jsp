@@ -78,7 +78,7 @@
 						+ 			'<a class="thumbnail" href="resources/images/samples/image' +imgNum+ '.jpg">'
 						+    			'<img class="media-object" src="resources/images/samples/image' +imgNum+ '.jpg">'
 						+  			'</a>'	
-						+			'<p class="address"><span class="city">' +element.city+ '</span>, <span class="province">' +element.province+ '</span></p>'
+// 						+			'<p class="address"><span class="city">' +element.city+ '</span>, <span class="province">' +element.province+ '</span></p>'
 						+			'<p class="bottom">'
 						+ 					'Registrado el <span >' +element.registration+ '</span>'
 						+ 			'</p>'

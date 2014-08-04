@@ -18,6 +18,8 @@ public interface IssueDAO {
 	
 	public List<Issue> getIssues(int numberOfResults);
 	
+	public List<Issue> getIssuesByLocation(float latitude, float longitude, int numberOfResults);
+	
 	public List<Issue> getIssuesByStatus(String[] status);
 	
 	public List<Issue> getIssuesByUser(String username);
