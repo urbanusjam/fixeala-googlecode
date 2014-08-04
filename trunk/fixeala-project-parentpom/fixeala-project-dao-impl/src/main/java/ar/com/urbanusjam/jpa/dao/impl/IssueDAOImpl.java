@@ -9,7 +9,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
+import org.hibernate.Criteria;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,6 +62,17 @@ public class IssueDAOImpl implements IssueDAO {
 	@Override
 	public List<Issue> getIssues(int numberOfResults) {
 		List<Issue> issues = entityManager.createQuery("SELECT i FROM Issue i ORDER BY i.creationDate DESC ")
+				.setMaxResults(numberOfResults)  
+				.getResultList(); 
+		return issues;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Issue> getIssuesByLocation(float latitude, float longitude, int numberOfResults) {
+		List<Issue> issues = entityManager.createQuery("SELECT i FROM Issue i WHERE i.latitude = :lat AND i.longitude = :lon ")
+				.setParameter("lat", latitude)
+				.setParameter("lon", longitude)
 				.setMaxResults(numberOfResults)  
 				.getResultList(); 
 		return issues;
@@ -111,38 +129,57 @@ public class IssueDAOImpl implements IssueDAO {
 	@Override
 	public List<Issue> getIssuesByCriteria(IssueCriteriaSearchRaw issueSearch) {
 		
-		List<Issue> issues = new ArrayList<Issue>();		
-		/*Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Issue.class);
-				
-		if(!issueSearch.getProvincia().equals("Todas"))		
-			criteria.add(Restrictions.eq("province", issueSearch.getProvincia()));
+		List<Issue> issues = new ArrayList<Issue>();	
 		
-		if(!issueSearch.getCiudad().equals("Todas"))		
-			criteria.add(Restrictions.eq("city", issueSearch.getCiudad()));
+		final CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		final CriteriaQuery<Issue> criteriaQuery = criteriaBuilder.createQuery(Issue.class);
 		
-		if(!issueSearch.getBarrio().equals("") && issueSearch.getBarrio() != null)	
-			criteria.add(Restrictions.eq("neighborhood", issueSearch.getBarrio()));
+		final Root issueRoot = criteriaQuery.from(Issue.class);
+		final Root tagRoot = criteriaQuery.from(Tag.class);
+
+		List criteriaList = new ArrayList();
+	
+//		if(!issueSearch.getProvincia().equals("Todas"))	
+//			criteriaQuery.where(criteriaBuilder.equal( issueRoot.get( "province" ), issueSearch.getProvincia()));
+//		
+//		if(!issueSearch.getCiudad().equals("Todas"))		
+//			criteriaQuery.where(criteriaBuilder.equal( issueRoot.get( "city" ), issueSearch.getCiudad()));		
+//		
+//		if(!issueSearch.getBarrio().equals("") && issueSearch.getBarrio() != null)	
+//			criteriaQuery.where(criteriaBuilder.equal( issueRoot.get( "neighborhood" ), issueSearch.getBarrio()));
+//			
+//		if(issueSearch.getTagsArray() != null){
+//			 Predicate predicateTags = criteriaBuilder.equal(
+//					 issueRoot. get("tagsList"). get("tagname"),
+//					 issueSearch.getTagsArray());
+//		      criteriaList.add(predicateTags);
+//		}
+//			
+//		
+//		if(issueSearch.getEstadosArray() != null){
+//			Expression<String> exp = issueRoot.get("status");
+//			Predicate predicateStatus = exp.in(issueSearch.getEstadosArray());
+//			criteriaList.add(predicateStatus);
+//		}
 		
-		if(issueSearch.getTagsArray() != null)
-			criteria.createAlias("tagsList", "t")
-					.add(Restrictions.in("t.tagname", issueSearch.getTagsArray()));
+		 criteriaQuery.select(issueRoot).distinct(true);
+
 		
-		if(issueSearch.getEstadosArray() != null)
-			criteria.add( Restrictions.in("status", issueSearch.getEstadosArray()));	
-		
+//		criteriaQuery.where(criteriaBuilder.and((Predicate[]) criteriaList.toArray(new Predicate[0])));
+
 		if(issueSearch.getSortDirection().equals("asc"))
-			criteria.addOrder(Order.asc(issueSearch.getSortField()));
+			criteriaQuery.orderBy( criteriaBuilder.asc( issueRoot.get( issueSearch.getSortField() ) ) );
 		
-		else if(issueSearch.getSortDirection().equals("desc"))
-			criteria.addOrder(Order.desc(issueSearch.getSortField()) );
+		else if(issueSearch.getSortDirection().equals("desc"))			
+		    criteriaQuery.orderBy( criteriaBuilder.desc( issueRoot.get( issueSearch.getSortField() ) ) );
+
 				
-		criteria.add(Restrictions.between("date", issueSearch.getMinFechaFormateada(), issueSearch.getMaxFechaFormateada()))
-		        .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-			        		
-		issues = criteria.list();	
-		*/
-		return issues;        
-        
+		criteriaQuery.where(criteriaBuilder.between(issueRoot.get( "creationDate" ), issueSearch.getMinFechaFormateada(), issueSearch.getMaxFechaFormateada()));
+			        	
+		final TypedQuery query = entityManager.createQuery(criteriaQuery);
+
+		return query.getResultList();
+      
 	}
 
 	@Override

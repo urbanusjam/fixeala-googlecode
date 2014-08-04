@@ -46,10 +46,11 @@ public class IssueDTO implements Serializable {
 	private List<IssueFollowDTO> followers = new ArrayList<IssueFollowDTO>();
 	private List<IssueVoteDTO> votes = new ArrayList<IssueVoteDTO>();
 	private Long totalVotes;
-	private Long totalFollowers;
-	private Long totalViews;
+	private int totalFollowers;
+	private int totalViews;
 	private String status;
 	private String statusCss;	
+	private String resolution;
 	private String fechaFormateada;
 	private String fechaFormateadaCompleta;
 	private MediaContentDTO uploadedFile;	
@@ -191,11 +192,11 @@ public class IssueDTO implements Serializable {
 		this.votes = votes;
 	}
 	
-	public Long getTotalFollowers() {
+	public int getTotalFollowers() {
 		return totalFollowers;
 	}
 
-	public void setTotalFollowers(Long totalFollowers) {
+	public void setTotalFollowers(int totalFollowers) {
 		this.totalFollowers = totalFollowers;
 	}
 
@@ -207,11 +208,11 @@ public class IssueDTO implements Serializable {
 		this.totalVotes = totalVotes;
 	}
 	
-	public Long getTotalViews() {
+	public int getTotalViews() {
 		return totalViews;
 	}
 
-	public void setTotalViews(Long totalViews) {
+	public void setTotalViews(int totalViews) {
 		this.totalViews = totalViews;
 	}
 
@@ -277,6 +278,14 @@ public class IssueDTO implements Serializable {
 
 	public void setStatusCss(String statusCss) {
 		this.statusCss = statusCss;
+	}
+	
+	public String getResolution() {
+		return resolution;
+	}
+
+	public void setResolution(String resolution) {
+		this.resolution = resolution;
 	}
 
 	public String getUsername() {

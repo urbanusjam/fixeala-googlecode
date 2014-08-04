@@ -1351,9 +1351,7 @@
 		     
 		  	  <div id="issue-header" class="hero-unit" style="padding:20px; margin-bottom:15px">	  
 		        <h3 style="display:inline">
-		        	<a href="#" id="issue-title">${titulo}</a>&nbsp;<i class="icon-pencil editableField"></i>
-		        	&nbsp;&nbsp;
-		        	<i class="icon-chevron-right icon-large"></i>&nbsp;&nbsp;<span style="color:${tituloCss}">${estado}</span></h3>
+		        	<a href="#" id="issue-title">${titulo}</a>&nbsp;<i class="icon-pencil editableField"></i><span class="pull-right" style="color:${tituloCss}">(${estado})</span></h3>
 		        <p>${direccion}</p>       
 		      </div>
 
@@ -1421,7 +1419,7 @@
 							 </tr>
 							 <tr>
 							    <th>Estado:</th>
-							    <td><a class="taglink" href="./search.html?type=status&value=${estado}" id="issue-status" data-type="text"><span class="${estadoCss}">${estado}</span></a></td>						   
+							    <td><a class="taglink" href="./search.html?type=status&value=${estado}" id="issue-status" data-type="text"><span class="${estadoCss}">${estado}</span></a><b>${resolucion}</b></td>						   
 							 </tr>
 							 <tr>
 							    <th>Categor&iacute;as:</th>

@@ -187,6 +187,7 @@ public class IssueController {
 			model.addAttribute("tituloCss", issue.getTitleCss());
 			model.addAttribute("estado", issue.getStatus());
 			model.addAttribute("estadoCss", issue.getStatusCss());
+			model.addAttribute("resolucion", issue.getResolution());
 			model.addAttribute("direccion", issue.getFormattedAddress());
 			model.addAttribute("id", issue.getId());
 			model.addAttribute("fechaCreacion", issue.getFormattedDate(
@@ -199,7 +200,6 @@ public class IssueController {
 			model.addAttribute("ciudad", issue.getCity());
 			model.addAttribute("provincia", issue.getProvince());
 			model.addAttribute("usuario", issue.getUsername());
-//			model.addAttribute("area", issue.getArea());
 			model.addAttribute("descripcion", issue.getDescription());
 			model.addAttribute("latitud", issue.getLatitude());
 			model.addAttribute("longitud", issue.getLongitude());

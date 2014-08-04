@@ -6,6 +6,7 @@ import javax.mail.MessagingException;
 
 import org.springframework.mail.MailException;
 
+import ar.com.urbanusjam.entity.annotations.Issue;
 import ar.com.urbanusjam.services.dto.CommentDTO;
 import ar.com.urbanusjam.services.dto.IssueCriteriaSearch;
 import ar.com.urbanusjam.services.dto.IssueDTO;
@@ -34,6 +35,7 @@ public interface IssueService {
 		
 	public List<IssueDTO> loadAllIssues();	
 	public List<IssueDTO> loadIssues(int numberOfResults);	
+	public List<IssueDTO> loadIssuesByLocation(float latitude, float longitude, int numberOfResults);
 	public List<IssueDTO> loadIssuesByStatus(String[] status);	
 	public List<IssueDTO> loadIssuesByUser(String username);	
 //	public List<IssueDTO> loadIssuesByArea(String areaName);
