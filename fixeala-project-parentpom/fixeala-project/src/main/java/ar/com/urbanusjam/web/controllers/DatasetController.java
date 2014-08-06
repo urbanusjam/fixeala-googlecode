@@ -188,7 +188,11 @@ public class DatasetController {
 		report.setReponse(response);	
 	
 		report.setOutputStream(response.getOutputStream());
-		result = exportService.generateDataset(report);			
+		try {
+			result = exportService.generateDataset(report);
+		} catch (Exception e) {
+			result = false;
+		}			
 		
 		return result;
 		

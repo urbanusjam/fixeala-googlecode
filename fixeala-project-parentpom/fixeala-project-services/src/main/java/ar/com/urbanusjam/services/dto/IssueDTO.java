@@ -53,6 +53,7 @@ public class IssueDTO implements Serializable {
 	private String resolution;
 	private String fechaFormateada;
 	private String fechaFormateadaCompleta;
+	private String fullAddress;
 	private MediaContentDTO uploadedFile;	
 	
 
@@ -311,6 +312,14 @@ public class IssueDTO implements Serializable {
 	public void setFechaFormateadaCompleta(Date date) {
 		this.fechaFormateadaCompleta = this.getFormattedDate(date, DateUtils.DATE_TIME_PATTERN_LONG);
 	}
+	
+	public String getFullAddress(){		
+		return address + ", " + city + ", " + province;	
+	}
+
+	public void setFullAddress(String fullAddress) {
+		this.fullAddress = fullAddress;
+	}
 
 	public List<IssueFollowDTO> getFollowers() {
 		return followers;
@@ -334,25 +343,6 @@ public class IssueDTO implements Serializable {
 
 	public void setParsedTitle(String parsedTitle) {
 		this.parsedTitle = parsedTitle;
-	}
-
-	public String getFormattedAddress(){
-		
-		String formattedAddress = "";
-		
-//		if( !neighborhood.isEmpty() && !city.isEmpty() ) {		
-//			formattedAddress = address + ", " + neighborhood + ", " + city + ", " + province;		
-//		}
-		
-//		if( neighborhood.isEmpty() && city.isEmpty() ) {
-//			formattedAddress = address + ", " + province;		
-//		}	
-		
-//		if ( neighborhood.isEmpty() && !city.isEmpty() ) {		
-			formattedAddress = address + ", " + city + ", " + province;	
-//		}	
-		
-		return formattedAddress;
 	}
 
 	public MediaContentDTO getUploadedFile() {

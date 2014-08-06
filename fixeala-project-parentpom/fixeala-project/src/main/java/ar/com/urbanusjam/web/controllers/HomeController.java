@@ -17,7 +17,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -60,40 +59,50 @@ public class HomeController {
 	private UserService userService;
 	
 	@ModelAttribute("issues")
-	public @ResponseBody ArrayList<IssueDTO> getIssuesArray() {    
-		return (ArrayList<IssueDTO>) issueService.loadAllIssues();
+	public @ResponseBody ArrayList<IssueDTO> getIssuesArray() {   
+		try{
+			return (ArrayList<IssueDTO>) issueService.loadAllIssues();
+		}catch(Exception e){
+			return null;
+		}	
+	
 	} 
 	
 	@RequestMapping(value="/home", method = RequestMethod.GET)
 	public String home(@ModelAttribute ("issues") ArrayList<IssueDTO> issues, Model model ) throws JSONException{		
 		
-//		List<IssueDTO> issues = issueService.loadAllIssues();
+		try{
+			List<String> dbTags = issueService.getTagList();
+			JSONArray array = new JSONArray();
+			String allTags = StringUtils.EMPTY;
+			
+			for(String s : dbTags){
+				JSONObject obj = new JSONObject();
+				obj.put("id", dbTags.indexOf(s));
+				obj.put("text", s);
+				array.put(obj);
+			}
+			
+			allTags = array.toString();
+			model.addAttribute("allTags", allTags.length() == 0 ? "[{}]" : allTags);
+			
+			if(issues != null){
+				//page 1
+				JSONArray issuePagesArray = new JSONArray();
+				issuePagesArray = paginateToArray(issues, 1, "issue");
+				
+				JSONArray userPagesArray = new JSONArray();
+				userPagesArray = paginateToArray(userService.loadAllActiveUsers(), 1, "user");
+				
+				model.addAttribute("jsonIssues", issuePagesArray);
+				model.addAttribute("jsonUsers", userPagesArray);
+			}	
+			
+			return "home";
 		
-		List<String> dbTags = issueService.getTagList();
-		JSONArray array = new JSONArray();
-		String allTags = StringUtils.EMPTY;
-		
-		for(String s : dbTags){
-			JSONObject obj = new JSONObject();
-			obj.put("id", dbTags.indexOf(s));
-			obj.put("text", s);
-			array.put(obj);
-		}
-		
-		allTags = array.toString();
-		model.addAttribute("allTags", allTags.length() == 0 ? "[{}]" : allTags);
-		
-		//page 1
-		JSONArray issuePagesArray = new JSONArray();
-		issuePagesArray = paginateToArray(issues, 1, "issue");
-		
-		JSONArray userPagesArray = new JSONArray();
-		userPagesArray = paginateToArray(userService.loadAllActiveUsers(), 1, "user");
-		
-		model.addAttribute("jsonIssues", issuePagesArray);
-		model.addAttribute("jsonUsers", userPagesArray);
-		
-		return "home";
+		}catch(Exception e){
+			return "redirect:/" + "error.html";
+		}	
 	}
 	
 	@RequestMapping(value = "/loadMapMarkers", method = RequestMethod.GET)
@@ -125,7 +134,7 @@ public class HomeController {
 
 			JSONObject properties = new JSONObject();
 			properties.put("id", s.getId());
-			properties.put("address", s.getFormattedAddress());
+			properties.put("address", s.getFullAddress());
 			properties.put("title", s.getTitle());
 			properties.put("status", s.getStatus());
 			properties.put("statusCss", s.getStatusCss());
@@ -210,7 +219,7 @@ public class HomeController {
 					obj.put("id", issue.getId());
 					obj.put("title", issue.getTitle());
 					obj.put("description", issue.getDescription());		
-					obj.put("address", issue.getFormattedAddress());	
+					obj.put("address", issue.getFullAddress());	
 					obj.put("barrio", issue.getNeighborhood());	
 					obj.put("city", issue.getCity());	
 					obj.put("province", issue.getProvince());	
@@ -262,7 +271,7 @@ public class HomeController {
 			obj.put("id", issue.getId());
 			obj.put("title", issue.getTitle());
 			obj.put("description", issue.getDescription());		
-			obj.put("address", issue.getFormattedAddress());	
+			obj.put("address", issue.getFullAddress());	
 			obj.put("barrio", issue.getNeighborhood());	
 			obj.put("city", issue.getCity());	
 			obj.put("province", issue.getProvince());	

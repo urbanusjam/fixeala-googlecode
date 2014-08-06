@@ -159,6 +159,30 @@
       	<res-auth>Container</res-auth>
     </resource-ref>
     
+ 
+ 	<error-page>
+		<exception-type>java.lang.Exception</exception-type>
+		<location>/error.html</location>
+	</error-page>
+	
+	<error-page>	
+		<exception-type>java.lang.Throwable</exception-type>
+	  	<location>/error.html</location>
+	</error-page>}
+	
+	<error-page>
+    	<exception-type>org.eclipse.persistence.exceptions.DatabaseException</exception-type>
+    	<location>/error.html</location>
+	</error-page>
+	 
+	<error-page>
+		<error-code>404</error-code>
+	  	<location>/error.html</location>
+	</error-page>
+	  
+	<error-page>
+		<location>/error.html</location>
+	</error-page>
      
 
 
