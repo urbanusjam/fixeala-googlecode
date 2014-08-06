@@ -1,7 +1,10 @@
 package ar.com.urbanusjam.services.impl;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,6 +16,7 @@ import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRCsvExporter;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.JRPdfExporterParameter;
@@ -20,6 +24,7 @@ import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 import net.sf.jasperreports.engine.export.JRXmlExporter;
 import net.sf.jasperreports.engine.export.JRXmlExporterParameter;
+import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 
 import org.apache.commons.lang.CharEncoding;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +33,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.jasperreports.JasperReportsUtils;
 
+import ar.com.fdvs.dj.core.DynamicJasperHelper;
+import ar.com.fdvs.dj.core.layout.ClassicLayoutManager;
+import ar.com.fdvs.dj.domain.DynamicReport;
+import ar.com.fdvs.dj.domain.builders.FastReportBuilder;
 import ar.com.urbanusjam.services.ExportService;
 import ar.com.urbanusjam.services.dto.ReportDTO;
 import ar.com.urbanusjam.services.utils.DateUtils;
@@ -42,9 +51,7 @@ public class ExportServiceImpl implements ExportService {
 	
 	@Value("${path.jasper.output.folder}") 	
 	private String pathJasperOutputFolder;
-	
-	
-	
+			
 	
 	public void setPathJasperTemplate(String pathJasperTemplate) {
 		this.pathJasperTemplate = pathJasperTemplate;
@@ -57,7 +64,7 @@ public class ExportServiceImpl implements ExportService {
 
 
 	@Override
-	public boolean generateDataset(ReportDTO report) {	
+	public boolean generateDataset(ReportDTO report) throws Exception {	
 		String fileFormat = "";
 		boolean result = false;		
 		
@@ -68,8 +75,11 @@ public class ExportServiceImpl implements ExportService {
 			if(fileFormat.equals(FileFormat.PDF))					
 				result = this.generatePDFReport(report);
 			
-			if(fileFormat.equals(FileFormat.XLS))					
-				result = this.generateXLSReport(report);
+			if(fileFormat.equals(FileFormat.XLS)){
+				this.generateExcelReport(report);
+				result = true;
+			}					
+				
 			
 			if(fileFormat.equals(FileFormat.CSV))					
 				result = this.generateCSVReport(report);
@@ -92,7 +102,7 @@ public class ExportServiceImpl implements ExportService {
 	
 	private JasperPrint generateJasperPrint(ReportDTO reportDTO) throws IOException, JRException {	
 		
-		ClassPathResource resource = new ClassPathResource(this.pathJasperTemplate);
+		ClassPathResource resource = new ClassPathResource(pathJasperTemplate);
 		JasperReport report = JasperCompileManager.compileReport(resource.getInputStream());		
 		JRDataSource dataSource;
 		
@@ -129,31 +139,70 @@ public class ExportServiceImpl implements ExportService {
 		
 	}
 	
-	private boolean generateXLSReport(ReportDTO report) throws IOException, JRException {
+	private void generateExcelReport(ReportDTO report) throws Exception {
 
 		try {	
 			
-			this.setCacheHeaders(report.getReponse());			
-			JasperPrint print = this.generateJasperPrint(report);	        
-	        JRXlsExporter exporterXLS = new JRXlsExporter();     
-	        
-	        exporterXLS.setParameter(JRExporterParameter.JASPER_PRINT, print);
-	        exporterXLS.setParameter(JRExporterParameter.OUTPUT_STREAM, report.getOutputStream());
-	        exporterXLS.setParameter(JRExporterParameter.CHARACTER_ENCODING, CharEncoding.UTF_8);
-	        exporterXLS.setParameter(JRExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
-	        exporterXLS.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
-	        exporterXLS.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.FALSE);
-	        exporterXLS.setParameter(JRXlsExporterParameter.IS_IGNORE_CELL_BACKGROUND, Boolean.TRUE);
-	        exporterXLS.setParameter(JRXlsExporterParameter.IS_DETECT_CELL_TYPE, Boolean.TRUE);
-	        exporterXLS.setParameter(JRXlsExporterParameter.IS_IGNORE_CELL_BORDER, Boolean.FALSE);
-	    	
-	        exporterXLS.exportReport();	
-			return true;
+		
+			
+			this.setCacheHeaders(report.getReponse());		
+			
+			
+			FastReportBuilder dynamicReportBuilder = new FastReportBuilder();
+			DynamicReport dynamicReport = dynamicReportBuilder.addColumn("ID"                   , "id"               , String.class.getName(), 30)
+			        .addColumn("Título"             , "titulo"              , String.class.getName(), 30)
+			        .addColumn("Dirección"       , "direccion" , String.class.getName(), 50)			    
+			        .addColumn("Fecha y Hora"           , "fecha"    , Long.class.getName()  , 60, true)
+			        .addColumn("Estado"             , "estado"              , Float.class.getName() , 70, true)
+			        .setPrintColumnNames(true)
+			        .setIgnorePagination(true) //for Excel, we may dont want pagination, just a plain list
+			        .setMargins(0, 0, 0, 0)
+			        .setTitle("Listado de incidencias barriales de la República Argentina")
+			        .setSubtitle("Este reporte fue generado el " + new Date())
+			        .setUseFullPageWidth(true)
+			        .setReportName("fixeala Excel")
+	                //Esto sirve para cuando no hay registros a mostrar, que muestre los headers pero no verifique las propiedades de los beans
+	                .setWhenNoDataShowNoDataSection() 
+	                .build();
+	
+			
+			  JRDataSource datasource = report.getBeans().isEmpty() ?  new JREmptyDataSource() : new JRBeanCollectionDataSource(report.getBeans());   
+			  
+			 JasperPrint jasperPrint = DynamicJasperHelper.generateJasperPrint(dynamicReport, new ClassicLayoutManager() , datasource);
+			 
+		        
+		    exportToXLSX(jasperPrint);
+			
+		    
 			
 		}catch(Exception e){
-			return false;
+			throw new Exception();
 		} 
 		
+	}
+	
+	 private static void exportToXLSX(JasperPrint jasperPrint) throws JRException, FileNotFoundException {
+	        JRXlsxExporter exporter = new JRXlsxExporter();
+
+	        File outputFile = new File("C:/Downloads/fixeala_reporte.xls");
+	        FileOutputStream fos = new FileOutputStream(outputFile);
+	        
+	        exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+	        exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, fos);
+	        exporter.setParameter(JRExporterParameter.CHARACTER_ENCODING, CharEncoding.UTF_8);
+
+	        //Excel specific parameter
+	        exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, true);
+	        exporter.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, true);
+	        exporter.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, false);
+	        exporter.setParameter(JRXlsExporterParameter.IGNORE_PAGE_MARGINS, true);
+
+//	        exporter.setParameter(JRXlsExporterParameter.SHEET_NAMES, ["Belka","Strelka"].toArray(new String[2]) );
+	        exporter.exportReport();
+	    }
+	
+	private String generateJaspeFilename(String fileFormat){		
+		return "fixeala_dataset_" + DateUtils.generateTimestampDate() + "_" + DateUtils.generateTimestampTime() + "." + fileFormat;	 	
 	}
 	
 	private boolean generateCSVReport(ReportDTO report) throws IOException, JRException {
@@ -207,9 +256,8 @@ public class ExportServiceImpl implements ExportService {
 		}
 	
 		
-	private File generateJaspeFile(String fileFormat){
-		File file = new File(this.pathJasperOutputFolder + "fixeala-dataset-" + DateUtils.generateTimestamp() + "." + fileFormat);	
-		return file; 	
+	public String generateOutputFilename(String fileFormat){			
+		return pathJasperOutputFolder + "fixeala-dataset-" + DateUtils.generateTimestamp() + "." + fileFormat;
 	}
 	
 	

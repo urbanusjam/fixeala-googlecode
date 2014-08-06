@@ -66,7 +66,7 @@ public class LoginController {
 			obj.put("id", issue.getId());
 			obj.put("title", issue.getTitle());
 			obj.put("description", issue.getDescription());		
-			obj.put("address", issue.getFormattedAddress());	
+			obj.put("address", issue.getFullAddress());	
 			obj.put("barrio", issue.getNeighborhood());	
 			obj.put("city", issue.getCity());	
 			obj.put("province", issue.getProvince());	

@@ -121,7 +121,7 @@ public class IssueController {
 			obj.put("date", issue.getFormattedDate(issue.getCreationDate(),
 					DateUtils.DATE_TIME_PATTERN_SHORT));
 			obj.put("user", issue.getUsername());
-			obj.put("address", issue.getFormattedAddress());
+			obj.put("address", issue.getFullAddress());
 			obj.put("description", issue.getDescription());
 			obj.put("status", issue.getStatus());
 			obj.put("statusCss", issue.getStatusCss());
@@ -188,7 +188,7 @@ public class IssueController {
 			model.addAttribute("estado", issue.getStatus());
 			model.addAttribute("estadoCss", issue.getStatusCss());
 			model.addAttribute("resolucion", issue.getResolution());
-			model.addAttribute("direccion", issue.getFormattedAddress());
+			model.addAttribute("direccion", issue.getFullAddress());
 			model.addAttribute("id", issue.getId());
 			model.addAttribute("fechaCreacion", issue.getFormattedDate(
 					issue.getCreationDate(), DateUtils.DATE_TIME_PATTERN_SHORT));
