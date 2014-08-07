@@ -31,9 +31,9 @@
 		<property name="mailService" ref="mailService" />
 	</bean>
 	
-	<bean name="exportService" class="ar.com.urbanusjam.services.impl.ExportServiceImpl" >
-		<property name="pathJasperTemplate" value="${path.jasper.template}${file.separator}" />
-		<property name="pathJasperOutputFolder" value="${path.jasper.output.folder}${file.separator}" />
+	<bean name="exportService" class="ar.com.urbanusjam.web.services.impl.ExportServiceImpl" >
+		<property name="pathJasperTemplatePdf" value="${path.jasper.template.pdf}${file.separator}" />
+		<property name="pathJasperTemplateCsv" value="${path.jasper.template.csv}${file.separator}" />
 	</bean>
 	
 	<bean name="contenidoService" class="ar.com.urbanusjam.services.impl.ContenidoServiceImpl" >
