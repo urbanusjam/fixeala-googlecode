@@ -1,4 +1,4 @@
-package ar.com.urbanusjam.dao.impl;
+/**package ar.com.urbanusjam.dao.impl;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -109,3 +109,4 @@ public class ContenidoDAOImpl extends GenericDAOImpl<MediaContent, Serializable>
 
 		
 }
+**/

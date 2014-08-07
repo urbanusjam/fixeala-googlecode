@@ -50,27 +50,12 @@ public class DateUtils {
         return (GregorianCalendar) cal;
 	}	
 	
-	public static String generateTimestamp(){
+	public static String generateTimestamp(String pattern){
 		Calendar cal = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_TIMESTAMP);         
+		SimpleDateFormat sdf = new SimpleDateFormat(pattern);         
 		String timestamp = "";
 		timestamp = sdf.format(cal.getTime());  
 		return timestamp;
-	}
+	}	
 	
-	public static String generateTimestampDate(){
-		Calendar cal = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_TIMESTAMP_DATE);         
-		String timestamp = "";
-		timestamp = sdf.format(cal.getTime());  
-		return timestamp;
-	}
-	public static String generateTimestampTime(){
-		Calendar cal = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_TIMESTAMP_TIME);         
-		String timestamp = "";
-		timestamp = sdf.format(cal.getTime());  
-		return timestamp;
-	}
-
 }

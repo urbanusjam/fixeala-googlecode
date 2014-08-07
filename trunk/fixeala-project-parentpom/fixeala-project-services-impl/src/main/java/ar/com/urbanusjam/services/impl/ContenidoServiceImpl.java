@@ -153,7 +153,7 @@ public class ContenidoServiceImpl implements ContenidoService {
       
        File file = new File( this.pathImagenes 
     		   						+ "IMG-" 
-					    		   	+ DateUtils.generateTimestamp() + "-FXL-" 
+					    		   	+ DateUtils.generateTimestamp(DateUtils.FORMAT_TIMESTAMP) + "-FXL-" 
 					    		   	+  nombreArchivoHash.substring(inicioCadena) 
 					    		   	+ "." + contenidoDTO.getExtension().toLowerCase());
        
