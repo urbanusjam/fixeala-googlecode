@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -150,10 +151,10 @@ public class ExportServiceImpl implements ExportService {
 			
 			FastReportBuilder dynamicReportBuilder = new FastReportBuilder();
 			DynamicReport dynamicReport = dynamicReportBuilder.addColumn("ID"                   , "id"               , String.class.getName(), 30)
-			        .addColumn("Título"             , "titulo"              , String.class.getName(), 30)
-			        .addColumn("Dirección"       , "direccion" , String.class.getName(), 50)			    
-			        .addColumn("Fecha y Hora"           , "fecha"    , Long.class.getName()  , 60, true)
-			        .addColumn("Estado"             , "estado"              , Float.class.getName() , 70, true)
+			        .addColumn("Titulo"             , "title"              , String.class.getName(), 30)
+			        .addColumn("Direccion"       , "address" , String.class.getName(), 50)			    
+			        .addColumn("Fecha y Hora"           , "fechaFormateada"    , String.class.getName()  , 60, true)
+			        .addColumn("Estado"             , "status"              , String.class.getName() , 70, true)
 			        .setPrintColumnNames(true)
 			        .setIgnorePagination(true) //for Excel, we may dont want pagination, just a plain list
 			        .setMargins(0, 0, 0, 0)
@@ -164,11 +165,11 @@ public class ExportServiceImpl implements ExportService {
 	                //Esto sirve para cuando no hay registros a mostrar, que muestre los headers pero no verifique las propiedades de los beans
 	                .setWhenNoDataShowNoDataSection() 
 	                .build();
-	
+		
 			
 			  JRDataSource datasource = report.getBeans().isEmpty() ?  new JREmptyDataSource() : new JRBeanCollectionDataSource(report.getBeans());   
 			  
-			 JasperPrint jasperPrint = DynamicJasperHelper.generateJasperPrint(dynamicReport, new ClassicLayoutManager() , datasource);
+			 JasperPrint jasperPrint = DynamicJasperHelper.generateJasperPrint(dynamicReport, new ClassicLayoutManager() , datasource, new HashMap<String, Object>());
 			 
 		        
 		    exportToXLSX(jasperPrint);
@@ -184,7 +185,7 @@ public class ExportServiceImpl implements ExportService {
 	 private static void exportToXLSX(JasperPrint jasperPrint) throws JRException, FileNotFoundException {
 	        JRXlsxExporter exporter = new JRXlsxExporter();
 
-	        File outputFile = new File("C:/Downloads/fixeala_reporte.xls");
+	        File outputFile = new File("/Users/cora/Downloads/fixeala_reporte.xls");
 	        FileOutputStream fos = new FileOutputStream(outputFile);
 	        
 	        exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
