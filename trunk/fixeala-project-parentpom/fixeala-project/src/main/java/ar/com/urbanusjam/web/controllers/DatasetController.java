@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.jasperreports.engine.JRException;
 
 import org.apache.commons.lang.StringUtils;
+import org.jfree.util.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,17 +24,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import ar.com.urbanusjam.services.ExportService;
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.dto.IssueCriteriaSearch;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.ReportDTO;
-import ar.com.urbanusjam.services.utils.DateUtils;
 import ar.com.urbanusjam.services.utils.FileFormat;
-import ar.com.urbanusjam.web.domain.AlertStatus;
+import ar.com.urbanusjam.web.services.ExportService;
+
 
 @Controller
-public class DatasetController {
+@RequestMapping(value="/dataset")
+public class DatasetController extends MainController {
 	
 	@Autowired
 	private IssueService issueService;
@@ -41,7 +42,7 @@ public class DatasetController {
 	@Autowired
 	private ExportService exportService;
 	
-	@RequestMapping(value="/dataset", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	public String showDatasetPage(Model model, HttpServletRequest request, HttpServletResponse response) { 	
 				
 		try {				
@@ -69,133 +70,66 @@ public class DatasetController {
 	}
 	
 	
-	@RequestMapping(value="/exportDataset", method = RequestMethod.GET)
-	public @ResponseBody AlertStatus exportDataset(@RequestParam("fileFormat") String fileFormat, 
-			HttpServletRequest request, HttpServletResponse response) throws IOException, JRException { 
+	@RequestMapping(value="/download", method = RequestMethod.GET)
+	public @ResponseBody void exportDataset(@RequestParam("format") String fileFormat, 
+			HttpServletRequest request, HttpServletResponse response) throws Exception { 
 			
-		boolean result = false;
+		List<IssueDTO> issues = new ArrayList<IssueDTO>();		
 		
-		try{
+		try{			
+			issues = issueService.loadAllIssues();			
+			buildReport(issues, fileFormat, response, request);		
 			
-			List<IssueDTO> issues = new ArrayList<IssueDTO>();		
-			issues = issueService.loadAllIssues();
-			
-			if(issues.isEmpty()){
-				return new AlertStatus(false, "No se encontraron resultados.");
-			}
-			
-			else{
-				result = generateDataset(issues, fileFormat, response);
-				
-//				if(!result)
-//					return new AlertStatus(false, "Hubo un error al exportar el dataset.");
-//				
-//				else
-//					return new AlertStatus(true, "Archivo generado correctamente.");
-				
-				return new AlertStatus(result, "Dataset");
-			}
-			
-		}catch(Exception e){
-			return new AlertStatus(false, "Hubo un error al exportar el dataset.");
-		}	
+		}catch (Exception e) {
+	      	Log.error(e.getMessage());	       
+	    }
 		
 	}
 	
-	@RequestMapping(value="/exportCustomDataset", method = RequestMethod.GET)
-	public @ResponseBody AlertStatus exportCustomDataset(@ModelAttribute("datasetForm") IssueCriteriaSearch search, 
+	@RequestMapping(value="/export", method = RequestMethod.GET)
+	public @ResponseBody void exportCustomDataset(@ModelAttribute("datasetForm") IssueCriteriaSearch search, 
 			HttpServletRequest request, HttpServletResponse response) throws IOException, JRException { 
+	
+		List<IssueDTO> issues = new ArrayList<IssueDTO>();	
 		
-		boolean result = false;
-		
-		try{
-			
-			List<IssueDTO> issues = new ArrayList<IssueDTO>();		
+		try{			
 			issues = issueService.findIssuesByCriteria(search);	
-			
-			if(issues.isEmpty()){
-				return new AlertStatus(false, "No se encontraron resultados.");
-			}
-					
-			else{			
-//				fileFormat = search.getFormatoArchivo();
-//				fileName = generateJaspeFilename(fileFormat);
-//				
-//				if(fileFormat.equals(FileFormat.PDF))
-//					response.setContentType("application/pdf");
-//					
-//				else if(fileFormat.equals(FileFormat.XLS))
-//					response.setContentType("application/vnd.ms-excel");
-//				
-//				else if(fileFormat.equals(FileFormat.CSV))
-//					response.setContentType("text/csv");
-//				
-//				else if(fileFormat.equals(FileFormat.XML))
-//					response.setContentType("text/xml");
-//				
-//				response.setHeader("Content-Disposition", "attachment; filename=" + fileName);    
-//	     					 
-//				ReportDTO report = new ReportDTO();
-//				report.setBeans(issues);
-//				report.setFileFormat(fileFormat);
-//				report.setParameters(new HashMap<String, Object>());
-//				report.setReponse(response);
-//				report.setOutputStream(response.getOutputStream());
-//			
-//				result = exportService.generateDataset(report);
-				result = generateDataset(issues, search.getFormatoArchivo(), response);
-				
-//				if(!result)
-//					return new AlertStatus(false, "Hubo un error al exportar el dataset.");
-//				
-//				else
-					return new AlertStatus(result, "Dataset");
-			}
+							
+				buildReport(issues, search.getFormatoArchivo(), response, request);				
 			
 		}catch(Exception e){
-			return new AlertStatus(false, "Hubo un error al exportar el dataset.");
+			Log.error(e.getMessage());	    
 		}
 	
 	}
 	
-	private String generateJaspeFilename(String fileFormat){		
-		return "fixeala_dataset_" + DateUtils.generateTimestampDate() + "_" + DateUtils.generateTimestampTime() + "." + fileFormat;	 	
-	}
 	
-	private boolean generateDataset(List<IssueDTO> issues, String fileFormat,  HttpServletResponse response) throws IOException, JRException {
+	
+	private void buildReport(List<IssueDTO> issues, String fileFormat,  HttpServletResponse response, HttpServletRequest request) throws Exception {
 		
-		String fileName = generateJaspeFilename(fileFormat);
-		boolean result = false;
-		
-		if(fileFormat.equals(FileFormat.PDF))
-			response.setContentType("application/pdf");
-			
-		else if(fileFormat.equals(FileFormat.XLS))
-			response.setContentType("application/vnd.ms-excel");
-		
-		else if(fileFormat.equals(FileFormat.CSV))
-			response.setContentType("text/csv");
-		
-		else if(fileFormat.equals(FileFormat.XML))
-			response.setContentType("text/xml");
-		
-		response.setHeader("Content-Disposition", "attachment; filename=" + fileName);    
- 					 
 		ReportDTO report = new ReportDTO();
+		
 		report.setBeans(issues);
-		report.setFileFormat(fileFormat);
+		report.setFileFormat(fileFormat);	
 		report.setParameters(new HashMap<String, Object>());
 		report.setReponse(response);	
-	
-		report.setOutputStream(response.getOutputStream());
-		try {
-			result = exportService.generateDataset(report);
-		} catch (Exception e) {
-			result = false;
-		}			
+		report.setOutputStream(response.getOutputStream());		
+		report.setInputStream(request.getInputStream());
 		
-		return result;
+		if(fileFormat.equals(FileFormat.PDF))
+			setResponseParametersForPdfExport(response, generateOutputFilename(fileFormat));
+		
+		if(fileFormat.equals(FileFormat.XLS))
+			setResponseParametersForExcelExport(response, generateOutputFilename(fileFormat));
+		
+		if(fileFormat.equals(FileFormat.CSV))
+			setResponseParametersForCsvExport(response, generateOutputFilename(fileFormat));
+		
+		if(fileFormat.equals(FileFormat.XML))
+			setResponseParametersForXmlExport(response, generateOutputFilename(fileFormat));
+				
+		exportService.generateDataset(report);
 		
 	}
-
+	
 }

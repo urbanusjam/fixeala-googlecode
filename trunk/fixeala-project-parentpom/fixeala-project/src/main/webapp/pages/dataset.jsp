@@ -81,25 +81,28 @@
 	  	  });		  
 	  });
 	  
-	  $('.download').click(function(){
-		  var fileFormat = $(this).attr('title').trim();
-		  
-		  $.ajax({			
-	            url : "./exportDataset",
-	            data: "fileFormat=" + fileFormat,
-	            success: function(data) { 
-	            	if(data.result)
-		        		bootbox.alert(data.message);
-		        },
-		        error: function (){
-		        	bootbox.alert(data.message);
-		        }
-	  	  });
-		  
-	  });
+	  
 	  
 	 
   });
+  
+  function downloadDataset(fileFormat){
+	  
+	  alert(fileFormat);
+	  
+	  $.ajax({			
+            url : "./exportDataset",
+            data: "fileFormat=" + fileFormat,
+            success: function() { 
+            	return null;
+	        },
+	        error: function (){
+	        	return null;
+// 	        	bootbox.alert("Hubo un error al intentar expotar el dataset. Intente m&aacute;s tarde.");
+	        }
+  	  });
+	  
+  }
 </script>
 
 
@@ -124,7 +127,7 @@
 			   
 			 <div class="page-header">   <h4>Datasets disponibles</h4> </div>
 			   
-			   
+			
 			  <table id="tblDatasetDownload" class="table-hover table-bordered">			  	
    	   		  	   	<tbody>
    	   		  	   		<tr>
@@ -134,22 +137,9 @@
 		    					<p>Listado completo de reclamos cargados en el portal en formato EXCEL.</p>
 		 					</td>
 					  		<td>
-					  			<input type="button" class="download btn btn-success" title="xls" value="bajar"/>
-					  			
+					  		 <a href="./dataset/download.html?format=xls"  class="btn btn-success">DESCARGAR</a>					  					  			
 					  		</td>
-					  	</tr>					  	
-					  	<tr>
-					  		<td><span class="badge badge-info">PDF</span></td>
-					  		<td>
-					  			<h4>Reclamos cargados en Fixeala</h4>
-		    					<p>Listado completo de reclamos cargados en el portal en formato PDF</p>
-		 					</td>
-					  		<td>
-					  			<button class="download btn btn-info" title="pdf">
-					  			<i class="icon-download-alt icon-large"></i>&nbsp;DESCARGAR</button>
-					  		</td>
-					  	</tr>
-					  	
+					  	</tr>	
 					  	<tr>
 					  		<td><span class="badge badge-warning">CSV</span></td>
 					  		<td>
@@ -157,8 +147,17 @@
 		    					<p>Listado completo de reclamos cargados en el portal en formato CSV.</p>
 		 					</td>
 					  		<td>
-					  			<button type="button" class="download btn btn-warning" title="csv">
-					  			<i class="icon-download-alt icon-large"></i>&nbsp;DESCARGAR</button>
+					  			<a href="./dataset/download.html?format=csv" class="btn btn-warning">DESCARGAR</a>	
+					  		</td>
+					  	</tr>
+					  	<tr>
+					  		<td><span class="badge badge-info">PDF</span></td>
+					  		<td>
+					  			<h4>Reclamos cargados en Fixeala</h4>
+		    					<p>Listado completo de reclamos cargados en el portal en formato PDF</p>
+		 					</td>
+					  		<td>
+					  			<a href="./dataset/download.html?format=pdf" class="btn btn-info">DESCARGAR</a>					  			
 					  		</td>
 					  	</tr>
 					  	<tr>
@@ -168,13 +167,13 @@
 		    					<p>Listado completo de reclamos cargados en el portal en formato XML.</p>
 		 					</td>
 					  		<td>
-					  			<button class="download btn btn-danger" title="xml">
-					  			<i class="icon-download-alt icon-large"></i>&nbsp;DESCARGAR</button>
+					  			<a href="./dataset/download.html?format=xml" class="btn btn-danger">DESCARGAR</a>	
 					  		</td>
 					  	</tr>
 			  		</tbody>
 			  
 			  </table>
+		
 		</div>
 		
 		<div class="span5 offset1">	 
@@ -208,7 +207,7 @@
  
 	<!-- Modal -->
 	<div id="mdl-dataset" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<form id="datasetForm" action="./exportCustomDataset.html" method="GET">     	   
+		<form id="datasetForm" action="./dataset/export.html" method="GET">     	   
 		  	<div class="modal-header">
 			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
 			    <h4 id="myModalLabel">Personaliz&aacute; tu dataset</h4>
@@ -311,8 +310,8 @@
 					    	   		<label><i class="icon-double-angle-right"></i>&nbsp;Formato del archivo</label>
 					    	   		<br>
 					    	   		<select id="formatoArchivo" name="formatoArchivo">	
-					    	   				<option value="xls">XLS</option>	
-					    	   				<option value="pdf" selected="selected">PDF</option>	
+					    	   				<option value="xls" selected="selected">XLS</option>	
+					    	   				<option value="pdf">PDF</option>	
 					    	   				<option value="csv">CSV</option>
 											<option value="xml">XML</option>																				
 									</select>	
