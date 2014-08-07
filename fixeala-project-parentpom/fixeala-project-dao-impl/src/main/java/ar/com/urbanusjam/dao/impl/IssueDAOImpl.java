@@ -1,4 +1,4 @@
-package ar.com.urbanusjam.dao.impl;
+/**package ar.com.urbanusjam.dao.impl;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -148,3 +148,4 @@ public class IssueDAOImpl extends GenericDAOImpl<Issue, Serializable> implements
 	}
 
 }
+**/

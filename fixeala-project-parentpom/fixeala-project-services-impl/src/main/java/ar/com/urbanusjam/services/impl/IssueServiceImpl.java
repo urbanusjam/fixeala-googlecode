@@ -765,6 +765,16 @@ public class IssueServiceImpl implements IssueService {
 		issueDTO.setTotalVotes(this.countIssueVotes(String.valueOf(issue.getId()))); // llamada al DAO
 		issueDTO.setTotalFollowers(issue.getFollowers().size());
 		
+		//tags		
+		Set<Tag> tagList = issue.getTagsList();
+		List<String> tagNames = new ArrayList<String>();		
+		if(tagList.size() > 0){
+			for(Tag t :  issue.getTagsList()){				
+				tagNames.add(t.getTagname().trim());
+			}
+		}		
+		issueDTO.setTags(tagNames);
+		
 		return issueDTO;
 	}
 	
@@ -797,17 +807,13 @@ public class IssueServiceImpl implements IssueService {
 		
 		//tags		
 		Set<Tag> tagList = issue.getTagsList();
-		List<String> tagNames = new ArrayList<String>();
-		
+		List<String> tagNames = new ArrayList<String>();		
 		if(tagList.size() > 0){
 			for(Tag t :  issue.getTagsList()){				
 				tagNames.add(t.getTagname().trim());
 			}
-		}
-		
+		}		
 		issueDTO.setTags(tagNames);
-		
-//		issueDTO.setAssignedOfficial(null);
 	
 		//historial
 		List<IssueUpdateHistoryDTO> historialDTO = new ArrayList<IssueUpdateHistoryDTO>();		

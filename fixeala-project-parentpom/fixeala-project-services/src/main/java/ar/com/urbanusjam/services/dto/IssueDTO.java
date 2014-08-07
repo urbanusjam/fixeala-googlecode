@@ -353,5 +353,14 @@ public class IssueDTO implements Serializable {
 		this.uploadedFile = uploadedFile;
 	}
 	
+	public String getCategorias(){
+		
+	  StringBuilder result = new StringBuilder();
+	    for(String categoria : this.tags) {
+	        result.append(categoria);
+	        result.append(",");
+	    }
+	    return result.length() > 0 ? result.substring(0, result.length() - 1): "";
+	}
 	
 }
