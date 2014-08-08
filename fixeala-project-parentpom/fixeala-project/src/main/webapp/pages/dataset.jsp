@@ -125,78 +125,93 @@
 			  
 			<div class="span6" >
 			   
-			 <div class="page-header">   <h4>Datasets disponibles</h4> </div>
-			   
-			
-			  <table id="tblDatasetDownload" class="table-hover table-bordered">			  	
-   	   		  	   	<tbody>
-   	   		  	   		<tr>
-					  		<td><span class="badge badge-success">XLS</span></td>
-					  		<td>
-					  			<h4>Reclamos cargados en Fixeala</h4>
-		    					<p>Listado completo de reclamos cargados en el portal en formato EXCEL.</p>
-		 					</td>
-					  		<td>
-					  		 <a href="./dataset/download.html?format=xls"  class="btn btn-success">DESCARGAR</a>					  					  			
-					  		</td>
-					  	</tr>	
-					  	<tr>
-					  		<td><span class="badge badge-warning">CSV</span></td>
-					  		<td>
-					  			<h4>Reclamos cargados en Fixeala</h4>
-		    					<p>Listado completo de reclamos cargados en el portal en formato CSV.</p>
-		 					</td>
-					  		<td>
-					  			<a href="./dataset/download.html?format=csv" class="btn btn-warning">DESCARGAR</a>	
-					  		</td>
-					  	</tr>
-					  	<tr>
-					  		<td><span class="badge badge-info">PDF</span></td>
-					  		<td>
-					  			<h4>Reclamos cargados en Fixeala</h4>
-		    					<p>Listado completo de reclamos cargados en el portal en formato PDF</p>
-		 					</td>
-					  		<td>
-					  			<a href="./dataset/download.html?format=pdf" class="btn btn-info">DESCARGAR</a>					  			
-					  		</td>
-					  	</tr>
-					  	<tr>
-					  		<td><span class="badge badge-important">XML</span></td>
-					  		<td>
-					  			<h4>Reclamos cargados en Fixeala</h4>
-		    					<p>Listado completo de reclamos cargados en el portal en formato XML.</p>
-		 					</td>
-					  		<td>
-					  			<a href="./dataset/download.html?format=xml" class="btn btn-danger">DESCARGAR</a>	
-					  		</td>
-					  	</tr>
-			  		</tbody>
-			  
-			  </table>
-		
+				 <div class="page-header"><h4>Datasets completos disponibles</h4></div>
+			 
+				 <!-- XLS -->
+				 <div class="row dataset">
+	  				<div class="span2"><span class="badge badge-success">XLS</span></div>
+	  				<div class="span7">Listado completo de reclamos en formato EXCEL.</div>
+	  				<div class="span3">
+	  					<a href="./dataset/download.html?format=xls" class="btn btn-default">
+	  						<i class="icon icon-download"></i><span>Descargar</span>
+	  					</a>		
+	  				</div>
+				 </div>
+				 <!-- CSV -->
+				 <div class="row dataset">
+	  				<div class="span2"><span class="badge badge-warning">CSV</span></div>
+	  				<div class="span7">Listado completo de reclamos en formato CSV.</div>
+	  				<div class="span3">
+	  					<a href="./dataset/download.html?format=csv" class="btn btn-default">
+	  						<i class="icon icon-download"></i><span>Descargar</span>
+	  					</a>		
+	  				</div>
+				 </div>
+				 <!-- PDF -->
+				 <div class="row dataset">
+	  				<div class="span2"><span class="badge badge-info">PDF</span></div>
+	  				<div class="span7">Listado completo de reclamos en formato PDF.</div>
+	  				<div class="span3">
+	  					<a href="./dataset/download.html?format=pdf" class="btn btn-default">
+	  						<i class="icon icon-download"></i><span>Descargar</span>
+	  					</a>		
+	  				</div>
+				 </div>
+				 <!-- XML -->
+				 <div class="row dataset">
+	  				<div class="span2"><span class="badge badge-important">XML</span></div>
+	  				<div class="span7">Listado completo de reclamos en formato XML.</div>
+	  				<div class="span3">
+	  					<a href="./dataset/download.html?format=xml" class="btn btn-default">
+	  						<i class="icon icon-download"></i><span>Descargar</span>
+	  					</a>		
+	  				</div>
+				 </div>
+				 <!-- JSON -->
+				 <div class="row dataset">
+	  				<div class="span2"><span class="badge badge-default">JSON</span></div>
+	  				<div class="span7">Listado completo de reclamos en formato JSON.</div>
+	  				<div class="span3">
+	  					<a href="./dataset/download.html?format=json" class="btn btn-default">
+	  						<i class="icon icon-download"></i><span>Descargar</span>
+	  					</a>		
+	  				</div>
+				 </div>
 		</div>
 		
 		<div class="span5 offset1">	 
-	    	 <div class="page-header"><h4>Informaci&oacute;n adicional</h4></div>   		    	 
-	    	 <table class="table table-bordered table-striped">
-				<tr>
-					<th>Autor</th>
-					<td>Fixeala</td>
-				</tr>
-				<tr>
-					<th>Frecuencia de actualizaci&oacute;n</th>
-					<td>cada 10 minutos</td>
-				</tr>
-				<tr>
-					<th>&Uacute;ltima fecha de actualizaci&oacute;n</th>
-					<td>25/07/13 a las 16:55 hs</td>
-				</tr>			
-			</table>		
+		 	<div class="page-header"><h4>Dataset personalizado</h4></div>   		    	
+<!-- 	    	 <div class="page-header"><h4>Informaci&oacute;n adicional</h4></div>   		    	  -->
+<!-- 	    	 <table class="table table-bordered table-striped"> -->
+<!-- 				<tr> -->
+<!-- 					<th>Autor</th> -->
+<!-- 					<td>Fixeala</td> -->
+<!-- 				</tr> -->
+<!-- 				<tr> -->
+<!-- 					<th>Frecuencia de actualizaci&oacute;n</th> -->
+<!-- 					<td>cada 10 minutos</td> -->
+<!-- 				</tr> -->
+<!-- 				<tr> -->
+<!-- 					<th>&Uacute;ltima fecha de actualizaci&oacute;n</th> -->
+<!-- 					<td>25/07/13 a las 16:55 hs</td> -->
+<!-- 				</tr>			 -->
+<!-- 			</table>		 -->
+<!-- 			<center>					 -->
+<!-- 				<a href="#mdl-dataset" class="btn btn-primary btn-large" data-toggle="modal" style="margin-top:30px;"> -->
+<!-- 					<i class="icon icon-magic"></i>&nbsp;&nbsp;Personaliz&aacute; tu Dataset -->
+<!-- 				</a> -->
+<!-- 			</center> -->
+			
+			
+			<div class="hero-unit">
 			<center>					
-				<a href="#mdl-dataset" class="btn btn-primary btn-large" data-toggle="modal" style="margin-top:30px;">
-					<i class="icon icon-magic"></i>&nbsp;&nbsp;Personaliz&aacute; tu Dataset
+				<a href="#mdl-dataset" class="btn btn-primary btn-large" data-toggle="modal">
+					<i class="icon icon-magic"></i>Configurar opciones del Dataset
 				</a>
 			</center>
+			
+			</div>
+			
 	   </div> 
 	   
 	  
@@ -210,7 +225,7 @@
 		<form id="datasetForm" action="./dataset/export.html" method="GET">     	   
 		  	<div class="modal-header">
 			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-			    <h4 id="myModalLabel">Personaliz&aacute; tu dataset</h4>
+			    <h4 id="myModalLabel">Configuraci&oacute;n de opciones del Dataset</h4>
 		  	</div>
 		  	<div class="modal-body">	    	
 	   	   		<table id="tblCustomDataset">		    	   		  	
@@ -280,12 +295,6 @@
 										  <label class="checkbox">
 										    <input name="estados" type="checkbox" value="REABIERTO" checked>Reabierto										    
 										  </label>
-<!-- 										  <label class="checkbox"> -->
-<!-- 										    <input name="estados" type="checkbox" value="ADMITIDO">Admitido										     -->
-<!-- 										  </label> -->
-<!-- 										  <label class="checkbox"> -->
-<!-- 										    <input name="estados" type="checkbox" value="EN PROGRESO">En Progreso										     -->
-<!-- 										  </label> -->
 										  <label class="checkbox">
 										    <input name="estados" type="checkbox" value="RESUELTO">Resuelto										    
 										  </label>
@@ -313,7 +322,8 @@
 					    	   				<option value="xls" selected="selected">XLS</option>	
 					    	   				<option value="pdf">PDF</option>	
 					    	   				<option value="csv">CSV</option>
-											<option value="xml">XML</option>																				
+											<option value="xml">XML</option>	
+											<option value="json">JSON</option>																				
 									</select>	
 								</td>						    	   		
 			    	   		</tr>	  			    	   		
@@ -322,11 +332,11 @@
 		  	</div>
 		  	<div class="modal-footer">    
 		  		<button class="btn btn-primary" id="btnExportDataset"> 
-					<i class="icon-save icon-large"></i>Exportar dataset 
+					<i class="icon-save"></i>&nbsp;Exportar  
 				</button>
 							
 		    	<button class="btn" data-dismiss="modal" aria-hidden="true">
-		    		<i class="icon-remove icon-large"></i>Cancelar
+		    		<i class="icon-remove"></i>&nbsp;Cancelar
 		    	</button>
 		  	</div>
   	  </form>
