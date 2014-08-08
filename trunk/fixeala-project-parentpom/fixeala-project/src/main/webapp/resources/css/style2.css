@@ -1470,3 +1470,12 @@ ul.nav.nav-tabs li:not(.active):hover a {
 #votes a { font-size: 30px; }
 
 #profileTab .thumbnail { margin-bottom: 15px; }
+
+.dataset.row { border: 0px solid #000;  height: 60px; line-height: 60px; border-bottom: 1px dashed #DDD;  }
+.dataset.row:hover { background-color: #EFEFEF; }
+
+.row.dataset .span2 { border: 0px solid red; text-align: center; }
+.row.dataset .span7 { border: 0px solid blue; font-size: 14px; }
+.row.dataset .span3 { border: 0px solid green;  display: inline-block !important;
+    vertical-align: top !important; float:none !important;}
+.row.dataset .span3 a { font-size: 11px; text-transform: uppercase;}

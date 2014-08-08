@@ -7,6 +7,6 @@ import ar.com.urbanusjam.services.dto.ReportDTO;
 
 public interface ExportService {
 
-	public void generateDataset(ReportDTO report) throws IOException, JRException, Exception;		
+	public void exportDataset(ReportDTO report) throws IOException, JRException, Exception;		
 	
 }

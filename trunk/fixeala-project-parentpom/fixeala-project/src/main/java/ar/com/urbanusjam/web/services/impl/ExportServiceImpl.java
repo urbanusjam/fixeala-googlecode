@@ -1,15 +1,10 @@
 package ar.com.urbanusjam.web.services.impl;
 
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JREmptyDataSource;
@@ -20,32 +15,31 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.data.JRCsvDataSource;
 import net.sf.jasperreports.engine.export.JRCsvExporter;
 import net.sf.jasperreports.engine.export.JRCsvExporterParameter;
+import net.sf.jasperreports.engine.export.JRCsvMetadataExporter;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.JRPdfExporterParameter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 import net.sf.jasperreports.engine.export.JRXmlExporter;
 import net.sf.jasperreports.engine.export.JRXmlExporterParameter;
+import net.sf.jasperreports.engine.util.JRLoader;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.CharEncoding;
-import org.jfree.util.Log;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.jasperreports.JasperReportsUtils;
 
-import ar.com.fdvs.dj.core.DynamicJasperHelper;
-import ar.com.fdvs.dj.core.layout.ClassicLayoutManager;
-import ar.com.fdvs.dj.domain.DynamicReport;
-import ar.com.fdvs.dj.domain.builders.ColumnBuilderException;
-import ar.com.fdvs.dj.domain.builders.FastReportBuilder;
+import com.google.gson.Gson;
+
 import ar.com.urbanusjam.services.dto.ReportDTO;
-import ar.com.urbanusjam.services.utils.DateUtils;
 import ar.com.urbanusjam.services.utils.FileFormat;
 import ar.com.urbanusjam.web.services.ExportService;
 import ar.com.urbanusjam.web.services.export.dto.IssueExcelDTO;
@@ -75,7 +69,7 @@ public class ExportServiceImpl implements ExportService {
 
 
 	@Override
-	public void generateDataset(ReportDTO report) throws Exception {	
+	public void exportDataset(ReportDTO report) throws Exception {	
 			
 		@SuppressWarnings("unchecked")
 		Collection<IssueExcelDTO> issuesDTO =  CollectionUtils.collect(report.getBeans(), new IssueDTOTransformer()); 
@@ -84,111 +78,31 @@ public class ExportServiceImpl implements ExportService {
 		
 		//EXCEL
 		if(fileFormat.equals(FileFormat.XLS)){		
-			exportToExcel(report.getOutputStream(), issuesDTO);			
+			toXLS(report.getOutputStream(), issuesDTO);			
 		}
 				
 		//PDF
 		if(fileFormat.equals(FileFormat.PDF))
-			exportToPDF(report.getOutputStream(), issuesDTO);
+			toPDF(report.getOutputStream(), issuesDTO);
 		
 		//CSV
 		if(fileFormat.equals(FileFormat.CSV)){		
-			exportToCSV(report.getOutputStream(), issuesDTO);			
+			toCSV(report.getOutputStream(), issuesDTO);					
 		}
 				
 		//XML
 		if(fileFormat.equals(FileFormat.XML)){		
-			exportToXML(report.getOutputStream(), issuesDTO);			
-		}
-				
-	}
-	
-
-	private JasperPrint getPdfPrint(OutputStream outputStream, Collection<?> beans) throws IOException, JRException {	
-		
-		ClassPathResource resource = new ClassPathResource(pathJasperTemplatePdf);
-		JasperReport report = JasperCompileManager.compileReport(resource.getInputStream());		
-		JRDataSource dataSource;
-		
-		if (beans.size() == 0) {
-		    dataSource = new JREmptyDataSource();
-		}
-		else {
-		   dataSource = JasperReportsUtils.convertReportData(beans);
+			toXML(report.getOutputStream(), issuesDTO);			
 		}
 		
-		JasperPrint print = JasperFillManager.fillReport(report, new HashMap<String, Object>(), dataSource);
-		return print;
+		//JSON
+		if(fileFormat.equals(FileFormat.JSON)){		
+			toJSON(report.getOutputStream(), issuesDTO);
+		}
+		
 	}
 
-	 
-	private JasperPrint getDynamicPrint(OutputStream outputStream, Collection<?> beans, String[] campos) throws IOException, JRException, ClassNotFoundException, ColumnBuilderException {
-		
-		FastReportBuilder drb = new FastReportBuilder();
-		DynamicReport dr = null;	
-		
-		dr = drb.addColumn( "NRO. DE RECLAMO", "nroReclamo", String.class.getName(),  50)
-				.addColumn(	"FECHA Y HORA"   , "fecha"     , String.class.getName(),  50  )
-				.addColumn(	"RUBRO"          , "rubro"     , String.class.getName(),  50  )
-				.addColumn(	"CATEGORIA"      , "categoria" , String.class.getName(),  100 )
-				.addColumn(	"TITULO"         , "titulo"    , String.class.getName(),  100 )
-				.addColumn(	"DIRECCION"      , "direccion" , String.class.getName(),  100 )		
-				.addColumn(	"BARRIO"         , "barrio"    , String.class.getName(),  50  )		
-				.addColumn(	"CIUDAD"         , "ciudad"    , String.class.getName(),  70  )		
-				.addColumn(	"PROVINCIA"      , "provincia" , String.class.getName(),  70  )		
-				.addColumn(	"LATITUD"        , "latitud"   , String.class.getName(),  50  )		
-				.addColumn(	"LONGITUD"       , "longitud"  , String.class.getName(),  50  )		
-				.addColumn(	"ESTADO"         , "estado"    , String.class.getName(),  50  )
-		        .setPrintColumnNames(Boolean.TRUE)
-		        .setIgnorePagination(Boolean.TRUE)
-		        .setUseFullPageWidth(Boolean.TRUE)
-		        .setMargins(0, 0, 0, 0)
-//		        .setTitle(REPORT_TITLE)
-		        .setSubtitle("Este reporte fue generado el día " + DateUtils.getFechaFormateada(new Date(), DateUtils.DATE_TIME_PATTERN_LONG))		        
-		        .setReportName("Fixeala - Lista de reclamos barriales")
-            //Esto sirve para cuando no hay registros a mostrar, que muestre los headers pero no verifique las propiedades de los beans
-            .setWhenNoDataShowNoDataSection() 
-            .build();
-	        
-		JRDataSource datasource = (beans.isEmpty() ?  new JREmptyDataSource() : new JRBeanCollectionDataSource(beans));   
-		JasperPrint jasperPrint = DynamicJasperHelper.generateJasperPrint(dr, new ClassicLayoutManager(), datasource);			  
-		
-		return jasperPrint;
-		
-		/**
-		for( String label : CAMPOS){			
-					
-			char[] propertyName = (label.toCharArray());
-            propertyName[0] = Character.toUpperCase(propertyName[0]);
-			
-            try{
-	            Object bean = beans.iterator().next();
-	            String methodName = "get" + String.valueOf(propertyName);
-	            Method method = bean.getClass().getMethod(methodName);
-	            Class<?> clase = method.getReturnType();
-	            	            
-	        	Class<?> clazz = bean.getClass();
-
-	 		   for(Field field : clazz.getDeclaredFields()) {
-	 		       //you can also use .toGenericString() instead of .getName(). This will
-	 		       //give you the type information as well.
-
-	 			System.out.println(field.getName());
-	 		   }			
-	 		   
-            } catch (SecurityException e) {
-                Log.error("Error de seguridad al intengar usar reflection", e);
-            } catch (NoSuchMethodException e) {
-            	Log.error("No se encontro el metodo por reflection", e);
-            }
-            
-		}
-		**/
-		
-	}
-	
-
-	private void exportToPDF(OutputStream outputStream, Collection<?> beans) {
+	private void toPDF (OutputStream outputStream, Collection<?> beans) {
 		
 		try{
 			
@@ -209,13 +123,12 @@ public class ExportServiceImpl implements ExportService {
 		}			
 		
 	}
-	
-	private void exportToExcel(OutputStream outputStream, Collection<?> beans) {
+
+	private void toXLS (OutputStream outputStream, Collection<?> beans) {
 
 		try{
 			
-//			JasperPrint jasperPrint = this.getDynamicPrint(outputStream, beans, CAMPOS);
-			
+//			JasperPrint jasperPrint = this.getDynamicPrint(outputStream, beans, CAMPOS);			
 			
 			ClassPathResource resource = new ClassPathResource(pathJasperTemplateCsv);
 			JasperReport report = JasperCompileManager.compileReport(resource.getInputStream());	
@@ -249,7 +162,7 @@ public class ExportServiceImpl implements ExportService {
     
 	}
 	
-	private void exportToXML(OutputStream outputStream, Collection<?> beans) {
+	private void toXML (OutputStream outputStream, Collection<?> beans) {
 		
 		try{
 			
@@ -275,7 +188,8 @@ public class ExportServiceImpl implements ExportService {
 		
 	}
 	
-	private void exportToCSV(OutputStream outputStream, Collection<?> beans) {
+	
+	private void toCSV (OutputStream outputStream, Collection<?> beans) {
 		
 		try{
 		
@@ -283,8 +197,7 @@ public class ExportServiceImpl implements ExportService {
 			JasperReport report = JasperCompileManager.compileReport(resource.getInputStream());	
 			JasperPrint jasperPrint = JasperFillManager.fillReport(report,
 					new HashMap<String, Object>(), new JRBeanCollectionDataSource(beans));
-			
-//			JRCsvMetadataExporter csvExporter = JRCsvMetadataExporter();
+	
 			JRCsvExporter csvExporter = new JRCsvExporter();
 			csvExporter.setParameter(JRCsvExporterParameter.FIELD_DELIMITER, ";");
 			csvExporter.setParameter(JRCsvExporterParameter.JASPER_PRINT, jasperPrint);	
@@ -302,5 +215,97 @@ public class ExportServiceImpl implements ExportService {
 		
 	}
 	
+	public void toJSON (OutputStream outputStream, Collection<?> beans) throws JsonGenerationException, JsonMappingException, IOException {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.writeValue(outputStream, beans);			
+	}
+
+	
+	/***********************************************************************************************************/
+	
+	
+	private JasperPrint getPdfPrint(OutputStream outputStream, Collection<?> beans) throws IOException, JRException {	
+		
+		ClassPathResource resource = new ClassPathResource(pathJasperTemplatePdf);
+		JasperReport report = JasperCompileManager.compileReport(resource.getInputStream());		
+		JRDataSource dataSource;
+		
+		if (beans.size() == 0) {
+		    dataSource = new JREmptyDataSource();
+		}
+		else {
+		   dataSource = JasperReportsUtils.convertReportData(beans);
+		}
+		
+		JasperPrint print = JasperFillManager.fillReport(report, new HashMap<String, Object>(), dataSource);
+		return print;
+	}
+
+	 /**
+	private JasperPrint getDynamicPrint(OutputStream outputStream, Collection<?> beans, String[] campos) throws IOException, 
+		JRException, ClassNotFoundException, ColumnBuilderException {
+		
+		FastReportBuilder drb = new FastReportBuilder();
+		DynamicReport dr = null;	
+		
+		dr = drb.addColumn( "NRO. DE RECLAMO", "nroReclamo", String.class.getName(),  50)
+				.addColumn(	"FECHA Y HORA"   , "fecha"     , String.class.getName(),  50  )
+				.addColumn(	"RUBRO"          , "rubro"     , String.class.getName(),  50  )
+				.addColumn(	"CATEGORIA"      , "categoria" , String.class.getName(),  100 )
+				.addColumn(	"TITULO"         , "titulo"    , String.class.getName(),  100 )
+				.addColumn(	"DIRECCION"      , "direccion" , String.class.getName(),  100 )		
+				.addColumn(	"BARRIO"         , "barrio"    , String.class.getName(),  50  )		
+				.addColumn(	"CIUDAD"         , "ciudad"    , String.class.getName(),  70  )		
+				.addColumn(	"PROVINCIA"      , "provincia" , String.class.getName(),  70  )		
+				.addColumn(	"LATITUD"        , "latitud"   , String.class.getName(),  50  )		
+				.addColumn(	"LONGITUD"       , "longitud"  , String.class.getName(),  50  )		
+				.addColumn(	"ESTADO"         , "estado"    , String.class.getName(),  50  )
+		        .setPrintColumnNames(Boolean.TRUE)
+		        .setIgnorePagination(Boolean.TRUE)
+		        .setUseFullPageWidth(Boolean.TRUE)
+		        .setMargins(0, 0, 0, 0)
+//		        .setTitle(REPORT_TITLE)
+		        .setSubtitle("Este reporte fue generado el día " + DateUtils.getFechaFormateada(new Date(), DateUtils.DATE_TIME_PATTERN_LONG))		        
+		        .setReportName("Fixeala - Lista de reclamos barriales")
+            //Esto sirve para cuando no hay registros a mostrar, que muestre los headers pero no verifique las propiedades de los beans
+            .setWhenNoDataShowNoDataSection() 
+            .build();
+	        
+		JRDataSource datasource = (beans.isEmpty() ?  new JREmptyDataSource() : new JRBeanCollectionDataSource(beans));   
+		JasperPrint jasperPrint = DynamicJasperHelper.generateJasperPrint(dr, new ClassicLayoutManager(), datasource);			  
+		
+		return jasperPrint;
+		
+		
+//		for( String label : CAMPOS){			
+//					
+//			char[] propertyName = (label.toCharArray());
+//            propertyName[0] = Character.toUpperCase(propertyName[0]);
+//			
+//            try{
+//	            Object bean = beans.iterator().next();
+//	            String methodName = "get" + String.valueOf(propertyName);
+//	            Method method = bean.getClass().getMethod(methodName);
+//	            Class<?> clase = method.getReturnType();
+//	            	            
+//	        	Class<?> clazz = bean.getClass();
+//
+//	 		   for(Field field : clazz.getDeclaredFields()) {
+//	 		       //you can also use .toGenericString() instead of .getName(). This will
+//	 		       //give you the type information as well.
+//
+//	 			System.out.println(field.getName());
+//	 		   }			
+//	 		   
+//            } catch (SecurityException e) {
+//                Log.error("Error de seguridad al intengar usar reflection", e);
+//            } catch (NoSuchMethodException e) {
+//            	Log.error("No se encontro el metodo por reflection", e);
+//            }
+//            
+//		}
+		
+		
+	}**/
 	
 }

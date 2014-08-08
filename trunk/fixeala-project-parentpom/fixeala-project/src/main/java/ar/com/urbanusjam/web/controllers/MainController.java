@@ -46,6 +46,12 @@ public class MainController {
         response.setHeader("Content-Disposition", "attachment; filename=" + xmlFileName);
         setExportCacheHeaders(response);
     }
+    
+    protected static void setResponseParametersForJsonExport(HttpServletResponse response, String xmlFileName) {
+        response.setContentType("application/json");
+        response.setHeader("Content-Disposition", "attachment; filename=" + xmlFileName);
+        setExportCacheHeaders(response);
+    }
 		
     protected static String generateOutputFilename(String fileFormat){			
 		return "fixeala_reclamos_" + DateUtils.generateTimestamp(DateUtils.FORMAT_TIMESTAMP_DATE) + "." + fileFormat;
