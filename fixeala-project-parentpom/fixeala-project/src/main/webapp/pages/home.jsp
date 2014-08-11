@@ -41,6 +41,8 @@
 			function renderToHtml(element, type){
 				
 				var html = '';
+				var issueUrl = "issues/" + element.id;
+				var userUrl = "users/" + element.username;
 					
 				if(type == "issue"){
 					
@@ -57,7 +59,7 @@
 						+ 			'<a class="thumbnail" href="resources/images/samples/image' +imgNum+ '.jpg">'
 						+    			'<img class="media-object" src="resources/images/samples/image' +imgNum+ '.jpg">'
 						+  			'</a>'	
-						+   		'<a class="title" href="' +element.url+ '">' +cropText(element.title, titleLimit)+ '</a>'	
+						+   		'<a class="title" href="' +issueUrl+ '">' +cropText(element.title, titleLimit)+ '</a>'	
 						+			'<p class="address"><span class="city">' +element.city+ '</span>, <span class="province">' +element.province+ '</span></p>'
 						+           '<p class="desc">' +cropText(dummyText, descLimit)+ '</p>'
 						+ 			'<span class="status '+element.css+'">' +element.status+ '</span>'
@@ -74,7 +76,7 @@
 					imgNum = 9;
 				
 					html = 	'<div class="brick brick-user">'
-						+   		'<a class="username" href="' +element.url+ '">' +element.username+ '</a>'	
+						+   		'<a class="username" href="' +userUrl+ '">' +element.username+ '</a>'	
 						+ 			'<a class="thumbnail" href="resources/images/samples/image' +imgNum+ '.jpg">'
 						+    			'<img class="media-object" src="resources/images/samples/image' +imgNum+ '.jpg">'
 						+  			'</a>'	
