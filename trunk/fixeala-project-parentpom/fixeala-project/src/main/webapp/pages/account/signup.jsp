@@ -24,7 +24,7 @@
 
  				<div id="captcha_register"> 
  					<label>Ingrese el texto de la imagen</label>
-					<img src="./captchaImg" />
+					<img src="../captchaImg" />
 				    <input name="captcha_answer" class="field" /> 
 				</div>
 				<span class="captcha_refresh"><a class="link" href="javascript:showRecaptcha('captcha_register');"><i class="icon-refresh"></i> Recargar</a></span>

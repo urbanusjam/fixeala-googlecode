@@ -642,7 +642,7 @@ var mapController = {
 		var host = window.location.host;
 		var context = "fixeala";
 		var subcontext = "issues/" + issueID;		
-		var url = protocol + "//" + host + "/" + context + "/" + subcontext + ".html";			
+		var url = protocol + "//" + host + "/" + context + "/" + subcontext;			
 		return url;
 	},
 
@@ -651,7 +651,7 @@ var mapController = {
 		var host = window.location.host;
 		var context = "fixeala";
 		var subcontext = "issues/" + issueID;		
-		var url = subcontext + ".html";	
+		var url = subcontext;	
 		
 		if(type == 'link')
 			return '<a href="'+ url +'">#' + issueID + " " + issueTitle + '</a>';		
@@ -665,7 +665,7 @@ var mapController = {
 		var host = window.location.host;
 		var context = "fixeala";
 		var subcontext = "users/" + userID;	
-		var url = protocol + "//" + host + "/" + context + "/" + subcontext + ".html";	
+		var url = protocol + "//" + host + "/" + context + "/" + subcontext;	
 		var urlLink = '<a id="issue-user" style="cursor:pointer" class="user-link" href="'+ url +'">' + userID + '</a>';	
 		return urlLink;
 	},
@@ -675,7 +675,7 @@ var mapController = {
 		var host = window.location.host;
 		var context = "fixeala";
 		var subcontext = "users/" + userID;	
-		var url = protocol + "//" + host + "/" + context + "/" + subcontext + ".html";	
+		var url = protocol + "//" + host + "/" + context + "/" + subcontext;	
 		return url;
 	},
 	

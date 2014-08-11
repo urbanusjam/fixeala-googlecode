@@ -229,7 +229,6 @@ public class HomeController {
 					obj.put("totalFollowers", issue.getTotalFollowers());	
 					obj.put("totalViews", "0");	
 					obj.put("css", issue.getStatusCss());		
-					obj.put("url", URISchemeUtils.CONN_RELATIVE_URL_ISSUES + "/" + issue.getId());
 					jsonArray.put(obj);
 				}		
 				
@@ -251,7 +250,6 @@ public class HomeController {
 					obj.put("reportedIssues", Math.floor(Math.random() * 50));
 					obj.put("postedComments", Math.floor(Math.random() * 99));
 					obj.put("fixedIssues", Math.floor(Math.random() * 15));
-					obj.put("url", URISchemeUtils.CONN_RELATIVE_URL_USERS + "/" + user.getUsername());
 					jsonArray.put(obj);
 				}				
 			}	
