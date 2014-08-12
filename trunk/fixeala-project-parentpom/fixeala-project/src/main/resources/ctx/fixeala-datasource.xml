@@ -36,7 +36,7 @@
  
  	<context:component-scan base-package="ar.com.urbanusjam.services" >
 	 	<context:include-filter type="regex" 
-	                       expression="ar.com.urbanusjam.dao.*DAOImpl.*" /> 
+	                       expression="ar.com.urbanusjam.jpa.dao.*DAOImpl.*" /> 
 		<context:include-filter type="regex" 
                        expression="ar.com.urbanusjam.services.*ServiceImpl.*" />
  	</context:component-scan>
