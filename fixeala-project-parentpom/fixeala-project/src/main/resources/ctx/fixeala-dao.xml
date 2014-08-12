@@ -35,39 +35,8 @@
     
     <bean id="issueVoteDAO" class="ar.com.urbanusjam.jpa.dao.impl.IssueVoteDAOImpl"/>
     
-	<!--     <bean id="areaDAO" class="ar.com.urbanusjam.jpa.dao.impl.AreaDAOImpl"/> -->
+	<bean id="provinceDAO" class="ar.com.urbanusjam.jpa.dao.impl.ProvinceDAOImpl"/>
 	
 	
-	
-	
-	
-	
-<!--     <bean id="userDAO" class="ar.com.urbanusjam.dao.impl.UserDAOImpl" parent="hibernateParent" /> -->
-
-<!--     <bean id="authorityDAO" class="ar.com.urbanusjam.dao.impl.AuthorityDAOImpl" parent="hibernateParent" />  -->
-    
-<!--     <bean id="passwordResetDAO" class="ar.com.urbanusjam.dao.impl.PasswordResetDAOImpl" parent="hibernateParent" />  -->
-    
-<!--     <bean id="activationDAO" class="ar.com.urbanusjam.dao.impl.ActivationDAOImpl" parent="hibernateParent" />  -->
-    
-<!--     <bean id="issueDAO" class="ar.com.urbanusjam.dao.impl.IssueDAOImpl" parent="hibernateParent" /> -->
-    
-<!--     <bean id="issueUpdateDAO" class="ar.com.urbanusjam.dao.impl.IssueHistorialRevisionDAOImpl" parent="hibernateParent" />  -->
-    
-<!--     <bean id="issueLicitacionDAO" class="ar.com.urbanusjam.dao.impl.IssueLicitacionDAOImpl" parent="hibernateParent" />  -->
-    
-<!--     <bean id="areaDAO" class="ar.com.urbanusjam.dao.impl.AreaDAOImpl" parent="hibernateParent" /> -->
-    
-<!--     <bean id="tagDAO" class="ar.com.urbanusjam.dao.impl.TagDAOImpl" parent="hibernateParent" />  -->
-    
-<!--     <bean id="contenidoDAO" class="ar.com.urbanusjam.dao.impl.ContenidoDAOImpl" parent="hibernateParent" />  -->
-    
-<!--     <bean id="commentDAO" class="ar.com.urbanusjam.dao.impl.CommentDAOImpl" parent="hibernateParent" />  -->
-    
-<!--     <bean id="issueFollowDAO" class="ar.com.urbanusjam.dao.impl.IssueFollowDAOImpl" parent="hibernateParent" />  -->
-    
-<!--     <bean id="issuePageViewDAO" class="ar.com.urbanusjam.dao.impl.IssuePageViewDAOImpl" parent="hibernateParent" />  -->
-    
-<!--     <bean id="issueVoteDAO" class="ar.com.urbanusjam.dao.impl.IssueVoteDAOImpl" parent="hibernateParent" />  -->
               
 </beans>

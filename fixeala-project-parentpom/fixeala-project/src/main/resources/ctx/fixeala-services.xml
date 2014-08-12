@@ -12,7 +12,6 @@
 		<property name="passwordResetDAO" ref="passwordResetDAO" />
 		<property name="activationDAO" ref="activationDAO" />
 		<property name="mailService" ref="mailService" />
-<!-- 		<property name="areaDAO" ref="areaDAO" /> -->
 	</bean>
 		
 	<bean name="issueService" class="ar.com.urbanusjam.services.impl.IssueServiceImpl" >
@@ -20,7 +19,7 @@
 		<property name="contenidoService" ref="contenidoService" />
 		<property name="issueDAO" ref="issueDAO" />
 		<property name="userDAO" ref="userDAO" />
-<!-- 		<property name="areaDAO" ref="areaDAO" /> -->
+		<property name="provinceDAO" ref="provinceDAO" />
 		<property name="tagDAO" ref="tagDAO" />
 		<property name="commentDAO" ref="commentDAO" />
 		<property name="issueFollowDAO" ref="issueFollowDAO" />
