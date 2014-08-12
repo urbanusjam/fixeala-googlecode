@@ -3,7 +3,7 @@ package ar.com.urbanusjam.web.services.export.transformer;
 import org.apache.commons.collections.Transformer;
 
 import ar.com.urbanusjam.services.dto.IssueDTO;
-import ar.com.urbanusjam.web.services.export.dto.IssueExcelDTO;
+import ar.com.urbanusjam.web.services.export.dto.ReclamoResponse;
 
 public class IssueDTOTransformer implements Transformer {
 
@@ -12,7 +12,7 @@ public class IssueDTOTransformer implements Transformer {
 		 if (input instanceof IssueDTO) {
 	            
 			 IssueDTO issue = (IssueDTO) input;            
-	         IssueExcelDTO dto = new IssueExcelDTO();
+	         ReclamoResponse dto = new ReclamoResponse();
 	     
 	         dto.setNroReclamo(issue.getId());
 	         dto.setFecha(issue.getFechaFormateada());
@@ -34,7 +34,7 @@ public class IssueDTOTransformer implements Transformer {
 	         return dto;
 	         
 	     } else
-	            return new IssueExcelDTO();
+	            return new ReclamoResponse();
 	}
 
 }

@@ -604,15 +604,12 @@ $(document).ready(function(){
   		        },
 			  	
 			  	submitHandler: function() {
-			  		
-//			  		bootbox.confirm("&iquest;Confirma que desea actualizar los datos?", function(result){
-						  
-//						  if(result){
+
 			  		blockPage("html");
 							  
 						  	 var newEmail = $('#updateAccountForm input#email').val();
-						  	 var newCity = $('#updateAccountForm #localidadList').val();
-						  	 var newProvince = $('#updateAccountForm #provinciaList').val();
+						  	 var newCity = $('#updateAccountForm #ciudad').find('option:selected').val();
+						  	 var newProvince = $('#updateAccountForm #provincia').find('option:selected').val();
 						    
 					         $.ajax({
 					        	  type: "POST",
@@ -633,28 +630,9 @@ $(document).ready(function(){
 							  	      
 					               },
 					               error: function(jqXHR, exception) {
-					                   if (jqXHR.status === 0) {
-					                       alert('Not connect.\n Verify Network.');
-					                   } else if (jqXHR.status == 404) {
-					                       alert('Requested page not found. [404]');
-					                   } else if (jqXHR.status == 500) {
-					                       alert('Internal Server Error [500].');
-					                   } else if (exception === 'parsererror') {
-					                       alert('Requested JSON parse failed.');
-					                   } else if (exception === 'timeout') {
-					                       alert('Time out error.');
-					                   } else if (exception === 'abort') {
-					                       alert('Ajax request aborted.');
-					                   } else {
-					                       alert('Uncaught Error.\n' + jqXHR.responseText);
-					                   }
+					            	   bootbox.alert("No se pudieron actualizar los datos de la cuenta."); 
 					               }
 					         });
-							  
-//						  }
-//			  		});
-			  		
-			  		 
 			     }
 			});
 			

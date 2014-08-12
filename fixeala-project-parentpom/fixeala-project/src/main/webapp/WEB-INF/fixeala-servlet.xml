@@ -15,43 +15,79 @@
     <!-- support JSR303 annotation if JSR 303 validation present on classpath -->
 	<mvc:annotation-driven ignoreDefaultModelOnRedirect="true" />
 	
- 	<mvc:resources mapping="/resources/**" location="/resources/" />
+ 	<mvc:resources mapping="/resources/**" location="/resources/" /> 	
  
-	<!--	Controllers       -->	
+	<!-- Controllers -->	
 	<context:component-scan base-package="ar.com.urbanusjam.web" />
 	
-
-	<!--	Context           -->	
+	<!-- Context -->	
 	<import resource="classpath:ctx/fixeala-context.xml" />
+
+	<!-- Content Negotiation Views -->
+	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="order" value="1" />		
+<!-- 		<property name="ignoreAcceptHeader" value="true" /> -->
+<!-- 	<property name="defaultContentType" value="text/html" /> -->		
+		<property name="mediaTypes">
+			<map>
+			   <entry key="json" value="application/json" />
+			   <entry key="xml" value="application/xml" />
+			   <entry key="html" value="text/html" />
+			</map>
+		</property> 	  	
+	  	<property name="defaultViews">
+	  		<list>
+	  			<!-- JSON View -->
+				<bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView">
+					<property name="objectMapper" ref="jacksonObjectMapper" />
+				</bean> 
+			  	<!-- JAXB XML View -->
+			  	<bean class="org.springframework.web.servlet.view.xml.MarshallingView">
+			  		<property name="marshaller" ref="jaxb2Marshaller" />
+			  	</bean>
+			</list>
+	  	</property>
+	  	<property name="viewResolvers">
+			<list>	
+				<bean class="org.springframework.web.servlet.view.BeanNameViewResolver" />	  		
+			  	<!-- JSP View Resolver -->	
+				<bean id="viewResolver" 
+					class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+				    <property name="prefix" value="/pages/" />
+				    <property name="suffix" value=".jsp" />	
+				    <property name="order"  value="2"/>
+				</bean>
+		 	</list>
+	  	</property>	 
+	</bean>
 	
-	  <!-- define the REST content negotiating view resolver -->
-<!--     <bean id="contentNegotiationManager" -->
-<!--           class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean" -->
-<!--           p:defaultContentType="application/json" -->
-<!--           p:favorPathExtension="true" -->
-<!--           p:useJaf="false"> -->
-<!--         <property name="mediaTypes"> -->
-<!--             <map> -->
-<!--                 <entry key="json" value="application/json"/> -->
-<!--                 <entry key="html" value="text/html"/> -->
-<!--                 <entry key="xls" value="application/vnd.ms-excel"/> -->
-<!--                 <entry key="csv" value="text/csv"/> -->
-<!--             </map> -->
-<!--         </property> -->
-<!--     </bean> -->
+	<!-- Jackson Mapper -->
+	<bean id="jacksonMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+		 <property name="objectMapper" ref="jacksonObjectMapper" />
+	</bean>
+	
+	<bean id="jacksonObjectMapper" class="org.codehaus.jackson.map.ObjectMapper" />
+
+	<bean id="marshallingHttpMessageConverter" class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
+        <property name="marshaller" ref="jaxb2Marshaller"></property>
+        <property name="unmarshaller" ref="jaxb2Marshaller"></property>
+    </bean>
+    
+    <bean id="jaxb2Marshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">                        
+         <property name="classesToBeBound">
+             <list>
+             	<value>ar.com.urbanusjam.web.services.export.dto.ReclamoResponse</value>
+             	<value>ar.com.urbanusjam.web.services.export.dto.ReclamoListaResponse</value>
+             </list>
+         </property>
+     </bean>
+    
 	
 	
 	<!-- Configure the multipart resolver -->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
         p:maxUploadSize="3000000"/> <!-- the maximum file size in bytes (3MB) -->
-
-	<!-- JSP View Resolver -->	
-	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-<!--    		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" /> -->
-	    <property name="prefix" value="/pages/" />
-	    <property name="suffix" value=".jsp" />	
-	    <property name="order" value="1" />
-	</bean>
+	
 
 	<!-- Default Tiles View Resolver -->	
  	<bean id="tilesViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver" >
@@ -66,23 +102,23 @@
 	     	</list>
    		</property>
  	</bean>
-	
-	<bean id="jacksonMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"></bean>
- 		<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
-			<property name="messageConverters">
-				  <list>
-				    <ref bean="jacksonMessageConverter"/>
-				  </list>
-			</property>
-	</bean>
-	
+ 	
+ 	
 
-<!-- 	Application Message Bundle -->
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+			  <list>
+			  	 <ref bean="jacksonMessageConverter"/>
+			     <ref bean="marshallingHttpMessageConverter"/>			    
+			  </list>
+		</property>
+	</bean>	
+
+	<!-- Application Message Bundle -->
 	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
 		<property name="basename" value="/messages/fixeala.messages" />		
 	</bean>
 	
-	<bean id="validator"
-      	class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
       
 </beans>

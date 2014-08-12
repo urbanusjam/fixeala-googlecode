@@ -27,6 +27,7 @@ import ar.com.urbanusjam.dao.IssueHistorialRevisionDAO;
 import ar.com.urbanusjam.dao.IssueLicitacionDAO;
 import ar.com.urbanusjam.dao.IssuePageViewDAO;
 import ar.com.urbanusjam.dao.IssueVoteDAO;
+import ar.com.urbanusjam.dao.ProvinceDAO;
 import ar.com.urbanusjam.dao.TagDAO;
 import ar.com.urbanusjam.dao.UserDAO;
 import ar.com.urbanusjam.dao.utils.IssueCriteriaSearchRaw;
@@ -39,7 +40,9 @@ import ar.com.urbanusjam.entity.annotations.IssueRepair;
 import ar.com.urbanusjam.entity.annotations.IssueUpdateHistory;
 import ar.com.urbanusjam.entity.annotations.IssueVote;
 import ar.com.urbanusjam.entity.annotations.IssueVotePK;
+import ar.com.urbanusjam.entity.annotations.Locality;
 import ar.com.urbanusjam.entity.annotations.MediaContent;
+import ar.com.urbanusjam.entity.annotations.Province;
 import ar.com.urbanusjam.entity.annotations.Tag;
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.ContenidoService;
@@ -72,6 +75,7 @@ public class IssueServiceImpl implements IssueService {
 	private ContenidoService contenidoService;
 	private IssueDAO issueDAO;
 	private UserDAO userDAO;
+	private ProvinceDAO provinceDAO;
 	private TagDAO tagDAO;
 	private CommentDAO commentDAO;
 	private IssueFollowDAO issueFollowDAO;
@@ -100,6 +104,10 @@ public class IssueServiceImpl implements IssueService {
 
 	public void setUserDAO(UserDAO userDAO) {
 		this.userDAO = userDAO;
+	}
+		
+	public void setProvinceDAO(ProvinceDAO provinceDAO) {
+		this.provinceDAO = provinceDAO;
 	}
 
 	public void setTagDAO(TagDAO tagDAO) {
@@ -1180,12 +1188,12 @@ public class IssueServiceImpl implements IssueService {
 				}
 			 	else if(orden.equals("status")){
 			 		sortField =  "status";
-			 		sortDirection = SortingDataUtils.SORT_DESC;
+			 		sortDirection = SortingDataUtils.SORT_ASC;
 						
 				}
 			 	else if(orden.equals("tag")){
 			 		sortField =  "tag";
-			 		sortDirection = SortingDataUtils.SORT_DESC;						
+			 		sortDirection = SortingDataUtils.SORT_ASC;						
 				}
 			 	
 			 	rawSearch.setSortField(sortField);
@@ -1265,6 +1273,16 @@ public class IssueServiceImpl implements IssueService {
 			reclamosDTO.add(convertToDTO(i));
 		}
 		return reclamosDTO;
+	}
+
+	@Override
+	public List<String> loadProvinces() {
+		return provinceDAO.findAllProvinces();
+	}
+
+	@Override
+	public List<String> loadLocalityByProvince(String province) {
+		return provinceDAO.findLocalitiesByProvince(province);
 	}
 	
 //	public void sendMailAfterCommit(final MailManager mail) { 	

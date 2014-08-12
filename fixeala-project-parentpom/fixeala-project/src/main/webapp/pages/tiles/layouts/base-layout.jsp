@@ -69,8 +69,9 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/markermanager.js"></script>	
 <%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/map.js"></script> --%>
 
-	<!-- FIXEALA -->
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.map.js"></script>
+	<!-- FIXEALA -->	
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.global.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.map.js"></script>	
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.issue.editable.js"></script>
   	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/select2.js"></script>	

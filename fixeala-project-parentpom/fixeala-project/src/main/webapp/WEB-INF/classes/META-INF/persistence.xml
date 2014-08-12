@@ -25,7 +25,10 @@
         <class>ar.com.urbanusjam.entity.annotations.PasswordResetToken</class>    
         <class>ar.com.urbanusjam.entity.annotations.Tag</class>   
         <class>ar.com.urbanusjam.entity.annotations.User</class>
-        
+        <class>ar.com.urbanusjam.entity.annotations.Province</class>
+        <class>ar.com.urbanusjam.entity.annotations.Department</class>
+        <class>ar.com.urbanusjam.entity.annotations.Locality</class>
+                
         <exclude-unlisted-classes/>    
         
         <properties>

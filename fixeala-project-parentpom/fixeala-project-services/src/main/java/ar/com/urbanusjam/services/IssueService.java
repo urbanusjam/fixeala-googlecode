@@ -1,12 +1,15 @@
 package ar.com.urbanusjam.services;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.mail.MessagingException;
 
 import org.springframework.mail.MailException;
 
 import ar.com.urbanusjam.entity.annotations.Issue;
+import ar.com.urbanusjam.entity.annotations.Locality;
+import ar.com.urbanusjam.entity.annotations.Province;
 import ar.com.urbanusjam.services.dto.CommentDTO;
 import ar.com.urbanusjam.services.dto.IssueCriteriaSearch;
 import ar.com.urbanusjam.services.dto.IssueDTO;
@@ -61,6 +64,9 @@ public interface IssueService {
 	public Long countIssueVotes(String issueID);	
 	
 	public List<IssueDTO> searchByTagOrStatus(String searchType, String value);
+	
+	public List<String> loadProvinces();
+	public List<String> loadLocalityByProvince(String province);
 	
 
 		

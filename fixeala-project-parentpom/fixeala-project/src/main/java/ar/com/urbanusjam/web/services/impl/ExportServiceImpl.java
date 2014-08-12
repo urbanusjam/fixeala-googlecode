@@ -3,8 +3,16 @@ package ar.com.urbanusjam.web.services.impl;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.HashMap;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.PropertyException;
+import javax.xml.bind.Unmarshaller;
 
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JREmptyDataSource;
@@ -42,7 +50,8 @@ import com.google.gson.Gson;
 import ar.com.urbanusjam.services.dto.ReportDTO;
 import ar.com.urbanusjam.services.utils.FileFormat;
 import ar.com.urbanusjam.web.services.ExportService;
-import ar.com.urbanusjam.web.services.export.dto.IssueExcelDTO;
+import ar.com.urbanusjam.web.services.export.dto.ReclamoListaResponse;
+import ar.com.urbanusjam.web.services.export.dto.ReclamoResponse;
 import ar.com.urbanusjam.web.services.export.transformer.IssueDTOTransformer;
 
 @Service
@@ -72,7 +81,7 @@ public class ExportServiceImpl implements ExportService {
 	public void exportDataset(ReportDTO report) throws Exception {	
 			
 		@SuppressWarnings("unchecked")
-		Collection<IssueExcelDTO> issuesDTO =  CollectionUtils.collect(report.getBeans(), new IssueDTOTransformer()); 
+		Collection<ReclamoResponse> issuesDTO =  CollectionUtils.collect(report.getBeans(), new IssueDTOTransformer()); 
 		
 		String fileFormat = report.getFileFormat();
 		
@@ -139,10 +148,8 @@ public class ExportServiceImpl implements ExportService {
 			exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
 			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, outputStream);
 			exporter.setParameter(JRExporterParameter.CHARACTER_ENCODING, CharEncoding.ISO_8859_1);
-
 			exporter.setParameter(JRXlsExporterParameter.IS_DETECT_CELL_TYPE, Boolean.TRUE);
 			exporter.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.FALSE);
-//         	exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, true);
          	exporter.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, true);
          	exporter.setParameter(JRXlsExporterParameter.IGNORE_PAGE_MARGINS, true);
 			
@@ -162,32 +169,12 @@ public class ExportServiceImpl implements ExportService {
     
 	}
 	
-	private void toXML (OutputStream outputStream, Collection<?> beans) {
-		
-		try{
-			
-//			JasperPrint print = this.getPdfPrint(outputStream, beans);	
-			ClassPathResource resource = new ClassPathResource(pathJasperTemplateCsv);
-			JasperReport report = JasperCompileManager.compileReport(resource.getInputStream());	
-			JasperPrint jasperPrint = JasperFillManager.fillReport(report,
-					new HashMap<String, Object>(), new JRBeanCollectionDataSource(beans));
-			
-			JRXmlExporter exporter = new JRXmlExporter();
-			exporter.setParameter(JRXmlExporterParameter.JASPER_PRINT, jasperPrint);	
-			exporter.setParameter(JRXmlExporterParameter.OUTPUT_STREAM, outputStream);
-			exporter.setParameter(JRXmlExporterParameter.CHARACTER_ENCODING, CharEncoding.ISO_8859_1);
-			exporter.exportReport();
-			
-		} catch (JRException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}			
-		
-	}
-	
+	private void toXML (OutputStream outputStream, Collection<ReclamoResponse> beans) throws JAXBException, UnsupportedEncodingException {		
+		JAXBContext jaxbContext;
+		jaxbContext = JAXBContext.newInstance(ReclamoListaResponse.class);
+		Marshaller marshaller = jaxbContext.createMarshaller();			
+		marshaller.marshal(new ReclamoListaResponse(beans), new OutputStreamWriter(outputStream, "UTF-8"));		
+	}	
 	
 	private void toCSV (OutputStream outputStream, Collection<?> beans) {
 		
