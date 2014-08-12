@@ -42,7 +42,7 @@ public class MainController {
     }
     
     protected static void setResponseParametersForXmlExport(HttpServletResponse response, String xmlFileName) {
-        response.setContentType("text/xml");
+        response.setContentType("application/xml");
         response.setHeader("Content-Disposition", "attachment; filename=" + xmlFileName);
         setExportCacheHeaders(response);
     }

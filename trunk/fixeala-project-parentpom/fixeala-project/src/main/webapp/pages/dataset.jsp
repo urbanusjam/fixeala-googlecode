@@ -1,29 +1,15 @@
 <script type="text/javascript">
 
   $(function() {
+	  
+	  fxlGlobalController.populateProvinceCombobox('${provinceList}', 'dataset');
 	  	  
 	  //keep at least one checkbox checked
 	  $("input[type='checkbox'][name='estados']").click(function() {
 		  if( $("input:checked").length == 0 )
 			  $(this).attr('checked','checked');			
 	  });  
-	  
-	  var provincias = ["Todas","Buenos Aires", "Catamarca", "Chaco", "Chubut", "Córdoba","Corrientes",
-                       "Entre Ríos", "Formosa", "Jujuy", "La Pampa", "La Rioja", "Mendoza",
-                       "Misiones", "Neuquén", "Río Negro", "Salta", "San Juan", "San Luis",
-                       "Santa Cruz", "Santa Fe", "Santiago del Estero", "Tierra del Fuego", "Tucumán" 
-                       ];
-	  
-	  var provinciaSelect = document.getElementById("provincia");
-
-	  for(var i = 0; i < provincias.length; i++) {
-	      var opt = provincias[i];
-	      var el = document.createElement("option");
-	      el.textContent = opt;
-	      el.value = opt;
-	      provinciaSelect.appendChild(el);
-	  }	
-	  
+	  	  
 	  $('#from-datepicker').datetimepicker({		  
 		  format: 'dd/MM/yyyy',
 		  language: 'es',		
@@ -56,40 +42,34 @@
 			  	return item.text;
 		  },		 
 		  formatSelectionTooBig: function(){ 
-			  return "Sólo se permiten 5 etiquetas como máximo.";
+			  return "S&oacute;lo se permiten 5 etiquetas como m&aacute;ximo.";
 		  },		  
 		  formatNoMatches: function(){ 
-			  return "No se encontraron resultados.";
+			  return "No se encontraron cateogr&iacute;as.";
 		  },	  
 		  createSearchChoice: function() { return null; }
 	  }); 
-	    
-	  
+	    	  
 	  $('#btnExportDataset').click(function(){		  
-	  	  var $form = $('#datasetForm');	  	  
-	  	  $form.submit(function(e){		  		  
+	  	  var $form = $('#datasetForm');	
+	  	  
+	  	  $form.submit(function(e){	
+	  		e.stopPropagation() ;
 	  		  $.ajax({			
 		            data: $form.serialize(),       
-		            success: function(data) { 
-		            	if(!data.result)
-			        		bootbox.alert(data.message);
-			        },
-			        error: function (){
-			        	bootbox.alert(data.message);
+		            success: function(result) { 
+		            
+			        	if(!result)
+			        		boobox.alert("No se encontraron resultados.");
 			        }
 		  	  });
 	  	  });		  
 	  });
-	  
-	  
-	  
-	 
+	  	 
   });
   
   function downloadDataset(fileFormat){
-	  
-	  alert(fileFormat);
-	  
+	
 	  $.ajax({			
             url : "./exportDataset",
             data: "fileFormat=" + fileFormat,
@@ -98,12 +78,14 @@
 	        },
 	        error: function (){
 	        	return null;
-// 	        	bootbox.alert("Hubo un error al intentar expotar el dataset. Intente m&aacute;s tarde.");
 	        }
   	  });
 	  
   }
+  
+ 
 </script>
+
 
 
 <div id="content">
@@ -132,7 +114,7 @@
 	  				<div class="span2"><span class="badge badge-success">XLS</span></div>
 	  				<div class="span7">Listado completo de reclamos en formato EXCEL.</div>
 	  				<div class="span3">
-	  					<a href="./dataset/download.html?format=xls" class="btn btn-default">
+	  					<a href="dataset/download?format=xls" class="btn btn-default">
 	  						<i class="icon icon-download"></i><span>Descargar</span>
 	  					</a>		
 	  				</div>
@@ -142,27 +124,17 @@
 	  				<div class="span2"><span class="badge badge-warning">CSV</span></div>
 	  				<div class="span7">Listado completo de reclamos en formato CSV.</div>
 	  				<div class="span3">
-	  					<a href="./dataset/download.html?format=csv" class="btn btn-default">
+	  					<a href="dataset/download?format=csv" class="btn btn-default">
 	  						<i class="icon icon-download"></i><span>Descargar</span>
 	  					</a>		
 	  				</div>
-				 </div>
-				 <!-- PDF -->
-				 <div class="row dataset">
-	  				<div class="span2"><span class="badge badge-info">PDF</span></div>
-	  				<div class="span7">Listado completo de reclamos en formato PDF.</div>
-	  				<div class="span3">
-	  					<a href="./dataset/download.html?format=pdf" class="btn btn-default">
-	  						<i class="icon icon-download"></i><span>Descargar</span>
-	  					</a>		
-	  				</div>
-				 </div>
+				 </div>				
 				 <!-- XML -->
 				 <div class="row dataset">
 	  				<div class="span2"><span class="badge badge-important">XML</span></div>
 	  				<div class="span7">Listado completo de reclamos en formato XML.</div>
 	  				<div class="span3">
-	  					<a href="./dataset/download.html?format=xml" class="btn btn-default">
+	  					<a href="dataset/download?format=xml" class="btn btn-default">
 	  						<i class="icon icon-download"></i><span>Descargar</span>
 	  					</a>		
 	  				</div>
@@ -172,7 +144,17 @@
 	  				<div class="span2"><span class="badge badge-default">JSON</span></div>
 	  				<div class="span7">Listado completo de reclamos en formato JSON.</div>
 	  				<div class="span3">
-	  					<a href="./dataset/download.html?format=json" class="btn btn-default">
+	  					<a href="dataset/download?format=json" class="btn btn-default">
+	  						<i class="icon icon-download"></i><span>Descargar</span>
+	  					</a>		
+	  				</div>
+				 </div>
+				 <!-- PDF -->
+				 <div class="row dataset">
+	  				<div class="span2"><span class="badge badge-info">PDF</span></div>
+	  				<div class="span7">Listado completo de reclamos en formato PDF.</div>
+	  				<div class="span3">
+	  					<a href="dataset/download?format=pdf" class="btn btn-default">
 	  						<i class="icon icon-download"></i><span>Descargar</span>
 	  					</a>		
 	  				</div>
@@ -222,7 +204,7 @@
  
 	<!-- Modal -->
 	<div id="mdl-dataset" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<form id="datasetForm" action="./dataset/export.html" method="GET">     	   
+		<form id="datasetForm" action="dataset/export" method="GET">     	   
 		  	<div class="modal-header">
 			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
 			    <h4 id="myModalLabel">Configuraci&oacute;n de opciones del Dataset</h4>
@@ -234,19 +216,19 @@
 			    	   			<td>
 				    	   			<label><i class="icon-double-angle-right"></i>&nbsp;Provincia</label>
 				    	   			<br>
-				    	   			<select id="provincia" name="provincia">							    	   										
-							 		</select>		
+									<select name="provincia" id="provincia" onchange="javascript:fxlGlobalController.populateLocalityOnChange('dataset')">
+    									<option value="todas">TODAS</option>
+    								</select>											    	
 							 	</td>								
 								<td>
-				    	   			<label><i class="icon-double-angle-right"></i>&nbsp;Ciudad</label>
+				    	   			<label><i class="icon-double-angle-right"></i>&nbsp;Ciudad / Localidad</label>
 				    	   			<br>
-				    	   			<select id="ciudad" name="ciudad">	
-				    	   				<option selected="selected">Todas</option>		
-				    	   				<option>Ciudad Autónoma de Buenos Aires</option>
-							 		</select>		
+							 		<select name="ciudad" id="ciudad">
+							 			<option value="todas">TODAS</option>
+							 		</select>	
 							 	</td>
 							 	<td>
-				    	   			<label><i class="icon-double-angle-right"></i>&nbsp;Barrio / Localidad (opcional)</label>
+				    	   			<label><i class="icon-double-angle-right"></i>&nbsp;Barrio (opcional)</label>
 				    	   			<br>
 					    	   		<input type="text" id="barrio" name="barrio"/>	
 							 	</td>															
@@ -293,7 +275,7 @@
 										    <input name="estados" type="checkbox" value="ABIERTO" checked>Abierto										    
 										  </label>
 										  <label class="checkbox">
-										    <input name="estados" type="checkbox" value="REABIERTO" checked>Reabierto										    
+										    <input name="estados" type="checkbox" value="REABIERTO">Reabierto										    
 										  </label>
 										  <label class="checkbox">
 										    <input name="estados" type="checkbox" value="RESUELTO">Resuelto										    
@@ -312,7 +294,7 @@
 											<option value="newest">fecha (m&aacute;s recientes)</option>	
 											<option value="oldest">fecha (m&aacute;s viejos)</option>	
 											<option value="status">estado</option>			
-											<option value="tag">categoría</option>																									
+											<option value="tag">categor&iacute;a</option>																									
 									</select>	
 			    	   			</td>
 			    	   			<td>

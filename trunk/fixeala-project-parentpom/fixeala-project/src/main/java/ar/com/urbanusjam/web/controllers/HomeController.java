@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +30,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import ar.com.urbanusjam.entity.annotations.Locality;
+import ar.com.urbanusjam.entity.annotations.Province;
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.UserService;
@@ -72,6 +75,7 @@ public class HomeController {
 	public String home(@ModelAttribute ("issues") ArrayList<IssueDTO> issues, Model model ) throws JSONException{		
 		
 		try{
+			
 			List<String> dbTags = issueService.getTagList();
 			JSONArray array = new JSONArray();
 			String allTags = StringUtils.EMPTY;
@@ -778,6 +782,20 @@ public class HomeController {
 					isSameUser = ((User) loggedUser).getUsername().equals(user.getUsername());
 				}
 				
+				//provinces
+				List<String> provinces = issueService.loadProvinces();
+				JSONArray provArray = new JSONArray();
+				String allProvinces = StringUtils.EMPTY;					
+				
+				for(String s : provinces){
+					JSONObject obj = new JSONObject();					
+					obj.put("text", s);
+					provArray.put(obj);
+				}		
+				
+				allProvinces = provArray.toString();
+				model.addAttribute("provinceList", allProvinces.length() == 0 ? "[{}]" : allProvinces);
+				
 //				if(user.hasRole("ROLE_ADMIN", user.getAuthorities()) 
 //						|| user.hasRole("ROLE_MANAGER", user.getAuthorities()) ){
 //					if(!isSameUser){
@@ -834,6 +852,25 @@ public class HomeController {
 		}
 		
 		return "users";		
+	}
+	
+	@RequestMapping(value="/getLocalities",  produces={"application/json; charset=UTF-8"}, method = RequestMethod.GET)
+	public @ResponseBody String getLocalitites(@RequestParam("province") String province) throws JSONException {		
+		
+		List<String> localidades = issueService.loadLocalityByProvince(province);			
+		String allLocalidades = StringUtils.EMPTY;	
+		JSONArray locArray = new JSONArray();
+		
+		for(String loc : localidades){
+			JSONObject obj = new JSONObject();					
+			obj.put("text", loc);
+			locArray.put(obj);
+		}
+
+		allLocalidades = locArray.toString();	
+		
+		return allLocalidades.length() == 0 ? "[{}]" : allLocalidades;
+		
 	}
 	
 	@RequestMapping(value="/error")

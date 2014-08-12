@@ -10,50 +10,79 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import ar.com.urbanusjam.services.utils.DateUtils;
 
 
-@XmlRootElement(name = "issue")
+@XmlRootElement(name = "reclamo")
 public class IssueDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	private UserDTO user;
-	private String username;
-	private String id;
-	private String address;
-	private String neighborhood;
-	private String city;
-	private String province;
-	private String latitude;
-	private String longitude;
-	private String title;
-	private String titleCss;
-	private String parsedTitle;
-	private String description;
-	private Date creationDate;	
-	private Date lastUpdateDate;	
-	private String area;
+	public  UserDTO user;
+	public  String username;
+	public  String id;
+	public  String address;
+	public  String neighborhood;
+	public  String city;
+	public  String province;
+	public  String latitude;
+	public  String longitude;
+	public  String title;
+	public  String titleCss;
+	public  String parsedTitle;
+	public  String description;
+	public  Date creationDate;	
+	public  Date lastUpdateDate;	
+	public  String area;
+	
+	@XmlTransient
 	private AreaDTO assignedArea;
+	
+	@XmlTransient
 	private UserDTO assignedOfficial;
+	
+	@XmlTransient
 	private IssueRepairDTO licitacion = new IssueRepairDTO();
+	
+	@XmlTransient
 	private List<String> tags = new ArrayList<String>();
+	
+	@XmlTransient
 	private Map<String, Object> tagsMap = new HashMap<String, Object>();
+	
+	@XmlTransient
 	private List<IssueUpdateHistoryDTO> historial = new ArrayList<IssueUpdateHistoryDTO>();
+	
+	@XmlTransient
 	private List<MediaContentDTO> contenidos = new ArrayList<MediaContentDTO>();
+	
+	@XmlTransient
 	private List<CommentDTO> comentarios = new ArrayList<CommentDTO>();	
+	
+	@XmlTransient
 	private List<IssueFollowDTO> followers = new ArrayList<IssueFollowDTO>();
+	
+	@XmlTransient
 	private List<IssueVoteDTO> votes = new ArrayList<IssueVoteDTO>();
-	private Long totalVotes;
-	private int totalFollowers;
-	private int totalViews;
-	private String status;
-	private String statusCss;	
-	private String resolution;
+	public  Long totalVotes;
+	public  int totalFollowers;
+	public  int totalViews;
+	public  String status;
+	public  String statusCss;	
+	public  String resolution;
+	
+	@XmlTransient
 	private String fechaFormateada;
+	
+	@XmlTransient
 	private String fechaFormateadaCompleta;
+	
+	@XmlTransient
 	private String fullAddress;
+	
+	@XmlTransient
 	private MediaContentDTO uploadedFile;	
 	
 

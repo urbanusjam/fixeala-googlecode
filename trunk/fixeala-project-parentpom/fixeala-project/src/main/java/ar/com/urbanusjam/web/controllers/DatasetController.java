@@ -35,7 +35,7 @@ import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.ReportDTO;
 import ar.com.urbanusjam.services.utils.FileFormat;
 import ar.com.urbanusjam.web.services.ExportService;
-import ar.com.urbanusjam.web.services.export.dto.IssueExcelDTO;
+import ar.com.urbanusjam.web.services.export.dto.ReclamoResponse;
 import ar.com.urbanusjam.web.services.export.transformer.IssueDTOTransformer;
 
 
@@ -53,20 +53,36 @@ public class DatasetController extends MainController {
 	public String showDatasetPage(Model model, HttpServletRequest request, HttpServletResponse response) { 	
 				
 		try {				
-				String allTags = StringUtils.EMPTY;				
-				JSONArray array = new JSONArray();
+			
+				//provinces
+				List<String> provinces = issueService.loadProvinces();
+				JSONArray provArray = new JSONArray();
+				String allProvinces = StringUtils.EMPTY;					
 				
-				List<String> dbTags = issueService.getTagList();
+				for(String s : provinces){
+					JSONObject obj = new JSONObject();					
+					obj.put("text", s);
+					provArray.put(obj);
+				}		
 				
+				allProvinces = provArray.toString();
+				model.addAttribute("provinceList", allProvinces.length() == 0 ? "[{}]" : allProvinces);
+				
+				//tags
+				List<String> dbTags = issueService.getTagList();				
+				JSONArray tagsArray = new JSONArray();
+				String allTags = StringUtils.EMPTY;	
+								
 				for(String s : dbTags){
 					JSONObject obj = new JSONObject();					
 					obj.put("id", dbTags.indexOf(s));
 					obj.put("text", s);
-					array.put(obj);
-				}
-		
-				allTags = array.toString();						
+					tagsArray.put(obj);
+				}				
+				
+				allTags = tagsArray.toString();		
 				model.addAttribute("allTags", allTags.length() == 0 ? "[{}]" : allTags);
+				
 		
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -75,22 +91,21 @@ public class DatasetController extends MainController {
 		
 		return "dataset";	 
 	}
-	
-	
+				
 	@RequestMapping(value="/download", method = RequestMethod.GET)
-	public @ResponseBody String exportDataset(@RequestParam("format") String fileFormat, 
+	public @ResponseBody List<ReclamoResponse> exportDataset(@RequestParam("format") String fileFormat, 
 			HttpServletRequest request, HttpServletResponse response) throws Exception { 
 			
 		List<IssueDTO> issues = new ArrayList<IssueDTO>();		
 		
-		try{			
-			issues = issueService.loadAllIssues();			
-			buildReport(issues, fileFormat, response, request);				
+		try{
+			issues = issueService.loadAllIssues();						
+			buildReport(issues, fileFormat, response, request);	
 			
 		}catch (Exception e) {
 	      	Log.error(e.getMessage());	       
 	    }
-		return fileFormat;
+		return null;
 		
 	}
 	
@@ -101,16 +116,14 @@ public class DatasetController extends MainController {
 		List<IssueDTO> issues = new ArrayList<IssueDTO>();	
 		
 		try{			
-			issues = issueService.findIssuesByCriteria(search);	
-							
-				buildReport(issues, search.getFormatoArchivo(), response, request);				
-			
+			issues = issueService.findIssuesByCriteria(search);		
+			buildReport(issues, search.getFormatoArchivo(), response, request);		
+		
 		}catch(Exception e){
 			Log.error(e.getMessage());	    
 		}
-	
+		
 	}
-	
 	
 	
 	private void buildReport(List<IssueDTO> issues, String fileFormat,  HttpServletResponse response, HttpServletRequest request) throws Exception {

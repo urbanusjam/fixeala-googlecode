@@ -10,6 +10,12 @@
 
 <script>
 
+$(document).ready(function(){
+	
+	fxlGlobalController.populateProvinceCombobox('${provinceList}', 'user');
+	
+});
+
 
 var xmlhttp;
 
@@ -61,11 +67,11 @@ function provinciaListOnChange() {
 		var city = '${city}';
 		
 		if(prov == null || prov == ''){
-			$('#provinciaList').val("none");
+			$('#provincia').append("<option value='none'>NINGUNA</option>");
 		}
 		else{
-			$('#provinciaList').val(prov);
-			$('#localidadList').append("<option value='"+ city +"'>"+city+"</option>");
+			$('#provincia').val(prov);
+			$('#ciudad').append("<option value='"+ city +"'>"+city+"</option>");
 		}
 			
 	});
@@ -125,7 +131,7 @@ function provinciaListOnChange() {
 					        </c:if> 
 					        
 					          <c:if test="${ not empty province }">
-					           <small><cite>Vecino de <i style="text-transform:uppercase;">${city}, ${province}</i>&nbsp;&nbsp;<i class="icon-map-marker"></i></cite></small>
+					           <small><cite>Vecin@ de <i style="text-transform:uppercase;">${city}, ${province}</i>&nbsp;&nbsp;<i class="icon-map-marker"></i></cite></small>
 					          </c:if>
 					          
 					          <c:if test="${ empty province }">
@@ -507,14 +513,12 @@ function provinciaListOnChange() {
 											    <label for="email">Email</label>
 											    <input type="text" id="email" name="email" class="input-large" value="${email}">
 				   								
-				   								<label for="province">Provincia</label>
-											    <select name="provinciaList" id="provinciaList" onchange="return provinciaListOnChange()">
-      												<option value="none">Ninguna</option>
-      												<option value="Gran Buenos Aires">Gran Buenos Aires</option><option value="Capital Federal">Capital Federal</option><option value="Catamarca">Catamarca</option><option value="Chaco">Chaco</option><option value="Chubut">Chubut</option><option value="Cordoba">Cordoba</option><option value="Corrientes">Corrientes</option><option value="Entre Rios">Entre Rios</option><option value="Formosa">Formosa</option><option value="Jujuy">Jujuy</option><option value="La Pampa">La Pampa</option><option value="La Rioja">La Rioja</option><option value="Mendoza">Mendoza</option><option value="Misiones">Misiones</option><option value="Neuquen">Neuquen</option><option value="Rio Negro">Rio Negro</option><option value="Salta">Salta</option><option value="San Juan">San Juan</option><option value="San Luis">San Luis</option><option value="Santa Cruz">Santa Cruz</option><option value="Santa Fe">Santa Fe</option><option value="Santiago Del Estero">Santiago Del Estero</option><option value="Tierra del Fuego">Tierra del Fuego</option><option value="Tucuman">Tucuman</option>    
-      											</select>
+				   								<label for="provincia">Provincia</label>
+											   	<select name="provincia" id="provincia" onchange="javascript:fxlGlobalController.populateLocalityOnChange('user');">
+    											</select>	
 										
-											 	<label for="city">Ciudad / Localidad</label>						
-											    <select name="localidadList" id="localidadList"></select>
+											 	<label for="ciudad">Ciudad / Localidad</label>						
+											    <select name="ciudad" id="ciudad"></select>	
 											
 											    <hr> 
 											    <button id="btnUpdateAccount" class="btn btn-success"><i class="icon-ok"></i>&nbsp;&nbsp; Actualizar datos</button>								 
