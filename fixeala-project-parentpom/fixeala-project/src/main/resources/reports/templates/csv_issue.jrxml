@@ -5,7 +5,6 @@
 	<property name="ireport.y" value="0"/> 
    
 	<field name="nroReclamo" class="java.lang.String"/>	
-	<field name="rubro" class="java.lang.String"/>	
 	<field name="categoria" class="java.lang.String"/>	
 	<field name="fecha" class="java.lang.String"/>	
 	<field name="titulo" class="java.lang.String"/>
@@ -29,44 +28,40 @@
             </textField>
             <textField>
                 <reportElement x="200" y="0" width="100" height="20" />
-                <textFieldExpression class="java.lang.String"><![CDATA["RUBRO"]]></textFieldExpression>
+                <textFieldExpression class="java.lang.String"><![CDATA["CATEGORIAS"]]></textFieldExpression>
             </textField>
             <textField>
                 <reportElement x="300" y="0" width="100" height="20" />
-                <textFieldExpression class="java.lang.String"><![CDATA["CATEGORIA"]]></textFieldExpression>
-            </textField>
-            <textField>
-                <reportElement x="400" y="0" width="300" height="20"/>
                 <textFieldExpression class="java.lang.String"><![CDATA["TITULO"]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="700" y="0" width="300" height="20" />
+                <reportElement x="400" y="0" width="300" height="20"/>
                 <textFieldExpression class="java.lang.String"><![CDATA["DIRECCION"]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="700" y="0" width="300" height="20" />
+                <textFieldExpression class="java.lang.String"><![CDATA["BARRIO"]]></textFieldExpression>
             </textField>          
             <textField>
                 <reportElement x="1000" y="0" width="150" height="20" />
-                <textFieldExpression class="java.lang.String"><![CDATA["BARRIO"]]></textFieldExpression>
-            </textField> 
-            <textField>
-                <reportElement x="1250" y="0" width="250" height="20" />
                 <textFieldExpression class="java.lang.String"><![CDATA["CIUDAD"]]></textFieldExpression>
             </textField> 
             <textField>
-                <reportElement x="1400" y="0" width="150" height="20" />
+                <reportElement x="1250" y="0" width="250" height="20" />
                 <textFieldExpression class="java.lang.String"><![CDATA["PROVINCIA"]]></textFieldExpression>
             </textField> 
             <textField>
-                <reportElement x="1500" y="0" width="100" height="20" />
+                <reportElement x="1400" y="0" width="150" height="20" />
                 <textFieldExpression class="java.lang.String"><![CDATA["LATITUD"]]></textFieldExpression>
             </textField> 
             <textField>
-                <reportElement x="1600" y="0" width="100" height="20" />
+                <reportElement x="1500" y="0" width="100" height="20" />
                 <textFieldExpression class="java.lang.String"><![CDATA["LONGTIUD"]]></textFieldExpression>
-            </textField>   
+            </textField> 
             <textField>
-                <reportElement x="1700" y="0" width="100" height="20" />
+                <reportElement x="1600" y="0" width="100" height="20" />
                 <textFieldExpression class="java.lang.String"><![CDATA["ESTADO"]]></textFieldExpression>
-            </textField>                                    			
+            </textField>                                         			
 		</band>
 	</columnHeader>
 		
@@ -82,44 +77,40 @@
             </textField> 
             <textField>
                 <reportElement x="200" y="0" width="100" height="20" />
-                <textFieldExpression class="java.lang.String"><![CDATA[$F{rubro}]]></textFieldExpression>
+                <textFieldExpression class="java.lang.String"><![CDATA[$F{categoria}]]></textFieldExpression>
             </textField> 
             <textField>
                 <reportElement x="300" y="0" width="100" height="20" />
-                <textFieldExpression class="java.lang.String"><![CDATA[$F{categoria}]]></textFieldExpression>
+                <textFieldExpression class="java.lang.String"><![CDATA[$F{titulo}]]></textFieldExpression>
             </textField> 	
             <textField>
                 <reportElement x="400" y="0" width="300" height="20" />
-                <textFieldExpression class="java.lang.String"><![CDATA[$F{titulo}]]></textFieldExpression>
+                <textFieldExpression class="java.lang.String"><![CDATA[$F{direccion}]]></textFieldExpression>
             </textField>
             <textField>
                 <reportElement x="700" y="0" width="300" height="20" />
-                <textFieldExpression class="java.lang.String"><![CDATA[$F{direccion}]]></textFieldExpression>
+                <textFieldExpression class="java.lang.String"><![CDATA[$F{barrio}]]></textFieldExpression>
             </textField>          
           	<textField>
                 <reportElement x="1000" y="0" width="150" height="20" />
-                <textFieldExpression class="java.lang.String"><![CDATA[$F{barrio}]]></textFieldExpression>
+                <textFieldExpression class="java.lang.String"><![CDATA[$F{ciudad}]]></textFieldExpression>
             </textField> 
              <textField>
                 <reportElement x="1250" y="0" width="250" height="20" />
-                <textFieldExpression class="java.lang.String"><![CDATA[$F{ciudad}]]></textFieldExpression>
-            </textField> 
-            <textField>
-                <reportElement x="1500" y="0" width="300" height="20" />
                 <textFieldExpression class="java.lang.String"><![CDATA[$F{provincia}]]></textFieldExpression>
             </textField> 
             <textField>
-                <reportElement x="1500" y="0" width="100" height="20" />
+                <reportElement x="1500" y="0" width="300" height="20" />
                 <textFieldExpression class="java.lang.String"><![CDATA[$F{latitud}]]></textFieldExpression>
+            </textField> 
+            <textField>
+                <reportElement x="1500" y="0" width="100" height="20" />
+                <textFieldExpression class="java.lang.String"><![CDATA[$F{longitud}]]></textFieldExpression>
             </textField> 
              <textField>
                 <reportElement x="1600" y="0" width="100" height="20" />
-                <textFieldExpression class="java.lang.String"><![CDATA[$F{longitud}]]></textFieldExpression>
-            </textField> 
-            <textField>
-                <reportElement x="1700" y="0" width="100" height="20" />
                 <textFieldExpression class="java.lang.String"><![CDATA[$F{estado}]]></textFieldExpression>
-            </textField>            			
+            </textField>                    			
 		</band>
 	</detail>
 

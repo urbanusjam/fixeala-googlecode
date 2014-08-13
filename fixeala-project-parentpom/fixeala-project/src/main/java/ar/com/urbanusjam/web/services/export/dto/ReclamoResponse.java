@@ -21,9 +21,6 @@ public class ReclamoResponse {
 	@XmlElement(name="fecha")
 	private String fecha;	
 	
-	@XmlElement(name="rubro")
-	private String rubro;
-	
 	@XmlElement(name="categoria")
 	private String categoria;
 	
@@ -67,15 +64,7 @@ public class ReclamoResponse {
 	public void setFecha(String fecha) {
 		this.fecha = fecha;
 	}
-	
-	public String getRubro() {
-		return rubro;
-	}
-
-	public void setRubro(String rubro) {
-		this.rubro = rubro;
-	}	
-	
+		
 	public String getCategoria() {
 		return categoria;
 	}

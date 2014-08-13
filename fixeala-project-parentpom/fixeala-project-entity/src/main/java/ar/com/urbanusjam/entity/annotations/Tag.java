@@ -42,6 +42,7 @@ public class Tag implements Serializable {
 	
 	public Tag() { issueList = new HashSet<Issue>(); }
 
+	public Tag(String tagname){ this.tagname = tagname; }
 	
 	public Long getId() {
 		return id;

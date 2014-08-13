@@ -237,7 +237,8 @@ CREATE TABLE tag (
 	   id_tag BIGINT(20) NOT NULL AUTO_INCREMENT,
 	   tagname VARCHAR (50) NOT NULL,
 	   
-	   PRIMARY KEY (id_tag)
+	   PRIMARY KEY (id_tag),
+	   UNIQUE KEY (tagname)
 	   
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;	
 
