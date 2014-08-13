@@ -137,9 +137,6 @@ public class DatasetController extends MainController {
 		report.setOutputStream(response.getOutputStream());		
 		report.setInputStream(request.getInputStream());
 		
-		if(fileFormat.equals(FileFormat.PDF))
-			setResponseParametersForPdfExport(response, generateOutputFilename(fileFormat));
-		
 		if(fileFormat.equals(FileFormat.XLS))
 			setResponseParametersForExcelExport(response, generateOutputFilename(fileFormat));
 		

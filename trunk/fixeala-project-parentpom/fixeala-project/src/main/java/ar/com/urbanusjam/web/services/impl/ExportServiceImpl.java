@@ -91,8 +91,8 @@ public class ExportServiceImpl implements ExportService {
 		}
 				
 		//PDF
-		if(fileFormat.equals(FileFormat.PDF))
-			toPDF(report.getOutputStream(), issuesDTO);
+//		if(fileFormat.equals(FileFormat.PDF))
+//			toPDF(report.getOutputStream(), issuesDTO);
 		
 		//CSV
 		if(fileFormat.equals(FileFormat.CSV)){		
