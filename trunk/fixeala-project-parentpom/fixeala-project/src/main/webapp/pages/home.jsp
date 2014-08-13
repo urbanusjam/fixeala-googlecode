@@ -774,7 +774,7 @@
 		<!-- ROW 1 -->
 		<div class="row-fluid" style="height:472px;">
 
-  				<select id="cbxProvincias" name="cbxProvincias" onchange="findProvincia(value);return false" onfocus="">              	
+  				<select id="cbxProvincias" name="cbxProvincias" onchange="javascript:mapController.findProvince(value);" onfocus="">              	
 					<option value="BA">Buenos Aires</option>
 					<option value="CF">Capital Federal</option>
 					<option value="CT">Catamarca</option>

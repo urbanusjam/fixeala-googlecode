@@ -593,7 +593,7 @@ var mapController = {
 		return validCountry;	
 	},
 	
-	findProvince : function(provinceID){
+	findProvince : function(value){
 		
 		if (value=="BA") {
 			map.setCenter(new google.maps.LatLng(-34.599722, -58.381944)); 
