@@ -16,7 +16,6 @@ public class IssueDTOTransformer implements Transformer {
 	     
 	         dto.setNroReclamo(issue.getId());
 	         dto.setFecha(issue.getFechaFormateada());
-	         dto.setRubro(null);
 	         
 //	         if( issue.getTags() != null || issue.getTags().size() > 0 )
 //	        	 dto.setCategoria(issue.getTags().toString());

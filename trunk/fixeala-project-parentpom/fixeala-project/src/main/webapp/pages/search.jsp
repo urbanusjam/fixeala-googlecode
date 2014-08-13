@@ -8,17 +8,17 @@
    	
    	<div class="container-fluid">
 	  	<div class="row-fluid">
-	  		<div class="row span7">
+	  		<div class="row span6">
 	  			<div class="issueList"></div>
 	  		</div>		  		
-	  		<div class="row span4 pull-right">
+	  		<div class="row span5 pull-right">
+	  			<h4>Estado</h4>
+	  			<hr>	  			
+	  			<div class="statusCloud"></div>
+	  			<br>
 	  			<h4>Categor&iacute;a</h4>
 	  			<hr>
-	  			<div class="tagCloud"></div>		  			
-	  			<br>
-	  			<h4>Estado</h4>
-	  			<hr>
-	  			<div class="statusCloud"></div>
+	  			<div class="tagCloud"></div>
 	  		</div>
 	    </div>	
     </div>
@@ -52,13 +52,13 @@
    	        		"</div>");
    	    	}   			
    		}
-   		   		
-   		for(var i = 0; i < allTags.length ; i++){
-   			$(".tagCloud").append( "<a class=\"tagLinkCloud\" href=\"" +allTags[i].url+ "\"><span style=\"padding: 10px; margin: 0 15px 10px 0;  font-size: 16px;\" class=\"label label-default\">" +allTags[i].label+ "</span></a>");
+   		   	
+   		for(var i = 0; i < allStatus.length ; i++){
+   			$(".statusCloud").append( "<a class=\"statusLinkCloud\" href=\"" +allStatus[i].url+ "\"><span style=\"padding: 10px; margin: 0 15px 10px 0;  font-size: 14px;\" class=\""+allStatus[i].css+"\">" +allStatus[i].text+ "</span></a>");
    		}
    		
-   		for(var i = 0; i < allStatus.length ; i++){
-   			$(".statusCloud").append( "<a class=\"statusLinkCloud\" href=\"" +allStatus[i].url+ "\"><span style=\"padding: 10px; margin: 0 15px 10px 0;  font-size: 16px;\" class=\""+allStatus[i].css+"\">" +allStatus[i].text+ "</span></a>");
+   		for(var i = 0; i < allTags.length ; i++){
+   			$(".tagCloud").append( "<a class=\"tagLinkCloud\" href=\"" +allTags[i].url+ "\"><span style=\"padding: 10px; margin: 0 15px 10px 0;  font-size: 14px;\" class=\"label label-default\">" +allTags[i].label+ "</span></a>");
    		}
    		
    	}); 

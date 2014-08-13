@@ -86,7 +86,7 @@ var mapController = {
 							 +'										<span class="'+markerArray[i].statusCss+'">'+ markerArray[i].status +'</span></b></td>'				           
 							 +'	 </tr>'	
 							 +'  <tr style="font-size:11px">'
-							 +'	 	<td style="text-align:left;color:grey">'+markerArray[i].formattedAddress+'</td>'				
+							 +'	 	<td style="text-align:left;color:grey">'+markerArray[i].fullAddress+'</td>'				
 							 +'	 </tr><tr><td>&nbsp;</td></tr>'	
 							 +'   <tr style="font-size:12px">'
 							 +'	 	<td style="text-align:justify;color:black">'+shortDescription+' ...</td>'				

@@ -149,7 +149,7 @@ public class IssueController {
 			JSONObject obj = new JSONObject();
 			String url = "./search.html?type=status&value=" + status.getLabel().trim().toLowerCase();
 			obj.put("url", url);
-			obj.put("text", status.getLabel());
+			obj.put("text", status.getLabel().toUpperCase());
 			obj.put("css", status.getCssClass());
 			obj.put("color", status.getColorCode());
 			statusArray.put(obj);
@@ -167,9 +167,6 @@ public class IssueController {
 			HttpServletRequest request) {
 
 		IssueDTO issue = new IssueDTO();
-		// String[] parts = issueToken.split("-");
-		// String issueID = parts[0];
-
 		String issueID = issueToken;
 
 		try {
@@ -211,24 +208,16 @@ public class IssueController {
 
 			if (!issueTags.isEmpty()) {
 				for (int i = 0; i < issueTags.size(); i++) {
-
 					issueTagsByComma += issueTags.get(i) + ", ";
-					// String url =
-					// "./search.html?type=tag&value="+issueTags.get(i);
-					// issueTagsByComma += "<a class=\"taglink\" href=\"" + url
-					// + "\"><span class=\"label label-default\">" +
-					// issueTags.get(i) + "</span></a>";
-
 				}
-				issueTagsByComma = issueTagsByComma.substring(0,
-						issueTagsByComma.length() - 2);
+				issueTagsByComma = issueTagsByComma.substring(0, issueTagsByComma.length() - 2);
 			}
 
 			List<String> dbTags = issueService.getTagList();
 			JSONArray array = new JSONArray();
 			for (String s : dbTags) {
 				JSONObject obj = new JSONObject();
-				obj.put("id", dbTags.indexOf(s));
+				obj.put("id", dbTags.indexOf(s)+1);
 				obj.put("text", s);
 				array.put(obj);
 			}
@@ -239,18 +228,6 @@ public class IssueController {
 			model.addAttribute("allTags", allTags.length() == 0 ? "[{}]"
 					: allTags);
 
-//			JSONArray jsonArray = new JSONArray();
-
-//			for (CommentDTO c : issue.getComentarios()) {
-//				JSONObject obj = new JSONObject();
-//				obj.put("fecha", c.getFechaFormateada());
-//				obj.put("usuario", c.getUsuario());
-//				obj.put("mensaje", c.getMensaje());
-//				jsonArray.put(obj);
-//			}
-//			model.addAttribute("comentariosJson", jsonArray);
-//			model.addAttribute("comentarios", issue.getComentarios());
-			
 			List<MediaContentDTO> contenidos = new ArrayList<MediaContentDTO>();
 			contenidos = issue.getContenidos();
 
@@ -276,10 +253,10 @@ public class IssueController {
 					.size());
 
 			IssueFollowDTO follow = new IssueFollowDTO();
-			IssueVoteDTO currentVote = new IssueVoteDTO();
-			boolean isUserWatching = false;
+			IssueVoteDTO currentVote = new IssueVoteDTO();			
 			String loggedUser = "";
-
+			boolean isUserWatching = false;
+			
 			Authentication auth = (Authentication) SecurityContextHolder
 					.getContext().getAuthentication();
 

@@ -334,7 +334,7 @@
 				     
 		          }
 			  });
-			  
+		
 			  $('#issue-tags').editable({
 				    pk: 22,
 				 	name: 'tagsMap',				 
@@ -347,25 +347,34 @@
 			            tokenSeparators: [",", " "],
 			            id: function (item) {
 			                return item.text;
-			            }
+			            },
+			            multiple: true,	
+// 			            minimumInputLength: 1,
+			            maximumSelectionSize: 5,
+			            formatSelectionTooBig: function (limit) {
+			                return 'S&oacute;lo se permiten 5 etiquetas.';
+			            },
+			            allowClear: true			           
 			        },
 			        display: function(value) {
-			        	var tags = new Array(value.length);
+			        	if(value != null){
+			        		var tags = new Array(value.length);
+				        	
+				            $.each(value,function(i){				            	
+				            	var url = "./search.html?type=tag&value=" + $('<p>' + value[i] + '</p>').text();
+				            	tags[i] = "<a class=\"taglink\" href=\"" + url + "\"><span class=\"label label-default\">" + $('<p>' + value[i] + '</p>').text() + "</span></a>";
+				            });
+				            
+				            $(this).html(tags.join(" "));
+			        	}
 			        	
-			            $.each(value,function(i){				            	
-			            	var url = "./search.html?type=tag&value=" + $('<p>' + value[i] + '</p>').text();
-			            	tags[i] = "<a class=\"taglink\" href=\"" + url + "\"><span class=\"label label-default\">" + $('<p>' + value[i] + '</p>').text() + "</span></a>";
-			            });
-			            
-			            $(this).html(tags.join(" "));
 			        },						
 			        ajaxOptions: {
 				        type: 'put'
 				    }			 
 		                    
   			  }); 
-			 
-			  
+		
 			//---- CAMPOS LICITACION
 			 
 			

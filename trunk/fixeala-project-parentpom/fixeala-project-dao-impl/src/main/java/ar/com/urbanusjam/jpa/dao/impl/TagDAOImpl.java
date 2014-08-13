@@ -63,6 +63,13 @@ public class TagDAOImpl implements TagDAO {
 	}
 	
 	
+	public void saveTags(String[] tags){
+		for(String tagname : tags){
+			entityManager.persist(new Tag(tagname));
+		}		
+	}
+	
+	
 
 
 }

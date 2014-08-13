@@ -38,6 +38,12 @@ public class TagDAOImpl extends GenericDAOImpl<Tag, Serializable> implements Tag
 	public void deleteTag(Tag tag) {
 		this.delete(tag);		
 	}
+
+	@Override
+	public void saveTags(String[] tags) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 

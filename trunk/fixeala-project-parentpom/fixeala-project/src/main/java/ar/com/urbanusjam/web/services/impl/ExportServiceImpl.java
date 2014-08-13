@@ -236,9 +236,8 @@ public class ExportServiceImpl implements ExportService {
 		DynamicReport dr = null;	
 		
 		dr = drb.addColumn( "NRO. DE RECLAMO", "nroReclamo", String.class.getName(),  50)
-				.addColumn(	"FECHA Y HORA"   , "fecha"     , String.class.getName(),  50  )
-				.addColumn(	"RUBRO"          , "rubro"     , String.class.getName(),  50  )
-				.addColumn(	"CATEGORIA"      , "categoria" , String.class.getName(),  100 )
+				.addColumn(	"FECHA Y HORA"   , "fecha"     , String.class.getName(),  50  )			
+				.addColumn(	"CATEGORIAS"     , "categoria" , String.class.getName(),  100 )
 				.addColumn(	"TITULO"         , "titulo"    , String.class.getName(),  100 )
 				.addColumn(	"DIRECCION"      , "direccion" , String.class.getName(),  100 )		
 				.addColumn(	"BARRIO"         , "barrio"    , String.class.getName(),  50  )		
