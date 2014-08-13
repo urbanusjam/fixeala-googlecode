@@ -121,7 +121,7 @@
 				 </div>
 				 <!-- CSV -->
 				 <div class="row dataset">
-	  				<div class="span2"><span class="badge badge-warning">CSV</span></div>
+	  				<div class="span2"><span class="badge badge-info">CSV</span></div>
 	  				<div class="span7">Listado completo de reclamos en formato CSV.</div>
 	  				<div class="span3">
 	  					<a href="dataset/download?format=csv" class="btn btn-default">
@@ -145,16 +145,6 @@
 	  				<div class="span7">Listado completo de reclamos en formato JSON.</div>
 	  				<div class="span3">
 	  					<a href="dataset/download?format=json" class="btn btn-default">
-	  						<i class="icon icon-download"></i><span>Descargar</span>
-	  					</a>		
-	  				</div>
-				 </div>
-				 <!-- PDF -->
-				 <div class="row dataset">
-	  				<div class="span2"><span class="badge badge-info">PDF</span></div>
-	  				<div class="span7">Listado completo de reclamos en formato PDF.</div>
-	  				<div class="span3">
-	  					<a href="dataset/download?format=pdf" class="btn btn-default">
 	  						<i class="icon icon-download"></i><span>Descargar</span>
 	  					</a>		
 	  				</div>
@@ -301,8 +291,7 @@
 					    	   		<label><i class="icon-double-angle-right"></i>&nbsp;Formato del archivo</label>
 					    	   		<br>
 					    	   		<select id="formatoArchivo" name="formatoArchivo">	
-					    	   				<option value="xls" selected="selected">XLS</option>	
-					    	   				<option value="pdf">PDF</option>	
+					    	   				<option value="xls" selected="selected">XLS (MS Excel)</option>
 					    	   				<option value="csv">CSV</option>
 											<option value="xml">XML</option>	
 											<option value="json">JSON</option>																				
