@@ -496,6 +496,7 @@ legend {
     height: 100%;
 	margin: 0 auto;
 	margin-top: 80px;
+	margin-bottom: 80px;
 	padding: 0;
 	clear: both;
 }
@@ -1479,3 +1480,74 @@ ul.nav.nav-tabs li:not(.active):hover a {
 .row.dataset .span3 { border: 0px solid green;  display: inline-block !important;
     vertical-align: top !important; float:none !important;}
 .row.dataset .span3 a { font-size: 11px; text-transform: uppercase;}
+
+
+/****************************/
+/** feedback **/
+
+div.feedback {
+	
+	position: fixed;	
+	top: 0;
+	right: 0;
+	bottom: 0;
+  	height: 30px;
+    margin: auto;
+    padding: 5px;
+	z-index: 9999;
+/* 	margin-top: -60px;	 */
+
+	padding: 10px 0 0 0;
+	color: #FFF;
+	background: #DC4A38;
+	
+/* 	border-right-width: 2px; */
+/* 	border-bottom-width: 2px; */
+/* 	border-left-width: 2px; */
+/* 	border-top-width: 0;	 */
+/* 	border-style: solid  solid solid ;	 */
+/* 	border-right-color: #000; */
+/* 	border-bottom-color: #000; */
+/* 	border-left-color: #000; */
+	
+	font-size: 20px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	
+	  -webkit-transform-origin: 100% 50%;
+       -moz-transform-origin: 100% 50%;
+        -ms-transform-origin: 100% 50%;
+         -o-transform-origin: 100% 50%;
+            transform-origin: 100% 50%;
+    -webkit-transform: rotate(90deg) translate(50%, 50%);
+       -moz-transform: rotate(90deg) translate(50%, 50%);
+        -ms-transform: rotate(90deg) translate(50%, 50%);
+         -o-transform: rotate(90deg) translate(50%, 50%);
+            transform: rotate(90deg) translate(50%, 50%);
+	
+}
+
+div.feedback span { margin: 30px;}
+div.feedback span a:hover { text-decoration: none; color: #FFF;}
+div.feedback span a i { margin-right: 10px; }
+div.feedback-inner { 
+	text-align: center;
+	position: relative; 
+
+/* 	transform: rotate(90deg); */
+/* 	transform-origin: 40% 40%; */
+	/* Safari */
+	-webkit-transform: rotate(-90deg);	
+	/* Firefox */
+	-moz-transform: rotate(-90deg);	
+	/* IE */
+	-ms-transform: rotate(-90deg);	
+	/* Opera */
+	-o-transform: rotate(-90deg);	
+	/* Internet Explorer */
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+	
+	}
+
+div.feedback a { color: #FFF; }
+div.feedback a:hover { text-decoration: none; }

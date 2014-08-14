@@ -10,20 +10,23 @@
 
 	$(document).ready(function(){
 		
-		var snippet = '<script type="text/javascript">'
-			+ '\n'
-			+ '  function resizeIframe(iframe) {'
-			+ '\n'
-			+ '  	iframe.height = iframe.contentWindow.document.body.scrollHeight + "px";'
-			+ '\n'	
-			+ '  }'
-			+ '\n'
-			+ '<\/script>'
-			+ '\n'
-			+ '\n'
-			+ '<iframe style="width: 300px; border: none" onload="resizeIframe(this)" src="http://localhost:8080/fixeala/widget-component.html"></iframe>';
+		var snippet = '\n'
+					+'<script type="text/javascript">'
+					+ '\n\n'
+					+ '  function resizeIframe(iframe) {'
+					+ '\n'
+					+ '  	iframe.height = iframe.contentWindow.document.body.scrollHeight + "px";'
+					+ '\n'	
+					+ '  }'
+					+ '\n\n'
+					+ '<\/script>'
+					+ '\n'
+					+ '\n'
+					+ '<iframe style="width:300px;border:none;" onload="resizeIframe(this)" src="http://localhost:8080/fixeala/widget-web.html">'
+					+ '\n'
+					+ '</iframe>';
 			
-		$("#widgetScript").val(snippet);
+		$("#widget-script").text(snippet);
 		
 	});
 
@@ -34,23 +37,26 @@
 		
 		<!-- Widget -->
 	    <div class="page-header">
-    	 	<h4><i class="icon-cogs"></i>&nbsp;&nbsp;<i class="icon-angle-right"></i>&nbsp;&nbsp;Widget Web</h4>    	 	
+    	 	<h3><i class="icon-cogs"></i>&nbsp;&nbsp;Widget Web</h3>    	 	
     	</div>    	
     	
-    	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse rhoncus odio eu iaculis malesuada. 
-    	Integer at diam sed metus mattis molestie. Aliquam lectus est, volutpat eget rutrum et, facilisis quis diam. 
-    	Cras vitae varius nisl, quis feugiat felis. Sed vehicula malesuada orci eget pellentesque. 
-    	Sed erat purus, feugiat ut lectus eu, ultrices convallis nisi. Curabitur id ante id turpis dapibus molestie eget vel eros. 
-    	Sed eu vehicula erat. Proin ornare libero diam, a luctus magna scelerisque in.</p>
+    	<p>Es un peque&ntilde;o componente web f&aacute;cil de integrar a tu sitio o blog
+    		que te permitir&aacute; mostrar informaci&oacute;n referente a los &uacute;ltimos reclamos cargados en la plataforma de FIXEALA 
+    		con un m&iacute;nimo bloque de c&oacute;digo. </p>
     	
     	
     	<div class="row-fluid">			  
 			
 			<div class="span7">
 				<div class="page-header" style="text-align: left !important;"><h4>C&oacute;digo HTML y JavaScript</h4></div>
-				<p>Copie el siguiente c&oacute;digo e ins&eacute;rtelo en cualquier lugar de su sitio web para embeber el widget.</p>	
+				<p>Para empezar a usar el widget, copi&aacute; el siguiente c&oacute;digo e insertalo en cualquier secci&oacute;n de tu p&aacute;gina web.</p>	
 				<br>
-				<textarea id="widgetScript" style="width: 560px; height: 150px; font-family: Courier New; font-size: 12px;"></textarea>				
+				<div class="docs-example">
+					<pre>
+						<code id="widget-script"></code>
+					</pre>
+				</div>
+			
 			</div>
 		
 <!-- 			<div class="span8"> -->
@@ -153,30 +159,9 @@
 <!-- 				</div> -->
 			
 			
-			<div class="span4 pull-right">	 
-			
-				<div class="page-header"><h4>Previsualizaci&oacute;n</h4> </div>
-				
-				<iframe style="width: 300px; border: none;" onload="resizeIframe(this)" src="http://localhost:8080/fixeala/widget-component.html"></iframe>
-			
-			
-<!-- 				 <table class="table" style="margin-top:50px;"> -->
-<!-- 					<tr> -->
-<!-- 						<td style="text-align:center; border:none"> -->
-<!-- 							<a href="#" class="btn btn-primary btn-large" style="width:230px; height:50px;line-height:50px"> -->
-<!-- 								<i class="icon-code icon-2x"></i>&nbsp;&nbsp;&nbsp; GENERAR CÓDIGO -->
-<!-- 							</a> -->
-<!-- 						</td> -->
-<!-- 				 	</tr> -->
-				 				
-<!-- 					<tr> -->
-<!-- 						<td style="text-align:center; border:none"> -->
-<!-- 							<a href="#" class="btn btn-inverse btn-large" style="width:230px; height:50px;line-height:50px"> -->
-<!-- 								<i class="icon-file-alt icon-2x"></i>&nbsp;&nbsp;&nbsp; TUTORIAL SOBRE WIDGETS -->
-<!-- 							</a> -->
-<!-- 						</td> -->
-<!-- 				 	</tr>				  -->
-<!-- 				 </table>		 -->
+			<div class="span4 pull-right" style="text-align: center;">	
+				<div class="page-header" style="text-align: left;"><h4>Previsualizaci&oacute;n</h4></div>				
+				<iframe style="width:300px;border:none;" onload="resizeIframe(this)" src="http://localhost:8080/fixeala/widget-web.html"></iframe>
 	   		</div> 
 	   
 		

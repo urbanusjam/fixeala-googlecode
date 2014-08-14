@@ -229,5 +229,28 @@ public class MailServiceImpl implements MailService {
 	      mailSender.send(message);
 	}
 	
-	
+	@Override
+	public void sendFeedbackEmail(String tipoFeedback, String mensajeFeedback) throws MessagingException, MailException {
+		
+		  MimeMessage message = this.mailSender.createMimeMessage();
+		  MimeMessageHelper helper = new MimeMessageHelper(message, true);
+		  
+		  helper.setFrom("random@gmail.com");
+	      helper.setTo("fixeala@gmail.com");
+		  helper.setSubject("Feedback - " + tipoFeedback);
+			
+	      String text = "Nuevo feedback recibido.";      
+	      text += "<br><br>";
+	      text += "ASUNTO:";
+	      text += "<br><br>";
+	      text += tipoFeedback;
+	      text += "<br><br>";
+	      text += mensajeFeedback;	   
+	      
+	      helper.setText(text, true);
+	      mailSender.send(message);
+	      
+	      System.out.println("Mensaje enviado existosamente...");
+		
+	}
 }

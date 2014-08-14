@@ -6,7 +6,7 @@ var fxlGlobalController = {
 		  var provinceList = $.parseJSON(provinces);
 		
 	      if(pageType != 'dataset'){
-	    	  $cbxProvince.append($("<option />").val("none").text("SELECCIONE  PROVINCIA"));
+	    	  $cbxProvince.append($("<option />").val("none").text("SELECCIONE PROVINCIA"));
 	      }
 		  
 		  $.each(provinceList, function(index, item) {
@@ -45,6 +45,42 @@ var fxlGlobalController = {
 			        $cbxLocality.attr("disabled", false);
 			    }
 		  });			  
+	},
+	
+	sendFeedback : function() {
+		var asunto = $("#cbxAsuntoFeedback").find('option:selected').text();
+		var mensaje = $("#msgFeedback").val(); 
+		
+		$("#mdl-feedback").modal('hide');
+		
+		$.ajax({
+			type: "POST",
+		    url: getDomainUrl() + "sendFeedback",
+	 		data: "asunto=" + asunto + "&mensaje=" + mensaje,		 		
+	 		beforeSend: function(){
+	 			setTimeout(function(){
+	 				blockPage("html");	 	
+	 			}, 500);
+	 				
+	 		},
+	        success: function(result){		
+	        	 
+	        	if(result)
+	        		bootbox.alert("El mensaje se ha enviado correctamente.");
+		    	
+		    	else
+		    		bootbox.alert("No se ha podido enviar el mensaje. Intente m&aacute;s tarde.");
+	        	
+    		},
+    		error: function(){
+             	bootbox.alert("No se ha podido enviar el mensaje. Intente m&aacute;s tarde.");
+            },
+    		complete: function() {
+    			unBlockPage("html");    			
+            }
+           
+		});
+		
 	}
 		
 }

@@ -47,7 +47,7 @@ public class WidgetController {
 		}	
 	}
 	
-	@RequestMapping(value="/widget-component", method = RequestMethod.GET)
+	@RequestMapping(value="/widget-web", method = RequestMethod.GET)
 	public String showWidgeComponent(Model model) throws Exception { 			
 		List<IssueDTO> issues = new ArrayList<IssueDTO>();		
 		try{
@@ -77,7 +77,7 @@ public class WidgetController {
 		} catch(Exception e){
 			model.addAttribute("errorMessage", "No se puedo establecer la conexión con el servidor.");
 		}		
-		return "widget-component";	 
+		return "widget-web";	 
 	}
 	
 	

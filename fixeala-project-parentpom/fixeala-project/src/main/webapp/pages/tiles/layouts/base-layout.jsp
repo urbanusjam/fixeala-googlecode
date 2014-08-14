@@ -156,6 +156,7 @@ path:hover {
 
   	<script type="text/javascript">
     //<![CDATA[
+          
                
             function getDomainUrl(){
 				var protocol = window.location.protocol;
@@ -191,7 +192,8 @@ path:hover {
 										textAlign : 'center',
 										color : '#000',
 										border : '0px solid #aaa',
-										cursor : 'wait'
+										cursor : 'wait',
+										'z-index': '99999'
 									}
 								});
 			}
@@ -201,6 +203,16 @@ path:hover {
 			}
         
 		$(document).ready(function(){
+			
+			$("#feedbackLink").click(function(){				
+				$('#cbxAsuntoFeedback option:first-child').attr("selected", "selected");
+				$('#msgFeedback').val('');				
+				$("#mdl-feedback").modal('show');					
+			});
+			
+			$("#btnSendFeedback").click(function(){
+				fxlGlobalController.sendFeedback();
+			});
 			
 				 window.localStorage.clear();
 			 
@@ -829,14 +841,23 @@ path:hover {
 		});
 		
 		
+		
 		 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */ 
 		//]]>
+    
+    
+		
+		
     
 	</script>
 
 </head>
 
-<body>
+<body data-spy="scroll" data-target=".bs-docs-sidebar">
+
+	<div class="feedback">
+    	<span><a id="feedbackLink" href="#" title="¡Tu opinión cuenta!" style="cursor: pointer;"><i class="icon-bolt"></i>Feedback</a></span>
+    </div>
 
 <section class="wrapper">
  
@@ -847,6 +868,43 @@ path:hover {
   <tiles:insertAttribute name="footer" />
   
 </section> 
+
+
+<div id="mdl-feedback" class="modal hide fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+	  	<div class="modal-header">
+		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>	
+			<h4>Ayudanos a mejorar la plataforma FIXEALA</h4>
+	  	</div>
+		<div class="modal-body">
+		
+			<div class="control-group">  			
+        			<label class="control-label">Asunto</label>
+        			<div class="controls">
+           				<select id="cbxAsuntoFeedback">
+           					<option value="bug" selected>BUG / FALLA</option>
+           					<option value="sugerencia">SUGERENCIA</option>           				
+           					<option value="ayuda">AYUDA / DUDA</option>
+           					<option value="otro">OTRO</option>
+           				</select>		
+        			</div>
+    			</div>    			
+			    <div class="control-group">
+			        <label class="control-label" for="observacion">Mensaje</label>
+			        <div class="controls">
+			        	<textarea id="msgFeedback" name="msgFeedback" class="form-control" style="width:520px; height: 100px; padding-right: 5px;" required></textarea>
+			        </div>
+			    </div>
+		
+		</div>
+		<div class="modal-footer"> 		
+			<button id="btnSendFeedback" class="btn btn-info"aria-hidden="true">
+		    	<i class="icon-ok icon-large"></i>&nbsp;&nbsp;&nbsp;Enviar
+		    </button>		 		  		
+	  		<button class="btn" data-dismiss="modal" aria-hidden="true">
+		    	<i class="icon-remove icon-large"></i>&nbsp;&nbsp;&nbsp;Cancelar
+		    </button>	 
+	  	</div>
+	</div>
  
   
   
