@@ -92,22 +92,20 @@
 		
 		<!-- Dataset -->
 	    <div class="page-header">
-    	 	<h4><i class="icon-tasks"></i>&nbsp;&nbsp;<i class="icon-angle-right"></i>&nbsp;&nbsp;Cat&aacute;logo de Datos</h4>    	 	
+    	 	<h3><i class="icon-tasks"></i>&nbsp;&nbsp;Datasets / Cat&aacute;logos de Datos</h3>    	 	
     	</div>    	
     	
-    	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse rhoncus odio eu iaculis malesuada. 
-    	Integer at diam sed metus mattis molestie. Aliquam lectus est, volutpat eget rutrum et, facilisis quis diam. 
-    	Cras vitae varius nisl, quis feugiat felis. Sed vehicula malesuada orci eget pellentesque. 
-    	Sed erat purus, feugiat ut lectus eu, ultrices convallis nisi. Curabitur id ante id turpis dapibus molestie eget vel eros. 
-    	Sed eu vehicula erat. Proin ornare libero diam, a luctus magna scelerisque in.</p>
-    	
-    	
+    	<p>FIXEALA pone a disposici&oacute;n de los ciudadanos el conjunto completo de datos referentes a los reclamos barriales comprendidos 
+    	dentro de los l&iacute;mites de la Rep&uacute;blica Argentina, que han sido publicados 
+    	por los propios usuarios de la plataforma para facilitar el proceso de b&uacute;squeda, descubrimiento y acceso, 
+    	dentro del marco de las pol&iacute;ticas de Gobierno Abierto. Estos cat&aacute;logos podr&aacute;n ser descargados en diversos formatos (.xls, .csv, .xml, .json) para su libre uso.</p>
+    	    	
     	
 		<div class="row-fluid">
 			  
 			<div class="span6" >
 			   
-				 <div class="page-header"><h4>Datasets completos disponibles</h4></div>
+				 <div class="page-header"><h4>Datasets disponibles</h4></div>
 			 
 				 <!-- XLS -->
 				 <div class="row dataset">

@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,10 +29,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import ar.com.urbanusjam.entity.annotations.Locality;
-import ar.com.urbanusjam.entity.annotations.Province;
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.IssueService;
+import ar.com.urbanusjam.services.MailService;
 import ar.com.urbanusjam.services.UserService;
 import ar.com.urbanusjam.services.dto.CommentDTO;
 import ar.com.urbanusjam.services.dto.IssueDTO;
@@ -60,6 +58,9 @@ public class HomeController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private MailService mailService;
 	
 	@ModelAttribute("issues")
 	public @ResponseBody ArrayList<IssueDTO> getIssuesArray() {   
@@ -354,9 +355,6 @@ public class HomeController {
        }  	
 	}
 	
-	
-	
-
 	
 	@RequestMapping(value="/reclamos/loadIssues", produces={"application/json; charset=ISO-8859-1"}, method = RequestMethod.GET)
 	public @ResponseBody void getIssuesJSON(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException { 
@@ -809,8 +807,8 @@ public class HomeController {
 				model.addAttribute("profileUser", user.getUsername());
 				model.addAttribute("profileRole", user.getAuthorities().get(0));				
 				model.addAttribute("email", user.getEmail());
-				model.addAttribute("city", user.getCity());			
-				model.addAttribute("province", user.getProvince());			
+				model.addAttribute("city", user.getCity().trim().toUpperCase());			
+				model.addAttribute("province", user.getProvince().trim().toUpperCase());			
 				
 				List<IssueDTO> userIssues = issueService.loadIssuesByUser(userID);
 				List<IssueDTO> allIssues = issueService.loadAllIssues();
@@ -882,6 +880,34 @@ public class HomeController {
 	public String showMessagePage(Map<String, Object> model) {		
 		return "closedAccount";			
 	}	
+	
+	
+	@RequestMapping(value="/mobile")
+	public String showMobilePage(Model model) {		
+		return "mobile";			
+	}	
+	
+	@RequestMapping(value="/api")
+	public String showAPIPage(Model model) {		
+		return "api";			
+	}	
+	
+	@RequestMapping(value="/help")
+	public String showHelpPage(Model model) {		
+		return "help";			
+	}	
+	
+	@RequestMapping(value = "/sendFeedback", method = RequestMethod.POST)
+	public @ResponseBody boolean doSendFeedback(@RequestParam("asunto") String asunto, @RequestParam("mensaje") String mensaje)
+			throws Exception {
+		try {
+			mailService.sendFeedbackEmail(asunto, mensaje);
+			return true;
+
+		} catch (Exception e) {
+			return false;
+		}
+	}
 	
 	private <T> String toJson(DataTableResultSet<T> dt) throws IOException{
 		  ObjectMapper mapper = new ObjectMapper();

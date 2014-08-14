@@ -15,9 +15,6 @@
     <put-attribute name="body" value="" /> 
   </definition>
   
-  
-  
-      
   <definition name="home" extends="base.layout">
   	<put-attribute name="title" value="Fixeala" /> 
   	<put-attribute name="body" value="/pages/home.jsp" />
@@ -27,12 +24,7 @@
   	<put-attribute name="title" value="Fixeala" /> 
   	<put-attribute name="body" value="/pages/home2.jsp" />
   </definition>
-  
-  <definition name="template2" extends="base.layout">
-  	<put-attribute name="title" value="Fixeala" /> 
-  	<put-attribute name="body" value="/pages/template2.jsp" />
-  </definition>
-  
+    
   <definition name="signup" extends="base.layout">
   	<put-attribute name="title" value="Fixeala - Registro de Nuevo Usuario" /> 
   	<put-attribute name="body" value="/pages/account/signup.jsp" />
@@ -77,6 +69,21 @@
   	<put-attribute name="title" value="Fixeala" /> 
   	<put-attribute name="body" value="/pages/widget.jsp" />
   </definition>
+  
+  <definition name="mobile" extends="base.layout">
+  	<put-attribute name="title" value="Fixeala" /> 
+  	<put-attribute name="body" value="/pages/mobile.jsp" />
+  </definition>
+  
+  <definition name="api" extends="base.layout">
+  	<put-attribute name="title" value="Fixeala" /> 
+  	<put-attribute name="body" value="/pages/api.jsp" />
+  </definition>
+  
+  <definition name="help" extends="base.layout">
+  	<put-attribute name="title" value="Fixeala" /> 
+  	<put-attribute name="body" value="/pages/help.jsp" />
+  </definition>
  
   <definition name="closedAccount" extends="base.layout">
   	<put-attribute name="title" value="Fixeala" /> 
@@ -88,7 +95,7 @@
   	<put-attribute name="body" value="/pages/error.jsp" />
   </definition>
   
-    <definition name="search" extends="base.layout">
+  <definition name="search" extends="base.layout">
   	<put-attribute name="title" value="Fixeala" /> 
   	<put-attribute name="body" value="/pages/search.jsp" />
   </definition>

@@ -8,80 +8,35 @@
 	
 </style>
 
-<script>
-
-$(document).ready(function(){
-	
-	fxlGlobalController.populateProvinceCombobox('${provinceList}', 'user');
-	
-});
-
-
-var xmlhttp;
-
-
-
-function provinciaListOnChange() {
-
-    var provinciaList = document.getElementById("provinciaList"); 
-    var selectedprovincia = provinciaList.options[provinciaList.selectedIndex].value;
-    var localidadSelect = $('#localidadList');
-   
-    if (window.XMLHttpRequest){	// code for IE7+, Firefox, Chrome, Opera, Safari
-    	xmlhttp = new XMLHttpRequest();
-    }
- 	
-    else{	// code for IE6, IE5
-    	xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-    }
-	
-    xmlhttp.open("GET", "../resources/data/provincias_localidades.xml", false);
-	xmlhttp.send();
-	xmlDoc=xmlhttp.responseXML;
-	
-	localidadSelect.empty();
-     	
-     $(xmlDoc).find('lista provincia').each(function(){
-   		  if($(this).attr('id').trim() === selectedprovincia){
-   		       $(this).find('localidades localidad').each(function(){  
-   		              var label = $(this).text();
-   		              localidadSelect.append("<option value='"+ label +"'>"+label+"</option>");
-   		       });
-   		  }
-    });
-
-}
-
-
-
-
-
-
-</script>
-
-
-	<script type="text/javascript">
+<script type="text/javascript">
 	
 	$(document).ready(function(){
+		fxlGlobalController.populateProvinceCombobox('${provinceList}', 'user');
+	});
+	</script>
+
+<script type="text/javascript">
+	
+	$(document).ready(function(){
+				
 		var prov = '${province}';
 		var city = '${city}';
-		
+	
 		if(prov == null || prov == ''){
 			$('#provincia').append("<option value='none'>NINGUNA</option>");
 		}
+		
 		else{
 			$('#provincia').val(prov);
 			$('#ciudad').append("<option value='"+ city +"'>"+city+"</option>");
 		}
-			
+		
 	});
 	
 	var rowId;
 	var rowTitle;
 	var selectedUser;
 	var currentUser = '${profileUser}';
-	
-
 	
 	function errorHandler (jqXHR, exception) {
         if (jqXHR.status === 0) {
@@ -100,18 +55,13 @@ function provinciaListOnChange() {
             alert('Uncaught Error.\n' + jqXHR.responseText);
         }
 	}
-	
-
-	
-	
+		
 	function redirect(){
 		var url = window.location.origin + '/'+ 'fixeala/issues/' + rowId + '.html';
 		return window.location.href = url;
 	}
 	
-
-	
-	</script>
+</script>
 
 
 
@@ -131,12 +81,9 @@ function provinciaListOnChange() {
 					        </c:if> 
 					        
 					          <c:if test="${ not empty province }">
-					           <small><cite>Vecin@ de <i style="text-transform:uppercase;">${city}, ${province}</i>&nbsp;&nbsp;<i class="icon-map-marker"></i></cite></small>
+					           <small><cite><i class="icon-map-marker"></i>&nbsp;&nbsp;<i style="text-transform:uppercase;">${city}, ${province}</i></cite></small>
 					          </c:if>
 					          
-					          <c:if test="${ empty province }">
-					           <small><cite>Vecino de...</cite></small>
-					          </c:if>
 					       			
 					    </blockquote>
 				</div>

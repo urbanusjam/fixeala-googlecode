@@ -22,4 +22,6 @@ public interface MailService {
 	
 	public void sendEmailChangeNotification(EmailDTO email) throws MessagingException, MailException;
 	
+	public void sendFeedbackEmail(String tipoFeedback, String mensajeFeedback) throws MessagingException, MailException;
+	
 }

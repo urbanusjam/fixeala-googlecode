@@ -18,10 +18,10 @@
           	<!-- MAIN NAV -->
             <ul id="menuNav" class="nav">
 				<li><a href="${pageContext.request.contextPath}/dataset" title="Datasets"><i class="icon-tasks icon-2x"></i></a></li>		
-				<li><a href="${pageContext.request.contextPath}/widget" title="Tu web Gadget"><i class="icon-cogs icon-2x"></i></a></li>	
-				<li><a href="#" title="Aplicaci&oacute;n M&oacute;vil"><i class="icon-android icon-2x"></i></a></li>
-				<li><a href="#" title="REST API"><i class="icon-bullseye icon-2x"></i></a></li>			
-				<li><a href="#" title="Ayuda"><i class="icon-question icon-2x"></i></a></li>			
+				<li><a href="${pageContext.request.contextPath}/widget" title="Tu Gadget Web"><i class="icon-cogs icon-2x"></i></a></li>	
+				<li><a href="${pageContext.request.contextPath}/mobile" title="Aplicaci&oacute;n M&oacute;vil"><i class="icon-android icon-2x"></i></a></li>
+				<li><a href="${pageContext.request.contextPath}/api" title="REST API"><i class="icon-bullseye icon-2x"></i></a></li>			
+				<li><a href="${pageContext.request.contextPath}/help" title="Ayuda"><i class="icon-question-sign icon-2x"></i></a></li>			
         	</ul>
         	<!-- /MAIN NAV -->
         	
