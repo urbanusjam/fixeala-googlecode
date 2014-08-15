@@ -1485,8 +1485,7 @@ ul.nav.nav-tabs li:not(.active):hover a {
 /****************************/
 /** feedback **/
 
-div.feedback {
-	
+div.feedback {	
 	position: fixed;	
 	top: 0;
 	right: 0;
@@ -1495,25 +1494,12 @@ div.feedback {
     margin: auto;
     padding: 5px;
 	z-index: 9999;
-/* 	margin-top: -60px;	 */
-
 	padding: 10px 0 0 0;
 	color: #FFF;
-	background: #DC4A38;
-	
-/* 	border-right-width: 2px; */
-/* 	border-bottom-width: 2px; */
-/* 	border-left-width: 2px; */
-/* 	border-top-width: 0;	 */
-/* 	border-style: solid  solid solid ;	 */
-/* 	border-right-color: #000; */
-/* 	border-bottom-color: #000; */
-/* 	border-left-color: #000; */
-	
+	background: #DC4A38;	
 	font-size: 20px;
 	letter-spacing: 1px;
-	text-transform: uppercase;
-	
+	text-transform: uppercase;	
 	  -webkit-transform-origin: 100% 50%;
        -moz-transform-origin: 100% 50%;
         -ms-transform-origin: 100% 50%;
@@ -1523,8 +1509,7 @@ div.feedback {
        -moz-transform: rotate(90deg) translate(50%, 50%);
         -ms-transform: rotate(90deg) translate(50%, 50%);
          -o-transform: rotate(90deg) translate(50%, 50%);
-            transform: rotate(90deg) translate(50%, 50%);
-	
+            transform: rotate(90deg) translate(50%, 50%);	
 }
 
 div.feedback span { margin: 30px;}

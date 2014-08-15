@@ -7,6 +7,7 @@
 <html>
 <head>	
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
 	<title><tiles:insertAttribute name="title" ignore="true" /></title>	
 
   	<script type="text/javascript" src="http://maps.google.com/maps/api/js?libraries=geometry,places&components=country:ar&language=ES&sensor=false"></script>
@@ -895,6 +896,7 @@ path:hover {
        			<div class="controls">
        				<select id="cbxAsuntoFeedback" style="width:265px;">
        					<option value="bug" selected>BUG / FALLA</option>
+       					<option value="idea">IDEA / PROPUESTA</option>     
        					<option value="sugerencia">SUGERENCIA</option>           				
        					<option value="ayuda">AYUDA / DUDA</option>
        					<option value="otro">OTRO</option>

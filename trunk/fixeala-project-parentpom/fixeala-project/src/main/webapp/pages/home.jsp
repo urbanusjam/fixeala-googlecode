@@ -316,65 +316,10 @@
   			 	$(this).addClass("active").siblings().removeClass("active");
   			});
 
-		
-			
-			/*
-			$(window).scroll(function(){				
-				
-				if($(window).scrollTop() == $(document).height() - $(window).height()){
-				        	
-		    		if (currentXHR) {
-		                return;
-		         	}
-				    	
-				    $('div#infinite-scroll-loader').show();				        	
-				        	
-				  	currentXHR = $.ajax({
-				        url: "./loadmore/" + currentPage,
-				        type: 'GET',					            
-				        success: function(data){			
-				        	
-				        	var dataArray = JSON.parse(data);					        							        
-				            if(dataArray.length > 0){	
-				            	
-				            	var html =  [];	
-				            	
-				            	$.each( dataArray, function( i, value ) {
-					        		var item = ""					        		
-					        			+ "<div class='brick'>"
-										+	"<div class='media'>"
-										+ 		"<a class='pull-left thumbnail' href='#'>"
-										+    		"<img class='media-object' src='${pageContext.request.contextPath}/resources/images/nopic64.png'>"
-										+  		"</a>"				
-										+  	"<div class='media-body'>"
-										+    	"<a href='#'><h5 class='media-heading'>" +value.title+ "</h5></a>"		
-										+    "<p style='font-size:11px'>" +value.date+ " en <a href='#'>" +value.city+ ", " +value.province+ "</a><br></p>"
-										+ "</div></div></div><br>";
-								
-					        		html.push(item);
-					        	});
-				            								            		
-				                $("#brickContainer").append(html);
-// 				                $("#brickContainer").append(currentPage + "--------------------------------------------------");								            	
-				            	$('div#infinite-scroll-container').hide();
-				            }						            
-				            else{  
-				            	$('#infinite-scroll-message').html("<center>No hay m&aacute;s resultados para mostrar.</center>");	
-				            	$('div#infinite-scroll-container').hide();
-				            }					            
-				            currentPage++;
-				      	},
-				      	complete: function() {
-		                    currentXHR = null;
-		                }
-			      	});					      
-				}
-			});
-			*/
-			
-			
-			
+  			
 			var flag = 0;
+			
+			
 			/****** BOOTSTRAP WIZARD ******/
 			
 			function enableDisableDraggableMarker(marker, tabIndex){
@@ -909,7 +854,7 @@
 			<li class="active"><a href="#latestIssues" data-toggle="tab"><i class="icon icon-tags icon-small"></i>&Uacute;ltimos publicados</a></li>
 			<li><a href="#hottestIssues" data-toggle="tab"><i class="icon icon-thumbs-up icon-small"></i>M&aacute;s votados</a></li>
 			<li><a href="#topUsers" data-toggle="tab"><i class="icon icon-user icon-small"></i>Ranking usuarios</a></li>
-			<li><a href="#graphs" data-toggle="tab"><i class="icon icon-signal icon-small"></i>Gráficos</a></li>
+			<li><a href="#graphs" data-toggle="tab"><i class="icon icon-bar-chart icon-small"></i>Indicadores</a></li>
 		</ul>							
 														
 		<div class="tab-content">	
