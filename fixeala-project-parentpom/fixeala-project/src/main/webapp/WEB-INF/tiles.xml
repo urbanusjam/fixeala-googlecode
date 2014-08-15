@@ -6,6 +6,7 @@
 <tiles-definitions>
   
   <definition name="base.layout" template="/pages/tiles/layouts/base-layout.jsp">
+  	<put-attribute name="title" value="Fixeala - Tu plataforma colaborativa de reporte ciudadano" />
     <put-attribute name="header" value="/pages/tiles/header.jsp" />
     <put-attribute name="body" value="" />
     <put-attribute name="footer" value="/pages/tiles/footer.jsp" />
@@ -16,7 +17,6 @@
   </definition>
   
   <definition name="home" extends="base.layout">
-  	<put-attribute name="title" value="Fixeala" /> 
   	<put-attribute name="body" value="/pages/home.jsp" />
   </definition>
   
@@ -26,77 +26,63 @@
   </definition>
     
   <definition name="signup" extends="base.layout">
-  	<put-attribute name="title" value="Fixeala - Registro de Nuevo Usuario" /> 
   	<put-attribute name="body" value="/pages/account/signup.jsp" />
   </definition>
     
   <definition name="forgotPassword" extends="base.layout">
-  	<put-attribute name="title" value="Fixeala - Recuperación de Contraseña" /> 
   	<put-attribute name="body" value="/pages/account/forgotPassword.jsp" />
   </definition>
  
   <definition name="resetPassword" extends="base.layout">
-  	<put-attribute name="title" value="Fixeala - Reseteo de Contraseña" /> 
   	<put-attribute name="body" value="/pages/account/resetPassword.jsp" />
   </definition>
   
   <definition name="reclamos" extends="base.layout">
-  	<put-attribute name="title" value="Fixeala - Lista de Reclamos" /> 
   	<put-attribute name="body" value="/pages/reclamos.jsp" />
   </definition>
   
   <definition name="usuarios" extends="base.layout">
-  	<put-attribute name="title" value="Fixeala - Lista de Usuarios" /> 
+<!--   	<put-attribute name="title" value="Fixeala - Lista de Usuarios" />  -->
   	<put-attribute name="body" value="/pages/usuarios.jsp" />
   </definition>
   
   <definition name="issues" extends="base.layout">
-  	<put-attribute name="title" value="Fixeala" /> 
   	<put-attribute name="body" value="/pages/issues.jsp" />
   </definition>
   
   <definition name="users" extends="base.layout">
-  	<put-attribute name="title" value="Fixeala - Cuenta de Usuario" /> 
   	<put-attribute name="body" value="/pages/users.jsp" />
   </definition>
   
   <definition name="dataset" extends="base.layout">
-  	<put-attribute name="title" value="Fixeala" /> 
   	<put-attribute name="body" value="/pages/dataset.jsp" />
   </definition>
   
   <definition name="widget" extends="base.layout">
-  	<put-attribute name="title" value="Fixeala" /> 
   	<put-attribute name="body" value="/pages/widget.jsp" />
   </definition>
   
   <definition name="mobile" extends="base.layout">
-  	<put-attribute name="title" value="Fixeala" /> 
   	<put-attribute name="body" value="/pages/mobile.jsp" />
   </definition>
   
   <definition name="api" extends="base.layout">
-  	<put-attribute name="title" value="Fixeala" /> 
   	<put-attribute name="body" value="/pages/api.jsp" />
   </definition>
   
   <definition name="help" extends="base.layout">
-  	<put-attribute name="title" value="Fixeala" /> 
   	<put-attribute name="body" value="/pages/help.jsp" />
   </definition>
  
   <definition name="closedAccount" extends="base.layout">
-  	<put-attribute name="title" value="Fixeala" /> 
   	<put-attribute name="body" value="/pages/closedAccount.jsp" />
   </definition>
   
   <definition name="error" extends="base.layout">
-  	<put-attribute name="title" value="Fixeala" /> 
   	<put-attribute name="body" value="/pages/error.jsp" />
   </definition>
   
   <definition name="search" extends="base.layout">
-  	<put-attribute name="title" value="Fixeala" /> 
   	<put-attribute name="body" value="/pages/search.jsp" />
   </definition>
   

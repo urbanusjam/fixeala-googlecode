@@ -38,38 +38,67 @@ public class WidgetController {
 		List<IssueDTO> issues = new ArrayList<IssueDTO>();
 		try{
 			issues = issueService.loadIssues(MAX_RESULTS);
-			model.addAttribute("numberOfIssues", issues.size());
-			model.addAttribute("widgetIssues", issues);	
+			model.addAttribute("totalIssues", issues.size());
+			model.addAttribute("widget-body", issues);	
 			return new AlertStatus(true, "OK");
 		} catch(Exception e){
-			model.addAttribute("numberOfIssues", 0);
+			model.addAttribute("totalIssues", 0);
 			return new AlertStatus(false, "Ha ocurrido un error al intentar actualizar la lista de reclamos.");
 		}	
 	}
 	
 	@RequestMapping(value="/widget-web", method = RequestMethod.GET)
 	public String showWidgeComponent(Model model) throws Exception { 			
+		
 		List<IssueDTO> issues = new ArrayList<IssueDTO>();		
+		
+		int totalOpen = 0;
+		int totalReopened = 0;
+		int totalResolved = 0;
+		int totalClosed = 0;
+		int totalComments = 0;
+		
 		try{
+			
 			issues = issueService.loadIssues(MAX_RESULTS);	
 			
 			for(IssueDTO issue : issues){
-				if(issue.getStatus().equals(IssueStatus.OPEN))
-					issue.setStatusCss(IssueStatusColorCode.CSS_OPEN);
-				if(issue.getStatus().equals(IssueStatus.REOPENED))
-					issue.setStatusCss(IssueStatusColorCode.CSS_REOPENED);
-//				if(issue.getStatus().equals(IssueStatus.ACKNOWLEDGED))
-//					issue.setStatusCss(IssueStatusColorCode.CSS_ACKNOWLEDGED);
-				if(issue.getStatus().equals(IssueStatus.IN_PROGRESS))
-					issue.setStatusCss(IssueStatusColorCode.CSS_IN_PROGRESS);
-				if(issue.getStatus().equals(IssueStatus.SOLVED))
-					issue.setStatusCss(IssueStatusColorCode.CSS_SOLVED);
-				if(issue.getStatus().equals(IssueStatus.CLOSED))
-					issue.setStatusCss(IssueStatusColorCode.CSS_CLOSED);
-			}
 				
+				if(issue.getStatus().equals(IssueStatus.OPEN)){
+					issue.setStatusCss(IssueStatusColorCode.CSS_OPEN);
+					totalOpen++;
+				}
+									
+				if(issue.getStatus().equals(IssueStatus.REOPENED)){
+					issue.setStatusCss(IssueStatusColorCode.CSS_REOPENED);
+					totalReopened++;					
+				}
+
+				if(issue.getStatus().equals(IssueStatus.IN_PROGRESS)){
+					issue.setStatusCss(IssueStatusColorCode.CSS_IN_PROGRESS);
+				}
+									
+				if(issue.getStatus().equals(IssueStatus.SOLVED)){
+					issue.setStatusCss(IssueStatusColorCode.CSS_SOLVED);
+					totalResolved++;
+				}					
+				
+				if(issue.getStatus().equals(IssueStatus.CLOSED)){
+					issue.setStatusCss(IssueStatusColorCode.CSS_CLOSED);
+					totalClosed++;
+				}
+				
+				totalComments += issue.getComentarios().size();
+					
+			}
+							
+			model.addAttribute("totalIssues", issues.size());	
+			model.addAttribute("totalOpen", totalOpen);	
+			model.addAttribute("totalReopened", totalReopened);	
+			model.addAttribute("totalResolved", totalResolved);	
+			model.addAttribute("totalClosed", totalClosed);	
+			model.addAttribute("totalComments", totalComments);	
 			
-			model.addAttribute("numberOfIssues", issues.size());			
 			if(issues.size() > 0)			
 				model.addAttribute("issueList", issues);			
 			else

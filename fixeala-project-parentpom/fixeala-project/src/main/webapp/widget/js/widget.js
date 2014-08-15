@@ -1,5 +1,5 @@
-var loader = '<div class="widgetLoader"><img src="http://localhost:8080/fixeala/widget/images/loader.gif"/></span>';	
-var $widgetBody =  $('.widgetIssues');
+var loader = '<div class="widget-loader"><img src="http://localhost:8080/fixeala/widget/images/loader.gif"/></span>';	
+var $widgetBody =  $('.widget-body');
 
 function redirectIssueURL(issueID, issueTitle){
 	var protocol = window.location.protocol;
@@ -21,21 +21,21 @@ function refreshWidget(){
 		    url: "./refreshWidget.html",
 	 		type: "GET",		 		
 	 		dataType: "json",									 
-	        success: function(data){	        	
-	        	        	
+	        success: function(data){	    
+	        		
 	          	$widgetBody.replaceWith(loader);
-	        	
+	        
 	        	if(data.result){
-	        		$widgetBody.load(location.href + " .widgetIssues > * ");	
+	        		$widgetBody.load(location.href + " .widget-body > * ");	
 	 				setTimeout(function(){	 				
-	 					$('.widgetLoader').replaceWith($widgetBody);					 					 						      
+	 					$('.widget-loader').replaceWith($widgetBody);					 					 						      
 	 				}, 1000);
 	        	}	        	
 	        	else{
 	        		setTimeout(function(){		
-	        			$('.widgetLoader').hide();
-	        			$(".widgetError").text(data.message);
-	 					$(".widgetError").show();	 					
+	        			$('.widget-loader').hide();
+	        			$(".widget-error").text(data.message);
+	 					$(".widget-error").show();	 					
 	 				}, 1000);
 	        	}
 	        	
@@ -49,9 +49,9 @@ function refreshWidget(){
 				$widgetBody.replaceWith(loader);
 				
 				setTimeout(function(){	 	
-					$(".widgetError").text("Ha ocurrido un error al intentar cargar los reclamos. Intente de nuevo.");
-					$('.widgetLoader').hide();	
-					$(".widgetError").show();	
+					$(".widget-error").text("Ha ocurrido un error al intentar cargar los reclamos. Intente de nuevo.");
+					$('.widget-loader').hide();	
+					$(".widget-error").show();	
 				}, 1000);
 				
 	        } // error
