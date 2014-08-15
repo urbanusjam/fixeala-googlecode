@@ -898,10 +898,11 @@ public class HomeController {
 	}	
 	
 	@RequestMapping(value = "/sendFeedback", method = RequestMethod.POST)
-	public @ResponseBody boolean doSendFeedback(@RequestParam("asunto") String asunto, @RequestParam("mensaje") String mensaje)
+	public @ResponseBody boolean doSendFeedback(@RequestParam("asunto") String asunto, 
+			@RequestParam("mensaje") String mensaje, @RequestParam("email") String email)
 			throws Exception {
 		try {
-			mailService.sendFeedbackEmail(asunto, mensaje);
+			mailService.sendFeedbackEmail(asunto, mensaje, email);
 			return true;
 
 		} catch (Exception e) {

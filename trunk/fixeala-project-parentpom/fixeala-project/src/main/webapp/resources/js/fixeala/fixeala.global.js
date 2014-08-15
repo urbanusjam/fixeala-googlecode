@@ -49,6 +49,7 @@ var fxlGlobalController = {
 	
 	sendFeedback : function() {
 		var asunto = $("#cbxAsuntoFeedback").find('option:selected').text();
+		var email = $("#emailFeedback").val(); 
 		var mensaje = $("#msgFeedback").val(); 
 		
 		$("#mdl-feedback").modal('hide');
@@ -56,12 +57,9 @@ var fxlGlobalController = {
 		$.ajax({
 			type: "POST",
 		    url: getDomainUrl() + "sendFeedback",
-	 		data: "asunto=" + asunto + "&mensaje=" + mensaje,		 		
+	 		data: "asunto=" + asunto + "&mensaje=" + mensaje + "&email=" + email,		 		
 	 		beforeSend: function(){
-	 			setTimeout(function(){
-	 				blockPage("html");	 	
-	 			}, 500);
-	 				
+	 			blockPage("html");	 		
 	 		},
 	        success: function(result){		
 	        	 

@@ -1,6 +1,10 @@
 package ar.com.urbanusjam.services.impl;
 
+import java.util.Properties;
+
 import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.mail.MailException;
@@ -36,7 +40,7 @@ public class MailServiceImpl implements MailService {
 		  helper.setFrom(from);
 	      //helper.setTo(email);
 		  helper.setTo(to);
-		  helper.setSubject("Fixeala - Activaci�n de cuenta");
+		  helper.setSubject("Fixeala - Activacion de cuenta");
 		
 	      String link = "<a target='_blank' href='http://localhost:8080/fixeala/account/activation/" + token + ".html' > link </a>";
 	    
@@ -230,22 +234,20 @@ public class MailServiceImpl implements MailService {
 	}
 	
 	@Override
-	public void sendFeedbackEmail(String tipoFeedback, String mensajeFeedback) throws MessagingException, MailException {
+	public void sendFeedbackEmail(String subject, String body, String sender) throws MessagingException, MailException {
 		
 		  MimeMessage message = this.mailSender.createMimeMessage();
 		  MimeMessageHelper helper = new MimeMessageHelper(message, true);
-		  
-		  helper.setFrom("random@gmail.com");
+
+//		  helper.setFrom(new InternetAddress("feedback.fixeala@gmail.com"));
 	      helper.setTo("fixeala@gmail.com");
-		  helper.setSubject("Feedback - " + tipoFeedback);
+		  helper.setSubject("Feedback - " + subject);
 			
-	      String text = "Nuevo feedback recibido.";      
+	      String text = "<b>Asunto: </b>" + subject;
 	      text += "<br><br>";
-	      text += "ASUNTO:";
+	      text += "<b>Email: </b>" + sender;
 	      text += "<br><br>";
-	      text += tipoFeedback;
-	      text += "<br><br>";
-	      text += mensajeFeedback;	   
+	      text += "<b>Mensaje: </b>" + body;	   
 	      
 	      helper.setText(text, true);
 	      mailSender.send(message);

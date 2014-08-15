@@ -192,8 +192,7 @@ path:hover {
 										textAlign : 'center',
 										color : '#000',
 										border : '0px solid #aaa',
-										cursor : 'wait',
-										'z-index': '99999'
+										cursor : 'wait'
 									}
 								});
 			}
@@ -203,6 +202,10 @@ path:hover {
 			}
         
 		$(document).ready(function(){
+			
+			/** feedback **/
+			
+		
 			
 			$("#feedbackLink").click(function(){				
 				$('#cbxAsuntoFeedback option:first-child').attr("selected", "selected");
@@ -214,10 +217,20 @@ path:hover {
 				fxlGlobalController.sendFeedback();
 			});
 			
-				 window.localStorage.clear();
+			$('#msgFeedback').keyup(function(){
+			      if($(this).val().length > 0){
+			         $('#btnSendFeedback').prop('disabled',false);
+			      }else{
+			         $('#btnSendFeedback').prop('disabled',true);
+			      }
+			 });
+			
+			/** end feedback **/
+			
+			window.localStorage.clear();
 			 
-				var issueNames;
-				var issueObjs;
+			var issueNames;
+			var issueObjs;
 			
 			 
 			 $('#search').typeahead({
@@ -878,26 +891,32 @@ path:hover {
 		<div class="modal-body">
 		
 			<div class="control-group">  			
-        			<label class="control-label">Asunto</label>
-        			<div class="controls">
-           				<select id="cbxAsuntoFeedback">
-           					<option value="bug" selected>BUG / FALLA</option>
-           					<option value="sugerencia">SUGERENCIA</option>           				
-           					<option value="ayuda">AYUDA / DUDA</option>
-           					<option value="otro">OTRO</option>
-           				</select>		
-        			</div>
-    			</div>    			
-			    <div class="control-group">
-			        <label class="control-label" for="observacion">Mensaje</label>
-			        <div class="controls">
-			        	<textarea id="msgFeedback" name="msgFeedback" class="form-control" style="width:520px; height: 100px; padding-right: 5px;" required></textarea>
-			        </div>
-			    </div>
+       			<label class="control-label">Asunto</label>
+       			<div class="controls">
+       				<select id="cbxAsuntoFeedback" style="width:265px;">
+       					<option value="bug" selected>BUG / FALLA</option>
+       					<option value="sugerencia">SUGERENCIA</option>           				
+       					<option value="ayuda">AYUDA / DUDA</option>
+       					<option value="otro">OTRO</option>
+       				</select>		
+       			</div>
+   			</div>   
+   			<div class="control-group">
+		        <label class="control-label" for="emailFeedback">Tu email (opcional)</label>
+		        <div class="controls">
+		        	<input type="email" id="emailFeedback" name="emailFeedback" class="form-control" style="width:250px;" />
+		        </div>
+		    </div> 			
+		    <div class="control-group">
+		        <label class="control-label" for="msgFeedback">Mensaje</label>
+		        <div class="controls">
+		        	<textarea id="msgFeedback" name="msgFeedback" class="form-control" style="width:520px; height: 100px; padding-right: 5px;" required ></textarea>
+		        </div>
+		    </div>
 		
 		</div>
 		<div class="modal-footer"> 		
-			<button id="btnSendFeedback" class="btn btn-info"aria-hidden="true">
+			<button id="btnSendFeedback" class="btn btn-info" aria-hidden="true" disabled>
 		    	<i class="icon-ok icon-large"></i>&nbsp;&nbsp;&nbsp;Enviar
 		    </button>		 		  		
 	  		<button class="btn" data-dismiss="modal" aria-hidden="true">
