@@ -1373,7 +1373,7 @@ a.no-hover { text-decoration: none; color: #000;}
 #sorts, #sorts-users { margin: 5px 0 10px 0;  }
 
 /** alineacion centrada de tres divs **/
-.inline-container { width:100%; text-align:center; }
+.inline-container { text-align:center; display: inline;}
 .left { float: left; }
 .right { float: right; }
 .center { margin: 0 auto; display: inline-block; }

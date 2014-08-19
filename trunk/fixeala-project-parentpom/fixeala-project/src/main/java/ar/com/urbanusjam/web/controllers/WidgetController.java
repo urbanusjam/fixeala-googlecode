@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import ar.com.urbanusjam.services.IssueService;
+import ar.com.urbanusjam.services.UserService;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.utils.IssueStatus;
 import ar.com.urbanusjam.services.utils.IssueStatusColorCode;
@@ -23,6 +24,9 @@ public class WidgetController {
 	
 	@Autowired
 	private IssueService issueService;
+	
+	@Autowired
+	private UserService userService;
 	
 	private final static int MAX_RESULTS = 4;
 	
@@ -57,10 +61,12 @@ public class WidgetController {
 		int totalResolved = 0;
 		int totalClosed = 0;
 		int totalComments = 0;
+		int totalUsers = 0;
 		
 		try{
 			
 			issues = issueService.loadIssues(MAX_RESULTS);	
+			totalUsers = userService.loadAllActiveUsers().size();
 			
 			for(IssueDTO issue : issues){
 				
@@ -98,13 +104,15 @@ public class WidgetController {
 			model.addAttribute("totalResolved", totalResolved);	
 			model.addAttribute("totalClosed", totalClosed);	
 			model.addAttribute("totalComments", totalComments);	
+			model.addAttribute("totalUsers", totalUsers);	
 			
 			if(issues.size() > 0)			
 				model.addAttribute("issueList", issues);			
 			else
-				model.addAttribute("errorMessage", "No es encontraron resultados.");			
+				model.addAttribute("errorMessage", "No es encontraron resultados.");		
+			
 		} catch(Exception e){
-			model.addAttribute("errorMessage", "No se puedo establecer la conexión con el servidor.");
+			model.addAttribute("errorMessage", "No se pudo establecer la conexión con el servidor.");
 		}		
 		return "widget-web";	 
 	}

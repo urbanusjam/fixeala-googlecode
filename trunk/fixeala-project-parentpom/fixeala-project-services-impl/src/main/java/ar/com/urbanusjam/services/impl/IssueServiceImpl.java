@@ -885,6 +885,7 @@ public class IssueServiceImpl implements IssueService {
 		issueDTO.setFechaFormateadaCompleta(issue.getCreationDate().getTime());		
 		issueDTO.setTotalVotes(this.countIssueVotes(String.valueOf(issue.getId()))); // llamada al DAO
 		issueDTO.setTotalFollowers(issue.getFollowers().size());
+		issueDTO.setTotalComments(issue.getComentarios().size());
 		
 		//tags		
 		/**

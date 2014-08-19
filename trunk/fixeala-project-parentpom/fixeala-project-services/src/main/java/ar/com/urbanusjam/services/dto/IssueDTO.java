@@ -66,9 +66,13 @@ public class IssueDTO implements Serializable {
 	
 	@XmlTransient
 	private List<IssueVoteDTO> votes = new ArrayList<IssueVoteDTO>();
+	
+	
+	
 	public  Long totalVotes;
 	public  int totalFollowers;
 	public  int totalViews;
+	public  int totalComments;
 	public  String status;
 	public  String statusCss;	
 	public  String resolution;
@@ -244,6 +248,14 @@ public class IssueDTO implements Serializable {
 
 	public void setTotalViews(int totalViews) {
 		this.totalViews = totalViews;
+	}
+
+	public int getTotalComments() {
+		return totalComments;
+	}
+
+	public void setTotalComments(int totalComments) {
+		this.totalComments = totalComments;
 	}
 
 	public List<MediaContentDTO> getContenidos() {
