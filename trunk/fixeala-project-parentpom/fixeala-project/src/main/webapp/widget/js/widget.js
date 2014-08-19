@@ -22,11 +22,11 @@ function refreshWidget(){
 	 		type: "GET",		 		
 	 		dataType: "json",									 
 	        success: function(data){	    
-	        		
-	          	$widgetBody.replaceWith(loader);
 	        
+	          	$widgetBody.replaceWith(loader);
+	       
 	        	if(data.result){
-	        		$widgetBody.load(location.href + " .widget-body > * ");	
+	        		$('.widget-body').load(location.href + " .widget-body > * ");	
 	 				setTimeout(function(){	 				
 	 					$('.widget-loader').replaceWith($widgetBody);					 					 						      
 	 				}, 1000);

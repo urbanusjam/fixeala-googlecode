@@ -189,7 +189,12 @@ public class IssueDAOImpl implements IssueDAO {
 			
 			TypedQuery<Issue> query = entityManager.createQuery(criteriaQuery);		
 			
-			return query.getResultList();
+			int LIMIT = issueSearch.getMaxResults();
+			
+			if(LIMIT == 0)
+				return query.getResultList();
+			else
+				return query.setMaxResults(LIMIT).getResultList();
 			
 		}catch(Exception e){
 			Log.error(e.getMessage());
