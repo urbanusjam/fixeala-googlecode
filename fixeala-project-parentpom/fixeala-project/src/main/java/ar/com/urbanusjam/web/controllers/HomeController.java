@@ -826,7 +826,7 @@ public class HomeController {
 							commentsCounter++;
 				}
 													
-				model.addAttribute("registrationDate", DateUtils.getFechaFormateada(user.getRegistrationDate(), DateUtils.DATE_TIME_PATTERN_SHORT));
+				model.addAttribute("registrationDate", DateUtils.getFechaFormateada(user.getRegistrationDate(), DateUtils.DATE_PATTERN_LONG));
 				model.addAttribute("total_issues", userIssues.size());
 				model.addAttribute("total_solved", solvedIssues);
 				model.addAttribute("total_voted", "0");

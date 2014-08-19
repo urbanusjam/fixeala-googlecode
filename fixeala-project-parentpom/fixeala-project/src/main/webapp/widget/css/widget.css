@@ -11,12 +11,11 @@
 	border: 0px solid red;
 }
 
-.widget-tabs { }
-
 .widget-body {	
 	border-right: 1px solid #CCC;
 	border-left: 1px solid #CCC;	
 	background: none;
+	height: 444px;
 }
 
 .widget-row {
@@ -127,10 +126,12 @@
 
 
 .widget-error { 	
-	padding: 10px; 
-	width:auto;
-	height: 70px; 
-	font-size: 13px;
+	font-size: 16px;
+	width: 250px;
+	padding: 20px;
+	margin: 0 auto;
+	margin-top: 100px;
+	text-align: center;
 }
 
 .widget-loader {
@@ -142,167 +143,58 @@
 	border-left: 1px solid #ccc;
 }
 
-/****************************************/
+/** alineacion centrada de tres divs **/
+.inline-container { width:auto; text-align:center; color: grey; font-size: 10px; margin-left: 10px; }
+.inline-container span { margin-right:10px; }
+.inline-container  i { margin-right: 3px; }
 
-.widgetContainer {
-	border: 0px solid #000; 
-	backgorund-color: #40C0ED; 
-	line-height: 25px;
-	margin: 0 auto;
-}
-.widgetHeader {	
-	height: 25px; 
-	background-color: #527CAC;
-	padding: 5px 10px 5px 10px; 
-	font-weight: bold;
-	font-size: 12px;
-	color: #fff;
-	text-transform: uppercase;
-	border-top: 1px solid #527CAC;
-	border-right: 1px solid #527CAC;
-	border-left: 1px solid #527CAC;
+.widget-stats { height: 444px; }
+
+.widget-stats .top-stat {
+	width: 300px; 
+	border-bottom: 1px dashed #CCC; 
+	margin: 20px 0 10px 0;
 }
 
-.widgetHeader a { 
-	color: #fff; 
-	text-decoration: none; 
+.widget-stats .top-stat small { 
+	display:block; 
 }
 
-.widgetHeader a img {
-	border: 1px solid #fff;
-	float: right;
-	background: #fff;
-}
-
-.widgetHeader a:hover{
-	color: #fff;
-	text-decoration: none;
-}
-
-.widgetBody {
-	border-right: 1px solid #ccc;
-	border-left: 1px solid #ccc;
-/* 	border-top: 1px solid #ccc; */
-}
-
-.widgetIssues {
-	height: auto;	
-}
-
-.widgetError { 	
+.widget-stats .middle-stat {
+	width: 95px; 
+	height: auto; 
+	display: inline-block; 
 	padding: 10px; 
-	width:auto;
-	height: 70px; 
-	font-size: 13px;
+	margin-bottom: 10px;
+	text-align: right; 
 }
 
-.widgetLoader {
-	background: #F1F1F1; 
-	height: 70px; 
-	line-height: 70px;
-	text-align: center;
-	border-right: 1px solid #ccc;
-	border-left: 1px solid #ccc;
+.widget-stats .middle-stat span {
+	display: block; 
+	text-transform: uppercase; 
 }
 
-.widgetRow {
-/* 	min-height: 70px;  */
-/* 	max-height: 100px; */
-	border-bottom: 1px dashed #ccc;	
-	padding: 15px; 
-	width: 100%;
-	
+.widget-stats .bottom-stat {
+	width: 300px; 
+	margin: 10px 0 20px 0;
+	border-top: 1px dashed #CCC; 
 }
 
-.widgetRow a { 
-	
-	color: #0C86AF; 
-	text-decoration: none;
+.widget-stats .bottom-stat span { 
+	width: 150px; 
+	display: inline; 
 }
 
-.widgetRow a:hover { 
-	text-decoration: underline; 
-}
-
-.widgetRow:last-child { 
-	border-bottom: none; 
-}
-
-.widgetRow:hover { 
-	background-color: #F1F1F1; 
-}
-
-.widgetRowTitle {	
-	font-size: 15px;
-	font-weight: bold;
-/* 	padding-bottom: 5px; */
-/* 	display: block;  */
-	-o-text-overflow: ellipsis;   /* Opera */
-    text-overflow:    ellipsis;   /* IE, Safari (WebKit) */
-    overflow:hidden;              /* don't show excess chars */
-    white-space:nowrap;           /* force single line */
-}
-
-.widgetRowLocation {
-	font-size: 10px;
-	text-transform:uppercase;
+.widget-stats .bottom-stat  small { 
 	display: block; 
 }
-.widgetRowDate {
-	font-size: 10px; 
-	color: grey;
-/* 	display: block;  */
-/* 	height: 25px; */
-	display: inline; 
-	
+
+.widget-stats .bottom-stat .left {
+	float: left;
 }
 
-.widgetRowStatus {
-	width: 100px;
-	font-size: 11px; 	
-	font-weight: bold;
-	text-align: center;
-	display: inline-block; 
-	height: 20px;
-	line-height: 20px;
-	color: #fff;
+.widget-stats .bottom-stat .right {
 	float: right;
-	
-	border-radius: 3px;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-}
-
-.row { border: 1px solid #000; height: 20px; line-height: 20px; display: block; width: 450px;}
-.widgetFooter { 
-	height: 15px; 
-	background-color: #0C86AF;
-	line-height: 15px;
-	padding: 5px 10px 5px 10px; 
-	color: #fff;
-	border-right: 1px solid #527CAC;
-	border-left: 1px solid #527CAC;
-	border-bottom: 1px solid #527CAC;
-}
-
-.widgetLogo { 
-	font-size: 11px;
-	text-align: center;
-}
-
-.widgetLogo a {
-	color: #fff;
-	text-decoration: none; 
-}
-
-.widgetLogo a:hover {
-	color: #40C0ED;
-	text-decoration: none;
-}
-
-.widgetRefresh  i[class^="icon-"] {  
-	vertical-align: top; 
-	border: 0px solid red; 
 }
 
 

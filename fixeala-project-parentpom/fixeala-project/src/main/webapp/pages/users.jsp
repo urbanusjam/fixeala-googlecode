@@ -166,7 +166,7 @@
 									<img src="${pageContext.request.contextPath}/resources/images/nopic.png" />
 								</span>										
 								<div class="thumbnail" style="text-align:center; width:200px;">
-              						<small style="text-align:center">Registrado el ${registrationDate}</small>		
+              						<small style="text-align:center">Miembro desde ${registrationDate}</small>		
     							</div>	    																
 <!-- 								<div class="thumbnail" style="text-align:center; width:200px;">	              						 -->
 <!--               						<small style="text-align:center">33 visitas</small>	 -->
