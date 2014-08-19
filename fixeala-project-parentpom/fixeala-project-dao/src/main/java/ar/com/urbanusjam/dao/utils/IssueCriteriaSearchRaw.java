@@ -19,6 +19,7 @@ public class IssueCriteriaSearchRaw implements Serializable {
 	private String sortField;
 	private String sortDirection;
 	private String formatoArchivo;
+	private int maxResults;
 	
 	public String getProvincia() {
 		return provincia;
@@ -83,6 +84,12 @@ public class IssueCriteriaSearchRaw implements Serializable {
 	}
 	public void setFormatoArchivo(String formatoArchivo) {
 		this.formatoArchivo = formatoArchivo;
+	}
+	public int getMaxResults() {
+		return maxResults;
+	}
+	public void setMaxResults(int maxResults) {
+		this.maxResults = maxResults;
 	}
 	
 	

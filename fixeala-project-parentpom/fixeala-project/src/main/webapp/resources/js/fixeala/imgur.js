@@ -31,7 +31,8 @@ $(function() {
             url: 'https://api.imgur.com/3/image',
             method: 'POST',
             headers: {
-              Authorization: 'Bearer ' + '63dd097afcc618396f50690d5b331a4bca28b9c6',
+//              Authorization: 'Bearer ' + '63dd097afcc618396f50690d5b331a4bca28b9c6',
+            	   Authorization: 'Client-ID ' + clientId,
               Accept: 'application/json'
             },
             data: {
@@ -40,7 +41,8 @@ $(function() {
             },
             success: function(result) {
               var id = result.data.id;
-              window.location = 'https://imgur.com/gallery/' + id;
+              console.log(result);
+//              window.location = 'https://imgur.com/gallery/' + id;
             }
           });
         }

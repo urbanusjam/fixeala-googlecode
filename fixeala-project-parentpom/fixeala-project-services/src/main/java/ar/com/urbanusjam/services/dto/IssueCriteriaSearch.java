@@ -18,6 +18,7 @@ public class IssueCriteriaSearch implements Serializable {
 	private String maxFecha;	
 	private String orden;
 	private String formatoArchivo;
+	private int cantResultados;
 	
 	public IssueCriteriaSearch(){
 		this.tags = "";
@@ -95,5 +96,17 @@ public class IssueCriteriaSearch implements Serializable {
 	public void setFormatoArchivo(String formatoArchivo) {
 		this.formatoArchivo = formatoArchivo;
 	}
+
+
+	public int getCantResultados() {
+		return cantResultados;
+	}
+
+
+	public void setCantResultados(int cantResultados) {
+		this.cantResultados = cantResultados;
+	}
+	
+	
 	
 }

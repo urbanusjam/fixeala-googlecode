@@ -112,7 +112,7 @@ public class DatasetController extends MainController {
 	@RequestMapping(value="/export", method = RequestMethod.GET)
 	public @ResponseBody void exportCustomDataset(@ModelAttribute("datasetForm") IssueCriteriaSearch search, 
 			HttpServletRequest request, HttpServletResponse response) throws IOException, JRException { 
-	
+		
 		List<IssueDTO> issues = new ArrayList<IssueDTO>();	
 		
 		try{			

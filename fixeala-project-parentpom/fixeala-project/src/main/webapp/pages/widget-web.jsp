@@ -14,7 +14,7 @@
 
 	<div class="widget-container">
 	
-		<ul class="nav nav-tabs">
+		<ul id="widget-tabs" class="nav nav-tabs">
 			<li class="active"><a href="#recent" data-toggle="tab">Recientes</a></li>
 			<li><a href="#stats" data-toggle="tab">Indicadores</a></li>		
 		</ul>	
@@ -73,30 +73,37 @@
 									</h1>
 								</div>
 							</center>
-							<div class="middle-stat border">
+							
+							<div class="middle-body">
+							
+							<div class="middle-stat left">
 								<h1>${totalOpen}</h1>
 								<span>Abiertos</span>
 							</div>
-							<div class="middle-stat border">
+							<div class="middle-stat right">
 								<h1>${totalReopened}</h1>
-								<span style="text-transform: uppercase; display: block">Reabiertos</span>
+								<span>Reabiertos</span>
 							</div>
-							<div class="middle-stat border">
+							<div class="middle-stat left">
 								<h1>${totalResolved}</h1>
 								<span>Resueltos</span>
 							</div>
-							<div class="middle-stat ">
+							<div class="middle-stat right">
 								<h1>${totalClosed}</h1>
-								<span style="text-transform: uppercase; display: block">Cerrados</span>
+								<span>Cerrados</span>
 							</div>
+							
+							
+							</div>
+							
 							<center>
 								<div class="bottom-stat">
-									<span class="left">
-										<h2> ${totalComments}
-											<small><i class="icon icon-comments"></i>&nbsp; comentarios</small>
-										</h2>
-									</span>
-									<span class="right">
+<!-- 									<span class="left"> -->
+<%-- 										<h2> ${totalComments} --%>
+<!-- 											<small><i class="icon icon-comments"></i>&nbsp; comentarios</small> -->
+<!-- 										</h2> -->
+<!-- 									</span> -->
+									<span>
 										<h2> ${totalUsers}
 											<small><i class="icon icon-user"></i>&nbsp; usuarios</small>
 										</h2>

@@ -1,14 +1,18 @@
 package ar.com.urbanusjam.web.controllers;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import ar.com.urbanusjam.services.IssueService;
@@ -39,36 +43,48 @@ public class WidgetController {
 	
 	@RequestMapping(value="/refreshWidget", method = RequestMethod.GET)
 	public @ResponseBody AlertStatus refreshWidget(Model model) throws JSONException { 			
-		List<IssueDTO> issues = new ArrayList<IssueDTO>();
+	
 		try{
-			issues = issueService.loadIssues(MAX_RESULTS);
-			model.addAttribute("totalIssues", issues.size());
-			model.addAttribute("widget-body", issues);	
+			model = loadWidgetModel(model);		
 			return new AlertStatus(true, "OK");
-		} catch(Exception e){
-			model.addAttribute("totalIssues", 0);
+		} catch(Exception e){			
 			return new AlertStatus(false, "Ha ocurrido un error al intentar actualizar la lista de reclamos.");
 		}	
 	}
 	
 	@RequestMapping(value="/widget-web", method = RequestMethod.GET)
-	public String showWidgeComponent(Model model) throws Exception { 			
+	public String showWidgetComponent(Model model) throws Exception { 
+		model = loadWidgetModel(model);		
+		return "widget-web";	 
+	}
+	
+	@RequestMapping(value="/widget-web?province={province}&city={city}", method = RequestMethod.GET)
+	public String showWidgetComponent(Model model, @PathVariable ("province") String province, 
+			@PathVariable ("city") String city) throws Exception { 			
+		
+		model = loadWidgetModel(model);		
+		return "widget-web";	 
+	}
+	
+	
+	private Model loadWidgetModel(Model model){
 		
 		List<IssueDTO> issues = new ArrayList<IssueDTO>();		
+		List<IssueDTO> totalIssues = new ArrayList<IssueDTO>();
 		
 		int totalOpen = 0;
 		int totalReopened = 0;
 		int totalResolved = 0;
-		int totalClosed = 0;
-		int totalComments = 0;
+		int totalClosed = 0;	
 		int totalUsers = 0;
 		
 		try{
 			
-			issues = issueService.loadIssues(MAX_RESULTS);	
+			issues = issueService.loadIssues(MAX_RESULTS);				
+			totalIssues = issueService.loadAllIssues();
 			totalUsers = userService.loadAllActiveUsers().size();
-			
-			for(IssueDTO issue : issues){
+
+			for(IssueDTO issue : totalIssues){
 				
 				if(issue.getStatus().equals(IssueStatus.OPEN)){
 					issue.setStatusCss(IssueStatusColorCode.CSS_OPEN);
@@ -94,8 +110,6 @@ public class WidgetController {
 					totalClosed++;
 				}
 				
-				totalComments += issue.getComentarios().size();
-					
 			}
 							
 			model.addAttribute("totalIssues", issues.size());	
@@ -103,20 +117,20 @@ public class WidgetController {
 			model.addAttribute("totalReopened", totalReopened);	
 			model.addAttribute("totalResolved", totalResolved);	
 			model.addAttribute("totalClosed", totalClosed);	
-			model.addAttribute("totalComments", totalComments);	
 			model.addAttribute("totalUsers", totalUsers);	
 			
-			if(issues.size() > 0)			
-				model.addAttribute("issueList", issues);			
+			if(issues.size() > 0)			{
+				model.addAttribute("issueList", issues);	
+				}
 			else
 				model.addAttribute("errorMessage", "No es encontraron resultados.");		
 			
 		} catch(Exception e){
 			model.addAttribute("errorMessage", "No se pudo establecer la conexión con el servidor.");
-		}		
-		return "widget-web";	 
+		}	
+		
+		return model;
+		
 	}
-	
-	
 
 }
