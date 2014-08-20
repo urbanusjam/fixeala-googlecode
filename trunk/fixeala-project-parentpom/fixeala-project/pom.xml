@@ -80,6 +80,13 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
 		</dependency>
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.1</version>
+		</dependency>
+		
+				
 		
 		<!-- JAXB -->
 		<dependency>
@@ -157,8 +164,8 @@
 			<groupId>org.apache.tiles</groupId>
 			<artifactId>tiles-template</artifactId>
 			<version>2.2.2</version>
-		</dependency>
-		
+		</dependency>		
+						
 		<!-- Simple CAPTCHA -->
 		<dependency>
 			<groupId>nl.captcha</groupId>
@@ -167,4 +174,6 @@
 		</dependency>
 	
 	</dependencies>
+	
+	
 </project>
