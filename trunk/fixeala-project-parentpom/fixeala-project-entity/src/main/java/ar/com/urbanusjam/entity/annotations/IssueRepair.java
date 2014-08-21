@@ -39,14 +39,11 @@ public class IssueRepair implements Serializable {
 //	@JoinColumn(name = "ID_ISSUE")
 //	private Issue issue;
 	
-	@Column(name = "tipo")
-	private String tipo;
-	
-	@Column(name = "descripcion")
-	private String objeto;
-	
-	@Column(name = "valor_pliego")
-	private Float valorPliego;
+	@Column(name = "obra")
+	private String obra;
+
+	@Column(name = "plazo")
+	private int plazo;
 	
 	@Column(name = "unidad_ejecutora")
 	private String unidadEjecutora;
@@ -54,26 +51,23 @@ public class IssueRepair implements Serializable {
 	@Column(name = "unidad_financiamiento")
 	private String unidadFinanciamiento;
 	
-	@Column(name = "empresa_contratada_nombre")
-	private String empresaConstructoraNombre;
+	@Column(name = "contratista_nombre")
+	private String contratistaNombre;
 	
-	@Column(name = "empresa_contratada_cuit")
-	private Integer empresaConstructoraCuit;
+	@Column(name = "contratista_cuit")
+	private String contratistaCuit;
 	
 	@Column(name = "representante_tecnico_nombre")
 	private String representanteTecnicoNombre;
 	
-	@Column(name = "representante_tecnico_dni")
-	private Integer representanteTecnicoDni;
-	
-	@Column(name = "plazo_ejecucion_en_dias")
-	private int plazoEjecucionEnDias;
-	
-	@Column(name = "presupuesto_adjudicado")
-	private Float presupuestoAdjudicado;
+	@Column(name = "representante_tecnico_matricula")
+	private String representanteTecnicoMatricula;
+		
+	@Column(name = "presupuesto_adjudicacion")
+	private double presupuestoAdjudicacion;
 	
 	@Column(name = "presupuesto_final")
-	private Float presupuestoFinal;
+	private double presupuestoFinal;
 		
 	@Column(name = "fecha_estimada_inicio")
 	private Date fechaEstimadaInicio;	
@@ -90,10 +84,13 @@ public class IssueRepair implements Serializable {
 	@Column(name = "estado_obra")
 	private String estadoObra;
 	
+	@Column(name = "observaciones")
+	private String observaciones;
+	
   	   	
 	public IssueRepair(){}
-	
-	
+
+
 	public Long getId() {
 		return id;
 	}
@@ -118,36 +115,20 @@ public class IssueRepair implements Serializable {
 		this.nroExpediente = nroExpediente;
 	}
 
-//	public Issue getIssue() {
-//		return issue;
-//	}
-//	
-//	public void setIssue(Issue issue) {
-//		this.issue = issue;
-//	}
-
-	public String getTipo() {
-		return tipo;
+	public String getObra() {
+		return obra;
 	}
 
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
+	public void setObra(String obra) {
+		this.obra = obra;
 	}
 
-	public String getObjeto() {
-		return objeto;
+	public int getPlazo() {
+		return plazo;
 	}
 
-	public void setObjeto(String objeto) {
-		this.objeto = objeto;
-	}
-
-	public Float getValorPliego() {
-		return valorPliego;
-	}
-
-	public void setValorPliego(Float valorPliego) {
-		this.valorPliego = valorPliego;
+	public void setPlazo(int plazo) {
+		this.plazo = plazo;
 	}
 
 	public String getUnidadEjecutora() {
@@ -166,22 +147,22 @@ public class IssueRepair implements Serializable {
 		this.unidadFinanciamiento = unidadFinanciamiento;
 	}
 
-	public String getEmpresaConstructoraNombre() {
-		return empresaConstructoraNombre;
+	public String getContratistaNombre() {
+		return contratistaNombre;
 	}
 
-	public void setEmpresaConstructoraNombre(String empresaConstructoraNombre) {
-		this.empresaConstructoraNombre = empresaConstructoraNombre;
+	public void setContratistaNombre(String contratistaNombre) {
+		this.contratistaNombre = contratistaNombre;
 	}
 
-	public Integer getEmpresaConstructoraCuit() {
-		return empresaConstructoraCuit;
+	public String getContratistaCuit() {
+		return contratistaCuit;
 	}
 
-	public void setEmpresaConstructoraCuit(Integer empresaConstructoraCuit) {
-		this.empresaConstructoraCuit = empresaConstructoraCuit;
+	public void setContratistaCuit(String contratistaCuit) {
+		this.contratistaCuit = contratistaCuit;
 	}
-	
+
 	public String getRepresentanteTecnicoNombre() {
 		return representanteTecnicoNombre;
 	}
@@ -190,35 +171,28 @@ public class IssueRepair implements Serializable {
 		this.representanteTecnicoNombre = representanteTecnicoNombre;
 	}
 
-	public Integer getRepresentanteTecnicoDni() {
-		return representanteTecnicoDni;
+	public String getRepresentanteTecnicoMatricula() {
+		return representanteTecnicoMatricula;
 	}
 
-	public void setRepresentanteTecnicoDni(Integer representanteTecnicoDni) {
-		this.representanteTecnicoDni = representanteTecnicoDni;
+	public void setRepresentanteTecnicoMatricula(
+			String representanteTecnicoMatricula) {
+		this.representanteTecnicoMatricula = representanteTecnicoMatricula;
 	}
 
-	public int getPlazoEjecucionEnDias() {
-		return plazoEjecucionEnDias;
+	public double getPresupuestoAdjudicacion() {
+		return presupuestoAdjudicacion;
 	}
 
-	public void setPlazoEjecucionEnDias(int plazoEjecucionEnDias) {
-		this.plazoEjecucionEnDias = plazoEjecucionEnDias;
+	public void setPresupuestoAdjudicacion(double presupuestoAdjudicacion) {
+		this.presupuestoAdjudicacion = presupuestoAdjudicacion;
 	}
 
-	public Float getPresupuestoAdjudicado() {
-		return presupuestoAdjudicado;
-	}
-
-	public void setPresupuestoAdjudicado(Float presupuestoAdjudicado) {
-		this.presupuestoAdjudicado = presupuestoAdjudicado;
-	}
-
-	public Float getPresupuestoFinal() {
+	public double getPresupuestoFinal() {
 		return presupuestoFinal;
 	}
 
-	public void setPresupuestoFinal(Float presupuestoFinal) {
+	public void setPresupuestoFinal(double presupuestoFinal) {
 		this.presupuestoFinal = presupuestoFinal;
 	}
 
@@ -260,6 +234,14 @@ public class IssueRepair implements Serializable {
 
 	public void setEstadoObra(String estadoObra) {
 		this.estadoObra = estadoObra;
+	}
+
+	public String getObservaciones() {
+		return observaciones;
+	}
+
+	public void setObservaciones(String observaciones) {
+		this.observaciones = observaciones;
 	}
 
 }

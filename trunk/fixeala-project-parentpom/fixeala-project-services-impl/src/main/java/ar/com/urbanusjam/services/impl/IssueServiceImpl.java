@@ -23,9 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ar.com.urbanusjam.dao.CommentDAO;
 import ar.com.urbanusjam.dao.IssueDAO;
 import ar.com.urbanusjam.dao.IssueFollowDAO;
-import ar.com.urbanusjam.dao.IssueHistorialRevisionDAO;
-import ar.com.urbanusjam.dao.IssueLicitacionDAO;
 import ar.com.urbanusjam.dao.IssuePageViewDAO;
+import ar.com.urbanusjam.dao.IssueRepairDAO;
 import ar.com.urbanusjam.dao.IssueVoteDAO;
 import ar.com.urbanusjam.dao.ProvinceDAO;
 import ar.com.urbanusjam.dao.TagDAO;
@@ -40,9 +39,7 @@ import ar.com.urbanusjam.entity.annotations.IssueRepair;
 import ar.com.urbanusjam.entity.annotations.IssueUpdateHistory;
 import ar.com.urbanusjam.entity.annotations.IssueVote;
 import ar.com.urbanusjam.entity.annotations.IssueVotePK;
-import ar.com.urbanusjam.entity.annotations.Locality;
 import ar.com.urbanusjam.entity.annotations.MediaContent;
-import ar.com.urbanusjam.entity.annotations.Province;
 import ar.com.urbanusjam.entity.annotations.Tag;
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.ContenidoService;
@@ -73,6 +70,8 @@ public class IssueServiceImpl implements IssueService {
 		
 	private UserService userService;
 	private ContenidoService contenidoService;
+	private MailService mailService;
+	
 	private IssueDAO issueDAO;
 	private UserDAO userDAO;
 	private ProvinceDAO provinceDAO;
@@ -81,9 +80,8 @@ public class IssueServiceImpl implements IssueService {
 	private IssueFollowDAO issueFollowDAO;
 	private IssuePageViewDAO issuePageViewDAO;
 	private IssueVoteDAO issueVoteDAO;
-	private IssueHistorialRevisionDAO issueUpdateDAO;
-	private IssueLicitacionDAO issueRepairDAO;
-	private MailService mailService;
+	private IssueRepairDAO issueRepairDAO;
+	
 	
 	
 	public void setUserService(UserService userService) {
@@ -94,7 +92,7 @@ public class IssueServiceImpl implements IssueService {
 		this.contenidoService = contenidoService;
 	}
 	
-	public void setIssueRepairDAO(IssueLicitacionDAO issueRepairDAO) {
+	public void setIssueRepairDAO(IssueRepairDAO issueRepairDAO) {
 		this.issueRepairDAO = issueRepairDAO;
 	}
 
@@ -129,14 +127,6 @@ public class IssueServiceImpl implements IssueService {
 	public void setIssuePageViewDAO(IssuePageViewDAO issuePageViewDAO) {
 		this.issuePageViewDAO = issuePageViewDAO;
 	}
-	
-	public void setIssueUpdateDAO(IssueHistorialRevisionDAO issueUpdateDAO) {
-		this.issueUpdateDAO = issueUpdateDAO;
-	}
-	
-	
-	
-	
 
 
 	@Override
@@ -585,22 +575,22 @@ public class IssueServiceImpl implements IssueService {
 		licitacion.setId(Long.valueOf(licitacionDTO.getNroReclamo()));
 		licitacion.setNroLicitacion(licitacionDTO.getNroLicitacion());
 		licitacion.setNroExpediente(licitacionDTO.getNroExpediente());
-		licitacion.setObjeto(licitacionDTO.getObra());
-		licitacion.setTipo(licitacionDTO.getTipoObra());
+		licitacion.setObra(licitacionDTO.getObra());
 		licitacion.setEstadoObra(licitacionDTO.getEstadoObra());
+		licitacion.setPlazo(licitacionDTO.getPlazo());
 		licitacion.setUnidadEjecutora(licitacionDTO.getUnidadEjecutora());
 		licitacion.setUnidadFinanciamiento(licitacionDTO.getUnidadFinanciamiento());
-		licitacion.setEmpresaConstructoraNombre(licitacionDTO.getEmpresaNombre());
-		licitacion.setEmpresaConstructoraCuit(licitacionDTO.getEmpresaCuit());	
+		licitacion.setContratistaNombre(licitacionDTO.getEmpresaNombre());
+		licitacion.setContratistaCuit(licitacionDTO.getEmpresaCuit());	
 		licitacion.setRepresentanteTecnicoNombre(licitacionDTO.getRepresentanteNombre());
-		licitacion.setRepresentanteTecnicoDni(licitacionDTO.getRepresentanteDni());	
-		licitacion.setValorPliego(licitacionDTO.getValorPliego());
-		licitacion.setPresupuestoAdjudicado(licitacionDTO.getPresupuestoAdjudicado());
+		licitacion.setRepresentanteTecnicoMatricula(licitacionDTO.getRepresentanteMatricula());	
+		licitacion.setPresupuestoAdjudicacion(licitacionDTO.getPresupuestoAdjudicacion());
 		licitacion.setPresupuestoFinal(licitacionDTO.getPresupuestoFinal());
 		licitacion.setFechaEstimadaInicio(licitacionDTO.getFechaEstimadaInicio() != null ? licitacionDTO.getFechaEstimadaInicio() : null );
 		licitacion.setFechaEstimadaFin(licitacionDTO.getFechaEstimadaFin() != null ? licitacionDTO.getFechaEstimadaFin() : null);
 		licitacion.setFechaRealInicio(licitacionDTO.getFechaRealInicio() != null ? licitacionDTO.getFechaRealInicio() : null);
 		licitacion.setFechaRealFin(licitacionDTO.getFechaRealFin() != null ? licitacionDTO.getFechaRealFin() : null);
+		licitacion.setObservaciones(licitacionDTO.getObservaciones());
 		return licitacion;
 	}
 	
@@ -609,22 +599,22 @@ public class IssueServiceImpl implements IssueService {
 		IssueRepairDTO licitacionDTO = new IssueRepairDTO();
 		licitacionDTO.setNroLicitacion(licitacion.getNroLicitacion());
 		licitacionDTO.setNroExpediente(licitacion.getNroExpediente());
-		licitacionDTO.setObra(licitacion.getObjeto());
-		licitacionDTO.setTipoObra(licitacion.getTipo());
+		licitacionDTO.setObra(licitacion.getObra());
 		licitacionDTO.setEstadoObra(licitacion.getEstadoObra());
+		licitacionDTO.setPlazo(licitacion.getPlazo());
 		licitacionDTO.setUnidadEjecutora(licitacion.getUnidadEjecutora());
 		licitacionDTO.setUnidadFinanciamiento(licitacion.getUnidadFinanciamiento());
-		licitacionDTO.setEmpresaNombre(licitacion.getEmpresaConstructoraNombre());
-		licitacionDTO.setEmpresaCuit(licitacion.getEmpresaConstructoraCuit());
+		licitacionDTO.setEmpresaNombre(licitacion.getContratistaNombre());
+		licitacionDTO.setEmpresaCuit(licitacion.getContratistaCuit());
 		licitacionDTO.setRepresentanteNombre(licitacion.getRepresentanteTecnicoNombre());
-		licitacionDTO.setRepresentanteDni(licitacion.getRepresentanteTecnicoDni());
-		licitacionDTO.setValorPliego(licitacion.getValorPliego());
-		licitacionDTO.setPresupuestoAdjudicado(licitacion.getPresupuestoAdjudicado());
+		licitacionDTO.setRepresentanteMatricula(licitacion.getRepresentanteTecnicoMatricula());
+		licitacionDTO.setPresupuestoAdjudicacion(licitacion.getPresupuestoAdjudicacion());
 		licitacionDTO.setPresupuestoFinal(licitacion.getPresupuestoFinal());
 		licitacionDTO.setFechaEstimadaInicio(licitacion.getFechaEstimadaInicio());
 		licitacionDTO.setFechaEstimadaFin(licitacion.getFechaEstimadaFin());
 		licitacionDTO.setFechaRealInicio(licitacion.getFechaRealInicio());
 		licitacionDTO.setFechaRealFin(licitacion.getFechaRealFin());
+		licitacionDTO.setObservaciones(licitacion.getObservaciones());
 		return licitacionDTO;
 	}
 	
@@ -853,6 +843,12 @@ public class IssueServiceImpl implements IssueService {
 		}		
 		issueDTO.setContenidos(contenidosDTO);
 		
+		//licitacion
+		if(issue.getLicitacion() != null)
+			issueDTO.setLicitacion(convertTo(issue.getLicitacion()));
+		else
+			issueDTO.setLicitacion(null);
+		
 		return issueDTO;
 
 	}
@@ -885,63 +881,8 @@ public class IssueServiceImpl implements IssueService {
 		issueDTO.setFechaFormateadaCompleta(issue.getCreationDate().getTime());		
 		issueDTO.setTotalVotes(this.countIssueVotes(String.valueOf(issue.getId()))); // llamada al DAO
 		issueDTO.setTotalFollowers(issue.getFollowers().size());
-		issueDTO.setTotalComments(issue.getComentarios().size());
-		
-		//tags		
-		/**
-		Set<Tag> tagList = issue.getTagsList();
-		List<String> tagNames = new ArrayList<String>();
-		
-		if(tagList.size() > 0){
-			for(Tag t :  issue.getTagsList()){				
-				tagNames.add(t.getTagname().trim());
-			}
-		}
-		
-		issueDTO.setTags(tagNames);
-		**/
-		
+		issueDTO.setTotalComments(issue.getComentarios().size());	
 		issueDTO.setAssignedOfficial(null);
-		
-		//licitacion
-//		if(issue.getLicitacion() != null)
-//			issueDTO.setLicitacion(convertTo(issue.getLicitacion()));
-//		else
-//			issueDTO.setLicitacion(null);
-		
-		//historial
-		/**
-		List<IssueUpdateHistoryDTO> historialDTO = new ArrayList<IssueUpdateHistoryDTO>();
-		
-		for(IssueUpdateHistory revision : issue.getRevisiones()){
-			historialDTO.add(convertTo(revision));
-		}
-		
-		issueDTO.setHistorial(historialDTO);**/
-		
-		//contenidos
-		/**
-		List<MediaContentDTO> contenidosDTO = new ArrayList<MediaContentDTO>();
-		
-		for(MediaContent contenido : issue.getContenidos()){			
-			MediaContentDTO contenidoDTO = contenidoService.convertirAContenidoDTO(contenido);
-			contenidoDTO.setFile(contenidoService.abrirContenidoFile(contenidoDTO));
-			contenidosDTO.add(contenidoDTO);
-		}
-		
-		issueDTO.setContenidos(contenidosDTO);
-		**/
-		
-		//comentarios
-		/**
-		List<CommentDTO> comentariosDTO = new ArrayList<CommentDTO>();
-		
-		for(Comment comentario : issue.getComentarios()){
-			comentariosDTO.add(convertToDTO(comentario));
-		}
-		
-		issueDTO.setComentarios(comentariosDTO);
-		**/
 		
 		return issueDTO;
 	}

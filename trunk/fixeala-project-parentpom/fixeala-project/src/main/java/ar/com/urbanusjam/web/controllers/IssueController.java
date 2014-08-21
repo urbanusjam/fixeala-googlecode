@@ -65,7 +65,7 @@ import ar.com.urbanusjam.services.utils.FileUploadUtils;
 import ar.com.urbanusjam.services.utils.IssueStatus;
 import ar.com.urbanusjam.services.utils.Messages;
 import ar.com.urbanusjam.services.utils.Operation;
-import ar.com.urbanusjam.services.utils.Resolution;
+import ar.com.urbanusjam.services.utils.ResolutionType;
 import ar.com.urbanusjam.web.domain.AlertStatus;
 import ar.com.urbanusjam.web.domain.ContenidoResponse;
 import ar.com.urbanusjam.web.utils.StatusList;
@@ -241,10 +241,8 @@ public class IssueController {
 
 			model.addAttribute("cantidadContenidos", contenidos.size());
 			model.addAttribute("cantidadRevisiones", issue.getHistorial()
-					.size());
-			model.addAttribute("cantidadLicitacion",
-					issue.getLicitacion() != null ? 1 : 0);
-			model.addAttribute("estadoLicitacion",
+					.size());		
+			model.addAttribute("infoReparacion",
 					issue.getLicitacion() != null ? issue.getLicitacion()
 							.getEstadoObra() : "Sin datos");
 			model.addAttribute("cantidadReclamosSimilares", 0);

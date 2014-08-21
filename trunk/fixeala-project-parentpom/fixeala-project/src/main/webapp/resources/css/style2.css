@@ -805,14 +805,16 @@ div[data-role="editor-toolbar"] {
 	overflow:hidden;
 }
 
-#mdl-repair {width:800px;}
+#mdl-repair { width:800px; }
 #mdl-repair	.modal-body {
 	max-height: auto; 
 /* 	overflow:hidden; */
 }
 #repairForm textarea { width: 480px; height: 100px; }
-#tbl-repair { width: 100%; border: 0px solid red;}
-#tbl-repair td { vertical-align: top; }
+#repairForm div#fecha-estimada-from, 
+#repairForm div#fecha-estimada-to,
+#repairForm div#fecha-real-from, 
+#repairForm div#fecha-real-to { margin:0; }
 
 input.repairDate { width:178px;  height:20px; }
 
@@ -887,10 +889,11 @@ input.repairDate { width:178px;  height:20px; }
 #tbl-issue th { width: 170px; vertical-align: middle; }
 #tbl-issue td { height: 15px; }
 
-#tbl-licitacion { width: 700px; margin:0 auto; margin-top: 20px; border: none; }
-#tbl-licitacion th { width: 200px; vertical-align: top; border: none; }
-#tbl-licitacion td { height: 15px;  border: none; }
+#tbl-licitacion { width: 700px; margin:0 auto; margin-top: 20px;  }
+#tbl-licitacion th { width: 200px; vertical-align: top; }
+#tbl-licitacion td { height: 15px;  }
 
+#issueRepair .row-fluid label { font-weight: bold; font-size: 12px; text-transform: uppercase; }
 
 .issue-textarea{height:80px; width:290px;}
 .licitacion-textarea{height:80px; width:300px;}
@@ -1461,7 +1464,7 @@ ul.nav.nav-tabs li:not(.active):hover a {
 
 #issue-stats .stats-box { padding: 5px 0; height: 25px;  }
 #issue-stats .stats-box span.text-big { font-size: 24px; font-weight: bold; margin-right: 5px; }
-#issue-stats  button { text-transform: uppercase; font-size: 11px; height: 25px;  line-height: 10px;}
+#issue-stats-actions  button { text-transform: uppercase; font-size: 11px; height: 25px;  line-height: 10px;}
 #issue-stats .stats-btn { border: 1px solid red;}
 
 #userIssueActions button { text-transform: uppercase; font-size: 11px; height: 25px;  line-height: 10px;}

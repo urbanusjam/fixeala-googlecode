@@ -5,16 +5,16 @@ import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
 
-import ar.com.urbanusjam.dao.IssueLicitacionDAO;
+import ar.com.urbanusjam.dao.IssueRepairDAO;
 import ar.com.urbanusjam.entity.annotations.IssueRepair;
 
 @Repository
-public class IssueLicitacionDAOImpl implements IssueLicitacionDAO {
+public class IssueRepairDAOImpl implements IssueRepairDAO {
 	
 	@PersistenceContext(unitName = "fixealaPU")
 	private EntityManager entityManager; 
 
-	public IssueLicitacionDAOImpl() {}
+	public IssueRepairDAOImpl() {}
 
 	@Override
 	public void saveLicitacion(IssueRepair licitacion) {

@@ -2,7 +2,7 @@ package ar.com.urbanusjam.dao;
 
 import ar.com.urbanusjam.entity.annotations.IssueRepair;
 
-public interface IssueLicitacionDAO {
+public interface IssueRepairDAO {
 	
 	public void saveLicitacion(IssueRepair licitacion);
 	
