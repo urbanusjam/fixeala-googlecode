@@ -668,9 +668,11 @@ path:hover {
 								            			var pathArray = window.location.pathname.split( '/' );	
 								            											            			
 														if(pathArray.indexOf("issues") != -1){
+															
 															var target = $('#userIssueActions');
 															var url = location.href + " #userIssueActions > *";
-															var urlVote = location.href + " #issue-stats > *";
+															var urlVote = location.href + " #issue-stats-actions > *";
+															
 															target.load(url, function(){
 																userActionsController.enableUserActions();							
 															});	
@@ -678,13 +680,11 @@ path:hover {
 														    var isVoted = '${isCurrentlyVoted}';
 														    var isVoteUp = '${isVoteUp}';
 														    
-															$("#issue-stats").load(urlVote, function(){
+															$("#issue-stats-actions").load(urlVote, function(){
 																userActionsController.setCurrentVote(isVoted, isVoteUp);	
 	 															$("#numFollowers").text('${cantidadObservadores}'); 
 															});	
 
-															//TODO
-																//load botones VOTE y WATCH
 														}
 															
 														

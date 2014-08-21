@@ -81,7 +81,7 @@ CREATE TABLE content (
 	   
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
+/** modificado 21/08/14 **/
 CREATE TABLE issue (
 	   id_issue BIGINT(20) NOT NULL, 
 	   id_reporter BIGINT(20) NOT NULL,
@@ -100,6 +100,7 @@ CREATE TABLE issue (
 	   priority VARCHAR(64) NULL, 
 	   resolution_type VARCHAR(64) NULL, 	
 	   status VARCHAR(64) NOT NULL,
+	   is_verified TINYINT(1) NULL,
 	   
 	   PRIMARY KEY (id_issue)
 	   
@@ -118,25 +119,24 @@ CREATE TABLE issue_follow (
 
 CREATE TABLE issue_repair ( 	  
 	   id_issue BIGINT(20) NOT NULL, 	
+	   obra VARCHAR (600) NULL, 
 	   nro_licitacion VARCHAR(20) NULL, 
-	   nro_expediente VARCHAR(20) NULL, 	
-	   tipo VARCHAR(20) NULL,  	
-	   descripcion VARCHAR (600) NULL, 	  
-	   valor_pliego FLOAT(20) NULL,
+	   nro_expediente VARCHAR(20) NULL, 	 
+	   plazo INT(20) NULL, 	  
+	   contratista_nombre VARCHAR (255) NULL, 
+	   contratista_cuit VARCHAR (30) NULL, 	 
+	   representante_tecnico_nombre VARCHAR (255) NULL, 
+	   representante_tecnico_matricula VARCHAR (30) NULL, 	 
 	   unidad_ejecutora VARCHAR (255) NULL, 
 	   unidad_financiamiento VARCHAR (255) NULL, 
-	   empresa_contratada_nombre VARCHAR (255) NULL, 
-	   empresa_contratada_cuit BIGINT (30) NULL, 	 
-	   representante_tecnico_nombre VARCHAR (255) NULL, 
-	   representante_tecnico_dni BIGINT (30) NULL, 	 
-	   plazo_ejecucion_en_dias INT(10) NULL, 
-	   presupuesto_adjudicado FLOAT (20) NULL,
-	   presupuesto_final FLOAT (20) NULL,
-	   fecha_estimada_inicio DATETIME NULL,
-	   fecha_estimada_fin DATETIME NULL,
-	   fecha_real_inicio DATETIME NULL,
-	   fecha_real_fin DATETIME NULL,
+	   presupuesto_adjudicacion DECIMAL (10,2) DEFAULT 0,
+	   presupuesto_final DECIMAL (10,2) DEFAULT 0,
+	   fecha_estimada_inicio DATE NULL,
+	   fecha_estimada_fin DATE NULL,
+	   fecha_real_inicio DATE NULL,
+	   fecha_real_fin DATE NULL,
 	   estado_obra VARCHAR(30) NULL,  
+	   observaciones LONGTEXT NULL,  
 	   
 	   KEY(id_issue)
 	   

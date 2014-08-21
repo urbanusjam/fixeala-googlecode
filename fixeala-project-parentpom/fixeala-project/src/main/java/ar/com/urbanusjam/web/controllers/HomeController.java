@@ -112,8 +112,6 @@ public class HomeController {
 	
 	@RequestMapping(value = "/loadMapMarkers", method = RequestMethod.GET)
 	public @ResponseBody List<IssueDTO> loadMapMarkers(@ModelAttribute ("issues") ArrayList<IssueDTO> issues, HttpServletRequest request) throws JSONException {
-		
-//		List<IssueDTO> issues = issueService.loadAllIssues();
 
 		JSONObject obj = new JSONObject();
 		JSONArray array = new JSONArray();

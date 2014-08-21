@@ -2,12 +2,13 @@ var userActionsController = {
 		
 		
 		enableUserActions :  function(){
-		    	
-			$('#userIssueActions').show;
-		    	  $('#userIssueActions').find("#btn-edit").bind('click', userActionsController.enableDisableFields);
-				  $('#userIssueActions').find("#btn-update").bind('click', userActionsController.editIssueFields);
-				  $('#userIssueActions').find("#btn-status").bind('click', userActionsController.initStatusModal);
-		    },
+					
+			  $('#userIssueActions').show();
+			  $('#issue-stats-actions').show();
+	    	  $('#userIssueActions').find("#btn-edit").bind('click', userActionsController.enableDisableFields);
+			  $('#userIssueActions').find("#btn-update").bind('click', userActionsController.editIssueFields);
+			  $('#userIssueActions').find("#btn-status").bind('click', userActionsController.initStatusModal);
+	    },
 		    
 		enableDisableFields : function(){
 				
@@ -142,7 +143,7 @@ var userActionsController = {
 			},
 			
 			setCurrentVote : function (isVoted, isVoteUp){
-			
+		
 			    var $voteUp = $('#vote-up');
 			    var $voteDown = $('#vote-down');
 			 

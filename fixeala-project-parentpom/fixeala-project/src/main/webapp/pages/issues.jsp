@@ -18,6 +18,9 @@
 		
 		<script type="text/javascript">
 		
+
+     
+
 		jQuery.extend(jQuery.validator.messages, {
 		    required: "Campo obligatorio."//,
 // 		    remote: "Please fix this field.",
@@ -110,72 +113,7 @@
 			      pickTime: false
 			 });
 			
-			//paginacion comentarios
 			
-			/*
-			var comentarios = $.parseJSON('${comentariosJson}');				
-			var totalItems = comentarios.length;		  
-        	var itemsPerPage = 3;
-        	var totalPages = Math.ceil(totalItems / itemsPerPage);	
-       
-			 $('#page-selection').bootpag({
-		            total: totalPages,
-		            page: 1,
-		            maxVisible: 5,
-		        }).on("page", function(event, num){
-		        	        			        	
-		        	var currentPage = num;
-		        	var startIndex = (currentPage - 1) * itemsPerPage ;			        	
-			    	var endIndex = startIndex+itemsPerPage-1 ;			    
-			    	
-					var lastPage = totalPages-currentPage;
-					
-					//is last page
-		        	if(lastPage == 0){
-						var itemsLeft = totalItems - [ (currentPage-1) * itemsPerPage ]; //ej: 7 - [ (3-1) * 3] = 1
-						console.log("items in last page: " + itemsLeft);
-		        		if( itemsLeft < itemsPerPage )
-		        			endIndex = (currentPage-1) * itemsPerPage + itemsLeft-1;
-		        	}
-		        			        		
-			    	var rows;
-			    	
-					console.log("total pages:" + totalPages + " - current page: " + currentPage + " > From " + startIndex + " to " + endIndex  );
-													
-					for(var i = startIndex; i <= endIndex ; i++) {
-						
-						var index = i+1;
-					
-						rows +='<tr>'
-				     		+			'<td>'
-				     		+				'<div class="media">'
-				     		+					  '<span class="pull-left">'
-				     		+					   		'<img class="media-object thumbnail" src="${pageContext.request.contextPath}/resources/images/nopic64.png">'
-							+							 '<center><strong>'+ index  +'</strong></center>'
-				     		+					  '</span>'
-				     		+					  '<div style="font-size:12px;margin-bottom:10px">'
-				     		+					  	'<a href="#"><strong>'+comentarios[i].usuario+'</strong></a> &nbsp; &raquo;  &nbsp; '
-				     		+				    	comentarios[i].fecha
-				     		+				      '</div>'
-				     		+			 		  '<div class="media-body" style="display:block">		'
-				     		+				    	'<p style="font-size:13px">'+comentarios[i].mensaje+'</p>'
-				     		+			  		'</div>'
-				     		+				'</div>		'				
-				     		+			'</td>'
-				     		+		'</tr>';
-					}
-					
-		             $("#content-comment").html(
-		            	'<table id="tblComments" class="table table-hover">'
-		            					+rows+
-		            	'</table>'
-		            		 
-		            		 ); 
-		        });
-		   */
-				
-			
-		
 			//default config
 			$.fn.editable.defaults.mode = 'popup';	
 			$.fn.editable.defaults.disabled = true;
@@ -193,27 +131,24 @@
 			//enable / disable
 			
 			$('.editableField').hide();
-			
-		
-		    /*
+		    
 		    $('#btn-edit-repair').click(function() {
-		    	if( $('#btn-update-repair').is(":disabled") == true ){		    	
-					$('#btn-update-repair').attr('disabled', false);
-					$('#btn-delete-repair').attr('disabled', true);
-		    	}
-		    	else{
-		    		$('#btn-update-repair').attr('disabled', true);
-		    		$('#btn-delete-repair').attr('disabled', false);
-		    	}
+// 		    	if( $('#btn-update-repair').is(":disabled") == true ){		    	
+// 					$('#btn-update-repair').attr('disabled', false);
+// 					$('#btn-delete-repair').attr('disabled', true);
+// 		    	}
+// 		    	else{
+// 		    		$('#btn-update-repair').attr('disabled', true);
+// 		    		$('#btn-delete-repair').attr('disabled', false);
+// 		    	}
 		    		
 
-		    	$('#tbl-licitacion .editable').editable('toggleDisabled');
+// 		    	$('#tbl-licitacion .editable').editable('toggleDisabled');
+
+		    	$('#mdl-repair').modal('show');
 		    	
 		    }); 
-		    */
-			  
 		    
-	
 			  //--NON-EDITABLE FIELDS
 			  
 			  $("#issue-id").editable({name: 'id',  disabled: true});			  
@@ -425,35 +360,28 @@
 // 				  }
 			  });
 			  
-			  $('#lic-tipo').editable({
-				  name: 'tipoObra',
-				  value: 'Publica',
-			      source: [
-						{value: 'Publica', text: 'Publica'},
-			            {value: 'Privada', text: 'Privada'},
-			            {value: 'Contratacion directa', text: 'Contratacion directa'}
-			        ]
+			  $('#lic-plazo').editable({
+				  name: 'plazoEnDias',
+				  emptytext:'Vac&iacute;o',
+				  ajaxOptions: {
+				        type: 'put'
+				  }
 			    });    
 			  
 			  $('#lic-estadoObra').editable({
 				  name: 'estadoObra',
-				  value: 'Sin iniciar',
+				  value: 'Indeterminado',
 			      source: [
-					    {value: 'Sin iniciar', text: 'Sin iniciar'},
+			            {value: 'Indeterminado', text: 'Indeterminado'},
+					    {value: 'No iniciada', text: 'No iniciada'},
 			            {value: 'En curso', text: 'En curso'},
-			            {value: 'Interrumpida', text: 'Interrumpida'},
-			            {value: 'Finalizada', text: 'Finalizada'}
+			            {value: 'Terminada', text: 'Terminada'},
+			            {value: 'Inconclusa', text: 'Inconclusa'},
+			            {value: 'Suspendida', text: 'Suspendida'},
+			            {value: 'Cancelada', text: 'Cancelada'}		        
 			        ]
 			  });  
-			  
-			  $("#lic-valorPliego").editable({	
-				  name: 'valorPliego',
-				  ajaxOptions: {
-				        type: 'put'
-				  },
-				  value: 0
-			  });
-			  
+			 			  
 			  $("#lic-unidadEjecutora").editable({
 				  name: 'unidadEjecutora',
 				  emptytext:'Vac&iacute;o',
@@ -477,7 +405,7 @@
 				        type: 'put'
 				  }
 			  });
-			  
+		
 			  $("#lic-empresaCuit").editable({		
 				  name: 'empresaCuit',
 				  emptytext:'Vac&iacute;o',
@@ -485,15 +413,8 @@
 				        type: 'put'
 				  }
 			  });
-			  
-// 			  $("#lic-empresaEmail").editable({	
-// 				  name: 'empresaEmail',
-// 				  emptytext:'Vac&iacute;o',
-// 				  ajaxOptions: {
-// 				        type: 'put'
-// 				  }
-// 			  });
-			  
+			
+			 
 			  $("#lic-representanteNombre").editable({			
 				  name: 'representanteNombre',
 				  emptytext:'Vac&iacute;o',
@@ -502,25 +423,16 @@
 				  }
 			  });
 			  
-			  $("#lic-representanteDni").editable({			
-				  name: 'representanteDni',
+			  $("#lic-representanteMatricula").editable({			
+				  name: 'representanteMatricula',
 				  emptytext:'Vac&iacute;o',
 				  ajaxOptions: {
 				        type: 'put'
 				  }
 			  });
-			  
-// 			  $("#lic-representanteEmail").editable({		
-// 				  name: 'representanteEmail',
-// 				  emptytext:'Vac&iacute;o',
-// 				  ajaxOptions: {
-// 				        type: 'put'
-// 				  }
-// 			  });
-			 
-			  
-			  $("#lic-presupuestoAdjudicado").editable({	
-				  name: 'presupuestoAdjudicado',
+	
+			  $("#lic-presupuestoAdjudicacion").editable({	
+				  name: 'presupuestoAdjudicacion',
 				  value: 0,
 				  ajaxOptions: {
 				        type: 'put'
@@ -534,9 +446,7 @@
 				        type: 'put'
 				  }
 			  });
-			  
-			  
-			  
+			  			  
 			  $('#lic-fechaEstimadaInicio').editable({
 				  name:'fechaEstimadaInicio',
 				  mode: 'popup',
@@ -612,18 +522,15 @@
 				  	 $('#lic-obra').editable('setValue', null); 
 				     $('#lic-nroLicitacion').editable('setValue', null); 
 				     $('#lic-nroExpediente').editable('setValue', null); 
-				     $('#lic-valorPliego').editable('setValue', 0); 
-				     $('#lic-unidadEjecutora').editable('setValue', null); 
-				     $('#lic-unidadFinanciamiento').editable('setValue', null); 
+				     $('#lic-plazo').editable('setValue', null); 				    
 				     $('#lic-empresaNombre').editable('setValue', null); 
 				     $('#lic-empresaCuit').editable('setValue', null); 
-				     $('#lic-empresaEmail').editable('setValue', null); 
 				     $('#lic-representanteNombre').editable('setValue', null); 
-				     $('#lic-representanteDni').editable('setValue', null); 
-				     $('#lic-representanteEmail').editable('setValue', null); 
-				     $('#lic-presupuestoAdjudicado').editable('setValue', 0); 
+				     $('#lic-representanteMatricula').editable('setValue', null); 
+				     $('#lic-unidadEjecutora').editable('setValue', null); 
+				     $('#lic-unidadFinanciamiento').editable('setValue', null); 
+				     $('#lic-presupuestoAdjudicacion').editable('setValue', 0); 
 				     $('#lic-presupuestoFinal').editable('setValue', 0); 
-				     $('#lic-tipo').editable('setValue', 1); 
 				     $('#lic-estadoObra').editable('setValue', 1); 
 				     $('#lic-fechaEstimadaInicio').editable('setValue', null); 
 				     $('#lic-fechaEstimadaFin').editable('setValue', null); 
@@ -673,63 +580,6 @@
 
 			  });
 			   
-			  	
-				$("#repairForm").validate({				
-					
-					rules: 
-					{								 
-						 obra: { required: true },			
-				 	     nroLicitacion: { required: true },		    			
-				 	     nroExpediente: { required: true }
-				 	}, 	 		
-					
-				 	messages: 
-					{ 	 	  			 	     			
-				 			obra: 
-				  			{
-				  			 		required: "El campo OBRA es requerido."			 	
-				  		 	},	
-				  		 	nroLicitacion: 
-				  			{
-				  			 		required: "El campo N&ordm de LICITACI&Oacute;N es requerido."			 	
-				  		 	},	
-				  		 	nroExpediente: 
-				  			{
-				  			 		required: "El campo N&ordm DE EXPEDIENTE es requerido."			 	
-				  		 	}
-				  	},
-				  	
-				  	highlight: function (element) { 
-	 			       $(element).css({ "border-color": "red" });
-	 			    },
-		 	    	
-	 			    unhighlight: function (element) { 
-	 			        $(element).css("border-color", "#ccc"); 
-	 			    },
-	 			    errorPlacement: function(error, element) {},
-
-	 			    submitHandler: function() {
-						var $form = $("#repairForm");
-						var formData = 'issueID='+ idIssue + '&userID='+ 'coripel' + '&repairForm='+ $form.serialize();
-						$.ajax({
-	        			    url: "./saveRepairInfo.html",
-					 		type: "POST",	
-					 		data: formData,				 								 
-					        success: function(data){	
-					        	if(data.result){
-					        		$("#mdl-repair").modal('hide');
-					        		window.location.reload();
-					        	}
-					        	else{
-					        		$("#mdl-repair").modal('hide');
-					        		bootbox.alert(data.message); 
-					        	}
-							}
-						});
-	  		  		}
-				});
-
-				
 				$('#btn-update-repair').click(function(e) {	
 				
 					//var formData = 'issueID='+ idIssue + '&userID='+ 'coripel' + '&licitacion=' + $('#tbl-licitacion .editable').serialize() ;
@@ -1445,6 +1295,7 @@
 		<li class="active"><a href="#issueHistory" data-toggle="tab"><i class="icon-time icon-large"></i>&nbsp;&nbsp;ACTUALIZACIONES (${cantidadRevisiones})</a></li>
 		<li><a href="#issueFiles" data-toggle="tab"><i class="icon-picture icon-large"></i>&nbsp;&nbsp;IM&Aacute;GENES (<span class="cantidadContenidos">${cantidadContenidos}</span>)</a></li>
 		<li><a href="#issueComments" data-toggle="tab"><i class="icon-comments icon-large"></i>&nbsp;&nbsp;COMENTARIOS (${cantidadComentarios})</a></li>
+		<li><a href="#issueRepair" data-toggle="tab"><i class="icon-wrench icon-large"></i>&nbsp;&nbsp;REPARACI&Oacute;N (${infoReparacion})</a></li>
 	  </ul>	
 	  
 	  <div class="tab-content">							
@@ -1486,136 +1337,142 @@
 		</div>								
 							
 		<!-- 3 Comentarios -->							
-		<div class="tab-pane fade" id="issueComments">			
-		 	
+		<div class="tab-pane fade" id="issueComments">	
 		 	<div class="row" style="margin-bottom: 30px;">	
 				<textarea id="comment-text" name="comment-text"
                 	placeholder="Ingrese su comentario" rows="5"></textarea>
 				<button id="btn-comment" class="btn btn-info" type="submit" style="float:right;margin-top:15px;margin-bottom:15px;">Publicar</button>	
-		 	
 		 		 <!-- infinite scroll -->
 				 <div id="infinite-container-comments"></div>
-				 
 				 <nav id="page-nav-comment" style="display: none;">
 	 			 	<a href="${id}/loadmore/comment/2"></a>
-				 </nav>
-			 
+				 </nav>			 
 			 	<center><a href="#" id="btn-more-comments" class="btn btn-default btn-more comment" style="display: none;">Mostrar m&aacute;s resultados</a></center>
-			
 		 	</div>
-			
 		</div>	
+		
+		<!-- 4 Reparacion -->							
+		<div class="tab-pane fade" id="issueRepair">	
+		
+			<c:if test="${cantidadLicitacion eq 0}">
+				No hay informaci&oacute;n disponible.	
+				 <button id="btn-add-repair"  href="#mdl-repair" data-toggle="modal" class="btn btn-success">Agregar datos</button>	 
+			</c:if>
+			<c:if test="${cantidadLicitacion ne 0}">			
+				<sec:authorize access="hasRole('ROLE_USER')">
+					<div style="width: 100%; text-align: right; padding: 10px 0 10px 0; margin-bottom: 20px; background: #F5F5F5; border-top: 1px dashed #CCC;border-bottom: 1px dashed #CCC; display: block; ">
+						<button id="btn-delete-repair" class="btn" title="Eliminar"><i class="icon-trash icon-large"></i></button>	
+						<button id="btn-edit-repair" class="btn" title="Editar"><i class="icon-pencil icon-large"></i></button>	
+<!-- 						<button id="btn-update-repair" class="btn" title="Guardar"><i class="icon-ok icon-large"></i></button>						 -->
+					</div>					
+				</sec:authorize>			
+				
+			<div class="row-fluid">
+	  			<div class="span6">
+	  				<label>Obra / Proyecto</label>					    
+		    	    <span>Reparación de Escuela N&ordm 10 "Antonio Zaccagnini" - Distrito Escolar N&ordm 13</span>
+	  			</div>	  		
+	  			<div class="span3 offset2">
+	  				<label>Estado</label>	
+			 		<span>En curso</span>
+			 	</div>
+	  		</div>	  		
+	  		<hr>	  		
+	  		<div class="row-fluid">
+	  			<div class="span4">
+	  				<label>N&ordm de Licitaci&oacute;n</label>					    		
+	  				<span>292-SIGAF-2010 (19-14)</span>
+	  			</div>
+	  			<div class="span4">
+	  				<label>N&ordm de de Expediente</label>		 
+				 	<span>10.486/2014</span>	
+				</div>
+         		<div class="span4">
+         			<label>Plazo de obra</label>		 
+         			<span>48 meses</span>
+         		</div>
+	  		</div>	  		
+	  		<hr>	  		
+	  		<div class="row-fluid">
+	  			<div class="span4">
+	  				<label>Empresa contratada</label>
+	 				<span>VIDOGAR CONSTRUCCIONES S.A.</span>
+	 				<br>
+	 				<span><i>CUIT 99-12345678-11</i></span> 					
+	  			</div>	  			
+	  			<div class="span4">
+	  				<label>Representante t&eacute;cnico</label>
+	 				<span>Arq. Orestes Carrere</span>
+	 				<br>
+	 				<span><i>Matrícula N&ordm 27.109 CPAU</i></span>
+	  			</div>	  		
+	  		</div>	  		
+	  		<hr>	  		
+	  		<div class="row-fluid">
+	  			<div class="span6">
+	  				<label>Unidad ejecutora</label>
+	  				<span>Ministerio de Educación<br>
+	  				Subsecretaría de Gestión Económico Financiera y Administración de Recursos<br>
+	  				Dirección General de Infrestructura Escolar</span>
+	  			</div>	  			
+	  			<div class="span6">
+	  				<label>Unidad de financiamiento</label>
+	  				<span>Ministerio de Educación<br>
+	  				Subsecretaría de Gestión Económico Financiera y Administración de Recursos<br>
+	  				Dirección General de Infrestructura Escolar</span>
+	  			</div>	  		
+	  		</div>	  		
+	  		<hr style="border: 2px solid #C64A48;">	  				
+	  		<div class="row-fluid">		  	
+	  			<div class="span4">
+	  				<label>Presupuesto de adjudicaci&oacute;n</label>
+	    			<span>$983.725, 47.-</span>
+	    		</div>
+	    		<div class="span4">
+	    			<label>Fecha estimada de inicio</label>
+		    	   	<span>15 Agosto 2014</span>
+	 			</div>	  				
+ 				<div class="span4">	  
+ 					<label>Fecha estimada de finalizaci&oacute;n</label>			
+  					<span>29 Noviembre 2014</span>
+	 			</div>
+	  		</div>	  		
+	  		
+	  		<hr>
+	  		
+	  		<div class="row-fluid">	  	
+		  		<div class="span4">
+			    	<label>Presupuesto final</label>
+	    	   		<span>-</span>
+	  			</div>	  			 
+	  			<div class="span4">
+	  				<label>Fecha real de inicio</label>			
+		    	  	<span>-</span>
+	  			</div>	  		
+	  			<div class="span4">	  
+	  				<label>Fecha real de finalizaci&oacute;n</label>						
+	  				<span>-</span>
+	  			</div>	  				
+	  		</div>	  	
+	  			
+	  		<hr style="border: 2px solid #C64A48;">	  	
+	  				
+	  		<div class="row-fluid">
+	  			<div class="span6">
+	  				<label>Observaciones</label>					    
+		    	   	<span>-</span>
+	  			</div>	  	
+	  		</div>	 		
+		
+			
+			</c:if>
+		
+			
+		</div>
 								
 		</div>
      
-		
-<!-- 		<div class="accordion" id="accordion2"> -->
-			  <!-- 3 REPARACION --> <!-- FUERA DEL ALCANCE -->
-<!-- 			  <div class="accordion-group"> -->
-<!-- 			    <div class="accordion-heading"> -->
-<!-- 			      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo"> -->
-<%-- 			        <h4><i class="icon-wrench icon-large"></i>REPARACI&Oacute;N (${estadoLicitacion})</h4> --%>
-<!-- 			      </a>			      -->
-<!-- 			    </div> -->
-<!-- 			    <div id="collapseTwo" class="accordion-body collapse"> -->
-<!-- 			      <div class="accordion-inner">	 -->
-<%-- 					<c:if test="${cantidadLicitacion eq 0}"> --%>
-<!-- 						No hay informaci&oacute;n disponible.	 -->
-<!-- 						 <button id="btn-add-repair"  href="#mdl-repair" data-toggle="modal" class="btn btn-success">Agregar datos</button>	  -->
-<%-- 					</c:if> --%>
-<%-- 					<c:if test="${cantidadLicitacion ne 0}"> --%>
-					
-<%-- 					<sec:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')"> --%>
-<!-- 						<div style="width: 200px; float: right; margin: 20px 10px 20px 0;"> -->
-<!-- 							<button id="btn-delete-repair" class="btn" title="Eliminar"><i class="icon-trash icon-large"></i></button>	 -->
-<!-- 							<button id="btn-edit-repair" class="btn" title="Editar"><i class="icon-pencil icon-large"></i></button>	 -->
-<!-- 							<button id="btn-update-repair" class="btn" title="Guardar"><i class="icon-ok icon-large"></i></button>						 -->
-<!-- 						</div>					 -->
-<%-- 					</sec:authorize> --%>
-											
-<!-- 						<table id="tbl-licitacion" class="table table-hover ">							 -->
-<!-- 							 <tr> -->
-<!-- 							    <th>Obra:</th> -->
-<%-- 							    <td><a href="#" id="lic-obra" data-type="textarea">${obra}</a></td>						   --%>
-<!-- 							 </tr> -->
-<!-- 							 <tr> -->
-<!-- 							    <th>N&ordm de Licitaci&oacute;n:</th> -->
-<%-- 							    <td><a href="#" id="lic-nroLicitacion" data-type="text">${nroLicitacion}</a>						   --%>
-<!-- 							 </tr> -->
-<!-- 							 <tr> -->
-<!-- 							    <th>N&ordm de Expediente:</th> -->
-<%-- 							    <td><a href="#" id="lic-nroExpediente" data-type="text">${nroExpediente}</a></td>						   --%>
-<!-- 							 </tr> -->
-<!-- 							 <tr> -->
-<!-- 							    <th>Estado de la obra:</th> -->
-<%-- 							    <td><a href="#" id="lic-estadoObra" data-type="select">${estadoObra}</a></td>						   --%>
-<!-- 							 </tr> -->
-<!-- 							 <tr> -->
-<!-- 							    <th>Tipo:</th> -->
-<%-- 							    <td><a href="#" id="lic-tipo" data-type="select" >${tipoObra}</a></td>						   --%>
-<!-- 							 </tr> -->
-<!-- 							 <tr> -->
-<!-- 							 	<th>Unidad ejecutora:</th> -->
-<%-- 							    <td><a href="#" id="lic-unidadEjecutora" data-type="text">${unidadEjecutora}</a></td> --%>
-<!-- 							 </tr>	 -->
-<!-- 							 <tr>	 -->
-<!-- 							    <th>Unidad de financiaci&oacute;n:</th> -->
-<%-- 							    <td><a href="#" id="lic-unidadFinanciamiento" data-type="text">${unidadFinanciamiento}</a></td>		 --%>
-<!-- 							 </tr> -->
-<!-- 							 <tr>	 -->
-<!-- 							    <th>Valor del pliego:</th> -->
-<%-- 							    <td>$ <a href="#" id="lic-valorPliego" data-type="number">${valorPliego}</a></td>		 --%>
-<!-- 							 </tr>						 <tr> -->
-<!-- 							    <th>Empresa contratada:</th> -->
-<!-- 							  	<td> -->
-<%-- 							    	Raz&oacute;n social: <a href="#" id="lic-empresaNombre" data-type="text">${empresaNombre}</a> --%>
-<%-- 							    	<br>CUIT: <a href="#" id="lic-empresaCuit" data-type="text">${empresaCuit}</a>	 --%>
-<!-- 							    </td> -->
-<!-- 							 </tr> -->
-<!-- 							 <tr> -->
-<!-- 							    <th>Representante t&eacute;cnico:</th> -->
-<!-- 							      <td> -->
-<%-- 							    	Nombre y Apellido: <a href="#" id="lic-representanteNombre" data-type="text">${representanteNombre}</a> --%>
-<%-- 							    	<br>DNI: <a href="#" id="lic-representanteDni" data-type="number">${representanteDni}</a> --%>
-<!-- 							      </td>								   						   -->
-<!-- 							 </tr> -->
-<!-- 							 <tr> -->
-<!-- 							    <th>Presupuesto adjudicado:</th> -->
-<!-- 							    <td> -->
-<%-- 							    	$ <a href="#" id="lic-presupuestoAdjudicado" data-type="number">${presupuestoAdjudicado}</a> --%>
-<!-- 							    </td> -->
-<!-- 							 </tr> -->
-<!-- 							 <tr>	 -->
-<!-- 							    <th>Presupuesto final:</th> -->
-<!-- 							    <td> -->
-<%-- 							    	$ <a href="#" id="lic-presupuestoFinal" data-type="number">${presupuestoFinal}</a> --%>
-<!-- 							    </td>					   -->
-<!-- 							 </tr> -->
-<!-- 							 <tr> -->
-<!-- 							    <th>Fechas estimadas:</th> -->
-<!-- 							    <td> -->
-<%-- 							    	<a href="#" id="lic-fechaEstimadaInicio" data-type="combodate">${fechaEstimadaInicio}</a> --%>
-<!-- 													&mdash; -->
-<%-- 													<a href="#" id="lic-fechaEstimadaFin" data-type="combodate">${fechaEstimadaFinal}</a> --%>
-<!-- 							    </td>	 -->
-<!-- 							 </tr> -->
-<!-- 							 <tr> -->
-<!-- 							    <th>Fechas reales:</th> -->
-<!-- 							    <td> -->
-<%-- 							    	<a href="#" id="lic-fechaRealInicio" data-type="combodate">${fechaRealInicio}</a>	 --%>
-<!-- 													&mdash; -->
-<%-- 									<a href="#" id="lic-fechaRealFin" data-type="combodate">${fechaRealFinal}</a>	 --%>
-<!-- 							    </td>					   -->
-<!-- 							 </tr> -->
-<!-- 				  		</table>	 -->
-<%-- 					</c:if> --%>
-<!-- 					</div> -->
-<!-- 			    </div> -->
-<!-- 			  </div>		 -->
-			  <!-- 3 REPARACION --> <!-- FUERA DEL ALCANCE -->	  
-<!-- 	    </div> -->
-
-		    </div>
+		</div>
 		    
 		    
 		    
@@ -1626,37 +1483,43 @@
 		
 			<div id="issue-stats" class="stats-container">
 				<div class="stats-box">
-					<span id="voteCount" class="text-big">${cantidadVotos}</span><span class="text-small">votos totales</span>
-					<span id="votes" class="pull-right">
-						<sec:authorize access="hasRole('ROLE_USER')">
-							<button id="vote-up" class="btn btn-success" title="Voto positivo"><i class="icon-thumbs-up "></i></button>
-							<button id="vote-down" class="btn btn-danger" title="Voto negativo"><i class="icon-thumbs-down "></i></button>
-						</sec:authorize>
-					</span>
+					<span class="text-small">votos totales</span><span id="voteCount" class="text-big pull-right">${cantidadVotos}</span>
 				</div> 
-				<div class="stats-box"><span class="text-big">${cantidadVisitas}</span> <span class="text-small">visitas</span></div>
-				<div class="stats-box"><span class="text-big">${cantidadComentarios}</span> <span class="text-small">comentarios</span></div>
-				<div id="watchers" class="stats-box">
-					<span class="text-big">
+				<div class="stats-box"><span class="text-small">visitas</span><span class="text-big pull-right">${cantidadVisitas}</span></div>
+				<div class="stats-box"><span class="text-small">comentarios</span><span class="text-big pull-right">${cantidadComentarios}</span></div>
+				<div id="watchers" class="stats-box">					
+					<span class="text-small">seguidores</span>
+					<span class="text-big pull-right">
 						<a href="#mdl-followers" id="followers-list" data-toggle="modal"><span id="numFollowers">${cantidadObservadores}</span></a>
 					</span> 
-					<span class="text-small">seguidores</span>
-					<sec:authorize access="hasRole('ROLE_USER')">
+				</div>
+			</div>			
+					
+			<div id="issue-stats-actions">	
+				<sec:authorize access="hasRole('ROLE_USER')">		
+				<div class="stats-container">
+					<span id="votes">
+						<button id="vote-up" class="btn btn-success" title="Voto positivo"><i class="icon-thumbs-up "></i></button>
+						<button id="vote-down" class="btn btn-danger" title="Voto negativo"><i class="icon-thumbs-down "></i></button>
+					</span>						
+					<span class="pull-right">
 						<c:if test="${isUserWatching}">
-							<button id="btn-unwatch-issue" class="btn btn-info pull-right">@ Siguiendo</button>
+							<button id="btn-unwatch-issue" class="btn btn-info">@ Siguiendo</button>
 						</c:if>
 						<c:if test="${!isUserWatching}">
 							<button id="btn-watch-issue" class="btn pull-right">@ Segu&iacute; el reclamo</button>
 						</c:if>
-					</sec:authorize>
-				</div>
+					</span>		
+				
+					</div>		
+				</sec:authorize>					
 			</div>
 			
 			<div class="stats-container">
 				&Uacute;ltima actualización: <span class="pull-right"><b>${fechaUltimaActualizacion}</b></span>
 			</div>
 			
-			<div id="userIssueActions" >
+			<div id="userIssueActions">
 				<sec:authorize access="hasRole('ROLE_USER')">				
 					<c:if test="${estado ne 'CERRADO'}">
 						<div class="stats-container">
@@ -1688,12 +1551,6 @@
 <!--       			<a href="#" onclick="javascript:window.print();" title="Imprimir"><i class="icon-print"></i></a> -->
 
 
-      			
-
-
-
-	
-		
 		   <div class="page-header">
     	   		<h4><i class="icon-globe icon-large"></i>&nbsp;&nbsp;Vista en el mapa</h4>    	 	
     	   </div>     	   
@@ -1720,8 +1577,6 @@
 	
 	
 	
-	
-	
 	<div id="mdl-detail" class="modal hide fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
 	  	<div class="modal-header">
 		    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>	
@@ -1743,21 +1598,21 @@
 		<div class="modal-body"></div>
 		<div class="modal-footer"> 				 		  		
 	  		<button class="btn" data-dismiss="modal" aria-hidden="true">
-		    		<i class="icon-remove icon-large"></i>&nbsp;&nbsp;&nbsp;Cerrar
+		    	<i class="icon-remove icon-large"></i>&nbsp;&nbsp;&nbsp;Cerrar
 		    </button>	 
 	  	</div>
 	</div>
 	
 	<div id="mdl-status" class="modal hide fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
 	  	<div class="modal-header">
-		    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>		    	
-		    	<h4 id="fileUploadLabel"> 
-			    	Actualizar estado
-		    	</h4>
+	    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>		    	
+	    	<h4 id="fileUploadLabel"> 
+		    	Actualizar estado
+	    	</h4>
 	  	</div>
 	  	<form id="modalStatusForm" enctype="multipart/form-data"  class="form-horizontal form-inline">
-  				<div class="modal-body">
-  				
+  			<!-- modal body -->
+  			<div class="modal-body">  				
   				<div class="control-group">  			
         			<label class="control-label">Resoluci&oacute;n</label>
         			<div class="controls">
@@ -1769,9 +1624,9 @@
 			        <div class="controls">
 			        	<textarea id="observacion"  class="form-control"  name="observacion" style="width:280px; height: 100px" required></textarea>
 			        </div>
-			    </div>
-  				
-  				</div>
+			    </div>  				
+  			</div>
+  			<!-- modal footer -->
 			<div class="modal-footer"> 
 				<button id="btn-update-status" class="btn btn-info" aria-hidden="true">
 			    		<i class="icon-ok icon-large"></i>&nbsp;&nbsp;&nbsp;Aceptar
@@ -1785,64 +1640,61 @@
 	
 	<div id="mdl-fileupload" class="modal hide fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="fileUploadLabel" aria-hidden="true">
 	  	<div class="modal-header">
-		    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-		    	
-		    	<h4 id="fileUploadLabel"> 
-			    	Gesti&oacute;n de archivos
-		    	</h4>
+	    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>		    	
+	    	<h4 id="fileUploadLabel"> 
+		    	Gesti&oacute;n de archivos
+	    	</h4>
 	  	</div>
 	  	<form id="multiplefileupload" enctype="multipart/form-data" >
-  				<div class="modal-body">
-    		
-    			<div class="alert alert-success" style="height:30px; line-height:30px; font-size:13px;"> 
-  					<i class="icon-info-sign"></i>&nbsp; Hay <b><span class="cantidadContenidos">${cantidadContenidos}</span></b> archivo(s) subido(s). M&aacute;ximo: 5 archivos.
-				</div>
-    			
-		    			<table id="tbl-fileupload" role="presentation" class="table table-hover">    			
-		   	   		  	   	<tbody class="files">   	   		  	   	
-		   	   		  	   		<c:forEach items="${contenidos}" var="contenido">	
-									<tr id="${contenido.id}">
-					    	   			<td width="100">					    	   			
-						    	   			<span class="preview thumbnail" style="max-height:60px; text-align: center">
-						                    	<a style="width:100px; height:60px; " href="#" title="{%=file.name%}">
-													<img style="max-width:100px; max-height:60px;" src="${pageContext.request.contextPath}/uploads/${contenido.nombreConExtension}">
-												</a>
-	            							</span>
-										</td>										
-										<td>
-											${contenido.fileSize}
-									 	</td>
-									 	<td width="100" class="centered">
-										 	<a href="#" class="btn btn-small btn-file-delete">
-										 		<i class="icon-trash icon-large" title="Eliminar archivo"></i>
-										 	</a>							 		
-									 	</td>						
-				    	   			</tr>
-								</c:forEach>
-				    	   	</tbody>
-						</table> 
-						
-							
-		</div>
-	  	<div class="modal-footer">  
-	  		<c:if test="${cantidadContenidos eq 5}">
-		  		<span class="btn btn-danger fileinput-button disabled">
-	                   <i class="icon-plus"></i>
-	                   <span>Seleccionar archivos</span>
-	                   <input type="file" name="files[]" multiple disabled>
-	            </span>
-	  		</c:if>	  			  		
-	  		<c:if test="${cantidadContenidos lt 5}">
-		  		<span class="btn btn-danger fileinput-button">
-	                   <i class="icon-plus"></i>
-	                   <span>Seleccionar archivos</span>
-	                   <input type="file" name="files[]" multiple>
-	            </span>
-	  		</c:if>			  	
-	  		<button class="btn" data-dismiss="modal" aria-hidden="true">
-		    		<i class="icon-remove icon-large"></i>&nbsp;&nbsp;&nbsp;Cerrar
-		    </button>	 
-	  	</div>
+ 			<!-- modal body -->
+ 			<div class="modal-body">   		
+	   			<div class="alert alert-success" style="height:30px; line-height:30px; font-size:13px;"> 
+	 				<i class="icon-info-sign"></i>&nbsp; Hay <b><span class="cantidadContenidos">${cantidadContenidos}</span></b> archivo(s) subido(s). M&aacute;ximo: 5 archivos.
+				</div>   			
+	   			<table id="tbl-fileupload" role="presentation" class="table table-hover">    			
+	  	   		  	   	<tbody class="files">   	   		  	   	
+	  	   		  	   		<c:forEach items="${contenidos}" var="contenido">	
+							<tr id="${contenido.id}">
+			    	   			<td width="100">					    	   			
+				    	   			<span class="preview thumbnail" style="max-height:60px; text-align: center">
+				                    	<a style="width:100px; height:60px; " href="#" title="{%=file.name%}">
+											<img style="max-width:100px; max-height:60px;" src="${pageContext.request.contextPath}/uploads/${contenido.nombreConExtension}">
+										</a>
+	          							</span>
+								</td>										
+								<td>
+									${contenido.fileSize}
+							 	</td>
+							 	<td width="100" class="centered">
+								 	<a href="#" class="btn btn-small btn-file-delete">
+								 		<i class="icon-trash icon-large" title="Eliminar archivo"></i>
+								 	</a>							 		
+							 	</td>						
+		    	   			</tr>
+						</c:forEach>
+		    	   	</tbody>
+				</table> 
+			</div>
+			<!-- modal footer -->
+		  	<div class="modal-footer">  
+		  		<c:if test="${cantidadContenidos eq 5}">
+			  		<span class="btn btn-danger fileinput-button disabled">
+		                   <i class="icon-plus"></i>
+		                   <span>Seleccionar archivos</span>
+		                   <input type="file" name="files[]" multiple disabled>
+		            </span>
+		  		</c:if>	  			  		
+		  		<c:if test="${cantidadContenidos lt 5}">
+			  		<span class="btn btn-danger fileinput-button">
+		                   <i class="icon-plus"></i>
+		                   <span>Seleccionar archivos</span>
+		                   <input type="file" name="files[]" multiple>
+		            </span>
+		  		</c:if>			  	
+		  		<button class="btn" data-dismiss="modal" aria-hidden="true">
+			    		<i class="icon-remove icon-large"></i>&nbsp;&nbsp;&nbsp;Cerrar
+			    </button>	 
+		  	</div>
 	  	</form>
 	</div>
 	
@@ -1850,132 +1702,142 @@
 	<div id="mdl-repair" class="modal hide fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="fileUploadLabel" aria-hidden="true">
 	  	<form id="repairForm">
 	  	<div class="modal-header">
-		    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-		    	
-		    	<h4 id="fileUploadLabel"> 
-			    	Reparaci&oacute;n de la incidencia
-		    	</h4>
+	    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>		    	
+	    	<h4 id="fileUploadLabel"> 
+		    	Detalle de la reparaci&oacute;n del reclamo
+	    	</h4>
 	  	</div>
-	  	
-	  		<div class="modal-body">
-	  		
-	  		<table id="tbl-repair">
-	  			<tr>
-	  				<td colspan="2">				    
-		    	   		<textarea id="obra" name="obra" placeholder="Descripci&oacute;n de la obra..."></textarea>	
-					</td>
-					<td>	    	   		
-						<label>Tipo</label>
-	    	   			<select id="tipoObra" name="tipoObra">		
-	    	   				<option value="Publica">Publica</option>
-	    	   				<option value="Privada">Privada</option>
-	    	   				<option value="Contratacion directa">Contratacion directa</option>	    	   	
-				 		</select>	
-				 		<label>Estado</label>	
-				 		<select id="estadoObra" name="estadoObra">		
-	    	   				<option value="Sin iniciar">Sin iniciar</option>
-	    	   				<option value="En Curso">En curso</option>
-	    	   				<option value="Interrumpida">Interrumpida</option>
-	    	   				<option value="Finalizada">Finalizada</option>
-	    	   				<option value="Cancelada">Cancelada</option>
-				 		</select>		
-				 	</td>					
-	  			</tr>	  			
-	  			<tr>	  				
-	  				<td>	  					
-	  					<input type="text" id="nroLicitacion" name="nroLicitacion" placeholder="N&ordm de Licitaci&oacute;n"/>		 
-				 		<input type="text" id="nroExpediente" name="nroExpediente" placeholder="N&ordm de de Expediente"/>				    	   		
-					</td>					
-					<td>
-						<input type="text" id="unidadEjecutora" name="unidadEjecutora" placeholder="Unidad ejecutora"/>	
-		    	   		<input type="text" id="unidadFinanciamiento" name="unidadFinanciamiento" placeholder="Unidad de financiamiento"/>		    	   	
-		    	   	
-				 	</td>
-				 	<td>
-				 		<input type="text" id="valorPliego" name="valorPliego" placeholder="Valor del pliego (en $ argentinos)"/>			 	
-				 	</td>		
-	  			</tr>
-	  			<tr><td colspan="3"><hr></td></tr>
-	  			
-	  			<tr>
-	  				<td>
-	  					<label>Empresa contratada</label>
-	  					<input type="text" id="empresaNombre" name="empresaNombre" placeholder="Raz&oacute;n social"/>	
-	  					<input type="text" id="empresaCuit" name="empresaCuit" placeholder="CUIT"/>	
-	  				</td>
-	  				<td>
-	  					<label>Representante t&eacute;cnico</label>
-	  					<input type="text" id="representanteNombre" name="representanteNombre" placeholder="Nombre(s) y Apellido(s)"/>	
-	  					<input type="text" id="representanteDni" name="representanteDni" placeholder="DNI"/>	
-	  				</td>
-	  				<td>
-					</td>
-	  			</tr>
-	  				
-	  			<tr><td colspan="3"><hr></td></tr>
-	  			<tr>
-	  				<td>
-				    	<label>Estimaci&oacute;n</label>
-		    	   		<input type="text" id="presupuestoAdjudicado" name="presupuestoAdjudicado" placeholder="Presupuesto adjudicado (en $ argentinos)"/>		
- 		    	   		
- 		    	   		<div id="fecha-estimada-from" class="input-append">											   
-						    <input id="fechaEstimadaInicio" name="fechaEstimadaInicio" type="text" class="repairDate" placeholder="Fecha inicio (dd/mm/aaaa)"/>
-						    <span class="add-on">
-						      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
-						      </i>
-						    </span>
-						</div>  	
-						
-						<div id="fecha-estimada-to" class="input-append">											   
-						    <input id="fechaEstimadaFin" name="fechaEstimadaFin" type="text" class="repairDate" placeholder="Fecha fin (dd/mm/aaaa)"/>
-						    <span class="add-on">
-						      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
-						      </i>
-						    </span>
-						</div>  		
- 				    	   	    
-					</td>	
-					<td>
-				    	<label>Ejecuci&oacute;n</label>
-		    	   		<input type="text" id="presupuestoFinal" name="presupuestoFinal" placeholder="Presupuesto final (en $ argentinos)"/>	
-		    	   		
-		    	   		<div id="fecha-real-from" class="input-append">											   
-						    <input id="fechaRealInicio" name="fechaRealInicio" type="text" class="repairDate" placeholder="Fecha inicio (dd/mm/aaaa)"/>
-						    <span class="add-on">
-						      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
-						      </i>
-						    </span>
-						</div>  							
-						<div id="fecha-real-to" class="input-append">											   
-						    <input id="fechaRealFin" name="fechaRealFin" type="text" class="repairDate" placeholder="Fecha fin (dd/mm/aaaa)"/>
-						    <span class="add-on">
-						      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
-						      </i>
-						    </span>
-						</div>  		  	   	 
-					</td>	
-					<td>
-						 <input type="text" id="plazoEjecucionEnDias" name="plazoEjecucionEnDias" placeholder="Plazo (en d&iacute;as)"/>	
-		    	   				
-					</td>								
-	  			</tr>		
-	  				
-	  		
-	  		</table>
-	    	
-								
-			</div>
-		  	<div class="modal-footer"> 	
-		  		<div class="btn-container">
-			  		<button  type="submit" class="btn btn-info" id="btn-save-repair">
-				    	<i class="icon-ok icon-large"></i>Guardar
-				    </button>  			  	
-			  		<button class="btn" data-dismiss="modal" aria-hidden="true">
-				    	<i class="icon-remove icon-large"></i>Cerrar
-				    </button>	
-		  		</div>
-		  		 
-		  	</div>
+	  	<!-- modal body -->
+  		<div class="modal-body">
+	  		<div class="row-fluid">
+	  			<div class="span6">
+	  				<label>Obra / Proyecto</label>					    
+		    	   	<textarea id="obra" name="obra" placeholder="Descripci&oacute;n de la obra..."></textarea>	
+	  			</div>	  		
+	  			<div class="span3 offset2">
+	  				<label>Estado</label>	
+			 		<select id="estadoObra" name="estadoObra">						 		
+	   	   				<option value="Sin iniciar">Sin iniciar</option>
+	   	   				<option value="En curso">En curso</option>
+	   	   				<option value="Terminada">Terminada</option>
+	   	   				<option value="Inconclusa">Inconclusa</option>
+	   	   				<option value="Suspendida">Suspendida</option>
+	   	   				<option value="Cancelada">Cancelada</option>
+			 		</select>	
+			 	</div>
+	  		</div>	  		
+	  		<hr>	  		
+	  		<div class="row-fluid">
+	  			<div class="span4">
+	  				<label>N&ordm de Licitaci&oacute;n</label>					    		
+	  				<input type="text" id="nroLicitacion" name="nroLicitacion"/>	
+	  			</div>
+	  			<div class="span4">
+	  				<label>N&ordm de de Expediente</label>		 
+				 	<input type="text" id="nroExpediente" name="nroExpediente"/>		
+				</div>
+	         		<div class="span4">
+	         			<label>Plazo (en d&iacute;as)</label>		 
+	         			<input type="text" id="plazoEnDias" name="plazoEnDias"/>	
+	         		</div>
+	  		</div>	  		
+	  		<hr>	  		
+	  		<div class="row-fluid">
+	  			<div class="span4">
+	  				<label>Empresa contratada</label>
+	 					<input type="text" id="empresaNombre" name="empresaNombre" placeholder="Raz&oacute;n social"/>	
+	 					<input type="text" id="empresaCuit" name="empresaCuit" placeholder="CUIT"/>		  					
+	  			</div>	  			
+	  			<div class="span4">
+	  				<label>Representante t&eacute;cnico</label>
+	 					<input type="text" id="representanteNombre" name="representanteNombre" placeholder="Nombre(s) y Apellido(s)"/>	
+	 					<input type="text" id="representanteMatricula" name="representanteMatricula" placeholder="Matr&iacute;cula"/>	
+	  			</div>	  		
+	  		</div>	  		
+	  		<hr>	  		
+	  		<div class="row-fluid">
+	  			<div class="span6">
+	  				<label>Unidad ejecutora</label>
+	  				<input style="width: 92%" type="text" id="unidadEjecutora" name="unidadEjecutora"/>	
+	  			</div>	  			
+	  			<div class="span6">
+	  				<label>Unidad de financiamiento</label>
+	  				<input style="width: 92%" type="text" id="unidadFinanciamiento" name="unidadFinanciamiento"/>	
+	  			</div>	  		
+	  		</div>	  		
+	  		<hr>	  		
+	  		<div class="row-fluid">		  	
+	  			<div class="span4">
+	  				<label>Presupuesto de adjudicaci&oacute;n</label>
+	    			<input type="text" id="presupuestoAdjudicacion" name="presupuestoAdjudicado" placeholder="en $ argentinos"/>		
+	    		</div>
+	    		<div class="span4">
+	    			<label>Fecha estimada de inicio</label>
+		    	   	<div id="fecha-estimada-from" class="input-append">											   
+					    <input id="fechaEstimadaInicio" name="fechaEstimadaInicio" type="text" class="repairDate" placeholder="dd/mm/aaaa"/>
+					    <span class="add-on">
+					      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+					      </i>
+					    </span>
+					</div> 
+	 				</div>	  				
+	 				<div class="span4">	  
+	 					<label>Fecha estimada de finalizaci&oacute;n</label>			
+	  				<div id="fecha-estimada-to" class="input-append">											   
+					    <input id="fechaEstimadaFin" name="fechaEstimadaFin" type="text" class="repairDate" placeholder="dd/mm/aaaa"/>
+					    <span class="add-on">
+					      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+					      </i>
+					    </span>
+					</div>  	
+	 			</div>
+	  		</div>	  		
+	  		<hr>	  		
+	  		<div class="row-fluid">	  	
+		  		<div class="span4">
+			    	   	<label>Presupuesto final</label>
+	    	   		<input type="text" id="presupuestoFinal" name="presupuestoFinal" placeholder="en $ argentinos"/>	
+	  			</div>	  			 
+	  			<div class="span4">
+	  				<label>Fecha real de inicio</label>			
+		    	   	<div id="fecha-real-from" class="input-append">											   
+					    <input id="fechaRealInicio" name="fechaRealInicio" type="text" class="repairDate" placeholder="dd/mm/aaaa"/>
+					    <span class="add-on">
+					      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+					      </i>
+					    </span>
+					</div>
+	  			</div>	  		
+	  			<div class="span4">	  
+	  				<label>Fecha real de finalizaci&oacute;n</label>						
+	  				<div id="fecha-real-to" class="input-append">											   
+					    <input id="fechaRealFin" name="fechaRealFin" type="text" class="repairDate" placeholder="dd/mm/aaaa"/>
+					    <span class="add-on">
+					      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+					      </i>
+					    </span>
+					</div>  	
+	  			</div>	  				
+	  		</div>	  		
+	  		<hr>	  		
+	  		<div class="row-fluid">
+	  			<div class="span6">
+	  				<label>Observaciones</label>					    
+		    	   	<textarea id="obs" name="obs"></textarea>	
+	  			</div>	  	
+	  		</div>	 
+		</div>
+		<!-- modal footer -->
+	  	<div class="modal-footer"> 	
+	  		<div class="btn-container">
+		  		<button  type="submit" class="btn btn-info" id="btn-save-repair">
+			    	<i class="icon-ok icon-large"></i>Guardar
+			    </button>  			  	
+		  		<button class="btn" data-dismiss="modal" aria-hidden="true">
+			    	<i class="icon-remove icon-large"></i>Cerrar
+			    </button>	
+	  		</div>	  		 
+	  	</div>
 	  	</form>
 	</div>
 	
@@ -2062,3 +1924,4 @@
 <!-- <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-53d8340b75bafe45"></script> -->
 		
 </div><!-- CONTENT -->
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.3.1/jquery.maskedinput.min.js"></script>

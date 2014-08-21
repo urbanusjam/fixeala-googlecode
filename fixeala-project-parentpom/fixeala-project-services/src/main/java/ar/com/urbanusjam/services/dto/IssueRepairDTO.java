@@ -14,19 +14,18 @@ public class IssueRepairDTO implements Serializable {
 	private String obra;
 	private String nroLicitacion;
 	private String nroExpediente;
-	private String nroReclamo;
-	private Float valorPliego;
+	private String nroReclamo;	
 	private String unidadEjecutora;
 	private String unidadFinanciamiento;
 	private String empresaConstructora;
 	private String empresaNombre;
-	private Integer empresaCuit;
+	private String empresaCuit;
 	private String representanteTecnico;
 	private String representanteNombre;
-	private Integer representanteDni;
-	private Integer plazoEjecucionEnDias;
-	private Float presupuestoAdjudicado;
-	private Float presupuestoFinal;
+	private String representanteMatricula;
+	private Integer plazo;
+	private double presupuestoAdjudicacion;
+	private double presupuestoFinal;
 	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	private Date fechaEstimadaInicio;	
 	@DateTimeFormat(pattern = "dd-MM-yyyy")
@@ -35,12 +34,12 @@ public class IssueRepairDTO implements Serializable {
 	private Date fechaRealInicio;
 	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	private Date fechaRealFin;
-	private String tipoObra;
 	private String estadoObra;
+	private String observaciones;
 	
 	public IssueRepairDTO(){}
 	
-	
+	   
 	public String getObra() {
 		return obra;
 	}
@@ -72,14 +71,7 @@ public class IssueRepairDTO implements Serializable {
 	public void setNroReclamo(String nroReclamo) {
 		this.nroReclamo = nroReclamo;
 	}
-	
-	public Float getValorPliego() {
-		return valorPliego;
-	}
-	
-	public void setValorPliego(Float valorPliego) {
-		this.valorPliego = valorPliego;
-	}
+
 	
 	public String getEmpresaConstructora() {
 		return empresaConstructora;
@@ -102,11 +94,11 @@ public class IssueRepairDTO implements Serializable {
 		this.empresaNombre = empresaNombre;
 	}
 	
-	public Integer getEmpresaCuit() {
+	public String getEmpresaCuit() {
 		return empresaCuit;
 	}
 	
-	public void setEmpresaCuit(Integer empresaCuit) {
+	public void setEmpresaCuit(String empresaCuit) {
 		this.empresaCuit = empresaCuit;
 	}
 	
@@ -132,7 +124,7 @@ public class IssueRepairDTO implements Serializable {
 	
 	public void setRepresentanteTecnico() {
 		this.representanteTecnico = getRepresentanteNombre() 
-				+ ","+ getRepresentanteDni();
+				+ ","+ getRepresentanteMatricula();
 	}
 	
 	public void setRepresentanteTecnico(String representanteTecnico) {
@@ -147,35 +139,35 @@ public class IssueRepairDTO implements Serializable {
 		this.representanteNombre = representanteNombre;
 	}
 
-	public Integer getRepresentanteDni() {
-		return representanteDni;
+	public String getRepresentanteMatricula() {
+		return representanteMatricula;
 	}
 
-	public void setRepresentanteDni(Integer representanteDni) {
-		this.representanteDni = representanteDni;
+	public void setRepresentanteMatricula(String representanteMatricula) {
+		this.representanteMatricula = representanteMatricula;
+	}
+	
+	public Integer getPlazo() {
+		return plazo;
 	}
 
-	public Integer getPlazoEjecucionEnDias() {
-		return plazoEjecucionEnDias;
+	public void setPlazo(Integer plazo) {
+		this.plazo = plazo;
 	}
-	
-	public void setPlazoEjecucionEnDias(Integer plazoEjecucionEnDias) {
-		this.plazoEjecucionEnDias = plazoEjecucionEnDias;
+
+	public double getPresupuestoAdjudicacion() {
+		return presupuestoAdjudicacion;
 	}
-	
-	public Float getPresupuestoAdjudicado() {
-		return presupuestoAdjudicado;
+
+	public void setPresupuestoAdjudicacion(double presupuestoAdjudicacion) {
+		this.presupuestoAdjudicacion = presupuestoAdjudicacion;
 	}
-	
-	public void setPresupuestoAdjudicado(Float presupuestoAdjudicado) {
-		this.presupuestoAdjudicado = presupuestoAdjudicado;
-	}
-	
-	public Float getPresupuestoFinal() {
+
+	public double getPresupuestoFinal() {
 		return presupuestoFinal;
 	}
 	
-	public void setPresupuestoFinal(Float presupuestoFinal) {
+	public void setPresupuestoFinal(double presupuestoFinal) {
 		this.presupuestoFinal = presupuestoFinal;
 	}
 	
@@ -211,14 +203,6 @@ public class IssueRepairDTO implements Serializable {
 		this.fechaRealFin = fechaRealFin;
 	}
 	
-	public String getTipoObra() {
-		return tipoObra;
-	}
-
-	public void setTipoObra(String tipoObra) {
-		this.tipoObra = tipoObra;
-	}
-
 	public String getEstadoObra() {
 		return estadoObra;
 	}
@@ -226,7 +210,14 @@ public class IssueRepairDTO implements Serializable {
 	public void setEstadoObra(String estadoObra) {
 		this.estadoObra = estadoObra;
 	}
-	
-	
 
+	public String getObservaciones() {
+		return observaciones;
+	}
+
+	public void setObservaciones(String observaciones) {
+		this.observaciones = observaciones;
+	}
+	
+	
 }
