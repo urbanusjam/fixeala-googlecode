@@ -17,29 +17,11 @@ public class IssueRepairDAOImpl implements IssueRepairDAO {
 	public IssueRepairDAOImpl() {}
 
 	@Override
-	public void saveLicitacion(IssueRepair licitacion) {
-		entityManager.persist(licitacion);
-	}
-
-	@Override
-	public void updateLicitacion(IssueRepair licitacion) {
-		entityManager.merge(licitacion);
-		entityManager.flush();
-	}
-	
-	@Override
-	public void deleteLicitacion(Long issueID) {
-		IssueRepair licitacion = entityManager.createNamedQuery("IssueRepair.findById", IssueRepair.class)
-				   .setParameter("id", issueID)
+	public void deleteReparacion(Long issueID) {
+		IssueRepair reparacion = entityManager.createQuery("SELECT r FROM IssueRepair r WHERE r.id = :issueID ", IssueRepair.class)
+				   .setParameter("issueID", issueID)
 			       .getSingleResult();	
-		entityManager.remove(licitacion);
+		entityManager.remove(reparacion);
 	}
 	
-	@Override
-	public IssueRepair getLicitacionByIssue(Long issueID) {
-		IssueRepair licitacion = entityManager.createNamedQuery("IssueRepair.findById", IssueRepair.class)
-											  .setParameter("id", issueID)
-											  .getSingleResult();
-		return licitacion;
-	}
 }

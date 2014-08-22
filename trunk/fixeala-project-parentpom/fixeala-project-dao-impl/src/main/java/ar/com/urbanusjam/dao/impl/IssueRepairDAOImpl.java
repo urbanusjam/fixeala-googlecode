@@ -15,24 +15,9 @@ implements IssueRepairDAO {
 	}
 
 	@Override
-	public void saveLicitacion(IssueRepair licitacion) {
-		this.save(licitacion);
-	}
-
-	@Override
-	public void updateLicitacion(IssueRepair licitacion) {
-		this.update(licitacion);
-	}
-	
-	@Override
-	public void deleteLicitacion(Long issueID) {
+	public void deleteReparacion(Long issueID) {
 		List<IssueRepair> licitaciones = this.findWhere(" id = ?", issueID);
 		this.delete(licitaciones.get(0));
 	}
 	
-	@Override
-	public IssueRepair getLicitacionByIssue(Long issueID) {
-		List<IssueRepair> licitaciones = this.findWhere(" id = ?", issueID);
-		return licitaciones.get(0);
-	}
 }

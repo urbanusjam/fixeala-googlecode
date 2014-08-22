@@ -90,7 +90,7 @@ public class Issue implements Serializable  {
 
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn  
-	private IssueRepair licitacion;
+	private IssueRepair reparacion;
 	
 	@ManyToMany(fetch = FetchType.LAZY) //owner side
     @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.ALL})	
@@ -294,15 +294,15 @@ public class Issue implements Serializable  {
 	public void setRevisiones(Set<IssueUpdateHistory> revisiones) {
 		this.revisiones = revisiones;
 	}
-
-	public IssueRepair getLicitacion() {
-		return licitacion;
-	}
-
-	public void setLicitacion(IssueRepair licitacion) {
-		this.licitacion = licitacion;
-	}
 	
+	public IssueRepair getReparacion() {
+		return reparacion;
+	}
+
+	public void setReparacion(IssueRepair reparacion) {
+		this.reparacion = reparacion;
+	}
+
 	public Set<MediaContent> getContenidos() {
 		return contenidos;
 	}

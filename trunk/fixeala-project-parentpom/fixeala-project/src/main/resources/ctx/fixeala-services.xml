@@ -22,6 +22,7 @@
 		<property name="provinceDAO" ref="provinceDAO" />
 		<property name="tagDAO" ref="tagDAO" />
 		<property name="commentDAO" ref="commentDAO" />
+		<property name="issueRepairDAO" ref="issueRepairDAO" />
 		<property name="issueFollowDAO" ref="issueFollowDAO" />
 		<property name="issuePageViewDAO" ref="issuePageViewDAO" />
 		<property name="issueVoteDAO" ref="issueVoteDAO" />
