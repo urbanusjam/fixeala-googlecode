@@ -17,6 +17,7 @@ import org.hibernate.annotations.LazyToOne;
 import org.hibernate.annotations.LazyToOneOption;
 //import org.hibernate.bytecode.javassist.FieldHandled;
 //import org.hibernate.bytecode.javassist.FieldHandler;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name="issue_repair")
@@ -70,15 +71,19 @@ public class IssueRepair implements Serializable {
 	private double presupuestoFinal;
 		
 	@Column(name = "fecha_estimada_inicio")
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	private Date fechaEstimadaInicio;	
 	
 	@Column(name = "fecha_estimada_fin")
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	private Date fechaEstimadaFin;
 	
 	@Column(name = "fecha_real_inicio")
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	private Date fechaRealInicio;
 	
 	@Column(name = "fecha_real_fin")
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	private Date fechaRealFin;
 	
 	@Column(name = "estado_obra")

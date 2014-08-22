@@ -684,6 +684,8 @@ path:hover {
 																userActionsController.setCurrentVote(isVoted, isVoteUp);	
 	 															$("#numFollowers").text('${cantidadObservadores}'); 
 															});	
+															
+															$("#issueRepair").load(location.href + " #issueRepair > *");
 
 														}
 															

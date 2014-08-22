@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.mail.MessagingException;
+import javax.swing.RepaintManager;
 
 import org.jfree.util.Log;
 import org.springframework.mail.MailException;
@@ -81,8 +82,7 @@ public class IssueServiceImpl implements IssueService {
 	private IssuePageViewDAO issuePageViewDAO;
 	private IssueVoteDAO issueVoteDAO;
 	private IssueRepairDAO issueRepairDAO;
-	
-	
+		
 	
 	public void setUserService(UserService userService) {
 		this.userService = userService;
@@ -127,6 +127,8 @@ public class IssueServiceImpl implements IssueService {
 	public void setIssuePageViewDAO(IssuePageViewDAO issuePageViewDAO) {
 		this.issuePageViewDAO = issuePageViewDAO;
 	}
+	
+	
 
 
 	@Override
@@ -443,15 +445,9 @@ public class IssueServiceImpl implements IssueService {
 	@Override
 	public IssueDTO getIssueById(String issueID){
 		Issue issue = issueDAO.findIssueById(issueID);
-//		return convertToDTO(issue);		
 		return loadCompleteIssue(issue);		
 	}
-	
-//	@Override
-//	public AreaDTO getAreaByName(String areaName) {
-//		return convertTo(areaDAO.getAreaByName(areaName));
-//	}
-	
+		
 	@Override
 	public List<String> getTagList() {
 		List<Tag> tagList = new ArrayList<Tag>();
@@ -570,53 +566,53 @@ public class IssueServiceImpl implements IssueService {
 //		return areaDTO;
 //	}
 	
-	public IssueRepair convertTo(IssueRepairDTO licitacionDTO){
-		IssueRepair licitacion = new IssueRepair();
-		licitacion.setId(Long.valueOf(licitacionDTO.getNroReclamo()));
-		licitacion.setNroLicitacion(licitacionDTO.getNroLicitacion());
-		licitacion.setNroExpediente(licitacionDTO.getNroExpediente());
-		licitacion.setObra(licitacionDTO.getObra());
-		licitacion.setEstadoObra(licitacionDTO.getEstadoObra());
-		licitacion.setPlazo(licitacionDTO.getPlazo());
-		licitacion.setUnidadEjecutora(licitacionDTO.getUnidadEjecutora());
-		licitacion.setUnidadFinanciamiento(licitacionDTO.getUnidadFinanciamiento());
-		licitacion.setContratistaNombre(licitacionDTO.getEmpresaNombre());
-		licitacion.setContratistaCuit(licitacionDTO.getEmpresaCuit());	
-		licitacion.setRepresentanteTecnicoNombre(licitacionDTO.getRepresentanteNombre());
-		licitacion.setRepresentanteTecnicoMatricula(licitacionDTO.getRepresentanteMatricula());	
-		licitacion.setPresupuestoAdjudicacion(licitacionDTO.getPresupuestoAdjudicacion());
-		licitacion.setPresupuestoFinal(licitacionDTO.getPresupuestoFinal());
-		licitacion.setFechaEstimadaInicio(licitacionDTO.getFechaEstimadaInicio() != null ? licitacionDTO.getFechaEstimadaInicio() : null );
-		licitacion.setFechaEstimadaFin(licitacionDTO.getFechaEstimadaFin() != null ? licitacionDTO.getFechaEstimadaFin() : null);
-		licitacion.setFechaRealInicio(licitacionDTO.getFechaRealInicio() != null ? licitacionDTO.getFechaRealInicio() : null);
-		licitacion.setFechaRealFin(licitacionDTO.getFechaRealFin() != null ? licitacionDTO.getFechaRealFin() : null);
-		licitacion.setObservaciones(licitacionDTO.getObservaciones());
-		return licitacion;
-	}
+//	public IssueRepair convertTo(IssueRepairDTO licitacionDTO){
+//		IssueRepair licitacion = new IssueRepair();
+//		licitacion.setId(Long.valueOf(licitacionDTO.getNroReclamo()));
+//		licitacion.setNroLicitacion(licitacionDTO.getNroLicitacion());
+//		licitacion.setNroExpediente(licitacionDTO.getNroExpediente());
+//		licitacion.setObra(licitacionDTO.getObra());
+//		licitacion.setEstadoObra(licitacionDTO.getEstadoObra());
+//		licitacion.setPlazo(licitacionDTO.getPlazo());
+//		licitacion.setUnidadEjecutora(licitacionDTO.getUnidadEjecutora());
+//		licitacion.setUnidadFinanciamiento(licitacionDTO.getUnidadFinanciamiento());
+//		licitacion.setContratistaNombre(licitacionDTO.getEmpresaNombre());
+//		licitacion.setContratistaCuit(licitacionDTO.getEmpresaCuit());	
+//		licitacion.setRepresentanteTecnicoNombre(licitacionDTO.getRepresentanteNombre());
+//		licitacion.setRepresentanteTecnicoMatricula(licitacionDTO.getRepresentanteMatricula());	
+//		licitacion.setPresupuestoAdjudicacion(licitacionDTO.getPresupuestoAdjudicacion());
+//		licitacion.setPresupuestoFinal(licitacionDTO.getPresupuestoFinal());
+//		licitacion.setFechaEstimadaInicio(licitacionDTO.getFechaEstimadaInicio() != null ? licitacionDTO.getFechaEstimadaInicio() : null );
+//		licitacion.setFechaEstimadaFin(licitacionDTO.getFechaEstimadaFin() != null ? licitacionDTO.getFechaEstimadaFin() : null);
+//		licitacion.setFechaRealInicio(licitacionDTO.getFechaRealInicio() != null ? licitacionDTO.getFechaRealInicio() : null);
+//		licitacion.setFechaRealFin(licitacionDTO.getFechaRealFin() != null ? licitacionDTO.getFechaRealFin() : null);
+//		licitacion.setObservaciones(licitacionDTO.getObservaciones());
+//		return licitacion;
+//	}
 	
-	public IssueRepairDTO convertTo(IssueRepair licitacion){
-		
-		IssueRepairDTO licitacionDTO = new IssueRepairDTO();
-		licitacionDTO.setNroLicitacion(licitacion.getNroLicitacion());
-		licitacionDTO.setNroExpediente(licitacion.getNroExpediente());
-		licitacionDTO.setObra(licitacion.getObra());
-		licitacionDTO.setEstadoObra(licitacion.getEstadoObra());
-		licitacionDTO.setPlazo(licitacion.getPlazo());
-		licitacionDTO.setUnidadEjecutora(licitacion.getUnidadEjecutora());
-		licitacionDTO.setUnidadFinanciamiento(licitacion.getUnidadFinanciamiento());
-		licitacionDTO.setEmpresaNombre(licitacion.getContratistaNombre());
-		licitacionDTO.setEmpresaCuit(licitacion.getContratistaCuit());
-		licitacionDTO.setRepresentanteNombre(licitacion.getRepresentanteTecnicoNombre());
-		licitacionDTO.setRepresentanteMatricula(licitacion.getRepresentanteTecnicoMatricula());
-		licitacionDTO.setPresupuestoAdjudicacion(licitacion.getPresupuestoAdjudicacion());
-		licitacionDTO.setPresupuestoFinal(licitacion.getPresupuestoFinal());
-		licitacionDTO.setFechaEstimadaInicio(licitacion.getFechaEstimadaInicio());
-		licitacionDTO.setFechaEstimadaFin(licitacion.getFechaEstimadaFin());
-		licitacionDTO.setFechaRealInicio(licitacion.getFechaRealInicio());
-		licitacionDTO.setFechaRealFin(licitacion.getFechaRealFin());
-		licitacionDTO.setObservaciones(licitacion.getObservaciones());
-		return licitacionDTO;
-	}
+//	public IssueRepairDTO convertTo(IssueRepair licitacion){
+//		
+//		IssueRepairDTO licitacionDTO = new IssueRepairDTO();
+//		licitacionDTO.setNroLicitacion(licitacion.getNroLicitacion());
+//		licitacionDTO.setNroExpediente(licitacion.getNroExpediente());
+//		licitacionDTO.setObra(licitacion.getObra());
+//		licitacionDTO.setEstadoObra(licitacion.getEstadoObra());
+//		licitacionDTO.setPlazo(licitacion.getPlazo());
+//		licitacionDTO.setUnidadEjecutora(licitacion.getUnidadEjecutora());
+//		licitacionDTO.setUnidadFinanciamiento(licitacion.getUnidadFinanciamiento());
+//		licitacionDTO.setEmpresaNombre(licitacion.getContratistaNombre());
+//		licitacionDTO.setEmpresaCuit(licitacion.getContratistaCuit());
+//		licitacionDTO.setRepresentanteNombre(licitacion.getRepresentanteTecnicoNombre());
+//		licitacionDTO.setRepresentanteMatricula(licitacion.getRepresentanteTecnicoMatricula());
+//		licitacionDTO.setPresupuestoAdjudicacion(licitacion.getPresupuestoAdjudicacion());
+//		licitacionDTO.setPresupuestoFinal(licitacion.getPresupuestoFinal());
+//		licitacionDTO.setFechaEstimadaInicio(licitacion.getFechaEstimadaInicio());
+//		licitacionDTO.setFechaEstimadaFin(licitacion.getFechaEstimadaFin());
+//		licitacionDTO.setFechaRealInicio(licitacion.getFechaRealInicio());
+//		licitacionDTO.setFechaRealFin(licitacion.getFechaRealFin());
+//		licitacionDTO.setObservaciones(licitacion.getObservaciones());
+//		return licitacionDTO;
+//	}
 	
 	
 	public IssueUpdateHistory convertTo(IssueUpdateHistoryDTO historialDTO, User user){
@@ -843,11 +839,11 @@ public class IssueServiceImpl implements IssueService {
 		}		
 		issueDTO.setContenidos(contenidosDTO);
 		
-		//licitacion
-		if(issue.getLicitacion() != null)
-			issueDTO.setLicitacion(convertTo(issue.getLicitacion()));
+		//reparacion
+		if(issue.getReparacion() != null)
+			issueDTO.setReparacion(issue.getReparacion());
 		else
-			issueDTO.setLicitacion(null);
+			issueDTO.setReparacion(null);
 		
 		return issueDTO;
 
@@ -1155,30 +1151,51 @@ public class IssueServiceImpl implements IssueService {
 		 return issuesDTO;
 	}
 
+
 	@Override
-	public void addHistoryUpdate(IssueUpdateHistoryDTO update) {
-//		issueUpdateDAO.saveHistorial(convertTo(update));		
+	@Transactional(propagation = Propagation.REQUIRED)
+	public void addReparacion(IssueRepair repair, String username) {		
+		
+		Issue issue = issueDAO.findIssueById(String.valueOf(repair.getId()));
+		User user = userDAO.loadUserByUsername(username);
+		
+		IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
+		revision.setFecha(new Date());
+		revision.setUsername(username);
+		revision.setNroReclamo(Long.valueOf(repair.getId()));
+		revision.setOperacion(Operation.UPDATE);
+		revision.setMotivo(Messages.ISSUE_REPAIR_INFO_ADD);
+		revision.setEstado(issue.getStatus());
+		revision.setObservaciones(null);
+		
+		issue.setLastUpdateDate(this.getCurrentCalendar(revision.getFecha()));
+		issue.setReparacion(repair);
+		issue.addRevision(this.convertTo(revision, user));
+		
+		issueDAO.updateIssue(issue);
 	}
 
 	@Override
-	public void addRepairInfo(IssueRepairDTO licitacion) {
-		issueRepairDAO.saveLicitacion(convertTo(licitacion));
-	}
+	@Transactional(propagation = Propagation.REQUIRED)
+	public void deleteReparacion(String issueID, String username) {
+		
+		Issue issue = issueDAO.findIssueById(issueID);
+		User user = userDAO.loadUserByUsername(username);
+		
+		IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
+		revision.setFecha(new Date());
+		revision.setUsername(username);
+		revision.setNroReclamo(Long.valueOf(issueID));
+		revision.setOperacion(Operation.UPDATE);
+		revision.setMotivo(Messages.ISSUE_REPAIR_INFO_DELETE);
+		revision.setEstado(issue.getStatus());
+		revision.setObservaciones(null);
 
-	@Override
-	public void updateRepairInfo(IssueRepairDTO licitacion) {
-		issueRepairDAO.updateLicitacion(convertTo(licitacion));
-	}
-
-	@Override
-	public void deleteRepairInfo(String issueID) {
-		issueRepairDAO.deleteLicitacion(Long.valueOf(issueID));
-	}
-
-	@Override
-	public IssueRepairDTO getRepairInfoByIssue(String issueID) {
-		IssueRepair licitacion = issueRepairDAO.getLicitacionByIssue(Long.valueOf(issueID));
-		return convertTo(licitacion);
+		issue.setLastUpdateDate(this.getCurrentCalendar(revision.getFecha()));
+		issue.addRevision(this.convertTo(revision, user));
+		issue.setReparacion(null);
+		
+		issueRepairDAO.deleteReparacion(Long.valueOf(issueID));
 	}
 
 	private String[] getFollowersEmails(Set<IssueFollow> followers, String reporterEmail){

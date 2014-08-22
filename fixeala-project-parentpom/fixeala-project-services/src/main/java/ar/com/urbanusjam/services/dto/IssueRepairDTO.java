@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.NumberFormat;
+import org.springframework.format.annotation.NumberFormat.Style;
 
 //import org.springframework.format.annotation.DateTimeFormat;
 
@@ -17,14 +19,14 @@ public class IssueRepairDTO implements Serializable {
 	private String nroReclamo;	
 	private String unidadEjecutora;
 	private String unidadFinanciamiento;
-	private String empresaConstructora;
 	private String empresaNombre;
 	private String empresaCuit;
-	private String representanteTecnico;
 	private String representanteNombre;
 	private String representanteMatricula;
 	private Integer plazo;
+	@NumberFormat(style = Style.CURRENCY)
 	private double presupuestoAdjudicacion;
+	@NumberFormat(style = Style.CURRENCY)
 	private double presupuestoFinal;
 	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	private Date fechaEstimadaInicio;	
@@ -39,15 +41,15 @@ public class IssueRepairDTO implements Serializable {
 	
 	public IssueRepairDTO(){}
 	
-	   
+	
 	public String getObra() {
 		return obra;
 	}
-	
+
 	public void setObra(String obra) {
 		this.obra = obra;
 	}
-	
+
 	public String getNroLicitacion() {
 		return nroLicitacion;
 	}
@@ -70,20 +72,6 @@ public class IssueRepairDTO implements Serializable {
 	
 	public void setNroReclamo(String nroReclamo) {
 		this.nroReclamo = nroReclamo;
-	}
-
-	
-	public String getEmpresaConstructora() {
-		return empresaConstructora;
-	}
-	
-	public void setEmpresaConstructora(String empresaConstructora) {
-		this.empresaConstructora = empresaConstructora;
-	}
-	
-	public void setEmpresaConstructora() {
-		this.empresaConstructora = getEmpresaNombre() 
-				+ "," + getEmpresaCuit();
 	}
 	
 	public String getEmpresaNombre() {
@@ -116,19 +104,6 @@ public class IssueRepairDTO implements Serializable {
 	
 	public void setUnidadFinanciamiento(String unidadFinanciamiento) {
 		this.unidadFinanciamiento = unidadFinanciamiento;
-	}
-	
-	public String getRepresentanteTecnico() {
-		return representanteTecnico;
-	}
-	
-	public void setRepresentanteTecnico() {
-		this.representanteTecnico = getRepresentanteNombre() 
-				+ ","+ getRepresentanteMatricula();
-	}
-	
-	public void setRepresentanteTecnico(String representanteTecnico) {
-		this.representanteTecnico = representanteTecnico;
 	}
 	
 	public String getRepresentanteNombre() {

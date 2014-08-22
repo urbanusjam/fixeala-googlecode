@@ -47,6 +47,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.Gson;
 
+import ar.com.urbanusjam.entity.annotations.IssueRepair;
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.ContenidoService;
 import ar.com.urbanusjam.services.IssueService;
@@ -208,7 +209,7 @@ public class IssueController {
 
 			if (!issueTags.isEmpty()) {
 				for (int i = 0; i < issueTags.size(); i++) {
-					issueTagsByComma += issueTags.get(i) + ", ";
+					issueTagsByComma += issueTags.get(i).toLowerCase() + ", ";
 				}
 				issueTagsByComma = issueTagsByComma.substring(0, issueTagsByComma.length() - 2);
 			}
@@ -218,7 +219,7 @@ public class IssueController {
 			for (String s : dbTags) {
 				JSONObject obj = new JSONObject();
 				obj.put("id", dbTags.indexOf(s)+1);
-				obj.put("text", s);
+				obj.put("text", s.toLowerCase());
 				array.put(obj);
 			}
 
@@ -243,7 +244,7 @@ public class IssueController {
 			model.addAttribute("cantidadRevisiones", issue.getHistorial()
 					.size());		
 			model.addAttribute("infoReparacion",
-					issue.getLicitacion() != null ? issue.getLicitacion()
+					issue.getReparacion() != null ? issue.getReparacion()
 							.getEstadoObra() : "Sin datos");
 			model.addAttribute("cantidadReclamosSimilares", 0);
 			model.addAttribute("cantidadArchivos", 0);
@@ -292,51 +293,32 @@ public class IssueController {
 			model.addAttribute("isVoteUp", currentVote.getVote() == 1 ? true
 					: false);
 
-			/**
-			 * IssueRepairDTO licitacion = new IssueRepairDTO();
-			 * 
-			 * if(issue.getLicitacion() != null){
-			 * 
-			 * licitacion = issue.getLicitacion();
-			 * 
-			 * model.addAttribute("obra", licitacion.getObra());
-			 * model.addAttribute("nroLicitacion",
-			 * licitacion.getNroLicitacion());
-			 * model.addAttribute("nroExpediente",
-			 * licitacion.getNroExpediente()); model.addAttribute("estadoObra",
-			 * licitacion.getEstadoObra()); model.addAttribute("tipoObra",
-			 * licitacion.getTipoObra()); model.addAttribute("valorPliego",
-			 * licitacion.getValorPliego());
-			 * model.addAttribute("unidadEjecutora",
-			 * licitacion.getEmpresaConstructora());
-			 * model.addAttribute("unidadFinanciamiento",
-			 * licitacion.getUnidadFinanciamiento());
-			 * model.addAttribute("empresaNombre",
-			 * licitacion.getEmpresaNombre()); model.addAttribute("empresaCuit",
-			 * licitacion.getEmpresaCuit());
-			 * model.addAttribute("representanteNombre",
-			 * licitacion.getRepresentanteNombre());
-			 * model.addAttribute("representanteDni",
-			 * licitacion.getRepresentanteDni()); //
-			 * model.addAttribute("lic-plazo",
-			 * licitacion.getPlazoEjecucionEnDias());
-			 * model.addAttribute("presupuestoAdjudicado",
-			 * licitacion.getPresupuestoAdjudicado());
-			 * model.addAttribute("presupuestoFinal",
-			 * licitacion.getPresupuestoFinal());
-			 * model.addAttribute("fechaEstimadaInicio",
-			 * parseDate(licitacion.getFechaEstimadaInicio()));
-			 * model.addAttribute("fechaEstimadaFinal",
-			 * parseDate(licitacion.getFechaEstimadaFin()));
-			 * model.addAttribute("fechaRealInicio",
-			 * parseDate(licitacion.getFechaRealInicio()));
-			 * model.addAttribute("fechaRealFinal",
-			 * parseDate(licitacion.getFechaRealFin()));
-			 * 
-			 * }
-			 **/
 			
-			
+			IssueRepair repair = issue.getReparacion();
+			 
+			 if(repair != null){
+			 
+				 model.addAttribute("obra", repair.getObra());
+				 model.addAttribute("nroLicitacion", repair.getNroLicitacion());
+				 model.addAttribute("nroExpediente", repair.getNroExpediente());
+				 model.addAttribute("estadoObra", repair.getEstadoObra()); 				 
+				 model.addAttribute("unidadEjecutora", repair.getUnidadEjecutora());
+			     model.addAttribute("unidadFinanciamiento", repair.getUnidadFinanciamiento());			     
+			     model.addAttribute("empresaNombre", repair.getContratistaNombre()); 
+			     model.addAttribute("empresaCuit", repair.getContratistaCuit());			  
+			     model.addAttribute("representanteNombre", repair.getRepresentanteTecnicoNombre());
+			     model.addAttribute("representanteMatricula", repair.getRepresentanteTecnicoMatricula()); 			 
+			     model.addAttribute("plazo", repair.getPlazo());
+			     model.addAttribute("presupuestoAdjudicacion", repair.getPresupuestoAdjudicacion());	
+			     model.addAttribute("presupuestoFinal", repair.getPresupuestoFinal());
+			     model.addAttribute("fechaEstimadaInicio", parseDate(repair.getFechaEstimadaInicio()));
+			     model.addAttribute("fechaEstimadaFin", parseDate(repair.getFechaEstimadaFin()));			     
+			     model.addAttribute("fechaRealInicio", parseDate(repair.getFechaRealInicio()));
+			     model.addAttribute("fechaRealFin", parseDate(repair.getFechaRealFin()));			     
+			     model.addAttribute("observaciones", repair.getObservaciones());
+			  
+			  }
+			 
 			//page 1
 			JSONArray updatePagesArray = new JSONArray();
 			updatePagesArray = paginateToArray(issue.getHistorial(), 1, "update");
@@ -606,7 +588,7 @@ public class IssueController {
 			revision.setObservaciones(Messages.ISSUE_CREATE_OBS);
 			revision.setEstado(issue.getStatus());
 
-			issueService.addHistoryUpdate(revision);
+//			issueService.addHistoryUpdate(revision);
 
 			List<MediaContentDTO> contenidos = new ArrayList<MediaContentDTO>();
 			contenidos = issue.getContenidos();
@@ -683,7 +665,7 @@ public class IssueController {
 				revision.setEstado(issue.getStatus());
 
 				issue.getHistorial().add(revision);
-				issue.setLicitacion(null);
+				issue.setReparacion(null);
 
 				// random id
 				// issue.setId(String.valueOf(issue.getId()));
@@ -854,110 +836,70 @@ public class IssueController {
 		}
 	}
 
-	@RequestMapping(value = "/issues/saveRepairInfo", method = RequestMethod.POST)
+	@RequestMapping(value = "/issues/addRepairInfo", method = RequestMethod.POST)
 	public @ResponseBody
-	AlertStatus saveRepairInfo(@RequestParam("issueID") String issueID,
-			@RequestParam("userID") String userID,
-			@ModelAttribute("repairForm") IssueRepairDTO licitacionDTO,
+	AlertStatus addRepairInfo(@ModelAttribute("repairForm") IssueRepair repair,
 			Model model, HttpServletRequest request) throws ParseException {
 
 		try {
+			
+			User user = getCurrentUser(SecurityContextHolder.getContext()
+					.getAuthentication());
+			UserDetails userDB = userService.loadUserByUsername(user
+					.getUsername());
 
-			licitacionDTO.setNroReclamo(String.valueOf(issueID));
+			if (userDB == null) {
+				return new AlertStatus(false,
+						"Debe estar logueado para agregar informaci&oacute;n al reclamo.");
+			}
+			
+			else{
+				String issueID = (String) request.getSession().getAttribute(
+						"issueID");
 
-			IssueDTO issue = issueService.getIssueById(issueID);
-			issue.setLicitacion(licitacionDTO);
-
-			IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
-			revision.setFecha(new Date());
-			revision.setUsername(userID);
-			revision.setNroReclamo(Long.valueOf(issueID));
-			revision.setOperacion(Operation.UPDATE);
-			revision.setMotivo(Messages.ISSUE_REPAIR_INFO_ADD);
-			revision.setEstado(issue.getStatus());
-			revision.setObservaciones(Messages.ISSUE_UPDATE_OBS);
-
-			issue.setLastUpdateDate(revision.getFecha());
-
-			issueService.addRepairInfo(licitacionDTO);
-			issueService.addHistoryUpdate(revision);
-
-			return new AlertStatus(true, "La informacion ha sido guardada.");
-
-		} catch (AccessDeniedException e) {
-			return new AlertStatus(false,
-					"Debe estar logueado para ingresar un nuevo reclamo.");
-		} catch (Exception e) {
-			return new AlertStatus(false,
-					"No se pudo guardar la informacion. Intente de nuevo.");
-		}
-	}
-
-	@RequestMapping(value = "/issues/updateRepairInfo", method = RequestMethod.POST)
-	public @ResponseBody
-	AlertStatus updateRepairInfo(
-			@ModelAttribute("licitacion") IssueRepairDTO licitacionDTO,
-			Model model, HttpServletRequest request) throws ParseException {
-
-		try {
-			String issueID = (String) request.getSession().getAttribute(
-					"issueID");
-			licitacionDTO.setNroReclamo(issueID);
-			IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
-			revision.setFecha(new Date());
-			revision.setUsername("coripel");
-			revision.setNroReclamo(Long.valueOf(issueID));
-			revision.setOperacion(Operation.UPDATE);
-			revision.setMotivo(Messages.ISSUE_REPAIR_INFO_UPDATE);
-			revision.setEstado("ESTADO");
-			revision.setObservaciones(Messages.ISSUE_UPDATE_OBS);
-
-			issueService.updateRepairInfo(licitacionDTO);
-			issueService.addHistoryUpdate(revision);
-
+				repair.setId(Long.valueOf(issueID));
+				issueService.addReparacion(repair, userDB.getUsername());
+			}
+		
 			return new AlertStatus(true, "La informacion ha sido actualizada.");
 
 		} catch (AccessDeniedException e) {
 			return new AlertStatus(false,
-					"Debe estar logueado para ingresar un nuevo reclamo.");
+					"Debe estar logueado para actualizar el reclamo.");
 		} catch (Exception e) {
 			return new AlertStatus(false,
-					"No se pudo actualizar la informacion. Intente de nuevo.");
+					"No se pudo guardar la informaci&oacute;n. Intente de nuevo.");
 		}
 	}
 
 	@RequestMapping(value = "/issues/deleteRepairInfo", method = RequestMethod.POST)
-	public @ResponseBody
-	AlertStatus deleteRepairInfo(@RequestParam("issueID") String issueID,
-			@RequestParam("userID") String userID, Model model,
-			HttpServletRequest request) throws ParseException {
+	public @ResponseBody AlertStatus deleteRepairInfo(Model model, HttpServletRequest request) throws ParseException {
 
 		try {
+			
+			User user = getCurrentUser(SecurityContextHolder.getContext()
+					.getAuthentication());
+			UserDetails userDB = userService.loadUserByUsername(user
+					.getUsername());
 
-			IssueDTO issue = issueService.getIssueById(issueID);
-
-			IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
-			revision.setFecha(new Date());
-			revision.setUsername(userID);
-			revision.setNroReclamo(Long.valueOf(issueID));
-			revision.setOperacion(Operation.UPDATE);
-			revision.setMotivo(Messages.ISSUE_REPAIR_INFO_DELETE);
-			revision.setEstado(issue.getStatus());
-			revision.setObservaciones(Messages.ISSUE_UPDATE_OBS);
-
-			issue.setLastUpdateDate(revision.getFecha());
-
-			issueService.deleteRepairInfo(issueID);
-			issueService.addHistoryUpdate(revision);
+			if (userDB == null) {
+				return new AlertStatus(false,
+						"Debe estar logueado para actualizar el reclamo.");
+			}
+			
+			else{
+				String issueID = (String) request.getSession().getAttribute("issueID");
+				issueService.deleteReparacion(issueID, userDB.getUsername());
+			}
 
 			return new AlertStatus(true, "La informacion ha sido eliminada.");
 
 		} catch (AccessDeniedException e) {
 			return new AlertStatus(false,
-					"Debe estar logueado para ingresar un nuevo reclamo.");
+					"Debe estar logueado para actualizar el reclamo.");
 		} catch (Exception e) {
 			return new AlertStatus(false,
-					"No se pudo eliminar la informacion. Intente de nuevo.");
+					"No se pudo eliminar la informaci&oacute;n. Intente de nuevo.");
 		}
 	}
 

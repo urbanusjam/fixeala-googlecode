@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import ar.com.urbanusjam.entity.annotations.IssueRepair;
 import ar.com.urbanusjam.services.utils.DateUtils;
 
 
@@ -44,7 +45,7 @@ public class IssueDTO implements Serializable {
 	private UserDTO assignedOfficial;
 	
 	@XmlTransient
-	private IssueRepairDTO licitacion = new IssueRepairDTO();
+	private IssueRepair reparacion = new IssueRepair();
 	
 	@XmlTransient
 	private List<String> tags = new ArrayList<String>();
@@ -185,15 +186,15 @@ public class IssueDTO implements Serializable {
 	public void setAssignedOfficial(UserDTO assignedOfficial) {
 		this.assignedOfficial = assignedOfficial;
 	}
-
-	public IssueRepairDTO getLicitacion() {
-		return licitacion;
-	}
-
-	public void setLicitacion(IssueRepairDTO licitacion) {
-		this.licitacion = licitacion;
-	}
 	
+	public IssueRepair getReparacion() {
+		return reparacion;
+	}
+
+	public void setReparacion(IssueRepair reparacion) {
+		this.reparacion = reparacion;
+	}
+
 	public List<String> getTags() {
 		return tags;
 	}

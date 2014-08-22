@@ -854,7 +854,7 @@
 			<li class="active"><a href="#latestIssues" data-toggle="tab"><i class="icon icon-tags icon-small"></i>&Uacute;ltimos publicados</a></li>
 			<li><a href="#hottestIssues" data-toggle="tab"><i class="icon icon-thumbs-up icon-small"></i>M&aacute;s votados</a></li>
 			<li><a href="#topUsers" data-toggle="tab"><i class="icon icon-user icon-small"></i>Ranking usuarios</a></li>
-			<li><a href="#graphs" data-toggle="tab"><i class="icon icon-bar-chart icon-small"></i>Indicadores</a></li>
+<!-- 			<li><a href="#graphs" data-toggle="tab"><i class="icon icon-bar-chart icon-small"></i>Indicadores</a></li> -->
 		</ul>							
 														
 		<div class="tab-content">	
@@ -916,9 +916,9 @@
 				
 			</div>
 			
-			<div class="tab-pane fade" id="graphs">		
-			Graficos
-			</div>
+<!-- 			<div class="tab-pane fade" id="graphs">		 -->
+<!-- 			Graficos -->
+<!-- 			</div> -->
 			
 		</div>
 

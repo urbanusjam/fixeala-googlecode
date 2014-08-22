@@ -82,16 +82,30 @@
 				}
 				
 			});
-				
-			//collapse detalle resolucion (reemplazado por MODAL)
-// 			$('.btn-collapse').on('click', function(e) {			
-// 			    e.preventDefault();
-// 			    var $this = $(this);
-// 			    var $collapse = $this.closest('.collapse-group').find('.collapse');
-// 			    $collapse.collapse('toggle');
-// 			});
 			
-
+			
+			$('#invalid-container').hide();
+			
+			$("#tipoResolucion").change(function(){
+				
+				if( $(this).val() == "Invalido" ){
+					var $options = $('#tipoInvalido');
+					$options.append($("<option />").val("No es un reclamo").text("NO ES UN RECLAMO"));
+					$options.append($("<option />").val("Ubicacion incorrecta").text("UBICACION INCORRECTA"));
+					$options.append($("<option />").val("Informacion falsa").text("INFORMACION FALSA"));
+					$options.append($("<option />").val("Datos personales").text("DATOS PERSONALES"));					
+					$options.append($("<option />").val("Contenido ofensivo").text("CONTENIDO OFENSIVO"));
+					 
+					$('#invalid-container').show();
+				}
+				
+				else{
+					$('#invalid-container').hide();
+				}
+				
+				
+			});
+	
 			$('#fecha-estimada-from').datetimepicker({		  
 				  format: 'dd/MM/yyyy',
 				  language: 'es',		
@@ -125,29 +139,103 @@
 			  '<button type="button" class="btn editable-cancel"><i class="icon-remove"></i></button>';     
 			
 			$('#btn-update').attr('disabled', true);
-			$('#btn-update-repair').attr('disabled', true);
+// 			$('#btn-save-repair').attr('disabled', true);
 			$('#btn-edit').addClass('notClicked');
 			
 			//enable / disable
 			
 			$('.editableField').hide();
+			
+			
+			$('#btn-add-repair').live('click', function() {
+				
+				$('#mdl-repair').modal('show');
+				$('#presupuestoAdjudicacion').val(0);
+				$('#presupuestoFinal').val(0);
+				$('#plazo').val(0);
+			
+			});
 		    
-		    $('#btn-edit-repair').click(function() {
-// 		    	if( $('#btn-update-repair').is(":disabled") == true ){		    	
-// 					$('#btn-update-repair').attr('disabled', false);
-// 					$('#btn-delete-repair').attr('disabled', true);
-// 		    	}
-// 		    	else{
-// 		    		$('#btn-update-repair').attr('disabled', true);
-// 		    		$('#btn-delete-repair').attr('disabled', false);
-// 		    	}
-		    		
+		    $('#btn-edit-repair').live('click', function() {
 
-// 		    	$('#tbl-licitacion .editable').editable('toggleDisabled');
+				$('#obra').val('${obra}');
+				$('#estadoObra').val('${estadoObra}');
+				$('#nroLicitacion').val('${nroLicitacion}');
+				$('#nroExpediente').val('${nroExpediente}');
+				$('#plazo').val('${plazo}');
+				$('#empresaNombre').val('${empresaNombre}');
+				$('#empresaCuit').val('${empresaCuit}');
+				$('#representanteNombre').val('${representanteNombre}');
+				$('#representanteMatricula').val('${representanteMatricula}');
+				$('#unidadEjecutora').val('${unidadEjecutora}');
+				$('#unidadFinanciamiento').val('${unidadFinanciamiento}');
+				$('#presupuestoAdjudicacion').val('${presupuestoAdjudicacion}');
+				$('#presupuestoFinal').val('${presupuestoFinal}');
+				$('#fechaEstimadaInicio').val('${fechaEstimadaInicio}');
+				$('#fechaEstimadaFin').val('${fechaEstimadaFin}');			
+				$('#fechaRealInicio').val('${fechaRealInicio}');
+				$('#fechaRealFin').val('${fechaRealFin}');
+				$('#observaciones').val('${observaciones}');
 
 		    	$('#mdl-repair').modal('show');
 		    	
 		    }); 
+		    
+		    $('#btn-save-repair').click(function(e) {	
+				
+				$.ajax({
+			       url: './addRepairInfo', 
+			       type: 'POST',
+			       data: $('#repairForm').serialize(),
+			       dataType: 'json',					       			       
+			       success: function(data) {
+			    	   if(data.result){					    		
+			    		   window.location.reload();	
+			    	   }						    	   
+			    	   else{
+			    		   bootbox.alert(data.message);		
+			    	   }						    	
+			       },
+			       error: function (response) {
+			    	   bootbox.alert('No se pudo guardar la informaci&oacute;n. Intente de nuevo.');		
+			       },
+			       complete: function(){
+			    	   $('#mdl-repair').modal('hide');
+			       }
+
+			   });				   
+				
+				return false; 
+			});
+			
+			$('#btn-delete-repair').live('click', function(e) {	
+				
+				 bootbox.confirm("&iquest;Confirma que desea eliminar los datos?", function(result){
+					  if(result){	
+							$.ajax({
+		        			    url: './deleteRepairInfo',
+						 		type: 'POST',			
+						 		dataType: 'json',		
+						        success: function(data){	
+						        	if(data.result){
+						        		window.location.reload();
+						        	}
+						        	else{
+						        		bootbox.alert(data.message); 
+						        	}
+								},
+								error: function (response) {
+							    	   bootbox.alert('No se pudo eliminar la informaci&oacute;n. Intente de nuevo.');		
+							    },
+							    complete: function(){
+							    	   $('#mdl-repair').modal('hide');
+							    }
+							});
+							
+							return false; 
+					  }
+				});
+			});
 		    
 			  //--NON-EDITABLE FIELDS
 			  
@@ -310,246 +398,10 @@
 		                    
   			  }); 
 		
-			//---- CAMPOS LICITACION
-			 
-			
-			  $("#lic-obra").editable({	
-				  pk: 5,  
-				  name: 'obra',
-				  emptytext:'Vac&iacute;o',
-				  placement:'bottom',
-				  inputclass: 'licitacion-textarea',
-				  ajaxOptions: {
-				        type: 'put'
-				  }
-// 				  validate: function(value) {
-// 					    if($.trim(value) == '') {
-// 					        return 'Este campo es requerido.';
-// 					    }
-// 					    if($.trim(value).length > 600) {
-// 					        return 'La longitud máxima del campo es de 600 caracteres.';
-// 					    }
-// 				  }
-			  });
-			  
-			  $("#lic-nroLicitacion").editable({
-				  pk: 6,  
-				  name: 'nroLicitacion',
-				  emptytext:'Vac&iacute;o',
-				  ajaxOptions: {
-				        type: 'put'
-				  }
-// 				  validate: function(value) {
-// 					    if($.trim(value) == '') {
-// 					        return 'Este campo es requerido.';
-// 					    }
-// 				  }
-			  });
-			  
-			  $("#lic-nroExpediente").editable({	
-				  pk: 7, 
-				  name: 'nroExpediente',
-				  emptytext:'Vac&iacute;o',
-				  ajaxOptions: {
-				        type: 'put'
-				  }
-// 				  validate: function(value) {
-// 					    if($.trim(value) == '') {
-// 					        return 'Este campo es requerido.';
-// 					    }
-// 				  }
-			  });
-			  
-			  $('#lic-plazo').editable({
-				  name: 'plazoEnDias',
-				  emptytext:'Vac&iacute;o',
-				  ajaxOptions: {
-				        type: 'put'
-				  }
-			    });    
-			  
-			  $('#lic-estadoObra').editable({
-				  name: 'estadoObra',
-				  value: 'Indeterminado',
-			      source: [
-			            {value: 'Indeterminado', text: 'Indeterminado'},
-					    {value: 'No iniciada', text: 'No iniciada'},
-			            {value: 'En curso', text: 'En curso'},
-			            {value: 'Terminada', text: 'Terminada'},
-			            {value: 'Inconclusa', text: 'Inconclusa'},
-			            {value: 'Suspendida', text: 'Suspendida'},
-			            {value: 'Cancelada', text: 'Cancelada'}		        
-			        ]
-			  });  
-			 			  
-			  $("#lic-unidadEjecutora").editable({
-				  name: 'unidadEjecutora',
-				  emptytext:'Vac&iacute;o',
-				  ajaxOptions: {
-				        type: 'put'
-				  }
-			  });
-			  
-			  $("#lic-unidadFinanciamiento").editable({				
-				  name: 'unidadFinanciamiento',
-				  emptytext:'Vac&iacute;o',
-				  ajaxOptions: {
-				        type: 'put'
-				  }		 
-			  });
-			  
-			  $("#lic-empresaNombre").editable({	
-				  name: 'empresaNombre',
-				  emptytext:'Vac&iacute;o',
-				  ajaxOptions: {
-				        type: 'put'
-				  }
-			  });
-		
-			  $("#lic-empresaCuit").editable({		
-				  name: 'empresaCuit',
-				  emptytext:'Vac&iacute;o',
-				  ajaxOptions: {
-				        type: 'put'
-				  }
-			  });
-			
-			 
-			  $("#lic-representanteNombre").editable({			
-				  name: 'representanteNombre',
-				  emptytext:'Vac&iacute;o',
-				  ajaxOptions: {
-				        type: 'put'
-				  }
-			  });
-			  
-			  $("#lic-representanteMatricula").editable({			
-				  name: 'representanteMatricula',
-				  emptytext:'Vac&iacute;o',
-				  ajaxOptions: {
-				        type: 'put'
-				  }
-			  });
-	
-			  $("#lic-presupuestoAdjudicacion").editable({	
-				  name: 'presupuestoAdjudicacion',
-				  value: 0,
-				  ajaxOptions: {
-				        type: 'put'
-				  }
-			  });
-			  
-			  $("#lic-presupuestoFinal").editable({	
-				  name: 'presupuestoFinal',
-				  value: 0,
-				  ajaxOptions: {
-				        type: 'put'
-				  }
-			  });
-			  			  
-			  $('#lic-fechaEstimadaInicio').editable({
-				  name:'fechaEstimadaInicio',
-				  mode: 'popup',
-				  placement: 'top',
-				  emptytext:'Vac&iacute;o',
-				  format: 'DD-MM-YYYY',    
-			      viewformat: 'DD/MM/YYYY',    
-			      combodate: {
-			                minYear: 2013,
-			                maxYear: 2015,
-			                minuteStep: 1,
-			                value: new Date()
-			      },
-			      ajaxOptions: {
-				        type: 'put'
-				  }
-			    });
-			 
-			  
-			  $('#lic-fechaEstimadaFin').editable({
-				  name:'fechaEstimadaFin',
-				  mode: 'popup',
-				  placement: 'right',
-				  emptytext:'Vac&iacute;o',
-				  format: 'DD-MM-YYYY', 
-				  viewformat: 'DD/MM/YYYY',    
-			      combodate: {
-			    	  	minYear: 2013,
-		                maxYear: 2015,
-		                minuteStep: 1,
-		                value: new Date()
-			      },
-			      ajaxOptions: {
-				        type: 'put'
-				  }
-			  });
-			  
-			  $('#lic-fechaRealInicio').editable({
-				  name:'fechaRealInicio',	
-				  mode: 'popup',
-				  placement: 'top',
-				  emptytext:'Vac&iacute;o',
-				  format: 'DD-MM-YYYY',    
-			      viewformat: 'DD/MM/YYYY',    
-			      combodate: {
-			    	  	minYear: 2013,
-		                maxYear: 2015,
-		                minuteStep: 1,
-		                value: new Date()
-			      },
-			      ajaxOptions: {
-				        type: 'put'
-				  }
-			    });
-			  
-			  $('#lic-fechaRealFin').editable({
-				  name:'fechaRealFin',	
-				  mode: 'popup',
-				  placement: 'right',
-				  emptytext:'Vac&iacute;o',
-				  format: 'DD-MM-YYYY',    
-			      viewformat: 'DD/MM/YYYY',   
-			      combodate: {
-			    	  	minYear: 2013,
-		                maxYear: 2015,
-		                minuteStep: 1,
-		                value: new Date()
-			      }
-			    });
-			  
-			  
-			  function resetLicitacionValues(){
-				  	 $('#lic-obra').editable('setValue', null); 
-				     $('#lic-nroLicitacion').editable('setValue', null); 
-				     $('#lic-nroExpediente').editable('setValue', null); 
-				     $('#lic-plazo').editable('setValue', null); 				    
-				     $('#lic-empresaNombre').editable('setValue', null); 
-				     $('#lic-empresaCuit').editable('setValue', null); 
-				     $('#lic-representanteNombre').editable('setValue', null); 
-				     $('#lic-representanteMatricula').editable('setValue', null); 
-				     $('#lic-unidadEjecutora').editable('setValue', null); 
-				     $('#lic-unidadFinanciamiento').editable('setValue', null); 
-				     $('#lic-presupuestoAdjudicacion').editable('setValue', 0); 
-				     $('#lic-presupuestoFinal').editable('setValue', 0); 
-				     $('#lic-estadoObra').editable('setValue', 1); 
-				     $('#lic-fechaEstimadaInicio').editable('setValue', null); 
-				     $('#lic-fechaEstimadaFin').editable('setValue', null); 
-				     $('#lic-fechaRealInicio').editable('setValue', null); 
-				     $('#lic-fechaRealFin').editable('setValue', null); 
-			  }
-			
-			  
-			  //--RESET Form Licitacion 
-			  $('#btn-reset').click(function() {
-// 				 if( $('#btn-update').is(":disabled") == false )
-				  	resetLicitacionValues();
-				});
-			  
+				
 			  /*******************************************/
 			
-			  $('#btn-comment').click(function() {
-				  
-				  	var $commentContainer = $("#issueComments");
+			  $('#btn-comment').click(function() {				  
 				  
 				  	blockPage($commentContainer);
 				  	
@@ -580,55 +432,7 @@
 
 			  });
 			   
-				$('#btn-update-repair').click(function(e) {	
 				
-					//var formData = 'issueID='+ idIssue + '&userID='+ 'coripel' + '&licitacion=' + $('#tbl-licitacion .editable').serialize() ;
-					
-					$('#tbl-licitacion .editable').editable('submit', {
-					
-					       url: './updateRepairInfo.html', 
-					       ajaxOptions: {
-					           dataType: 'json'
-					       },  				       
-					       success: function(data, config) {
-					    	   if(data.result){		
-					    		   bootbox.alert(data.message); 
-					    		   window.location.reload();	
-					    	   }						    	   
-					    	   else{
-					    		   bootbox.alert(data.message);		
-					    	   }						    	
-					       },
-					       error: function (response) {
-					           console.log(response);
-					       }
-
-					   });//editable 
-					   
-					
-					return false; 
-				});
-				
-				$('#btn-delete-repair').click(function(e) {		
-					 bootbox.confirm("&iquest;Confirma que desea eliminar los datos?", function(result){
-						  if(result){
-							  var formData = 'issueID='+ idIssue + '&userID=' + 'coripel'; //CAMBIAR
-								$.ajax({
-			        			    url: "./deleteRepairInfo.html",
-							 		type: "POST",	
-							 		data: formData,				 								 
-							        success: function(data){	
-							        	if(data.result){
-							        		window.location.reload();
-							        	}
-							        	else{
-							        		bootbox.alert(data.message); 
-							        	}
-									}
-								});
-						  }
-					});
-				});
 				
 				
 				$(function () {
@@ -1353,84 +1157,96 @@
 		
 		<!-- 4 Reparacion -->							
 		<div class="tab-pane fade" id="issueRepair">	
-		
-			<c:if test="${cantidadLicitacion eq 0}">
-				No hay informaci&oacute;n disponible.	
-				 <button id="btn-add-repair"  href="#mdl-repair" data-toggle="modal" class="btn btn-success">Agregar datos</button>	 
-			</c:if>
-			<c:if test="${cantidadLicitacion ne 0}">			
-				<sec:authorize access="hasRole('ROLE_USER')">
+				
+			<sec:authorize access="isAnonymous()">
+				<c:if test="${infoReparacion eq 'Sin datos'}">			
+					<h4 style="padding-bottom: 20px; margin-left: 15px;">No hay informaci&oacute;n cargada.</h4>
+				</c:if>
+			</sec:authorize>			
+					
+			<sec:authorize access="hasRole('ROLE_USER')">			
+				<c:if test="${infoReparacion eq 'Sin datos'}">				
+					<center>
+					 	<button id="btn-add-repair" data-toggle="modal" class="btn btn-danger" title="Agregar informaci&oacute;n sobre la reparación del reclamo" 
+					 		style="font-size: 11px; text-transform: uppercase; margin-top: 20px">
+					 		<i class="icon icon-plus"></i>Cargar informaci&oacute;n
+					 	</button> 				
+					</center>
+				</c:if>
+				
+				<c:if test="${infoReparacion ne 'Sin datos'}">	
+				
 					<div style="width: 100%; text-align: right; padding: 10px 0 10px 0; margin-bottom: 20px; background: #F5F5F5; border-top: 1px dashed #CCC;border-bottom: 1px dashed #CCC; display: block; ">
 						<button id="btn-delete-repair" class="btn" title="Eliminar"><i class="icon-trash icon-large"></i></button>	
 						<button id="btn-edit-repair" class="btn" title="Editar"><i class="icon-pencil icon-large"></i></button>	
-<!-- 						<button id="btn-update-repair" class="btn" title="Guardar"><i class="icon-ok icon-large"></i></button>						 -->
-					</div>					
-				</sec:authorize>			
+					</div>
+					</c:if>					
+			</sec:authorize>			
 				
+				
+				<c:if test="${infoReparacion ne 'Sin datos'}">	
 			<div class="row-fluid">
 	  			<div class="span6">
 	  				<label><i class="icon icon-angle-right"></i>Obra / Proyecto</label>					    
-		    	    <span class="align">Reparacion de Escuela N&ordm 10 "Antonio Zaccagnini" - Distrito Escolar N&ordm 13</span>
+		    	    <span class="align">${obra}</span>
 	  			</div>	  		
 	  			<div class="span3 offset2">
 	  				<label><i class="icon icon-angle-right"></i>Estado</label>	
-			 		<span class="align">En curso</span>
+			 		<span class="align">${estadoObra}</span>
 			 	</div>
 	  		</div>	  		
 	  		<hr>	  		
 	  		<div class="row-fluid">
 	  			<div class="span4">
 	  				<label><i class="icon icon-angle-right"></i>N&ordm de Licitaci&oacute;n</label>					    		
-	  				<span class="align">292-SIGAF-2010 (19-14)</span>
+	  				<span class="align">${nroLicitacion}</span>
 	  			</div>
 	  			<div class="span4">
 	  				<label><i class="icon icon-angle-right"></i>N&ordm de de Expediente</label>		 
-				 	<span class="align">10.486/2014</span>	
+				 	<span class="align">${nroExpediente}</span>	
 				</div>
          		<div class="span4">
          			<label><i class="icon icon-angle-right"></i>Plazo de obra</label>		 
-         			<span class="align">48 meses</span>
+         			<span class="align">${plazo} meses</span>
          		</div>
 	  		</div>	  		
 	  		<hr>	  		
 	  		<div class="row-fluid">
 	  			<div class="span4">
 	  				<label><i class="icon icon-angle-right"></i>Empresa contratada</label>
-	 				<span class="align">VIDOGAR CONSTRUCCIONES S.A.</span>
-	 				<span class="align"><i>CUIT 99-12345678-11</i></span> 					
+	 				<span class="align">${empresaNombre}</span>
+	 				<span class="align"><i>CUIT ${empresaCuit}</i></span> 					
 	  			</div>	  			
 	  			<div class="span4">
 	  				<label><i class="icon icon-angle-right"></i>Representante t&eacute;cnico</label>
-	 				<span class="align">Arq. Orestes Carrere</span>
-	 				<span class="align"><i>Matricula N&ordm 27.109 CPAU</i></span>
+	 				<span class="align">${representanteNombre}</span>
+	 				<span class="align"><i>Matricula N&ordm ${representanteMatricula}</i></span>
 	  			</div>	  		
 	  		</div>	  		
 	  		<hr>	  		
 	  		<div class="row-fluid">
 	  			<div class="span6">
 	  				<label><i class="icon icon-angle-right"></i>Unidad ejecutora</label>
-	  				<span class="align">Ministerio de Educacion<br>
-	  				Subsecretaria de Gestion Economico Financiera y Administracion de Recursos<br>
-	  				Direccion General de Infrestructura Escolar</span>
+	  				<span class="align">${unidadEjecutora}</span>
 	  			</div>	  			
 	  			<div class="span6">
 	  				<label><i class="icon icon-angle-right"></i>Unidad de financiamiento</label>
-	  				<span class="align">Ministerio de Planificacion GCBA</span>
+	  				<span class="align">${unidadFinanciamiento}</span>
 	  			</div>	  		
 	  		</div>	  		
 	  		<hr style="border: 2px solid #C64A48;">	  				
 	  		<div class="row-fluid">		  	
 	  			<div class="span4">
 	  				<label><i class="icon icon-angle-right"></i>Presupuesto de adjudicaci&oacute;n</label>
-	    			<span class="align">$983.725, 47.-</span>
+	    			<span class="align">$ ${presupuestoAdjudicacion}</span>
 	    		</div>
 	    		<div class="span4">
 	    			<label><i class="icon icon-angle-right"></i>Fecha estimada de inicio</label>
-		    	   	<span class="align">15 Agosto 2014</span>
+		    	   	<span class="align">${fechaEstimadaInicio}</span>
 	 			</div>	  				
  				<div class="span4">	  
  					<label><i class="icon icon-angle-right"></i>Fecha estimada de finalizaci&oacute;n</label>			
-  					<span class="align">29 Noviembre 2014</span>
+  					<span class="align">${fechaEstimadaFin}</span>
 	 			</div>
 	  		</div>	  		
 	  		
@@ -1439,15 +1255,15 @@
 	  		<div class="row-fluid">	  	
 		  		<div class="span4">
 			    	<label><i class="icon icon-angle-right"></i>Presupuesto final</label>
-	    	   		<span class="align">-</span>
+	    	   		<span class="align">$ ${presupuestoFinal}</span>
 	  			</div>	  			 
 	  			<div class="span4">
 	  				<label><i class="icon icon-angle-right"></i>Fecha real de inicio</label>			
-		    	  	<span class="align">-</span>
+		    	  	<span class="align">${fechaRealInicio}</span>
 	  			</div>	  		
 	  			<div class="span4">	  
 	  				<label><i class="icon icon-angle-right"></i>Fecha real de finalizaci&oacute;n</label>						
-	  				<span class="align">-</span>
+	  				<span class="align">${fechaRealFin}</span>
 	  			</div>	  				
 	  		</div>	  	
 	  			
@@ -1456,12 +1272,12 @@
 	  		<div class="row-fluid">
 	  			<div class="span6">
 	  				<label><i class="icon icon-angle-right"></i>Observaciones</label>					    
-		    	   	<span class="align">-</span>
+		    	   	<span class="align">${observaciones}</span>
 	  			</div>	  	
 	  		</div>	 		
-		
+	</c:if>
 			
-			</c:if>
+			
 		
 			
 		</div>
@@ -1614,6 +1430,11 @@
         			<div class="controls">
            				<select id="tipoResolucion" name="tipoResolucion"></select>		
         			</div>
+    			</div>    
+    			<div class="control-group" id="invalid-container">  		       
+        			<div class="controls">
+           				<select id="tipoInvalido" name="tipoInvalido"></select>		
+        			</div>
     			</div>    			
 			    <div class="control-group">
 			        <label class="control-label" for="observacion">Comentario</label>
@@ -1708,7 +1529,7 @@
 	  		<div class="row-fluid">
 	  			<div class="span6">
 	  				<label>Obra / Proyecto</label>					    
-		    	   	<textarea id="obra" name="obra" placeholder="Descripci&oacute;n de la obra..."></textarea>	
+		    	   	<textarea id="obra" name="obra"></textarea>	
 	  			</div>	  		
 	  			<div class="span3 offset2">
 	  				<label>Estado</label>	
@@ -1733,8 +1554,8 @@
 				 	<input type="text" id="nroExpediente" name="nroExpediente"/>		
 				</div>
 	         		<div class="span4">
-	         			<label>Plazo (en d&iacute;as)</label>		 
-	         			<input type="text" id="plazoEnDias" name="plazoEnDias"/>	
+	         			<label>Plazo (en meses)</label>		 
+	         			<input type="number" id="plazo" name="plazo"/>	
 	         		</div>
 	  		</div>	  		
 	  		<hr>	  		
@@ -1765,7 +1586,7 @@
 	  		<div class="row-fluid">		  	
 	  			<div class="span4">
 	  				<label>Presupuesto de adjudicaci&oacute;n</label>
-	    			<input type="text" id="presupuestoAdjudicacion" name="presupuestoAdjudicado" placeholder="en $ argentinos"/>		
+	    			<input type="text" id="presupuestoAdjudicacion" name="presupuestoAdjudicacion" placeholder="en $ argentinos"/>		
 	    		</div>
 	    		<div class="span4">
 	    			<label>Fecha estimada de inicio</label>
@@ -1819,14 +1640,14 @@
 	  		<div class="row-fluid">
 	  			<div class="span6">
 	  				<label>Observaciones</label>					    
-		    	   	<textarea id="obs" name="obs"></textarea>	
+		    	   	<textarea id="observaciones" name="observaciones"></textarea>	
 	  			</div>	  	
 	  		</div>	 
 		</div>
 		<!-- modal footer -->
 	  	<div class="modal-footer"> 	
 	  		<div class="btn-container">
-		  		<button  type="submit" class="btn btn-info" id="btn-save-repair">
+		  		<button id="btn-save-repair"  type="submit" class="btn btn-info">
 			    	<i class="icon-ok icon-large"></i>Guardar
 			    </button>  			  	
 		  		<button class="btn" data-dismiss="modal" aria-hidden="true">

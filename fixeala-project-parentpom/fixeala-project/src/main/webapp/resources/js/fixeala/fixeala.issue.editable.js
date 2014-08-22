@@ -169,15 +169,16 @@ var userActionsController = {
 				options.empty();
 				
 				if(statusLabel == 'Resolver'){
-					 options.append($("<option />").val("Arreglado").text("Arreglado"));
-					 options.append($("<option />").val("Duplicado").text("Duplicado"));
-					 options.append($("<option />").val("Invalido").text("Invalido"));
-				}
-			
+					 options.append($("<option />").val("Solucionado").text("SOLUCIONADO"));
+					 options.append($("<option />").val("Duplicado").text("DUPLICADO"));
+					 options.append($("<option />").val("Incompleto").text("INCOMPLETO"));
+					 options.append($("<option />").val("Invalido").text("INVALIDO"));
+				}			
 				
 				else{
-					 options.append($("<option />").val("No").text("No arreglado"));
-					 options.append($("<option />").val("Deteioro").text("Hubo deterioro"));
+					 options.append($("<option />").val("No arreglado").text("NO ARREGLADO"));
+					 options.append($("<option />").val("Hubo deterioro").text("HUBO DETERIORO"));
+					 options.append($("<option />").val("Nueva informacion").text("NUEVA INFORMACION"));
 				}
 			
 				$("#mdl-status").modal('show');
