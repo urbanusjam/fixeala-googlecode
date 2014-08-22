@@ -1369,72 +1369,68 @@
 				
 			<div class="row-fluid">
 	  			<div class="span6">
-	  				<label>Obra / Proyecto</label>					    
-		    	    <span>Reparación de Escuela N&ordm 10 "Antonio Zaccagnini" - Distrito Escolar N&ordm 13</span>
+	  				<label><i class="icon icon-angle-right"></i>Obra / Proyecto</label>					    
+		    	    <span class="align">Reparacion de Escuela N&ordm 10 "Antonio Zaccagnini" - Distrito Escolar N&ordm 13</span>
 	  			</div>	  		
 	  			<div class="span3 offset2">
-	  				<label>Estado</label>	
-			 		<span>En curso</span>
+	  				<label><i class="icon icon-angle-right"></i>Estado</label>	
+			 		<span class="align">En curso</span>
 			 	</div>
 	  		</div>	  		
 	  		<hr>	  		
 	  		<div class="row-fluid">
 	  			<div class="span4">
-	  				<label>N&ordm de Licitaci&oacute;n</label>					    		
-	  				<span>292-SIGAF-2010 (19-14)</span>
+	  				<label><i class="icon icon-angle-right"></i>N&ordm de Licitaci&oacute;n</label>					    		
+	  				<span class="align">292-SIGAF-2010 (19-14)</span>
 	  			</div>
 	  			<div class="span4">
-	  				<label>N&ordm de de Expediente</label>		 
-				 	<span>10.486/2014</span>	
+	  				<label><i class="icon icon-angle-right"></i>N&ordm de de Expediente</label>		 
+				 	<span class="align">10.486/2014</span>	
 				</div>
          		<div class="span4">
-         			<label>Plazo de obra</label>		 
-         			<span>48 meses</span>
+         			<label><i class="icon icon-angle-right"></i>Plazo de obra</label>		 
+         			<span class="align">48 meses</span>
          		</div>
 	  		</div>	  		
 	  		<hr>	  		
 	  		<div class="row-fluid">
 	  			<div class="span4">
-	  				<label>Empresa contratada</label>
-	 				<span>VIDOGAR CONSTRUCCIONES S.A.</span>
-	 				<br>
-	 				<span><i>CUIT 99-12345678-11</i></span> 					
+	  				<label><i class="icon icon-angle-right"></i>Empresa contratada</label>
+	 				<span class="align">VIDOGAR CONSTRUCCIONES S.A.</span>
+	 				<span class="align"><i>CUIT 99-12345678-11</i></span> 					
 	  			</div>	  			
 	  			<div class="span4">
-	  				<label>Representante t&eacute;cnico</label>
-	 				<span>Arq. Orestes Carrere</span>
-	 				<br>
-	 				<span><i>Matrícula N&ordm 27.109 CPAU</i></span>
+	  				<label><i class="icon icon-angle-right"></i>Representante t&eacute;cnico</label>
+	 				<span class="align">Arq. Orestes Carrere</span>
+	 				<span class="align"><i>Matricula N&ordm 27.109 CPAU</i></span>
 	  			</div>	  		
 	  		</div>	  		
 	  		<hr>	  		
 	  		<div class="row-fluid">
 	  			<div class="span6">
-	  				<label>Unidad ejecutora</label>
-	  				<span>Ministerio de Educación<br>
-	  				Subsecretaría de Gestión Económico Financiera y Administración de Recursos<br>
-	  				Dirección General de Infrestructura Escolar</span>
+	  				<label><i class="icon icon-angle-right"></i>Unidad ejecutora</label>
+	  				<span class="align">Ministerio de Educacion<br>
+	  				Subsecretaria de Gestion Economico Financiera y Administracion de Recursos<br>
+	  				Direccion General de Infrestructura Escolar</span>
 	  			</div>	  			
 	  			<div class="span6">
-	  				<label>Unidad de financiamiento</label>
-	  				<span>Ministerio de Educación<br>
-	  				Subsecretaría de Gestión Económico Financiera y Administración de Recursos<br>
-	  				Dirección General de Infrestructura Escolar</span>
+	  				<label><i class="icon icon-angle-right"></i>Unidad de financiamiento</label>
+	  				<span class="align">Ministerio de Planificacion GCBA</span>
 	  			</div>	  		
 	  		</div>	  		
 	  		<hr style="border: 2px solid #C64A48;">	  				
 	  		<div class="row-fluid">		  	
 	  			<div class="span4">
-	  				<label>Presupuesto de adjudicaci&oacute;n</label>
-	    			<span>$983.725, 47.-</span>
+	  				<label><i class="icon icon-angle-right"></i>Presupuesto de adjudicaci&oacute;n</label>
+	    			<span class="align">$983.725, 47.-</span>
 	    		</div>
 	    		<div class="span4">
-	    			<label>Fecha estimada de inicio</label>
-		    	   	<span>15 Agosto 2014</span>
+	    			<label><i class="icon icon-angle-right"></i>Fecha estimada de inicio</label>
+		    	   	<span class="align">15 Agosto 2014</span>
 	 			</div>	  				
  				<div class="span4">	  
- 					<label>Fecha estimada de finalizaci&oacute;n</label>			
-  					<span>29 Noviembre 2014</span>
+ 					<label><i class="icon icon-angle-right"></i>Fecha estimada de finalizaci&oacute;n</label>			
+  					<span class="align">29 Noviembre 2014</span>
 	 			</div>
 	  		</div>	  		
 	  		
@@ -1442,16 +1438,16 @@
 	  		
 	  		<div class="row-fluid">	  	
 		  		<div class="span4">
-			    	<label>Presupuesto final</label>
-	    	   		<span>-</span>
+			    	<label><i class="icon icon-angle-right"></i>Presupuesto final</label>
+	    	   		<span class="align">-</span>
 	  			</div>	  			 
 	  			<div class="span4">
-	  				<label>Fecha real de inicio</label>			
-		    	  	<span>-</span>
+	  				<label><i class="icon icon-angle-right"></i>Fecha real de inicio</label>			
+		    	  	<span class="align">-</span>
 	  			</div>	  		
 	  			<div class="span4">	  
-	  				<label>Fecha real de finalizaci&oacute;n</label>						
-	  				<span>-</span>
+	  				<label><i class="icon icon-angle-right"></i>Fecha real de finalizaci&oacute;n</label>						
+	  				<span class="align">-</span>
 	  			</div>	  				
 	  		</div>	  	
 	  			
@@ -1459,8 +1455,8 @@
 	  				
 	  		<div class="row-fluid">
 	  			<div class="span6">
-	  				<label>Observaciones</label>					    
-		    	   	<span>-</span>
+	  				<label><i class="icon icon-angle-right"></i>Observaciones</label>					    
+		    	   	<span class="align">-</span>
 	  			</div>	  	
 	  		</div>	 		
 		

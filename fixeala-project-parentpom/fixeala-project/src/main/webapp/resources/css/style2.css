@@ -894,6 +894,7 @@ input.repairDate { width:178px;  height:20px; }
 #tbl-licitacion td { height: 15px;  }
 
 #issueRepair .row-fluid label { font-weight: bold; font-size: 12px; text-transform: uppercase; }
+#issueRepair .row-fluid span.align { padding-left:13px; display:block; }
 
 .issue-textarea{height:80px; width:290px;}
 .licitacion-textarea{height:80px; width:300px;}
