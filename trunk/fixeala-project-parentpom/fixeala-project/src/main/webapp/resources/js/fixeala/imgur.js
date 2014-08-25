@@ -15,12 +15,21 @@ var fileController = {
 	        fd.append("image", file); 
 	        
 	        var xhr = new XMLHttpRequest();
-	        xhr.open("POST", "https://api.imgur.com/3/image.json"); 
+	        xhr.open("POST", "https://api.imgur.com/3/image.json", false); //synchronous req 
+	        xhr.ontimeout = function () {
+	            console.error("The request for " + url + " timed out.");
+	        };
 	        xhr.onload = function() {
 	        	console.log('--- imgur processing ---');
+//	        	if (xhr.status === 200) {
 	        		 callback(xhr.responseText, filename);
 	        		 mapController.unBlockIssueForm();	 	
+//	        	}
 	        }
+	        xhr.onerror = function (xhr) {
+//	        	callback(xhr.statusText, null);
+	        	console.error(xhr.statusText);
+	        };
 	        xhr.setRequestHeader('Authorization', 'Client-ID f64d4441566d507'); 
 	        xhr.send(fd);
 	    

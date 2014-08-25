@@ -639,6 +639,8 @@
 				        	var success = result.success;
 				        	var statusCode = result.status;
 				        	
+				        	console.log(success + ' - ' + statusCode);
+				        	
 			        		//upload error
 				        	if(!success && statusCode != '200'){
 				        		bootbox.confirm("Hubo un error al cargar el archivo. &iquest;Desea continuar con la publicacion del reclamo?", function(result){
