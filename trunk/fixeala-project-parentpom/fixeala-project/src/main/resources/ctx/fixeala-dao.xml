@@ -19,7 +19,7 @@
     
     <bean id="issueDAO" class="ar.com.urbanusjam.jpa.dao.impl.IssueDAOImpl"/>
     
-    <bean id="issueUpdateDAO" class="ar.com.urbanusjam.jpa.dao.impl.IssueHistorialRevisionDAOImpl"/>
+    <bean id="issueUpdateDAO" class="ar.com.urbanusjam.jpa.dao.impl.IssueHistoryDAOImpl"/>
     
     <bean id="issueRepairDAO" class="ar.com.urbanusjam.jpa.dao.impl.IssueRepairDAOImpl"/>
     

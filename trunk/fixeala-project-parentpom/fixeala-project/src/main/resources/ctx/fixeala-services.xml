@@ -17,6 +17,7 @@
 	<bean name="issueService" class="ar.com.urbanusjam.services.impl.IssueServiceImpl" >
 		<property name="userService" ref="userService" />
 		<property name="contenidoService" ref="contenidoService" />
+		<property name="mailService" ref="mailService" />
 		<property name="issueDAO" ref="issueDAO" />
 		<property name="userDAO" ref="userDAO" />
 		<property name="provinceDAO" ref="provinceDAO" />
@@ -26,7 +27,6 @@
 		<property name="issueFollowDAO" ref="issueFollowDAO" />
 		<property name="issuePageViewDAO" ref="issuePageViewDAO" />
 		<property name="issueVoteDAO" ref="issueVoteDAO" />
-		<property name="mailService" ref="mailService" />
 	</bean>
 	
 	<bean name="exportService" class="ar.com.urbanusjam.web.services.impl.ExportServiceImpl" >
@@ -37,7 +37,7 @@
 	<bean name="contenidoService" class="ar.com.urbanusjam.services.impl.ContenidoServiceImpl" >
 		<property name="contenidoDAO" ref="contenidoDAO" />		
 		<property name="issueDAO" ref="issueDAO" />		
-		<property name="pathImagenes" value="${path.imagenes}${file.separator}" />    
+<!-- 		<property name="pathImagenes" value="${path.imagenes}${file.separator}" />     -->
 	</bean>	
 	
 	<bean id="mailService" class="ar.com.urbanusjam.services.impl.MailServiceImpl">
