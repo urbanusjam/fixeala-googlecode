@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import ar.com.urbanusjam.entity.annotations.IssueRepair;
+import ar.com.urbanusjam.entity.annotations.MediaContent;
 import ar.com.urbanusjam.services.utils.DateUtils;
 
 
@@ -57,7 +58,7 @@ public class IssueDTO implements Serializable {
 	private List<IssueUpdateHistoryDTO> historial = new ArrayList<IssueUpdateHistoryDTO>();
 	
 	@XmlTransient
-	private List<MediaContentDTO> contenidos = new ArrayList<MediaContentDTO>();
+	private List<MediaContent> contenidos = new ArrayList<MediaContent>();
 	
 	@XmlTransient
 	private List<CommentDTO> comentarios = new ArrayList<CommentDTO>();	
@@ -88,7 +89,7 @@ public class IssueDTO implements Serializable {
 	private String fullAddress;
 	
 	@XmlTransient
-	private MediaContentDTO uploadedFile;	
+	private MediaContent uploadedFile;	
 	
 
 	
@@ -259,11 +260,11 @@ public class IssueDTO implements Serializable {
 		this.totalComments = totalComments;
 	}
 
-	public List<MediaContentDTO> getContenidos() {
+	public List<MediaContent> getContenidos() {
 		return contenidos;
 	}
 
-	public void setContenidos(List<MediaContentDTO> contenidos) {
+	public void setContenidos(List<MediaContent> contenidos) {
 		this.contenidos = contenidos;
 	}
 
@@ -387,11 +388,11 @@ public class IssueDTO implements Serializable {
 		this.parsedTitle = parsedTitle;
 	}
 
-	public MediaContentDTO getUploadedFile() {
+	public MediaContent getUploadedFile() {
 		return uploadedFile;
 	}
 
-	public void setUploadedFile(MediaContentDTO uploadedFile) {
+	public void setUploadedFile(MediaContent uploadedFile) {
 		this.uploadedFile = uploadedFile;
 	}
 	

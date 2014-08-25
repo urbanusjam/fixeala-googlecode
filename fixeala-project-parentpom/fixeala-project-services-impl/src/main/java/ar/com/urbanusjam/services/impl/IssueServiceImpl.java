@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -87,11 +88,15 @@ public class IssueServiceImpl implements IssueService {
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
-
+	
 	public void setContenidoService(ContenidoService contenidoService) {
 		this.contenidoService = contenidoService;
 	}
-	
+
+	public void setMailService(MailService mailService) {
+		this.mailService = mailService;
+	}
+
 	public void setIssueRepairDAO(IssueRepairDAO issueRepairDAO) {
 		this.issueRepairDAO = issueRepairDAO;
 	}
@@ -129,8 +134,6 @@ public class IssueServiceImpl implements IssueService {
 	}
 	
 	
-
-
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public void reportIssue(IssueDTO issueDTO) {
@@ -138,16 +141,14 @@ public class IssueServiceImpl implements IssueService {
 		issue = this.convertTo(issueDTO);
 		User u = userDAO.loadUserByUsername(issueDTO.getUser().getUsername());
 		issue.setReporter(u);		
-		
+
 		if(issueDTO.getUploadedFile() != null){
-			issue.addMediaContent(contenidoService.convertirAContenido(issueDTO.getUploadedFile()));
-		}		
+			issue.addMediaContent(issueDTO.getUploadedFile());
+		}
+
 		issueDAO.saveIssue(issue);	
 	}
 	
-	public void setMailService(MailService mailService) {
-		this.mailService = mailService;
-	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor={MessagingException.class})
@@ -170,10 +171,6 @@ public class IssueServiceImpl implements IssueService {
 				tag.getIssueList().remove(issue);
 			}
 		}		
-		
-		for(MediaContentDTO contenidoDTO : issueDTO.getContenidos()){
-			issue.addMediaContent(contenidoService.convertirAContenido(contenidoDTO));
-		}
 		
 		issueDAO.updateIssue(issue);
 		
@@ -831,13 +828,13 @@ public class IssueServiceImpl implements IssueService {
 		issueDTO.setComentarios(comentariosDTO);
 						
 		//contenidos
-		List<MediaContentDTO> contenidosDTO = new ArrayList<MediaContentDTO>();		
-		for(MediaContent contenido : issue.getContenidos()){			
-			MediaContentDTO contenidoDTO = contenidoService.convertirAContenidoDTO(contenido);
-			contenidoDTO.setFile(contenidoService.abrirContenidoFile(contenidoDTO));
-			contenidosDTO.add(contenidoDTO);
-		}		
-		issueDTO.setContenidos(contenidosDTO);
+		List<MediaContent> imagenes = new ArrayList<MediaContent>();
+		for(MediaContent c : issue.getContenidos()){
+			//solo imagenes del reclamo
+			if(!c.isProfilePic())
+				imagenes.add(c);
+		}
+		issueDTO.setContenidos(imagenes);
 		
 		//reparacion
 		if(issue.getReparacion() != null)

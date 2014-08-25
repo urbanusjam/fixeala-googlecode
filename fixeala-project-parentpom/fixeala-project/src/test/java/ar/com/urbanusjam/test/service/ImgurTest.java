@@ -5,6 +5,7 @@ import java.util.Scanner;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.ImgUrApi;
 import org.scribe.model.OAuthRequest;
+import org.scribe.model.Request;
 import org.scribe.model.Response;
 import org.scribe.model.Token;
 import org.scribe.model.Verb;
@@ -15,13 +16,15 @@ import org.scribe.oauth.OAuthService;
 
 public class ImgurTest {
 	
-	private static final String PROTECTED_RESOURCE_URL = "https://api.imgur.com/3/image.json";
+	private static final String PROTECTED_RESOURCE_URL = "https://api.imgur.com/3/account.json";
 	
-	private static final String API_KEY = "f64d4441566d507";
-	private static final String API_SECRET = "63dd097afcc618396f50690d5b331a4bca28b9c6";
+	
 
 	
 	private static void uploadImage(){
+		
+		String API_KEY = "f64d4441566d507";
+		String API_SECRET = "f7e46de533ccf94b3456928a3a97f40cb2ede343";
 		
 		// Replace these with your own api key and secret (you'll need an read/write api key)
 	   
@@ -33,6 +36,7 @@ public class ImgurTest {
 
 	    // Obtain the Request Token
 	    System.out.println("Fetching the Request Token...");
+	    
 	    Token requestToken = service.getRequestToken();
 	    System.out.println("Got the Request Token!");
 	    System.out.println();
