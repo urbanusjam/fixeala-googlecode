@@ -18,6 +18,12 @@ public class ContenidoResponse {
 		this.message = message;
 	}
 	
+	public ContenidoResponse(boolean status, int totalUploadedFiles) {
+		super();
+		this.status = status;
+		this.totalUploadedFiles = totalUploadedFiles;
+	}
+	
 	public ContenidoResponse(boolean status, String message, int totalUploadedFiles) {
 		super();
 		this.status = status;

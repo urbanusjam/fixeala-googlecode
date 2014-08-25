@@ -29,7 +29,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import ar.com.urbanusjam.entity.annotations.MediaContent;
 import ar.com.urbanusjam.entity.annotations.User;
+import ar.com.urbanusjam.services.ContenidoService;
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.MailService;
 import ar.com.urbanusjam.services.UserService;
@@ -61,6 +63,9 @@ public class HomeController {
 	
 	@Autowired
 	private MailService mailService;
+	
+	@Autowired
+	private ContenidoService contenidoService;
 	
 	@ModelAttribute("issues")
 	public @ResponseBody ArrayList<IssueDTO> getIssuesArray() {   
@@ -823,7 +828,9 @@ public class HomeController {
 						if(c.getUsuario().equals(userID))
 							commentsCounter++;
 				}
-													
+				
+				MediaContent profilePic = contenidoService.getUserPic(userID);
+				model.addAttribute("profilePicUrl", profilePic != null ? profilePic.getLink() : null);
 				model.addAttribute("registrationDate", DateUtils.getFechaFormateada(user.getRegistrationDate(), DateUtils.DATE_PATTERN_LONG));
 				model.addAttribute("total_issues", userIssues.size());
 				model.addAttribute("total_solved", solvedIssues);

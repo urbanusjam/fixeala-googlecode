@@ -1,9 +1,6 @@
 package ar.com.urbanusjam.web.controllers;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
-import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,23 +8,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
-import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.mail.MailException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -38,16 +29,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.google.gson.Gson;
 
 import ar.com.urbanusjam.entity.annotations.IssueRepair;
+import ar.com.urbanusjam.entity.annotations.MediaContent;
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.ContenidoService;
 import ar.com.urbanusjam.services.IssueService;
@@ -56,21 +44,18 @@ import ar.com.urbanusjam.services.dto.CommentDTO;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.IssueFollowDTO;
 import ar.com.urbanusjam.services.dto.IssuePageViewDTO;
-import ar.com.urbanusjam.services.dto.IssueRepairDTO;
 import ar.com.urbanusjam.services.dto.IssueUpdateHistoryDTO;
 import ar.com.urbanusjam.services.dto.IssueVoteDTO;
-import ar.com.urbanusjam.services.dto.MediaContentDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
 import ar.com.urbanusjam.services.utils.DateUtils;
-import ar.com.urbanusjam.services.utils.FileUploadUtils;
 import ar.com.urbanusjam.services.utils.IssueStatus;
 import ar.com.urbanusjam.services.utils.Messages;
 import ar.com.urbanusjam.services.utils.Operation;
-import ar.com.urbanusjam.services.utils.ResolutionType;
 import ar.com.urbanusjam.web.domain.AlertStatus;
 import ar.com.urbanusjam.web.domain.ContenidoResponse;
 import ar.com.urbanusjam.web.utils.StatusList;
-import ar.com.urbanusjam.web.utils.URISchemeUtils;
+
+import com.google.gson.Gson;
 
 @Controller
 // @RequestMapping(value="/issue")
@@ -87,23 +72,11 @@ public class IssueController {
 	@Autowired
 	private ContenidoService contenidoService;
 
-	private static final String UPLOAD_DIRECTORY_WIN = "C:\\temp\\fixeala\\uploads\\";
-	// private static final String UPLOAD_DIRECTORY_MAC =
-	// "file:///Users/cora/Documents/dev/temp/fixeala/uploads/";
-
-	private MediaContentDTO uploadedFile = null;
 
 	@Autowired
 	@Qualifier(value = "fixealaAuthenticationManager")
 	protected AuthenticationManager fixealaAuthenticationManager;
 
-	public MediaContentDTO getUploadedFile() {
-		return uploadedFile;
-	}
-
-	public void setUploadedFile(MediaContentDTO uploadedFile) {
-		this.uploadedFile = uploadedFile;
-	}
 
 	@RequestMapping(value = "/issues/search", method = RequestMethod.GET)
 	public String showSearchPage(Model model,
@@ -229,15 +202,14 @@ public class IssueController {
 			model.addAttribute("allTags", allTags.length() == 0 ? "[{}]"
 					: allTags);
 
-			List<MediaContentDTO> contenidos = new ArrayList<MediaContentDTO>();
+			//contenidos
+			List<MediaContent> contenidos = new ArrayList<MediaContent>();
 			contenidos = issue.getContenidos();
 
 			if (contenidos.size() > 0) {
 				model.addAttribute("contenidos", contenidos);
-				MediaContentDTO contenido = contenidos.get(0);
-				model.addAttribute("image", contenido);
-				model.addAttribute("imageUrl", contenido.getPathRelativo());
-				model.addAttribute("imageName", contenido.getNombre());
+				MediaContent contenido = contenidos.get(0);
+				model.addAttribute("imageUrl", contenido.getLink());
 			}
 
 			model.addAttribute("cantidadContenidos", contenidos.size());
@@ -430,199 +402,101 @@ public class IssueController {
 			return jsonArray;		   
 		}
 	}
+	
+	
+	@RequestMapping(value = "/users/{userID}/uploadUserPic", method = RequestMethod.POST)
+	public @ResponseBody ContenidoResponse doUserFileUpload(
+			@PathVariable ("userID") String userPage, 
+			@RequestParam ("fileData") String fileData, 
+			@RequestParam ("filename") String filename) throws JSONException{
+		
+		try{
+			User user = getCurrentUser(SecurityContextHolder.getContext()
+					.getAuthentication());
+			UserDetails loggedUser = userService.loadUserByUsername(user
+					.getUsername());
 
-	@RequestMapping(value = "/issues/handleMultipleFileUpload", method = RequestMethod.POST)
-	public @ResponseBody
-	ContenidoResponse processMultipleUpload(
-			@RequestParam("issueID") String issueID,
-			@RequestParam("userID") String userID,
-			@RequestParam("files[]") List<MultipartFile> files,
-			HttpServletRequest request, Model model) throws Exception {
-
-		InputStream inputStream = null;
-		String fileName = StringUtils.EMPTY;
-		String extensionArchivo = StringUtils.EMPTY;
-		MediaContentDTO newContenido = new MediaContentDTO();
-		List<MediaContentDTO> uploadedFiles = new ArrayList<MediaContentDTO>();
-		ContenidoResponse response = new ContenidoResponse();
-
-		JSONArray jsonArray = new JSONArray();
-
-		try {
-
-			IssueDTO issue = issueService.getIssueById(issueID);
-
-			if (issueID.isEmpty()) {
-				return new ContenidoResponse(false,
-						"No se pudo cargar el archivo.");
+			if (userPage.equals(loggedUser.getUsername())) {
+			
+				MediaContent file = new MediaContent();
+				file = this.deserializeFile(fileData);
+				file.setFilename(filename);
+				file.setUsername(loggedUser.getUsername());
+				file.setProfilePic(true);
+				file.setFileOrder(0);
+				
+				contenidoService.uploadUserPic(file);
+			
 			}
-
-			if (files.size() > 0) {
-
-				for (MultipartFile file : files) {
-					fileName = file.getOriginalFilename();
-					inputStream = file.getInputStream();
-					extensionArchivo = FileUploadUtils
-							.getExtensionArchivo(fileName);
-					newContenido.setInputStream(inputStream);
-					newContenido.setExtension(extensionArchivo);
-					newContenido.setNroReclamo(issueID);
-					newContenido.setOrden(String.valueOf(0));
-
-					MediaContentDTO uploadedContenido = contenidoService
-							.subirContenido(newContenido);
-					uploadedFiles.add(uploadedContenido);
-
-					JSONObject jsonObject = new JSONObject();
-					// jsonObject.put("id",
-					// uploadedContenido.getId().toString());
-					jsonObject.put("name",
-							uploadedContenido.getNombreConExtension());
-					jsonObject.put("format", uploadedContenido.getExtension());
-					jsonObject.put("url", UPLOAD_DIRECTORY_WIN);
-					jsonObject.put("thumbnailUrl", "UPLOAD_DIRECTORY_MAC");
-					jsonObject.put("size", Double.valueOf(uploadedContenido
-							.getFile().length()));
-					jsonObject.put("error", StringUtils.EMPTY);
-
-					jsonArray.put(jsonObject);
-
-					issue.getContenidos().add(uploadedContenido);
-				}
-
-				List<MediaContentDTO> contenidos = contenidoService
-						.listarContenidos(Long.valueOf(issueID));
-				model.addAttribute("contenidos", contenidos);
-				model.addAttribute("cantidadContenidos", contenidos.size());
-
-				response.setStatus(true);
-				response.setTotalUploadedFiles(contenidos.size());
-				response.setUploadedFiles(jsonArray.toString());
-
-				IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
-				revision.setNroReclamo(Long.valueOf(issueID));
-				revision.setFecha(new Date());
-				revision.setUsername(userID);
-				revision.setOperacion(Operation.CREATE);
-				revision.setMotivo(Messages.ISSUE_UPDATE_ATTACH_FILES + " "
-						+ files.size() + " archivo(s).");
-				revision.setObservaciones(Messages.ISSUE_CREATE_OBS);
-				revision.setEstado(issue.getStatus());
-
-				issue.getHistorial().add(revision);
-
-				issueService.updateIssue(issue); // NO ANDA BIEN > duplica los
-													// registros del historial
-
-				return response;
-
+			
+			else{
+				return new ContenidoResponse(false, 0);
 			}
-
-			else {
-				return new ContenidoResponse(false,
-						"No se pudo cargar el archivo.");
-			}
-
-		} catch (IOException e) {
-			return new ContenidoResponse(false, "No se pudo cargar el archivo.");
-		}
-
-	}
-
-	@RequestMapping(value = "/handleFileUpload", method = RequestMethod.POST)
-	public @ResponseBody
-	ContenidoResponse doFileUpload(
-			@RequestParam("file") MultipartFile file,
-			/* @RequestParam("isProfilePic") boolean isProfilePic, */HttpServletRequest request) {
-
-		InputStream inputStream = null;
-		String fileName = StringUtils.EMPTY;
-		String extensionArchivo = StringUtils.EMPTY;
-		MediaContentDTO nuevoContenido = new MediaContentDTO();
-
-		try {
-
-			if (file != null) {
-				fileName = file.getOriginalFilename();
-				inputStream = file.getInputStream();
-				extensionArchivo = FileUploadUtils
-						.getExtensionArchivo(fileName);
-				nuevoContenido.setInputStream(inputStream);
-				nuevoContenido.setExtension(extensionArchivo);
-				nuevoContenido.setOrden("0");
-				// nuevoContenido.setProfilePic(isProfilePic);
-				nuevoContenido = contenidoService.uploadFile(inputStream,
-						nuevoContenido);
-				this.setUploadedFile(nuevoContenido);
-			}
-
-			return new ContenidoResponse(true,
-					"La foto se carg&oacute; exitosamente.");
-
-		} catch (IOException e) {
-			return new ContenidoResponse(false, "No se pudo cargar el archivo.");
+			
+			return new ContenidoResponse(true, 1);
+			
+			
+			
+		}catch(Exception e){
+			return new ContenidoResponse(false, 0);
 		}
 	}
 
-	@RequestMapping(value = "/issues/deleteFile", method = RequestMethod.POST)
-	public @ResponseBody
-	ContenidoResponse doDeleteFile(@RequestParam("issueID") String issueID,
-			@RequestParam("userID") String userID,
-			@RequestParam("fileID") String fileID, Model model,
-			HttpServletRequest request) throws ParseException {
 
-		try {
-			MediaContentDTO contenidoABorrar = contenidoService
-					.obtenerContenido(fileID, issueID);
-			contenidoService.borrarContenido(contenidoABorrar);
-
-			IssueDTO issue = issueService.getIssueById(issueID);
-
-			IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
-			revision.setNroReclamo(Long.valueOf(issueID));
-			revision.setFecha(new Date());
-			revision.setUsername(userID);
-			revision.setOperacion(Operation.CREATE);
-			revision.setMotivo(Messages.ISSUE_UPDATE_REMOVE_FILES
-					+ " 1 archivo.");
-			revision.setObservaciones(Messages.ISSUE_CREATE_OBS);
-			revision.setEstado(issue.getStatus());
-
-//			issueService.addHistoryUpdate(revision);
-
-			List<MediaContentDTO> contenidos = new ArrayList<MediaContentDTO>();
-			contenidos = issue.getContenidos();
-
-			model.addAttribute("contenidos", contenidos);
-			model.addAttribute("cantidadContenidos", contenidos.size());
-
-			return new ContenidoResponse(true, "El archivo ha sido eliminado.",
-					contenidos.size());
-
-		} catch (Exception e) {
-			return new ContenidoResponse(false,
-					"Ha ocurrido un error al intentar eliminar el archivo.");
+	
+	@RequestMapping(value = "/uploadFiles", method = RequestMethod.POST)
+	public @ResponseBody ContenidoResponse doFileUpload(@RequestParam ("issueID") String issueID, 
+			@RequestParam ("fileData") String fileData, 
+			@RequestParam ("filename") String filename) throws JSONException{
+		
+		try{
+			
+			MediaContent file = new MediaContent();
+			file = this.deserializeFile(fileData);
+			file.setFilename(filename);
+			file.setIssueID(issueID);
+			file.setProfilePic(false);
+			
+			List<MediaContent> files = new ArrayList<MediaContent>();
+			files.add(file);
+			
+			contenidoService.uploadFiles(files, issueID);
+			return new ContenidoResponse(true, files.size());
+			
+		}catch(Exception e){
+			return new ContenidoResponse(false, 0);
 		}
-
 	}
-
-	/**
-	 * private String getNombreArchivoSinExtension(String nombreArchivo) {
-	 * String nombreArchivoSinExtension = ""; if (nombreArchivo.lastIndexOf(".")
-	 * == -1) nombreArchivoSinExtension = nombreArchivo; else
-	 * nombreArchivoSinExtension = nombreArchivo.substring(0,
-	 * nombreArchivo.lastIndexOf(".")); return nombreArchivoSinExtension; }
-	 * 
-	 * private String getExtensionArchivo(String fileName) { String extension =
-	 * "";
-	 * 
-	 * int i = fileName.lastIndexOf('.'); if (i > 0) { extension =
-	 * fileName.substring(i+1); } return extension; }
-	 **/
+	
+	private MediaContent deserializeFile(String fileData){
+		
+		try{
+			
+			JSONObject jsonFile = new JSONObject(fileData);
+			
+			MediaContent file = new MediaContent();
+			file.setFileID(jsonFile.getString("id"));
+			file.setFileType(jsonFile.getString("type"));
+			file.setWidth(Integer.parseInt(jsonFile.getString("width")));
+			file.setHeight(Integer.parseInt(jsonFile.getString("height")));
+			file.setSize(Integer.parseInt(jsonFile.getString("size")));
+			file.setUploadDate(Integer.parseInt(jsonFile.getString("datetime")));
+			file.setDeleteHash(jsonFile.getString("deletehash"));
+			file.setLink(jsonFile.getString("link"));
+			
+			return file;
+			
+		}
+		catch(JSONException e){
+			return null;
+		}
+		
+	}
 
 	@RequestMapping(value = "/reportIssue", method = RequestMethod.POST)
 	public @ResponseBody
-	AlertStatus doReportIssue(@ModelAttribute("issueForm") IssueDTO issue,
+	AlertStatus doReportIssue(@ModelAttribute("issueForm") IssueDTO issue, 
+			@RequestParam("fileData") String fileData, @RequestParam("filename") String filename,
 			HttpServletRequest request) {
 
 		try {
@@ -667,18 +541,20 @@ public class IssueController {
 				issue.getHistorial().add(revision);
 				issue.setReparacion(null);
 
-				// random id
-				// issue.setId(String.valueOf(issue.getId()));
-				// revision.setNroReclamo(Long.valueOf(issue.getId()));
-
-				// contenido
-				MediaContentDTO contenido = this.getUploadedFile();
-				if (contenido != null) {
-					// contenido.setNroReclamo(String.valueOf(issue.getId()));
-					issue.setUploadedFile(contenido);
+				//contenido (opcional)
+			
+				MediaContent file = this.deserializeFile(fileData);
+				
+				if(file != null){
+					file.setFileOrder(1);
+					issue.setUploadedFile(file);
 				}
-				this.setUploadedFile(null);
-
+				else{
+					issue.setUploadedFile(null);
+				}
+				
+				
+					
 				issueService.reportIssue(issue);
 
 				return new AlertStatus(true, "Su reclamo ha sido registrado.");

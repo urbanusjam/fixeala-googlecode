@@ -40,7 +40,8 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-wysiwyg.js"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-paginator.min.js"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootbox.js"></script>
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/select2.js"></script>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/select2-3.5.1/select2.js"></script>
+
 <%-- 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/typeahead.js"></script>  --%>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/hogan-2.0.0.js"></script> 
 		
@@ -75,7 +76,7 @@
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.map.js"></script>	
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.issue.editable.js"></script>
   	
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/select2.js"></script>	
+  	
   	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/masonry/masonry.pkgd.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/masonry/infinitescroll.js"></script>
@@ -97,7 +98,7 @@
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/DT_bootstrap.css" rel="stylesheet">
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.tagit.css" rel="stylesheet">
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/tagit.ui-zendesk.css" rel="stylesheet">
-	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/select2.css" rel="stylesheet">
+<%-- 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/select2.css" rel="stylesheet"> --%>
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/2.3.2/bootstrap.css" rel="stylesheet">   
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/2.3.2/bootstrap-combined.min.css" rel="stylesheet"> 
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/2.3.2/bootstrap-editable.css" rel="stylesheet"> 
@@ -108,8 +109,8 @@
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/2.3.2/bootstrap-lightbox.css" rel="stylesheet">   
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/2.3.2/bootstrap-datetimepicker.min.css" rel="stylesheet">  
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/2.3.2/bootstrap-tags.css" rel="stylesheet">  
-	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/select2.css" rel="stylesheet">   
-	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/select2-bootstrap.css" rel="stylesheet">   
+	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/select2-3.5.1/select2.css" rel="stylesheet">   
+	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/select2-3.5.1/select2-bootstrap.css" rel="stylesheet">   
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/font-awesome/3.2.1/font-awesome.css" rel="stylesheet">
 
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/lightbox.css" rel="stylesheet"> 
@@ -175,10 +176,13 @@ path:hover {
             
           //BLOCKUI
 			function blockPage(containerID) {
+        	  	
+        	  var loader = '/resources/images/loader.gif';
+        	  
 				$(containerID)
 						.block(
 								{
-									message : "<h4>Procesando...<br><br><img src=\".././resources/images/loader.gif\"/></h4>",
+									message : '<h4>Procesando...<br><br><img src='+loader+ '/></h4>',
 									overlayCSS : {
 										backgroundColor : '#000',
 										opacity : 0.3,
@@ -204,9 +208,7 @@ path:hover {
         
 		$(document).ready(function(){
 			
-			/** feedback **/
-			
-		
+			/***** FEEDBACK *****/
 			
 			$("#feedbackLink").click(function(){				
 				$('#cbxAsuntoFeedback option:first-child').attr("selected", "selected");
@@ -226,7 +228,7 @@ path:hover {
 			      }
 			 });
 			
-			/** end feedback **/
+			/***** END FEEDBACK *****/
 			
 			window.localStorage.clear();
 			 

@@ -1,5 +1,9 @@
 	<script type="text/javascript">   
 	
+	
+		var issueFileData = null; //holds the (optional) attached file
+	
+	
 		$(document).ready(function(){
 			
 			/*** INIT GOOGLE MAPS ***/
@@ -619,84 +623,112 @@
 					
 					else{
 						
-						var location = initMarker.location;
 						
-						var $form = $("#issueWizard");
-						console.log($form.serialize());
+						//no file selected
+						if(issueFileData == null){
+							 saveIssue(null, null, null);
+						}
 						
+						//selected file
+						else{
+							
+							//upload file to imgur
+							console.log(issueFileData);
+							var result = JSON.parse(issueFileData.response);
 						
-						var lat = $("#latitude").val();
-						var lng = $("#longitude").val();
-						var address = $("#address").val();
-						var neighborhood = $("#neighborhood").val();
-						var city = $("#locality").val();
-						var province = $("#administrative_area_level_1").val();
-					
-						var title = $("#formTitle").val();
-						var description = $("#formDescription").val();
-						var tags = $("#tags").val();
-						
-						
-						var formData = "latitude=" + lat + "&longitude=" + lng + "&address=" + address + 
-									   "&neighborhood=" + neighborhood + "&city=" + city + "&province=" + province + 
-									   "&title=" + title + "&description=" + description + "&tags=" + tags;
-									
-						$.ajax({ 
-						 		url: "./reportIssue.html", 		
-						 		type: "POST",					 	
-						 		data : formData,	
-						 		success : function(alertStatus){					 		
-						 			if(alertStatus.result){
-						 				
-						 				mapController.blockIssueForm();	 	
-						 				
-						 				bootbox.alert(alertStatus.message, function() {					 					
-						 								 					
-						 					mapController.displayMarkers(map);
-					 						initMarker.setMap(null);
-					 						map.setCenter(location);
-					 						
-					 						$('#btnIssue').removeClass('btn-danger').addClass('btn-success').html("<i class=\"icon-map-marker icon-large\"></i>&nbsp;&nbsp;&nbsp;PUBLICAR RECLAMO");
-					 						
-					 						toggleIssueForm();
-					 					
-						 					
-						 				});		
-						 				
-						 				setTimeout(function(){   	
-						 					mapController.unBlockIssueForm();	   
-					 					}, 2000);
-			 	    				}
-			 	    				else{	 	    			
-			 	    					bootbox.alert(alertStatus.message);	 	    										 	    					
-			 	    				}  
-						 			
-						 		},
-						 		error: function(jqXHR, exception) {
-					                   if (jqXHR.status === 0) {
-					                       alert('Not connect.\n Verify Network.');
-					                   } else if (jqXHR.status == 404) {
-					                       alert('Requested page not found. [404]');
-					                   } else if (jqXHR.status == 500) {
-					                       alert('Internal Server Error [500].');
-					                   } else if (exception === 'parsererror') {
-					                       alert('Requested JSON parse failed.');
-					                   } else if (exception === 'timeout') {
-					                       alert('Time out error.');
-					                   } else if (exception === 'abort') {
-					                       alert('Ajax request aborted.');
-					                   } else {
-					                       alert('Uncaught Error.\n' + jqXHR.responseText);
-					                   }
-					               }
-						 	
-						 	});//ajax
-						
+				        	var success = result.success;
+				        	var statusCode = result.status;
+				        	
+			        		//upload error
+				        	if(!success && statusCode != '200'){
+				        		bootbox.confirm("Hubo un error al cargar el archivo. &iquest;Desea continuar con la publicacion del reclamo?", function(result){
+									  if(result){
+										  saveIssue(null, null, null);
+									  }
+				        		});
+				        	}
+			        		//upload OK
+			        		else if(success && statusCode == '200'){
+			        		
+				        		var imgurFileID = result.data.id;
+					        	var deletehash = result.data.deletehash;
+				        		
+				        		//parameters
+				        		var fileData = JSON.stringify(result.data);
+				        		var filename = issueFileData.filename;
+				        		
+				        		//SAVE ISSUE
+				        		saveIssue(fileData, filename, deletehash);
+							
+			        		}//else imgur ok
+							
+						}
 						
 						
 					}
 					return false;
 				});//rootwizard
+				
+				
+				
+				function saveIssue(fileData, filename, deletehash){
+					//save issue
+					var location = initMarker.location;
+					
+					var $form = $("#issueWizard");
+					console.log($form.serialize());
+					
+					//parameters
+					var lat = $("#latitude").val();
+					var lng = $("#longitude").val();
+					var address = $("#address").val();
+					var neighborhood = $("#neighborhood").val();
+					var city = $("#locality").val();
+					var province = $("#administrative_area_level_1").val();
+					var title = $("#formTitle").val();
+					var description = $("#formDescription").val();
+					var tags = $("#tags").val();
+					
+					var formData = "latitude=" + lat + "&longitude=" + lng + "&address=" + address + 
+								   "&neighborhood=" + neighborhood + "&city=" + city + "&province=" + province + 
+								   "&title=" + title + "&description=" + description + "&tags=" + tags + 
+								   "&fileData=" + fileData + "&filename=" + filename;
+								
+					$.ajax({ 
+					 		url: "./reportIssue.html", 		
+					 		type: "POST",					 	
+					 		data : formData,	
+					 		success : function(alertStatus){					 		
+					 			if(alertStatus.result){
+					 				
+					 				mapController.blockIssueForm();	 	
+					 				
+					 				bootbox.alert(alertStatus.message, function() {	
+					 					mapController.displayMarkers(map);
+				 						initMarker.setMap(null);
+				 						map.setCenter(location);
+				 						$('#btnIssue').removeClass('btn-danger').addClass('btn-success').html("<i class=\"icon-map-marker icon-large\"></i>&nbsp;&nbsp;&nbsp;PUBLICAR RECLAMO");
+				 						toggleIssueForm();
+					 				});		
+					 				
+					 				setTimeout(function(){   	
+					 					mapController.unBlockIssueForm();	   
+				 					}, 2000);
+		 	    				}
+		 	    				else{	 	    			
+		 	    					if(deletehash != null){
+		 	    						fileController.deleteImage(deletehash);
+		 	    					}
+		 	    					bootbox.alert(alertStatus.message);	 	    										 	    					
+		 	    				}  
+					 			
+					 		},
+					 		error: function(jqXHR, exception) {
+					 			bootbox.alert('No se pudo publicar el reclamo.');	 	  
+				            }
+					 	
+					 	});//ajax
+				}
 			
 		});
 	</script>
@@ -806,26 +838,17 @@
 								    
 								     <!-- TAB 3 -->
 									<div class="tab-pane" id="tab3">							
-										<label>Categor&iacute;a *</label>
-			   							<input type="hidden" id="tags" name="tags" style="width:300px" class="input-xlarge" required/>								
+										<label>Categor&iacute;as *</label>
+			   							<input type="hidden" id="tags" name="tags" style="width:300px; margin-bottom: 20px;" required/>								
 										<label>Foto (opcional)</label>
-										
-<!-- 										<div class="fileupload fileupload-new" data-provides="fileupload" style="display:inline-block"> -->
-<!-- 											<div class="fileupload-new thumbnail" style="width: 304px; height: 100px;"> -->
-<%-- 												<img src="${pageContext.request.contextPath}/resources/images/nopic.png" /> --%>
-<!-- 											</div> -->
-<!-- 											<div class="fileupload-preview fileupload-exists thumbnail" style="height: 100px;min-width:300px;max-width: 200px; max-height: 100px; line-height: 20px;"></div> -->
-<!-- 											<span class="btn fileinput-button"> -->
-<!-- 										        <i class="icon-upload icon-large"></i>&nbsp;&nbsp; -->
-<!-- 										        <span>Subir archivo</span>									         -->
-<!-- 										        <input type="file" name="files[]" id="fileupload"> -->
-<!-- 										    </span>									   -->
-<!-- 										</div> -->
-
 										<br><br>
 										<center>
 										<!-- uploadify -->	
-										<input id="file_upload_1" name="file_upload_1" type="file" > 
+<!-- 										<input id="file_upload_1" name="file_upload_1" type="file" >  -->
+										
+										<input id="file_upload" name="file_upload" type="file" accept="image/*" 
+										onchange="javascript:fileController.simpleUpload(this.files[0], this.files[0].name, fileController.uploadCallback);">
+										
 											</center>
 								    </div>
 								    
@@ -930,4 +953,4 @@
 	
 	
   	
-	
+ <script src="${pageContext.request.contextPath}/resources/js/fixeala/imgur.js"></script>	
