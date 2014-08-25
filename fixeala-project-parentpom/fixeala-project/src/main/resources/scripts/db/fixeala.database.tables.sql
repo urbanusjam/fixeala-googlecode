@@ -64,24 +64,30 @@ CREATE TABLE comment (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE content ( 
+/**********************/
+/** new **/
+CREATE TABLE media_content ( 
 	   id_content BIGINT(20) NOT NULL AUTO_INCREMENT,
-	   id_issue BIGINT(20) NOT NULL,	   
-	   height BIGINT(22) NOT NULL,
+	   id_issue BIGINT(20) NULL,	
+	   file_id VARCHAR(50) NOT NULL,
+	   file_type VARCHAR(30) NOT NULL, 
+	   filename VARCHAR(200) NULL,
+	   file_order INT(1) NOT NULL,
+	   upload_date BIGINT NOT NULL,
 	   width BIGINT(22) NOT NULL,
-	   filename VARCHAR(255) NOT NULL,
-	   filename_extension VARCHAR(255) NOT NULL,	
-	   filename_with_extension VARCHAR(255) NOT NULL,
-	   relative_path VARCHAR(255) NOT NULL,		  
-	   upload_date DATETIME NULL,
-	   file_order INT(10) NOT NULL,
+	   height BIGINT(22) NOT NULL,
+	   size BIGINT(50) NOT NULL,
+	   deletehash VARCHAR(100) NULL,
+	   link VARCHAR(150) NOT NULL,
 	   is_profile_pic TINYINT(1) NOT NULL,
+	   username VARCHAR(50) NULL,
 	   
-	   PRIMARY KEY (id_content)
+	   PRIMARY KEY (id_content),
+	   UNIQUE KEY(file_id)
 	   
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-/** modificado 21/08/14 **/
+
 CREATE TABLE issue (
 	   id_issue BIGINT(20) NOT NULL, 
 	   id_reporter BIGINT(20) NOT NULL,
@@ -100,7 +106,7 @@ CREATE TABLE issue (
 	   priority VARCHAR(64) NULL, 
 	   resolution_type VARCHAR(64) NULL, 	
 	   status VARCHAR(64) NOT NULL,
-	   is_verified TINYINT(1) NULL,
+	   is_verified TINYINT(1) NULL, /** modificado 21/08/14 **/
 	   
 	   PRIMARY KEY (id_issue)
 	   
@@ -331,8 +337,8 @@ ALTER TABLE issue_tag
     ADD CONSTRAINT FOREIGN KEY fk_issue_tag_2 (id_issue)
     REFERENCES issue (id_issue);
     
-ALTER TABLE content
-    ADD CONSTRAINT FOREIGN KEY fk_content_1 (id_issue)
+ALTER TABLE media_content
+    ADD CONSTRAINT FOREIGN KEY fk_media_content_1 (id_issue)
     REFERENCES issue (id_issue);
     
 ALTER TABLE issue_update_history

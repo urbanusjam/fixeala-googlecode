@@ -621,9 +621,11 @@ ul.select2-results  li.select2-search-choice {
 	height: 20px; 
 	line-height:20px; 
 	font-size:12px;
-
 	margin: 0 auto;
+	
 }
+
+.fileinput-button{float: none;}
 
 .form-issue #btnBackNext {
 	float: left;
@@ -794,22 +796,12 @@ div[data-role="editor-toolbar"] {
 }
 
 
-#mdl-licitacion {
-	width:1000px;
-	margin: -25px 0 0 -500px;
-}
-	
-
-#mdl-licitacion	.modal-body {
-	max-height: 550px; 
-	overflow:hidden;
-}
-
-#mdl-repair { width:800px; }
+#mdl-repair { width:800px;left: 50%;}
 #mdl-repair	.modal-body {
 	max-height: auto; 
-/* 	overflow:hidden; */
 }
+#mdl-repair .modal-footer button i { margin-right: 5px; }
+
 #repairForm textarea { width: 480px; height: 100px; }
 #repairForm div#fecha-estimada-from, 
 #repairForm div#fecha-estimada-to,

@@ -160,53 +160,69 @@
          				<div class="page-header">
 				    		<h3>Perfil p&uacute;blico</h3>
 				    	</div>				    	
-				    	<div class="row" style="margin: 0 auto; border: 0px solid #000; ">				    	
+				    	<div class="row-fluid" style="margin: 0 auto; border: 0px solid #000; ">	
+				    	
+				    		<!-- column 1 -->    	
 						    <div class="span3" style="border: 0px solid #000; ">		
-						    	<span class="thumbnail" style="width:200px; height:200px">				     
-									<img src="${pageContext.request.contextPath}/resources/images/nopic.png" />
-								</span>										
-								<div class="thumbnail" style="text-align:center; width:200px;">
+						    	
+						    	<div class="profilePic">
+						    		<c:if test="${empty profilePicUrl}">			     
+										<img width="200" height="200" class="thumbnail" src="${pageContext.request.contextPath}/resources/images/nopic_user.png" />
+									</c:if>
+									<c:if test="${not empty profilePicUrl}">			     
+										<img width="200" height="200" class="thumbnail" src="${profilePicUrl}"/>
+									</c:if>
+						    	</div>
+						    		
+						    	<div class="changePic">
+						    		<c:if test="${ loggedMatchesProfile }">
+										<a href="#" class="fileinput-button" style="width:150px; text-align: center; font-size:12px;">
+									       Cambiar imagen								        
+									        <input type="file" name="file" id="fileupload-profile" accept="image/*" onchange="javascript:fileController.handleUserPicUpload(this.files[0]);">  
+								    	</a>
+							    	</c:if>
+						    	</div>
+														
+								<div class="thumbnail" style="text-align:center;">
               						<small style="text-align:center">Miembro desde ${registrationDate}</small>		
-    							</div>	    																
-<!-- 								<div class="thumbnail" style="text-align:center; width:200px;">	              						 -->
-<!--               						<small style="text-align:center">33 visitas</small>	 -->
-<!--     							</div>			 -->
+    							</div>															
+	
 						    </div>
-							<div class="span2 thumbnail" style="text-align:center" title="Reclamos publicados">
-             						<i class="icon-pushpin icon-4x"></i>
+						    
+						    <!-- column 2 -->
+						    
+<!-- 						    <div class="span9" style="border: 1px solid red"> -->
+						    
+				
+						    	<span class="span2 thumbnail" style="text-align:center; width: 120px;" title="Reclamos publicados">
+             				
              						<h2>${total_issues}</h2>
              						<strong>PUBLICADOS</strong>
-   							</div>   							
-   							<div class="span2 thumbnail" style="text-align:center" title="Reclamos resueltos">
-             						<i class="icon-ok icon-4x"></i>
-             						<h2>${total_solved}</h2>
-             						<strong>RESUELTOS</strong>
-   							</div> 
-   							<div class="span2 thumbnail" style="text-align:center" title="Reclamos votados">
-             						<i class="icon-thumbs-up icon-4x"></i>
-             						<h2>${total_voted}</h2>
-             						<strong>VOTADOS</strong>
-   							</div>   							
-   							<div class="span2 thumbnail" style="text-align:center" title="Reclamos en seguimiento">
-             						<i class="icon-screenshot icon-4x"></i>
-             						<h2>${total_followings}</h2>
-             						<strong>OBSERVANDO</strong>
-   							</div>   							
-<!--    							<div class="span2 thumbnail" style="text-align:center" title="Comentarios realizados"> -->
-<!--              						<i class="icon-warning-sign icon-4x"></i> -->
-<%--              						<h2>${total_flagged}</h2> --%>
-<!--              						<strong>DENUNCIADOS</strong> -->
-<!--    							</div>   							 -->
-   							<div class="span2 thumbnail" style="text-align:center" title="Comentarios realizados">
-             						<i class="icon-comments icon-4x"></i>
-             						<h2>${total_comments}</h2>
-             						<strong>COMENTARIOS</strong>
-   							</div> 
-<!--    							<div class="span2 thumbnail" style="text-align:center"> -->
-<!--              						<i class="icon-cogs icon-4x"></i> -->
-<%--              						<h2>${total_widgets}</h2> --%>
-<!--              						<strong>WIDGETS</strong> -->
-<!--    							</div>   						 -->
+   								</span>   							
+	   							<span class="span2 thumbnail" style="text-align:center; width: 120px;" title="Reclamos resueltos">
+	             					
+	             						<h2>${total_solved}</h2>
+	             						<strong>RESUELTOS</strong>
+	   							</span> 
+	   							<span class="span2 thumbnail" style="text-align:center; width: 120px;" title="Reclamos votados">
+	             				
+	             						<h2>${total_voted}</h2>
+	             						<strong>VOTADOS</strong>
+	   							</span>   							
+	   							<span class="span2 thumbnail" style="text-align:center; width: 120px;" title="Reclamos en seguimiento">
+	             					
+	             						<h2>${total_followings}</h2>
+	             						<strong>OBSERVANDO</strong>
+	   							</span>   							
+	   							<span class="span2 thumbnail" style="text-align:center; width: 120px;" title="Comentarios realizados">
+	             					
+	             						<h2>${total_comments}</h2>
+	             						<strong>COMENTARIOS</strong>
+	   							</span> 
+						    
+						    
+<!-- 						    </div> -->
+						
    						</div>				    	
 			    	</div>
 					<!-- fin TAB PROFILE -->
@@ -429,32 +445,6 @@
 	 								
 	 							<div class="row-fluid">
 						            <div class="span9">
-						                <div class="span5">
-							                <div class="logowrapper">
-							                    <div class="fileupload fileupload-new" data-provides="fileupload" style="display:inline-block">
-													<div class="fileupload-new thumbnail">
-														<c:if test="${not empty image}">											    								  	  			  	   		
-															<img src="${pageContext.request.contextPath}/uploads/${imageUrl}" alt="${imageName}">	
-											    		</c:if>
-											    		<c:if test="${empty image}">											    		
-															<img src="${pageContext.request.contextPath}/resources/images/nopic.png" alt="">
-											    		</c:if>
-													</div>
-													<div class="fileupload-preview fileupload-exists thumbnail" style="height: 100px;min-width:100px;max-width: 100px; max-height: 100px; line-height: 20px;"></div>
-													
-<!-- 													<span class="btn fileinput-button" style="line-height:30px; width:auto; font-size:12px"> -->
-<!-- 												        <i class="icon-plus"></i>&nbsp;&nbsp; -->
-<!-- 												        <span>Seleccionar archivo</span>									         -->
-<!-- 												           <input type="file" name="files[]" id="fileupload-profile"> -->
-<!-- 												    </span>			 -->
-												    	<a href="#" class="fileinput-button" style="line-height:30px; width:250px; text-align: center; font-size:12px;">
-													        <span>Cambiar imagen</span>									        
-													        <input type="file" name="files[]" id="fileupload-profile">
-												    	</a>		
-												    						  
-												</div>		
-							                </div>
-						                </div>
 					                	<div class="span7">
 					                		<form class="form-horizontal" id="updateAccountForm">					              
 											    <label for="email">Email</label>
@@ -564,3 +554,5 @@
 		
 	</div>
 	<!-- /content --> 
+	
+	<script src="${pageContext.request.contextPath}/resources/js/fixeala/imgur.js"></script>

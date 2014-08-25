@@ -147,6 +147,7 @@
 			$('.editableField').hide();
 			
 			
+			
 			$('#btn-add-repair').live('click', function() {
 				
 				$('#mdl-repair').modal('show');
@@ -207,6 +208,15 @@
 				
 				return false; 
 			});
+		    
+		    $('#obra').keyup(function(){
+			      if($(this).val().length > 0){
+			         $('#btn-save-repair').prop('disabled',false);
+			      }else{
+			         $('#btn-save-repair').prop('disabled',true);
+			      }
+			 });
+			
 			
 			$('#btn-delete-repair').live('click', function(e) {	
 				
@@ -401,6 +411,15 @@
 				
 			  /*******************************************/
 			
+				
+				$('#comment-text').keyup(function(){
+				      if($(this).val().length > 0){
+				         $('#btn-comment').prop('disabled',false);
+				      }else{
+				         $('#btn-comment').prop('disabled',true);
+				      }
+				 });
+				
 			  $('#btn-comment').click(function() {				  
 				  
 				  	blockPage($commentContainer);
@@ -1023,12 +1042,12 @@
 					 <div class="span4">  
 						 <ul class="thumbnails">
 					  	   		<li style="margin-left:0">		
-						    		<c:if test="${not empty image}">
+						    		<c:if test="${cantidadContenidos gt 0}">
 						    			<a data-lightbox="issue-lightbox2" class="thumbnail" href="${imageUrl}">							  	  			  	   		
-											<img src="${imageUrl}" alt="${imageName}">	 
+											<img src="${imageUrl}" alt="${imageUrl}">	 
 										</a>		
 						    		</c:if>
-						    		<c:if test="${empty image}">
+						    		<c:if test="${cantidadContenidos eq 0}">
 						    			<a data-lightbox="issue-lightbox2" class="thumbnail" href="${pageContext.request.contextPath}/resources/images/nopic.png" >							  	  			  	   		
 											<img src="${pageContext.request.contextPath}/resources/images/nopic.png" alt="">	
 										</a>
@@ -1130,8 +1149,8 @@
 			        <ul id="lst-file-thumnails" class="thumbnails" style="margin-top:30px;">
 			        	<c:forEach items="${contenidos}" var="contenido">	
 			        		<li style="margin-right:20px;">					                
-			                	<a class="thumbnail"  style="width:100px; height: 60px; max-height:60px; text-align: center" data-lightbox="issue-lightbox" href="${pageContext.request.contextPath}/uploads/${contenido.nombreConExtension}" >							  	  			  	   		
-				      				<img style="max-width:100px; max-height:60px;" src="${pageContext.request.contextPath}/uploads/${contenido.nombreConExtension}" > 
+			                	<a class="thumbnail"  style="width:100px; height: 60px; max-height:60px; text-align: center" data-lightbox="issue-lightbox" href="${contenido.link}" >							  	  			  	   		
+				      				<img style="max-width:100px; max-height:60px;" src="${contenido.link}" > 
 				    			</a>
 		                	</li>
 			        	</c:forEach>
@@ -1142,10 +1161,17 @@
 							
 		<!-- 3 Comentarios -->							
 		<div class="tab-pane fade" id="issueComments">	
-		 	<div class="row" style="margin-bottom: 30px;">	
-				<textarea id="comment-text" name="comment-text"
+		 	<div class="row-fluid">	
+		 		<span>
+		 			<textarea id="comment-text" name="comment-text"
                 	placeholder="Ingrese su comentario" rows="5"></textarea>
-				<button id="btn-comment" class="btn btn-info" type="submit" style="float:right;margin-top:15px;margin-bottom:15px;">Publicar</button>	
+		 		</span>
+		 		<span>
+		 			<button id="btn-comment" class="btn btn-warning" type="submit" disabled 
+					style="width: 150px; margin-left: 20px;">Publicar</button>
+		 		</span>
+			</div>	
+				<div class="row-fluid" style="margin-bottom: 30px;">		
 		 		 <!-- infinite scroll -->
 				 <div id="infinite-container-comments"></div>
 				 <nav id="page-nav-comment" style="display: none;">
@@ -1184,7 +1210,7 @@
 			</sec:authorize>			
 				
 				
-				<c:if test="${infoReparacion ne 'Sin datos'}">	
+			<c:if test="${infoReparacion ne 'Sin datos'}">	
 			<div class="row-fluid">
 	  			<div class="span6">
 	  				<label><i class="icon icon-angle-right"></i>Obra / Proyecto</label>					    
@@ -1455,65 +1481,65 @@
 	  	</form>
 	</div>
 	
-	<div id="mdl-fileupload" class="modal hide fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="fileUploadLabel" aria-hidden="true">
-	  	<div class="modal-header">
-	    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>		    	
-	    	<h4 id="fileUploadLabel"> 
-		    	Gesti&oacute;n de archivos
-	    	</h4>
-	  	</div>
-	  	<form id="multiplefileupload" enctype="multipart/form-data" >
- 			<!-- modal body -->
- 			<div class="modal-body">   		
-	   			<div class="alert alert-success" style="height:30px; line-height:30px; font-size:13px;"> 
-	 				<i class="icon-info-sign"></i>&nbsp; Hay <b><span class="cantidadContenidos">${cantidadContenidos}</span></b> archivo(s) subido(s). M&aacute;ximo: 5 archivos.
-				</div>   			
-	   			<table id="tbl-fileupload" role="presentation" class="table table-hover">    			
-	  	   		  	   	<tbody class="files">   	   		  	   	
-	  	   		  	   		<c:forEach items="${contenidos}" var="contenido">	
-							<tr id="${contenido.id}">
-			    	   			<td width="100">					    	   			
-				    	   			<span class="preview thumbnail" style="max-height:60px; text-align: center">
-				                    	<a style="width:100px; height:60px; " href="#" title="{%=file.name%}">
-											<img style="max-width:100px; max-height:60px;" src="${pageContext.request.contextPath}/uploads/${contenido.nombreConExtension}">
-										</a>
-	          							</span>
-								</td>										
-								<td>
-									${contenido.fileSize}
-							 	</td>
-							 	<td width="100" class="centered">
-								 	<a href="#" class="btn btn-small btn-file-delete">
-								 		<i class="icon-trash icon-large" title="Eliminar archivo"></i>
-								 	</a>							 		
-							 	</td>						
-		    	   			</tr>
-						</c:forEach>
-		    	   	</tbody>
-				</table> 
-			</div>
-			<!-- modal footer -->
-		  	<div class="modal-footer">  
-		  		<c:if test="${cantidadContenidos eq 5}">
-			  		<span class="btn btn-danger fileinput-button disabled">
-		                   <i class="icon-plus"></i>
-		                   <span>Seleccionar archivos</span>
-		                   <input type="file" name="files[]" multiple disabled>
-		            </span>
-		  		</c:if>	  			  		
-		  		<c:if test="${cantidadContenidos lt 5}">
-			  		<span class="btn btn-danger fileinput-button">
-		                   <i class="icon-plus"></i>
-		                   <span>Seleccionar archivos</span>
-		                   <input type="file" name="files[]" multiple>
-		            </span>
-		  		</c:if>			  	
-		  		<button class="btn" data-dismiss="modal" aria-hidden="true">
-			    		<i class="icon-remove icon-large"></i>&nbsp;&nbsp;&nbsp;Cerrar
-			    </button>	 
-		  	</div>
-	  	</form>
-	</div>
+<!-- 	<div id="mdl-fileupload" class="modal hide fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="fileUploadLabel" aria-hidden="true"> -->
+<!-- 	  	<div class="modal-header"> -->
+<!-- 	    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>		    	 -->
+<!-- 	    	<h4 id="fileUploadLabel">  -->
+<!-- 		    	Gesti&oacute;n de archivos -->
+<!-- 	    	</h4> -->
+<!-- 	  	</div> -->
+<!-- 	  	<form id="multiplefileupload" enctype="multipart/form-data" > -->
+<!--  			modal body -->
+<!--  			<div class="modal-body">   		 -->
+<!-- 	   			<div class="alert alert-success" style="height:30px; line-height:30px; font-size:13px;">  -->
+<%-- 	 				<i class="icon-info-sign"></i>&nbsp; Hay <b><span class="cantidadContenidos">${cantidadContenidos}</span></b> archivo(s) subido(s). M&aacute;ximo: 5 archivos. --%>
+<!-- 				</div>   			 -->
+<!-- 	   			<table id="tbl-fileupload" role="presentation" class="table table-hover">    			 -->
+<!-- 	  	   		  	   	<tbody class="files">   	   		  	   	 -->
+<%-- 	  	   		  	   		<c:forEach items="${contenidos}" var="contenido">	 --%>
+<%-- 							<tr id="${contenido.id}"> --%>
+<!-- 			    	   			<td width="100">					    	   			 -->
+<!-- 				    	   			<span class="preview thumbnail" style="max-height:60px; text-align: center"> -->
+<!-- 				                    	<a style="width:100px; height:60px; " href="#" title="{%=file.name%}"> -->
+<%-- 											<img style="max-width:100px; max-height:60px;" src="${pageContext.request.contextPath}/uploads/${contenido.nombreConExtension}"> --%>
+<!-- 										</a> -->
+<!-- 	          							</span> -->
+<!-- 								</td>										 -->
+<!-- 								<td> -->
+<%-- 									${contenido.fileSize} --%>
+<!-- 							 	</td> -->
+<!-- 							 	<td width="100" class="centered"> -->
+<!-- 								 	<a href="#" class="btn btn-small btn-file-delete"> -->
+<!-- 								 		<i class="icon-trash icon-large" title="Eliminar archivo"></i> -->
+<!-- 								 	</a>							 		 -->
+<!-- 							 	</td>						 -->
+<!-- 		    	   			</tr> -->
+<%-- 						</c:forEach> --%>
+<!-- 		    	   	</tbody> -->
+<!-- 				</table>  -->
+<!-- 			</div> -->
+<!-- 			<!-- modal footer --> 
+<!-- 		  	<div class="modal-footer">   -->
+<%-- 		  		<c:if test="${cantidadContenidos eq 5}"> --%>
+<!-- 			  		<span class="btn btn-danger fileinput-button disabled"> -->
+<!-- 		                   <i class="icon-plus"></i> -->
+<!-- 		                   <span>Seleccionar archivos</span> -->
+<!-- 		                   <input type="file" name="files[]" multiple disabled> -->
+<!-- 		            </span> -->
+<%-- 		  		</c:if>	  			  		 --%>
+<%-- 		  		<c:if test="${cantidadContenidos lt 5}"> --%>
+<!-- 			  		<span class="btn btn-danger fileinput-button"> -->
+<!-- 		                   <i class="icon-plus"></i> -->
+<!-- 		                   <span>Seleccionar archivos</span> -->
+<!-- 		                   <input type="file" name="files[]" multiple> -->
+<!-- 		            </span> -->
+<%-- 		  		</c:if>			  	 --%>
+<!-- 		  		<button class="btn" data-dismiss="modal" aria-hidden="true"> -->
+<!-- 			    		<i class="icon-remove icon-large"></i>&nbsp;&nbsp;&nbsp;Cerrar -->
+<!-- 			    </button>	  -->
+<!-- 		  	</div> -->
+<!-- 	  	</form> -->
+<!-- 	</div> -->
 	
 	
 	<div id="mdl-repair" class="modal hide fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="fileUploadLabel" aria-hidden="true">
@@ -1529,7 +1555,7 @@
 	  		<div class="row-fluid">
 	  			<div class="span6">
 	  				<label>Obra / Proyecto</label>					    
-		    	   	<textarea id="obra" name="obra"></textarea>	
+		    	   	<textarea id="obra" name="obra" required></textarea>	
 	  			</div>	  		
 	  			<div class="span3 offset2">
 	  				<label>Estado</label>	
@@ -1646,14 +1672,12 @@
 		</div>
 		<!-- modal footer -->
 	  	<div class="modal-footer"> 	
-	  		<div class="btn-container">
-		  		<button id="btn-save-repair"  type="submit" class="btn btn-info">
-			    	<i class="icon-ok icon-large"></i>Guardar
-			    </button>  			  	
-		  		<button class="btn" data-dismiss="modal" aria-hidden="true">
-			    	<i class="icon-remove icon-large"></i>Cerrar
-			    </button>	
-	  		</div>	  		 
+	  		<button id="btn-save-repair" class="btn btn-info" aria-hidden="true" disabled>
+		    	<i class="icon-ok icon-large"></i>Guardar
+		    </button>  			  	
+	  		<button class="btn" data-dismiss="modal" aria-hidden="true">
+		    	<i class="icon-remove icon-large"></i>Cancelar
+		    </button>	
 	  	</div>
 	  	</form>
 	</div>
