@@ -2,14 +2,14 @@ package ar.com.urbanusjam.dao.impl;
 
 import java.io.Serializable;
 
-import ar.com.urbanusjam.dao.IssueHistorialRevisionDAO;
+import ar.com.urbanusjam.dao.IssueHistoryDAO;
 import ar.com.urbanusjam.dao.impl.utils.GenericDAOImpl;
 import ar.com.urbanusjam.entity.annotations.IssueUpdateHistory;
 
-public class IssueHistorialRevisionDAOImpl extends GenericDAOImpl<IssueUpdateHistory, Serializable> 
-implements IssueHistorialRevisionDAO {
+public class IssueHistoryDAOImpl extends GenericDAOImpl<IssueUpdateHistory, Serializable> 
+implements IssueHistoryDAO {
 
-	public IssueHistorialRevisionDAOImpl() {
+	public IssueHistoryDAOImpl() {
 		super(IssueUpdateHistory.class);
 	}
 

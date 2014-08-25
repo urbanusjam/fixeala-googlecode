@@ -41,8 +41,8 @@ public class ReadTags {
 		    // for-each loop for calculating heat index of May - October
 
 		    // create Scanner inFile1
-		    Scanner inFile1 = new Scanner(new File("D:\\tags.txt")).useDelimiter("\n *");
-
+		    Scanner inFile1 = new Scanner(new File("/Users/cora/Documents/fixeala.tags.txt")).useDelimiter("\n *");
+		    
 		    List<String> temps = new LinkedList<String>();
 
 		    // while loop
@@ -62,13 +62,13 @@ public class ReadTags {
 		  
 		    for (String tagname : tempsArray) {
 		    	tagname = tagname.replaceAll("(\\r|\\n)", "");
-		    	builder.append("INSERT INTO tag (tagname) VALUES (' " +tagname+ "');");
+		    	builder.append("INSERT INTO tag (tagname) VALUES ('" +tagname+ "');");
 		    	builder.append("\n");
 		      System.out.println(builder);
 		    }
 		    
-		    
-		    PrintStream out = new PrintStream(new FileOutputStream("D:\\tag_query.sql"));
+//		    PrintStream out = new PrintStream(new FileOutputStream("D:\\fixeala.tags.sql"));
+		    PrintStream out = new PrintStream(new FileOutputStream("/Users/cora/Documents/fixeala.tags.sql"));
 		    out.print(builder);
 		    
 		    
