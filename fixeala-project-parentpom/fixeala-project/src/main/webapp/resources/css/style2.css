@@ -1372,7 +1372,7 @@ a.no-hover { text-decoration: none; color: #000;}
 .inline-container { text-align:center; display: inline;}
 .left { float: left; }
 .right { float: right; }
-.center { margin: 0 auto; display: inline-block; }
+.center { margin: 0 auto; }
 
 /* Start: Recommended Isotope styles */
 
