@@ -165,7 +165,7 @@
 			<artifactId>tiles-template</artifactId>
 			<version>2.2.2</version>
 		</dependency>		
-						
+		
 		<!-- Simple CAPTCHA -->
 		<dependency>
 			<groupId>nl.captcha</groupId>
