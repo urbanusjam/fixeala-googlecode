@@ -18,6 +18,21 @@
 <script type="text/javascript">
 	
 	$(document).ready(function(){
+		
+		var rowId;
+		var rowTitle;
+		var selectedUser;
+		var currentUser = '${profileUser}';
+		
+		$(".fileinput-button").click(function() {
+		    $("#fileupload-profile").click();
+		})
+		
+		
+		 $("#fileupload-profile").change(function(){
+			 fileController.handleUserPicUpload(this.files[0], currentUser);
+		 });
+	
 				
 		var prov = '${province}';
 		var city = '${city}';
@@ -33,10 +48,7 @@
 		
 	});
 	
-	var rowId;
-	var rowTitle;
-	var selectedUser;
-	var currentUser = '${profileUser}';
+
 	
 	function errorHandler (jqXHR, exception) {
         if (jqXHR.status === 0) {
@@ -176,10 +188,11 @@
 						    		
 						    	<div class="changePic">
 						    		<c:if test="${ loggedMatchesProfile }">
-										<a href="#" class="fileinput-button" style="width:150px; text-align: center; font-size:12px;">
+										<a href="#" class="fileinput-button">
 									       Cambiar imagen								        
-									        <input type="file" name="file" id="fileupload-profile" accept="image/*" onchange="javascript:fileController.handleUserPicUpload(this.files[0]);">  
+									     
 								    	</a>
+								    	   <input type="file" name="file" id="fileupload-profile" accept="image/*" style="position: absolute; top:-100px">  
 							    	</c:if>
 						    	</div>
 														

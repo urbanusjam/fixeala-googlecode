@@ -51,7 +51,7 @@ public class ContenidoDAOImpl implements ContenidoDAO  {
 	}
 
 	@Override
-	public boolean deleteContenido(String issueID, String fileID) {
+	public boolean deleteContenido(Long issueID, String fileID) {
 		try{
 			MediaContent contenido = entityManager.createQuery("SELECT c FROM MediaContent c WHERE c.issue.id = :issueID AND c.fileID = :fileID", MediaContent.class)
 					 .setParameter("issueID", issueID)

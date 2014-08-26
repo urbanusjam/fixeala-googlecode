@@ -35,8 +35,8 @@ var fileController = {
 	    
 		},
 		
-		handleUserPicUpload : function(file){
-		 	
+		handleUserPicUpload : function(file, loggeduser){
+		 s
 			blockPage('html');
 
 			console.log('--- the file ---');
@@ -70,7 +70,7 @@ var fileController = {
 	        		var filename = file.name;
 	        		
 	    			$.ajax({
-	    			    url: './coripel/uploadUserPic',
+	    			    url: './'+loggeduser+'/uploadUserPic',
 	    		 		type: 'POST',	
 	    		 		dataType: 'json',
 	    		 		data: 'fileData=' + fileData + '&filename=' + filename,
@@ -108,7 +108,8 @@ var fileController = {
 		},
 
 		uploadImgur : function(file) {
-alert('aaa');
+			alert('aaa');
+			
 			if (!file || !file.type.match(/image.*/)){
 	        	bootbox.alert("Debe seleccionar un archivo de imagen");
 	        	return;
@@ -188,6 +189,25 @@ alert('aaa');
 	        }
 	        xhr.setRequestHeader('Authorization', 'Client-ID f64d4441566d507');
 	        xhr.send(fd);
+		},
+		
+		deleteMultipleImages : function(images) {
+			console.log("--- stating imgur delete ---");
+			
+			for(var i = 0; i < images.length ; i++){
+				
+				var fd = new FormData();
+		        var xhr = new XMLHttpRequest();
+		        xhr.open("DELETE", "https://api.imgur.com/3/image/" + images[i].deletehash);
+		        xhr.onload = function() {
+		        	console.log("--- imgur delete ---");
+		        	console.log(JSON.parse(xhr.responseText).data);
+		        }
+		        xhr.setRequestHeader('Authorization', 'Client-ID f64d4441566d507');
+		        xhr.send(fd);
+				
+			}
+	    	
 		}
 		
 		

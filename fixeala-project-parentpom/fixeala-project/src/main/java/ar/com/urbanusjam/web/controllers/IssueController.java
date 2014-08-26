@@ -444,36 +444,82 @@ public class IssueController {
 
 
 	
-	@RequestMapping(value = "/uploadFiles", method = RequestMethod.POST)
-	public @ResponseBody ContenidoResponse doFileUpload(@RequestParam ("issueID") String issueID, 
-			@RequestParam ("fileData") String fileData, 
-			@RequestParam ("filename") String filename) throws JSONException{
+	@RequestMapping(value = "/issues/{issueID}/uploadFiles", method = RequestMethod.POST)
+	public @ResponseBody ContenidoResponse doFileUpload(@PathVariable ("issueID") String issueID, 
+			@RequestParam ("fileList") String fileList, Model model) throws JSONException{
+	
+		List<MediaContent> files = new ArrayList<MediaContent>();
+		ContenidoResponse response = new ContenidoResponse();
 		
-		try{
+		try{			
 			
-			MediaContent file = new MediaContent();
-			file = this.deserializeFile(fileData);
-			file.setFilename(filename);
-			file.setIssueID(issueID);
-			file.setProfilePic(false);
-			
-			List<MediaContent> files = new ArrayList<MediaContent>();
-			files.add(file);
-			
+			files = (List<MediaContent>) this.deserializeMultipleFiles(fileList);
 			contenidoService.uploadFiles(files, issueID);
-			return new ContenidoResponse(true, files.size());
+			
+			List<MediaContent> contenidos = contenidoService.getIssueFiles(issueID);
+			model.addAttribute("contenidos", contenidos);
+			model.addAttribute("cantidadContenidos", contenidos.size());
+			
+			JSONArray jsonArray = new JSONArray();
+			
+			for(MediaContent c : files){
+				
+				JSONObject jsonObject = new JSONObject();
+				// jsonObject.put("id",
+				// uploadedContenido.getId().toString());
+				jsonObject.put("name",c.getFilename());
+				jsonObject.put("format", c.getFileType());
+				jsonObject.put("url", c.getLink());
+				jsonObject.put("thumbnailUrl", c.getLink());
+				jsonObject.put("size", c.getSize());
+				jsonObject.put("error", StringUtils.EMPTY);
+
+				jsonArray.put(jsonObject);
+
+				
+			}
+			
+			response.setStatus(true);
+			response.setTotalUploadedFiles(contenidos.size());
+			response.setUploadedFiles(jsonArray.toString());
+
+			
+			return response;
 			
 		}catch(Exception e){
 			return new ContenidoResponse(false, 0);
 		}
 	}
 	
+	@RequestMapping(value = "/issues/{issueID}/deleteFile", method = RequestMethod.POST)
+	public @ResponseBody ContenidoResponse doFileDelete(@PathVariable ("issueID") String issueID, 
+			@RequestParam ("fileID") String fileID, Model model) throws JSONException{
+	
+		List<String> files = new ArrayList<String>();
+		
+		try{			
+			
+			files.add(fileID);
+			contenidoService.deleteFiles(files, issueID);
+			
+			List<MediaContent> contenidos = contenidoService.getIssueFiles(issueID);
+			model.addAttribute("contenidos", contenidos);
+			model.addAttribute("cantidadContenidos", contenidos.size());
+
+			
+			return new ContenidoResponse(true, contenidos.size());
+			
+		}catch(Exception e){
+			return new ContenidoResponse(false, "No se puedo eliminar el archivo" , 0);
+		}
+	}
+	
+	
 	private MediaContent deserializeFile(String fileData){
 		
 		try{
-			
 			JSONObject jsonFile = new JSONObject(fileData);
-			
+		  
 			MediaContent file = new MediaContent();
 			file.setFileID(jsonFile.getString("id"));
 			file.setFileType(jsonFile.getString("type"));
@@ -483,13 +529,45 @@ public class IssueController {
 			file.setUploadDate(Integer.parseInt(jsonFile.getString("datetime")));
 			file.setDeleteHash(jsonFile.getString("deletehash"));
 			file.setLink(jsonFile.getString("link"));
-			
+					
 			return file;
+		}
+		catch(JSONException e){
+			return null;
+		}
+	}
+	
+	private List<MediaContent> deserializeMultipleFiles(String fileData){
+		
+		List<MediaContent> contenidos = new ArrayList<MediaContent>();
+		
+		try{
+			JSONArray jsonArray = new JSONArray(fileData);
+		    
+			for(int i = 0; i < jsonArray.length(); i++){
+	            JSONObject jsonObject = jsonArray.getJSONObject(i);
+	            JSONObject jsonFile = jsonObject.getJSONObject("filedata");
+	            
+				MediaContent file = new MediaContent();
+				file.setFileID(jsonFile.getString("id"));
+				file.setFileType(jsonFile.getString("type"));
+				file.setWidth(Integer.parseInt(jsonFile.getString("width")));
+				file.setHeight(Integer.parseInt(jsonFile.getString("height")));
+				file.setSize(Integer.parseInt(jsonFile.getString("size")));
+				file.setUploadDate(Integer.parseInt(jsonFile.getString("datetime")));
+				file.setDeleteHash(jsonFile.getString("deletehash"));
+				file.setLink(jsonFile.getString("link"));				
+				file.setFilename(jsonObject.getString("filename"));
+				file.setProfilePic(false);			
+				contenidos.add(file);
+				
+		    }
 			
 		}
 		catch(JSONException e){
 			return null;
 		}
+		return contenidos;
 		
 	}
 
@@ -891,10 +969,10 @@ public class IssueController {
 		return new AlertStatus(true, "El comentario ha sido publicado.");
 	}
 
-	@RequestMapping(value = "/issues/{watchOrUnwatch}", method = RequestMethod.POST)
+	@RequestMapping(value = "/issues/{issueID}/{watchOrUnwatch}", method = RequestMethod.POST)
 	public @ResponseBody
 	AlertStatus wIssue(@PathVariable String watchOrUnwatch,
-			@RequestParam("issueID") String issueID, Model model) {
+			@PathVariable("issueID") String issueID, Model model) {
 
 		IssueFollowDTO follow = new IssueFollowDTO();
 

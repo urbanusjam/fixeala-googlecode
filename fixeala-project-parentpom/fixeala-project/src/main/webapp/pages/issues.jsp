@@ -18,84 +18,6 @@
 		
 		<script type="text/javascript">
 		
-
-	    function upload(file) {
-	    	alert('aaa');
-	    				if (!file || !file.type.match(/image.*/)){
-	    		        	bootbox.alert("Debe seleccionar un archivo de imagen");
-	    		        	return;
-	    			    } 
-
-	    		        var fd = new FormData();
-	    		        fd.append("image", file); 
-	    		        
-	    		        var xhr = new XMLHttpRequest();
-	    		        xhr.open("POST", "https://api.imgur.com/3/image.json", false); 
-	    		        xhr.onload = function() {
-
-	    		        	var result = JSON.parse(xhr.responseText);
-	    		        	console.log(result);
-	    		        	var success = result.success;
-	    		        	var statusCode = result.status;
-	    		        	
-	    		        	var imgurFileID = result.data.id;
-	    		        	var deletehash = result.data.deletehash;
-	    		        
-	    		        	if(success && statusCode == '200'){
-	    		        		var id = result.data.id;
-	    		        		var fileData = JSON.stringify(file);
-	    		        		
-//	    		             	window.location = 'https://imgur.com/gallery/' + id;
-	    		        		$('#multiplefileupload').fileupload({
-	    					    	 url: './uploadFiles.html',
-	    						     type: "POST",
-	    						     dataType: 'json',
-	    						     contentType: false,
-	    							 processData: false,
-	    							 formData: [ { name: 'issueID', value: ${id} }, { name: 'fileData', value: fileData }, { name: 'filename', value: file.name }],
-	    						     maxNumberOfFiles: 5,
-	    							 maxFileSize: 5000000, // 5 MB		
-	    							 acceptFileTypes: /(\.|\/)(jpe?g|png)$/i,
-	    							 singleFileUploads: false,
-	    							 autoUpload: true,	
-	    							 disableImageResize: /Android(?!.*Chrome)|Opera/
-	    							        .test(window.navigator && navigator.userAgent),				
-	    					         previewMinWidth : 100,
-	    					         previewMaxHeight : 60,	
-	    							 imageCrop: false						
-	    					    }).bind('fileuploaddone', function(e, data){				    	
-	    					    	console.log(data);		
-	    					    	var parsedResult = $.parseJSON(data.result.uploadedFiles);	
-	    						    data.files = parsedResult;					    
-// 	    						    updateFilesInfo(data.result.totalUploadedFiles);
-	    	 					});
-	    		             	
-	    		        	}
-	    		        }
-	    		        xhr.setRequestHeader('Authorization', 'Client-ID f64d4441566d507'); 
-	    		        xhr.send(fd);
-	    		    
-	    			}
-
-		jQuery.extend(jQuery.validator.messages, {
-		    required: "Campo obligatorio."//,
-// 		    remote: "Please fix this field.",
-// 		    email: "Please enter a valid email address.",
-// 		    url: "Please enter a valid URL.",
-// 		    date: "Please enter a valid date.",
-// 		    dateISO: "Please enter a valid date (ISO).",
-// 		    number: "Please enter a valid number.",
-// 		    digits: "Please enter only digits.",
-// 		    creditcard: "Please enter a valid credit card number.",
-// 		    equalTo: "Please enter the same value again.",
-// 		    accept: "Please enter a value with a valid extension.",
-// 		    maxlength: jQuery.validator.format("Please enter no more than {0} characters."),
-// 		    minlength: jQuery.validator.format("Please enter at least {0} characters."),
-// 		    rangelength: jQuery.validator.format("Please enter a value between {0} and {1} characters long."),
-// 		    range: jQuery.validator.format("Please enter a value between {0} and {1}."),
-// 		    max: jQuery.validator.format("Please enter a value less than or equal to {0}."),
-// 		    min: jQuery.validator.format("Please enter a value greater than or equal to {0}.")
-		});
 			
 			var issueID = ${id};
 		  	var updatedFields =  { "title": 0 , "desc": 0, "barrio": 0};			 
@@ -120,6 +42,151 @@
 			        }
 			    });
 			});
+			
+			
+			
+			
+			
+		    function upload() {
+		    	
+		    	console.log('--- start files upload ---');
+		    
+		    	var files = $('#files').get(0).files;
+		    	console.log('--- num. of files: ' +files.length+ ' ---' );
+		    	
+		    	var uploadCounter = 0;
+		    	var uploadsOK = [];
+		    
+		    	
+		    	//call imgur api for each file
+		    	for(var i = 0; i < files.length ; i++){
+		    		
+		    		var selectedFile = files[i];	    		
+			        var fd = new FormData();
+			        fd.append("image", selectedFile); 
+			        
+			        var xhr = new XMLHttpRequest();
+			        xhr.open("POST", "https://api.imgur.com/3/image.json", false); 
+			        xhr.onload = function() {
+
+			        	var result = JSON.parse(xhr.responseText);
+			        	console.log(result);
+			        	
+			        	var success = result.success;
+			        	var statusCode = result.status;		        	
+			        	
+			        	if(success && statusCode == '200'){		        	
+			        		var upload = new Object();			       
+					    	upload.filedata =  result.data;
+					    	upload.filename = selectedFile.name;
+					    	upload.deletehash = result.data.deletehash;		        		
+					    	
+					    	uploadsOK.push(upload);		             	
+			        	}
+			        }
+			        xhr.setRequestHeader('Authorization', 'Client-ID f64d4441566d507'); 
+			        xhr.send(fd);
+			        //end IMGUR
+			        
+			        console.log('--- resultado uploads ---')
+			        console.log(uploadsOK);
+		    		
+		    	}//end call
+		    
+		    	//persist successful uploads into db
+		    	
+		    	var fileList =  JSON.stringify(uploadsOK);
+		    	
+			    $('#multiplefileupload').fileupload({
+			         url: './'+issueID+'/uploadFiles',
+				     type: "POST",
+				     dataType: 'json',
+//				     contentType: false,
+//					 processData: false,
+ 					 formData: [{ name: 'fileList', value: fileList }],
+ 				    sequentialUploads: true,
+				     maxNumberOfFiles: 5,
+// 					 maxFileSize: 5000000, // 5 MB		
+					 acceptFileTypes: /(\.|\/)(jpe?g|png)$/i,
+					 singleFileUploads: false,
+					 autoUpload: true,	
+					 disableImageResize: /Android(?!.*Chrome)|Opera/
+					        .test(window.navigator && navigator.userAgent),				
+			         previewMinWidth : 100,
+			         previewMaxHeight : 60,	
+					 imageCrop: false						
+			    }).bind('fileuploaddone', function(e, data){	
+			    	
+			    	console.log('--- fileupload plugin done ----');		
+			    	var parsedResult = $.parseJSON(data.result.uploadedFiles);	
+				    data.files = parsedResult;					    
+				    updateFilesInfo(data.result.totalUploadedFiles);
+				    
+				}).bind('fileprogressfail', function (e, data) {
+					
+// 					alert(data.files[data.index].error);
+						console.log("--- ajax upload ERROR ---");
+					fileController.deleteMultipleImages(uploadsOK);
+		        	bootbox.alert('No se pudo guardar el archivo.');
+					
+				}).bind('fileuploadfail', function (e, data) {
+					
+// 					alert(data.files[data.index].error);
+						console.log("--- ajax upload ERROR ---");
+					fileController.deleteMultipleImages(uploadsOK);
+		        	bootbox.alert('No se pudo guardar el archivo.');
+					
+				});
+			    
+		    	
+// 				$.ajax({
+// 				    url: './'+issueID+'/uploadFiles',
+// 			 		type: 'POST',			
+// 			 		dataType: 'json',	
+// 			 		data: 'fileList=' +  fileList,
+// 			        success: function(data){	
+// 			        	console.log(data);
+// 			        	if(data.status){
+			        	
+// 			        		console.log("--- db upload OK ---");
+			        		
+// 			        	}
+// 			        	else{
+// 			        		console.log("--- imgur upload ERROR ---");
+// 			        		//delete imgur files
+// 	 		        		fileController.deleteMultipleImages(uploadsOK);
+// 			        		bootbox.alert('No se pudo guardar el archivo.');
+// 			        	}
+// 					},
+// 					error: function (xhr) {
+// 						console.log("--- ajax upload ERROR ---");
+// 	 					fileController.deleteMultipleImages(uploadsOK);
+// 				    	bootbox.alert('No se pudo guardar el archivo.');		
+// 				    }
+// 				});
+		    		
+		    	
+					
+			}
+		    
+		    function updateFilesInfo(numberOfFiles){
+		    	 
+				if(numberOfFiles == 5){
+					$(".modal-footer .fileinput-button").addClass("disabled");
+					$(".modal-footer .fileinput-button > input").attr("disabled", true);
+				}
+				else if(numberOfFiles < 5){
+					$(".modal-footer .fileinput-button").removeClass("disabled");
+					$(".modal-footer .fileinput-button > input").attr("disabled", false);
+				}
+
+				$('.cantidadContenidos').fadeOut('slow', function(){ 
+		        		$(this).html(numberOfFiles).fadeIn('slow'); 		        	
+		        });	
+				
+				$('#issueFiles').load(location.href + '#issueFiles #lst-file-thumnails'); 
+			}
+
 			
 		//////////////////////////////////////////////////////////////////////	
 		
@@ -513,46 +580,26 @@
 				$(function () {
 				    'use strict';				   
 				    
-// 				    $('#btnAddFiles').click(function(e){
+				   
 				    	
-// 						var loggedUser = '${loggedUser}';
+						var loggedUser = '${loggedUser}';
 				    	
-// 				    	if(loggedUser == ""){
+				    	if(loggedUser == ""){
+				    		 $('#btnAddFiles').hide();
 // 				    		$("#mdl-fileupload").modal('hide');
 // 				    		e.stopPropagation();
 // 				    		bootbox.alert("Debe estar logueado para agregar archivos.");
-// 				    	}	
+				    	}	
 				    	
-// 				    });
+				    
 				    
 				    
 				    $('#multiplefileupload').fileupload();
-				    
-			
 				
-// 				    $('#multiplefileupload').fileupload({
-// 				    	 url: './uploadFiles.html',
-// 					     type: "POST",
-// 					     dataType: 'json',
-// 					     contentType: false,
-// 						 processData: false,
-// 						 formData: [ { name: 'issueID', value: ${id} }, { name: 'userID', value: loggedUser }],
-// 					     maxNumberOfFiles: 5,
-// 						 maxFileSize: 5000000, // 5 MB		
-// 						 acceptFileTypes: /(\.|\/)(jpe?g|png)$/i,
-// 						 singleFileUploads: false,
-// 						 autoUpload: true,	
-// 						 disableImageResize: /Android(?!.*Chrome)|Opera/
-// 						        .test(window.navigator && navigator.userAgent),				
-// 				         previewMinWidth : 100,
-// 				         previewMaxHeight : 60,	
-// 						 imageCrop: false						
-// 				    }).bind('fileuploaddone', function(e, data){				    	
-// 				    	console.log(data);		
-// 				    	var parsedResult = $.parseJSON(data.result.uploadedFiles);	
-// 					    data.files = parsedResult;					    
-// 					    updateFilesInfo(data.result.totalUploadedFiles);
-//  					});
+
+				    
+				    
+				    
 				    
 				});
 				
@@ -563,63 +610,36 @@
 					var contenidoID = $(this).closest('tr').attr('id');					
 					var data = 'issueID='+ issueID + '&fileID='+ contenidoID + '&userID='+ loggedUser;
 					
-					console.log(data);
-
 					  bootbox.confirm("&iquest;Confirma que desea eliminar el archivo?", "Cancelar", "Eliminar", function(result){
 						  
 						  if(result){
 							  
 							  $.ajax({
-			        			    url: "./deleteFile.html",
+			        			    url: './' +issueID+ '/deleteFile',
 							 		type: "POST",	
 							 		data: data,							 
 							        success: function(data){	
 							        	
-							        	if(data.status){
-							        		
-							        		var deleteRow = $("#tbl-fileupload tr[id^='" + contenidoID +"']");	 
-											
+							        	if(data.status){							        		
+							        		var deleteRow = $("#tbl-fileupload tr[id^='" + contenidoID +"']");												
 								        	deleteRow.fadeOut('slow',function() {								        		
 								        		deleteRow.remove();	
-								        	});		
-								        	
+								        	});										        	
 								        	updateFilesInfo(data.totalUploadedFiles);
-						        
-							        		
-							        	}
-							        	
+							        	}							        	
 							        	else{
 							        		bootbox.alert(data.message);	
-							        	}							        	
+							        	}			        	
 							    	
 				            		}
 							  
-			        			});
-							  
-						  }
-				
+			        			});							  
+						  }				
 						   
 					  });//bootbox   
 				});
 				
-				function updateFilesInfo(numberOfFiles){
- 
-					if(numberOfFiles == 5){
-						$(".modal-footer .fileinput-button").addClass("disabled");
-						$(".modal-footer .fileinput-button > input").attr("disabled", true);
-					}
-					else if(numberOfFiles < 5){
-						$(".modal-footer .fileinput-button").removeClass("disabled");
-						$(".modal-footer .fileinput-button > input").attr("disabled", false);
-					}
-
-					$('.cantidadContenidos').fadeOut('slow', function(){ 
-			        		$(this).html(numberOfFiles).fadeIn('slow'); 
-			        });	
-					
-					$('#collapseFive').load(location.href + '#collapseFive #lst-file-thumnails'); 
-				}
-
+				
 				function getFormData(){
 					var fileInput = document.getElementById('multipleFileupload');
 					var files = fileInput.files;
@@ -632,8 +652,7 @@
 					var issueID = ${id};			
 					formData.append('issueID', issueID);
 
-					return formData;
-					
+					return formData;					
 				}
 			
 				    
@@ -654,13 +673,13 @@
 				    	
 				    }
 				    
-				    function getFilenameWithoutExtension(input){				    	
-				    	return input.substr(0, input.lastIndexOf('.'));				    	
-				    }
+// 				    function getFilenameWithoutExtension(input){				    	
+// 				    	return input.substr(0, input.lastIndexOf('.'));				    	
+// 				    }
 				    
-				    function getFileSizeInMB(fileSize){
-				    	return Math.round(fileSize / 1024);				    	
-				    }
+// 				    function getFileSizeInMB(fileSize){
+// 				    	return Math.round(fileSize / 1024);				    	
+// 				    }
 				    
 				    
 				    /*** RECLAMOS CERCANOS ***/
@@ -1113,9 +1132,9 @@
 						    		</c:if>
 					    			<br>
 					    			<div class="caption">
-					    				<a id="btnAddFiles" href="#mdl-fileupload" data-toggle="modal" class="btn btn-info">
-					    				<i class="icon-upload-alt"></i>&nbsp;&nbsp;&nbsp;Agregar imagenes
-					    				</a>
+					    				<button id="btnAddFiles" href="#mdl-fileupload" data-toggle="modal" class="btn btn-default" style="font-size: 11px; text-transform: uppercase">
+					    					<i class="icon-plus"></i>&nbsp;Cargar im&aacute;genes
+					    				</button>
 					    			</div>
 					  			</li>	
 					      </ul>
@@ -1551,24 +1570,28 @@
  			<!-- modal body -->
  			<div class="modal-body">   		
 	   			<div class="alert alert-success" style="height:30px; line-height:30px; font-size:13px;"> 
-	 				<i class="icon-info-sign"></i>&nbsp; Hay <b><span class="cantidadContenidos">${cantidadContenidos}</span></b> archivo(s) subido(s). M&aacute;ximo: 5 archivos.
+	 				<i class="icon-info-sign"></i>&nbsp; Hay <b><span class="cantidadContenidos">${cantidadContenidos}</span></b> archivo(s) subido(s). <b>M&aacute;ximo:</b> 5 archivos.
 				</div>   			
 	   			<table id="tbl-fileupload" role="presentation" class="table table-hover">    			
 	  	   		  	   	<tbody class="files">   	   		  	   	
 	  	   		  	   		<c:forEach items="${contenidos}" var="contenido">	
-							<tr id="${contenido.id}">
+							<tr id="${contenido.fileID}">
 			    	   			<td width="100">					    	   			
 				    	   			<span class="preview thumbnail" style="max-height:60px; text-align: center">
-				                    	<a style="width:100px; height:60px; " href="#" title="{%=file.name%}">
-											<img style="max-width:100px; max-height:60px;" src="${pageContext.request.contextPath}/uploads/${contenido.nombreConExtension}">
+				                    	<a style="width:100px; height:60px; " href="#" title="{%=contenido.filename%}">
+											<img style="max-width:100px; max-height:60px;" src="${contenido.link}">
 										</a>
-	          							</span>
-								</td>										
+	          						</span>
+								</td>		
 								<td>
-									${contenido.fileSize}
+									${contenido.filename}
+							 	</td>								
+								<td>
+								${contenido.displaySize}
+									
 							 	</td>
 							 	<td width="100" class="centered">
-								 	<a href="#" class="btn btn-small btn-file-delete">
+								 	<a href="#" class="btn btn-default btn-small btn-file-delete">
 								 		<i class="icon-trash icon-large" title="Eliminar archivo"></i>
 								 	</a>							 		
 							 	</td>						
@@ -1583,14 +1606,14 @@
 			  		<span class="btn btn-danger fileinput-button disabled">
 		                   <i class="icon-plus"></i>
 		                   <span>Seleccionar archivos</span>
-		                   <input type="file" name="files[]" multiple disabled >
+		                   <input type="file" name="files[]" disabled>
 		            </span>
 		  		</c:if>	  			  		
 		  		<c:if test="${cantidadContenidos lt 5}">
 			  		<span class="btn btn-danger fileinput-button">
 		                   <i class="icon-plus"></i>
 		                   <span>Seleccionar archivos</span>
-		                   <input type="file" name="files[]" multiple onchange="upload(this.files[0]);">
+		                   <input type="file" id="files" name="files[]" accept="image/*" onchange="upload();">
 		            </span>
 		  		</c:if>			  	
 		  		<button class="btn" data-dismiss="modal" aria-hidden="true">
@@ -1745,6 +1768,7 @@
 <script id="template-upload" type="text/x-tmpl">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-upload fade">
+		
 		<td width="100">	 	  			  	   		
 				 <span class="preview thumbnail" style="max-height:60px; text-align: center"></span>
 		</td>
@@ -1758,7 +1782,9 @@
 				
         	</td>
 
-        	<td width="100" class="centered">				
+
+
+        	<td width="100" class="centered" colspan="2">				
             	{% if (!i && !o.options.autoUpload) { %}
                 	<button class="btn btn-primary start" disabled>
                     	<i class="icon-upload"></i>
@@ -1768,8 +1794,8 @@
 				
             	{% if (!i) { %}
 				
-                		<button class="btn btn-warning cancel">
-                    		<i class="icon-ban-circle"></i>                    		
+                		<button class="btn btn-default cancel">
+                    		<i class="icon-trash"></i>                    		
                 		</button>
             	
 				{% } %}   
@@ -1784,37 +1810,41 @@
 
         <td width="100"> 	   		
 				<span class="preview thumbnail" style="max-height:60px; text-align: center">
-                 	{% if (file.thumbnailUrl) { %}
+                
                     	<a style="width:100px; height:60px; " href="#" title="{%=file.name%}">
-							<img style="max-width:100px; max-height:60px;" src="${pageContext.request.contextPath}/uploads/{%=file.name%}">
+							<img style="max-width:100px; max-height:60px;" src="{%=file.url%}">
 						</a>
-  				 	{% } %}
+  				
             	</span>
 		</td>
 
-        <td>
-            
- 			<span class="size">{%=o.formatFileSize(file.size)%}</span>
-            {% if (file.error) { %}
-                <div><span class="label label-danger">Error</span> {%=file.error%}</div>
-			{% } %}
 
+        <td>            
+ 			
+            {% if (file.error) { %}
+                <div><span class="label label-danger">Error</span> No se pudo guardar el archivo.</div>
+			  {% } else { %}
+
+			<span> {%=file.name%}</span>
+{% } %}
         </td>
+
+		<td>
+			<span class="size">{%=o.formatFileSize(file.size)%}</span>
+		</td>
        
         <td width="100" class="centered">
 			 {% if (file.error) { %}
-                		<button class="btn btn-warning cancel">
-                    		<i class="icon-ban-circle"></i>                    		
+                		<button class="btn btn-default cancel">
+                    		<i class="icon-trash"></i>                    		
                 		</button>
              {% } else { %}
 
-                                        <a href="#" class="btn btn-small btn-file-delete">
-									 		<i class="icon-trash icon-large" title="Eliminar archivo"></i>
-									 	</a>
+             <a href="#" class="btn btn-default btn-small btn-file-delete">
+				<i class="icon-trash icon-large" title="Eliminar archivo"></i>
+			 </a>
 
   			{% } %}
-										
-           
         </td>
     </tr>
 {% } %}

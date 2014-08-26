@@ -1,8 +1,11 @@
 package ar.com.urbanusjam.entity.annotations;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -72,6 +75,9 @@ public class MediaContent implements Serializable {
     
     @Transient
 	private String issueID;
+    
+    @Transient
+  	private String displaySize;
     
     
 	public MediaContent(){
@@ -197,5 +203,37 @@ public class MediaContent implements Serializable {
 	public void setIssueID(String issueID) {
 		this.issueID = issueID;
 	}
+
+	public String getDisplaySize() {
+		return convertFileSize(this.size);
+	}
+
+	public void setDisplaySize(String displaySize) {
+		this.displaySize = displaySize;
+	}
+
+	
+	private String convertFileSize(int size){
+		
+		Locale locale  = new Locale("en", "UK");
+		String pattern = "###.##";
+
+		DecimalFormat df = (DecimalFormat)
+		        NumberFormat.getNumberInstance(locale);
+		df.applyPattern(pattern);
+		// Get length of file in bytes
+		double fileSizeInBytes = Double.valueOf(size);
+		// Convert the bytes to Kilobytes (1 KB = 1024 Bytes)
+		double fileSizeInKB = fileSizeInBytes / 1024;
+		// Convert the KB to MegaBytes (1 MB = 1024 KBytes)
+		double fileSizeInMB = fileSizeInKB / 1024;
+
+		if (fileSizeInKB > 1024) {
+		  return df.format(fileSizeInMB) + " MB";
+		}
+		else
+			return df.format(fileSizeInKB) + " KB";
+	}
+	
 
 }

@@ -12,7 +12,7 @@ public interface ContenidoDAO {
 	
 	public MediaContent findProfilePic(String username);
 	
-	public boolean deleteContenido(String issueID, String fileID);
+	public boolean deleteContenido(Long issueID, String fileID);
 	
 	public boolean deleteProfilePic(String fileID, String username);
 	
