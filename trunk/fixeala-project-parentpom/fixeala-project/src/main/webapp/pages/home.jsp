@@ -470,43 +470,7 @@
 		  	          }, duration);  				 
 	  				     		
 	            }
-	            
-	        
-	            
-	            $("#file_upload_1").uploadify({	    
-	            	debug : false,
-	                swf           : './resources/images/uploadify.swf',
-	                uploader      : 'http://localhost:8080/fixeala/handleFileUpload.html',	         
-				    fileObjName :  'file',
-   					method   : 'post',
-   					width : 170,
-   					height: 30,
-					auto :  true,
-					method   : 'post',
-// 					buttonClass : 'btn-default',
-					buttonText : '<i class="icon-upload icon-large"></i>&nbsp;&nbsp;Seleccionar archivo',
-				    multi           : false,
- 					fileTypeExts        : '*.jpg;*.jpeg;*.png',
-	                removeCompleted : false,
-	                removeTimeout   : false,
-// 	                uploadLimit: 1,
-	                queueSizeLimit: 1,
-	                onUploadError : function(file, errorCode, errorMsg, errorString) {
-	                	$('span.data').text(' - Error');
-	                    bootbox.alert("No se pudo cargar el archivo. Intente de nuevo o publique el reclamo sin el adjunto.");
-	                },
-	                onUploadComplete : function(file) {
-	                	$('span.data').text(' - Completo');
-	                },
-	                onCancel : function(file) {
-	                	$('span.data').text(' - Cancelado');
-	                },
-	                onClearQueue : function(queueItemCount) {
-	                	$('span.data').text(' - Cancelado');
-	                }
-	            
-	            });
-	            
+	           
 	            
 	            
 	            //sin caracteres especiales
@@ -731,6 +695,14 @@
 					 	
 					 	});//ajax
 				}
+				
+				//filestyle
+				$("#file_upload").filestyle({
+					buttonText: "Seleccionar",
+// 					classButton: "btn btn-primary",
+// 					classInput: "input-small",
+					classIcon: "icon-plus"
+				});
 			
 		});
 	</script>
@@ -841,17 +813,12 @@
 								     <!-- TAB 3 -->
 									<div class="tab-pane" id="tab3">							
 										<label>Categor&iacute;as *</label>
-			   							<input type="hidden" id="tags" name="tags" style="width:300px; margin-bottom: 20px;" required/>								
-										<label>Foto (opcional)</label>
-										<br><br>
-										<center>
-										<!-- uploadify -->	
-<!-- 										<input id="file_upload_1" name="file_upload_1" type="file" >  -->
+			   							<input type="hidden" id="tags" name="tags" style="margin-bottom: 20px;" required/>								
 										
+										<label>Foto (opcional)</label>										
 										<input id="file_upload" name="file_upload" type="file" accept="image/*" 
 										onchange="javascript:fileController.simpleUpload(this.files[0], this.files[0].name, fileController.uploadCallback);">
-										
-											</center>
+									
 								    </div>
 								    
 								    <!-- BUTTONS -->

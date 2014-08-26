@@ -74,9 +74,9 @@ public class ContenidoServiceImpl implements ContenidoService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public void deleteFiles(List<String> files, String issueID) {
-		for(String fileID : files){
-			contenidoDAO.deleteContenido(issueID, fileID);
+	public void deleteFiles(List<String> filesID, String issueID) {
+		for(String fileID : filesID){
+			contenidoDAO.deleteContenido(Long.valueOf(issueID), fileID);
 		}
 		//save update
 		//send notification

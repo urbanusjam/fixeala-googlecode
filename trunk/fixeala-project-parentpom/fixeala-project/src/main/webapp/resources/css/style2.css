@@ -570,7 +570,7 @@ footer {
 
 .form-issue label { font-size: 13px; font-weight: bold; }
 
-.form-issue input {
+.form-issue input[type="text"] {
 	width: 306px;
 	height: 30px;
 /* 	margin-bottom: 20px; */
@@ -588,6 +588,9 @@ footer {
 /* 	clear: both; */
 /* } */
 
+
+/* .bootstrap-filestyle input { width: 150px;} */
+.bootstrap-filestyle label  { display: block; margin: 0 auto; margin-top: 20px; width: 100px; height: 30px; line-height: 30px;}
 .form-issue textarea {
 	width: 306px;
 	height: 170px;	
@@ -607,7 +610,8 @@ ul.select2-results  li.select2-search-choice {
   min-height: 40px;
   max-height: 100px;
   overflow-y: auto;
-   width:310px;
+  width:306px;
+  border-radius: 3px;
 
 }
 .form-issue .select2-container.input-xlarge { margin-bottom: 20px; }
@@ -616,16 +620,17 @@ ul.select2-results  li.select2-search-choice {
 	margin-bottom: 20px;
 }
 
-.form-issue span.fileinput-button {
+a.fileinput-button {
 	width: 100px;
 	height: 20px; 
 	line-height:20px; 
 	font-size:12px;
 	margin: 0 auto;
-	
+	margin-bottom: 20px;
+	float: none;
+	text-align: center; 
+	display: block;
 }
-
-.fileinput-button{float: none;}
 
 .form-issue #btnBackNext {
 	float: left;
@@ -1466,7 +1471,7 @@ ul.nav.nav-tabs li:not(.active):hover a {
 
 #votes a { font-size: 30px; }
 
-#profileTab .thumbnail { margin-bottom: 15px; }
+#profileTab .thumbnail { margin-bottom: 5px; }
 
 .dataset.row { border: 0px solid #000;  height: 60px; line-height: 60px; border-bottom: 1px dashed #DDD;  }
 .dataset.row:hover { background-color: #EFEFEF; }
