@@ -19,7 +19,63 @@
 		<script type="text/javascript">
 		
 
-     
+	    function upload(file) {
+	    	alert('aaa');
+	    				if (!file || !file.type.match(/image.*/)){
+	    		        	bootbox.alert("Debe seleccionar un archivo de imagen");
+	    		        	return;
+	    			    } 
+
+	    		        var fd = new FormData();
+	    		        fd.append("image", file); 
+	    		        
+	    		        var xhr = new XMLHttpRequest();
+	    		        xhr.open("POST", "https://api.imgur.com/3/image.json", false); 
+	    		        xhr.onload = function() {
+
+	    		        	var result = JSON.parse(xhr.responseText);
+	    		        	console.log(result);
+	    		        	var success = result.success;
+	    		        	var statusCode = result.status;
+	    		        	
+	    		        	var imgurFileID = result.data.id;
+	    		        	var deletehash = result.data.deletehash;
+	    		        
+	    		        	if(success && statusCode == '200'){
+	    		        		var id = result.data.id;
+	    		        		var fileData = JSON.stringify(file);
+	    		        		
+//	    		             	window.location = 'https://imgur.com/gallery/' + id;
+	    		        		$('#multiplefileupload').fileupload({
+	    					    	 url: './uploadFiles.html',
+	    						     type: "POST",
+	    						     dataType: 'json',
+	    						     contentType: false,
+	    							 processData: false,
+	    							 formData: [ { name: 'issueID', value: ${id} }, { name: 'fileData', value: fileData }, { name: 'filename', value: file.name }],
+	    						     maxNumberOfFiles: 5,
+	    							 maxFileSize: 5000000, // 5 MB		
+	    							 acceptFileTypes: /(\.|\/)(jpe?g|png)$/i,
+	    							 singleFileUploads: false,
+	    							 autoUpload: true,	
+	    							 disableImageResize: /Android(?!.*Chrome)|Opera/
+	    							        .test(window.navigator && navigator.userAgent),				
+	    					         previewMinWidth : 100,
+	    					         previewMaxHeight : 60,	
+	    							 imageCrop: false						
+	    					    }).bind('fileuploaddone', function(e, data){				    	
+	    					    	console.log(data);		
+	    					    	var parsedResult = $.parseJSON(data.result.uploadedFiles);	
+	    						    data.files = parsedResult;					    
+// 	    						    updateFilesInfo(data.result.totalUploadedFiles);
+	    	 					});
+	    		             	
+	    		        	}
+	    		        }
+	    		        xhr.setRequestHeader('Authorization', 'Client-ID f64d4441566d507'); 
+	    		        xhr.send(fd);
+	    		    
+	    			}
 
 		jQuery.extend(jQuery.validator.messages, {
 		    required: "Campo obligatorio."//,
@@ -457,43 +513,46 @@
 				$(function () {
 				    'use strict';				   
 				    
-				    $('#btnAddFiles').click(function(e){
+// 				    $('#btnAddFiles').click(function(e){
 				    	
-						var loggedUser = '${loggedUser}';
+// 						var loggedUser = '${loggedUser}';
 				    	
-				    	if(loggedUser == ""){
-				    		$("#mdl-fileupload").modal('hide');
-				    		e.stopPropagation();
-				    		bootbox.alert("Debe estar logueado para agregar archivos.");
-				    	}	
+// 				    	if(loggedUser == ""){
+// 				    		$("#mdl-fileupload").modal('hide');
+// 				    		e.stopPropagation();
+// 				    		bootbox.alert("Debe estar logueado para agregar archivos.");
+// 				    	}	
 				    	
-				    });
+// 				    });
 				    
 				    
 				    $('#multiplefileupload').fileupload();
+				    
+			
 				
-				    $('#multiplefileupload').fileupload({
-				    	 url: './handleMultipleFileUpload.html',
-					     type: "POST",
-					     dataType: 'json',
-					     contentType: false,
-						 processData: false,
-						 formData: [ { name: 'issueID', value: ${id} }, { name: 'userID', value: loggedUser }],
-					     maxNumberOfFiles: 5,
-						 maxFileSize: 5000000, // 5 MB		
-						 acceptFileTypes: /(\.|\/)(jpe?g|png)$/i,
-						 singleFileUploads: false,
-						 autoUpload: true,	
-						 disableImageResize: /Android(?!.*Chrome)|Opera/
-						        .test(window.navigator && navigator.userAgent),				
-				         previewMinWidth : 100,
-				         previewMaxHeight : 60,	
-						 imageCrop: false						
-				    }).bind('fileuploaddone', function(e, data){				    	
-				    	console.log(data);		
-					    data.files = parsedResult;					    
-					    updateFilesInfo(data.result.totalUploadedFiles);
- 					});
+// 				    $('#multiplefileupload').fileupload({
+// 				    	 url: './uploadFiles.html',
+// 					     type: "POST",
+// 					     dataType: 'json',
+// 					     contentType: false,
+// 						 processData: false,
+// 						 formData: [ { name: 'issueID', value: ${id} }, { name: 'userID', value: loggedUser }],
+// 					     maxNumberOfFiles: 5,
+// 						 maxFileSize: 5000000, // 5 MB		
+// 						 acceptFileTypes: /(\.|\/)(jpe?g|png)$/i,
+// 						 singleFileUploads: false,
+// 						 autoUpload: true,	
+// 						 disableImageResize: /Android(?!.*Chrome)|Opera/
+// 						        .test(window.navigator && navigator.userAgent),				
+// 				         previewMinWidth : 100,
+// 				         previewMaxHeight : 60,	
+// 						 imageCrop: false						
+// 				    }).bind('fileuploaddone', function(e, data){				    	
+// 				    	console.log(data);		
+// 				    	var parsedResult = $.parseJSON(data.result.uploadedFiles);	
+// 					    data.files = parsedResult;					    
+// 					    updateFilesInfo(data.result.totalUploadedFiles);
+//  					});
 				    
 				});
 				
@@ -1481,65 +1540,65 @@
 	  	</form>
 	</div>
 	
-<!-- 	<div id="mdl-fileupload" class="modal hide fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="fileUploadLabel" aria-hidden="true"> -->
-<!-- 	  	<div class="modal-header"> -->
-<!-- 	    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>		    	 -->
-<!-- 	    	<h4 id="fileUploadLabel">  -->
-<!-- 		    	Gesti&oacute;n de archivos -->
-<!-- 	    	</h4> -->
-<!-- 	  	</div> -->
-<!-- 	  	<form id="multiplefileupload" enctype="multipart/form-data" > -->
-<!--  			modal body -->
-<!--  			<div class="modal-body">   		 -->
-<!-- 	   			<div class="alert alert-success" style="height:30px; line-height:30px; font-size:13px;">  -->
-<%-- 	 				<i class="icon-info-sign"></i>&nbsp; Hay <b><span class="cantidadContenidos">${cantidadContenidos}</span></b> archivo(s) subido(s). M&aacute;ximo: 5 archivos. --%>
-<!-- 				</div>   			 -->
-<!-- 	   			<table id="tbl-fileupload" role="presentation" class="table table-hover">    			 -->
-<!-- 	  	   		  	   	<tbody class="files">   	   		  	   	 -->
-<%-- 	  	   		  	   		<c:forEach items="${contenidos}" var="contenido">	 --%>
-<%-- 							<tr id="${contenido.id}"> --%>
-<!-- 			    	   			<td width="100">					    	   			 -->
-<!-- 				    	   			<span class="preview thumbnail" style="max-height:60px; text-align: center"> -->
-<!-- 				                    	<a style="width:100px; height:60px; " href="#" title="{%=file.name%}"> -->
-<%-- 											<img style="max-width:100px; max-height:60px;" src="${pageContext.request.contextPath}/uploads/${contenido.nombreConExtension}"> --%>
-<!-- 										</a> -->
-<!-- 	          							</span> -->
-<!-- 								</td>										 -->
-<!-- 								<td> -->
-<%-- 									${contenido.fileSize} --%>
-<!-- 							 	</td> -->
-<!-- 							 	<td width="100" class="centered"> -->
-<!-- 								 	<a href="#" class="btn btn-small btn-file-delete"> -->
-<!-- 								 		<i class="icon-trash icon-large" title="Eliminar archivo"></i> -->
-<!-- 								 	</a>							 		 -->
-<!-- 							 	</td>						 -->
-<!-- 		    	   			</tr> -->
-<%-- 						</c:forEach> --%>
-<!-- 		    	   	</tbody> -->
-<!-- 				</table>  -->
-<!-- 			</div> -->
-<!-- 			<!-- modal footer --> 
-<!-- 		  	<div class="modal-footer">   -->
-<%-- 		  		<c:if test="${cantidadContenidos eq 5}"> --%>
-<!-- 			  		<span class="btn btn-danger fileinput-button disabled"> -->
-<!-- 		                   <i class="icon-plus"></i> -->
-<!-- 		                   <span>Seleccionar archivos</span> -->
-<!-- 		                   <input type="file" name="files[]" multiple disabled> -->
-<!-- 		            </span> -->
-<%-- 		  		</c:if>	  			  		 --%>
-<%-- 		  		<c:if test="${cantidadContenidos lt 5}"> --%>
-<!-- 			  		<span class="btn btn-danger fileinput-button"> -->
-<!-- 		                   <i class="icon-plus"></i> -->
-<!-- 		                   <span>Seleccionar archivos</span> -->
-<!-- 		                   <input type="file" name="files[]" multiple> -->
-<!-- 		            </span> -->
-<%-- 		  		</c:if>			  	 --%>
-<!-- 		  		<button class="btn" data-dismiss="modal" aria-hidden="true"> -->
-<!-- 			    		<i class="icon-remove icon-large"></i>&nbsp;&nbsp;&nbsp;Cerrar -->
-<!-- 			    </button>	  -->
-<!-- 		  	</div> -->
-<!-- 	  	</form> -->
-<!-- 	</div> -->
+	<div id="mdl-fileupload" class="modal hide fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="fileUploadLabel" aria-hidden="true">
+	  	<div class="modal-header">
+	    	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>		    	
+	    	<h4 id="fileUploadLabel"> 
+		    	Gesti&oacute;n de archivos
+	    	</h4>
+	  	</div>
+	  	<form id="multiplefileupload" enctype="multipart/form-data" >
+ 			<!-- modal body -->
+ 			<div class="modal-body">   		
+	   			<div class="alert alert-success" style="height:30px; line-height:30px; font-size:13px;"> 
+	 				<i class="icon-info-sign"></i>&nbsp; Hay <b><span class="cantidadContenidos">${cantidadContenidos}</span></b> archivo(s) subido(s). M&aacute;ximo: 5 archivos.
+				</div>   			
+	   			<table id="tbl-fileupload" role="presentation" class="table table-hover">    			
+	  	   		  	   	<tbody class="files">   	   		  	   	
+	  	   		  	   		<c:forEach items="${contenidos}" var="contenido">	
+							<tr id="${contenido.id}">
+			    	   			<td width="100">					    	   			
+				    	   			<span class="preview thumbnail" style="max-height:60px; text-align: center">
+				                    	<a style="width:100px; height:60px; " href="#" title="{%=file.name%}">
+											<img style="max-width:100px; max-height:60px;" src="${pageContext.request.contextPath}/uploads/${contenido.nombreConExtension}">
+										</a>
+	          							</span>
+								</td>										
+								<td>
+									${contenido.fileSize}
+							 	</td>
+							 	<td width="100" class="centered">
+								 	<a href="#" class="btn btn-small btn-file-delete">
+								 		<i class="icon-trash icon-large" title="Eliminar archivo"></i>
+								 	</a>							 		
+							 	</td>						
+		    	   			</tr>
+						</c:forEach>
+		    	   	</tbody>
+				</table> 
+			</div>
+			<!-- modal footer -->
+		  	<div class="modal-footer">  
+		  		<c:if test="${cantidadContenidos eq 5}">
+			  		<span class="btn btn-danger fileinput-button disabled">
+		                   <i class="icon-plus"></i>
+		                   <span>Seleccionar archivos</span>
+		                   <input type="file" name="files[]" multiple disabled >
+		            </span>
+		  		</c:if>	  			  		
+		  		<c:if test="${cantidadContenidos lt 5}">
+			  		<span class="btn btn-danger fileinput-button">
+		                   <i class="icon-plus"></i>
+		                   <span>Seleccionar archivos</span>
+		                   <input type="file" name="files[]" multiple onchange="upload(this.files[0]);">
+		            </span>
+		  		</c:if>			  	
+		  		<button class="btn" data-dismiss="modal" aria-hidden="true">
+			    		<i class="icon-remove icon-large"></i>&nbsp;&nbsp;&nbsp;Cerrar
+			    </button>	 
+		  	</div>
+	  	</form>
+	</div>
 	
 	
 	<div id="mdl-repair" class="modal hide fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="fileUploadLabel" aria-hidden="true">
@@ -1765,4 +1824,4 @@
 <!-- <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-53d8340b75bafe45"></script> -->
 		
 </div><!-- CONTENT -->
-<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.3.1/jquery.maskedinput.min.js"></script>
+ <script src="${pageContext.request.contextPath}/resources/js/fixeala/imgur.js"></script>	

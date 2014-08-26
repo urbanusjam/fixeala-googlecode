@@ -107,8 +107,8 @@ var fileController = {
 			
 		},
 
-		upload : function(file, filename) {
-
+		uploadImgur : function(file) {
+alert('aaa');
 			if (!file || !file.type.match(/image.*/)){
 	        	bootbox.alert("Debe seleccionar un archivo de imagen");
 	        	return;
@@ -118,10 +118,11 @@ var fileController = {
 	        fd.append("image", file); 
 	        
 	        var xhr = new XMLHttpRequest();
-	        xhr.open("POST", "https://api.imgur.com/3/image.json"); 
+	        xhr.open("POST", "https://api.imgur.com/3/image.json", false); 
 	        xhr.onload = function() {
 
 	        	var result = JSON.parse(xhr.responseText);
+	        	console.log(result);
 	        	var success = result.success;
 	        	var statusCode = result.status;
 	        	
@@ -131,7 +132,7 @@ var fileController = {
 	        	if(success && statusCode == '200'){
 	        		var id = result.data.id;
 //	             	window.location = 'https://imgur.com/gallery/' + id;
-	        		fileController.saveFile(result.data, filename);
+	        		fileController.saveFile(result.data, file.name, deletehash);
 	             	
 	        	}
 	        }
@@ -140,7 +141,7 @@ var fileController = {
 	    
 		},
 		
-		saveFile : function(file, filename) {
+		saveFile : function(file, filename, deletehash) {
 			  
 			var issueID = '';
 			var fileData = JSON.stringify(file);
@@ -164,13 +165,13 @@ var fileController = {
 		        	else{
 		        		console.log("--- imgur upload ERROR ---");
 		        		//delete imgur file
-		        		fileController.imageDelete(deletehash);
+		        		fileController.deleteImage(deletehash);
 		        		bootbox.alert('No se puedo guardar el archivo.');
 		        	}
 				},
 				error: function (xhr) {
 					console.log("--- ajax upload ERROR ---");
-					fileController.imageDelete(deletehash);
+					fileController.deleteImage(deletehash);
 			    	bootbox.alert('No se pudo guardar el archivo.');		
 			    }
 			});
