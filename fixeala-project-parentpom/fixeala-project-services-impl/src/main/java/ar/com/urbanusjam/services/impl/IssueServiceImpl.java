@@ -9,12 +9,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.mail.MessagingException;
-import javax.swing.RepaintManager;
 
 import org.jfree.util.Log;
 import org.springframework.mail.MailException;
@@ -44,7 +42,6 @@ import ar.com.urbanusjam.entity.annotations.IssueVotePK;
 import ar.com.urbanusjam.entity.annotations.MediaContent;
 import ar.com.urbanusjam.entity.annotations.Tag;
 import ar.com.urbanusjam.entity.annotations.User;
-import ar.com.urbanusjam.services.ContenidoService;
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.MailService;
 import ar.com.urbanusjam.services.UserService;
@@ -54,10 +51,8 @@ import ar.com.urbanusjam.services.dto.IssueCriteriaSearch;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.IssueFollowDTO;
 import ar.com.urbanusjam.services.dto.IssuePageViewDTO;
-import ar.com.urbanusjam.services.dto.IssueRepairDTO;
 import ar.com.urbanusjam.services.dto.IssueUpdateHistoryDTO;
 import ar.com.urbanusjam.services.dto.IssueVoteDTO;
-import ar.com.urbanusjam.services.dto.MediaContentDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
 import ar.com.urbanusjam.services.utils.DateUtils;
 import ar.com.urbanusjam.services.utils.IssueStatus;
@@ -71,7 +66,6 @@ import ar.com.urbanusjam.services.utils.SortingDataUtils;
 public class IssueServiceImpl implements IssueService {
 		
 	private UserService userService;
-	private ContenidoService contenidoService;
 	private MailService mailService;
 	
 	private IssueDAO issueDAO;
@@ -89,10 +83,6 @@ public class IssueServiceImpl implements IssueService {
 		this.userService = userService;
 	}
 	
-	public void setContenidoService(ContenidoService contenidoService) {
-		this.contenidoService = contenidoService;
-	}
-
 	public void setMailService(MailService mailService) {
 		this.mailService = mailService;
 	}
@@ -177,7 +167,7 @@ public class IssueServiceImpl implements IssueService {
 		try{			
 			//email notification
 			String link = "<a target='_blank' href='http://localhost:8080/fixeala/issues/" + issue.getId().toString() + ".html' >LINK</a>.";
-			String text = "El usuario <i>" + issueDTO.getUsername() + "</i> actualiz� la informaci�n del reclamo <i>#" +issue.getId()+ " \"" + issue.getTitle() + "\"</i>.";
+			String text = "El usuario <i>" + issueDTO.getUsername() + "</i> actualizo la informacion del reclamo <i>#" +issue.getId()+ " \"" + issue.getTitle() + "\"</i>.";
 			text += "<br><br>";
 			text += "Para acceder al mismo, hac&eacute; clic en el siguiente " + link;
 			
@@ -913,7 +903,7 @@ public class IssueServiceImpl implements IssueService {
 	}
 	
 	
-	private GregorianCalendar getCurrentCalendar(Date date){		
+	public GregorianCalendar getCurrentCalendar(Date date){		
 		Calendar calendar = new GregorianCalendar();
 		calendar.setTime(date);
 		return (GregorianCalendar) calendar;	
@@ -1195,7 +1185,8 @@ public class IssueServiceImpl implements IssueService {
 		issueRepairDAO.deleteReparacion(Long.valueOf(issueID));
 	}
 
-	private String[] getFollowersEmails(Set<IssueFollow> followers, String reporterEmail){
+	@Override
+	public String[] getFollowersEmails(Set<IssueFollow> followers, String reporterEmail){
 		String [] emails;
 		if(followers.size() > 0){
 			emails = new String[followers.size()+1];
