@@ -36,7 +36,7 @@ var fileController = {
 		},
 		
 		handleUserPicUpload : function(file, loggeduser){
-		 s
+		
 			blockPage('html');
 
 			console.log('--- the file ---');
