@@ -451,10 +451,19 @@ public class IssueController {
 		List<MediaContent> files = new ArrayList<MediaContent>();
 		ContenidoResponse response = new ContenidoResponse();
 		
-		try{			
+		try{	
+			
+			User user = getCurrentUser(SecurityContextHolder.getContext()
+					.getAuthentication());
+			UserDetails userDB = userService.loadUserByUsername(user
+					.getUsername());
+
+			if (userDB == null) {
+				return new ContenidoResponse(false, 0);
+			}
 			
 			files = (List<MediaContent>) this.deserializeMultipleFiles(fileList);
-			contenidoService.uploadFiles(files, issueID);
+			contenidoService.uploadFiles(files, issueID, userDB.getUsername());
 			
 			List<MediaContent> contenidos = contenidoService.getIssueFiles(issueID);
 			model.addAttribute("contenidos", contenidos);
@@ -462,8 +471,7 @@ public class IssueController {
 			
 			JSONArray jsonArray = new JSONArray();
 			
-			for(MediaContent c : files){
-				
+			for(MediaContent c : files){				
 				JSONObject jsonObject = new JSONObject();
 				jsonObject.put("name",shortenFilename(c.getFilename()));
 				jsonObject.put("format", c.getFileType());
@@ -471,17 +479,12 @@ public class IssueController {
 				jsonObject.put("thumbnailUrl", c.getLink());
 				jsonObject.put("size", c.getSize());
 				jsonObject.put("error", StringUtils.EMPTY);
-
 				jsonArray.put(jsonObject);
-
-				
 			}
 			
 			response.setStatus(true);
 			response.setTotalUploadedFiles(contenidos.size());
 			response.setUploadedFiles(jsonArray.toString());
-
-			
 			return response;
 			
 		}catch(Exception e){

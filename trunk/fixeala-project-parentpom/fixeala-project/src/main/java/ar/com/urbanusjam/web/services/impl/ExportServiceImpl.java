@@ -49,10 +49,10 @@ import com.google.gson.Gson;
 
 import ar.com.urbanusjam.services.dto.ReportDTO;
 import ar.com.urbanusjam.services.utils.FileFormat;
+import ar.com.urbanusjam.web.domain.api.ReclamoListaResponse;
+import ar.com.urbanusjam.web.domain.api.ReclamoResponse;
 import ar.com.urbanusjam.web.services.ExportService;
-import ar.com.urbanusjam.web.services.export.dto.ReclamoListaResponse;
-import ar.com.urbanusjam.web.services.export.dto.ReclamoResponse;
-import ar.com.urbanusjam.web.services.export.transformer.IssueDTOTransformer;
+import ar.com.urbanusjam.web.services.transformer.IssueDTOTransformer;
 
 @Service
 @Transactional
