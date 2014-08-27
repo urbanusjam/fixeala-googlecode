@@ -584,8 +584,9 @@
 				    	
 						var loggedUser = '${loggedUser}';
 				    	
-				    	if(loggedUser == ""){
-				    		 $('#btnAddFiles').hide();
+						
+				    	if(loggedUser != ""){
+				    		 $('#btnAddFiles').show();
 // 				    		$("#mdl-fileupload").modal('hide');
 // 				    		e.stopPropagation();
 // 				    		bootbox.alert("Debe estar logueado para agregar archivos.");

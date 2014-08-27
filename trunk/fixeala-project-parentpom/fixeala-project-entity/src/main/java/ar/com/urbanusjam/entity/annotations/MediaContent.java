@@ -79,6 +79,9 @@ public class MediaContent implements Serializable {
     @Transient
   	private String displaySize;
     
+    @Transient
+  	private String filenameShort;
+    
     
 	public MediaContent(){
         
@@ -211,8 +214,26 @@ public class MediaContent implements Serializable {
 	public void setDisplaySize(String displaySize) {
 		this.displaySize = displaySize;
 	}
-
 	
+	public String getFilenameShort() {
+		
+		String longname = this.filename;
+		String[] parts = longname.split("\\.");
+		String type = parts[1];
+		String shorten = parts[0];
+		
+		if(longname.length() > 25){
+			return shorten.subSequence(0, 15) + "..." + type;
+		}
+		else
+			return this.filename;
+		
+	}
+
+	public void setFilenameShort(String filenameShort) {
+		this.filenameShort = filenameShort;
+	}
+
 	private String convertFileSize(int size){
 		
 		Locale locale  = new Locale("en", "UK");

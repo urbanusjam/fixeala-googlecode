@@ -1,11 +1,13 @@
 package ar.com.urbanusjam.services;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.mail.MessagingException;
 
 import org.springframework.mail.MailException;
 
+import ar.com.urbanusjam.entity.annotations.IssueFollow;
 import ar.com.urbanusjam.entity.annotations.IssueRepair;
 import ar.com.urbanusjam.services.dto.CommentDTO;
 import ar.com.urbanusjam.services.dto.IssueCriteriaSearch;
@@ -61,5 +63,8 @@ public interface IssueService {
 	//provinces
 	public List<String> loadProvinces();
 	public List<String> loadLocalityByProvince(String province);
+	
+	//util
+	public String[] getFollowersEmails(Set<IssueFollow> followers, String reporterEmail);
 	
 }

@@ -11,7 +11,7 @@ public interface ContenidoService {
 	
 	public MediaContent getUserPic(String username);
 	 
-    public void uploadFiles(List<MediaContent> files, String issueID);
+    public void uploadFiles(List<MediaContent> files, String issueID, String username);
     
     public void uploadUserPic(MediaContent file);
     
