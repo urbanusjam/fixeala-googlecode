@@ -2,7 +2,6 @@ package ar.com.urbanusjam.web.controllers;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -11,9 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jasperreports.engine.JRException;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.jfree.util.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,16 +24,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.gson.Gson;
-
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.dto.IssueCriteriaSearch;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.ReportDTO;
 import ar.com.urbanusjam.services.utils.FileFormat;
+import ar.com.urbanusjam.web.domain.api.ReclamoResponse;
 import ar.com.urbanusjam.web.services.ExportService;
-import ar.com.urbanusjam.web.services.export.dto.ReclamoResponse;
-import ar.com.urbanusjam.web.services.export.transformer.IssueDTOTransformer;
 
 
 @Controller
