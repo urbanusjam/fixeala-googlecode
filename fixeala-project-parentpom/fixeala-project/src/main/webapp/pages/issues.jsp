@@ -1119,17 +1119,19 @@
 			  	<div class="row-fluid" style="margin-bottom: 30px;">
 					 <div class="span4">  
 						 <ul class="thumbnails">
-					  	   		<li style="margin-left:0">		
-						    		<c:if test="${cantidadContenidos gt 0}">
-						    			<a data-lightbox="issue-lightbox2" class="thumbnail" href="${imageUrl}">							  	  			  	   		
-											<img src="${imageUrl}" alt="${imageUrl}">	 
-										</a>		
-						    		</c:if>
-						    		<c:if test="${cantidadContenidos eq 0}">
-						    			<a data-lightbox="issue-lightbox2" class="thumbnail" href="${pageContext.request.contextPath}/resources/images/nopic.png" >							  	  			  	   		
-											<img src="${pageContext.request.contextPath}/resources/images/nopic.png" alt="">	
-										</a>
-						    		</c:if>
+					  	   		<li style="margin-left:0">
+					  	   			<div id="mainPhoto">
+							    		<c:if test="${cantidadContenidos gt 0}">
+							    			<a data-lightbox="issue-lightbox2" class="thumbnail" href="${imageUrl}">							  	  			  	   		
+												<img src="${imageUrl}" alt="${imageUrl}">	 
+											</a>		
+							    		</c:if>
+							    		<c:if test="${cantidadContenidos eq 0}">
+							    			<a data-lightbox="issue-lightbox2" class="thumbnail" href="${pageContext.request.contextPath}/resources/images/nopic.png" >							  	  			  	   		
+												<img src="${pageContext.request.contextPath}/resources/images/nopic.png" alt="">	
+											</a>
+							    		</c:if>
+						    		</div>		
 					    			<br>
 					    			<div class="caption">
 					    				<button id="btnAddFiles" href="#mdl-fileupload" data-toggle="modal" class="btn btn-default" style="font-size: 11px; text-transform: uppercase">
@@ -1584,7 +1586,7 @@
 	          						</span>
 								</td>		
 								<td>
-									${contenido.filename}
+									${contenido.filenameShort}
 							 	</td>								
 								<td>
 								${contenido.displaySize}

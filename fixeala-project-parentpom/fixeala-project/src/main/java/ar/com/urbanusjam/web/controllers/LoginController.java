@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import ar.com.urbanusjam.services.ContenidoService;
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.UserService;
 import ar.com.urbanusjam.services.dto.IssueDTO;
@@ -52,7 +53,9 @@ public class LoginController {
 	@Qualifier("issueService")
 	IssueService issueService;
 	
-	
+	@Autowired
+	@Qualifier("contenidoService")
+	ContenidoService contenidoService;
 	
 	@ModelAttribute("issuesJson")
 	public @ResponseBody String getIssuesJson() throws JSONException{  
@@ -107,13 +110,13 @@ public class LoginController {
 
 	
 	@RequestMapping(value="/login", method = RequestMethod.GET)
-	public String login(){
+	public String login(Model model){
 		return "index";
 	}
 
 	@RequestMapping(value="/login", method = RequestMethod.POST)	  
 	public @ResponseBody LoginStatus login(@RequestParam("j_username") String username,
-                      					 @RequestParam("j_password") String password){
+                      					 @RequestParam("j_password") String password, Model model){
 	
 		LoginStatus loggedUser = new LoginStatus();
 	    UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);	   
@@ -125,6 +128,7 @@ public class LoginController {
 		      SecurityContextHolder.getContext().setAuthentication(auth);	
 		      loggedUser.setLoggedIn(auth.isAuthenticated());
 		      loggedUser.setUsername(auth.getName());
+		     
 		      return loggedUser;
 
 	    } catch (BadCredentialsException e) {

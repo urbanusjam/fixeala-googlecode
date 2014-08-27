@@ -465,9 +465,7 @@ public class IssueController {
 			for(MediaContent c : files){
 				
 				JSONObject jsonObject = new JSONObject();
-				// jsonObject.put("id",
-				// uploadedContenido.getId().toString());
-				jsonObject.put("name",c.getFilename());
+				jsonObject.put("name",shortenFilename(c.getFilename()));
 				jsonObject.put("format", c.getFileType());
 				jsonObject.put("url", c.getLink());
 				jsonObject.put("thumbnailUrl", c.getLink());
@@ -488,6 +486,19 @@ public class IssueController {
 			
 		}catch(Exception e){
 			return new ContenidoResponse(false, 0);
+		}
+	}
+	
+	private String shortenFilename(String filename){
+		
+		if(filename.length() > 25){
+			String [] split =  filename.split(".");
+			String type = split[1];
+			String newName = split[0].substring(0, 11) + "..." + type;
+			return newName;
+		}
+		else{
+			return filename;
 		}
 	}
 	
