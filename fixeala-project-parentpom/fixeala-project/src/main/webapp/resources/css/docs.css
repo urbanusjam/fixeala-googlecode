@@ -72,7 +72,8 @@ section .dl-horizontal dd {
 -------------------------------------------------- */
 #nav-bar {
 /*   box-shadow: 2px 2px 2px silver; */
-  border: 1px solid #e5e5e5;margin-left: -30px;
+border: 1px solid #DDD;
+margin-left: -30px;margin-top:190px;
 }
 .nav-list .nav-header {
   text-align: left;
@@ -80,7 +81,7 @@ section .dl-horizontal dd {
 }
 .bs-docs-sidenav {
   width: 228px;
-  margin: 20px 0 0;
+  margin: 30px 0 0;
   padding: 0;
   background-color: #fcfcfc;
   -webkit-border-radius: 6px;
@@ -135,14 +136,14 @@ section .dl-horizontal dd {
   background-image: url(../img/glyphicons-halflings-white.png);
   opacity: 1;
 }
-/* .bs-docs-sidenav.affix { */
-/*   top: 40px; */
-/* } */
-/* .bs-docs-sidenav.affix-bottom { */
-/*   position: absolute; */
-/*   top: auto; */
-/*   bottom: 270px; */
-/* } */
+.bs-docs-sidenav.affix {
+  top: 0;
+}
+.bs-docs-sidenav.affix-bottom {
+  position: absolute;
+  top: auto;
+  bottom: 570px;
+}
 /* Responsive
 -------------------------------------------------- */
 /* Desktop large

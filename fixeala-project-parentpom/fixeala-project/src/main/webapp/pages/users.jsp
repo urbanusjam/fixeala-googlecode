@@ -569,3 +569,4 @@
 	<!-- /content --> 
 	
 	<script src="${pageContext.request.contextPath}/resources/js/fixeala/imgur.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/DT_bootstrap.js"></script>

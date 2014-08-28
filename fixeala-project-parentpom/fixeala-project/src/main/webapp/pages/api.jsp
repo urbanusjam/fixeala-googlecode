@@ -2,124 +2,252 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <link type="text/css" href="${pageContext.request.contextPath}/resources/css/docs.css" rel="stylesheet">
+<link type="text/css" href="${pageContext.request.contextPath}/resources/css/highlight.css" rel="stylesheet">
+
+<style>
 
 
-<div id="content">
+	.table td { font-weight: normal; }
+
+	blockquote { margin-bottom: 40px; }
+	blockquote p { font-size: 13px; }
+	
+	h3 { display: block; }
+	
+	.muted { color: #333; }
+	
+	code.lead { margin-right: 10px; }
+/* 	.lead {font-size: 18px; } */
+
+
+</style>
+
+<div id="content" style="border: 0px solid red">
 		
 		<!-- API REST -->
 	    <div class="page-header">
     	 	<h3><i class="icon-bullseye"></i>&nbsp;&nbsp;REST API</h3>    	 	
     	</div>    	
     	
-    	<div class="row">
+    
+
     	
-    	<div class="span3 bs-docs-sidebar">    	
-	    	<ul id="nav-bar" class="nav nav-list bs-docs-sidenav affix">
-	    		<li class="nav-header">Rutas</li>
-	    		<li class="active"><a href="#rutas-categoria">Categorías</a></li>
-	    		<li><a href="#rutas-grupos">Grupos</a></li>
-	    		<li><a href="#rutas-recursos">Recursos</a></li>
-	    		<li><a href="#rutas-query">Query</a></li>
-	    		<li class="nav-header">Tipos de Respuesta</li>
-	    		<li><a href="#respuestas-parcial">Parcial</a></li>
-	    		<li class="nav-header">Entidades</li>
-	    		<li><a href="#entidades-categoria">Categoría</a></li>
-	    		<li><a href="#entidades-grupo">Grupo</a></li>
-	    		<li><a href="#entidades-recurso">Recurso</a></li>
-	    	</ul>    	
-    	</div>
+	    	<div class="span3 bs-docs-sidebar">    	
+		    	<ul id="nav-bar" class="nav nav-list bs-docs-sidenav affix" data-spy="affix">
+		    		<li class="nav-header">Rutas / Endpoints</li>
+		    		<li class="active"><a href="#rutas-reclamo">Reclamos</a></li>		
+		    		<li><a href="#rutas-actualizacion">Actualizaciones</a></li>			
+		    		<li><a href="#rutas-reparacion">Reparaciones</a></li>			
+		    		<li><a href="#rutas-imagen">Im&aacute;genes</a></li>			    		
+		    		<li><a href="#rutas-query">Query</a></li>		    
+		    		<li class="nav-header">Entidades</li>
+		    		<li><a href="#entidades-reclamo">Reclamo</a></li>
+		    		<li><a href="#entidades-actualizacion">Actualizaci&oacute;n</a></li>
+		    		<li><a href="#entidades-reparacion">Reparaci&oacute;n</a></li>
+		    		<li><a href="#entidades-imagen">Imagen</a></li>	
+					<li class="nav-header">Manejo de Errores</li>
+					<li><a href="#errores-info">Informaci&oacute;n General</a></li>
+					<li><a href="#errores-ejemplo">Ejemplo</a></li>
+					<li><a href="#errores-codes">C&oacute;digos de Error</a></li>
+		    	</ul>    	
+	    	</div>
     	
-    	<div class="span7"><section id="introduccion"><p>La organización de las rutas es horizontal, no sigue una estructura 
-de directorios ya que la misión de la API es acceder a los datos 
-de los recursos de forma simple. Es por eso que las rutas 
-Categorías y Grupos fueron ideadas para navegar la API hasta encontrar
-el recurso necesario, para luego utilizar sólo la ruta Recursos al obtener
-la información deseada.</p><p>Toda consulta tiene un <code>máximo de 200 registros</code>. Esto es provisorio, ya que 
-no tiene otras restricciones (como claves de acceso o API Keys para manejar
-la cantidad de pedidos periodicos por usuario) y desconozco 
-la cantidad de accesos y/o utilización que le pueden dar.</p><code>El estado de la API es ALPHA (experimental), no garantizo la totalidad 
-ni la integridad de los datos.</code></section><section id="rutas-categoria"><h3>Categorías </h3><code class="lead text-success">GET</code> <code class="lead text-info">/api/categorias</code><a href="#respuestas-parcial"> <span class="text-warning"> [Respuesta Parcial]</span></a><blockquote><p>Devuelve un array con todas las categorías disponibles.</p></blockquote><code class="lead text-success">GET</code> <code class="lead text-info">/api/categorias/[nombre]</code><blockquote><p>Devuelve una entidad Categoria con sus Grupos.</p><p>El parámetro <code class="muted">nombre</code> debe tener sus espacios separados por <code class="muted">-</code></p><p>Ejemplo:  <code class="muted">/api/categorias/transporte-y-movilidad</code></p></blockquote></section><section id="rutas-grupos"><h3>Grupos</h3><code class="lead text-success">GET</code> <code class="lead text-info">/api/grupos</code><a href="#respuestas-parcial"> <span class="text-warning"> [Respuesta Parcial]</span></a><blockquote><p>Devuelve un array con todos los grupos disponibles.</p></blockquote><code class="lead text-success">GET</code> <code class="lead text-info">/api/grupos/[nombre]</code><blockquote><p>Devuelve una entidad Grupo con sus Recursos.</p><p>El parámetro <code class="muted">nombre</code> debe tener sus espacios separados por <code class="muted">-</code></p><p>Ejemplo:  <code class="muted">/api/grupos/bicicletas-publicas</code></p></blockquote></section><section id="rutas-recursos"><h3>Recursos</h3><code class="lead text-success">GET</code> <code class="lead text-info">/api/recursos</code><a href="#respuestas-parcial"> <span class="text-warning"> [Respuesta Parcial]</span></a><blockquote><p>Devuelve un array con todos los recursos disponibles.</p></blockquote><code class="lead text-success">GET</code> <code class="lead text-info">/api/recursos/[nombre]</code><blockquote><p>Devuelve una entidad Recurso con sus registros. </p><p>El parámetro <code class="muted">nombre</code> debe tener sus espacios separados por <code class="muted">-</code></p><p>Ejemplo:  <code class="muted">/api/recursos/recorridos-realizados-en-bicicleta  </code></p></blockquote></section><section id="rutas-query"><h3>Query <code class="warning"> 
-(experimental)</code></h3><code class="lead text-success">GET</code> <code class="lead text-info">/api/recursos/[nombre]?[campo]=[valor]</code><blockquote><p>Devuelve una entidad Recurso con los registros encontrados por el query. </p><p>El parámetro <code class="muted">nombre</code> debe tener sus espacios separados por <code class="muted">-</code></p><p>Los parámetros  <code class="muted">campo</code> y <code class="muted">valor</code> varian dependiendo de los campos del recurso y se utilizan para 
-realizar consultas sobre sus registros</p><p>Ejemplo:  <code class="muted">/api/recursos/recorridos-realizados-en-bicicleta?origen=catedral&amp;usuario=user1234  </code></p></blockquote></section><section id="respuestas-parcial"><h3>Respuestas Parciales </h3><p>Las respuestas Parciales  <b>SÓLO </b>devuelven la información de la entidad necesaria para su navegación.</p><p>Ejemplo de una respuesta parcial de un Grupo: </p><div class="docs-example"><pre><code class="json">{ 
-  "<span class="attribute">nombre</span>": <span class="value"><span class="string">"Bicicleterías en la Ciudad"</span></span>,
-  "<span class="attribute">descripcion</span>": <span class="value"><span class="string">"Listado de bicicleterías de la Ciudad de Buenos Aires."</span></span>,
-  "<span class="attribute">categoria</span>": <span class="value"><span class="string">"http://apicaba.com/api/categorias/transporte-y-movilidad"</span></span>,
-  "<span class="attribute">uri</span>": <span class="value"><span class="string">"http://apicaba.com/api/grupos/bicicleterías-en-la-ciudad"</span>
-</span>}</code></pre></div></section><section id="entidades-categoria"><h3>Categoría </h3><p>Conjunto de Grupos.</p><p>Posee la información necesaria para obtener el detalle de sus grupos.</p><div class="docs-fields"><dl class="dl-horizontal"><dt>nombre</dt><dd>Nombre de la Categoría</dd><dt>grupos</dt><dd>Array de entidades Grupo (parciales)</dd></dl></div><div class="docs-example"><pre><code class="json">{
-  "<span class="attribute">nombre</span>": <span class="value"><span class="string">"Transporte y Movilidad"</span></span>,
-  "<span class="attribute">grupos</span>": <span class="value">[
-    {
-      "<span class="attribute">nombre</span>": <span class="value"><span class="string">"Bicicletas Públicas"</span></span>,
-      "<span class="attribute">descripcion</span>": <span class="value"><span class="string">"Información del sistema de transporte público de bicicletas."</span></span>,
-      "<span class="attribute">categoria</span>": <span class="value"><span class="string">"transporte-y-movilidad"</span></span>,
-      "<span class="attribute">uri</span>": <span class="value"><span class="string">"http://apicaba.com/api/grupos/bicicletas-públicas"</span>
-    </span>},
-    {
-      "<span class="attribute">nombre</span>": <span class="value"><span class="string">"Bicicleterías en la Ciudad"</span></span>,
-      "<span class="attribute">descripcion</span>": <span class="value"><span class="string">"Listado de bicicleterías de la Ciudad de Buenos Aires."</span></span>,
-      "<span class="attribute">categoria</span>": <span class="value"><span class="string">"transporte-y-movilidad"</span></span>,
-      "<span class="attribute">uri</span>": <span class="value"><span class="string">"http://apicaba.com/api/grupos/bicicleterías-en-la-ciudad"</span>
-    </span>}
-  ]
-</span>}</code></pre></div></section><section id="entidades-grupo"><h3>Grupo </h3><p>Conjunto de Recursos.</p><p>Posee la información necesaria para obtener el detalle de sus recursos, como así también su categoría.</p><div class="docs-fields"><dl class="dl-horizontal"><dt>nombre</dt><dd>Nombre del Grupo</dd><dt>descripcion</dt><dd>Breve descripción del Grupo</dd><dt>categoria</dt><dd>Entidad Categoria a la que pertenece el Grupo</dd><dt>recursos</dt><dd>Array de entidades Recurso (parciales)</dd></dl></div><div class="docs-example"><pre><code class="json">{
-  "<span class="attribute">nombre</span>": <span class="value"><span class="string">"Bicicleterías en la Ciudad"</span></span>,
-  "<span class="attribute">descripcion</span>": <span class="value"><span class="string">"Listado de bicicleterías de la Ciudad de Buenos Aires."</span></span>,
-  "<span class="attribute">categoria</span>": <span class="value">{
-    "<span class="attribute">nombre</span>": <span class="value"><span class="string">"Transporte y Movilidad"</span></span>,
-    "<span class="attribute">uri</span>": <span class="value"><span class="string">"http://apicaba.com/api/categorias/transporte-y-movilidad"</span>
-  </span>}</span>,
-  "<span class="attribute">recursos</span>": <span class="value">[{
-      "<span class="attribute">nombre</span>": <span class="value"><span class="string">"Estaciones de Bicicletas"</span></span>,
-      "<span class="attribute">descripcion</span>": <span class="value"><span class="string">"Nombre, ID, referencia geográfica, dirección, latitud y longitud."</span></span>,
-      "<span class="attribute">uri</span>": <span class="value"><span class="string">"http://apicaba.com/api/recursos/estaciones-de-bicicletas"</span>
-  </span>}]
-</span>}</code></pre></div></section><section id="entidades-recurso"><h3>Recurso </h3><p>Un recurso es equivalente a un DataSet en BA Open Data.</p><p>Posee la información del DataSet y una pre-visualización de sus valores.</p><div class="docs-fields"><dl class="dl-horizontal"><dt>nombre</dt><dd>Nombre del Recurso/ DataSet</dd><dt>descripcion</dt><dd>Breve descripción del Recurso/ DataSet</dd><dt>grupo</dt><dd>Entidad Grupo a la que pertenece el Recurso/ DataSet</dd><dt>cantidad</dt><dd>Cantidad de datos disponibles en su totalidad</dd><dt>propiedades</dt><dd>Array de Propiedades que posee cada JSON en el DataSet, siendo:<dl class="dl-horizontal"><dt>nombre</dt><dd>Nombre del campo</dd><dt>tipo</dt><dd>Tipo de Dato de su valor (actualmente son todos String)</dd></dl></dd><dt>datos</dt><dd>Array de JSON (registros). Máximo 200 registros.</dd></dl></div><div class="docs-example"><pre><code class="json">{
-  "<span class="attribute">nombre</span>": <span class="value"><span class="string">"Estaciones de Bicicletas"</span></span>,
-  "<span class="attribute">descripcion</span>": <span class="value"><span class="string">"Nombre, ID, referencia geográfica, dirección, latitud y longitud ..."</span></span>,
-  "<span class="attribute">grupo</span>": <span class="value">{
-    "<span class="attribute">nombre</span>": <span class="value"><span class="string">"Bicicletas Públicas"</span></span>,
-    "<span class="attribute">descripcion</span>": <span class="value"><span class="string">"Información del sistema de transporte público de bicicletas."</span></span>,
-    "<span class="attribute">uri</span>": <span class="value"><span class="string">"http://apicaba.com/api/grupos/bicicletas-públicas"</span></span>,
-    "<span class="attribute">categoria</span>": <span class="value">{ 
-      "<span class="attribute">nombre</span>": <span class="value"><span class="string">"Transporte y Movilidad"</span></span>,
-      "<span class="attribute">uri</span>": <span class="value"><span class="string">"http://apicaba.com/api/categorias/transporte-y-movilidad"</span>
-    </span>}
-  </span>}</span>,
-  "<span class="attribute">cantidad</span>": <span class="value"><span class="number">28</span></span>,
-  "<span class="attribute">propiedades</span>": <span class="value">[{
-      "<span class="attribute">nombre</span>": <span class="value"><span class="string">"estacionId"</span></span>,
-      "<span class="attribute">tipo</span>": <span class="value"><span class="string">"string"</span>
-    </span>}, {
-      "<span class="attribute">nombre</span>": <span class="value"><span class="string">"estacionNombre"</span></span>,
-      "<span class="attribute">tipo</span>": <span class="value"><span class="string">"string"</span>
-    </span>}, {
-      "<span class="attribute">nombre</span>": <span class="value"><span class="string">"latitud"</span></span>,
-      "<span class="attribute">tipo</span>": <span class="value"><span class="string">"string"</span>
-    </span>}, {
-      "<span class="attribute">nombre</span>": <span class="value"><span class="string">"longitud"</span></span>,
-      "<span class="attribute">tipo</span>": <span class="value"><span class="string">"string"</span>
-    </span>}]</span>,
-  "<span class="attribute">datos</span>": <span class="value">[{
-      "<span class="attribute">estacionId</span>": <span class="value"><span class="string">"3"</span></span>,
-      "<span class="attribute">estacionNombre</span>": <span class="value"><span class="string">"RETIRO"</span></span>,
-      "<span class="attribute">latitud</span>": <span class="value"><span class="string">"-34.592308"</span></span>,
-      "<span class="attribute">longitud</span>": <span class="value"><span class="string">"-58.37501"</span>
-    </span>}, {
-      "<span class="attribute">estacionId</span>": <span class="value"><span class="string">"5"</span></span>,
-      "<span class="attribute">estacionNombre</span>": <span class="value"><span class="string">"ADUANA"</span></span>,
-      "<span class="attribute">latitud</span>": <span class="value"><span class="string">"-34.611365"</span></span>,
-      "<span class="attribute">longitud</span>": <span class="value"><span class="string">"-58.369077"</span>
-    </span>}, {
-      "<span class="attribute">estacionId</span>": <span class="value"><span class="string">"6"</span></span>,
-      "<span class="attribute">estacionNombre</span>": <span class="value"><span class="string">"DERECHO"</span></span>,
-      "<span class="attribute">latitud</span>": <span class="value"><span class="string">"-34.583669"</span></span>,
-      "<span class="attribute">longitud</span>": <span class="value"><span class="string">"-58.391243"</span>
-    </span>}]
-</span>}</code></pre></div></section></div>
+	    	<div class="span8" style="border: 0px solid red;">
+	    	
+	    		<!-- introduccion -->
+	    		<section id="introduccion">
+	    			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sed malesuada nulla. Fusce pretium, dui quis molestie fermentum, nunc quam placerat tortor, gravida euismod est tortor in ex. Suspendisse potenti. Cras ultrices turpis et tortor eleifend, at consectetur orci maximus. Nulla facilisi. Phasellus blandit finibus tortor, a accumsan dui. Sed malesuada mauris vel magna auctor, ac dignissim metus placerat. Donec sodales tortor id ligula placerat, at venenatis tortor fringilla.</p>
+	    			<code>El estado de la API es ALPHA (experimental), no garantizo la totalidad ni la integridad de los datos.</code>
+				</section>
+				
+				<!-- endpoint reclamo -->
+				<section id="rutas-reclamo">
+					<h3>Reclamos</h3>
+					<code class="lead text-success">GET</code><code class="lead text-info">/api/reclamos</code>
+					<blockquote>
+						<p>Devuelve un array con todos los reclamos disponibles..</p>
+						<p>Por default NO devuelve los que est&aacute;n en estado "Archivado".</p>
+					</blockquote>
+					<code class="lead text-success">GET</code><code class="lead text-info">/api/reclamos/{reclamoID}</code>
+					<blockquote>
+						<p>Devuelve una entidad Reclamo.</p>
+						<p>Ejemplo:  <code class="muted">/api/reclamos/12345</code></p>
+					</blockquote>
+				</section>
+				
+				<!-- endpoint actualizacion -->
+				<section id="rutas-actualizacion">
+					<h3>Actualizaciones</h3>
+					<code class="lead text-success">GET</code><code class="lead text-info">/api/reclamos/{reclamoID}/actualizaciones</code>
+					<blockquote>
+						<p>Devuelve una array con el historial de actualizaciones correspondiente al n&uacute;mero de reclamo provisto.</p>
+						<p>Ejemplo:  <code class="muted">/api/reclamos/12345/actualizaciones</code></p>
+					</blockquote>
+				</section>
+				
+				<!-- endpoint reparacion -->
+				<section id="rutas-reparacion">
+					<h3>Reparaciones</h3>
+					<code class="lead text-success">GET</code><code class="lead text-info">/api/reclamos/{reclamoID}/reparaciones</code>
+					<blockquote>
+						<p>Devuelve una entidad Reparaci&oacute;n correspondiente al n&uacute;mero de reclamo provisto.</p>
+						<p>Ejemplo:  <code class="muted">/api/reclamos/12345/reparaciones</code></p>
+					</blockquote>
+				</section>
+				
+				<!-- endpoint imagenes -->
+				<section id="rutas-imagen">
+					<h3>Im&aacute;genes</h3>
+					<code class="lead text-success">GET</code><code class="lead text-info">/api/reclamos/{reclamoID}/imagenes</code>
+					<blockquote>
+						<p>Devuelve una entidad Imagen correspondiente al n&uacute;mero de reclamo provisto.</p>
+						<p>Ejemplo:  <code class="muted">/api/reclamos/12345/imagenes</code></p>
+					</blockquote>
+				</section>
+				
+				<!-- endpoint query -->
+				<section id="rutas-query">
+					<h3>Query</h3>
+					<code class="lead text-success">GET</code><code class="lead text-info">/api/reclamos?usuario={username}</code>
+					<blockquote>
+						<p>Devuelve un array de entidades Reclamo filtrados por el nombre de usuario que los report&oacute;.</p>
+						<p>Ejemplo:  <code class="muted">/api/reclamos?usuario=pedrito1988</code></p>
+					</blockquote>		
+					<code class="lead text-success">GET</code><code class="lead text-info">/api/reclamos?[campo]=[valor]</code>
+					<blockquote>
+						<p>Devuelve un array de entidades Reclamo con los registros encontrados por el query.</p>
+						<p>Los par&aacute;metros <code class="muted">campo</code> y <code class="muted">valor</code> deben tener sus espacios separados por <code class="muted">-</code>.</p>
+					</blockquote>		
+					<code class="lead text-success">GET</code><code class="lead text-info">/api/reclamos?provincia={provincia}&ciudad={ciudad}</code>
+					<blockquote>
+						<p>Devuelve un array de entidades Reclamo filtardos por Provincia y Ciudad.</p>
+						<p>Los par&aacute;metros <code class="muted">provincia</code> y <code class="muted">ciudad</code> son opcionales pero al menos uno de ellos debe ser informado.
+						<p>Ejemplo:  <code class="muted">/api/reclamos?provincia=la-pampa&ciudad=santa-rosa</code></p>
+					</blockquote>						
+					<code class="lead text-success">GET</code><code class="lead text-info">/api/reclamos?estado={estado1,estado2,estadoN}</code>
+					<blockquote>
+						<p>Devuelve un array de entidades Reclamo filtrados por Estado.</p>
+						<p>Los valores posibles para el par&aacute;metro <code class="muted">estado</code> son: Abierto, Resuelto, Cerrado, Archivado y Reabierto.</p>
+						<p>Ejemplo:  <code class="muted">/api/reclamos?estado=abierto,resuelto</code></p>
+					</blockquote>	
+					<code class="lead text-success">GET</code><code class="lead text-info">/api/reclamos?categoria={categoria1,categoria2,categoriaN}</code>
+					<blockquote>
+						<p>Devuelve un array de entidades Reclamo filtrados por Categor&iacute;a.</p>
+						<p>Ejemplo:  <code class="muted">/api/reclamos?categoria=bache,alumbrado,residuos,mamposteria</code></p>
+					</blockquote>	
+					<code class="lead text-success">GET</code><code class="lead text-info">/api/reclamos?desde={fechaDesde}&hasta={fechaHasta}</code>
+					<blockquote>
+						<p>Devuelve un array de entidades Reclamo filtrados por Fecha de Publicaci&oacute;n.</p>
+						<p>El formato de los par&aacute;metros <code class="muted">desde</code> y <code class="muted">hasta</code> es <code class="muted">DD-MM-AAAA</code>.</p>
+						<p>Ejemplo:  <code class="muted">/api/reclamos?desde=14-06-2014&hasta=22-08-2014</code></p>
+					</blockquote>	
+				</section>
+				
+				<!-- endpoint reclamo -->
+				<section id="entidades-generico">
+					<h3>B&aacute;sica</h3>
+					
+					<table class="table table-bordered table-hover">
+						<thead>
+							<tr>
+								<th>campo</th><th>formato</th><th>descripci&oacute;n</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>data</td><td>mixto</td><td>null, boolean, integer o un objeto.</td>
+							</tr>
+							<tr>
+								<td>success</td><td>boolean</td><td>determina si la consulta se ejecut&oacute; con &eacute;xito.</td>
+							</tr>
+							<tr>
+								<td>status</td><td>integer</td><td>c&oacute;digo de estado del HTTP.</td>
+							</tr>
+						</tbody>						
+					</table>
+					
+					<div class="docs-example">
+						<pre>
+							<code class="json"></code>
+						</pre>
+					</div>
+					
+				</section>
+					
+				<section id="entidades-reclamo">
+					<h3>Reclamo</h3>
+					
+					<table class="table table-bordered table-hover">
+						<thead>
+							<tr>
+								<th>campo</th><th>formato</th><th>descripci&oacute;n</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>id</td><td>integer</td><td>null, boolean, integer o un objeto.</td>
+							</tr>
+							<tr>
+								<td>fecha</td><td>integer</td><td>determina si la consulta se ejecut&oacute; con &eacute;xito.</td>
+							</tr>
+							<tr>
+								<td>titulo</td><td>string</td><td>c&oacute;digo de estado del HTTP.</td>
+							</tr>
+							<tr>
+								<td>descripcion</td><td>string</td><td>c&oacute;digo de estado del HTTP.</td>
+							</tr>
+							<tr>
+								<td>direccion</td><td>string</td><td>c&oacute;digo de estado del HTTP.</td>
+							</tr>
+							<tr>
+								<td>barrio</td><td>string</td><td>c&oacute;digo de estado del HTTP.</td>
+							</tr>
+							<tr>
+								<td>ciudad</td><td>string</td><td>c&oacute;digo de estado del HTTP.</td>
+							</tr>
+							<tr>
+								<td>provincia</td><td>string</td><td>c&oacute;digo de estado del HTTP.</td>
+							</tr>
+							<tr>
+								<td>latitud</td><td>float</td><td>c&oacute;digo de estado del HTTP.</td>
+							</tr>
+							<tr>
+								<td>longitud</td><td>float</td><td>c&oacute;digo de estado del HTTP.</td>
+							</tr>
+							<tr>
+								<td>estado</td><td>float</td><td>c&oacute;digo de estado del HTTP.</td>
+							</tr>
+							<tr>
+								<td>comentarios</td><td>integer</td><td>c&oacute;digo de estado del HTTP.</td>
+							</tr>
+							<tr>
+								<td>votos</td><td>integer</td><td>c&oacute;digo de estado del HTTP.</td>
+							</tr>
+							<tr>
+								<td>seguidores</td><td>integer</td><td>c&oacute;digo de estado del HTTP.</td>
+							</tr>
+							<tr>
+								<td>link</td><td>string</td><td>c&oacute;digo de estado del HTTP.</td>
+							</tr>
+						</tbody>						
+					</table>
+					
+					
+					<div class="docs-example">
+						<pre>
+							<code class="json"></code>
+						</pre>
+					</div>
+				</section>
+	    	
+	    	
+	    	</div>
     	
     	
 
-		</div>
+		
    	    
    		<!-- /API REST -->
 </div>
+
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/vendor.js"></script>	

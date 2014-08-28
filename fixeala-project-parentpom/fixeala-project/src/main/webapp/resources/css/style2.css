@@ -1362,7 +1362,6 @@ a.no-hover { text-decoration: none; color: #000;}
 .brick span.date, .brick span.id, .brick span.id-char { padding-top: 5px; font-size: 11px;  }
 .brick span.city, .brick span.province { text-transform: uppercase;  font-size: 11px; }
 .brick span.date-box { width: 96%; display: block; }
-.brick span.id { font-weight: bold; }
 
 .brick .username { font-size: 18px; }
 .brick .thumbnail { margin: 10px 0 15px 0; }

@@ -50,7 +50,7 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.dataTables.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.dataTables.columnFilter.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.dataTables.rowReordering.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/DT_bootstrap.js"></script>
+<%--     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/DT_bootstrap.js"></script> --%>
   	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fileupload/jquery.ui.widget.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fileupload/tmpl.min.js"></script>
@@ -872,13 +872,13 @@ path:hover {
 
 </head>
 
-<body data-spy="scroll" data-target=".bs-docs-sidebar">
+<body >
 
 	<div class="feedback">
     	<span><a id="feedbackLink" href="#" title="¡Tu opinión cuenta!" style="cursor: pointer;"><i class="icon-bolt"></i>Feedback</a></span>
     </div>
 
-<section class="wrapper">
+<!-- <section class="wrapper"> -->
  
   <tiles:insertAttribute name="header" />
   
@@ -886,7 +886,7 @@ path:hover {
   
   <tiles:insertAttribute name="footer" />
   
-</section> 
+<!-- </section>  -->
 
 
 <div id="mdl-feedback" class="modal hide fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
