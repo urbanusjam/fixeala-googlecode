@@ -207,7 +207,7 @@ jQuery.fn.dataTableExt.oSort['string-num-desc'] = function(x1,y1) {
 $(document).ready(function() {
 	
 	
-	
+	/**
 	
 	//TBL USERS
 	$('#tblUsers').dataTable({
@@ -303,7 +303,7 @@ $(document).ready(function() {
 	});
 	
 	
-	
+	**/
 	var userID = "";	
 	
 	if(typeof currentUser != 'undefined')
