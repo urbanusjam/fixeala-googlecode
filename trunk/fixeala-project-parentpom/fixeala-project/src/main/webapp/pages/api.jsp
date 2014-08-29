@@ -4,22 +4,38 @@
 <link type="text/css" href="${pageContext.request.contextPath}/resources/css/docs.css" rel="stylesheet">
 <link type="text/css" href="${pageContext.request.contextPath}/resources/css/highlight.css" rel="stylesheet">
 
+
+<script>
+
+
+</script>
 <style>
 
-
+section {
+  padding-top: 60px;
+}
 	.table td { font-weight: normal; }
 
-	blockquote { margin-bottom: 40px; }
-	blockquote p { font-size: 13px; }
+	blockquote { margin: 20px 0 40px 0; }
+	blockquote p { font-size: 13px; padding: 5px 0 5px 0; }
 	
-	h3 { display: block; }
+	h3 { display: block; padding-bottom: 10px; }
 	
 	.muted { color: #333; }
 	
 	code.lead { margin-right: 10px; }
 /* 	.lead {font-size: 18px; } */
 
-
+.bs-docs-sidenav > .active > a {
+  position: relative;
+  z-index: 2;
+  padding: 9px 15px;
+  border: 0;
+  text-shadow: 0 1px 0 rgba(0,0,0,.15);
+  -webkit-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
+     -moz-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
+          box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
+}
 </style>
 
 <div id="content" style="border: 0px solid red">
@@ -33,35 +49,35 @@
 
     	
 	    	<div class="span3 bs-docs-sidebar">    	
-		    	<ul id="nav-bar" class="nav nav-list bs-docs-sidenav affix" data-spy="affix">
+		    	<ul id="nav-bar" class="nav nav-list bs-docs-sidenav affix-top" data-offset-top="120" data-spy="affix">
 		    		<li class="nav-header">Rutas / Endpoints</li>
-		    		<li class="active"><a href="#rutas-reclamo">Reclamos</a></li>		
-		    		<li><a href="#rutas-actualizacion">Actualizaciones</a></li>			
-		    		<li><a href="#rutas-reparacion">Reparaciones</a></li>			
-		    		<li><a href="#rutas-imagen">Im&aacute;genes</a></li>			    		
+		    		<li class="active"><a href="#rutas-issue">Reclamos</a></li>		
+		    		<li><a href="#rutas-history">Actualizaciones</a></li>			
+		    		<li><a href="#rutas-repair">Reparaciones</a></li>			
+		    		<li><a href="#rutas-image">Im&aacute;genes</a></li>			    		
 		    		<li><a href="#rutas-query">Query</a></li>		    
 		    		<li class="nav-header">Entidades</li>
-		    		<li><a href="#entidades-reclamo">Reclamo</a></li>
-		    		<li><a href="#entidades-actualizacion">Actualizaci&oacute;n</a></li>
-		    		<li><a href="#entidades-reparacion">Reparaci&oacute;n</a></li>
-		    		<li><a href="#entidades-imagen">Imagen</a></li>	
+		    		<li><a href="#entidades-issue">Reclamo</a></li>
+		    		<li><a href="#entidades-history">Actualizaci&oacute;n</a></li>
+		    		<li><a href="#entidades-repair">Reparaci&oacute;n</a></li>
+		    		<li><a href="#entidades-image">Imagen</a></li>	
 					<li class="nav-header">Manejo de Errores</li>
-					<li><a href="#errores-info">Informaci&oacute;n General</a></li>
-					<li><a href="#errores-ejemplo">Ejemplo</a></li>
-					<li><a href="#errores-codes">C&oacute;digos de Error</a></li>
+					<li><a href="#errores-basic">B&aacute;sico</a></li>
+					<li><a href="#errores-example">Ejemplo</a></li>
+					<li><a href="#errores-code">C&oacute;digos de Error</a></li>
 		    	</ul>    	
 	    	</div>
     	
 	    	<div class="span8" style="border: 0px solid red;">
 	    	
 	    		<!-- introduccion -->
-	    		<section id="introduccion">
-	    			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sed malesuada nulla. Fusce pretium, dui quis molestie fermentum, nunc quam placerat tortor, gravida euismod est tortor in ex. Suspendisse potenti. Cras ultrices turpis et tortor eleifend, at consectetur orci maximus. Nulla facilisi. Phasellus blandit finibus tortor, a accumsan dui. Sed malesuada mauris vel magna auctor, ac dignissim metus placerat. Donec sodales tortor id ligula placerat, at venenatis tortor fringilla.</p>
-	    			<code>El estado de la API es ALPHA (experimental), no garantizo la totalidad ni la integridad de los datos.</code>
-				</section>
+<%-- 	    		<section id="introduccion"> --%>
+<!-- 	    			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sed malesuada nulla. Fusce pretium, dui quis molestie fermentum, nunc quam placerat tortor, gravida euismod est tortor in ex. Suspendisse potenti. Cras ultrices turpis et tortor eleifend, at consectetur orci maximus. Nulla facilisi. Phasellus blandit finibus tortor, a accumsan dui. Sed malesuada mauris vel magna auctor, ac dignissim metus placerat. Donec sodales tortor id ligula placerat, at venenatis tortor fringilla.</p> -->
+<%-- 	    			<code>El estado de la API es ALPHA (experimental), no garantizo la totalidad ni la integridad de los datos.</code> --%>
+<%-- 				</section> --%>
 				
 				<!-- endpoint reclamo -->
-				<section id="rutas-reclamo">
+				<section id="rutas-issue">
 					<h3>Reclamos</h3>
 					<code class="lead text-success">GET</code><code class="lead text-info">/api/reclamos</code>
 					<blockquote>
@@ -76,7 +92,7 @@
 				</section>
 				
 				<!-- endpoint actualizacion -->
-				<section id="rutas-actualizacion">
+				<section id="rutas-history">
 					<h3>Actualizaciones</h3>
 					<code class="lead text-success">GET</code><code class="lead text-info">/api/reclamos/{reclamoID}/actualizaciones</code>
 					<blockquote>
@@ -86,7 +102,7 @@
 				</section>
 				
 				<!-- endpoint reparacion -->
-				<section id="rutas-reparacion">
+				<section id="rutas-repair">
 					<h3>Reparaciones</h3>
 					<code class="lead text-success">GET</code><code class="lead text-info">/api/reclamos/{reclamoID}/reparaciones</code>
 					<blockquote>
@@ -96,7 +112,7 @@
 				</section>
 				
 				<!-- endpoint imagenes -->
-				<section id="rutas-imagen">
+				<section id="rutas-image">
 					<h3>Im&aacute;genes</h3>
 					<code class="lead text-success">GET</code><code class="lead text-info">/api/reclamos/{reclamoID}/imagenes</code>
 					<blockquote>
@@ -144,7 +160,7 @@
 				</section>
 				
 				<!-- endpoint reclamo -->
-				<section id="entidades-generico">
+				<section id="entidades-basic">
 					<h3>B&aacute;sica</h3>
 					
 					<table class="table table-bordered table-hover">
@@ -174,7 +190,7 @@
 					
 				</section>
 					
-				<section id="entidades-reclamo">
+				<section id="entidades-issue">
 					<h3>Reclamo</h3>
 					
 					<table class="table table-bordered table-hover">
