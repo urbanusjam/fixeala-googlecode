@@ -432,7 +432,11 @@ public class IssueServiceImpl implements IssueService {
 	@Override
 	public IssueDTO getIssueById(String issueID){
 		Issue issue = issueDAO.findIssueById(issueID);
-		return loadCompleteIssue(issue);		
+		if(issue != null){
+			return loadCompleteIssue(issue);		
+		}
+		else
+			return null; 
 	}
 		
 	@Override

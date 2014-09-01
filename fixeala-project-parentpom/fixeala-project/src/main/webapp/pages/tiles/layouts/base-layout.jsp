@@ -872,7 +872,7 @@ path:hover {
 
 </head>
 
-<body >
+<body data-spy="scroll" data-target=".bs-docs-sidebar">
 
 	<div class="feedback">
     	<span><a id="feedbackLink" href="#" title="¡Tu opinión cuenta!" style="cursor: pointer;"><i class="icon-bolt"></i>Feedback</a></span>

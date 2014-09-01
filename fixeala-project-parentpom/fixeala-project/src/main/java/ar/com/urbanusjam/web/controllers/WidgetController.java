@@ -1,9 +1,7 @@
 package ar.com.urbanusjam.web.controllers;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import ar.com.urbanusjam.services.IssueService;
@@ -21,7 +18,6 @@ import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.utils.IssueStatus;
 import ar.com.urbanusjam.services.utils.IssueStatusColorCode;
 import ar.com.urbanusjam.web.domain.AlertStatus;
-import ar.com.urbanusjam.web.utils.StatusResponse;
 
 @Controller
 public class WidgetController {

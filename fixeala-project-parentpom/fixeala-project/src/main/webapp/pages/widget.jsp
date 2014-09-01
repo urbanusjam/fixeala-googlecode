@@ -22,7 +22,7 @@
 					+ '<\/script>'
 					+ '\n'
 					+ '\n'
-					+ '<iframe style="border:none;" onload="resizeIframe(this)" src="http://localhost:8080/fixeala/widget-web.html">'
+					+ '<iframe style="border:none;" onload="resizeIframe(this)" src="http://localhost:8081/fixeala/widget-web.html">'
 					+ '\n'
 					+ '</iframe>';
 			
@@ -161,7 +161,7 @@
 			
 			<div class="span4 pull-right" style="text-align: center;">	
 				<div class="page-header" style="text-align: left;"><h4>Previsualizaci&oacute;n</h4></div>				
-				<iframe style="width:370px;border:none;" onload="resizeIframe(this)" src="http://localhost:8080/fixeala/widget-web.html"></iframe>
+				<iframe style="width:370px;border:none;" onload="resizeIframe(this)" src="${pageContext.request.contextPath}/widget-web.html"></iframe>
 	   		</div> 
 	   
 		

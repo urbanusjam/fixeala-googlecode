@@ -1,6 +1,8 @@
 package ar.com.urbanusjam.web.domain.api;
 
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -11,17 +13,19 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ReclamoResponse {
 	
 	
-	private Object data;
+	private List<?> data;
 	
 	private boolean success;
 	
 	private int status;
 
-	public Object getData() {
+	
+
+	public List<?> getData() {
 		return data;
 	}
 
-	public void setData(Object data) {
+	public void setData(List<?> data) {
 		this.data = data;
 	}
 
