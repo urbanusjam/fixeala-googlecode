@@ -1,4 +1,3 @@
-
 $(document).ready(function(){
 	
 			$('#signupForm #username').focus();
@@ -15,20 +14,20 @@ $(document).ready(function(){
 // 					}, "El nombre de usuario no cumple con el formato requerido.");
  			
 			
- 			$.validator.addMethod("emailCheck", function(value, element)
-				{
-				return this.optional(element) || /^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$/.test(value);
-				}, "Ingrese una direcci&oacute;n de email v&aacute;lida." +
-						"<br/> (ej: hola@ejemplo.com)");
- 			
- 			$.validator.addMethod(
- 				    "regex",
- 				    function(value, element, regexp) {
- 				        var check = false;
- 				        return this.optional(element) || regexp.test(value);
- 				    },
- 				    "El texto ingresado no cumple con el formato requerido."
- 				);
+// 			$.validator.addMethod("emailCheck", function(value, element)
+//				{
+//				return this.optional(element) || /^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$/.test(value);
+//				}, "Ingrese una direcci&oacute;n de email v&aacute;lida." +
+//						"<br/> (ej: hola@ejemplo.com)");
+// 			
+// 			$.validator.addMethod(
+// 				    "regex",
+// 				    function(value, element, regexp) {
+// 				        var check = false;
+// 				        return this.optional(element) || regexp.test(value);
+// 				    },
+// 				    "El texto ingresado no cumple con el formato requerido."
+// 				);
  			
  		
  			/** ======================================================================================================== **/
