@@ -9,7 +9,11 @@
     <c:set var="isCommonUser" value="true" />
 </sec:authorize>
 
+<style>
 
+	#repairForm input { text-align: right; }
+
+</style>
 	
 <div id="content">	
 
@@ -228,27 +232,90 @@
 				
 				
 			});
+			
+			var startDate = new Date();
+			var fromEndDate = new Date();
+			var toEndDate = new Date();
+
+			toEndDate.setDate(toEndDate.getDate()+365);
 	
-			$('#fecha-estimada-from').datetimepicker({		  
-				  format: 'dd/MM/yyyy',
-				  language: 'es',		
-			      pickTime: false
-			 });
-			$('#fecha-estimada-to').datetimepicker({		  
-				  format: 'dd/MM/yyyy',
-				  language: 'es',		
-			      pickTime: false
-			 });
-			$('#fecha-real-from').datetimepicker({		  
-				  format: 'dd/MM/yyyy',
-				  language: 'es',		
-			      pickTime: false
-			 });
-			$('#fecha-real-to').datetimepicker({		  
-				  format: 'dd/MM/yyyy',
-				  language: 'es',		
-			      pickTime: false
-			 });
+			
+			$('#fechaEstimadaInicio').datepicker({			    
+				format: 'dd/mm/yyyy',
+			    startDate: startDate,
+			    language: 'es',		
+// 			    endDate: FromEndDate, 
+			    autoclose: true
+			}).on('changeDate', function(selected){
+			        startDate = new Date(selected.date.valueOf());
+			        startDate.setDate(startDate.getDate(new Date(selected.date.valueOf())));
+			        $('#fechaEstimadaFin').datepicker('setStartDate', startDate);
+			}); 
+			
+			$('#fechaEstimadaFin').datepicker({			        
+			    	format: 'dd/mm/yyyy',
+			        startDate: startDate,
+			        language: 'es',		
+			        endDate: toEndDate,
+			        autoclose: true
+			}).on('changeDate', function(selected){
+			        fromEndDate = new Date(selected.date.valueOf());
+			        fromEndDate.setDate(fromEndDate.getDate(new Date(selected.date.valueOf())));
+			        $('#fechaEstimadaInicio').datepicker('setEndDate', fromEndDate);
+			});
+			
+			$('#fechaRealInicio').datepicker({			    
+				format: 'dd/mm/yyyy',
+				startDate: startDate,
+			    language: 'es',		
+			    autoclose: true
+			}).on('changeDate', function(selected){
+			        startDate = new Date(selected.date.valueOf());
+			        startDate.setDate(startDate.getDate(new Date(selected.date.valueOf())));
+			        $('#fechaRealFin').datepicker('setStartDate', startDate);
+			}); 
+			
+			$('#fechaRealFin').datepicker({			        
+			    	format: 'dd/mm/yyyy',
+			        startDate: startDate,
+			        language: 'es',		
+			        endDate: toEndDate,
+			        autoclose: true
+			}).on('changeDate', function(selected){
+			        fromEndDate = new Date(selected.date.valueOf());
+			        fromEndDate.setDate(fromEndDate.getDate(new Date(selected.date.valueOf())));
+			        $('#fechaRealInicio').datepicker('setEndDate', fromEndDate);
+			});
+
+			  
+				//http://www.bootply.com/74352
+				//http://stackoverflow.com/questions/11933173/how-to-restrict-the-selectable-date-ranges-in-bootstrap-datepicker
+			
+			
+// 			$('#fecha-estimada-from').datetimepicker({		  
+// 				  format: 'dd/MM/yyyy',
+// 				  language: 'es',		
+// 			      pickTime: false
+	
+// 			 }); 
+			
+// 			$('#fecha-estimada-to').datetimepicker({		  
+// 				  format: 'dd/MM/yyyy',
+// 				  language: 'es',		
+// 			      pickTime: false
+// 			 });
+			
+			
+// 			$('#fecha-real-from').datetimepicker({		  
+// 				  format: 'dd/MM/yyyy',
+// 				  language: 'es',		
+// 			      pickTime: false
+// 			 });
+// 			$('#fecha-real-to').datetimepicker({		  
+// 				  format: 'dd/MM/yyyy',
+// 				  language: 'es',		
+// 			      pickTime: false
+// 			 });
 			
 			
 			//default config
@@ -272,7 +339,7 @@
 			
 			
 			$('#btn-add-repair').live('click', function() {
-				
+				 $('#btn-save-repair').prop('disabled',true);
 				$('#mdl-repair').modal('show');
 				$('#presupuestoAdjudicacion').val(0);
 				$('#presupuestoFinal').val(0);
@@ -305,42 +372,80 @@
 		    	
 		    }); 
 		    
-		    $('#btn-save-repair').click(function(e) {	
-				
-				$.ajax({
-			       url: './addRepairInfo', 
-			       type: 'POST',
-			       data: $('#repairForm').serialize(),
-			       dataType: 'json',					       			       
-			       success: function(data) {
-			    	   if(data.result){					    		
-			    		   window.location.reload();	
-			    	   }						    	   
-			    	   else{
-			    		   bootbox.alert(data.message);		
-			    	   }						    	
-			       },
-			       error: function (response) {
-			    	   bootbox.alert('No se pudo guardar la informaci&oacute;n. Intente de nuevo.');		
-			       },
-			       complete: function(){
-			    	   $('#mdl-repair').modal('hide');
-			       }
 
-			   });				   
-				
-				return false; 
-			});
 		    
-		    $('#obra').keyup(function(){
-			      if($(this).val().length > 0){
-			         $('#btn-save-repair').prop('disabled',false);
-			      }else{
-			         $('#btn-save-repair').prop('disabled',true);
-			      }
-			 });
-			
-			
+		    $.validator.addMethod('money', function(value) {			     
+			        return /^\d{0,4}(\.\d{0,2})?$/.test(value);
+			},"S&oacute;lo n&uacute;meros positivos con hasta 2 decimales.");
+		    
+		    $.validator.addMethod('integer', function (value) { 
+		        return /^[0-9]+$/.test(value); 
+		    }, 'S&oacute;lo n&uacute;meros positivos.');
+		    
+		    $("#repairForm").validate({	
+		    	
+		    	rules: {
+		    		
+		            obra: {
+		                required: true
+		            },
+		            plazo: {
+		            	integer: true 
+		            },
+		            presupuestoAdjudicacion: {	
+		            	money: true
+		            },
+		            presupuestoFinal: {	
+		            	money: true
+		            }
+		        },
+		        
+		        messages: {
+		        	
+		        	obra: {
+		        		required: 'Campo obligatorio.'
+		        	}
+		        
+		        },
+		    	
+		    	submitHandler: function () {
+		    	
+		    	    	
+	 				$.ajax({
+	 			       url: './addRepairInfo', 
+	 			       type: 'POST',
+	 			       data: $('#repairForm').serialize(),
+	 			       dataType: 'json',					       			       
+	 			       success: function(data) {
+	 			    	   if(data.result){					    		
+	 			    		   window.location.reload();	
+	 			    	   }						    	   
+	 			    	   else{
+	 			    		   bootbox.alert(data.message);		
+	 			    	   }						    	
+	 			       },
+	 			       error: function (response) {
+	 			    	   bootbox.alert('No se pudo guardar la informaci&oacute;n. Intente de nuevo.');		
+	 			       },
+	 			       complete: function(){
+	 			    	   $('#mdl-repair').modal('hide');
+	 			       }
+
+	 			   });	
+		    	   
+		    	    return false; 
+		    	}
+		    	
+		    });
+		    
+		    $('#repairForm input, #repairForm textarea').on('keyup blur', function () { 
+		        if ($(this).valid()) {                  
+		        	 $('#btn-save-repair').prop('disabled',false);   
+		        } else {
+		        	  $('#btn-save-repair').prop('disabled',true); 
+		        }
+		    });
+
 			$('#btn-delete-repair').live('click', function(e) {	
 				
 				 bootbox.confirm("&iquest;Confirma que desea eliminar los datos?", function(result){
@@ -1640,7 +1745,7 @@
 	  		<div class="row-fluid">
 	  			<div class="span6">
 	  				<label>Obra / Proyecto</label>					    
-		    	   	<textarea id="obra" name="obra" required></textarea>	
+		    	   	<textarea id="obra" name="obra"></textarea>	
 	  			</div>	  		
 	  			<div class="span3 offset2">
 	  				<label>Estado</label>	
@@ -1666,7 +1771,7 @@
 				</div>
 	         		<div class="span4">
 	         			<label>Plazo (en meses)</label>		 
-	         			<input type="number" id="plazo" name="plazo"/>	
+	         			<input type="text" id="plazo" name="plazo"/>	
 	         		</div>
 	  		</div>	  		
 	  		<hr>	  		
@@ -1701,50 +1806,48 @@
 	    		</div>
 	    		<div class="span4">
 	    			<label>Fecha estimada de inicio</label>
-		    	   	<div id="fecha-estimada-from" class="input-append">											   
-					    <input id="fechaEstimadaInicio" name="fechaEstimadaInicio" type="text" class="repairDate" placeholder="dd/mm/aaaa"/>
-					    <span class="add-on">
-					      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
-					      </i>
-					    </span>
-					</div> 
-	 				</div>	  				
-	 				<div class="span4">	  
-	 					<label>Fecha estimada de finalizaci&oacute;n</label>			
-	  				<div id="fecha-estimada-to" class="input-append">											   
-					    <input id="fechaEstimadaFin" name="fechaEstimadaFin" type="text" class="repairDate" placeholder="dd/mm/aaaa"/>
-					    <span class="add-on">
-					      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
-					      </i>
-					    </span>
-					</div>  	
+<!-- 		    	   	<div id="fecha-estimada-from" class="input-append">											    -->
+					    <input type="text" id="fechaEstimadaInicio" name="fechaEstimadaInicio" class="repairDate" placeholder="dd/mm/aaaa"/>
+<!-- 					    <span class="add-on"> -->
+<!-- 					      <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i> -->
+<!-- 					    </span> -->
+<!-- 					</div>  -->
+	 			</div>	  				
+	 			<div class="span4">	  
+ 					<label>Fecha estimada de finalizaci&oacute;n</label>			
+<!--   					<div id="fecha-estimada-to" class="input-append">											    -->
+					    <input type="text" id="fechaEstimadaFin" name="fechaEstimadaFin"  class="repairDate" placeholder="dd/mm/aaaa"/>
+<!-- 					    <span class="add-on"> -->
+<!-- 					      <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i> -->
+<!-- 					    </span> -->
+<!-- 					</div>  	 -->
 	 			</div>
 	  		</div>	  		
 	  		<hr>	  		
 	  		<div class="row-fluid">	  	
 		  		<div class="span4">
-			    	   	<label>Presupuesto final</label>
+			    	<label>Presupuesto final</label>
 	    	   		<input type="text" id="presupuestoFinal" name="presupuestoFinal" placeholder="en $ argentinos"/>	
 	  			</div>	  			 
 	  			<div class="span4">
 	  				<label>Fecha real de inicio</label>			
-		    	   	<div id="fecha-real-from" class="input-append">											   
-					    <input id="fechaRealInicio" name="fechaRealInicio" type="text" class="repairDate" placeholder="dd/mm/aaaa"/>
-					    <span class="add-on">
-					      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
-					      </i>
-					    </span>
-					</div>
+<!-- 		    	   	<div id="fecha-real-from" class="input-append">											    -->
+					    <input type="text" id="fechaRealInicio" name="fechaRealInicio"  class="repairDate" placeholder="dd/mm/aaaa"/>
+<!-- 					    <span class="add-on"> -->
+<!-- 					      <i data-time-icon="icon-time" data-date-icon="icon-calendar"> -->
+<!-- 					      </i> -->
+<!-- 					    </span> -->
+<!-- 					</div> -->
 	  			</div>	  		
 	  			<div class="span4">	  
 	  				<label>Fecha real de finalizaci&oacute;n</label>						
-	  				<div id="fecha-real-to" class="input-append">											   
-					    <input id="fechaRealFin" name="fechaRealFin" type="text" class="repairDate" placeholder="dd/mm/aaaa"/>
-					    <span class="add-on">
-					      <i data-time-icon="icon-time" data-date-icon="icon-calendar">
-					      </i>
-					    </span>
-					</div>  	
+<!-- 	  				<div id="fecha-real-to" class="input-append">											    -->
+					    <input type="text" id="fechaRealFin" name="fechaRealFin" class="repairDate" placeholder="dd/mm/aaaa"/>
+<!-- 					    <span class="add-on"> -->
+<!-- 					      <i data-time-icon="icon-time" data-date-icon="icon-calendar"> -->
+<!-- 					      </i> -->
+<!-- 					    </span> -->
+<!-- 					</div>  	 -->
 	  			</div>	  				
 	  		</div>	  		
 	  		<hr>	  		
@@ -1757,7 +1860,7 @@
 		</div>
 		<!-- modal footer -->
 	  	<div class="modal-footer"> 	
-	  		<button id="btn-save-repair" class="btn btn-info" aria-hidden="true" disabled>
+	  		<button id="btn-save-repair" class="btn btn-info" aria-hidden="true">
 		    	<i class="icon-ok icon-large"></i>Guardar
 		    </button>  			  	
 	  		<button class="btn" data-dismiss="modal" aria-hidden="true">
@@ -1858,3 +1961,6 @@
 		
 </div><!-- CONTENT -->
  <script src="${pageContext.request.contextPath}/resources/js/fixeala/imgur.js"></script>	
+ <script src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-datepicker.js"></script>	
+  <script src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-datepicker.es.js"></script>	
+ <link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/2.3.2/bootstrap-datepicker.css" rel="stylesheet">
