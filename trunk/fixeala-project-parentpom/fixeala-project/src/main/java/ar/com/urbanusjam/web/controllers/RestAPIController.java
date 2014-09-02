@@ -45,7 +45,7 @@ public class RestAPIController {
 			List<IssueDTO> issues = issueService.loadAllIssues();
 //			issues =  new ArrayList<IssueDTO>();
 			
-			if(issues.size() > 0 && issues == null){
+			if(issues.size() > 0 && issues != null){
 				for(IssueDTO issue : issues){
 					jsonArray.add(this.convertReclamoToJson(issue));
 				}
