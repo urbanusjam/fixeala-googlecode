@@ -15,7 +15,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="issue_update_history")
-public class IssueUpdateHistory implements Serializable {
+public class IssueHistory implements Serializable {
 
 	private static final long serialVersionUID = -3016074901901662598L;
 	
@@ -51,10 +51,10 @@ public class IssueUpdateHistory implements Serializable {
 	private String resolucion;
 
 	
-	public IssueUpdateHistory(){ }
+	public IssueHistory(){ }
 	
 	
-	public IssueUpdateHistory(Issue issue, User usuario,
+	public IssueHistory(Issue issue, User usuario,
 			GregorianCalendar fecha, String estado, String motivo,
 			String operacion, String observaciones) {
 		super();

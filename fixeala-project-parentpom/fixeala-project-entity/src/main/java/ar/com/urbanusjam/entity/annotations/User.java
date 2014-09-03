@@ -56,32 +56,13 @@ public class User implements UserDetails {
     
     @Column(name="last_name")
     private String apellido;
-    
-    @OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_area")
-    private Area area;
-    
-    @Column(name="gov_position")
-    private String cargo;
-    
-    @Column(name="gov_sub_area")
-    private String subArea;
-    
-    @Column(name="gov_sub_area_acronym")
-    private String siglaSubArea;
-    
+      
     @Column(name="city_of_residence")
     private String city;  
     
     @Column(name="province_of_residence")
     private String province;
-    
-    @Column(name="is_area")
-    private boolean isArea;
-    
-    @Column(name="is_verified_official")
-    private boolean verifiedOfficial;
-       
+           
     @Column(name="enabled")
     private boolean enabled;
     
@@ -194,38 +175,6 @@ public class User implements UserDetails {
 		this.apellido = apellido;
 	}
 	
-	public Area getArea() {
-		return area;
-	}
-
-	public void setArea(Area area) {
-		this.area = area;
-	}
-
-	public String getCargo() {
-		return cargo;
-	}
-
-	public void setCargo(String cargo) {
-		this.cargo = cargo;
-	}
-
-	public String getSubArea() {
-		return subArea;
-	}
-
-	public void setSubArea(String subArea) {
-		this.subArea = subArea;
-	}
-
-	public String getSiglaSubArea() {
-		return siglaSubArea;
-	}
-
-	public void setSiglaSubArea(String siglaSubArea) {
-		this.siglaSubArea = siglaSubArea;
-	}
-
 	public String getCity() {
 		return city;
 	}
@@ -242,14 +191,6 @@ public class User implements UserDetails {
 		this.province = province;
 	}
 
-	public boolean isArea() {
-		return isArea;
-	}
-
-	public void setArea(boolean isArea) {
-		this.isArea = isArea;
-	}
-
 	public boolean isEnabled() {
         return this.enabled;
     }
@@ -257,15 +198,7 @@ public class User implements UserDetails {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
-       
-    public boolean isVerifiedOfficial() {
-		return verifiedOfficial;
-	}
-
-	public void setVerifiedOfficial(boolean verifiedOfficial) {
-		this.verifiedOfficial = verifiedOfficial;
-	}
-	
+    
 	public void setRoles(Collection<Authority> roles) {
 		this.roles = roles;
 	}	

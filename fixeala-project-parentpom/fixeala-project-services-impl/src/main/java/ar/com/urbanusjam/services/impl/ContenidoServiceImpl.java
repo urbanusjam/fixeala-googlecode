@@ -20,14 +20,14 @@ import ar.com.urbanusjam.dao.IssueDAO;
 import ar.com.urbanusjam.dao.UserDAO;
 import ar.com.urbanusjam.entity.annotations.Issue;
 import ar.com.urbanusjam.entity.annotations.IssueFollow;
-import ar.com.urbanusjam.entity.annotations.IssueUpdateHistory;
+import ar.com.urbanusjam.entity.annotations.IssueHistory;
 import ar.com.urbanusjam.entity.annotations.MediaContent;
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.ContenidoService;
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.MailService;
 import ar.com.urbanusjam.services.dto.EmailDTO;
-import ar.com.urbanusjam.services.dto.IssueUpdateHistoryDTO;
+import ar.com.urbanusjam.services.dto.IssueHistoryDTO;
 import ar.com.urbanusjam.services.utils.Messages;
 import ar.com.urbanusjam.services.utils.Operation;
 
@@ -103,7 +103,7 @@ public class ContenidoServiceImpl implements ContenidoService {
 			completeFiles.add(file);
 		}
 		
-		IssueUpdateHistory revision = new IssueUpdateHistory();
+		IssueHistory revision = new IssueHistory();
 		revision.setFecha(this.getCurrentCalendar(new Date()));
 		revision.setUsuario(user);	
 		revision.setOperacion(Operation.CREATE);			
