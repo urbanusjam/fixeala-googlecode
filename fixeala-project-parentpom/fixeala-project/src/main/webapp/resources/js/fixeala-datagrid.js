@@ -178,7 +178,7 @@
             sortProperty: 'apellido' 
 		},
 		{	
-            label: '�ltimo acceso',
+            label: 'Ultimo acceso',
             property: 'lastLogin',
             sortable: true,
             sortProperty: 'lastLogin'            				         		

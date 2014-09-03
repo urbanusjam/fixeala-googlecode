@@ -647,9 +647,11 @@
 				         $('#btn-comment').prop('disabled',true);
 				      }
 				 });
+			  
+			  var $commentContainer = $('#issueComments');
 				
-			  $('#btn-comment').click(function() {				  
-				  
+			  $('#btn-comment').click(function() {
+				  				 	
 				  	blockPage($commentContainer);
 				  	
 					var message = $("#comment-text").val();
@@ -869,7 +871,7 @@
 			 				$(this).replaceWith(loader);
 			 				
 				 			$.ajax({
-		        			    url: "./watch/",
+		        			    url: './'+issueID+'/watch/',
 						 		type: "POST",	
 						 		data: data,							 
 						        success: function(data){
@@ -902,7 +904,7 @@
 			        		$(this).replaceWith(loader);
 			        	
 				 			$.ajax({
-		        			    url: "./unwatch",
+		        			    url: './'+issueID+'/unwatch/',
 						 		type: "POST",	
 						 		data: data,							 
 						        success: function(data){							        	

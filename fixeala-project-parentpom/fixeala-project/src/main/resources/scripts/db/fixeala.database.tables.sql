@@ -36,21 +36,6 @@ CREATE TABLE activation (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE area ( 
-	   id_area BIGINT(20) NOT NULL AUTO_INCREMENT,
-	   area_name VARCHAR(255) NULL,
-	   acronym VARCHAR(15) NULL,
-	   city VARCHAR(255) NULL,
-	   city_acronym VARCHAR(2) NULL,
-	   province VARCHAR(15) NULL,
-	   province_acronym VARCHAR(2) NULL,
-	   
-	   PRIMARY KEY (id_area),
-	   UNIQUE KEY (area_name)
-	   
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-	
 CREATE TABLE comment ( 	  
 	   id_comment BIGINT(20) NOT NULL AUTO_INCREMENT,    
 	   id_issue BIGINT(20) NOT NULL, 
@@ -64,8 +49,6 @@ CREATE TABLE comment (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-/**********************/
-/** new **/
 CREATE TABLE media_content ( 
 	   id_content BIGINT(20) NOT NULL AUTO_INCREMENT,
 	   id_issue BIGINT(20) NULL,	
@@ -91,8 +74,6 @@ CREATE TABLE media_content (
 CREATE TABLE issue (
 	   id_issue BIGINT(20) NOT NULL, 
 	   id_reporter BIGINT(20) NOT NULL,
-	   id_assigned_official BIGINT(20) NULL,
-	   id_area BIGINT(20) NULL,
 	   creation_date DATETIME NOT NULL,    	  
 	   last_update_date DATETIME NOT NULL,    	  
 	   address VARCHAR(255) NOT NULL,
@@ -106,7 +87,7 @@ CREATE TABLE issue (
 	   priority VARCHAR(64) NULL, 
 	   resolution_type VARCHAR(64) NULL, 	
 	   status VARCHAR(64) NOT NULL,
-	   is_verified TINYINT(1) NULL, /** modificado 21/08/14 **/
+	   is_verified TINYINT(1) NOT NULL 0,
 	   
 	   PRIMARY KEY (id_issue)
 	   
@@ -248,7 +229,6 @@ CREATE TABLE tag (
 	   
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;	
 
-
 CREATE TABLE user ( 
 	   id_user BIGINT(20) NOT NULL AUTO_INCREMENT,
 	   username VARCHAR(50) NOT NULL,
@@ -258,13 +238,7 @@ CREATE TABLE user (
 	   last_name VARCHAR(255) NULL,
 	   city_of_residence VARCHAR(64) NULL,
 	   province_of_residence VARCHAR(64) NULL,
-	   salt VARCHAR(25) NULL,	
-	   id_area BIGINT(20) NULL,
-	   gov_position VARCHAR(255) NULL,
-	   gov_sub_area VARCHAR(255) NULL,
-	   gov_sub_area_acronym VARCHAR(15) NULL,
-	   is_area TINYINT(1) NOT NULL,
-	   is_verified_official TINYINT(1) NOT NULL,
+	   salt VARCHAR(25) NULL,		   
 	   registration_date DATETIME NULL,     
 	   last_password_change_date DATETIME NULL,    	   
 	   last_login_date DATETIME NULL,   
@@ -294,10 +268,6 @@ CREATE TABLE user_role (
 /* ###################################################################################### */
 
 
-ALTER TABLE user
-    ADD CONSTRAINT FOREIGN KEY fk_user_1 (id_area)
-    REFERENCES area (id_area);
-        
 ALTER TABLE user_role
     ADD CONSTRAINT FOREIGN KEY fk_user_role_1 (id_user)
     REFERENCES user (id_user);
@@ -305,14 +275,6 @@ ALTER TABLE user_role
 ALTER TABLE issue
     ADD CONSTRAINT FOREIGN KEY fk_issue_1 (id_reporter)
     REFERENCES user (id_user);
-    
-ALTER TABLE issue
-    ADD CONSTRAINT FOREIGN KEY fk_issue_2 (id_assigned_official)
-    REFERENCES user (id_user);
-    
-ALTER TABLE issue
-    ADD CONSTRAINT FOREIGN KEY fk_issue_3 (id_area)
-    REFERENCES area (id_area);
     
 ALTER TABLE issue_repair
     ADD CONSTRAINT FOREIGN KEY fk_issue_repair_1 (id_issue)

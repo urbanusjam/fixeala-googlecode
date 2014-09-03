@@ -454,19 +454,10 @@ public class HomeController {
 	public @ResponseBody void getUserIssuesJSON(Model model, @PathVariable("userID") String userID,
 			HttpServletRequest request, HttpServletResponse response) throws IOException {
 				
-		UserDTO user = userService.getUserByUsername(userID); 
 		List<IssueDTO> dbIssues = new ArrayList<IssueDTO>();
 		List<IssueDTO> issues = new ArrayList<IssueDTO>();
-		
-//		if(user.hasRole("ROLE_AREA", user.getAuthorities()))
-//			dbIssues = issueService.loadIssuesByArea(user.getAreaNombre());
-//		
-//		if(user.hasRole("ROLE_ADMIN", user.getAuthorities()) 
-//				|| user.hasRole("ROLE_MANAGER", user.getAuthorities()))
-//			dbIssues = issueService.getIssuesAsignados(userID);
-//		
-//		else
-			dbIssues = issueService.loadIssuesByUser(userID);		
+	
+		dbIssues = issueService.loadIssuesByUser(userID);		
 		
 		JQueryDataTableParamModel param = DataTablesParamUtility.getParam(request);
         
@@ -631,7 +622,7 @@ public class HomeController {
 	
 	}
 	
-	
+	/**
 	@RequestMapping(value="/users/{userID}/loadBackendUsers", produces={"application/json; charset=ISO-8859-1"}, method = RequestMethod.POST)
 	public @ResponseBody void getBackendUsers(@PathVariable("userID") String userID,  
 			@RequestParam("areaID") String areaID, HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException {
@@ -717,11 +708,9 @@ public class HomeController {
             e.printStackTrace();
             response.setContentType("text/html");
             response.getWriter().print(e.getMessage());
-       }  	
-        
-      
-
+       }  
 	}
+	**/
 	
 	@RequestMapping(value="/users/{userID}/getIssueStatus", method = RequestMethod.GET)
 	public @ResponseBody String getIssueStatus(Model model,  
@@ -730,10 +719,8 @@ public class HomeController {
 	
 			IssueDTO issue = issueService.getIssueById(issueID);
 			model.addAttribute("currentIssueStatus", issue.getStatus());
-			model.addAttribute("isAssigned", issue.getAssignedOfficial().getUsername() != null ? true : false);
 			
 			String currentStatus = issue.getStatus();
-			boolean isAssigned = issue.getAssignedOfficial().getUsername() != null ? true : false; 
 			
 			List<String> statusList = new ArrayList<String>();
 			
@@ -796,14 +783,6 @@ public class HomeController {
 				
 				allProvinces = provArray.toString();
 				model.addAttribute("provinceList", allProvinces.length() == 0 ? "[{}]" : allProvinces);
-				
-//				if(user.hasRole("ROLE_ADMIN", user.getAuthorities()) 
-//						|| user.hasRole("ROLE_MANAGER", user.getAuthorities()) ){
-//					if(!isSameUser){
-//						return "redirect:/" + "error.html";
-//					}					
-//				}
-				
 				model.addAttribute("loggedUser", loggedUser);
 				model.addAttribute("loggedMatchesProfile", isSameUser);			
 				model.addAttribute("isActiveUser", user.isEnabled());
@@ -839,17 +818,7 @@ public class HomeController {
 				model.addAttribute("total_flagged", "0");
 				model.addAttribute("total_comments", commentsCounter);
 				model.addAttribute("total_widgets", "0");				
-								
-//				if(user.isVerifiedOfficial()){
-//					model.addAttribute("current_nombre", user.getNombre());
-//					model.addAttribute("current_apellido", user.getApellido());
-//					model.addAttribute("current_rol", user.getAuthorities().size() > 0 ? user.getAuthorities().get(0) : "");
-//					model.addAttribute("current_area", user.getAreaNombre());
-//					model.addAttribute("current_areaID", user.getAreaId());
-//					model.addAttribute("current_ciudad", user.getAreaCiudad());
-//					model.addAttribute("current_provincia", user.getAreaProvinciaSigla());
-//				}				
-				
+						
 		}catch(Exception e){
 			return "redirect:/" + "error.html";
 		}
