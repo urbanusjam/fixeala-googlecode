@@ -16,18 +16,12 @@ public class UserDTO implements Serializable {
 	private String email;
 	private String nombre;
 	private String apellido;
-	private String cargo;
-	private String areaId;
-	private String areaNombre;
-	private String areaCiudad;
-	private String areaProvinciaSigla;
-	private String subarea;
+	private String cargo;	
 	private String city;
 	private String province;
 	private Date registrationDate;
 	private Date lastLoginDate;
 	private List<String> authorities;	
-	private boolean verifiedOfficial;
 	private String accountStatus;
 	private boolean enabled;
 	private String rol;
@@ -106,46 +100,6 @@ public class UserDTO implements Serializable {
 		this.cargo = cargo;
 	}
 	
-	public String getAreaId() {
-		return areaId;
-	}
-
-	public void setAreaId(String areaId) {
-		this.areaId = areaId;
-	}
-
-	public String getAreaNombre() {
-		return areaNombre;
-	}
-
-	public void setAreaNombre(String areaNombre) {
-		this.areaNombre = areaNombre;
-	}
-
-	public String getAreaCiudad() {
-		return areaCiudad;
-	}
-
-	public void setAreaCiudad(String areaCiudad) {
-		this.areaCiudad = areaCiudad;
-	}
-
-	public String getAreaProvinciaSigla() {
-		return areaProvinciaSigla;
-	}
-
-	public void setAreaProvinciaSigla(String areaProvinciaSigla) {
-		this.areaProvinciaSigla = areaProvinciaSigla;
-	}
-	
-	public String getSubarea() {
-		return subarea;
-	}
-
-	public void setSubarea(String subarea) {
-		this.subarea = subarea;
-	}
-
 	public List<String> getAuthorities() {
 		return authorities;
 	}
@@ -162,14 +116,6 @@ public class UserDTO implements Serializable {
 		this.enabled = enabled;
 	}
 	
-	public boolean isVerifiedOfficial() {
-		return verifiedOfficial;
-	}
-
-	public void setVerifiedOfficial(boolean verifiedOfficial) {
-		this.verifiedOfficial = verifiedOfficial;
-	}
-
 	public String getCity() {
 		return city;
 	}

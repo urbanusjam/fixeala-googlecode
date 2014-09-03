@@ -37,13 +37,6 @@ public class IssueDTO implements Serializable {
 	public  String description;
 	public  Date creationDate;	
 	public  Date lastUpdateDate;	
-	public  String area;
-	
-	@XmlTransient
-	private AreaDTO assignedArea;
-	
-	@XmlTransient
-	private UserDTO assignedOfficial;
 	
 	@XmlTransient
 	private IssueRepair reparacion = new IssueRepair();
@@ -55,7 +48,7 @@ public class IssueDTO implements Serializable {
 	private Map<String, Object> tagsMap = new HashMap<String, Object>();
 	
 	@XmlTransient
-	private List<IssueUpdateHistoryDTO> historial = new ArrayList<IssueUpdateHistoryDTO>();
+	private List<IssueHistoryDTO> historial = new ArrayList<IssueHistoryDTO>();
 	
 	@XmlTransient
 	private List<MediaContent> contenidos = new ArrayList<MediaContent>();
@@ -164,30 +157,6 @@ public class IssueDTO implements Serializable {
 		this.description = description;
 	}
 	
-	public String getArea() {
-		return area;
-	}
-
-	public void setArea(String area) {
-		this.area = area;
-	}
-
-	public AreaDTO getAssignedArea() {
-		return assignedArea;
-	}
-
-	public void setAssignedArea(AreaDTO assignedArea) {
-		this.assignedArea = assignedArea;
-	}
-	
-	public UserDTO getAssignedOfficial() {
-		return assignedOfficial;
-	}
-
-	public void setAssignedOfficial(UserDTO assignedOfficial) {
-		this.assignedOfficial = assignedOfficial;
-	}
-	
 	public IssueRepair getReparacion() {
 		return reparacion;
 	}
@@ -212,11 +181,11 @@ public class IssueDTO implements Serializable {
 		this.tagsMap = tagsMap;
 	}
 
-	public List<IssueUpdateHistoryDTO> getHistorial() {
+	public List<IssueHistoryDTO> getHistorial() {
 		return historial;
 	}
 
-	public void setHistorial(List<IssueUpdateHistoryDTO> historial) {
+	public void setHistorial(List<IssueHistoryDTO> historial) {
 		this.historial = historial;
 	}
 		

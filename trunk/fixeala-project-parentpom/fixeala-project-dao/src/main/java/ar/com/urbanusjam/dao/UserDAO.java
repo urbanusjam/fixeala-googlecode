@@ -24,8 +24,6 @@ public interface UserDAO extends /*JpaRepository<User, Long>,*/ UserDetailsManag
 
 	public List<User> findAllActiveUsers();
 	
-//	public List<User> findUsersByArea(String areaID);
-	
 	public List<User> findUsersByCriteria(UserCriteriaSearch criteria);
 	
 	public void createUser(User user);

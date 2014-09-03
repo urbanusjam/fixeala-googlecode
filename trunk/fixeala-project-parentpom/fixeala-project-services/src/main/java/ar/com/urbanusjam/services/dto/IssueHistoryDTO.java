@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class IssueUpdateHistoryDTO implements Serializable {
+public class IssueHistoryDTO implements Serializable {
 	
 	private static final long serialVersionUID = 3825783987489912575L;
 	

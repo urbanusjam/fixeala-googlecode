@@ -1,9 +1,9 @@
 package ar.com.urbanusjam.dao;
 
-import ar.com.urbanusjam.entity.annotations.IssueUpdateHistory;
+import ar.com.urbanusjam.entity.annotations.IssueHistory;
 
 public interface IssueHistoryDAO {
 	
-	public void saveHistorial(IssueUpdateHistory historial);
+	public void saveHistorial(IssueHistory historial);
 
 }

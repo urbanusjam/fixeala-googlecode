@@ -107,20 +107,6 @@ public class IssueDAOImpl implements IssueDAO {
 		return issues;
 	}
 	
-//	@Override
-//	public List<Issue> getIssuesByArea(String areaName) {
-//		List<Issue> issues = new ArrayList<Issue>();
-//		issues = this.findWhere(" assignedArea.nombre = ? ", new Object[]{areaName});
-//		return issues;
-//	}
-	
-//	@Override
-//	public List<Issue> getAssignedIssuesByVerifiedOfficial(String username) {
-//		List<Issue> issues = new ArrayList<Issue>();
-//		issues = this.findWhere(" assignedOfficial.username = ? ", new Object[]{ username});
-//		return issues;
-//	}
-
 	@Override
 	public Issue findIssueById(String issueID) {
 		try{

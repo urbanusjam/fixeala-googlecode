@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import ar.com.urbanusjam.dao.CommentDAO;
 import ar.com.urbanusjam.dao.IssueDAO;
 import ar.com.urbanusjam.dao.IssueFollowDAO;
 import ar.com.urbanusjam.dao.IssuePageViewDAO;
@@ -34,9 +33,9 @@ import ar.com.urbanusjam.entity.annotations.Comment;
 import ar.com.urbanusjam.entity.annotations.Issue;
 import ar.com.urbanusjam.entity.annotations.IssueFollow;
 import ar.com.urbanusjam.entity.annotations.IssueFollowPK;
+import ar.com.urbanusjam.entity.annotations.IssueHistory;
 import ar.com.urbanusjam.entity.annotations.IssuePageView;
 import ar.com.urbanusjam.entity.annotations.IssueRepair;
-import ar.com.urbanusjam.entity.annotations.IssueUpdateHistory;
 import ar.com.urbanusjam.entity.annotations.IssueVote;
 import ar.com.urbanusjam.entity.annotations.IssueVotePK;
 import ar.com.urbanusjam.entity.annotations.MediaContent;
@@ -50,8 +49,8 @@ import ar.com.urbanusjam.services.dto.EmailDTO;
 import ar.com.urbanusjam.services.dto.IssueCriteriaSearch;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.IssueFollowDTO;
+import ar.com.urbanusjam.services.dto.IssueHistoryDTO;
 import ar.com.urbanusjam.services.dto.IssuePageViewDTO;
-import ar.com.urbanusjam.services.dto.IssueUpdateHistoryDTO;
 import ar.com.urbanusjam.services.dto.IssueVoteDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
 import ar.com.urbanusjam.services.utils.DateUtils;
@@ -72,7 +71,7 @@ public class IssueServiceImpl implements IssueService {
 	private UserDAO userDAO;
 	private ProvinceDAO provinceDAO;
 	private TagDAO tagDAO;
-	private CommentDAO commentDAO;
+//	private CommentDAO commentDAO;
 	private IssueFollowDAO issueFollowDAO;
 	private IssuePageViewDAO issuePageViewDAO;
 	private IssueVoteDAO issueVoteDAO;
@@ -107,9 +106,9 @@ public class IssueServiceImpl implements IssueService {
 		this.tagDAO = tagDAO;
 	}
 	
-	public void setCommentDAO(CommentDAO commentDAO) {
-		this.commentDAO = commentDAO;
-	}
+//	public void setCommentDAO(CommentDAO commentDAO) {
+//		this.commentDAO = commentDAO;
+//	}
 	
 	public void setIssueFollowDAO(IssueFollowDAO issueFollowDAO) {
 		this.issueFollowDAO = issueFollowDAO;
@@ -192,7 +191,7 @@ public class IssueServiceImpl implements IssueService {
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor={MessagingException.class})
 	public void updateIssueStatus(String username, String issueID, String newStatus, String resolution, String obs) throws MessagingException {
 	
-		IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
+		IssueHistoryDTO revision = new IssueHistoryDTO();
 		revision.setFecha(new Date());
 		revision.setUsername(username);
 		revision.setOperacion(Operation.UPDATE);			
@@ -249,122 +248,7 @@ public class IssueServiceImpl implements IssueService {
 			Log.debug("Error en el envio del email a los seguidores del reclamo.");			
 		}	
 	}
-	
-	
-	@Override
-	public void assignUserToIssue(String issueID, String username) {
-
-		Issue issue = new Issue();
-		issue = issueDAO.findIssueById(issueID);
-		User user = userDAO.loadUserByUsername(username);
-		issue.setAssignedOfficial(user);
 		
-		IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
-		revision.setFecha(new Date());
-		revision.setUsername(issue.getReporter().getUsername());			
-		revision.setNroReclamo(issue.getId());			
-		revision.setOperacion(Operation.UPDATE);			
-		revision.setMotivo("MODIFICACION");			
-		revision.setEstado(issue.getStatus());
-		revision.setObservaciones("El reclamo ha sido asignado a " + user.getUsername().toUpperCase() + ".");
-		issue.getRevisiones().add(convertTo(revision, user));
-		
-		issueDAO.updateIssue(issue);
-	}
-	
-	/**
-	private void asignarUsuarioDefault(Issue issue) {
-		
-		//asignar USUARIO (ADMIN o MANAGER) seg�n AREA
-		//obtener usuarios del area
-		List<User> users = new ArrayList<User>();
-		users = userDAO.findUsersByArea(String.valueOf(issue.getAssignedArea().getId()));
-				
-			for(User u : users){
-									
-					List<Issue> assignedIssues = new ArrayList<Issue>();
-					assignedIssues = issueDAO.getAssignedIssuesByVerifiedOfficial(u.getUsername());
-					
-					//asignar si el usuario: 
-					
-						//- no tiene reclamos asignados
-						if(assignedIssues.size() == 0){
-							//- lista de reclamos == 0
-							issue.setAssignedOfficial(u);
-							break;
-						}						
-						
-						//- tiene reclamos asignados
-						else{
-							boolean hasPendingIssues = false;
-							for(Issue i : assignedIssues){
-								//- todos resueltos, cerrados o archivados
-								if( i.getStatus().equals(IssueStatus.SOLVED) 
-										|| i.getStatus().equals(IssueStatus.CLOSED) ){
-									hasPendingIssues = false;
-								}
-								else
-									hasPendingIssues = true;
-							}
-							
-							if(!hasPendingIssues){
-								issue.setAssignedOfficial(u);
-								break;
-							}
-							
-							else{
-								//- tiene la menor cantidad de reclamos asignados
-//								if(hasLessAssignedIssues(users, u)){
-//									issue.setAssignedOfficial(u);
-//									break;
-//								}
-								//- random
-								//else{
-									Random random = new Random();
-									int randomUser = 0 + random.nextInt(users.size()-1);
-									issue.setAssignedOfficial(users.get(randomUser));
-									break;
-								//}
-							}
-							
-						}
-					
-				}
-				
-		
-	}
-	**/
-	
-	/**
-	private boolean hasLessAssignedIssues(List<User> users, User user){
-		HashMap<String, Integer> unSorted = new HashMap<String, Integer>();
-		
-		for(User u : users){
-			unSorted.put(u.getUsername(), (issueDAO.getAssignedIssuesByVerifiedOfficial(u.getUsername()).size()));
-		}
-		
-		Map<String, Integer> sorted = (SortedMap<String, Integer>) MapUtil.sortByComparator(unSorted);
-		
-		if(sorted.entrySet().iterator().next().getKey().equals(user.getUsername()))
-			return true;
-		
-		return false;
-		
-	}**/
-	
-	/**
-	@Override
-	public List<IssueDTO> getIssuesAsignados(String username){
-		List<Issue> issues = new ArrayList<Issue>();
-		issues = issueDAO.getAssignedIssuesByVerifiedOfficial(username);
-		List<IssueDTO> issuesDTO = new ArrayList<IssueDTO>();
-		for(Issue issue : issues){		
-			issuesDTO.add(convertToDTO(issue));
-		}
-		return issuesDTO;	
-	}**/
-	
-
 	@Override
 	public List<IssueDTO> loadAllIssues() {
 		List<Issue> issues = new ArrayList<Issue>();
@@ -415,20 +299,7 @@ public class IssueServiceImpl implements IssueService {
 		}
 		return issuesDTO;	
 	}
-	
-	/**
-	@Override
-	public List<IssueDTO> loadIssuesByArea(String areaName) {
-		List<Issue> issues = new ArrayList<Issue>();
-		issues = issueDAO.getIssuesByArea(areaName);
-		List<IssueDTO> issuesDTO = new ArrayList<IssueDTO>();
-		for(Issue issue : issues){			
-			issuesDTO.add(convertToDTO(issue));
-		}
-		return issuesDTO;	
-	}**/
-
-	
+		
 	@Override
 	public IssueDTO getIssueById(String issueID){
 		Issue issue = issueDAO.findIssueById(issueID);
@@ -463,7 +334,7 @@ public class IssueServiceImpl implements IssueService {
 		Comment comment = new Comment(issue, user, getCurrentCalendar(commentDTO.getFecha()), commentDTO.getMensaje(), false);
 				
 		//revision
-		IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
+		IssueHistoryDTO revision = new IssueHistoryDTO();
 		revision.setFecha(new Date());
 		revision.setUsername(comment.getUsuario().getUsername());			
 		revision.setOperacion(Operation.UPDATE);			
@@ -504,16 +375,6 @@ public class IssueServiceImpl implements IssueService {
 		
 	}
 
-	@Override
-	public List<CommentDTO> getCommentsByIssue(String issueID) {
-		List<Comment> comentarios = new ArrayList<Comment>();
-		List<CommentDTO> comentariosDTO = new ArrayList<CommentDTO>();
-		comentarios = commentDAO.findCommentsByIssueId(Long.valueOf(issueID));
-		for(Comment c : comentarios){
-			comentariosDTO.add(convertToDTO(c));
-		}		
-		return comentariosDTO;
-	}
 	
 	@Override
 	public List<IssueDTO> searchByTagOrStatus(String searchType, String value) {
@@ -535,80 +396,9 @@ public class IssueServiceImpl implements IssueService {
 	
 	/********************************************************************************/
 	
-//	public Area convertTo(AreaDTO areaDTO){
-//		Area area = new Area();
-//		area.setNombre(areaDTO.getAreaName());
-//		area.setSigla(areaDTO.getAreaAcronym());
-//		area.setCiudad(areaDTO.getCityName());
-//		area.setCiudadSigla(areaDTO.getCityAcronym());
-//		area.setProvincia(areaDTO.getProvinceName());
-//		area.setProvinciaSigla(areaDTO.getProvinceAcronym());
-//		return area;
-//	}
-//	
-//	public AreaDTO convertTo(Area area){
-//		AreaDTO areaDTO = new AreaDTO();
-//		areaDTO.setAreaName(area.getNombre());
-//		areaDTO.setAreaAcronym(area.getSigla());
-//		areaDTO.setCityName(area.getCiudad());
-//		areaDTO.setCityAcronym(area.getCiudadSigla());
-//		areaDTO.setProvinceName(area.getProvincia());
-//		areaDTO.setProvinceAcronym(area.getProvinciaSigla());
-//		return areaDTO;
-//	}
-	
-//	public IssueRepair convertTo(IssueRepairDTO licitacionDTO){
-//		IssueRepair licitacion = new IssueRepair();
-//		licitacion.setId(Long.valueOf(licitacionDTO.getNroReclamo()));
-//		licitacion.setNroLicitacion(licitacionDTO.getNroLicitacion());
-//		licitacion.setNroExpediente(licitacionDTO.getNroExpediente());
-//		licitacion.setObra(licitacionDTO.getObra());
-//		licitacion.setEstadoObra(licitacionDTO.getEstadoObra());
-//		licitacion.setPlazo(licitacionDTO.getPlazo());
-//		licitacion.setUnidadEjecutora(licitacionDTO.getUnidadEjecutora());
-//		licitacion.setUnidadFinanciamiento(licitacionDTO.getUnidadFinanciamiento());
-//		licitacion.setContratistaNombre(licitacionDTO.getEmpresaNombre());
-//		licitacion.setContratistaCuit(licitacionDTO.getEmpresaCuit());	
-//		licitacion.setRepresentanteTecnicoNombre(licitacionDTO.getRepresentanteNombre());
-//		licitacion.setRepresentanteTecnicoMatricula(licitacionDTO.getRepresentanteMatricula());	
-//		licitacion.setPresupuestoAdjudicacion(licitacionDTO.getPresupuestoAdjudicacion());
-//		licitacion.setPresupuestoFinal(licitacionDTO.getPresupuestoFinal());
-//		licitacion.setFechaEstimadaInicio(licitacionDTO.getFechaEstimadaInicio() != null ? licitacionDTO.getFechaEstimadaInicio() : null );
-//		licitacion.setFechaEstimadaFin(licitacionDTO.getFechaEstimadaFin() != null ? licitacionDTO.getFechaEstimadaFin() : null);
-//		licitacion.setFechaRealInicio(licitacionDTO.getFechaRealInicio() != null ? licitacionDTO.getFechaRealInicio() : null);
-//		licitacion.setFechaRealFin(licitacionDTO.getFechaRealFin() != null ? licitacionDTO.getFechaRealFin() : null);
-//		licitacion.setObservaciones(licitacionDTO.getObservaciones());
-//		return licitacion;
-//	}
-	
-//	public IssueRepairDTO convertTo(IssueRepair licitacion){
-//		
-//		IssueRepairDTO licitacionDTO = new IssueRepairDTO();
-//		licitacionDTO.setNroLicitacion(licitacion.getNroLicitacion());
-//		licitacionDTO.setNroExpediente(licitacion.getNroExpediente());
-//		licitacionDTO.setObra(licitacion.getObra());
-//		licitacionDTO.setEstadoObra(licitacion.getEstadoObra());
-//		licitacionDTO.setPlazo(licitacion.getPlazo());
-//		licitacionDTO.setUnidadEjecutora(licitacion.getUnidadEjecutora());
-//		licitacionDTO.setUnidadFinanciamiento(licitacion.getUnidadFinanciamiento());
-//		licitacionDTO.setEmpresaNombre(licitacion.getContratistaNombre());
-//		licitacionDTO.setEmpresaCuit(licitacion.getContratistaCuit());
-//		licitacionDTO.setRepresentanteNombre(licitacion.getRepresentanteTecnicoNombre());
-//		licitacionDTO.setRepresentanteMatricula(licitacion.getRepresentanteTecnicoMatricula());
-//		licitacionDTO.setPresupuestoAdjudicacion(licitacion.getPresupuestoAdjudicacion());
-//		licitacionDTO.setPresupuestoFinal(licitacion.getPresupuestoFinal());
-//		licitacionDTO.setFechaEstimadaInicio(licitacion.getFechaEstimadaInicio());
-//		licitacionDTO.setFechaEstimadaFin(licitacion.getFechaEstimadaFin());
-//		licitacionDTO.setFechaRealInicio(licitacion.getFechaRealInicio());
-//		licitacionDTO.setFechaRealFin(licitacion.getFechaRealFin());
-//		licitacionDTO.setObservaciones(licitacion.getObservaciones());
-//		return licitacionDTO;
-//	}
-	
-	
-	public IssueUpdateHistory convertTo(IssueUpdateHistoryDTO historialDTO, User user){
+	public IssueHistory convertTo(IssueHistoryDTO historialDTO, User user){
 		
-		IssueUpdateHistory historial = new IssueUpdateHistory();	
+		IssueHistory historial = new IssueHistory();	
 		historial.setFecha(this.getCurrentCalendar(historialDTO.getFecha()));	
 		historial.setUsuario(user);
 		historial.setOperacion(historialDTO.getOperacion());
@@ -621,9 +411,9 @@ public class IssueServiceImpl implements IssueService {
 		
 	}
 	
-	public IssueUpdateHistoryDTO convertTo(IssueUpdateHistory historial){
+	public IssueHistoryDTO convertTo(IssueHistory historial){
 		
-		IssueUpdateHistoryDTO historialDTO = new IssueUpdateHistoryDTO();
+		IssueHistoryDTO historialDTO = new IssueHistoryDTO();
 		
 		historialDTO.setFecha(historial.getFecha().getTime());	
 		historialDTO.setUsername(historial.getUsuario().getUsername());
@@ -663,13 +453,18 @@ public class IssueServiceImpl implements IssueService {
 		issue.setDescription(issueDTO.getDescription());
 		
 		//history
-		for(IssueUpdateHistoryDTO historial : issueDTO.getHistorial()){
+		for(IssueHistoryDTO historial : issueDTO.getHistorial()){
 			issue.addRevision(convertTo(historial, user));
 		}
 		
 		//votes
 		for(IssueVoteDTO vote : issueDTO.getVotes()){
 			issue.addVote(convertTo(vote));
+		}
+		
+		//followers
+		for(IssueFollowDTO follower : issueDTO.getFollowers()){
+			issue.addFollower(convertTo(follower));
 		}
 				
 		//licitacion
@@ -801,8 +596,8 @@ public class IssueServiceImpl implements IssueService {
 		issueDTO.setTags(tagNames);
 	
 		//historial
-		List<IssueUpdateHistoryDTO> historialDTO = new ArrayList<IssueUpdateHistoryDTO>();		
-		for(IssueUpdateHistory revision : issue.getRevisiones()){
+		List<IssueHistoryDTO> historialDTO = new ArrayList<IssueHistoryDTO>();		
+		for(IssueHistory revision : issue.getRevisiones()){
 			historialDTO.add(convertTo(revision));
 		}		
 		issueDTO.setHistorial(historialDTO);
@@ -869,8 +664,7 @@ public class IssueServiceImpl implements IssueService {
 		issueDTO.setTotalVotes(this.countIssueVotes(String.valueOf(issue.getId()))); // llamada al DAO
 		issueDTO.setTotalFollowers(issue.getFollowers().size());
 		issueDTO.setTotalComments(issue.getComentarios().size());	
-		issueDTO.setAssignedOfficial(null);
-		
+	
 		return issueDTO;
 	}
 	
@@ -1150,7 +944,7 @@ public class IssueServiceImpl implements IssueService {
 		Issue issue = issueDAO.findIssueById(String.valueOf(repair.getId()));
 		User user = userDAO.loadUserByUsername(username);
 		
-		IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
+		IssueHistoryDTO revision = new IssueHistoryDTO();
 		revision.setFecha(new Date());
 		revision.setUsername(username);
 		revision.setNroReclamo(Long.valueOf(repair.getId()));
@@ -1173,7 +967,7 @@ public class IssueServiceImpl implements IssueService {
 		Issue issue = issueDAO.findIssueById(issueID);
 		User user = userDAO.loadUserByUsername(username);
 		
-		IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
+		IssueHistoryDTO revision = new IssueHistoryDTO();
 		revision.setFecha(new Date());
 		revision.setUsername(username);
 		revision.setNroReclamo(Long.valueOf(issueID));

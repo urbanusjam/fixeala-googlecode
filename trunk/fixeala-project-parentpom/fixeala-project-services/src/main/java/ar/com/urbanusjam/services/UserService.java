@@ -17,13 +17,11 @@ public interface UserService extends UserDetailsService {
 	public UserDTO getUserByUsername(String username) throws UsernameNotFoundException;	
 	public User loadUserByUsername(String username) throws UsernameNotFoundException;
 	public Long getUserId(String username) throws UsernameNotFoundException;
-//	public List<UserDTO> loadVerifiedUsersByArea(String idArea);
 	public List<UserDTO> loadAllActiveUsers();
 	  
     public String findUsernameByPasswordToken(String token);    
     public String findUsernameByActivationToken(String token);    
     public String findUsernameByEmail(String email);
-//    public String findPassword(String username, String password);
     
     public boolean usernameExists(String username);	
 	public boolean emailExists(String email);
@@ -35,7 +33,6 @@ public interface UserService extends UserDetailsService {
     
     public void deleteActivationToken(String token);
     public void deleteAccountAndToken(String username);
-//  public void deletePasswordToken(String token);    
 	
 	public void createAccount(UserDTO userDTO) throws Exception;	
 	public void activateAccount(String username) throws UsernameNotFoundException, Exception;

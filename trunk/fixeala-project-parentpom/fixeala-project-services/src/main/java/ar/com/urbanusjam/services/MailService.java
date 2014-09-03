@@ -8,6 +8,11 @@ import ar.com.urbanusjam.services.dto.EmailDTO;
 
 public interface MailService {
 	
+	/** 
+	 * TODO
+	 * 		- agrupar parametros en EmailDTO
+	 * 		- unir servicios comunes
+	 */
 	public void sendActivationRequestEmail(String username, String token, String email) throws MessagingException, MailException;
 	
 	public void sendActivationSuccessEmail(String username, String email) throws MessagingException, MailException;

@@ -13,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
@@ -75,18 +74,13 @@ public class Issue implements Serializable  {
 	@Column(name = "status")
 	private String status;
 	
-	@OneToOne
-	@JoinColumn(name = "id_assigned_official")
-	private User assignedOfficial;
-	
-	@ManyToOne
-	@JoinColumn(name = "id_area")
-	private Area assignedArea;
+	@Column(name = "is_verified")
+	private boolean isVerified;
 		
     @OneToMany(mappedBy="issue", fetch = FetchType.LAZY)  
     @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.ALL})	
     @OrderBy("fecha DESC")
-	private Set<IssueUpdateHistory> revisiones;
+	private Set<IssueHistory> revisiones;
 
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn  
@@ -118,7 +112,7 @@ public class Issue implements Serializable  {
 	
 	public Issue(){   
 		tagsList = new HashSet<Tag>(); 
-		revisiones = new HashSet<IssueUpdateHistory>();
+		revisiones = new HashSet<IssueHistory>();
 		contenidos = new HashSet<MediaContent>();
 		comentarios = new HashSet<Comment>();
 		votes = new HashSet<IssueVote>();
@@ -262,23 +256,7 @@ public class Issue implements Serializable  {
 	public void setResolution(String resolution) {
 		this.resolution = resolution;
 	}
-
-	public User getAssignedOfficial() {
-		return assignedOfficial;
-	}
-
-	public void setAssignedOfficial(User assignedOfficial) {
-		this.assignedOfficial = assignedOfficial;
-	}
 	
-	public Area getAssignedArea() {
-		return assignedArea;
-	}
-
-	public void setAssignedArea(Area assignedArea) {
-		this.assignedArea = assignedArea;
-	}
-
 	public Set<Tag> getTagsList() {
 		return tagsList;
 	}
@@ -287,11 +265,11 @@ public class Issue implements Serializable  {
 		this.tagsList = tagsList;
 	}
 		
-	public Set<IssueUpdateHistory> getRevisiones() {
+	public Set<IssueHistory> getRevisiones() {
 		return revisiones;
 	}
 
-	public void setRevisiones(Set<IssueUpdateHistory> revisiones) {
+	public void setRevisiones(Set<IssueHistory> revisiones) {
 		this.revisiones = revisiones;
 	}
 	
@@ -363,10 +341,10 @@ public class Issue implements Serializable  {
 	     }			
 	}
 	
-	public void addRevision(IssueUpdateHistory update) {		
+	public void addRevision(IssueHistory update) {		
 		if (update != null) {
 	        if (revisiones == null) {
-	        	revisiones = new HashSet<IssueUpdateHistory>();          
+	        	revisiones = new HashSet<IssueHistory>();          
 	        }
 	        revisiones.add(update);
 	        update.setIssue(this);
@@ -391,6 +369,22 @@ public class Issue implements Serializable  {
 	        contenidos.add(contenido);
 	        contenido.setIssue(this);
 	     }		
+	}
+	
+	public void addFollower(IssueFollow follower) {		
+		if (follower != null) {
+	        if (followers == null) {
+	        	followers = new HashSet<IssueFollow>();          
+	        }
+	        followers.add(follower);
+	        follower.setIssue(this);
+	     }			
+	}
+	
+	public void removeFollower(IssueFollow follower) {	
+		if (getFollowers().contains(follower)) {
+			getFollowers().remove(follower);
+		}	   		
 	}
 	
 	@Override

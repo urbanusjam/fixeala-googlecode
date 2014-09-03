@@ -6,7 +6,7 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 import ar.com.urbanusjam.dao.IssueHistoryDAO;
-import ar.com.urbanusjam.entity.annotations.IssueUpdateHistory;
+import ar.com.urbanusjam.entity.annotations.IssueHistory;
 
 @Repository
 public class IssueHistoryDAOImpl implements IssueHistoryDAO {
@@ -17,7 +17,7 @@ public class IssueHistoryDAOImpl implements IssueHistoryDAO {
 	public IssueHistoryDAOImpl() {}
 
 	@Override
-	public void saveHistorial(IssueUpdateHistory historial) {
+	public void saveHistorial(IssueHistory historial) {
 		entityManager.persist(historial);		
 	}
 	

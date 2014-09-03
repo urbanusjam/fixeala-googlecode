@@ -115,24 +115,7 @@ public class UserServiceImpl implements UserService {
 		
 		return usersDTO;
 	}
-	/**
-	@throws Exception 
-	 * @throws UsernameNotFoundException 
-	 * @Override
-	public List<UserDTO> loadVerifiedUsersByArea(String areaID) {
-		List<User> users = userDAO.findUsersByArea(areaID);
-		List<UserDTO> usersDTO = new ArrayList<UserDTO>();
-		
-		for(User u : users){	
-			UserDTO uDTO = convertToDTO(u);
-			usersDTO.add(uDTO);	
-		}
-		return usersDTO;
-	}
-	 **/
 	
-	
-
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = MessagingException.class)
 	public void changePassword(PasswordChangeDTO passwordChange) throws Exception {
@@ -305,19 +288,6 @@ public class UserServiceImpl implements UserService {
 		user.setProvince(userDTO.getProvince());
 		user.setRegistrationDate(userDTO.getRegistrationDate());		
 		
-//		if(userDTO.isVerifiedOfficial()){
-//			user.setVerifiedOfficial(true);
-//			user.setNombre(userDTO.getNombre());
-//			user.setApellido(userDTO.getApellido());
-//			user.setCargo(userDTO.getCargo());
-//			user.setSubArea(userDTO.getSubarea());
-//			user.setArea(areaDAO.getAreaById(userDTO.getAreaId()));
-//		}
-//		
-//		else{
-			
-//		}
-		
 		return user;
 	}
 	
@@ -334,24 +304,10 @@ public class UserServiceImpl implements UserService {
 		userDTO.setAuthorities(roles);
 		userDTO.setEnabled(user.isEnabled());				
 		userDTO.setRegistrationDate(user.getRegistrationDate());		
-		userDTO.setLastLoginDate(user.getLastLoginDate());		
-		
-//		if(user.isVerifiedOfficial()){
-//			userDTO.setVerifiedOfficial(user.isVerifiedOfficial());
-//			userDTO.setNombre(user.getNombre());
-//			userDTO.setApellido(user.getApellido());
-//			userDTO.setCargo(user.getCargo());
-//			userDTO.setAreaId(String.valueOf(user.getArea().getId()));
-//			userDTO.setAreaNombre(user.getArea().getNombre());
-//			userDTO.setAreaCiudad(user.getArea().getCiudad());
-//			userDTO.setAreaProvinciaSigla(user.getArea().getProvinciaSigla());
-//		}
-//		
-//		else{
-			userDTO.setCity(user.getCity());
-			userDTO.setProvince(user.getProvince());
-//		}
-		
+		userDTO.setLastLoginDate(user.getLastLoginDate());			
+		userDTO.setCity(user.getCity());
+		userDTO.setProvince(user.getProvince());
+
 		if(user.isEnabled())
 			userDTO.setAccountStatus("ACTIVO");
 		else

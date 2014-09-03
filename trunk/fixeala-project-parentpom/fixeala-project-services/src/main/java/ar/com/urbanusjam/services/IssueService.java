@@ -14,7 +14,6 @@ import ar.com.urbanusjam.services.dto.IssueCriteriaSearch;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.IssueFollowDTO;
 import ar.com.urbanusjam.services.dto.IssuePageViewDTO;
-import ar.com.urbanusjam.services.dto.IssueRepairDTO;
 import ar.com.urbanusjam.services.dto.IssueVoteDTO;
 
 public interface IssueService {
@@ -23,7 +22,6 @@ public interface IssueService {
 	public void reportIssue(IssueDTO issue);	
 	public void updateIssue(IssueDTO issue) throws MessagingException, MailException;		
 	public void updateIssueStatus(String username, String issueID, String newStatus, String resolution, String obs) throws MessagingException, MailException;	
-	public void assignUserToIssue(String issueID, String username);
 	public IssueDTO getIssueById(String issueID);	
 	public List<IssueDTO> loadAllIssues();	
 	public List<IssueDTO> loadIssues(int numberOfResults);	
@@ -35,7 +33,6 @@ public interface IssueService {
 		
 	//comments
 	public void postComment(CommentDTO comment) throws MessagingException, MailException;		
-	public List<CommentDTO> getCommentsByIssue(String issueID);
 	
 	//repair
 	public void addReparacion(IssueRepair repair, String username);
@@ -50,21 +47,19 @@ public interface IssueService {
 	public boolean isUserFollowingIssue(IssueFollowDTO followDTO);
 	public List<String> getIssueFollowers(String issueID);
 	public List<String> getUserFollowings(String username);
-	
-	//pageviews
-	public boolean trackIssuePageView(IssuePageViewDTO pageviewDTO);
-	public int getIssuePageViews(String issueID);
+	public String[] getFollowersEmails(Set<IssueFollow> followers, String reporterEmail);
 	
 	//votes
 	public void voteIssue(IssueVoteDTO voteDTO);
 	public IssueVoteDTO getCurrentVote(String issueID, String username);
 	public Long countIssueVotes(String issueID);	
 	
+	//pageviews
+	public boolean trackIssuePageView(IssuePageViewDTO pageviewDTO);
+	public int getIssuePageViews(String issueID);
+	
 	//provinces
 	public List<String> loadProvinces();
 	public List<String> loadLocalityByProvince(String province);
-	
-	//util
-	public String[] getFollowersEmails(Set<IssueFollow> followers, String reporterEmail);
-	
+		
 }
