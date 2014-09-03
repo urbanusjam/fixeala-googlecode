@@ -44,7 +44,7 @@ import ar.com.urbanusjam.services.dto.CommentDTO;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.IssueFollowDTO;
 import ar.com.urbanusjam.services.dto.IssuePageViewDTO;
-import ar.com.urbanusjam.services.dto.IssueUpdateHistoryDTO;
+import ar.com.urbanusjam.services.dto.IssueHistoryDTO;
 import ar.com.urbanusjam.services.dto.IssueVoteDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
 import ar.com.urbanusjam.services.utils.DateUtils;
@@ -367,9 +367,9 @@ public class IssueController {
 				
 				jsonArray = new JSONArray();
 				
-				List<IssueUpdateHistoryDTO> sub = (List<IssueUpdateHistoryDTO>) elements.subList(from, to + 1); //sublist toma el item en la posicion anterior al toIndex que se le pasa
+				List<IssueHistoryDTO> sub = (List<IssueHistoryDTO>) elements.subList(from, to + 1); //sublist toma el item en la posicion anterior al toIndex que se le pasa
 				
-				for(IssueUpdateHistoryDTO update : sub){
+				for(IssueHistoryDTO update : sub){
 					int index = from + (sub.indexOf(update) + 1);
 					
 					JSONObject obj = new JSONObject();
@@ -622,7 +622,7 @@ public class IssueController {
 				issue.setId(String.valueOf(idIssue));
 
 				// history
-				IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
+				IssueHistoryDTO revision = new IssueHistoryDTO();
 				revision.setFecha(new Date());
 				revision.setUsername(userDTO.getUsername());
 				revision.setOperacion(Operation.CREATE);
@@ -739,7 +739,7 @@ public class IssueController {
 				}
 
 				// history
-				IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
+				IssueHistoryDTO revision = new IssueHistoryDTO();
 				revision.setFecha(new Date());
 				revision.setUsername(userDB.getUsername());
 				revision.setOperacion(Operation.UPDATE);
@@ -871,42 +871,6 @@ public class IssueController {
 		}
 	}
 
-	@RequestMapping(value = "/issues/assignUser", method = RequestMethod.POST)
-	public @ResponseBody
-	AlertStatus doAssignUser(@RequestParam("issueID") String issueID,
-			@RequestParam("selectedUser") String selectedUser,
-			HttpServletRequest request) throws ParseException {
-
-		try {
-			User user = getCurrentUser(SecurityContextHolder.getContext()
-					.getAuthentication());
-			UserDetails userDB = userService.loadUserByUsername(user
-					.getUsername());
-
-			if (userDB == null) {
-				return new AlertStatus(false,
-						"Debe estar logueado para ingresar un nuevo reclamo.");
-			}
-
-			else {
-				issueService.assignUserToIssue(issueID, selectedUser);
-				return new AlertStatus(true, "El reclamo ha sido actualizado.");
-			}
-
-		} catch (AccessDeniedException e) {
-			return new AlertStatus(false,
-					"Debe estar logueado para ingresar un nuevo reclamo.");
-		}
-	}
-
-	@RequestMapping(value = "/issues/getAvailableUsers/{areaID}", produces = "application/json", method = RequestMethod.GET)
-	public @ResponseBody
-	List<UserDTO> loadAvailableUsers(@PathVariable("areaID") String areaID,
-			HttpServletRequest request) {
-		List<UserDTO> u = null; // userService.loadVerifiedUsersByArea(areaID);
-		return u;
-	}
-
 	@RequestMapping(value = "/loadTags", method = RequestMethod.GET)
 	public @ResponseBody
 	List<String> loadTagList(HttpServletRequest request) {
@@ -960,10 +924,10 @@ public class IssueController {
 
 				issueService.postComment(comentario);
 
-				List<CommentDTO> comments = issueService
-						.getCommentsByIssue(issueID);
-				model.addAttribute("comentarios",
-						issueService.getCommentsByIssue(issueID));
+//				List<CommentDTO> comments = issueService
+//						.getCommentsByIssue(issueID);
+				List<CommentDTO> comments = issueService.getIssueById(issueID).getComentarios();
+				model.addAttribute("comentarios", comments);
 				model.addAttribute("cantidadComentarios", comments.size());
 				
 			}

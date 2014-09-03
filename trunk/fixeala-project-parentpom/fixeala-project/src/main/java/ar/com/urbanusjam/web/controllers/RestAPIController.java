@@ -17,7 +17,7 @@ import ar.com.urbanusjam.entity.annotations.IssueRepair;
 import ar.com.urbanusjam.entity.annotations.MediaContent;
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.dto.IssueDTO;
-import ar.com.urbanusjam.services.dto.IssueUpdateHistoryDTO;
+import ar.com.urbanusjam.services.dto.IssueHistoryDTO;
 import ar.com.urbanusjam.web.utils.RestURIConstants;
 
 import com.google.gson.JsonArray;
@@ -145,11 +145,11 @@ public class RestAPIController {
 		
 		try{
 			
-			List<IssueUpdateHistoryDTO> updates = issueService.getIssueById(reclamoID).getHistorial();
+			List<IssueHistoryDTO> updates = issueService.getIssueById(reclamoID).getHistorial();
 			
 			if(updates.size() > 0 && updates != null){
 				
-				for(IssueUpdateHistoryDTO update : updates){
+				for(IssueHistoryDTO update : updates){
 					jsonArray.add(this.convertActualizacionToJson(update));
 				}
 				
@@ -319,7 +319,7 @@ public class RestAPIController {
 		
 	}
 	
-	private JsonElement convertActualizacionToJson(IssueUpdateHistoryDTO update) throws JSONException {
+	private JsonElement convertActualizacionToJson(IssueHistoryDTO update) throws JSONException {
 		
 		JsonObject obj = new JsonObject(); //LinkedHashMap mantiene el orden de los campos; JSONObject no
 		obj.addProperty("reclamo", update.getNroReclamo());	

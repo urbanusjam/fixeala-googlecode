@@ -7,65 +7,36 @@
 /*  Created:  08-10-2013 (dd-MM-YYYY)        */
 
 
-INSERT INTO `area` (`area_name`,`acronym`,`province`,`province_acronym`,`city`,`city_acronym`) 
+/***** roles *****/
+INSERT INTO role (id_role, rolename) 
 VALUES 
-('Comuna 1','C1', 'Buenos Aires', 'BA', 'Ciudad de Buenos Aires', 'CABA'),
-('Comuna 2','C2', 'Buenos Aires', 'BA', 'Ciudad de Buenos Aires', 'CABA'),
-('Comuna 3','C3', 'Buenos Aires', 'BA', 'Ciudad de Buenos Aires', 'CABA'),
-('Comuna 4','C4', 'Buenos Aires', 'BA', 'Ciudad de Buenos Aires', 'CABA'),
-('Ministerio de Ambiente y Espacio Publico','MAYEPGC', 'Buenos Aires', 'BA', 'Ciudad de Buenos Aires', 'CABA');
+	(1,'ROLE_ADMIN'),
+	(2,'ROLE_MANAGER'),
+	(3,'ROLE_AREA'),
+	(4,'ROLE_USER');
 
-
-INSERT INTO `role` (`id_role`,`rolename`) VALUES 
-(1,'ROLE_ADMIN'),
-(2,'ROLE_MANAGER'),
-(3,'ROLE_AREA'),
-(4,'ROLE_USER');
-
--- role_admin
--- role_moderator
--- role_publisher
-
-
-INSERT INTO `user` 
-(`username`,`password`,`email`,`name`, `last_name`,`salt`, `id_area`,`gov_position`,`gov_sub_area`,`gov_sub_area_acronym`,
-`place_of_residence`,`registration_date`,`last_password_change_date`,`last_login_date`,`closed_account_date`, `is_verified_official`, `enabled`) 
+	
+/***** users *****/	
+INSERT INTO user 
+	(username, password, email, name, last_name, salt, city_of_residence, province_of_residence, 
+	 registration_date, last_password_change_date, last_login_date, closed_account_date, enabled) 
 VALUES
-('coripel','c7589745dd1841655ac79a8f6fbb8e63b01b1e00','coripel@gmail.com','Cora','Reyes Calens',NULL, 5, 'Responsable de area', curdate(), NULL, NULL,NULL,NULL,NULL,NULL,1,1),
-('fakeuser','20dc925be88e7d0bd130c6c2cf43a77eb344243f','fakeuser@gmail.com','Juan','Vasquez',NULL, 1, 'Presidente Comunal', curdate(), NULL, NULL,NULL,NULL,NULL,NULL,1,1),
-('mock','3a49a0e2f78aa4d0300177f4588388a21833b0b5','mock@gmail.com','Julia','Rikiki', NULL, 1, 'Miembro Junta Comunal', curdate(), NULL, NULL,NULL,NULL,NULL,NULL,0,1),
-('helloworld','dce876c90f1e39b5a195d468ebbdfb7f192c4c8a','helloworld@gmail.com',NULL,NULL, NULL, NULL, NULL, NULL, NULL, 'San Telmo',curdate(),NULL,NULL,NULL,0,1),
-('dummy','37323501a7840726056e7d2159f2c776482f13ef','dummy@gmail.com',NULL,NULL, NULL, NULL, NULL, NULL, NULL, 'Caballito',curdate(),NULL,NULL,NULL,0,1),
-('comuna1',NULL,'comuna_uno@buenosaires.gob.ar',NULL,NULL, NULL, 1, 'Area', NULL, NULL, NULL,curdate(),NULL,NULL,NULL,1,1),
-('comuna2',NULL,'comuna_dos@buenosaires.gob.ar',NULL,NULL, NULL, 2, 'Area', NULL, NULL, NULL,curdate(),NULL,NULL,NULL,1,1),
-('user2','c7589745dd1841655ac79a8f6fbb8e63b01b1e00','user2@gmail.com','Cora','Reyes Calens',NULL, 5, 'Responsable de area', NULL, NULL, NULL,curdate(),NULL,NULL,NULL,1,1),
-('user3','c7589745dd1841655ac79a8f6fbb8e63b01b1e00','user3@gmail.com','Juan','Vasquez',NULL, 1, 'Presidente Comunal', NULL, NULL, NULL,curdate(),NULL,NULL,NULL,1,1),
-('user4','c7589745dd1841655ac79a8f6fbb8e63b01b1e00','user4@gmail.com','Julia','Rikiki', NULL, 1, 'Miembro Junta Comunal', NULL, NULL, NULL,curdate(),NULL,NULL,NULL,0,1),
-('user5','c7589745dd1841655ac79a8f6fbb8e63b01b1e00','user5@gmail.com',NULL,NULL, NULL, NULL, NULL, NULL, NULL, 'San Telmo',curdate(),NULL,NULL,NULL,0,1),
-('user6','c7589745dd1841655ac79a8f6fbb8e63b01b1e00','user6@gmail.com',NULL,NULL, NULL, NULL, NULL, NULL, NULL, 'La Boca',curdate(),NULL,NULL,NULL,0,1),
-('user7','c7589745dd1841655ac79a8f6fbb8e63b01b1e00','user7@gmail.com',NULL,NULL, NULL, NULL, NULL, NULL, NULL, 'Caballito',curdate(),NULL,NULL,NULL,0,1),
-('user8','c7589745dd1841655ac79a8f6fbb8e63b01b1e00','user8@gmail.com',NULL,NULL, NULL, NULL, NULL, NULL, NULL, 'Caballito',curdate(),NULL,NULL,NULL,0,1);
+	('coripel','c7589745dd1841655ac79a8f6fbb8e63b01b1e00','coripel@gmail.com','Cora','Reyes Calens', NULL, 'JUNIN DE LOS ANDES', 'NEUQUEN', curdate(), null, null, 1),
+	('fakeuser','20dc925be88e7d0bd130c6c2cf43a77eb344243f','fakeuser@gmail.com','Juan','Vasquez', NULL, 'BOULOGNE SUR MER', 'BUENOS AIRES', curdate(), null, null, 1),
+	('mock','3a49a0e2f78aa4d0300177f4588388a21833b0b5','mock@gmail.com','Julia','Rikiki', NULL, 'MORENO', 'BUENOS AIRES', curdate(), null, null, 1),
+	('helloworld','dce876c90f1e39b5a195d468ebbdfb7f192c4c8a','helloworld@gmail.com', 'Hello', 'World', 'BOEDO', 'CABALLITO', 'CAPITAL FEDERAL', curdate(), null, null, 1),
+	('dummy','37323501a7840726056e7d2159f2c776482f13ef','dummy@gmail.com', 'Dummy', 'The Dumbest', 'CABALLITO', 'CAPITAL FEDERAL', curdate(), null, null, 1);
 
-INSERT INTO `user_role` (`id_user`,`id_role`) VALUES 
-(1,1),
-(2,1),
-(3,2),
-(4,4),
-(5,4),
-(6,3), 
-(7,3);
+	
+/***** users & roles *****/	
+INSERT INTO user_role (id_user, id_role) VALUES (1,4);
+INSERT INTO user_role (id_user, id_role) VALUES (2,4);
+INSERT INTO user_role (id_user, id_role) VALUES (3,4);
+INSERT INTO user_role (id_user, id_role) VALUES (4,4);
+INSERT INTO user_role (id_user, id_role) VALUES (5,4);
 
-/*
-INSERT INTO `comment` (`id_issue`,`id_user`, `creation_date`, `message`, `flag`) VALUES
-(82621, 3, NOW(), 'Aliquam non sodales nulla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.', false ),
-(82621, 4, NOW(), 'Aliquam non sodales nulla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.', false ),
-(82621, 4, NOW(), 'Aliquam non sodales nulla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.', false ),
-(82621, 3, NOW(), 'Aliquam non sodales nulla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.', false ),
-(82621, 5, NOW(), 'Aliquam non sodales nulla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.', false ),
-(82621, 5, NOW(), 'Aliquam non sodales nulla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.', false ),
-(82621, 6, NOW(), 'Aliquam non sodales nulla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.', false );
-*/
 
+/***** tags *****/
 INSERT INTO tag (tagname) VALUES ('ACERA');
 INSERT INTO tag (tagname) VALUES ('AEROPUERTO');
 INSERT INTO tag (tagname) VALUES ('ALUMBRADO');
@@ -95,7 +66,7 @@ INSERT INTO tag (tagname) VALUES ('INUNDACION');
 INSERT INTO tag (tagname) VALUES ('LUMINARIA APAGADA / ROTA');
 INSERT INTO tag (tagname) VALUES ('MAL ESTACIONAMIENTO');
 INSERT INTO tag (tagname) VALUES ('MAMPOSTERIA');
-INSERT INTO tag (tagname) VALUES ('MEDIOS (RADIODIFUSORA, CANAL TV, PRODUCTORA)');
+INSERT INTO tag (tagname) VALUES ('MEDIOS (RADIO, CANAL TV, PRODUCTORA)');
 INSERT INTO tag (tagname) VALUES ('MICRO');
 INSERT INTO tag (tagname) VALUES ('OBRA ABANDONADA ');
 INSERT INTO tag (tagname) VALUES ('OBRA EN CONSTRUCCION');
@@ -128,3 +99,15 @@ INSERT INTO tag (tagname) VALUES ('TREN');
 INSERT INTO tag (tagname) VALUES ('VEHICULO ABANDONADO');
 INSERT INTO tag (tagname) VALUES ('VEREDA ROTAS');
 INSERT INTO tag (tagname) VALUES ('VETERINARIA');
+
+
+/*
+INSERT INTO `comment` (`id_issue`,`id_user`, `creation_date`, `message`, `flag`) VALUES
+(82621, 3, NOW(), 'Aliquam non sodales nulla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.', false ),
+(82621, 4, NOW(), 'Aliquam non sodales nulla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.', false ),
+(82621, 4, NOW(), 'Aliquam non sodales nulla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.', false ),
+(82621, 3, NOW(), 'Aliquam non sodales nulla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.', false ),
+(82621, 5, NOW(), 'Aliquam non sodales nulla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.', false ),
+(82621, 5, NOW(), 'Aliquam non sodales nulla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.', false ),
+(82621, 6, NOW(), 'Aliquam non sodales nulla. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.', false );
+*/
