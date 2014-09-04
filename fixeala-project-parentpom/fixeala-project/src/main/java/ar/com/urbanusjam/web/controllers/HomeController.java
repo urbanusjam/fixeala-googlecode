@@ -106,7 +106,32 @@ public class HomeController {
 				
 				model.addAttribute("jsonIssues", issuePagesArray);
 				model.addAttribute("jsonUsers", userPagesArray);
-			}	
+			}
+			
+			int verified = 0;
+			int notVerified = 0; 
+			int resolved = 0; 
+			int notResolved = 0; 
+			
+			for(IssueDTO issue : issues){
+				if(issue.getStatus().equals(IssueStatus.VERIFIED))
+					verified++;
+				if(issue.getStatus().equals(IssueStatus.SOLVED))
+					resolved++;
+				if(issue.getStatus().equals(IssueStatus.OPEN) 
+						|| issue.getStatus().equals(IssueStatus.VERIFIED)
+						|| issue.getStatus().equals(IssueStatus.REOPENED)
+						|| issue.getStatus().equals(IssueStatus.IN_PROGRESS))
+					notResolved++;
+			}
+			
+			notVerified = issues.size() - verified;
+			
+			model.addAttribute("totalIssues", issues.size());
+			model.addAttribute("verified", verified);
+			model.addAttribute("notVerified", notVerified);
+			model.addAttribute("resolved", resolved);
+			model.addAttribute("notResolved", notResolved);
 			
 			return "home";
 		

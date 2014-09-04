@@ -87,8 +87,7 @@ CREATE TABLE issue (
 	   priority VARCHAR(64) NULL, 
 	   resolution_type VARCHAR(64) NULL, 	
 	   status VARCHAR(64) NOT NULL,
-	   is_verified TINYINT(1) NOT NULL 0,
-	   
+	  
 	   PRIMARY KEY (id_issue)
 	   
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

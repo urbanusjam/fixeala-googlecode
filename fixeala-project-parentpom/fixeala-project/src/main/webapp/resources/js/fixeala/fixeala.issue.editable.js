@@ -94,8 +94,6 @@ var userActionsController = {
 			
 					var status = "";
 					
-					var title = '${titulo}';
-					
 					if(label == 'Resolver')
 						status = 'RESUELTO';
 					
@@ -105,6 +103,59 @@ var userActionsController = {
 					var data = 'issueID='+ issueID + '&newStatus='+ status + '&resolution=' + resolution + '&obs=' + obs;
 					
 					$("#mdl-status").modal('hide');
+					
+				
+					$.ajax({
+	    			    url: "./updateIssueStatus.html",
+				 		type: "POST",	
+				 		data: data,
+				 		dataType: "json",	
+				 		beforeSend: function(){
+				 			blockPage("html");
+				 		},
+				        success: function(data){		
+				        	 unBlockPage("html");
+				        	 
+				        	if(data.result){
+				        		setTimeout(function(){
+			        				var url = mapController.getIssuePlainURL(issueID);
+					    			window.location.href= url;	
+				        		}, 1000);
+	
+					    	   }
+					    	   
+					    	   else{
+					    		   
+					    	    	setTimeout(function(){
+					    	    		 bootbox.alert(data.message);	
+					        		}, 1000);
+					    		  	
+					    	   }
+	            		},
+	            		complete: function() {
+	            			 unBlockPage("html");
+		                }
+	    			});
+			
+				
+			},
+			
+			//VERIFY OR REJECT
+			verifyOrRejectIssue : function(label){
+				
+				event.preventDefault();
+				
+					var status = "";
+					
+					if(label == 'Verificar')
+						status = 'VERIFICADO';
+					
+					if(label == 'Rechazar')
+						status = "RECHAZADO";
+					
+					var data = 'issueID='+ issueID + '&newStatus='+ status + '&resolution=' + null + '&obs=' + null;
+					
+					$("#mdl-verify").modal('hide');
 					
 				
 					$.ajax({

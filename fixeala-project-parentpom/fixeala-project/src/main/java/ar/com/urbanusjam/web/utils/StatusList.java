@@ -3,12 +3,13 @@ package ar.com.urbanusjam.web.utils;
 public enum StatusList {
 	
 	OPEN("Abierto", "label label-important", "#B94A48"), 
-	REOPENED("Reabierto", "label label-info", "#39B3D7"),
-//	ACKNOWLEDGED("Admitido", "label label-primary", "blue"),
-	IN_PROGRESS("En progreso", "label label-warning", "#F89406"),
+	VERIFIED("Verificado", "label label-info", "#39B3D7"), 
+	REJECTED("Rechazado", "label label-inverse", "#333333"), 	
+	IN_PROGRESS("En progreso", "label label-warning", "#F89406"),	
 	SOLVED("Resuelto", "label label-success", "#468847"),
+	REOPENED("Reabierto", "label label-important", "#B94A48"),
 	CLOSED("Cerrado", "label label-inverse", "#333333");
-//	ARCHIVED("Archivado", "label label-default" , "gray");
+//	ARCHIVED("Archivado", "label label-default" , "#EEEEEE");
 	
 	private String label;
 	private String cssClass;

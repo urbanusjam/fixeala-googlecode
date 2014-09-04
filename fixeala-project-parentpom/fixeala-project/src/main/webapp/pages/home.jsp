@@ -703,24 +703,70 @@
 // 					classInput: "input-small",
 					classIcon: "icon-plus"
 				});
+				
+				//overall progress bar 
+				var totalIssues = '${totalIssues}'; 
+				var verifiedIssues = '${verified}'; 
+				var resolvedIssues = '${resolved}'; 
+				
+				var verifiedProgress = (100 * verifiedIssues) / totalIssues;
+				var resolvedProgress = (100 * resolvedIssues) / totalIssues;
+				
+				$('#verifiedBar').css('width', verifiedProgress);
+				$('#resolvedBar').css('width', resolvedProgress);
 			
 		});
 	</script>
 	
 	<div id="content">
-	
-		<div id="searchBar" class="row-fluid">
-		  	<div class="span8">
+
+		<!-- search bar -->
+		<div id="searchBar" class="row-fluid" >
+			<div class="span8">				
 				<div class="input-append">
 					<input id="search" type="text" data-link="./autocomplete" data-provide="typeahead" placeholder="Busc&aacute; reclamos por ID, Estado, T&iacute;tulo o Direcci&oacute;n">				
-				</div>
-			</div>		
-			<div class="span3 pull-right" style="width:336px;">	
+				</div>			
+			</div>			
+			<div class="span3 pull-right" style="width:336px;">
 				<button id="btnIssue" class="btn btn-success" data-toggle="button"> 
 					<i class="icon-map-marker icon-large"></i>&nbsp;&nbsp;&nbsp;PUBLICAR RECLAMO
-				</button>
-			</div>		
+				</button>		
+			</div>	
+		
+		</div>
+		
+		<!-- progress bar -->
+		<div class="row-fluid" style="padding: 10px 0 10px 0; margin-bottom: 20px;  border: 1px solid #DDD;">
+
+			<div class="span6 pull-left" style="border-right: 1px solid #DDD; margin:0;">			
+				<center>
+					<h4>¡Ya se verificaron ${verified} de ${totalIssues} reclamos!</h4>
+					<div class="progress progress-striped active" style="width: 400px;">					
+		  				<div class="bar" id="verifiedBar"></div>	  				
+					</div>
+					<p style="text-align: center;">Todavía quedan ${notVerified} reclamos sin verificar</p>
+				</center>
+			</div>
+			<div class="span6 pull-right" style=" border-left: 1px solid #DDD; margin:0;">			
+				<center>
+					<h4>¡Y se resolvieron ${resolved} de ${totalIssues} reclamos!</h4>
+					<div class="progress progress-striped active" style="width: 400px;">					
+		  				<div class="bar bar-success" id="resolvedBar"></div>	  				
+					</div>
+					<p style="text-align: center;">Todavía quedan ${notResolved} reclamos sin resolver</p>
+				</center>
+			</div>
+<!-- 			<div class="span4" style=" margin:0; text-align: center"> -->
+<%-- 				<h3>${totalIssues} reclamos publicados</h3> --%>
+<!-- 			</div> -->
+<!-- 			<div class="span4 pull-right" style="padding:0;margin-right:30px;width:auto;height:110px;line-height:110px;border: 0px solid red;"> -->
+<!-- 				<button id="btnIssue" class="btn btn-success" style="padding: 0;margin:0 auto;" data-toggle="button">  -->
+<!-- 					<i class="icon-map-marker icon-large"></i>&nbsp;&nbsp;&nbsp;PUBLICAR RECLAMO -->
+<!-- 				</button>		 -->
+<!-- 			</div>		 -->
 		</div>	
+		
+		
 
 		<!-- ROW 1 -->
 		<div class="row-fluid" style="height:472px;">
@@ -838,6 +884,7 @@
 	
 	 <div class="clearfix"></div>
        		<!-- ROW 2 new -->
+       	
        	
 
 	<div class="row" style="height:auto; margin:30px 0 30px 0; padding: 0">
