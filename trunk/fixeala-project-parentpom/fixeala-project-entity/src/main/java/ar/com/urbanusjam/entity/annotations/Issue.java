@@ -74,9 +74,6 @@ public class Issue implements Serializable  {
 	@Column(name = "status")
 	private String status;
 	
-	@Column(name = "is_verified")
-	private boolean isVerified;
-		
     @OneToMany(mappedBy="issue", fetch = FetchType.LAZY)  
     @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.ALL})	
     @OrderBy("fecha DESC")

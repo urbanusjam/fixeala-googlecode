@@ -71,7 +71,6 @@ public class IssueServiceImpl implements IssueService {
 	private UserDAO userDAO;
 	private ProvinceDAO provinceDAO;
 	private TagDAO tagDAO;
-//	private CommentDAO commentDAO;
 	private IssueFollowDAO issueFollowDAO;
 	private IssuePageViewDAO issuePageViewDAO;
 	private IssueVoteDAO issueVoteDAO;
@@ -194,10 +193,15 @@ public class IssueServiceImpl implements IssueService {
 		IssueHistoryDTO revision = new IssueHistoryDTO();
 		revision.setFecha(new Date());
 		revision.setUsername(username);
-		revision.setOperacion(Operation.UPDATE);			
-		revision.setResolucion(resolution);
-		revision.setEstado(newStatus);			
-		revision.setObservaciones(obs);
+		revision.setOperacion(Operation.UPDATE);	
+		revision.setEstado(newStatus);		
+		
+		if(!resolution.isEmpty() || resolution != null)
+			revision.setResolucion(resolution);
+		
+		
+		if(!obs.isEmpty() || obs != null)
+			revision.setObservaciones(obs);
 		
 		if(newStatus.equals(IssueStatus.IN_PROGRESS))	
 			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_PROGRESS + " el reclamo");			
@@ -206,13 +210,20 @@ public class IssueServiceImpl implements IssueService {
 		if(newStatus.equals(IssueStatus.CLOSED))
 			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_CLOSE + " el reclamo");	
 		if(newStatus.equals(IssueStatus.REOPENED))	
-			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_REOPEN + " el reclamo porque " + resolution.toUpperCase());				
+			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_REOPEN + " el reclamo porque " + resolution.toUpperCase());		
+		if(newStatus.equals(IssueStatus.VERIFIED))	
+			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_VERIFY + " el reclamo");	
+		if(newStatus.equals(IssueStatus.REJECTED))	
+			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_REJECT + " el reclamo");	
 		
 		Issue issue = issueDAO.findIssueById(issueID);
 		User user = userDAO.loadUserByUsername(username);
 		
 		issue.setStatus(newStatus);
-		issue.setResolution(resolution);
+		
+		if(!resolution.isEmpty() || resolution != null)
+			issue.setResolution(resolution);
+		
 		issue.setLastUpdateDate(this.getCurrentCalendar(revision.getFecha()));
 		issue.addRevision(this.convertTo(revision, user));
 		
@@ -717,13 +728,19 @@ public class IssueServiceImpl implements IssueService {
 		}
 		
 		if(status.equalsIgnoreCase(IssueStatus.REOPENED)){
+			css[0] = "label label-important";
+			css[1] = "#B94A48";
+		}
+		
+		if(status.equalsIgnoreCase(IssueStatus.VERIFIED)){
 			css[0] = "label label-info";
 			css[1] = "#3A87AD";
 		}
 		
-//		if(status.equalsIgnoreCase(IssueStatus.ACKNOWLEDGED)){
-//			css = "label label-primary";
-//		}
+		if(status.equalsIgnoreCase(IssueStatus.REJECTED)){
+			css[0] = "label label-inverse";
+			css[1] = "#333333";			
+		}
 		
 		if(status.equalsIgnoreCase(IssueStatus.IN_PROGRESS)){
 			css[0] = "label label-warning";
@@ -738,6 +755,11 @@ public class IssueServiceImpl implements IssueService {
 		if(status.equalsIgnoreCase(IssueStatus.CLOSED)){
 			css[0] = "label label-inverse";
 			css[1] = "#333333";			
+		}
+		
+		if(status.equalsIgnoreCase(IssueStatus.ARCHIVED)){
+			css[0] = "label label-default";
+			css[1] = "#EEEEEE";			
 		}
 		
 		return css;
@@ -949,14 +971,15 @@ public class IssueServiceImpl implements IssueService {
 		revision.setUsername(username);
 		revision.setNroReclamo(Long.valueOf(repair.getId()));
 		revision.setOperacion(Operation.UPDATE);
-		revision.setMotivo(Messages.ISSUE_REPAIR_INFO_ADD);
-		revision.setEstado(issue.getStatus());
-		revision.setObservaciones(null);
+		revision.setMotivo(Messages.ISSUE_REPAIR_INFO_ADD);		
+		revision.setObservaciones(null);	
+		revision.setEstado(IssueStatus.IN_PROGRESS);
 		
+		issue.setStatus(revision.getEstado());
 		issue.setLastUpdateDate(this.getCurrentCalendar(revision.getFecha()));
 		issue.setReparacion(repair);
 		issue.addRevision(this.convertTo(revision, user));
-		
+				
 		issueDAO.updateIssue(issue);
 	}
 
@@ -973,9 +996,10 @@ public class IssueServiceImpl implements IssueService {
 		revision.setNroReclamo(Long.valueOf(issueID));
 		revision.setOperacion(Operation.UPDATE);
 		revision.setMotivo(Messages.ISSUE_REPAIR_INFO_DELETE);
-		revision.setEstado(issue.getStatus());
+		revision.setEstado(IssueStatus.VERIFIED);
 		revision.setObservaciones(null);
 
+		issue.setStatus(revision.getEstado());
 		issue.setLastUpdateDate(this.getCurrentCalendar(revision.getFecha()));
 		issue.addRevision(this.convertTo(revision, user));
 		issue.setReparacion(null);

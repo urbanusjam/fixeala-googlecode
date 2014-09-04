@@ -12,6 +12,16 @@
 <style>
 
 	#repairForm input { text-align: right; }
+	
+	#mdl-verify .modal-body { max-height: 450px; }
+	
+ 	#mdl-verify ul.list > li { padding: 10px 0 10px 0;} 
+	
+	#mdl-verify ul.sublist > li { padding: 5px 0 5px 0; }
+	
+	#mdl-verify ul.sublist > li:FIRST-CHILD { padding-top: 10px; }
+	
+	
 
 </style>
 	
@@ -136,40 +146,11 @@
 				}).bind('fileuploadfail', function (e, data) {
 					
 // 					alert(data.files[data.index].error);
-						console.log("--- ajax upload ERROR ---");
+					console.log("--- ajax upload ERROR ---");
 					fileController.deleteMultipleImages(uploadsOK);
 		        	bootbox.alert('No se pudo guardar el archivo.');
 					
 				});
-			    
-		    	
-// 				$.ajax({
-// 				    url: './'+issueID+'/uploadFiles',
-// 			 		type: 'POST',			
-// 			 		dataType: 'json',	
-// 			 		data: 'fileList=' +  fileList,
-// 			        success: function(data){	
-// 			        	console.log(data);
-// 			        	if(data.status){
-			        	
-// 			        		console.log("--- db upload OK ---");
-			        		
-// 			        	}
-// 			        	else{
-// 			        		console.log("--- imgur upload ERROR ---");
-// 			        		//delete imgur files
-// 	 		        		fileController.deleteMultipleImages(uploadsOK);
-// 			        		bootbox.alert('No se pudo guardar el archivo.');
-// 			        	}
-// 					},
-// 					error: function (xhr) {
-// 						console.log("--- ajax upload ERROR ---");
-// 	 					fileController.deleteMultipleImages(uploadsOK);
-// 				    	bootbox.alert('No se pudo guardar el archivo.');		
-// 				    }
-// 				});
-		    		
-		    	
 					
 			}
 		    
@@ -1219,7 +1200,7 @@
 		     
 		  	  <div id="issue-header" class="hero-unit" style="padding:20px; margin-bottom:15px">	  
 		        <h3 style="display:inline">
-		        	<a href="#" id="issue-title">${titulo}</a>&nbsp;<i class="icon-pencil editableField"></i><span class="pull-right" style="color:${tituloCss}">(${estado})</span></h3>
+		        	<a href="#" id="issue-title">${titulo}</a>&nbsp;<i class="icon-pencil editableField"></i></h3>
 		        <p>${direccion}</p>       
 		      </div>
 
@@ -1241,11 +1222,16 @@
 							    		</c:if>
 						    		</div>		
 					    			<br>
-					    			<div class="caption">
-					    				<button id="btnAddFiles" href="#mdl-fileupload" data-toggle="modal" class="btn btn-default" style="font-size: 11px; text-transform: uppercase">
-					    					<i class="icon-plus"></i>&nbsp;Cargar im&aacute;genes
-					    				</button>
-					    			</div>
+					    			<sec:authorize access="hasRole('ROLE_USER')">	
+						    			<c:if test="${estado ne 'CERRADO' && estado ne 'ARCHIVADO'}">
+											<div class="caption">
+							    				<button id="btnAddFiles" href="#mdl-fileupload" data-toggle="modal" class="btn btn-default" style="font-size: 11px; text-transform: uppercase">
+							    					<i class="icon-plus"></i>&nbsp;Cargar im&aacute;genes
+							    				</button>
+							    			</div>
+										</c:if>
+									</sec:authorize>
+					    			
 					  			</li>	
 					      </ul>
 				 	</div>
@@ -1289,7 +1275,11 @@
 							 </tr>
 							 <tr>
 							    <th>Estado:</th>
-							    <td><a class="taglink" href="./search.html?type=status&value=${estado}" id="issue-status" data-type="text"><span class="${estadoCss}">${estado}</span></a><b>${resolucion}</b></td>						   
+							    <td><a class="taglink" href="./search.html?type=status&value=${estado}" id="issue-status" data-type="text"><span class="${estadoCss}">${estado}</span></a>
+							    <c:if test="${not empty esolucion}">
+							   		<b>${resolucion}</b>
+							    </c:if>
+							    </td>						   
 							 </tr>
 							 <tr>
 							    <th>Categor&iacute;as:</th>
@@ -1349,24 +1339,35 @@
 							
 		<!-- 3 Comentarios -->							
 		<div class="tab-pane fade" id="issueComments">	
-		 	<div class="row-fluid">	
-		 		<span>
-		 			<textarea id="comment-text" name="comment-text"
-                	placeholder="Ingrese su comentario" rows="5"></textarea>
-		 		</span>
-		 		<span>
-		 			<button id="btn-comment" class="btn btn-warning" type="submit" disabled 
-					style="width: 150px; margin-left: 20px;">Publicar</button>
-		 		</span>
-			</div>	
-				<div class="row-fluid" style="margin-bottom: 30px;">		
-		 		 <!-- infinite scroll -->
-				 <div id="infinite-container-comments"></div>
-				 <nav id="page-nav-comment" style="display: none;">
-	 			 	<a href="${id}/loadmore/comment/2"></a>
-				 </nav>			 
-			 	<center><a href="#" id="btn-more-comments" class="btn btn-default btn-more comment" style="display: none;">Mostrar m&aacute;s resultados</a></center>
-		 	</div>
+		 	
+		 	<sec:authorize access="hasRole('ROLE_USER')">	
+    			<c:if test="${estado ne 'CERRADO' && estado ne 'ARCHIVADO'}">
+					<div class="row-fluid">	
+				 		<span>
+				 			<textarea id="comment-text" name="comment-text"
+		                	placeholder="Ingrese su comentario" rows="5"></textarea>
+				 		</span>
+				 		<span>
+				 			<button id="btn-comment" class="btn btn-warning" type="submit" disabled 
+							style="width: 150px; margin-left: 20px;">Publicar</button>
+				 		</span>
+					</div>
+				</c:if>
+			</sec:authorize>
+			<c:if test="${cantidadComentarios eq 0}">
+					<h4 style="padding-bottom: 20px; margin-left: 15px;">No hay comentarios publicados.</h4>
+				</c:if>
+		    <c:if test="${cantidadComentarios gt 0}">
+		    	<div class="row-fluid" style="margin-bottom: 30px;">		
+			 		 <!-- infinite scroll -->
+					 <div id="infinite-container-comments"></div>
+					 <nav id="page-nav-comment" style="display: none;">
+		 			 	<a href="${id}/loadmore/comment/2"></a>
+					 </nav>			 
+				 	<center><a href="#" id="btn-more-comments" class="btn btn-default btn-more comment" style="display: none;">Mostrar m&aacute;s resultados</a></center>
+		 		</div>
+		    </c:if>
+			
 		</div>	
 		
 		<!-- 4 Reparacion -->							
@@ -1506,7 +1507,50 @@
 		<!-- COLUMNA 2 -->    
 		<div class="span3">
 		<!--Sidebar content-->
-		
+			
+			<sec:authorize access="hasRole('ROLE_USER')">	
+				<c:if test="${estado eq 'ABIERTO'}">
+					<button id="btnVerifyIssue" data-toggle="modal" href="#mdl-verify" class="btn btn-danger" style="width: 100%; margin-bottom: 20px; height: 46px; line-height: 46px;" title="Verificar"><h3>VERIFICAR</h3></button> 
+				</c:if>
+			</sec:authorize>
+			
+			<sec:authorize access="isAnonymous()">	
+				<c:if test="${estado eq 'ABIERTO'}">
+					<div class="alert" style="background: #B94A48; color: #FFF; border: none"><h3>SIN VERIFICAR</h3></div> 
+				</c:if>
+			</sec:authorize>
+			
+			
+			<c:if test="${estado eq 'REABIERTO' }">
+				<div class="alert alert-danger" style="border: none"><i class="icon-exclamation-sign icon-2x"></i><h3>&nbsp;${estado}</h3></div>
+			</c:if>
+									
+			<c:if test="${estado eq 'VERIFICADO' }">
+				<div class="alert alert-info" style="border: none"><i class="icon-ok icon-2x"></i><h3>&nbsp;${estado}</h3></div> 
+			</c:if>
+			
+			<c:if test="${estado eq 'RECHAZADO' }">
+				<div class="alert alert-danger" style="border: none"><i class="icon-minus-sign icon-2x"></i><h3>&nbsp;${estado}</h3></div> 
+			</c:if>
+			
+			<c:if test="${estado eq 'EN PROGRESO' }">
+				<div class="alert alert-warning" style="border: none"><i class="icon-warning-sign icon-2x"></i><h3>&nbsp;${estado}</h3></div> 
+			</c:if>
+			
+			<c:if test="${estado eq 'RESUELTO' }">
+				<div class="alert alert-success" style="border: none"><i class="icon-ok icon-2x"></i><h3>&nbsp;${estado}</h3></div> 
+			</c:if>
+			
+			<c:if test="${estado eq 'CERRADO' }">
+				<div class="alert" style="background: #5E5E5E; color: #FFF; border: none;"><i class="icon-minus-sign icon-2x"></i><h3>&nbsp;${estado}</h3></div> 
+			</c:if>
+			
+			<c:if test="${estado eq 'ARCHIVADO' }">
+				<div class="alert alert-default" style="background: #DDDDDD; color: #999999; border: none"><i class="icon-folder-close icon-2x"></i><h3>&nbsp;${estado}</h3></div> 
+			</c:if>
+			
+			
+			
 			<div id="issue-stats" class="stats-container">
 				<div class="stats-box">
 					<span class="text-small">votos totales</span><span id="voteCount" class="text-big pull-right">${cantidadVotos}</span>
@@ -1522,22 +1566,23 @@
 			</div>			
 					
 			<div id="issue-stats-actions">	
-				<sec:authorize access="hasRole('ROLE_USER')">		
-				<div class="stats-container">
-					<span id="votes">
-						<button id="vote-up" class="btn btn-success" title="Voto positivo"><i class="icon-thumbs-up "></i></button>
-						<button id="vote-down" class="btn btn-danger" title="Voto negativo"><i class="icon-thumbs-down "></i></button>
-					</span>						
-					<span class="pull-right">
-						<c:if test="${isUserWatching}">
-							<button id="btn-unwatch-issue" class="btn btn-info">@ Siguiendo</button>
-						</c:if>
-						<c:if test="${!isUserWatching}">
-							<button id="btn-watch-issue" class="btn pull-right">@ Segu&iacute; el reclamo</button>
-						</c:if>
-					</span>		
-				
-					</div>		
+				<sec:authorize access="hasRole('ROLE_USER')">	
+					<c:if test="${estado ne 'CERRADO' && estado ne 'ARCHIVADO'}">	
+						<div class="stats-container">
+							<span id="votes">
+								<button id="vote-up" class="btn btn-success" title="¡Vot&aacute; para que este reclamo se resuelva!"><i class="icon-thumbs-up "></i></button>
+		<!-- 					<button id="vote-down" class="btn btn-danger" title="Voto negativo"><i class="icon-thumbs-down "></i></button> -->
+							</span>						
+							<span class="pull-right">
+								<c:if test="${isUserWatching}">
+									<button id="btn-unwatch-issue" class="btn btn-info">@ Siguiendo</button>
+								</c:if>
+								<c:if test="${!isUserWatching}">
+									<button id="btn-watch-issue" class="btn pull-right">@ Segu&iacute; el reclamo</button>
+								</c:if>
+							</span>						
+						</div>	
+					</c:if>	
 				</sec:authorize>					
 			</div>
 			
@@ -1547,11 +1592,11 @@
 			
 			<div id="userIssueActions">
 				<sec:authorize access="hasRole('ROLE_USER')">				
-					<c:if test="${estado ne 'CERRADO'}">
+					<c:if test="${estado ne 'CERRADO' && estado ne 'ARCHIVADO'}">
 						<div class="stats-container">
 							<button id="btn-edit" class="btn" title="Editar"><i class="icon-pencil icon-large"></i></button>	
 							<button id="btn-update" class="btn btn-primary" title="Guardar cambios"><i class="icon-save icon-large"></i></button>	
-							<c:if test="${estado eq 'ABIERTO' || estado eq 'REABIERTO'}">
+							<c:if test="${estado eq 'ABIERTO' || estado eq 'REABIERTO' || estado eq 'EN PROGRESO'}">
 								<div id="btn-status" data-toggle="modal" class="pull-right">			
 									<button class="btn btn-success" title="Resolver"><i class="icon-ok icon-large"></i> RESOLVER</button>
 								</div>
@@ -1564,13 +1609,13 @@
 							<script type="text/javascript">
 								userActionsController.enableUserActions();
 							</script>
-						</div>
+						</div>							
 					</c:if>
-					<c:if test="${estado eq 'CERRADO'}">
-						<div class="stats-container" style="color: #fff; background: #333; font-weight: bold; border: none; text-align: center;">
-							Este reclamo ya no puede editarse.
-						</div>
-					</c:if>
+<%-- 					<c:if test="${estado eq 'CERRADO'}"> --%>
+<!-- 						<div class="stats-container" style="color: #fff; background: #333; font-weight: bold; border: none; text-align: center;"> -->
+<!-- 							Este reclamo ya no puede editarse. -->
+<!-- 						</div> -->
+<%-- 					</c:if> --%>
 				</sec:authorize>	
 			</div>
 <!--       			<a id="bookmarkme" href="#" rel="sidebar" title="Agregar a Favoritos"><i class="icon-star"></i></a> -->
@@ -1602,6 +1647,60 @@
 	</div><!-- CONTAINER FLUID -->
 	
 	
+	
+	<div id="mdl-verify" class="modal hide fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+	  	<div class="modal-header">
+		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>	
+			<h4>¿Cumple las siguientes condiciones?</h4>
+	  	</div>
+		<div class="modal-body">
+		
+			<ul class="list">
+				<li>Es CORRECTO
+					<ul class="sublist">
+						<li>Ubicación geográfica exacta (dirección, altura, ciudad, provincia).</li>						
+						<li>Problemática REAL descripta en el Título y la Descripción.</li>
+						<li>Consistencia entre texto e imágenes adjuntadas (si las hay).</li>
+						<li>Buena redacción. Sin faltas de ortografía y gramática que impidan o dificulten la comprensión de la información publicada.</li>
+					</ul>
+				</li>
+				<li>Está COMPLETO
+					<ul class="sublist">
+						<li>Obligatorios: título, descripción, categorías (tags).</li>
+						<li>Opcionales: barrio, imágenes.</li>
+					</ul>
+				</li>
+				<li>Es PERTINENTE
+					<ul class="sublist">
+						<li>La información suministrada constituye un reclamo barrial circunscripto a los límites de la República Argentina.</li>
+					</ul>
+				</li>
+				<li>Es ACTUAL</li>
+			</ul>
+		
+		</div>
+<!-- 		<div class="modal-footer"> 	 -->
+<!-- 			¿Cumple las condiciones? -->
+<!-- 			<button id="btn-update-status" class="btn btn-info" aria-hidden="true"> -->
+<!-- 			    <i class="icon-ok icon-large"></i>&nbsp;&nbsp;S&iacute; -->
+<!-- 			</button>	  			 		  		 -->
+<!-- 	  		<button class="btn" data-dismiss="modal" aria-hidden="true"> -->
+<!-- 		    	<i class="icon-remove icon-large"></i>&nbsp;&nbsp;No -->
+<!-- 		    </button>	  -->
+<!-- 	  	</div> -->
+		<div class="modal-footer"> 	
+			
+			<button id="btn-verify" class="btn btn-info" aria-hidden="true" onclick="userActionsController.verifyOrRejectIssue('Verificar');">
+			    <i class="icon-ok icon-large"></i>&nbsp;&nbsp;Verificar
+			</button>	  			 		  		
+	  		<button id="btn-reject" class="btn btn-danger" aria-hidden="true" onclick="userActionsController.verifyOrRejectIssue('Rechazar');">
+		    	<i class="icon-minus-sign icon-large"></i>&nbsp;&nbsp;Rechazar
+		    </button>	 
+		    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">
+		    	<i class="icon-remove icon-large"></i>&nbsp;&nbsp;Cancelar
+		    </button>	 
+	  	</div>
+	</div>
 	
 	<div id="mdl-detail" class="modal hide fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
 	  	<div class="modal-header">

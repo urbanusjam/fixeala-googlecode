@@ -2,7 +2,6 @@ package ar.com.urbanusjam.jpa.dao.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -11,19 +10,13 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CollectionJoin;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
-import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.persistence.criteria.Subquery;
-import javax.persistence.metamodel.SingularAttribute;
 
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
 import org.jfree.util.Log;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
@@ -57,7 +50,7 @@ public class IssueDAOImpl implements IssueDAO {
 	@Override
 	public List<Issue> getAllIssues() throws NoResultException, PersistenceException {
 		try{
-			return (List<Issue>) entityManager.createQuery("SELECT i FROM Issue i ORDER BY i.creationDate DESC").getResultList();
+			return (List<Issue>) entityManager.createQuery("SELECT i FROM Issue i WHERE i.status != 'ARCHIVADO' ORDER BY i.creationDate DESC").getResultList();
 		}catch(NoResultException e){
 			return null;
 		}catch(PersistenceException e){
