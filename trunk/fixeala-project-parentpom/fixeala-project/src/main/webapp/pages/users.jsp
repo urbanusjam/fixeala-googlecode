@@ -11,93 +11,31 @@
 <script type="text/javascript">
 	
 	$(document).ready(function(){
+	
+		var profileUserID = '${profileUser}';		
 		fxlGlobalController.populateProvinceCombobox('${provinceList}', 'user');
-	});
-	</script>
-
-<script type="text/javascript">
-	
-	$(document).ready(function(){
+		fxlAccountController.init(profileUserID);
 		
-		var rowId;
-		var rowTitle;
-		var selectedUser;
-		var currentUser = '${profileUser}';
-		
-		$(".fileinput-button").click(function() {
-		    $("#fileupload-profile").click();
-		})
-		
-		
-		 $("#fileupload-profile").change(function(){
-			 fileController.handleUserPicUpload(this.files[0], currentUser);
-		 });
-	
-				
-		var prov = '${province}';
-		var city = '${city}';
-	
-		if(prov == null || prov == ''){
-			$('#provincia').append("<option value='none'>NINGUNA</option>");
-		}
-		
-		else{
-			$('#provincia').val(prov);
-			$('#ciudad').append("<option value='"+ city +"'>"+city+"</option>");
-		}
-		
-	});
-	
-
-	
-	function errorHandler (jqXHR, exception) {
-        if (jqXHR.status === 0) {
-            alert('Not connect.\n Verify Network.');
-        } else if (jqXHR.status == 404) {
-            alert('Requested page not found. [404]');
-        } else if (jqXHR.status == 500) {
-            alert('Internal Server Error [500].');
-        } else if (exception === 'parsererror') {
-            alert('Requested JSON parse failed.');
-        } else if (exception === 'timeout') {
-            alert('Time out error.');
-        } else if (exception === 'abort') {
-            alert('Ajax request aborted.');
-        } else {
-            alert('Uncaught Error.\n' + jqXHR.responseText);
-        }
-	}
-		
-	function redirect(){
-		var url = window.location.origin + '/'+ 'fixeala/issues/' + rowId + '.html';
-		return window.location.href = url;
-	}
+	});	
 	
 </script>
 
-
-
-
 <div id="content">
-		    
-	    
 			<div class="container-fluid">
 			  <div class="row-fluid">
 			  
 			  <div class="row">
 	    	   	<div class="span5 pull-left" style="padding:0;text-align:left;margin:0; border:0px solid #000">
-    	   				<blockquote>    	   				
-					        <h3>${profileUser}</h3> &nbsp;&nbsp;					        
-					        <c:if test="${ !isActiveUser }">
-					        	<span class="label" style="vertical-align:super;">Este usuario ya no forma parte de Fixeala</span>
-					        </c:if> 
-					        
-					          <c:if test="${ not empty province }">
-					           <small><cite><i class="icon-map-marker"></i>&nbsp;&nbsp;<i style="text-transform:uppercase;">${city}, ${province}</i></cite></small>
-					          </c:if>
-					          
-					       			
-					    </blockquote>
+   	   				<blockquote>    	   				
+				        <h3>${profileUser}</h3> &nbsp;&nbsp;					        
+				        <c:if test="${ !isActiveUser }">
+				        	<span class="label" style="vertical-align:super;">Este usuario ya no forma parte de Fixeala</span>
+				        </c:if> 
+				        
+				          <c:if test="${ not empty province }">
+				           <small><cite><i class="icon-map-marker"></i>&nbsp;&nbsp;<i style="text-transform:uppercase;">${city}, ${province}</i></cite></small>
+				          </c:if>
+				    </blockquote>
 				</div>
 			</div>
 		
@@ -286,42 +224,14 @@
 							<!-- Context Menu -->
 					    	<div id="contextmenu-issue" class="dropdown clearfix">
 							    <ul id="ctxMenu" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" style="display:block;position:static;margin-bottom:5px;">
-							      <li><a tabindex="-1" href="javascript:redirect();"><i class="icon-paper-clip"></i>&nbsp;&nbsp;Ver detalles</a></li>
+							      <li><a tabindex="-1" href="javascript:fxlAccountController.goToIssuePage(fxlAccountController.rowID);"><i class="icon-paper-clip"></i>&nbsp;&nbsp;Ver detalles</a></li>
 							      <li><a tabindex="-1" href="#"><i class="icon-globe"></i>&nbsp;&nbsp;Ver en mapa</a></li>							    
 							      <li class="divider" id="actionsDivider"></li>						      	
 						      	  <li><a tabindex="-1" href="#" onclick="updateStatus('RESUELTO');"><i class="icon-ok"></i>&nbsp;&nbsp;Resolver</a></li>
 						      	  <li><a tabindex="-1" href="#" onclick="updateStatus('CERRADO');"><i class="icon-lock"></i>&nbsp;&nbsp;Cerrar</a></li>
 						      	  <li><a tabindex="-1" href="#" onclick="updateStatus('REABIERTO');"><i class="icon-folder-open-alt"></i>&nbsp;&nbsp;Reabrir</a></li>  
 							    </ul>
-	  						</div>
-	  											    	
-					    	<script>
-							    	$(function() {
-							    		
-							    		  var $contextMenu = $("#contextmenu-issue");
-							    		  
-							    		  $("body").on("contextmenu", "#tblUserIssues tr", function(e) {
-								    		  	$contextMenu.css({
-									    		      display: "block",
-									    		      left: e.pageX,
-									    		      top: e.pageY
-								    		    });		
-						    					rowId = $(this).find("td").eq(0).html().trim(); 
-						    					//rowTitle = $(this).find("td").eq(2).html().trim(); 								    		
-							    			  return false;							    			
-							    		  });
-							    		  
-							    		  $contextMenu.on("click", "a", function() {
-							    		     $contextMenu.hide();
-							    		  });
-							    		  
-							    		  $("body").on("click", function() {
-								    		     $contextMenu.hide();
-								    	  });
-							    		  
-							    	});
-					    	</script>
-					    	
+	  						</div>					    	
 					    </div>
 					    <!-- fin TAB RECLAMOS -->
 					    
@@ -568,5 +478,6 @@
 	</div>
 	<!-- /content --> 
 	
+	<script src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.account.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.file.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/DT_bootstrap.js"></script>

@@ -631,7 +631,7 @@
 			  
 			  $('#btn-comment').click(function() {
 				  				 	
-				  	blockPage('html');
+				  fxlGlobalController.blockPage('html');
 				  	
 					var message = $("#comment-text").val();
 					var id = ${id};					
@@ -644,13 +644,13 @@
 				 		dataType: "json",									 
 				        success: function(data){
 				        	if(data.result){
-				        		unBlockPage('html');
+				        		fxlGlobalController.unBlockPage('html');
 				        		setTimeout(function(){
 				        			window.location.reload();
 				        		}, 1000); 
 						    }					    	   
 				    	    else{
-				    	    	unBlockPage('html');
+				    	    	fxlGlobalController.unBlockPage('html');
 				    	    	setTimeout(function(){
 				        			bootbox.alert(data.message);	
 				        		}, 1000);

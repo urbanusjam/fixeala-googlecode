@@ -44,7 +44,7 @@
 							    	<div class="control-group">				     
 							        	<input type="password" class="input-block-level" name="j_password" placeholder="Contrase&ntilde;a">
 							        </div>
-							      	<button type="submit" id="btnLogin" class="btn btn-primary">            						
+							      	<button type="submit" id="btnLogin" class="btn btn-primary" onclick="fxlAccountController.login();">            						
 							           Login
 							    	</button>							    	
 							    	<div class="ajax_loading" style="display:none;" >
@@ -142,3 +142,4 @@
     <!-- /NAVBAR -->
     
 </header>
+<script src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.account.js"></script>  	

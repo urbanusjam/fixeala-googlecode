@@ -9,7 +9,7 @@
    
 </div>
 <br><br>
-<a href="javascript:getDomainUrl()">Volver a la página de Inicio</a>
+<a href="fxlGlobalController.getDomainUrl();">Volver a la página de Inicio</a>
 	
 </div>
 	

@@ -1,7 +1,3 @@
- function getDomainUrl(){
-			 	return window.location;
-			 }		
-
 /* Set the defaults for DataTables initialisation */
 $.extend( true, $.fn.dataTable.defaults, {
 	"sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
@@ -203,11 +199,15 @@ jQuery.fn.dataTableExt.oSort['string-num-desc'] = function(x1,y1) {
 };
 
 
+
+
+
 /* Table initialisation */
+/**
 $(document).ready(function() {
 	
 	
-	/**
+	
 	
 	//TBL USERS
 	$('#tblUsers').dataTable({
@@ -302,69 +302,5 @@ $(document).ready(function() {
 	    "aaSorting": [[ 0, "desc" ]] 
 	});
 	
-	
-	**/
-	var userID = "";	
-	
-	if(typeof currentUser != 'undefined')
-		userID = currentUser;
-	
-	
-	//TBL ISSUES BY USER
-	$('#tblUserIssues').dataTable({
-		"bProcessing": true,
-		"bServerSide": true,
-		"aoColumns" : [	 						
-		               	 { "sTitle" : "#" , "mData" : "id" },
-		               	 { "sTitle" : "FECHA" , "mData" : "fechaFormateada" },
-		               	 { "sTitle" : "TITULO" , "mData" : "title" },
-		                 { "sTitle" : "DIRECCION" , "mData" : "address" },		             
-		               	 { "sTitle" : "CIUDAD" , "mData" : "city" },
-		               	 { "sTitle" : "PROVINCIA" , "mData" : "province" },		   		            
-		               	 { "sTitle" : "ESTADO" , "mData" : "status" }		            	
-	                  ],		  		
-		"sAjaxSource": getDomainUrl() + "users/"+userID+"/loadUserIssues.html",
-		"fnServerData": function ( sSource, aoData, fnCallback ) {							 	
-	            $.ajax( {
-	                "dataType": 'json',
-	                "type": "GET",
-	                "url": sSource,
-	                "data": aoData,
-	                "success": fnCallback      	              
-	            } );
-	        },
-	        "fnRowCallback": function( nRow, aData, iDataIndex, iDisplayIndexFull  ) {
-	            $(nRow).attr('id', aData.id);
-	        },
-	    "aaSorting": [[ 0, "desc" ]] 
-	});
-	
-	
-	
-	//TBL COMMENTS BY USER
-	$('#tblUserComments').dataTable({
-		"bProcessing": true,
-		"bServerSide": true,
-		"aoColumns" : [	 
-		          	 	 { "sTitle" : "FECHA" , "mData" : "fechaFormateada" },
-		                 { "sTitle" : "MENSAJE" , "mData" : "mensaje" },		    
-		               	 { "sTitle" : "NRO. DE RECLAMO" , "mData" : "nroReclamo" }		               	
-	                  ],		  		
-		"sAjaxSource": getDomainUrl() + "users/"+userID+"/loadUserComments.html",
-		"fnServerData": function ( sSource, aoData, fnCallback ) {		
-	            $.ajax( {
-	                "dataType": 'json',
-	                "type": "GET",
-	                "url": sSource,
-	                "data": aoData,
-	                "success": fnCallback      	              
-	            } );
-	        },
-	        "fnRowCallback": function( nRow, aData, iDataIndex, iDisplayIndexFull  ) {
-	            $(nRow).attr('id', aData.id);
-	        },
-	    "aaSorting": [[ 0, "desc" ]] 
-	});
-	
-
-} );
+});
+**/

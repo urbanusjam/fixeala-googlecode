@@ -111,19 +111,18 @@ public class AccountController extends AbstractController {
 			HttpServletRequest request) throws MessagingException {
     
     	if(!isCaptchaValido(request)) {
-    		return new AlertStatus(true, "Captcha inv&aacute;lido. Intente de nuevo.");
+    		return new AlertStatus(false, "Captcha inv&aacute;lido. Intente de nuevo.");
     	}
     	    	
 		try {			
 			String encodedPass = passwordEncoder.encodePassword(user.getPassword(), user.getUsername());
-	    	user.setPassword(encodedPass);	      	
-	    
+	    	user.setPassword(encodedPass);  
  			userService.createAccount(user);
  			
 			return new AlertStatus(true, "Se ha enviado un link de activacion de cuenta a su casilla de correo.");					
 			
 		} catch (Exception e) {			
-				return new AlertStatus(false, "Ha ocurrido un error al crear su cuenta. Intente de nuevo.");
+				return new AlertStatus(false, "Ha ocurrido un error al crear su cuenta.");
 		}       		
 		
 	}
@@ -326,10 +325,11 @@ public class AccountController extends AbstractController {
 		
 		try {		
 		
-			if( !newEmail.equals(loggedUser.getEmail()) 
-					&& userService.emailExists(newEmail))
+			if( userService.emailExists(newEmail) && 
+				!loggedUser.getUsername().equals(userService.findUsernameByEmail(newEmail)) ){
 				return new ContenidoResponse(false, "La direcci&oacute;n de email ya ha sido registrada por otro usuario.");
-			
+			}
+				
 			UserDTO userDTO = userService.getUserByUsername(loggedUser.getUsername());		
 			userDTO.setEmail(newEmail);
 			userDTO.setCity(newCity);
