@@ -1,3 +1,3 @@
-var fixealaIssueController = {
+var issueController = {
 		
 }

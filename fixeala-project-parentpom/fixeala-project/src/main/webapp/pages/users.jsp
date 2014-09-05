@@ -568,5 +568,5 @@
 	</div>
 	<!-- /content --> 
 	
-	<script src="${pageContext.request.contextPath}/resources/js/fixeala/imgur.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.file.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/DT_bootstrap.js"></script>
