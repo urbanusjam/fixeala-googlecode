@@ -5,16 +5,16 @@
     	</div>    	
    	    <form id="forgotPasswordForm" class="well span5">
 		    <div class="row">			
-			    <input type="text" id="passwordResetEmail" name="passwordResetEmail" placeholder="Dirección de email" class="input-xlarge" >	
+			    <input type="text" id="passwordResetEmail" name="passwordResetEmail" placeholder="ejemplo@correo.com" class="input-xlarge" >	
 		      	<button type="submit" id="btnResetPwd" class="btn btn-primary pull-right">            						
 		           Enviar
 		    	</button>
 				<div class="span4">					
-			    	<p><i class="icon-caret-right"></i>&nbsp;Introduzca la dirección de correo electrónico que utilizó al crear su cuenta.
-			    	Un mensaje será enviado a la dirección provista con un enlace para restablecer tu contraseña.</p>
+			    	<p><i class="icon-caret-right"></i>&nbsp;Introduzca la direcci&oacute;n de email que utiliz&oacute; al crear su cuenta.
+			    	Le enviaremos un mensaje a la direcci&oacute;n provista con un enlace para restablecer tu clave.</p>
 					<br>
-					<p><i class="icon-caret-right"></i>&nbsp;Por razones de seguridad, el enlace tendrá una <b>vigencia de 24 horas</b>. 
-					Si el mensaje tarda en llegar, verifique que no esté en su carpeta de correo no deseado (spam).</p>
+					<p><i class="icon-caret-right"></i>&nbsp;El enlace tiene una <b>vigencia de 24 horas</b>. 
+					Si el mensaje tarda en llegar, verifique su carpeta de Correo No Deseado (spam).</p>
 		    	</div>   		
 		    </div>		 
 		    <div class="row" style="height:50px">
@@ -23,3 +23,7 @@
    		</form>   		    
    		<!-- /Reset password -->
 </div>
+<script src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.account.js"></script> 
+<script type="text/javascript">      
+	$(document).ready(function(){	fxlAccountController.initReset();	});	
+</script> 	

@@ -17,41 +17,38 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery-ui-1.10.3.custom.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.mockjax.js"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery-migrate-1.1.0.js"></script>
-    
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.uploadify.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.bootpag.min.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/formToWizard.js"></script>
-    
+
+    <!-- FIXEALA -->	
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.global.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.map.js"></script>	
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.issue.editable.js"></script>
+  	  	    
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.geocomplete.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/json.min.js"></script>	
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/d3.min.js"></script>	
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/topojson.v1.min.js"></script>	 
-    		
+
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-editable.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-datetimepicker.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-datetimepicker.es.js"></script>
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-rowlink.js"></script>
+<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-rowlink.js"></script> --%>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-lightbox.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-tags.js"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-contextmenu.js"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-fileupload.js"></script>
-<!--  <script src="//raw.github.com/botmonster/jquery-bootpag/master/lib/jquery.bootpag.min.js"></script> -->
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-wysiwyg.js"></script> 
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-paginator.min.js"></script> 
+<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-wysiwyg.js"></script>  --%>
+<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-paginator.min.js"></script>  --%>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootbox.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/bootstrap-filestyle-1.0.6.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/select2-3.5.1/select2.js"></script>
 
 <%-- 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/typeahead.js"></script>  --%>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/hogan-2.0.0.js"></script> 
+<%-- 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/hogan-2.0.0.js"></script>  --%>
 		
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.hotkeys.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.dataTables.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.dataTables.columnFilter.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.dataTables.rowReordering.js"></script>
-<%--     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/DT_bootstrap.js"></script> --%>
-  	
+
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fileupload/jquery.ui.widget.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fileupload/tmpl.min.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/fileupload/load-image.min.js"></script>
@@ -70,36 +67,22 @@
   	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/markerclusterer.js"></script>	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/markermanager.js"></script>	
-<%--   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/map.js"></script> --%>
 
-	<!-- FIXEALA -->	
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.global.js"></script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.map.js"></script>	
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.issue.editable.js"></script>
-  	
-  	
-  	
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/masonry/masonry.pkgd.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/masonry/infinitescroll.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/masonry/imagesloaded.pkgd.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/masonry/isotope.pkgd.js"></script>
-  	    
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.stepy.js"></script>
+
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.validate.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.blockUI.js"></script>
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.tagit.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.tooltipster.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.shorten.1.0.js"></script>
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/moment.min.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.bootstrap.wizard.js"></script>
-  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/script.js"></script>	
-  	  	
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/moment.min.js"></script>
+
   	<link type="text/css" href="http://fonts.googleapis.com/css?family=Oxygen:400,300,700|Lato:400,900|Graduate:400,900" rel="stylesheet">
   	
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/DT_bootstrap.css" rel="stylesheet">
-	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.tagit.css" rel="stylesheet">
-	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/tagit.ui-zendesk.css" rel="stylesheet">
-<%-- 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/select2.css" rel="stylesheet"> --%>
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/2.3.2/bootstrap.css" rel="stylesheet">   
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/2.3.2/bootstrap-combined.min.css" rel="stylesheet"> 
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/2.3.2/bootstrap-editable.css" rel="stylesheet"> 
@@ -114,782 +97,49 @@
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/select2-3.5.1/select2-bootstrap.css" rel="stylesheet">   
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/font-awesome/3.2.1/font-awesome.css" rel="stylesheet">
 
-	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/lightbox.css" rel="stylesheet"> 
-	
-	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/blueimp-gallery.min.css" rel="stylesheet">
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.fileupload-ui.css" rel="stylesheet">
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.fileupload.css" rel="stylesheet">	
-	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.uploadify.css" rel="stylesheet">		
+	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.dataTables.css" rel="stylesheet">	
+	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/blueimp-gallery.min.css" rel="stylesheet">	
+	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/lightbox.css" rel="stylesheet">	
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/tooltipster.css" rel="stylesheet">		
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/style2.css" rel="stylesheet">
-	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.stepy.css" rel="stylesheet"> 	
-	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/jquery.dataTables.css" rel="stylesheet">	
 
-<style>
 
-path {
-  fill: #ccc;
-  stroke: #fff;
-  stroke-width: .5px;
-}
-
-path:hover {
-  fill: red;
-}
-
-/* #issueWizard {zwidth:600px;border:1px solid #ccc}  */
-.easyWizardSteps {list-style:none;width:100%;overflow:hidden;margin:0;padding:0;border-bottom:1px solid #ccc;margin-bottom:20px}
-.easyWizardSteps li {font-size:12px;display:inline-block;padding:15px 0px 10px 0px;color:#B0B1B3;margin-right:20px;}
-.easyWizardSteps li span {font-size:24px}
-.easyWizardSteps li.current {color:#000}
-
-.easyWizardButtons {overflow:hidden;padding:5px;}
-.easyWizardButtons button, .easyWizardButtons .submit {cursor:pointer; }
-.easyWizardButtons .prev {float:left}
-.easyWizardButtons .next, .easyWizardButtons .submit {float:right}
-
-.step{display:inline;} 
-
-.easyWizardWrapper{height:280px;width:600px;}  
-
-#issueWizard fieldset{width:300px; padding:0; border:none;}
-/* #issueWizard legend.none{display:none;} */
-
-</style>
-
-  	<script type="text/javascript">
-    //<![CDATA[
-          
-               
-            function getDomainUrl(){
-				var protocol = window.location.protocol;
-				var host = window.location.host;
-				var context = "fixeala";
-				var domainUrl = protocol + "//" + host + "/" + context + "/";
-				console.log(domainUrl);
-			 	return domainUrl;
-			}	
-            
-            function showRecaptcha (divId) {
-            	var captchaContent = '<label>Ingrese el texto de la imagen</label><img src="../captchaImg" /><input name="captcha_answer" class="field" />';
-            	$("#"+divId).html (captchaContent);
-            }
-            
-          //BLOCKUI
-			function blockPage(containerID) {
-        	  	
-        	  var loader = '${pageContext.request.contextPath}/resources/images/loader.gif';
-        	  
-				$(containerID)
-						.block(
-								{
-									message : '<h4>Procesando...<br><br><img src='+loader+ '/></h4>',
-									overlayCSS : {
-										backgroundColor : '#000',
-										opacity : 0.3,
-										cursor : 'wait'
-									},
-									css : {
-										'-webkit-border-radius' : '5px',
-										'-moz-border-radius' : '5px',
-										padding : 20,
-										margin : 0,
-										width : '250px',
-										textAlign : 'center',
-										color : '#000',
-										border : '0px solid #aaa',
-										cursor : 'wait'
-									}
-								});
-			}
-
-			function unBlockPage(containerID) {
-				$(containerID).unblock();
-			}
-        
+	<script type="text/javascript">
+      
 		$(document).ready(function(){
 			
-			/***** FEEDBACK *****/
-			
-			$("#feedbackLink").click(function(){				
-				$('#cbxAsuntoFeedback option:first-child').attr("selected", "selected");
-				$('#msgFeedback').val('');				
-				$("#mdl-feedback").modal('show');					
-			});
-			
-			$("#btnSendFeedback").click(function(){
-				fxlGlobalController.sendFeedback();
-			});
-			
-			$('#msgFeedback').keyup(function(){
-			      if($(this).val().length > 0){
-			         $('#btnSendFeedback').prop('disabled',false);
-			      }else{
-			         $('#btnSendFeedback').prop('disabled',true);
-			      }
-			 });
-			
-			/***** END FEEDBACK *****/
-			
+			fxlGlobalController.initNavTooltip();
+			fxlGlobalController.initFeedback();
 			window.localStorage.clear();
-			 
-			var issueNames;
-			var issueObjs;
 			
-			 
-			 $('#search').typeahead({
-				 	minLength: 3,
-				    items: 5,
-				    cache: false,
-				    source: function(query, process){				    	
-				    	 return $.ajax({
-				             url: $('#search').data('link'),
-				             type: 'GET',
-				             data: { query: query },
-				             dataType: 'json',
-				             beforeSend: function() {
-				                 //that.$element is a variable that stores the element the plugin was called on
-				                 $('#search').addClass('loading');
-				             },
-				             success: function (data) {
+		});	
 
-								issueNames = [];
- 								issueObjs = {};				
-				            	 
-				            	 $.each( data, function ( i, item ) {				            		 
-				            		issueNames.push(item.title);
-				            		issueObjs[item.title] = item;
-				            	 });
-
-				                 return process(issueNames);
-				             },
-				             complete: function() {
-				            	 $('#search').removeClass('loading');
-				             }
-				         });
-				    },
-				
-			        matcher: function(item) {
-			        
-			        	var issue = issueObjs[item];
-			        	var query = this.query.toLowerCase();
-			        	
-			            return issue.id.toLowerCase().indexOf(query) != -1 
-			            			|| issue.title.toLowerCase().indexOf(query) != -1 
-			            			|| issue.status.toLowerCase().indexOf(query) != -1
-			            			|| issue.address.toLowerCase().indexOf(query) != -1   ;
-			            	
-			        },
-				    updater: function(itemName) {
-				    	window.location.href = issueObjs[ itemName ].url;   
-// 				    	return itemName;					
-				    },
-				    sorter: function(items) {
-				    	console.log(items);
-				        if (items.length == 0) {
-				            var noResult = new Object();
-				            items.push(noResult);
-				        }
-				    	return items;    
-				    },
-				    highlighter: function (item) {				    	
-
-				    	 if( issueNames.indexOf(item) == -1 ) {				    		
-				    		 return '<h4>No se encontraron resultados.</h4>';
-				    	 }
-
-				    	 else{
-				    		 var issue = issueObjs[item];
-				    		 var q  = this.query.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&amp;');
-				    		
-					    	   return ''
-							       + "<div class='typeahead-container'>"
-				                   + "<div class='typeahead-status'>"
-				                   + 		"<p class='" +issue.css+ "'>" +issue.status+ "</p>"
-				                   + "</div>"
-				                   + "<div class='typeahead-content'>"
-				                   + "<span class='typeahead-id'>&#35;" +highlightQuery(issue.id, q)+  "&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;" +issue.date+ "</span>"				                   
-				                   + "<span class='typeahead-title'><strong>" + highlightQuery(item, q)+ "</strong></span>"
-				                   + "<span class='typeahead-address'>" +highlightQuery(issue.address, q) + "</span>"
-				                   + "</div></div>";	     
-				    	 }  
-				    	  
-				    }				  
-				});
-			 
-			 function highlightQuery(data, query){
-				 return data.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
-		               return '<span style="background-color:yellow; display: inline;">' + match + '</span>';
-		         });
-			 }
-					
-			 //Remove forced selection of first item
-			 $.fn.typeahead.Constructor.prototype.render = function(items) {
-			     var that = this;
-			     items = $(items).map(function (i, item) {
-			       i = $(that.options.item).attr('data-value', item);
-			       i.find('a').html(that.highlighter(item));
-			       return i[0];
-			     });
-
-			     this.$menu.html(items);
-			     return this;
-			};
-			
-			var options = {
-	                currentPage: 1
-	                , totalPages: 10
-	                , numberOfPages:3
-	                , size:'normal'
-	                , alignment:'center'
-	                , onPageChanged: function(e,oldPage,newPage){
-	                    $('.pag').text("Current page changed, old: "+oldPage+" new: "+newPage);
-	                }
-	              
-	        }
-
-// 	        $('#comments-pag').bootstrapPaginator(options);
-			
-			$('#comments-pag').bootpag({
-			    total: 10
-			    , page: 1
-			    , maxVisible: 3
-			    , next: 'Siguiente &raquo;'
-			    , prev: '&laquo; Anterior'
-			}).on("page", function(event, num){
-			    $(".content").html("Page " + num); // or some ajax content loading...
-			});
-		
-			
-			$(".finish").addClass("btn btn-success");
-			
-			var isValid = false;
-
-			$("#fileupload").change(function(){				
-				alert("fileupload");
-				var fileInput = document.getElementById('fileupload');
-				var file = fileInput.files;
-				var formData = new FormData();			
-				formData.append('file', file[0]);
-				formData.append('isProfilePic', false);
-					                
-					$.ajax({ 
-					 		url: "./handleFileUpload.html", 		
-					 		type: "POST",						 				 	
-					 		data : formData,
-					 		contentType: false,
-					        processData: false,	
-					 		success : function(response){				 		
-					 			var input = $("#fileUpload");
-					 			if(!response.result){
-// 					 				bootbox.alert(alertStatus.message);
-					 				input.replaceWith(input.val('').clone(true));
-					 			}
-					 		},						 		 
-					 		error: function(jqXHR, exception) {
-				                   if (jqXHR.status === 0) {
-				                       alert('Not connect.\n Verify Network.');
-				                   } else if (jqXHR.status == 404) {
-				                       alert('Requested page not found. [404]');
-				                   } else if (jqXHR.status == 500) {
-				                       alert('Internal Server Error [500].');
-				                   } else if (exception === 'parsererror') {
-				                       alert('Requested JSON parse failed.');
-				                   } else if (exception === 'timeout') {
-				                       alert('Time out error.');
-				                   } else if (exception === 'abort') {
-				                       alert('Ajax request aborted.');
-				                   } else {
-				                       alert('Uncaught Error.\n' + jqXHR.responseText);
-				                   }
-				               }
-					 	});
-				
-			});
-
-			
-		
-				
-			function updateProgressBar(navItems, stepIndex){
-				var $total = navItems;		
-				var $current = stepIndex;			
-				var $percent = ($current/$total) * 100;
-				$('.bar').css({width:$percent+'%'});
-			}
-			
-			
-// 			$("#issueWizard").validate({ignore:".ignore"});
-			
-			/**
-			
-			$('#issueWizard').stepy({
-				backLabel  : '&laquo; Anterior',
-				nextLabel  : 'Siguiente &raquo;', 
-				errorImage :  false,
-				legend     :  false,
-				transition : 'fade',
-				block: true,
-				validate: true,
-				next: function(index) {
-						
-					if($("#issueWizard").valid()){
-						
-						if(index-1 == 1){
-							
-							//valido direccion ingresada a mano
-							geocodeAddress(function(value) { isValid = value; });	
-		
-					    	if(!isValid)
-					    		return false;
-					    	
-					    	else{					    		
-					    		$('#issueWizard').stepy('step', 2);
-					    		updateProgressBar(3, index-1);
-					    	}									    	
-						}
-						
-					}
-					
-				   
-				},
-				select: function(index){
-					updateProgressBar(3, index-1);
-				},       
-				back: function(index) {
-					updateProgressBar(3, index-1);
-				
-				}, finish: function(index) {
-					
-					if( $("#tags").val() == ""){
-						bootbox.alert("Debe especificar al menos una etiqueta.");						
-					}
-					
-					else{
-						
-						var $form = $("#issueWizard");
-						console.log($form.serialize());
-									
-						$.ajax({ 
-						 		url: "./reportIssue.html", 		
-						 		type: "POST",					 	
-						 		data : $form.serialize(),	
-						 		success : function(alertStatus){					 		
-						 			if(alertStatus.result){
-						 				
-						 				bootbox.alert(alertStatus.message, function() {
-						 					setTimeout(function () {
-				 	    						window.location.reload();
-				 	    					}, 400);	
-						 				});		 	    					
-			 	    				}
-			 	    				else{	 	    			
-			 	    					bootbox.alert(alertStatus.message);	 	    										 	    					
-			 	    				}  
-						 			
-						 		},
-						 		error: function(jqXHR, exception) {
-					                   if (jqXHR.status === 0) {
-					                       alert('Not connect.\n Verify Network.');
-					                   } else if (jqXHR.status == 404) {
-					                       alert('Requested page not found. [404]');
-					                   } else if (jqXHR.status == 500) {
-					                       alert('Internal Server Error [500].');
-					                   } else if (exception === 'parsererror') {
-					                       alert('Requested JSON parse failed.');
-					                   } else if (exception === 'timeout') {
-					                       alert('Time out error.');
-					                   } else if (exception === 'abort') {
-					                       alert('Ajax request aborted.');
-					                   } else {
-					                       alert('Uncaught Error.\n' + jqXHR.responseText);
-					                   }
-					               }
-						 	
-						 	});
-						
-						
-						
-					}
-					return false;
-					
-			  }
-			});
-			*/
-			
-			$(function(){
-				function initToolbarBootstrapBindings() {
-					$('a[title]').tooltip({container:'.text-editor'});
-					$('.dropdown-menu input').click(function() {return false;})
-						.change(function () {$(this).parent('.dropdown-menu').siblings('.dropdown-toggle').dropdown('toggle');})
-						.keydown('esc', function () {this.value='';$(this).change();});
-				};
-				function showErrorAlert (reason, detail) {
-					var msg='';
-					if (reason==='unsupported-file-type') { msg = "Unsupported format " +detail; }
-					else {
-						console.log("error uploading file", reason, detail);
-					}
-					$('File upload error '+ msg + '').prependTo('#alerts');
-				};
-				
-				initToolbarBootstrapBindings();
-
-				$('#commentTextEditor').wysiwyg({ fileUploadError: showErrorAlert} );
-			});
-			
-		
-		
-			
-			$("#issueClose").click(function(){		
-					 $("#issueForm").fadeIn('slow');					
-			});
-		
-			
-			/**
-			// initialize tooltipster on form input elements
-		    $('#issueWizard input[type="text"], #issueWizard textarea').tooltipster({ 		    
-		    	animation: 'fade',		
-		    	delay: 200,
-		    	interactive: true,
-		    	timer: 2500,
-		    	maxWidth: 230,
-		        trigger: 'custom', // default is 'hover' which is no good here
-		        onlyOne: false,    // allow multiple tips to be open at a time
-		        position: 'right'  // display the tips to the right of the element
-		    });
-			**/
-			
-			/** ======================================================================================================== **/
-			/**                                               I S S U E	S		  	  								     **/
-			/** ======================================================================================================== **/
-			
-			var visible = true;		
-			
-			function showAlert(message, alertType) {
-				$('#alert_placeholder')
-					.fadeIn('slow')
-					.append('<div id="alertdiv" style="text-align:center;height:45px;line-height:45px;border:2px solid" class="alert ' +  alertType + '"><a id="issueClose" class="close" data-dismiss="alert">&times;</a><span>'+message+'</span></div>');
-			    setTimeout(function() { // this will automatically close the alert and remove this if the users doesnt close it in 5 secs
-			      $("#alertdiv").fadeOut('slow');					 
-			    }, 3000);
-			}  
-	
-			
-			
-
-			
-			
-			
-			
-			function initBlokUI(){				
-					
-				$("#issueFormWizard").block({ 
-	                message: '<img src="resources/images/loader5.gif" />', 
-	                css: { 
-	                	border: 'none', 
-	                	width:  '100px', 
-	                	height: '100px', 
-	                	top:    '50%',
-	                	left:   '50%'
-	                },		       
-	                overlayCSS:  { 
-	                    backgroundColor: '#000', 
-	                    opacity:          0.2		                 
-	                },				              
-	                fadeOut: 500
-	            });
-			}
-			
-				
-			$('.navbar .nav > li > a').tooltip({
-  				placement: 'bottom'
-  			});
-			
-			
-			//-------------------------------
-            // USER LOGIN
-            //-------------------------------
-			
-			var loginFailed = function(data, status, e) {
-		        $(".alert").remove();
-		        $('#username').before('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times;</a>El usuario y/o la contrase&ntildea <br>son incorrectos.</div>');
-		        $('.ajax_loading').hide();
-		        $('#btnLogin').show();	
-		        $('#loginForm').each(function(){
-                    this.reset();   //Here form fields will be cleared.
-                });
-			};
-			
-		    $("#btnLogin").click( function(e) {	
-		        
-		        $('#loginForm').validate({ 
-		        	
-		        	 	rules: {
-		        	 		j_username: { required: true },				    
-		        	 		j_password: { required: true }
-		 				},
-		 				
-		 			    messages: {
-		 			    	j_username: { required : "" },
-		 			    	j_password: { required : "" }			 					
-		 				},
-		 				
-		 				highlight: function (element) { 
-		 					
-		 					 $(element).closest('.control-group').addClass('error');
-		 			    },
-			 	    	
-		 			    unhighlight: function (element) { 
-		 			  	 $(element).closest('.control-group').removeClass('error');  
-		 			    },
-		 						 			    
-		 			 	submitHandler: function() {
-		 			 				 			 		
-		 			 		 // Hide 'Submit' Button
-		 			        $('#btnLogin').hide();
-
-		 			        // Show Gif Spinning Rotator
-		 			        $('.ajax_loading').show();
-		 			 		
-		 			 		 $.ajax({
-				        			url: getDomainUrl() + "login.html",
-				            		type: "POST",		            	
-						            beforeSend: function(xhr) {
-						                xhr.withCredentials = true;
-						            },
-						            data: $("#loginForm").serialize(),				       
-						            success: function(data, status) { 
-						            	
-						            		setTimeout(function () {				                   
-								            		$('#btnLogin').show();
-								            		$('.ajax_loading').hide(); 
-								            		
-								            		if(data.loggedIn) {								            			
-								            			
-								            			$('#loginNav').load(location.href + " #loginNav > *");	
-								            			
-								            			var pathArray = window.location.pathname.split( '/' );	
-								            											            			
-														if(pathArray.indexOf("issues") != -1){
-															
-															var target = $('#userIssueActions');
-															var url = location.href + " #userIssueActions > *";
-															var urlVote = location.href + " #issue-stats-actions > *";
-															
-															target.load(url, function(){
-																userActionsController.enableUserActions();							
-															});	
-															
-														    var isVoted = '${isCurrentlyVoted}';
-														    var isVoteUp = '${isVoteUp}';
-														    
-															$("#issue-stats-actions").load(urlVote, function(){
-																userActionsController.setCurrentVote(isVoted, isVoteUp);	
-	 															$("#numFollowers").text('${cantidadObservadores}'); 
-															});	
-															
-															$("#issueRepair").load(location.href + " #issueRepair > *");
-
-														}
-															
-														
-		 							                } else {							                
-									                    loginFailed(data);							                    
-									                }				            				
-						            		},2000);
-						            		
-						            		return false;				
-						            		
-						            },
-						            						           
-						           error: loginFailed				           
-				        	});	    	
-				        	return false;					        	
-		 			 	}	
-		        });
-		       
-		    });
-		    
-		    /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */ 
-		   
-		    
-			
-		
-				var gotoHashTab = function (customHash) {
-		        var hash = customHash || location.hash;
-		        var hashPieces = hash.split('?'),
-		            activeTab = $('[href=' + hashPieces[0] + ']');
-		       		activeTab && activeTab.tab('show');
-		    	}
-		 
-			    // onready go to the tab requested in the page hash
-			    gotoHashTab();
-			 
-			    // when the nav item is selected update the page hash
-			    $('.nav a').on('shown', function (e) {
-			        window.location.hash = e.target.hash;
-			    })
-			 
-			    // when a link within a tab is clicked, go to the tab requested
-			    $('.tab-pane a').click(function (event) {
-			    	
-			        if (event.target.hash) {
-			       
-			            gotoHashTab(event.target.hash);
-			        }
-			    });
-				
-		
- 			/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */ 
-			
-			
-			//-------------------------------
-            // Tag events
-            //-------------------------------
-            
-            //var sampleTags = ['luminaria apagada', 'acera rota', 'bache', 'vehÃÂ­culo abandonado', 'residuos'];
-            var eventTags = $('#eventTags');
-
-            var addEvent = function(text) {
-                $('#events_container').append(text + '<br>');
-            };
-            eventTags.tagit({
-            	//availableTags: sampleTags,     
-            	 autocomplete: {
-            		 messages: {
-            		        noResults: '',
-            		        results: function() {}
-            		    }
-            	 },
-            	tagSource: function(search, showChoices) {
-            		var filter = search.term.toLowerCase();
-
-            		$.ajax({ 
-            			  url: getDomainUrl() + "loadTags.html",
-	            		  type: "GET",	
-            			  success: function(data){
-		            		var choices = $.grep(data, function(element) {
-		            		// Only match autocomplete options that begin with the search term.
-		            		// (Case insensitive.)
-		            		return (element.toLowerCase().indexOf(filter) === 0);
-		            		});
-	            			showChoices(choices);
-	            		},
-	            		dataType: 'json'
-            		});
-            	},              
-                allowSpaces: true,
-                tagLimit: 5,
-                beforeTagAdded: function(evt, ui) {
-                    if (!ui.duringInitialization) {
-                        addEvent('beforeTagAdded: ' + eventTags.tagit('tagLabel', ui.tag));
-                    }
-                },
-                afterTagAdded: function(evt, ui) {
-                    if (!ui.duringInitialization) {
-                        addEvent('afterTagAdded: ' + eventTags.tagit('tagLabel', ui.tag));
-                    }
-                },
-                beforeTagRemoved: function(evt, ui) {
-                    addEvent('beforeTagRemoved: ' + eventTags.tagit('tagLabel', ui.tag));
-                },
-                afterTagRemoved: function(evt, ui) {
-                    addEvent('afterTagRemoved: ' + eventTags.tagit('tagLabel', ui.tag));
-                },
-                onTagClicked: function(evt, ui) {
-                    addEvent('onTagClicked: ' + eventTags.tagit('tagLabel', ui.tag));
-                },
-                onTagExists: function(evt, ui) {
-                    addEvent('onTagExists: ' + eventTags.tagit('tagLabel', ui.existingTag));
-                }
-            });
-								
-            /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */ 
-					
-			function loadCaptcha(){
-				
-				//CAPTCHA
-	      	   	Recaptcha.create("6Lck8coSAAAAAKsNsoJdRVpHrCYfpbC60xhY7Ywv", 'captchadiv', {                              
-	      	   		theme: "clean",
-	      	   		callback: Recaptcha.focus_response_field
-	      	   	});  
-				
-			}
-                       
-      
-			$('#btnAdvancedSearch').click(function(){ 
-            	 $("#searchFilters").slideToggle('slow');              	
-            });
-            
-            
-            function setInitMarker(){
-          	
-          		map.setCenter(init_coord); 		
-          		
-          		var marker = new google.maps.Marker({ 
-          			 map: map,
-          			 position: init_coord,
-          			 draggable: true          			 
-          		}); 
-          	
-          	}	
-            
-            
-            function clearForm(form) {
-            	  // iterate over all of the inputs for the form
-            	  // element that was passed in
-            	  $(':input', form).each(function() {
-            	    var type = this.type;
-            	    var tag = this.tagName.toLowerCase(); // normalize case
-            	    // it's ok to reset the value attr of text inputs,
-            	    // password inputs, and textareas
-            	    if (type == 'text' || type == 'password' || tag == 'textarea')
-            	      this.value = "";
-            	    // checkboxes and radios need to have their checked state cleared
-            	    // but should *not* have their 'value' changed
-            	    else if (type == 'checkbox' || type == 'radio')
-            	      this.checked = false;
-            	    // select elements need to have their 'selectedIndex' property set to -1
-            	    // (this works for both single and multiple select elements)
-            	    else if (tag == 'select')
-            	      this.selectedIndex = -1;
-            	  });
-            };
-
-
-		});
-		
-		
-		
-		 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */ 
-		//]]>
-    
-    
-		
-		
-    
 	</script>
 
 </head>
 
 <body data-spy="scroll" data-target=".bs-docs-sidebar">
 
+	<!-- feedback button -->
 	<div class="feedback">
     	<span><a id="feedbackLink" href="#" title="¡Tu opinión cuenta!" style="cursor: pointer;"><i class="icon-bolt"></i>Feedback</a></span>
     </div>
 
-<!-- <section class="wrapper"> -->
+<!--<section class="wrapper"> -->
  
-  <tiles:insertAttribute name="header" />
+	  <tiles:insertAttribute name="header" />
+	  
+	  <tiles:insertAttribute name="body" />  
+	  
+	  <tiles:insertAttribute name="footer" />
   
-  <tiles:insertAttribute name="body" />  
-  
-  <tiles:insertAttribute name="footer" />
-  
-<!-- </section>  -->
+<!--</section>  -->
 
 
-<div id="mdl-feedback" class="modal hide fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+	<!-- feedback form -->
+	<div id="mdl-feedback" class="modal hide fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
 	  	<div class="modal-header">
 		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>	
 			<h4>Ayudanos a mejorar la plataforma FIXEALA</h4>
@@ -931,9 +181,6 @@ path:hover {
 		    </button>	 
 	  	</div>
 	</div>
- 
-  
-  
+	<!-- end feedback form -->  
 </body>
-
 </html>

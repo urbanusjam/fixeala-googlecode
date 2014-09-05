@@ -308,8 +308,7 @@ public class HomeController {
 			obj.put("province", issue.getProvince());	
 			obj.put("date", issue.getFechaFormateada());
 			obj.put("status", issue.getStatus());
-			obj.put("css", issue.getStatusCss());		
-			obj.put("url", URISchemeUtils.CONN_RELATIVE_URL_ISSUES + "/" + issue.getId());
+			obj.put("css", issue.getStatusCss());					
 			array.put(obj);
 		}		
 	

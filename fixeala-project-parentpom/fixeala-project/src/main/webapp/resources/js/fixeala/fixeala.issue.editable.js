@@ -111,10 +111,10 @@ var userActionsController = {
 				 		data: data,
 				 		dataType: "json",	
 				 		beforeSend: function(){
-				 			blockPage("html");
+				 			fxlGlobalController.blockPage("html");
 				 		},
 				        success: function(data){		
-				        	 unBlockPage("html");
+				        	fxlGlobalController.unBlockPage("html");
 				        	 
 				        	if(data.result){
 				        		setTimeout(function(){
@@ -133,7 +133,7 @@ var userActionsController = {
 					    	   }
 	            		},
 	            		complete: function() {
-	            			 unBlockPage("html");
+	            			fxlGlobalController.unBlockPage("html");
 		                }
 	    			});
 			
@@ -164,10 +164,10 @@ var userActionsController = {
 				 		data: data,
 				 		dataType: "json",	
 				 		beforeSend: function(){
-				 			blockPage("html");
+				 			fxlGlobalController.blockPage("html");
 				 		},
 				        success: function(data){		
-				        	 unBlockPage("html");
+				        	fxlGlobalController.unBlockPage("html");
 				        	 
 				        	if(data.result){
 				        		setTimeout(function(){
@@ -186,7 +186,7 @@ var userActionsController = {
 					    	   }
 	            		},
 	            		complete: function() {
-	            			 unBlockPage("html");
+	            			fxlGlobalController.unBlockPage("html");
 		                }
 	    			});
 			

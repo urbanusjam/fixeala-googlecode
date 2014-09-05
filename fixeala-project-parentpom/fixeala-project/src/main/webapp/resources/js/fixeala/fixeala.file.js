@@ -37,7 +37,7 @@ var fileController = {
 		
 		handleUserPicUpload : function(file, loggeduser){
 		
-			blockPage('html');
+			fxlGlobalController.blockPage('html');
 
 			console.log('--- the file ---');
 
@@ -77,7 +77,7 @@ var fileController = {
 	    		        success: function(data){	
 	    		 
 	    		        	if(data.status){
-	    		        		unBlockPage('html');
+	    		        		fxlGlobalController.unBlockPage('html');
 	    		        		console.log("--- db upload OK ---");
 	    		        		
 	    		        		setTimeout(function(){
@@ -155,7 +155,7 @@ var fileController = {
 		        success: function(data){	
 		        	console.log(data);
 		        	if(data.status){
-		        		unBlockPage('html');
+		        		fxlGlobalController.unBlockPage('html');
 		        		console.log("--- db upload OK ---");
 		        		
 		        		setTimeout(function(){

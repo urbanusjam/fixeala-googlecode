@@ -55,7 +55,7 @@
             setTimeout(function () {
                 var data = $.extend(true, [], self._data);
                 
-                var url = getDomainUrl() + "users/" + '${profileUser}' + "/loadBackendUsers.html";
+                var url = fxlGlobalController.getDomainUrl() + "users/" + '${profileUser}' + "/loadBackendUsers.html";
 			 	 
 			 	   $.ajax({
 						url: url,

@@ -6,20 +6,21 @@
 	
 		$(document).ready(function(){
 			
+			
+			/***** SEARCH *****/		
+			
+			fxlHomeController.initSearch();
+			
 			/*** INIT GOOGLE MAPS ***/
 					 
 			google.maps.event.addDomListener(window, 'load', mapController.initMap);  	 
-			
-			
+						
 			var currentPage = 1,
-	        currentXHR;	
-			
-			
+	        var currentXHR;				
 			var titleLimit = 40;
 			var descLimit = 150;
 			var dummyText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum mattis fringilla nisl sed elementum. Maecenas congue aliquet lacinia. Sed diam ante, consectetur at imperdiet tristique, tincidunt vitae magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed vitae vestibulum orci, ut cursus libero. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam in lorem at sapien accumsan consequat ut eu purus. "
-			
-			
+						
 			var $container = $('#infinite-container');
 			var $containerVotes = $('#infinite-container-votes');
 			var $containerUsers = $('#infinite-container-users');
@@ -893,7 +894,6 @@
 			<li class="active"><a href="#latestIssues" data-toggle="tab"><i class="icon icon-tags icon-small"></i>&Uacute;ltimos publicados</a></li>
 			<li><a href="#hottestIssues" data-toggle="tab"><i class="icon icon-thumbs-up icon-small"></i>M&aacute;s votados</a></li>
 			<li><a href="#topUsers" data-toggle="tab"><i class="icon icon-user icon-small"></i>Ranking usuarios</a></li>
-<!-- 			<li><a href="#graphs" data-toggle="tab"><i class="icon icon-bar-chart icon-small"></i>Indicadores</a></li> -->
 		</ul>							
 														
 		<div class="tab-content">	
@@ -954,11 +954,7 @@
 				<center><a href="#" class="btn btn-default btn-more user">Mostrar m&aacute;s resultados</a></center>
 				
 			</div>
-			
-<!-- 			<div class="tab-pane fade" id="graphs">		 -->
-<!-- 			Graficos -->
-<!-- 			</div> -->
-			
+	
 		</div>
 
       </div>
@@ -968,5 +964,5 @@
 	</div><!-- /CONTENT -->
 	
 	
-  	
- <script src="${pageContext.request.contextPath}/resources/js/fixeala/imgur.js"></script>	
+<script src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.home.js"></script>  	
+<script src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.file.js"></script>	

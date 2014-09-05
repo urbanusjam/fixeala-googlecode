@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import javax.mail.MessagingException;
 
+import org.jfree.util.Log;
 import org.joda.time.DateTime;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -117,7 +118,7 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = MessagingException.class)
+	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = MessagingException.class)
 	public void changePassword(PasswordChangeDTO passwordChange) throws Exception {
 		
 		String operation = passwordChange.getOperation();
@@ -130,8 +131,14 @@ public class UserServiceImpl implements UserService {
 		}
 		else if(operation.equals(PASSWORD_CHANGE)){
 			if(userDAO.findPassword(username, passwordChange.getCurrentPassword())){
-				userDAO.changePassword(username, passwordChange.getNewPassword());		
-				mailService.sendPasswordResetSuccessEmail(username, userDAO.findEmailbyUsername(username));
+				userDAO.changePassword(username, passwordChange.getNewPassword());	
+				
+				try{
+					mailService.sendPasswordResetSuccessEmail(username, userDAO.findEmailbyUsername(username));
+				}catch(Exception e){			
+					Log.debug("Error en el envio del email por cambio de clave.");			
+				}
+				
 			}				
 			else
 				throw new Exception("La clave actual ingresada es incorrecta.");
@@ -270,10 +277,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = MessagingException.class)
+	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = MessagingException.class)
 	public void closeAccount(String username) throws Exception {		
 		userDAO.closeAccount(username);
-		mailService.sendClosedAccountEmail(username, userDAO.findEmailbyUsername(username));
+		try{
+			mailService.sendClosedAccountEmail(username, userDAO.findEmailbyUsername(username));
+		}catch(Exception e){			
+			Log.debug("Error en el envio del email por cambio de clave.");			
+		}
 	}
 		
 	
