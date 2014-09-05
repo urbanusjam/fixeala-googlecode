@@ -629,11 +629,9 @@
 				      }
 				 });
 			  
-			  var $commentContainer = $('#issueComments');
-				
 			  $('#btn-comment').click(function() {
 				  				 	
-				  	blockPage($commentContainer);
+				  	blockPage('html');
 				  	
 					var message = $("#comment-text").val();
 					var id = ${id};					
@@ -646,13 +644,13 @@
 				 		dataType: "json",									 
 				        success: function(data){
 				        	if(data.result){
-				        		unBlockPage($commentContainer);
+				        		unBlockPage('html');
 				        		setTimeout(function(){
 				        			window.location.reload();
 				        		}, 1000); 
 						    }					    	   
 				    	    else{
-				    	    	unBlockPage($commentContainer);
+				    	    	unBlockPage('html');
 				    	    	setTimeout(function(){
 				        			bootbox.alert(data.message);	
 				        		}, 1000);
@@ -1379,8 +1377,8 @@
 				</c:if>
 			</sec:authorize>			
 					
-			<sec:authorize access="hasRole('ROLE_USER')">			
-				<c:if test="${infoReparacion eq 'Sin datos'}">				
+			<sec:authorize access="hasRole('ROLE_USER')">
+				<c:if test="${estado ne 'CERRADO' && estado ne 'ARCHIVADO' && infoReparacion eq 'Sin datos'}">				
 					<center>
 					 	<button id="btn-add-repair" data-toggle="modal" class="btn btn-danger" title="Agregar informaci&oacute;n sobre la reparación del reclamo" 
 					 		style="font-size: 11px; text-transform: uppercase; margin-top: 20px">
@@ -1390,7 +1388,6 @@
 				</c:if>
 				
 				<c:if test="${infoReparacion ne 'Sin datos'}">	
-				
 					<div style="width: 100%; text-align: right; padding: 10px 0 10px 0; margin-bottom: 20px; background: #F5F5F5; border-top: 1px dashed #CCC;border-bottom: 1px dashed #CCC; display: block; ">
 						<button id="btn-delete-repair" class="btn" title="Eliminar"><i class="icon-trash icon-large"></i></button>	
 						<button id="btn-edit-repair" class="btn" title="Editar"><i class="icon-pencil icon-large"></i></button>	
@@ -1563,6 +1560,10 @@
 						<a href="#mdl-followers" id="followers-list" data-toggle="modal"><span id="numFollowers">${cantidadObservadores}</span></a>
 					</span> 
 				</div>
+			</div>
+			
+			<div class="stats-container">
+				&Uacute;ltima actualizaci&oacute;n: <span class="pull-right"><b>${fechaUltimaActualizacion}</b></span>
 			</div>			
 					
 			<div id="issue-stats-actions">	
@@ -1586,9 +1587,7 @@
 				</sec:authorize>					
 			</div>
 			
-			<div class="stats-container">
-				&Uacute;ltima actualización: <span class="pull-right"><b>${fechaUltimaActualizacion}</b></span>
-			</div>
+			
 			
 			<div id="userIssueActions">
 				<sec:authorize access="hasRole('ROLE_USER')">				
@@ -1596,7 +1595,7 @@
 						<div class="stats-container">
 							<button id="btn-edit" class="btn" title="Editar"><i class="icon-pencil icon-large"></i></button>	
 							<button id="btn-update" class="btn btn-primary" title="Guardar cambios"><i class="icon-save icon-large"></i></button>	
-							<c:if test="${estado eq 'ABIERTO' || estado eq 'REABIERTO' || estado eq 'EN PROGRESO'}">
+							<c:if test="${estado eq 'VERIFICADO' || estado eq 'REABIERTO' || estado eq 'EN PROGRESO'}">
 								<div id="btn-status" data-toggle="modal" class="pull-right">			
 									<button class="btn btn-success" title="Resolver"><i class="icon-ok icon-large"></i> RESOLVER</button>
 								</div>
@@ -2061,7 +2060,7 @@
 <!-- <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-53d8340b75bafe45"></script> -->
 		
 </div><!-- CONTENT -->
- <script src="${pageContext.request.contextPath}/resources/js/fixeala/imgur.js"></script>	
+ <script src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.file.js"></script>	
  <script src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-datepicker.js"></script>	
   <script src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-datepicker.es.js"></script>	
  <link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/2.3.2/bootstrap-datepicker.css" rel="stylesheet">

@@ -178,7 +178,7 @@ path:hover {
           //BLOCKUI
 			function blockPage(containerID) {
         	  	
-        	  var loader = '/resources/images/loader.gif';
+        	  var loader = '${pageContext.request.contextPath}/resources/images/loader.gif';
         	  
 				$(containerID)
 						.block(

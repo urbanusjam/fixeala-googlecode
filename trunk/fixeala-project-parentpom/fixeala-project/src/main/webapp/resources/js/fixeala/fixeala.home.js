@@ -1,3 +1,3 @@
-var fixealaHomeController = {
+var homeController = {
 		
 }
