@@ -10,7 +10,7 @@ var fxlAccountController = {
 		fxlAccountController.loadIssuesTable(profileUserID);
 		fxlAccountController.loadCommentsTable(profileUserID);
 		fxlAccountController.configContextMenu();
-				
+						
 		$(".fileinput-button").click(function() {
 		    $("#fileupload-profile").click();
 		});		
@@ -68,10 +68,12 @@ var fxlAccountController = {
 	/** ============================================================================================== **/
 		
 	
-	login : function(){
-
-        $('#loginForm').validate({ 
-        	
+	initLogin : function(){
+		
+//		$("#btnLogin").click(function(){
+			
+			$('#loginForm').validate({ 
+	        	
         	 	rules: {
         	 		j_username: { required: true },				    
         	 		j_password: { required: true }
@@ -82,8 +84,7 @@ var fxlAccountController = {
  			    	j_password: { required : "" }			 					
  				},
  				
- 				highlight: function (element) { 
- 					
+ 				highlight: function (element) { 	 					
  					 $(element).closest('.control-group').addClass('error');
  			    },
 	 	    	
@@ -92,78 +93,101 @@ var fxlAccountController = {
  			    },
  						 			    
  			 	submitHandler: function() {
- 			 				 			 		
- 			 		 // Hide 'Submit' Button
- 			        $('#btnLogin').hide();
-
- 			        // Show Gif Spinning Rotator
- 			        $('.ajax_loading').show();
- 			 		
- 			 		 $.ajax({
-		        			url: fxlGlobalController.getDomainUrl() + "login.html",
-		            		type: "POST",		            	
-				            beforeSend: function(xhr) {
-				                xhr.withCredentials = true;
-				            },
-				            data: $("#loginForm").serialize(),				       
-				            success: function(data, status) { 
-				            	
-				            		setTimeout(function () {				                   
-						            		$('#btnLogin').show();
-						            		$('.ajax_loading').hide(); 
-						            		
-						            		if(data.loggedIn) {								            			
-						            			
-						            			$('#loginNav').load(location.href + " #loginNav > *");	
-						            			
-						            			var pathArray = window.location.pathname.split( '/' );	
-						            											            			
-												if(pathArray.indexOf("issues") != -1){
-													
-													var target = $('#userIssueActions');
-													var url = location.href + " #userIssueActions > *";
-													var urlVote = location.href + " #issue-stats-actions > *";
-													
-													target.load(url, function(){
-														userActionsController.enableUserActions();							
-													});	
-													
-												    var isVoted = '${isCurrentlyVoted}';
-												    var isVoteUp = '${isVoteUp}';
-												    
-													$("#issue-stats-actions").load(urlVote, function(){
-														userActionsController.setCurrentVote(isVoted, isVoteUp);	
-														$("#numFollowers").text('${cantidadObservadores}'); 
-													});	
-													
-													$("#issueRepair").load(location.href + " #issueRepair > *");
-
-												}
-													
-												
- 							                } else {							                
- 							                	fxlAccountController.handleLoginFailure();							                    
-							                }				            				
-				            		},2000);
-				            		
-				            		return false;				
-				            		
-				            },
-				            						           
-				           error: fxlAccountController.handleLoginFailure				           
-		        	});	    	
-		        	return false;					        	
+ 			 		fxlAccountController.login();        	
  			 	}//end submit	
         });
+			
+//		});
+
+        
+
+	},
+	
+	login : function(){
+		
+		console.log('--- submit');		 		
+ 		 // Hide 'Submit' Button
+//        $('#btnLogin').hide();
+		$('#btnLogin').attr('disabled', true);
+
+        // Show Gif Spinning Rotator
+        $('.ajax_loading').show();
+ 		
+ 		 $.ajax({
+   			url: fxlGlobalController.getDomainUrl() + "login.html",
+       		type: "POST",		            	
+	            beforeSend: function(xhr) {
+	                xhr.withCredentials = true;
+	            },
+	            data: $("#loginForm").serialize(),				       
+	            success: function(data, status) { 
+	            	
+		           
+		            
+	            	console.log('paso login');
+	            	
+	            		setTimeout(function () {				                   
+			            		$('#btnLogin').show();
+			            		$('.ajax_loading').hide(); 
+			            		
+			            		if(data.loggedIn) {	
+			            			 $('#loginModal').modal('hide');
+			            			 
+			            			window.location.reload();
+			            			/**
+			            			$('#loginNav').load(location.href + " #loginNav > *");	
+			            			
+			            			var pathArray = window.location.pathname.split( '/' );	
+			            											            			
+									if(pathArray.indexOf("issues") != -1){
+										
+										var target = $('#userIssueActions');
+										var url = location.href + " #userIssueActions > *";
+										var urlVote = location.href + " #issue-stats-actions > *";
+										
+										target.load(url, function(){
+											fxlIssueController.enableUserActions();							
+										});	
+										
+									    var isVoted = '${isCurrentlyVoted}';
+									    var isVoteUp = '${isVoteUp}';
+									    
+										$("#issue-stats-actions").load(urlVote, function(){
+											fxlIssueController.setCurrentVote(isVoted, isVoteUp);	
+											$("#numFollowers").text('${cantidadObservadores}'); 
+										});	
+										
+										$("#issueRepair").load(location.href + " #issueRepair > *");
+
+									}**/
+										
+									
+				                } else {							                
+				                	fxlAccountController.handleLoginFailure();							                    
+				                }				            				
+	            		},2000);
+	            		
+	            		return false;				
+	            		
+	            },
+	            						           
+	           error: fxlAccountController.handleLoginFailure				           
+   	});	    	
+   	return false;		
 		
 	},
 	
 	handleLoginFailure : function() {
-		
-        $(".alert").remove();
-        $('#username').before('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times;</a>El usuario y/o la contrase&ntildea <br>son incorrectos.</div>');
+		console.log('error');
+//		$('.alert-error').remove();
+//		$(".alert").remove();
+//        $('#username').before('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times;</a>El usuario y/o la contrase&ntildea <br>son incorrectos.</div>');
+        
+        $('.alert-error').text('El usuario y/o la clave son incorrectos.');
+        $('.alert-error').show();
         $('.ajax_loading').hide();
-        $('#btnLogin').show();	
+        $('#btnLogin').attr('disabled', false);
+//        $('#btnLogin').show();	
         $('#loginForm').each(function(){
             this.reset();   //Here form fields will be cleared.
         });
@@ -276,16 +300,16 @@ var fxlAccountController = {
  	    	
  	    	highlight: function (element) { 
  	    		$(element).closest('.input-prepend').removeClass('success').addClass('error');
-			    },
- 	    	
-			    unhighlight: function (element) { 
-			    	$(element).closest('.input-prepend').removeClass('error');
-			    },
-	
-		 		errorPlacement: function (error, element) {
-		 			$(element).closest('.input-prepend').tooltipster('update', $(error).text());
-		 			$(element).closest('.input-prepend').tooltipster('show');				        
-		        }
+		    },
+    	
+		    unhighlight: function (element) { 
+		    	$(element).closest('.input-prepend').removeClass('error');
+		    },
+
+	 		errorPlacement: function (error, element) {
+	 			$(element).closest('.input-prepend').tooltipster('update', $(error).text());
+	 			$(element).closest('.input-prepend').tooltipster('show');				        
+	        }
  	    	
  	    	/*
  	    	success: function(element) {
@@ -897,4 +921,4 @@ var fxlAccountController = {
 	}
 	
 
-}
+};

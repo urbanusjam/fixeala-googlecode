@@ -1,5 +1,9 @@
 var fxlGlobalController = {
 		
+	loggedUser : null,
+	
+	tagList : null,
+		
 	initNavTooltip : function(){
 		
 		$('.navbar .nav > li > a').tooltip({
@@ -191,4 +195,4 @@ var fxlGlobalController = {
         return cropped;
 	}
 		
-}
+};

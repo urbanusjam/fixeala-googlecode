@@ -15,6 +15,9 @@ var fxlHomeController = {
 			classIcon: "icon-plus"
 		});
 		
+		//bootstrap wizard
+		fxlHomeController.initIssueWizard();
+		
 		//pagination
 		fxlHomeController.issuesJson = issues;
 		fxlHomeController.usersJson = users;
@@ -136,10 +139,401 @@ var fxlHomeController = {
         }
 		
 	},
+	
+	/** ============================================================================================== **/
+	/**                               I S S U E   W I Z A R D			    		                   **/
+	/** ============================================================================================== **/
+	
+	
+	initIssueWizard : function(){
+		
+		//limit counter
+		$.fn.extend( {
+	        limiter: function(limit, elem) {
+	            $(this).on("keyup focus", function() {
+	                setCount(this, elem);
+	            });
+	            function setCount(src, elem) {
+	                var chars = src.value.length;
+	                if (chars > limit) {
+	                    src.value = src.value.substr(0, limit);
+	                    chars = limit;
+	                }
+	                elem.html( limit - chars + " / " + limit );
+	            }
+	            setCount($(this)[0], elem);
+	        }
+	    });
+		
+		//init limit counter
+		var elemTitle = $(".titleCounter");
+		var elemDesc = $(".descCounter");
+		$(".formTitle").limiter(100, elemTitle);
+		$(".formDescription").limiter(600, elemDesc);
+		
+		//disable next button on first tab
+		if( $(".tab-pane#tab1").hasClass('active') ){
+			$(".pager li.next").addClass('disabled');
+		}
+		
+		
+		
+		fxlHomeController.bindIssueToggleBtn();
+		
+		
+		
+		fxlHomeController.configWizard();
+		
+		fxlHomeController.configWizardFinishBtn();
+		
+	},
+	
+	configWizardTags : function(allTags){
+		
+		$("#tags").select2({				
+			placeholder: 'Seleccione una etiqueta...',
+			maximumSelectionSize: 5,
+//			tags: ${allTags},
+			tags : allTags,
+			multiple: true,			
+			tokenSeparators: [",", " "],
+		   	id: function (item) {
+	            return item.text;
+		   	},  		
+			createSearchChoice:function(term, data) {
+				  if ($(data).filter(function() {
+				    return this.text.localeCompare(term)===0;
+				  }).length!=0) {
+					  //return {id:term, text:term};
+					  return false;
+				  }
+				},
+			formatNoMatches: function(term){ 
+					return "No se encontraron resultados.";
+			},		
+			formatSelectionTooBig : function(term){ 
+				return 'S&oacute;lo se permiten 5 etiquetas.'; 
+			}
+		});	
+		
+	},	 
+		
+	emptyFields : function(){
+    	  return $("#address").val() == "" 
+    	  			&& $("#locality").val() == ""
+    	  			&& $("#administrative_area_level_1").val() == ""
+    	  			&& $("#formTitle").val() == ""
+    	  			&& $("#formDescription").val() == ""
+    	  			&& $("#tags").val() == "";
+    },      
+	
+    bindIssueToggleBtn : function(){
+    	
+    	$('#btnIssue').bind('click', function(event) {
 
+    		isAnimating = true;
+       
+        	//open form
+        	if( isFormOpen ){
+        	
+        		if(!fxlHomeController.emptyFields()){
+        			
+        			bootbox.confirm("Si cierra el formulario, se descartar&aacute; la informaci&oacute;n ingresada. &iquest;Desde continuar?", function(result){
+            			if(result){
+            				window.parent.location.reload();
+            			}
+            		});
+        			
+        		}
+        		//empty form
+        		else{             		
+        		 	if( $(this).hasClass('btn-danger') ){  	            		 	
+             			$(this).removeClass('btn-danger').addClass('btn-success').html("<i class=\"icon-map-marker icon-large\"></i>&nbsp;&nbsp;&nbsp;PUBLICAR RECLAMO");
+             			fxlHomeController.toggleIssueForm();       
+             		}        		
+        		}
+        		
+        	}
+        	//closed form
+        	else{
+        		
+        		if( $(this).hasClass('btn-success') ){
+            		$(this).removeClass('btn-success').addClass('btn-danger').html("<i class=\"icon-remove-sign icon-large\"></i>&nbsp;&nbsp;&nbsp;CANCELAR RECLAMO");
+            		fxlHomeController.toggleIssueForm();   
+            	} 
+        	
+        	}
+       
+        });//btnIssue
+    	
+    },	
+       
+	toggleIssueForm : function(){
+    	
+      	  var $issueBox = $("#issueFormWizard");  
+      	  var duration = 1000;
+      	  
+      	  $issueBox.animate({
+                width: "toggle",
+                right:"338px",
+                opacity: "toggle"                   
+          }, duration, function(){ isAnimating = false; });
+
+		  $("#map_canvas").animate({            		 
+       		  width : parseInt($issueBox.css('width')) == 316 ?  1178 :  842                   		
+          }, duration, function(){
+        	  
+        	  if( $issueBox.is(":hidden") )
+        		  isFormOpen = false;
+        	  else
+        		  isFormOpen = true;
+          });
+			 
+		  $("#cbxProvincias").animate({
+           	      marginRight : parseInt($issueBox.css('width')) == 316 ? 115 : 451        
+          }, duration);  				 
+			     		
+    },
+    
+    validateIssueForm : function(){
+    	
+    	 //sin caracteres especiales
+		$.validator.addMethod("titleCheck",function(value){
+			var pattern = /^\s*[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿñÑ0-9,\s]+\s*$/;
+			return pattern.test(value);
+		},  "Formato no v&aacute;lido.");
+		
+		//sin comillas simples o dobles
+		$.validator.addMethod("descriptionCheck",function(value){
+			var pattern = /^[^'"]*$/;
+			return pattern.test(value);
+		}, "Formato no v&aacute;lido.");
+		
+		var $issueValidator = $("#issueWizard").validate({	
+			
+			rules: {
+	 			route: { required: true },	
+	 			street_number: { required: true },
+	 			city: { required: true },		
+	 			province: { required: true },		
+	 			formTitle: { required: true, titleCheck: true },				    
+			    formDescription: { required: true, descriptionCheck: true } 				  
+			},
+		    messages: {
+		    	  route: { required : 'Campo obligatorio.'},	
+		    	  street_number: { required : 'Campo obligatorio.' },
+		    	  city: { required : 'Campo obligatorio.' },	
+		    	  province: { required : 'Campo obligatorio.' },
+		    	  formTitle: { required : 'Campo obligatorio.'},
+ 					  formDescription: { required : 'Campo obligatorio.' }
+			},
+			
+			highlight: function (element) { 
+		        $(element).addClass("error"); 
+		    },
+    	
+		    unhighlight: function (element) { 
+		        $(element).removeClass("error"); 
+		    },
+		    
+	 		errorPlacement: function (error, element) {
+	            $(element).addClass("error");
+	        }
+		});
+		
+		return $issueValidator;
+    	
+    },
+        		
+	configWizard : function(){
+		
+		var $issueValidator = fxlHomeController.validateIssueForm();
+		
+		 $('#rootwizard').bootstrapWizard({
+			
+			onPrevious: function(tab, navigation, index){	
+				fxlHomeController.enableDisableDraggableMarker(initMarker, index);
+	  		},				
+	  		
+			onNext: function(tab, navigation, index) {					
+			
+				var $valid = $("#issueWizard").valid();
+	  			
+				if(!$valid) {		  			
+	  				$issueValidator.focusInvalid();
+	  				return false;
+	  			}
+	  			
+	  			fxlHomeController.enableDisableDraggableMarker(initMarker, index);
+	  		
+	  			//first tab
+	  			if(index == 1){				  				
+	  				var $next =  $(".pager li.next");
+	  				if( $next.hasClass('next disabled') ){			  				
+	  					return false;
+	  				}			  				
+	  			}			  		
+			
+			},
+			
+			onTabShow: function(tab, navigation, index){
+				
+				var $total = navigation.find('li').length;
+				var $current = index+1;
+				
+				// If it's the last tab, hide the last button and show the finish instead
+				if($current >= $total) {
+					$('#rootwizard').find('.pager .next').hide();
+					$('#rootwizard').find('.pager .finish').show();
+					$('#rootwizard').find('.pager .finish').removeClass('disabled');
+					$('#rootwizard').find('.pager .finish').removeClass('btn');
+				} else {
+					$('#rootwizard').find('.pager .next').show();
+					$('#rootwizard').find('.pager .finish').hide();
+				}
+				
+			}, //onTabshow
+			onTabClick: function(tab, navigation, index) {
+				return false;
+			}
+		});
+		 
+		 return $('#rootwizard');
+		
+	},
+	
+	configWizardFinishBtn : function(){
+		
+		$('#rootwizard .finish').click(function() {
+			
+			if( $("#tags").val() == ""){
+				bootbox.alert("Debe especificar al menos una categor&iacute;a.");						
+			}
+			
+			else{
+				
+				//no file selected
+				if(issueFileData == null){
+					 fxlHomeController.saveIssue(null, null, null);
+				}
+				
+				//selected file
+				else{
+					
+					//upload file to imgur
+					console.log(issueFileData);
+					
+					var result = JSON.parse(issueFileData.response);				
+		        	var success = result.success;
+		        	var statusCode = result.status;
+		        	
+		        	console.log(success + ' - ' + statusCode);
+		        	
+	        		//upload error
+		        	if(!success && statusCode != '200'){
+		        		bootbox.confirm("Hubo un error al cargar el archivo. &iquest;Desea continuar con la publicacion del reclamo?", function(result){
+							  if(result){
+								  fxlHomeController.saveIssue(null, null, null);
+							  }
+		        		});
+		        	}
+		        	
+	        		//upload OK
+	        		else if(success && statusCode == '200'){
+	        		
+		        		var imgurFileID = result.data.id;
+			        	var deletehash = result.data.deletehash;
+		        		
+		        		//parameters
+		        		var fileData = JSON.stringify(result.data);
+		        		var filename = issueFileData.filename;
+		        		
+		        		//SAVE ISSUE
+		        		fxlHomeController.saveIssue(fileData, filename, deletehash);
+					
+	        		}//else imgur ok					
+				}
+			}
+			return false;
+		});		
+	},	
+	
+	enableDisableDraggableMarker : function(marker, tabIndex){
+		if(marker != null){
+			if(tabIndex==0)
+				marker.setOptions({draggable:true});			
+			else
+				marker.setOptions({draggable:false});			
+		}
+	},
+				
+	saveIssue : function(fileData, filename, deletehash){
+		
+		//save issue
+		var location = initMarker.location;
+		
+		var $form = $("#issueWizard");
+		console.log($form.serialize());
+		
+		//parameters
+		var lat = $("#latitude").val();
+		var lng = $("#longitude").val();
+		var address = $("#address").val();
+		var neighborhood = $("#neighborhood").val();
+		var city = $("#locality").val();
+		var province = $("#administrative_area_level_1").val();
+		var title = $("#formTitle").val();
+		var description = $("#formDescription").val();
+		var tags = $("#tags").val();
+		
+		var formData = "latitude=" + lat + "&longitude=" + lng + "&address=" + address + 
+					   "&neighborhood=" + neighborhood + "&city=" + city + "&province=" + province + 
+					   "&title=" + title + "&description=" + description + "&tags=" + tags + 
+					   "&fileData=" + fileData + "&filename=" + filename;
+					
+		$.ajax({ 
+		 		url: "./reportIssue.html", 		
+		 		type: "POST",					 	
+		 		data : formData,	
+		 		success : function(alertStatus){
+		 			
+		 			if(alertStatus.result){
+		 				
+		 				mapController.blockIssueForm();	 	
+		 				
+		 				bootbox.alert(alertStatus.message, function() {	
+		 					mapController.displayMarkers(map);
+	 						initMarker.setMap(null);
+	 						map.setCenter(location);
+	 						$('#btnIssue').removeClass('btn-danger').addClass('btn-success').html("<i class=\"icon-map-marker icon-large\"></i>&nbsp;&nbsp;&nbsp;PUBLICAR RECLAMO");
+	 						fxlHomeController.toggleIssueForm();
+		 				});		
+		 				
+		 				setTimeout(function(){   	
+		 					mapController.unBlockIssueForm();	   
+	 					}, 2000);
+    				}
+		 			
+    				else{	 	    			
+    					if(deletehash != null){
+    						fileController.deleteImage(deletehash);
+    					}
+    					bootbox.alert(alertStatus.message);	 	    										 	    					
+    				}  
+		 			
+		 		},
+		 		error: function(jqXHR, exception) {
+		 			bootbox.alert('No se pudo publicar el reclamo.');	 	  
+	            }
+		 	
+		});
+	},
+	
+	
 	/** ============================================================================================== **/
 	/**                               I N F I N I T E   S C R O L L				    		           **/
 	/** ============================================================================================== **/
+	
 	
 	initInfiniteScroll : function(){
 		
@@ -479,4 +873,4 @@ var fxlHomeController = {
 	}
 	
 		
-}
+};
