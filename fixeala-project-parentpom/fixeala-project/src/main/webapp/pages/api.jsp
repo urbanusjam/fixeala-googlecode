@@ -4,40 +4,14 @@
 <link type="text/css" href="${pageContext.request.contextPath}/resources/css/docs.css" rel="stylesheet">
 <link type="text/css" href="${pageContext.request.contextPath}/resources/css/highlight.css" rel="stylesheet">
 
-
-<script type="text/javascript">
-
-$(document).ready(function(){
-	
-	$('.nav-list li').click(function(e) {
-	    $('.nav-list li.active').removeClass('active');
-	    var $this = $(this);
-	    if (!$this.hasClass('active')) {
-	        $this.addClass('active');
-	    }
-	});	
-	
-});
-
-	
-</script>
-
 <style>
-
-section {
-  padding-top: 60px;
-}
+	section {  padding-top: 60px; }
 	.table td { font-weight: normal; }
-
 	blockquote { margin: 20px 0 40px 0; }
-	blockquote p { font-size: 13px; padding: 5px 0 5px 0; }
-	
-	h3 { display: block; padding-bottom: 10px; }
-	
-	.muted { color: #333; }
-	
+	blockquote p { font-size: 13px; padding: 5px 0 5px 0; }	
+	h3 { display: block; padding-bottom: 10px; }	
+	.muted { color: #333; }	
 	code.lead { margin-right: 10px; }
-
 </style>
 
 <div id="content" style="border: 0px solid red">
@@ -659,42 +633,43 @@ section {
 					</div>	
 				</section>
 				
-				<!-- entidad imagen -->
-				<section id="errores-code" style="border-bottom: none;">
-					<h3>C&oacute;digos de Error</h3>	
-					
-					<table class="table table-bordered table-hover">
-						<thead>
-							<tr>
-								<th>c&oacute;digo</th><th>descripci&oacute;n</th>
-							</tr>
-						</thead>
-						<tbody>							
-							<tr>
-								<td>200</td><td>la consulta se ejecut&oacute; con &eacute;xito y no se produjeron errores</td>
-							</tr>
-							<tr>
-								<td>400</td><td>indica que hay uno o varios par&oacute;metros faltantes o que el valor de un par&oacute;metro est&aacute; fuera de los l&iacute;mites o es incorrecto.</td>
-							</tr>
-							<tr>
-								<td>404</td><td>indica que el recurso solicitado no existe. Por ejemplo: solicitar un reclamo que no existe</td>
-							</tr>
-							<tr>
-								<td>500</td><td>indica que se produjo un error interno inesperado, que algo del servicio de FIXEALA no funciona</td>
-							</tr>
-							
-						</tbody>						
-					</table>
-				</section>
-	    	
-	    	
+			<!-- entidad imagen -->
+			<section id="errores-code" style="border-bottom: none;">
+				<h3>C&oacute;digos de Error</h3>	
+				
+				<table class="table table-bordered table-hover">
+					<thead>
+						<tr>
+							<th>c&oacute;digo</th><th>descripci&oacute;n</th>
+						</tr>
+					</thead>
+					<tbody>							
+						<tr>
+							<td>200</td><td>la consulta se ejecut&oacute; con &eacute;xito y no se produjeron errores</td>
+						</tr>
+						<tr>
+							<td>400</td><td>indica que hay uno o varios par&oacute;metros faltantes o que el valor de un par&oacute;metro est&aacute; fuera de los l&iacute;mites o es incorrecto.</td>
+						</tr>
+						<tr>
+							<td>404</td><td>indica que el recurso solicitado no existe. Por ejemplo: solicitar un reclamo que no existe</td>
+						</tr>
+						<tr>
+							<td>500</td><td>indica que se produjo un error interno inesperado, que algo del servicio de FIXEALA no funciona</td>
+						</tr>
+						
+					</tbody>						
+				</table>
+			</section>  
 	    	</div>
-    	
-    	
-
-		
-   	    
-   		<!-- /API REST -->
 </div>
-
-<%-- 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/vendor.js"></script>	 --%>
+<script type="text/javascript">
+$(document).ready(function(){	
+	$('.nav-list li').click(function(e) {
+	    $('.nav-list li.active').removeClass('active');
+	    var $this = $(this);
+	    if (!$this.hasClass('active')) {
+	        $this.addClass('active');
+	    }
+	});		
+});	
+</script>
