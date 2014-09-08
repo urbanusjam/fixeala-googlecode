@@ -104,26 +104,40 @@
                  }
              });
 								
-           
-           
-            function clearForm(form) {
-            	  // iterate over all of the inputs for the form
-            	  // element that was passed in
-            	  $(':input', form).each(function() {
-            	    var type = this.type;
-            	    var tag = this.tagName.toLowerCase(); // normalize case
-            	    // it's ok to reset the value attr of text inputs,
-            	    // password inputs, and textareas
-            	    if (type == 'text' || type == 'password' || tag == 'textarea')
-            	      this.value = "";
-            	    // checkboxes and radios need to have their checked state cleared
-            	    // but should *not* have their 'value' changed
-            	    else if (type == 'checkbox' || type == 'radio')
-            	      this.checked = false;
-            	    // select elements need to have their 'selectedIndex' property set to -1
-            	    // (this works for both single and multiple select elements)
-            	    else if (tag == 'select')
-            	      this.selectedIndex = -1;
-            	  });
-            };
+             //Add to Favorites			
+ 	        $('#bookmarkme').click(function() {
+ 	            if (window.sidebar && window.sidebar.addPanel) { // Mozilla Firefox Bookmark
+ 	                window.sidebar.addPanel(document.title,window.location.href,'');
+ 	            } else if(window.external && ('AddFavorite' in window.external)) { // IE Favorite
+ 	                window.external.AddFavorite(location.href,document.title); 
+ 	            } else if(window.opera && window.print) { // Opera Hotlist
+ 	                this.title=document.title;
+ 	                return true;
+ 	            } else { // webkit - safari/chrome
+ 	            	bootbox.alert('Esta funci&oacute;n no est&aacute; disponible para los navegadores Chrome y Safari.<br>' + 
+ 	            					'Presione las teclas <b>' + (navigator.userAgent.toLowerCase().indexOf('mac') != - 1 ? 'Command/Cmd' : 'CTRL') + ' + D</b> para agregar la p&aacute;gina a Favoritos.');
+ 	                
+ 	            }
+ 	        });
+ 	        
+ 	       <!--       			<a id="bookmarkme" href="#" rel="sidebar" title="Agregar a Favoritos"><i class="icon-star"></i></a> -->
+ 	      <!--       			<a href="#" onclick="javascript:window.print();" title="Imprimir"><i class="icon-print"></i></a> -->
+ 	      
+ 	      
+		//Prevents Jump When Tabs Are Clicked
+		$('.nav-tabs li a').click( function(e) {
+			history.pushState( null, null, $(this).attr('href') );
+		});
+		
+		
+		$('[data-toggle="popover"]').popover();
+		$('body').on('click', function (e) {
+		    $('[data-toggle="popover"]').each(function () {
+		        //the 'is' for buttons that trigger popups
+		        //the 'has' for icons within a button that triggers a popup
+		        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+		            $(this).popover('hide');
+		        }
+		    });
+		});
 			

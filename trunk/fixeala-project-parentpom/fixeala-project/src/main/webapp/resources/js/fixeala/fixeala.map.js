@@ -554,9 +554,10 @@ var mapController = {
 				    	
 				    	$.each(closestMarkers, function(i, marker){				    	
 					    	var tr = "";				    
-				    		var imageSrc = '';			    	
-					    	if(marker.contenidos.length > 0)
-					    		imageSrc = '../uploads/'+marker.contenidos[0].nombreConExtension;	
+				    		var imageSrc = '';	
+				    		
+					    	if(marker.images.length > 0)
+					    		imageSrc = marker.images[0].link;	
 					    	else
 					    		imageSrc = '../resources/images/nopic64.png';				    
 					    
@@ -720,7 +721,7 @@ var mapController = {
 		$container.unblock();	
 	}
 		
-}
+};
 
 
 /**********************************************/

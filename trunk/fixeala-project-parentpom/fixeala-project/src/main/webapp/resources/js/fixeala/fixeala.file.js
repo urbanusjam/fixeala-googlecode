@@ -4,35 +4,36 @@ var fileController = {
 			issueFileData = new Object();
 			issueFileData.response = fileData;
 			issueFileData.filename = filename;
-
 //			console.log(fileData);
 //			return fileData;
+			
+			console.log('--- finish imgur processing ---');
 		},
 		
 		simpleUpload : function(file, filename, callback) {
-			mapController.blockIssueForm();	 	
+			
 	        var fd = new FormData();
 	        fd.append("image", file); 
 	        
 	        var xhr = new XMLHttpRequest();
 	        xhr.open("POST", "https://api.imgur.com/3/image.json", false); //synchronous req 
+	        
 	        xhr.ontimeout = function () {
 	            console.error("The request for " + url + " timed out.");
 	        };
+	        
 	        xhr.onload = function() {
-	        	console.log('--- imgur processing ---');
-//	        	if (xhr.status === 200) {
-	        		 callback(xhr.responseText, filename);
-	        		 mapController.unBlockIssueForm();	 	
-//	        	}
-	        }
+	        	console.log('--- start imgur processing ---');
+	        	callback(xhr.responseText, filename);	        	
+	        };
+	        
 	        xhr.onerror = function (xhr) {
-//	        	callback(xhr.statusText, null);
 	        	console.error(xhr.statusText);
 	        };
+	        
 	        xhr.setRequestHeader('Authorization', 'Client-ID f64d4441566d507'); 
 	        xhr.send(fd);
-	    
+	        
 		},
 		
 		handleUserPicUpload : function(file, loggeduser){
@@ -214,7 +215,7 @@ var fileController = {
 		
 		
 		
-}
+};
 
 
  
