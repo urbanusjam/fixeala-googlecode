@@ -3,343 +3,34 @@
 	
 		var issueFileData = null; //holds the (optional) attached file
 	
-	
 		$(document).ready(function(){
-			
-			
-			/***** SEARCH *****/		
-			
-			fxlHomeController.initSearch();
-			
-			/*** INIT GOOGLE MAPS ***/
-					 
-			google.maps.event.addDomListener(window, 'load', mapController.initMap);  	 
-						
-			var currentPage = 1,
-	        var currentXHR;				
-			var titleLimit = 40;
-			var descLimit = 150;
-			var dummyText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum mattis fringilla nisl sed elementum. Maecenas congue aliquet lacinia. Sed diam ante, consectetur at imperdiet tristique, tincidunt vitae magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed vitae vestibulum orci, ut cursus libero. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam in lorem at sapien accumsan consequat ut eu purus. "
-						
-			var $container = $('#infinite-container');
-			var $containerVotes = $('#infinite-container-votes');
-			var $containerUsers = $('#infinite-container-users');
-			
-			/*** Load first page of infinite scroll ***/
-			
-			var issueJson = '${jsonIssues}';
+ 
+			//data
+			var issuesJson = '${jsonIssues}';
 			var usersJson = '${jsonUsers}';
-			var issuesArray = JSON.parse(issueJson);	
-			var usersArray = JSON.parse(usersJson);	
-			var votesArray = JSON.parse(issueJson);							
 			
-			//This will sort your array
-			function SortByVotes(a, b){
-			  var aVote = a.totalVotes;
-			  var bVote = b.totalVotes; 
-			  return bVote - aVote;
-			}
-
-			votesArray.sort(SortByVotes);
-			loadFirstPage(issuesArray, votesArray, usersArray);
+			//google maps
+			mapController.loadGoogleMap();
 			
-			function renderToHtml(element, type){
-				
-				var html = '';
-				var issueUrl = "issues/" + element.id;
-				var userUrl = "users/" + element.username;
-					
-				if(type == "issue"){
-					
-					imgNum = Math.floor(Math.random() * 10);  //entre 0 y 9
-					
-					html = 	'<div class="brick">'
-	        			+ 			'<p class="top">'
-						+				'<span class="id-char pull-left"><b>#</b></span>'
-						+ 				'<span class="date-box pull-right">'
-						+ 					'<span class="id pull-left">' +element.id+ '</span>'
-						+ 					'<span class="date pull-right">' +element.date+ '</span>'
-						+				'</span>'
-						+ 			'</p>'
-						+ 			'<a class="thumbnail" href="resources/images/samples/image' +imgNum+ '.jpg">'
-						+    			'<img class="media-object" src="resources/images/samples/image' +imgNum+ '.jpg">'
-						+  			'</a>'	
-						+   		'<a class="title" href="' +issueUrl+ '">' +cropText(element.title, titleLimit)+ '</a>'	
-						+			'<p class="address"><span class="city">' +element.city+ '</span>, <span class="province">' +element.province+ '</span></p>'
-						+           '<p class="desc">' +cropText(dummyText, descLimit)+ '</p>'
-						+ 			'<span class="status '+element.css+'">' +element.status+ '</span>'
-						+ 			'<div class="inline-container">'
-						+ 					'<div class="left"><i class="icon icon-thumbs-up icon-small"></i>' +element.totalVotes+ '</div>'
-						+					'<div class="right"><i class="icon icon-eye-open icon-small"></i>' +element.totalViews+ '</div>'
-						+ 					'<div class="center"><i class="icon icon-user icon-small"></i>' +element.totalFollowers+ '</div>'
-						+ 			'</div>'		
-						+   '</div>';
-				}
-				
-				else if(type == "user"){
-					
-					imgNum = 9;
-				
-					html = 	'<div class="brick brick-user">'
-						+   		'<a class="username" href="' +userUrl+ '">' +element.username+ '</a>'	
-						+ 			'<a class="thumbnail" href="resources/images/samples/image' +imgNum+ '.jpg">'
-						+    			'<img class="media-object" src="resources/images/samples/image' +imgNum+ '.jpg">'
-						+  			'</a>'	
-// 						+			'<p class="address"><span class="city">' +element.city+ '</span>, <span class="province">' +element.province+ '</span></p>'
-						+			'<p class="bottom">'
-						+ 					'Registrado el <span >' +element.registration+ '</span>'
-						+ 			'</p>'
-						+ 			'<div class="inline-container">'
-						+ 					'<div class="left"><i class="icon icon-map-marker icon-small"></i><span class="numIssues">' +element.reportedIssues+ '</div>'
-						+ 					'<div class="right"><i class="icon icon-comments-alt icon-small"></i><span class="numComments">' +element.postedComments+ '</div>'
-						+ 					'<div class="center"><i class="icon icon-ok icon-small"></i><span class="numFixes">' +element.fixedIssues+ '</div>'
-						+ 			'</div>'						
-						+   	'</div>';
-				}
-				
-				return html;
-				
-			}
+			//init
+			fxlHomeController.initHome(issuesJson, usersJson);
 			
-			function loadFirstPage(issuesArray, votesArray, usersArray){
-				 if(issuesArray.length > 0){
-	            	var html =  [];	
-	            	$.each( issuesArray, function( i, value ) {
-	            		var imgNum = Math.floor(Math.random() * 10);  //entre 0 y 9
-	            		var item = renderToHtml(value, "issue");
-		        		html.push(item);
-		        	});
-	            	$container.append(html);
-		         }
-				 
-				 if(votesArray.length > 0){
-	            	var html =  [];	
-	            	$.each( votesArray, function( i, value ) {
-	            		var imgNum = Math.floor(Math.random() * 10);  //entre 0 y 9
-	            		var item = renderToHtml(value, "issue");
-		        		html.push(item);
-		        	});
-	            	$containerVotes.append(html);
-		         }
-				 
-				 if(usersArray.length > 0){
-	            	var html =  [];	
-	            	$.each( usersArray, function( i, value ) {
-	            		var imgNum = Math.floor(Math.random() * 10);  //entre 0 y 9
-	            		var item = renderToHtml(value, "user");
-		        		html.push(item);
-		        	});
-	            	$containerUsers.append(html);
-			     }
-			}
-			
-			/*** INFINITE-SCROLL with ISOTOPE ***/
+			//progress bar
+			loadProgressBar();
 			
 			
-  			$container.imagesLoaded( function(){                
-                $container.isotope({
-                    itemSelector : '.brick',   
-                    sortBy: 'original-order',
-                    getSortData : {
-                        title    : '.title',
-                        id       : '.id parseInt',
-                        status   : '.status',
-                        province : '.province' 
-                    }
-                });
-            });
-			
-  			$container.infinitescroll({
-				navSelector  	: "#page-nav",
-  				nextSelector 	: "#page-nav a",
-				itemSelector 	: ".brick",  
-				pixelsFromNavToBottom : "20",
-				debug: true,
-				dataType: 'json',
-  				appendCallback: false,
-  				loading: {
-  		            finishedMsg: "<h4>No se encontraron m&aacute;s resultados.</h4>",
-  		            msgText: "<h4>Cargando reclamos...</h4>",
-  		            speed: 'slow'
-  		        }  		      
-			 }, function (newElements) {
-			 		var html = '';
- 			 		$.each( newElements, function( i, value ) {
- 			 			 html += renderToHtml(value, 'issue');
- 			        });
-					 	
- 			 		var $newElems = $( html );
-
-	 			    $newElems.imagesLoaded(function(){
-	 					$newElems.animate({ opacity: 1 });
-	 					$container.append( $newElems ).isotope( 'appended', $newElems );
-		 			});
-	 			    
-             });
-			
-			 $container.infinitescroll('pause');
-			 
-			 $containerVotes.imagesLoaded( function(){                
-	                $containerVotes.isotope({
-	                    itemSelector : '.brick'	                  
-	                });
-	            });
-				
-  			 $containerVotes.infinitescroll({
-				navSelector  	: "#page-nav-votes",
-  				nextSelector 	: "#page-nav-votes a",
-				itemSelector 	: ".brick",  
-				pixelsFromNavToBottom : "20",
-				debug: true,
-				dataType: 'json',
-  				appendCallback: false,
-  				loading: {
-  		            finishedMsg: "<h4>No se encontraron m&aacute;s resultados.</h4>",
-  		            msgText: "<h4>Cargando reclamos...</h4>",
-  		            speed: 'slow'
-  		        }  		      
-			 }, function (newElements) {
-			 		var html = '';
- 			 		$.each( newElements, function( i, value ) {
- 			 			 html += renderToHtml(value, 'issue');
- 			        });
-					 	
- 			 		var $newElems = $( html );
-
-	 			    $newElems.imagesLoaded(function(){
-	 					$newElems.animate({ opacity: 1 });
-	 					$containerVotes.append( $newElems ).isotope( 'appended', $newElems );
-		 			});
-	 			    
-             });
-				
-  			 $containerVotes.infinitescroll('pause');
-			 
-			 $containerUsers.imagesLoaded( function(){   
-	                $containerUsers.isotope({
-	                    itemSelector : '.brick',
-	                    sortBy: 'original-order',
-	                    sortAscending : false,
-	                    getSortData : {
-	                    	issues    : '.numIssues parseInt',
-	                        comments  : '.numComments parseInt',
-	                        fixes     : '.numFixes parseInt'
-	                    }
-	                });
-	 			});
-			 
-  			 $containerUsers.infinitescroll({
-				navSelector  	: "#page-nav-user",
-  				nextSelector 	: "#page-nav-user a",
-				itemSelector 	: ".brick",  
-				pixelsFromNavToBottom : "20",
-				debug: true,
-				dataType: 'json',
-  				appendCallback: false,
-  				loading: {
-  		            finishedMsg: "<h4>No se encontraron m&aacute;s resultados.</h4>",
-  		            msgText: "<h4>Cargando usuarios...</h4>",
-  		            speed: 'slow',
-  		        }  		      
-			 }, function (newElements) {
-			 		var html = '';
- 			 		$.each( newElements, function( i, value ) {
- 			 			 html += renderToHtml(value, 'user');
- 			        });
-					 	
- 			 		var $newElems = $( html );
- 			 		
-	 			    $newElems.imagesLoaded(function(){
-	 					$newElems.animate({ opacity: 1 });
-	 					$containerUsers.append( $newElems ).isotope( 'appended', $newElems );
-		 			});
-             });
-						
-			$containerUsers.infinitescroll('pause');
-			
-			//bootstrap tabs + multiple isotope instances = overlapping [FIXED] 
-			// http://stackoverflow.com/questions/19214362/making-a-jquery-isotope-layout-initialize-inside-a-bootstrap-tab
-			// https://github.com/metafizzy/isotope/issues/458
-			
-			$('.nav-tabs li').on('shown.bs.tab', function (e) {
-				var clickedTab = $(this).find('a').attr('href');
-			 	if(clickedTab == "#topUsers"){
-				  	$containerUsers.isotope('layout');
-			 	}
-			 	if(clickedTab == "#hottestIssues"){
-				  	$containerVotes.isotope('layout');
-			 	}
-
-			});
-			
-			
-			$(' .btn-more ').click(function(e){
-  			     // call this whenever you want to retrieve the next page of content
-  			     // likely this would go in a click handler of some sort
-  			     e.preventDefault();
   			
-  			    if( $(this).hasClass( 'issue' ) ){
-  					$container.infinitescroll('retrieve');
-  				    $('#page-nav').hide(); 
-  			   	}  	
-  			    else if( $(this).hasClass( 'vote' ) ){
-					$containerVotes.infinitescroll('retrieve');
-				    $('#page-nav-votes').hide(); 
-			   	}  	
-  			    else{
-  			    	$containerUsers.infinitescroll('retrieve');
-  			        $('#page-nav-users').hide(); 
-  			    } 			  
-  			    return false;
-  			});
-			
-			
-			
-			function cropText(value, limit){
-				var cropped = '';
-				if(value.length > limit)
-					cropped = value.substr(0, limit) + '...';
-                else 
-                	cropped = value;	
-				
-				return cropped;
-			}
-			
-			
-           
-			 // sort items on button click
-  			$('#sorts  > .btn').on( 'click',  function() {
-  				var sortByValue = $(this).attr('data-sort-by');
-  			  	$container.isotope({ sortBy: sortByValue });
-  			 	$(this).addClass("active").siblings().removeClass("active");
-  			});
-  			
-  			// sort items on button click
-  			$('#sorts-users  > .btn').on( 'click',  function() {
-  				var sortByValue = $(this).attr('data-sort-by');
-  			  	$containerUsers.isotope({ sortBy: sortByValue });
-  			 	$(this).addClass("active").siblings().removeClass("active");
-  			});
-
-  			
-			var flag = 0;
-			
-			
-			/****** BOOTSTRAP WIZARD ******/
+			/********** BOOTSTRAP WIZARD **********/
 			
 			function enableDisableDraggableMarker(marker, tabIndex){
-				
 				if(marker != null){
 					if(tabIndex==0)
 						marker.setOptions({draggable:true});			
 					else
 						marker.setOptions({draggable:false});			
 				}
-			
 			}
-			
-			
-					 
+				 
 			$("#tags").select2({				
 				placeholder: 'Seleccione una etiqueta...',
 				maximumSelectionSize: 5,
@@ -389,29 +80,21 @@
 			$(".formTitle").limiter(100, elemTitle);
 			$(".formDescription").limiter(600, elemDesc);
 			
-			 function emptyFields(){
+			function emptyFields(){
 	        	  return $("#address").val() == "" 
 	        	  			&& $("#locality").val() == ""
 	        	  			&& $("#administrative_area_level_1").val() == ""
 	        	  			&& $("#formTitle").val() == ""
 	        	  			&& $("#formDescription").val() == ""
 	        	  			&& $("#tags").val() == "";
-	          }
+	        }
 	          
-	 
-			 var timesClicked = 0;
+			var timesClicked = 0;
 		
-			 
 			 $( '#btnIssue' ).bind( 'click', function( event ) {
 		
 				 isAnimating = true;
 	           
-// 				  timesClicked++;
-// 				   if ( timesClicked >= 3 ) {
-// 				     $( this ).unbind( event );
-// 				   }
-	
-	              
 	            	//open form
 	            	if( isFormOpen ){
 	            	
@@ -471,8 +154,6 @@
 		  	          }, duration);  				 
 	  				     		
 	            }
-	           
-	            
 	            
 	            //sin caracteres especiales
 				$.validator.addMethod("titleCheck",function(value){
@@ -698,25 +379,31 @@
 				}
 				
 				//filestyle
-				$("#file_upload").filestyle({
-					buttonText: "Seleccionar",
-// 					classButton: "btn btn-primary",
-// 					classInput: "input-small",
-					classIcon: "icon-plus"
-				});
+// 				$("#file_upload").filestyle({
+// 					buttonText: "Seleccionar",
+// 					classIcon: "icon-plus"
+// 				});
 				
-				//overall progress bar 
-				var totalIssues = '${totalIssues}'; 
-				var verifiedIssues = '${verified}'; 
-				var resolvedIssues = '${resolved}'; 
 				
-				var verifiedProgress = (100 * verifiedIssues) / totalIssues;
-				var resolvedProgress = (100 * resolvedIssues) / totalIssues;
 				
-				$('#verifiedBar').css('width', verifiedProgress);
-				$('#resolvedBar').css('width', resolvedProgress);
+				
 			
 		});
+		
+		function loadProgressBar(){
+			
+			//overall progress bar 
+			var totalIssues = '${totalIssues}'; 
+			var verifiedIssues = '${verified}'; 
+			var resolvedIssues = '${resolved}'; 
+			
+			var verifiedProgress = (100 * verifiedIssues) / totalIssues;
+			var resolvedProgress = (100 * resolvedIssues) / totalIssues;
+			
+			$('#verifiedBar').css('width', verifiedProgress);
+			$('#resolvedBar').css('width', resolvedProgress);
+			
+		}
 	</script>
 	
 	<div id="content">
@@ -725,7 +412,7 @@
 		<div id="searchBar" class="row-fluid" >
 			<div class="span8">				
 				<div class="input-append">
-					<input id="search" type="text" data-link="./autocomplete" data-provide="typeahead" placeholder="Busc&aacute; reclamos por ID, Estado, T&iacute;tulo o Direcci&oacute;n">				
+					<input id="search" type="text" data-link="./autocomplete" data-provide="typeahead" placeholder="Buscar reclamos por t&iacute;tulo, direcci&oacute;n, n&uacute;mero o estado...">				
 				</div>			
 			</div>			
 			<div class="span3 pull-right" style="width:336px;">
@@ -741,20 +428,20 @@
 
 			<div class="span6 pull-left" style="border-right: 1px solid #DDD; margin:0;">			
 				<center>
-					<h4>¡Ya se verificaron ${verified} de ${totalIssues} reclamos!</h4>
+					<h4>&iexcl;Ya se verificaron ${verified} de ${totalIssues} reclamos!</h4>
 					<div class="progress progress-striped active" style="width: 400px;">					
 		  				<div class="bar" id="verifiedBar"></div>	  				
 					</div>
-					<p style="text-align: center;">Todavía quedan ${notVerified} reclamos sin verificar</p>
+					<p style="text-align: center;">Todav&iacute;a quedan ${notVerified} reclamos sin verificar</p>
 				</center>
 			</div>
 			<div class="span6 pull-right" style=" border-left: 1px solid #DDD; margin:0;">			
 				<center>
-					<h4>¡Y se resolvieron ${resolved} de ${totalIssues} reclamos!</h4>
+					<h4>&iexcl;Y se resolvieron ${resolved} de ${totalIssues} reclamos!</h4>
 					<div class="progress progress-striped active" style="width: 400px;">					
 		  				<div class="bar bar-success" id="resolvedBar"></div>	  				
 					</div>
-					<p style="text-align: center;">Todavía quedan ${notResolved} reclamos sin resolver</p>
+					<p style="text-align: center;">Todav&iacute;a quedan ${notResolved} reclamos sin resolver</p>
 				</center>
 			</div>
 <!-- 			<div class="span4" style=" margin:0; text-align: center"> -->

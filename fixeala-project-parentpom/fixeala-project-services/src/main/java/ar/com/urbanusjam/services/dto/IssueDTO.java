@@ -37,6 +37,7 @@ public class IssueDTO implements Serializable {
 	public  String description;
 	public  Date creationDate;	
 	public  Date lastUpdateDate;	
+	public  String firstImageUrl;	
 	
 	@XmlTransient
 	private IssueRepair reparacion = new IssueRepair();

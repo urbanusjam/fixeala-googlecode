@@ -12,6 +12,7 @@
 		<property name="passwordResetDAO" ref="passwordResetDAO" />
 		<property name="activationDAO" ref="activationDAO" />
 		<property name="mailService" ref="mailService" />
+		<property name="contenidoService" ref="contenidoService" />	
 	</bean>
 		
 	<bean name="issueService" class="ar.com.urbanusjam.services.impl.IssueServiceImpl" >

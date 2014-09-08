@@ -25,8 +25,8 @@ public class UserDTO implements Serializable {
 	private String accountStatus;
 	private boolean enabled;
 	private String rol;
-	
 	private int cantidadIssues; 
+	private String profilePic; 
 	
 	public UserDTO(){}
 	
@@ -170,6 +170,14 @@ public class UserDTO implements Serializable {
 
 	public void setAccountStatus(String accountStatus) {
 		this.accountStatus = accountStatus;
+	}
+	
+	public String getProfilePic() {
+		return profilePic;
+	}
+
+	public void setProfilePic(String profilePic) {
+		this.profilePic = profilePic;
 	}
 
 	public boolean hasRole(String role, List<String> authorities) {

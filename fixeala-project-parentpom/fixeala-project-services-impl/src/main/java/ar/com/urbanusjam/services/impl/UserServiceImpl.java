@@ -22,8 +22,10 @@ import ar.com.urbanusjam.dao.PasswordResetDAO;
 import ar.com.urbanusjam.dao.UserDAO;
 import ar.com.urbanusjam.entity.annotations.ActivationToken;
 import ar.com.urbanusjam.entity.annotations.Authority;
+import ar.com.urbanusjam.entity.annotations.MediaContent;
 import ar.com.urbanusjam.entity.annotations.PasswordResetToken;
 import ar.com.urbanusjam.entity.annotations.User;
+import ar.com.urbanusjam.services.ContenidoService;
 import ar.com.urbanusjam.services.MailService;
 import ar.com.urbanusjam.services.UserService;
 import ar.com.urbanusjam.services.dto.ActivationDTO;
@@ -43,6 +45,7 @@ public class UserServiceImpl implements UserService {
 	private AuthorityDAO authorityDAO;
 	private PasswordResetDAO passwordResetDAO;
 	private ActivationDAO activationDAO;
+	private ContenidoService contenidoService; 
 	private MailService mailService;
 	
 	
@@ -64,6 +67,10 @@ public class UserServiceImpl implements UserService {
 		
 	public void setMailService(MailService mailService) {
 		this.mailService = mailService;
+	}
+	
+	public void setContenidoService(ContenidoService contenidoService) {
+		this.contenidoService = contenidoService;
 	}
 
 	@Override
@@ -318,6 +325,10 @@ public class UserServiceImpl implements UserService {
 		userDTO.setLastLoginDate(user.getLastLoginDate());			
 		userDTO.setCity(user.getCity());
 		userDTO.setProvince(user.getProvince());
+		
+		MediaContent userPic = contenidoService.getUserPic(user.getUsername());
+		
+		userDTO.setProfilePic(userPic != null ? userPic.getLink() : null);
 
 		if(user.isEnabled())
 			userDTO.setAccountStatus("ACTIVO");

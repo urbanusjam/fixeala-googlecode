@@ -1,6 +1,28 @@
 var fxlHomeController = {
 		
-	initSearch : function(){
+	issuesJson : null,
+	
+	usersJson : null,
+	
+	initHome : function(issues, users){
+		
+		//search
+		fxlHomeController.initSearchBar();
+		
+		//fileupload button
+		$("#file_upload").filestyle({
+			buttonText: "Seleccionar",
+			classIcon: "icon-plus"
+		});
+		
+		//pagination
+		fxlHomeController.issuesJson = issues;
+		fxlHomeController.usersJson = users;
+		fxlHomeController.initInfiniteScroll();
+		
+	},
+		
+	initSearchBar : function(){
 		
 		var issueNames;
 		var issueObjs;			
@@ -112,6 +134,347 @@ var fxlHomeController = {
                 }
               
         }
+		
+	},
+
+	/** ============================================================================================== **/
+	/**                               I N F I N I T E   S C R O L L				    		           **/
+	/** ============================================================================================== **/
+	
+	initInfiniteScroll : function(){
+		
+		var issuesArray = JSON.parse(fxlHomeController.issuesJson);	
+		var votesArray = JSON.parse(fxlHomeController.issuesJson);		
+		var usersArray = JSON.parse(fxlHomeController.usersJson);	
+		
+		votesArray.sort(fxlHomeController.sortByVotes);
+		
+		//config
+		fxlHomeController.configIsotopeContainers();
+		fxlHomeController.configIsotopeTabs();
+		fxlHomeController.configIsotopeMoreBtn();
+		fxlHomeController.configIsotopeSortBtn();
+
+		//first page
+		fxlHomeController.loadFirstPage(issuesArray, votesArray, usersArray);
+		
+	},
+	
+	sortByVotes : function(a, b){
+		var aVote = a.totalVotes;
+		var bVote = b.totalVotes; 
+		return bVote - aVote;
+	},
+	
+	loadFirstPage : function(issuesArray, votesArray, usersArray){
+		
+		var $container = $('#infinite-container');
+		var $containerVotes = $('#infinite-container-votes');
+		var $containerUsers = $('#infinite-container-users');
+		
+		 if(issuesArray.length > 0){
+        	var html =  [];	
+        	$.each( issuesArray, function( i, value ) {
+        		var item = fxlHomeController.renderToHtml(value, "issue");
+        		html.push(item);
+        	});
+        	$container.append(html);
+         }
+		 
+		 if(votesArray.length > 0){
+        	var html =  [];	
+        	$.each( votesArray, function( i, value ) {
+        		var item = fxlHomeController.renderToHtml(value, "issue");
+        		html.push(item);
+        	});
+        	$containerVotes.append(html);
+         }
+		 
+		 if(usersArray.length > 0){
+        	var html =  [];	
+        	$.each( usersArray, function( i, value ) {
+        		var item = fxlHomeController.renderToHtml(value, "user");
+        		html.push(item);
+        	});
+        	$containerUsers.append(html);
+	     }
+	},
+	
+	renderToHtml : function(element, type){
+		
+		var html = '';
+		var imageUrl = '';
+		var issueUrl = "issues/" + element.id;
+		var userUrl = "users/" + element.username;
+		var titleLimit = 40;
+		var descLimit = 150;
+		
+		if(type == "issue"){
+			
+			if(element.url != null){	
+				imageUrl = element.url;	
+			}
+			
+			else{
+				imageUrl = "resources/images/nopic.png";
+			}
+			
+			html = 	'<div class="brick">'
+    			+ 			'<p class="top">'
+				+				'<span class="id-char pull-left"><b>#</b></span>'
+				+ 				'<span class="date-box pull-right">'
+				+ 					'<span class="id pull-left">' +element.id+ '</span>'
+				+ 					'<span class="date pull-right">' +element.date+ '</span>'
+				+				'</span>'
+				+ 			'</p>'
+				+ 			'<a class="thumbnail" href="'+imageUrl+'">'
+				+    			'<img src="'+imageUrl+'">'
+				+  			'</a>'	
+				+   		'<a class="title" title="'+element.title+'" href="' +issueUrl+ '">' +fxlGlobalController.cropText(element.title, titleLimit)+ '</a>'	
+				+			'<p class="address"><span class="city">' +element.city+ '</span>, <span class="province">' +element.province+ '</span></p>'
+				+           '<p class="desc">' +fxlGlobalController.cropText(element.description, descLimit)+ '</p>'
+				+ 			'<span class="status '+element.css+'">' +element.status+ '</span>'
+				+ 			'<div class="inline-container">'
+				+ 					'<div class="left"><i class="icon icon-thumbs-up icon-small"></i>' +element.totalVotes+ '</div>'
+				+					'<div class="right"><i class="icon icon-eye-open icon-small"></i>' +element.totalViews+ '</div>'
+				+ 					'<div class="center"><i class="icon icon-user icon-small"></i>' +element.totalFollowers+ '</div>'
+				+ 			'</div>'		
+				+   '</div>';
+		}
+		
+		else if(type == "user"){
+			
+			if(element.profilePic != null){	
+				imageUrl = element.profilePic;	
+			}
+			
+			else{
+				imageUrl = "resources/images/nopic.png";
+			}
+		
+			html = 	'<div class="brick brick-user">'
+				+   		'<a class="username" href="' +userUrl+ '">' +element.username+ '</a>'	
+				+ 			'<a class="thumbnail" href="'+imageUrl+'">'
+				+    			'<img src="'+imageUrl+'">'
+				+  			'</a>'	
+				+			'<p class="bottom">'
+				+ 					'Registrado el <span >' +element.registration+ '</span>'
+				+ 			'</p>'
+				+ 			'<div class="inline-container">'
+				+ 					'<div class="left"><i class="icon icon-map-marker icon-small"></i><span class="numIssues">' +element.reportedIssues+ '</div>'
+				+ 					'<div class="right"><i class="icon icon-comments-alt icon-small"></i><span class="numComments">' +element.postedComments+ '</div>'
+				+ 					'<div class="center"><i class="icon icon-ok icon-small"></i><span class="numFixes">' +element.fixedIssues+ '</div>'
+				+ 			'</div>'						
+				+   	'</div>';
+		}
+		
+		return html;
+		
+	},
+	
+	configIsotopeContainers : function(){
+		
+		var $container = $('#infinite-container');
+		var $containerVotes = $('#infinite-container-votes');
+		var $containerUsers = $('#infinite-container-users');
+		
+		//issues
+		$container.imagesLoaded( function(){                
+	        $container.isotope({
+	            itemSelector : '.brick',   
+	            sortBy: 'original-order',
+	            getSortData : {
+	                title    : '.title',
+	                id       : '.id parseInt',
+	                status   : '.status',
+	                province : '.province' 
+	            }
+	        });
+	    });
+		
+		$container.infinitescroll({
+			navSelector  	: "#page-nav",
+			nextSelector 	: "#page-nav a",
+			itemSelector 	: ".brick",  
+			pixelsFromNavToBottom : "20",
+			debug: true,
+			dataType: 'json',
+			appendCallback: false,
+			loading: {
+				finishedMsg: "<h4>No se encontraron m&aacute;s resultados.</h4>",
+		        msgText: "<h4>Cargando reclamos...</h4>",
+		        speed: 'slow'
+		    }  		      
+		 }, function (newElements) {
+		 		var html = '';
+		 		$.each( newElements, function( i, value ) {
+		 			 html += renderToHtml(value, 'issue');
+		        });
+				 	
+			 	var $newElems = $( html );
+
+			    $newElems.imagesLoaded(function(){
+					$newElems.animate({ opacity: 1 });
+					$container.append( $newElems ).isotope( 'appended', $newElems );
+			    });
+	    });
+		
+		$container.infinitescroll('pause');
+		 
+		//votes
+		$containerVotes.imagesLoaded( function(){                
+	    	$containerVotes.isotope({
+	        	itemSelector : '.brick'	                  
+	    	});
+	    });
+		
+		$containerVotes.infinitescroll({
+			navSelector  	: "#page-nav-votes",
+			nextSelector 	: "#page-nav-votes a",
+			itemSelector 	: ".brick",  
+			pixelsFromNavToBottom : "20",
+			debug: true,
+			dataType: 'json',
+			appendCallback: false,
+			loading: {
+	            finishedMsg: "<h4>No se encontraron m&aacute;s resultados.</h4>",
+	            msgText: "<h4>Cargando reclamos...</h4>",
+	            speed: 'slow'
+		    }  		      
+		 }, function (newElements) {
+		 		var html = '';
+			 		$.each( newElements, function( i, value ) {
+			 			 html += renderToHtml(value, 'issue');
+			        });
+				 	
+			 		var $newElems = $( html );
+
+				    $newElems.imagesLoaded(function(){
+						$newElems.animate({ opacity: 1 });
+						$containerVotes.append( $newElems ).isotope( 'appended', $newElems );
+	 			});
+				    
+	    });
+			
+		$containerVotes.infinitescroll('pause');
+		 
+		//users
+		$containerUsers.imagesLoaded( function(){   
+	    	$containerUsers.isotope({
+	        	itemSelector : '.brick',
+	            sortBy: 'original-order',
+	            sortAscending : false,
+	            getSortData : {
+	            	issues    : '.numIssues parseInt',
+	                comments  : '.numComments parseInt',
+	                fixes     : '.numFixes parseInt'
+	            }
+	        });
+		});
+		 
+		$containerUsers.infinitescroll({
+			navSelector  	: "#page-nav-user",
+			nextSelector 	: "#page-nav-user a",
+			itemSelector 	: ".brick",  
+			pixelsFromNavToBottom : "20",
+			debug: true,
+			dataType: 'json',
+			appendCallback: false,
+			loading: {
+	            finishedMsg: "<h4>No se encontraron m&aacute;s resultados.</h4>",
+	            msgText: "<h4>Cargando usuarios...</h4>",
+	            speed: 'slow',
+		    }  		      
+		 }, function (newElements) {
+		 		var html = '';
+		 		$.each( newElements, function( i, value ) {
+		 			 html += renderToHtml(value, 'user');
+		        });
+				 	
+		 		var $newElems = $( html );
+		 		
+			    $newElems.imagesLoaded(function(){
+					$newElems.animate({ opacity: 1 });
+					$containerUsers.append( $newElems ).isotope( 'appended', $newElems );
+	 			});
+	    });
+					
+		$containerUsers.infinitescroll('pause');
+		
+	},
+	
+	configIsotopeTabs : function(){
+		
+		var $container = $('#infinite-container');
+		var $containerVotes = $('#infinite-container-votes');
+		var $containerUsers = $('#infinite-container-users');
+		
+		//bootstrap tabs + multiple isotope instances = overlapping [FIXED] 
+		// http://stackoverflow.com/questions/19214362/making-a-jquery-isotope-layout-initialize-inside-a-bootstrap-tab
+		// https://github.com/metafizzy/isotope/issues/458
+		
+		$('.nav-tabs li').on('shown.bs.tab', function (e) {
+			var clickedTab = $(this).find('a').attr('href');
+		 	if(clickedTab == "#topUsers"){
+			  	$containerUsers.isotope('layout');
+		 	}
+		 	if(clickedTab == "#hottestIssues"){
+			  	$containerVotes.isotope('layout');
+		 	}
+
+		});
+		
+	},
+	
+	configIsotopeMoreBtn : function(){
+		
+		var $container = $('#infinite-container');
+		var $containerVotes = $('#infinite-container-votes');
+		var $containerUsers = $('#infinite-container-users');
+		
+		$(' .btn-more ').click(function(e){
+			// call this whenever you want to retrieve the next page of content
+		    // likely this would go in a click handler of some sort
+		    e.preventDefault();
+		
+		    if( $(this).hasClass( 'issue' ) ){
+				$container.infinitescroll('retrieve');
+			    $('#page-nav').hide(); 
+		   	}  
+		    
+		    else if( $(this).hasClass( 'vote' ) ){
+		    	$containerVotes.infinitescroll('retrieve');
+		    	$('#page-nav-votes').hide(); 
+		    } 
+		    
+		    else{
+		    	$containerUsers.infinitescroll('retrieve');
+		        $('#page-nav-users').hide(); 
+		    } 			  
+		    return false;
+		});
+		
+	},
+	
+	configIsotopeSortBtn : function(){
+		
+		var $container = $('#infinite-container');
+		var $containerVotes = $('#infinite-container-votes');
+		var $containerUsers = $('#infinite-container-users');
+		
+		// sort items on button click
+		$('#sorts  > .btn').on( 'click',  function() {
+			var sortByValue = $(this).attr('data-sort-by');
+		  	$container.isotope({ sortBy: sortByValue });
+		 	$(this).addClass("active").siblings().removeClass("active");
+		});
+		
+		// sort items on button click
+		$('#sorts-users  > .btn').on( 'click',  function() {
+			var sortByValue = $(this).attr('data-sort-by');
+		  	$containerUsers.isotope({ sortBy: sortByValue });
+		 	$(this).addClass("active").siblings().removeClass("active");
+		});
 		
 	}
 	
