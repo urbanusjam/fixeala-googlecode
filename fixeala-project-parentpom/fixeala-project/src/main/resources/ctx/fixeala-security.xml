@@ -23,7 +23,7 @@
      		<security:intercept-url pattern="/widget-component.html" access="permitAll"/>	
      		<security:intercept-url pattern="/mobile" access="permitAll"/>	 
      		<security:intercept-url pattern="/api/**" access="permitAll"/>	 
-     		<security:intercept-url pattern="/help" access="permitAll"/>	       		
+     		<security:intercept-url pattern="/help" access="permitAll"/>       		
      		     	
 			<security:intercept-url pattern="/account/signup" access="permitAll"/>			
 			<security:intercept-url pattern="/account/forgotPassword" access="permitAll"/>
@@ -32,9 +32,6 @@
 			<security:intercept-url pattern="/closedAccount" access="permitAll"/>		
 			<security:intercept-url pattern="/error" access="permitAll"/>
 			
-			<security:intercept-url pattern="/reclamos" access="permitAll"/>				
-     		<security:intercept-url pattern="/usuarios" access="permitAll"/>	
-     		
             <security:form-login login-page="/login" 
 								 login-processing-url="/login"
 			/>

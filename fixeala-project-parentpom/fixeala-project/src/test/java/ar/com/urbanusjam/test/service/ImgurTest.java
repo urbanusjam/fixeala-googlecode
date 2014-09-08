@@ -1,4 +1,4 @@
-package ar.com.urbanusjam.test.service;
+/**package ar.com.urbanusjam.test.service;
 
 import java.util.Scanner;
 
@@ -77,3 +77,4 @@ public class ImgurTest {
 	
 	
 }
+**/
