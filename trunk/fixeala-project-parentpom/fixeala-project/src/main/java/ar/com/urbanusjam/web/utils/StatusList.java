@@ -2,10 +2,10 @@ package ar.com.urbanusjam.web.utils;
 
 public enum StatusList {
 	
-	OPEN("Abierto", "label label-important", "#B94A48"), 
-	VERIFIED("Verificado", "label label-info", "#39B3D7"), 
-	REJECTED("Rechazado", "label label-inverse", "#333333"), 	
-	IN_PROGRESS("En progreso", "label label-warning", "#F89406"),	
+	OPEN("Abierto", "label label-important", "#B94A48"),
+	VERIFIED("Verificado", "label label-info", "#39B3D7"),
+	REJECTED("Rechazado", "label label-inverse", "#333333"),
+	IN_PROGRESS("En progreso", "label label-warning", "#F89406"),
 	SOLVED("Resuelto", "label label-success", "#468847"),
 	REOPENED("Reabierto", "label label-important", "#B94A48"),
 	CLOSED("Cerrado", "label label-inverse", "#333333");

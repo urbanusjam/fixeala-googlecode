@@ -43,7 +43,6 @@ import ar.com.urbanusjam.services.utils.IssueStatus;
 import ar.com.urbanusjam.web.domain.DataTablesParamUtility;
 import ar.com.urbanusjam.web.domain.JQueryDataTableParamModel;
 import ar.com.urbanusjam.web.utils.DataTableResultSet;
-import ar.com.urbanusjam.web.utils.URISchemeUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
@@ -158,7 +157,8 @@ public class HomeController {
 			obj.put("user", s.getUsername());
 			obj.put("latitude", s.getLatitude());
 			obj.put("longitude", s.getLongitude());
-
+			obj.put("images", s.getContenidos());
+			
 			array.put(obj);
 		}
 

@@ -3,8 +3,6 @@ package ar.com.urbanusjam.entity.annotations;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import javax.persistence.Column;
@@ -16,7 +14,6 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -41,7 +38,7 @@ public class MediaContent implements Serializable {
     private String fileID;
     
     @Column(name = "file_type")
-    private String fileType;  //MIME type 'image/png' ...
+    private String fileType;
     
     @Column(name = "filename")
     private String filename;
