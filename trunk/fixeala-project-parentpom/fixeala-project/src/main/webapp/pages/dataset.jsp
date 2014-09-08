@@ -1,93 +1,3 @@
-<script type="text/javascript">
-
-  $(function() {
-	  
-	  fxlGlobalController.populateProvinceCombobox('${provinceList}', 'dataset');
-	  	  
-	  //keep at least one checkbox checked
-	  $("input[type='checkbox'][name='estados']").click(function() {
-		  if( $("input:checked").length == 0 )
-			  $(this).attr('checked','checked');			
-	  });  
-	  	  
-	  $('#from-datepicker').datetimepicker({		  
-		  format: 'dd/MM/yyyy',
-		  language: 'es',		
-	      pickTime: false
-	  });
-	  	 	  
-	  $('#to-datepicker').datetimepicker({
-		  format: 'dd/MM/yyyy',
-		  language: 'es',	
-		  endDate: today,
-	      pickTime: false
-	  });	  	  
-	 	
-	  var today = new Date();	  
-	  var date = new Date();	 
-	  date.setMonth(date.getMonth() - 3);	  
-	  var lastThreeMonths = date;
-	  	 
-	  var pickerFrom = $('#from-datepicker').data('datetimepicker');
-	  var pickerTo = $('#to-datepicker').data('datetimepicker');
-	  pickerFrom.setLocalDate(lastThreeMonths);
-	  pickerTo.setLocalDate(today);
-	  	  
-	  $('#tags').select2({		
-		  width: '220',		
-		  tags: ${allTags},
-	      tokenSeparators: [","],
-		  maximumSelectionSize: 5,
-		  id: function(item){ 
-			  	return item.text;
-		  },		 
-		  formatSelectionTooBig: function(){ 
-			  return "S&oacute;lo se permiten 5 etiquetas como m&aacute;ximo.";
-		  },		  
-		  formatNoMatches: function(){ 
-			  return "No se encontraron cateogr&iacute;as.";
-		  },	  
-		  createSearchChoice: function() { return null; }
-	  }); 
-	    	  
-	  $('#btnExportDataset').click(function(){		  
-	  	  var $form = $('#datasetForm');	
-	  	  
-	  	  $form.submit(function(e){	
-	  		e.stopPropagation() ;
-	  		  $.ajax({			
-		            data: $form.serialize(),       
-		            success: function(result) { 
-		            
-			        	if(!result)
-			        		boobox.alert("No se encontraron resultados.");
-			        }
-		  	  });
-	  	  });		  
-	  });
-	  	 
-  });
-  
-  function downloadDataset(fileFormat){
-	
-	  $.ajax({			
-            url : "./exportDataset",
-            data: "fileFormat=" + fileFormat,
-            success: function() { 
-            	return null;
-	        },
-	        error: function (){
-	        	return null;
-	        }
-  	  });
-	  
-  }
-  
- 
-</script>
-
-
-
 <div id="content">
 		
 		<!-- Dataset -->
@@ -309,8 +219,87 @@
 		    	</button>
 		  	</div>
   	  </form>
-	</div>
-        
-    
-   		<!-- /Dataset -->
-</div>
+	</div>     
+</div><!-- content -->
+<script type="text/javascript">
+$(document).ready(function(){	
+	  
+	  fxlGlobalController.populateProvinceCombobox('${provinceList}', 'dataset');
+	  	  
+	  //keep at least one checkbox checked
+	  $("input[type='checkbox'][name='estados']").click(function() {
+		  if( $("input:checked").length == 0 )
+			  $(this).attr('checked','checked');			
+	  });  
+	  	  
+	  $('#from-datepicker').datetimepicker({		  
+		  format: 'dd/MM/yyyy',
+		  language: 'es',		
+	      pickTime: false
+	  });
+	  	 	  
+	  $('#to-datepicker').datetimepicker({
+		  format: 'dd/MM/yyyy',
+		  language: 'es',	
+		  endDate: today,
+	      pickTime: false
+	  });	  	  
+	 	
+	  var today = new Date();	  
+	  var date = new Date();	 
+	  date.setMonth(date.getMonth() - 3);	  
+	  var lastThreeMonths = date;
+	  	 
+	  var pickerFrom = $('#from-datepicker').data('datetimepicker');
+	  var pickerTo = $('#to-datepicker').data('datetimepicker');
+	  pickerFrom.setLocalDate(lastThreeMonths);
+	  pickerTo.setLocalDate(today);
+	  	  
+	  $('#tags').select2({		
+		  width: '220',		
+		  tags: ${allTags},
+	      tokenSeparators: [","],
+		  maximumSelectionSize: 5,
+		  id: function(item){ 
+			  	return item.text;
+		  },		 
+		  formatSelectionTooBig: function(){ 
+			  return "S&oacute;lo se permiten 5 etiquetas como m&aacute;ximo.";
+		  },		  
+		  formatNoMatches: function(){ 
+			  return "No se encontraron cateogr&iacute;as.";
+		  },	  
+		  createSearchChoice: function() { return null; }
+	  }); 
+	    	  
+	  $('#btnExportDataset').click(function(){		  
+	  	  var $form = $('#datasetForm');	
+	  	  
+	  	  $form.submit(function(e){	
+	  		e.stopPropagation() ;
+	  		  $.ajax({			
+		            data: $form.serialize(),       
+		            success: function(result) { 
+		            
+			        	if(!result)
+			        		boobox.alert("No se encontraron resultados.");
+			        }
+		  	  });
+	  	  });		  
+	  });
+	  	 
+  });
+  
+  function downloadDataset(fileFormat){	
+	  $.ajax({			
+            url : "./exportDataset",
+            data: "fileFormat=" + fileFormat,
+            success: function() { 
+            	return null;
+	        },
+	        error: function (){
+	        	return null;
+	        }
+  	  });	  
+  }  
+</script>

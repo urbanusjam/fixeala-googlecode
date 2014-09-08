@@ -21,7 +21,6 @@
     <!-- FIXEALA -->	
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.global.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.map.js"></script>	
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.issue.editable.js"></script>
   	  	    
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/jquery.geocomplete.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/json/json.min.js"></script>	
@@ -105,17 +104,12 @@
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/tooltipster.css" rel="stylesheet">		
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/style2.css" rel="stylesheet">
 
-
-	<script type="text/javascript">
-      
-		$(document).ready(function(){
-			
+	<script type="text/javascript">      
+		$(document).ready(function(){			
 			fxlGlobalController.initNavTooltip();
 			fxlGlobalController.initFeedback();
-			window.localStorage.clear();
-			
+			window.localStorage.clear();			
 		});	
-
 	</script>
 
 </head>
@@ -127,16 +121,11 @@
     	<span><a id="feedbackLink" href="#" title="¡Tu opinión cuenta!" style="cursor: pointer;"><i class="icon-bolt"></i>Feedback</a></span>
     </div>
 
-<!--<section class="wrapper"> -->
- 
-	  <tiles:insertAttribute name="header" />
-	  
-	  <tiles:insertAttribute name="body" />  
-	  
-	  <tiles:insertAttribute name="footer" />
-  
+<!--<section class="wrapper"> --> 
+	  <tiles:insertAttribute name="header" />	  
+	  <tiles:insertAttribute name="body" />  	  
+	  <tiles:insertAttribute name="footer" />  
 <!--</section>  -->
-
 
 	<!-- feedback form -->
 	<div id="mdl-feedback" class="modal hide fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
@@ -144,8 +133,7 @@
 		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>	
 			<h4>Ayudanos a mejorar la plataforma FIXEALA</h4>
 	  	</div>
-		<div class="modal-body">
-		
+		<div class="modal-body">		
 			<div class="control-group">  			
        			<label class="control-label">Asunto</label>
        			<div class="controls">
@@ -169,8 +157,7 @@
 		        <div class="controls">
 		        	<textarea id="msgFeedback" name="msgFeedback" class="form-control" style="width:520px; height: 100px; padding-right: 5px;" required ></textarea>
 		        </div>
-		    </div>
-		
+		    </div>		
 		</div>
 		<div class="modal-footer"> 		
 			<button id="btnSendFeedback" class="btn btn-info" aria-hidden="true" disabled>

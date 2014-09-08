@@ -1,6 +1,7 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/2.3.2/bootstrap-datepicker.css" rel="stylesheet">
 
 <!-- Boolean isCommonUser -->
 <!-- needed for creating the boolean: !isUser -->
@@ -10,1186 +11,15 @@
 </sec:authorize>
 
 <style>
-
-	#repairForm input { text-align: right; }
-	
-	#mdl-verify .modal-body { max-height: 450px; }
-	
- 	#mdl-verify ul.list > li { padding: 10px 0 10px 0;} 
-	
-	#mdl-verify ul.sublist > li { padding: 5px 0 5px 0; }
-	
+	#repairForm input { text-align: right; }	
+	#mdl-verify .modal-body { max-height: 450px; }	
+ 	#mdl-verify ul.list > li { padding: 10px 0 10px 0; } 	
+	#mdl-verify ul.sublist > li { padding: 5px 0 5px 0; }	
 	#mdl-verify ul.sublist > li:FIRST-CHILD { padding-top: 10px; }
-	
-	
-
 </style>
 	
 <div id="content">	
 
-
-		<!-- Issue -->
-		
-		<script type="text/javascript">
-		
-			
-			var issueID = ${id};
-		  	var updatedFields =  { "title": 0 , "desc": 0, "barrio": 0};			 
-		  	var oldFields = $.parseJSON('${oldFields}');
-		  
-		  	var idIssue = '${id}'; //duplicado
-			var loggedUser = '${loggedUser}';
-	   		var latitud = '${latitud}';
-	   		var longitud = '${longitud}';
-			var newTitle = "";	
-			
-			var statusLabel = "";
-
-			$('[data-toggle="popover"]').popover();
-	
-			$('body').on('click', function (e) {
-			    $('[data-toggle="popover"]').each(function () {
-			        //the 'is' for buttons that trigger popups
-			        //the 'has' for icons within a button that triggers a popup
-			        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
-			            $(this).popover('hide');
-			        }
-			    });
-			});
-			
-			
-			
-			
-			
-		    function upload() {
-		    	
-		    	console.log('--- start files upload ---');
-		    
-		    	var files = $('#files').get(0).files;
-		    	console.log('--- num. of files: ' +files.length+ ' ---' );
-		    	
-		    	var uploadCounter = 0;
-		    	var uploadsOK = [];
-		    
-		    	
-		    	//call imgur api for each file
-		    	for(var i = 0; i < files.length ; i++){
-		    		
-		    		var selectedFile = files[i];	    		
-			        var fd = new FormData();
-			        fd.append("image", selectedFile); 
-			        
-			        var xhr = new XMLHttpRequest();
-			        xhr.open("POST", "https://api.imgur.com/3/image.json", false); 
-			        xhr.onload = function() {
-
-			        	var result = JSON.parse(xhr.responseText);
-			        	console.log(result);
-			        	
-			        	var success = result.success;
-			        	var statusCode = result.status;		        	
-			        	
-			        	if(success && statusCode == '200'){		        	
-			        		var upload = new Object();			       
-					    	upload.filedata =  result.data;
-					    	upload.filename = selectedFile.name;
-					    	upload.deletehash = result.data.deletehash;		        		
-					    	
-					    	uploadsOK.push(upload);		             	
-			        	}
-			        }
-			        xhr.setRequestHeader('Authorization', 'Client-ID f64d4441566d507'); 
-			        xhr.send(fd);
-			        //end IMGUR
-			        
-			        console.log('--- resultado uploads ---')
-			        console.log(uploadsOK);
-		    		
-		    	}//end call
-		    
-		    	//persist successful uploads into db
-		    	
-		    	var fileList =  JSON.stringify(uploadsOK);
-		    	
-			    $('#multiplefileupload').fileupload({
-			         url: './'+issueID+'/uploadFiles',
-				     type: "POST",
-				     dataType: 'json',
-//				     contentType: false,
-//					 processData: false,
- 					 formData: [{ name: 'fileList', value: fileList }],
- 				    sequentialUploads: true,
-				     maxNumberOfFiles: 5,
-// 					 maxFileSize: 5000000, // 5 MB		
-					 acceptFileTypes: /(\.|\/)(jpe?g|png)$/i,
-					 singleFileUploads: false,
-					 autoUpload: true,	
-					 disableImageResize: /Android(?!.*Chrome)|Opera/
-					        .test(window.navigator && navigator.userAgent),				
-			         previewMinWidth : 100,
-			         previewMaxHeight : 60,	
-					 imageCrop: false						
-			    }).bind('fileuploaddone', function(e, data){	
-			    	
-			    	console.log('--- fileupload plugin done ----');		
-			    	var parsedResult = $.parseJSON(data.result.uploadedFiles);	
-				    data.files = parsedResult;					    
-				    updateFilesInfo(data.result.totalUploadedFiles);
-				    
-				}).bind('fileprogressfail', function (e, data) {
-					
-// 					alert(data.files[data.index].error);
-						console.log("--- ajax upload ERROR ---");
-					fileController.deleteMultipleImages(uploadsOK);
-		        	bootbox.alert('No se pudo guardar el archivo.');
-					
-				}).bind('fileuploadfail', function (e, data) {
-					
-// 					alert(data.files[data.index].error);
-					console.log("--- ajax upload ERROR ---");
-					fileController.deleteMultipleImages(uploadsOK);
-		        	bootbox.alert('No se pudo guardar el archivo.');
-					
-				});
-					
-			}
-		    
-		    function updateFilesInfo(numberOfFiles){
-		    	 
-				if(numberOfFiles == 5){
-					$(".modal-footer .fileinput-button").addClass("disabled");
-					$(".modal-footer .fileinput-button > input").attr("disabled", true);
-				}
-				else if(numberOfFiles < 5){
-					$(".modal-footer .fileinput-button").removeClass("disabled");
-					$(".modal-footer .fileinput-button > input").attr("disabled", false);
-				}
-
-				$('.cantidadContenidos').fadeOut('slow', function(){ 
-		        		$(this).html(numberOfFiles).fadeIn('slow'); 		        	
-		        });	
-				
-				$('#issueFiles').load(location.href + '#issueFiles #lst-file-thumnails'); 
-			}
-
-			
-		//////////////////////////////////////////////////////////////////////	
-		
-			$(function(e){	
-				
-			
-			$("#btn-update-status").click(function(event){
-				var statusForm =  $("#modalStatusForm");
-				statusForm.validate();
-				
-				if(!statusForm.valid()){
-					return false;
-				}				
-				else{
-					userActionsController.editIssueStatus(event);
-				}
-				
-			});
-			
-			
-			$('#invalid-container').hide();
-			
-			$("#tipoResolucion").change(function(){
-				
-				if( $(this).val() == "Invalido" ){
-					var $options = $('#tipoInvalido');
-					$options.append($("<option />").val("No es un reclamo").text("NO ES UN RECLAMO"));
-					$options.append($("<option />").val("Ubicacion incorrecta").text("UBICACION INCORRECTA"));
-					$options.append($("<option />").val("Informacion falsa").text("INFORMACION FALSA"));
-					$options.append($("<option />").val("Datos personales").text("DATOS PERSONALES"));					
-					$options.append($("<option />").val("Contenido ofensivo").text("CONTENIDO OFENSIVO"));
-					 
-					$('#invalid-container').show();
-				}
-				
-				else{
-					$('#invalid-container').hide();
-				}
-				
-				
-			});
-			
-			var startDate = new Date();
-			var fromEndDate = new Date();
-			var toEndDate = new Date();
-
-			toEndDate.setDate(toEndDate.getDate()+365);
-	
-			
-			$('#fechaEstimadaInicio').datepicker({			    
-				format: 'dd/mm/yyyy',
-			    startDate: startDate,
-			    language: 'es',		
-// 			    endDate: FromEndDate, 
-			    autoclose: true
-			}).on('changeDate', function(selected){
-			        startDate = new Date(selected.date.valueOf());
-			        startDate.setDate(startDate.getDate(new Date(selected.date.valueOf())));
-			        $('#fechaEstimadaFin').datepicker('setStartDate', startDate);
-			}); 
-			
-			$('#fechaEstimadaFin').datepicker({			        
-			    	format: 'dd/mm/yyyy',
-			        startDate: startDate,
-			        language: 'es',		
-			        endDate: toEndDate,
-			        autoclose: true
-			}).on('changeDate', function(selected){
-			        fromEndDate = new Date(selected.date.valueOf());
-			        fromEndDate.setDate(fromEndDate.getDate(new Date(selected.date.valueOf())));
-			        $('#fechaEstimadaInicio').datepicker('setEndDate', fromEndDate);
-			});
-			
-			$('#fechaRealInicio').datepicker({			    
-				format: 'dd/mm/yyyy',
-				startDate: startDate,
-			    language: 'es',		
-			    autoclose: true
-			}).on('changeDate', function(selected){
-			        startDate = new Date(selected.date.valueOf());
-			        startDate.setDate(startDate.getDate(new Date(selected.date.valueOf())));
-			        $('#fechaRealFin').datepicker('setStartDate', startDate);
-			}); 
-			
-			$('#fechaRealFin').datepicker({			        
-			    	format: 'dd/mm/yyyy',
-			        startDate: startDate,
-			        language: 'es',		
-			        endDate: toEndDate,
-			        autoclose: true
-			}).on('changeDate', function(selected){
-			        fromEndDate = new Date(selected.date.valueOf());
-			        fromEndDate.setDate(fromEndDate.getDate(new Date(selected.date.valueOf())));
-			        $('#fechaRealInicio').datepicker('setEndDate', fromEndDate);
-			});
-
-			  
-				//http://www.bootply.com/74352
-				//http://stackoverflow.com/questions/11933173/how-to-restrict-the-selectable-date-ranges-in-bootstrap-datepicker
-			
-			
-// 			$('#fecha-estimada-from').datetimepicker({		  
-// 				  format: 'dd/MM/yyyy',
-// 				  language: 'es',		
-// 			      pickTime: false
-	
-// 			 }); 
-			
-// 			$('#fecha-estimada-to').datetimepicker({		  
-// 				  format: 'dd/MM/yyyy',
-// 				  language: 'es',		
-// 			      pickTime: false
-// 			 });
-			
-			
-// 			$('#fecha-real-from').datetimepicker({		  
-// 				  format: 'dd/MM/yyyy',
-// 				  language: 'es',		
-// 			      pickTime: false
-// 			 });
-// 			$('#fecha-real-to').datetimepicker({		  
-// 				  format: 'dd/MM/yyyy',
-// 				  language: 'es',		
-// 			      pickTime: false
-// 			 });
-			
-			
-			//default config
-			$.fn.editable.defaults.mode = 'popup';	
-			$.fn.editable.defaults.disabled = true;
-			$.mockjaxSettings.responseTime = 300; 
-			
-			//modify buttons style
-			$.fn.editableform.buttons = 
-			  '<button type="submit" class="btn btn-warning editable-submit"><i class="icon-ok icon-white"></i></button>' +
-			  '<button type="button" class="btn editable-cancel"><i class="icon-remove"></i></button>';     
-			
-			$('#btn-update').attr('disabled', true);
-// 			$('#btn-save-repair').attr('disabled', true);
-			$('#btn-edit').addClass('notClicked');
-			
-			//enable / disable
-			
-			$('.editableField').hide();
-			
-			
-			
-			$('#btn-add-repair').live('click', function() {
-				 $('#btn-save-repair').prop('disabled',true);
-				$('#mdl-repair').modal('show');
-				$('#presupuestoAdjudicacion').val(0);
-				$('#presupuestoFinal').val(0);
-				$('#plazo').val(0);
-			
-			});
-		    
-		    $('#btn-edit-repair').live('click', function() {
-
-				$('#obra').val('${obra}');
-				$('#estadoObra').val('${estadoObra}');
-				$('#nroLicitacion').val('${nroLicitacion}');
-				$('#nroExpediente').val('${nroExpediente}');
-				$('#plazo').val('${plazo}');
-				$('#empresaNombre').val('${empresaNombre}');
-				$('#empresaCuit').val('${empresaCuit}');
-				$('#representanteNombre').val('${representanteNombre}');
-				$('#representanteMatricula').val('${representanteMatricula}');
-				$('#unidadEjecutora').val('${unidadEjecutora}');
-				$('#unidadFinanciamiento').val('${unidadFinanciamiento}');
-				$('#presupuestoAdjudicacion').val('${presupuestoAdjudicacion}');
-				$('#presupuestoFinal').val('${presupuestoFinal}');
-				$('#fechaEstimadaInicio').val('${fechaEstimadaInicio}');
-				$('#fechaEstimadaFin').val('${fechaEstimadaFin}');			
-				$('#fechaRealInicio').val('${fechaRealInicio}');
-				$('#fechaRealFin').val('${fechaRealFin}');
-				$('#observaciones').val('${observaciones}');
-
-		    	$('#mdl-repair').modal('show');
-		    	
-		    }); 
-		    
-
-		    
-		    $.validator.addMethod('money', function(value) {			     
-			        return /^\d{0,4}(\.\d{0,2})?$/.test(value);
-			},"S&oacute;lo n&uacute;meros positivos con hasta 2 decimales.");
-		    
-		    $.validator.addMethod('integer', function (value) { 
-		        return /^[0-9]+$/.test(value); 
-		    }, 'S&oacute;lo n&uacute;meros positivos.');
-		    
-		    $("#repairForm").validate({	
-		    	
-		    	rules: {
-		    		
-		            obra: {
-		                required: true
-		            },
-		            plazo: {
-		            	integer: true 
-		            },
-		            presupuestoAdjudicacion: {	
-		            	money: true
-		            },
-		            presupuestoFinal: {	
-		            	money: true
-		            }
-		        },
-		        
-		        messages: {
-		        	
-		        	obra: {
-		        		required: 'Campo obligatorio.'
-		        	}
-		        
-		        },
-		    	
-		    	submitHandler: function () {
-		    	
-		    	    	
-	 				$.ajax({
-	 			       url: './addRepairInfo', 
-	 			       type: 'POST',
-	 			       data: $('#repairForm').serialize(),
-	 			       dataType: 'json',					       			       
-	 			       success: function(data) {
-	 			    	   if(data.result){					    		
-	 			    		   window.location.reload();	
-	 			    	   }						    	   
-	 			    	   else{
-	 			    		   bootbox.alert(data.message);		
-	 			    	   }						    	
-	 			       },
-	 			       error: function (response) {
-	 			    	   bootbox.alert('No se pudo guardar la informaci&oacute;n. Intente de nuevo.');		
-	 			       },
-	 			       complete: function(){
-	 			    	   $('#mdl-repair').modal('hide');
-	 			       }
-
-	 			   });	
-		    	   
-		    	    return false; 
-		    	}
-		    	
-		    });
-		    
-		    $('#repairForm input, #repairForm textarea').on('keyup blur', function () { 
-		        if ($(this).valid()) {                  
-		        	 $('#btn-save-repair').prop('disabled',false);   
-		        } else {
-		        	  $('#btn-save-repair').prop('disabled',true); 
-		        }
-		    });
-
-			$('#btn-delete-repair').live('click', function(e) {	
-				
-				 bootbox.confirm("&iquest;Confirma que desea eliminar los datos?", function(result){
-					  if(result){	
-							$.ajax({
-		        			    url: './deleteRepairInfo',
-						 		type: 'POST',			
-						 		dataType: 'json',		
-						        success: function(data){	
-						        	if(data.result){
-						        		window.location.reload();
-						        	}
-						        	else{
-						        		bootbox.alert(data.message); 
-						        	}
-								},
-								error: function (response) {
-							    	   bootbox.alert('No se pudo eliminar la informaci&oacute;n. Intente de nuevo.');		
-							    },
-							    complete: function(){
-							    	   $('#mdl-repair').modal('hide');
-							    }
-							});
-							
-							return false; 
-					  }
-				});
-			});
-		    
-			  //--NON-EDITABLE FIELDS
-			  
-			  $("#issue-id").editable({name: 'id',  disabled: true});			  
-			  $("#issue-date").editable({name: 'creationDate', disabled: true});
-// 			  $("#issue-last-update").editable({name: 'lastUpdate', disabled: true});				  
-			  $("#issue-street").editable({name: 'address', disabled: true});		
-			  $("#issue-city").editable({name: 'city', disabled: true});			  
-			  $("#issue-province").editable({name: 'province', disabled: true});
-			  $("#issue-lat").editable({name: 'latitude', disabled: true});
-			  $("#issue-lng").editable({name: 'longitude', disabled: true});
-			  $("#issue-status").editable({name: 'status', disabled: true});
-			  $("#issue-user").editable({name: 'username', disabled: true});
-			  $("#issue-area").editable({name: 'area', disabled: true});
-			  
-			  //--EDITABLE FIELDS
-			  
-			
-			 
-			  $("#issue-title").editable({
-				  pk: 1,  
-				  name: 'title', 
-				  type: 'text',
-				  mode: 'popup',
-				  placement: 'right',
-				  ajaxOptions: {
-				        type: 'put'
-				  },
-				  validate: function(value) {
-					  
-						var pattern = /^\s*[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9,\s]+\s*$/;
-
-					    if($.trim(value) == '') {
-					        return 'Campo obligatorio.';
-					    }
-					    
-					    if($.trim(value).length > 80) {
-					        return 'La longitud m&aacute;xima del campo es de 80 caracteres.';
-					    }
-					    
-// 					    if(!pattern.test(value)){
-// 					    	return 'No se permiten caracteres especiales.';
-// 					    }
-					    
-				  },
-				  success: function(response, newValue) {	
-		               newTitle =  newValue;
-					   if(newValue != oldFields.title)
-						   updatedFields.title = 1;
-					   else
-					   	updatedFields.title = 0;
-		          }
-				
-			  });
-
-			  $("#issue-desc").editable({ 		
-				  pk: 2, 
-				  name: 'description',
-				  type: 'textarea', 
-				  mode: 'popup',	
-				  placement: 'right',
-				  inputclass: 'issue-textarea',
-				  ajaxOptions: {
-				        type: 'put'
-				  },				
-				  validate: function(value) {
-					  
-						var pattern = /^[^'"]*$/;
-						
-					    if($.trim(value) == '') {
-					        return 'Campo obligatorio.';
-					    }
-					    
-					    if($.trim(value).length > 600) {
-					        return 'La longitud m&aacute;xima del campo es de 600 caracteres.';
-					    }
-					    
-					    if(!pattern.test(value)){
-					    	return 'No se permiten comillas simples o dobles.';
-					    }
-				  },
-				  success: function(response, newValue) {
-					  if(newValue != oldFields.desc)
-						   updatedFields.desc = 1;
-					  else
-						  updatedFields.desc = 0;
-				     
-		          }			  	
-			  });
-			  
-			
-			  
-			  $("#issue-barrio").editable({
-				  pk: 3,  
-				  name: 'neighborhood', 	
-				  mode: 'popup',	
-				  placement: 'right',
-				  emptytext: 'A definir',
-				  ajaxOptions: {
-					  dataType: 'json'
-				  },			
-				  validate: function(value) {		
-					  
-					 	var pattern = /^\s*[a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ0-9,\s]+\s*$/;
-					  
-					    if($.trim(value).length > 30) {
-					        return 'La longitud m&aacute;xima del campo es de 30 caracteres.';
-					    }
-					   					   
-// 					    if(!pattern.test(value)){
-// 					    	return 'No se permiten caracteres especiales.';
-// 					    }
-				  },
-				  success: function(response, newValue) {
-					  if(newValue != oldFields.barrio)
-						   updatedFields.barrio = 1;
-					  else
-						  updatedFields.barrio = 0;
-				     
-		          }
-			  });
-		
-			  $('#issue-tags').editable({
-				    pk: 22,
-				 	name: 'tagsMap',				 
-				    placement: 'top',      
-				    mode: 'popup',					 
-      				emptytext: 'No hay etiquetas definidas',
-      				inputclass: 'input-large',
-			        select2: {				
-			        	tags: ${allTags},
-			            tokenSeparators: [",", " "],
-			            id: function (item) {
-			                return item.text;
-			            },
-			            multiple: true,	
-// 			            minimumInputLength: 1,
-			            maximumSelectionSize: 5,
-			            formatSelectionTooBig: function (limit) {
-			                return 'S&oacute;lo se permiten 5 etiquetas.';
-			            },
-			            allowClear: true			           
-			        },
-			        display: function(value) {
-			        	if(value != null){
-			        		var tags = new Array(value.length);
-				        	
-				            $.each(value,function(i){				            	
-				            	var url = "./search.html?type=tag&value=" + $('<p>' + value[i] + '</p>').text();
-				            	tags[i] = "<a class=\"taglink\" href=\"" + url + "\"><span class=\"label label-default\">" + $('<p>' + value[i] + '</p>').text() + "</span></a>";
-				            });
-				            
-				            $(this).html(tags.join(" "));
-			        	}
-			        	
-			        },						
-			        ajaxOptions: {
-				        type: 'put'
-				    }			 
-		                    
-  			  }); 
-		
-				
-			  /*******************************************/
-			
-				
-				$('#comment-text').keyup(function(){
-				      if($(this).val().length > 0){
-				         $('#btn-comment').prop('disabled',false);
-				      }else{
-				         $('#btn-comment').prop('disabled',true);
-				      }
-				 });
-			  
-			  $('#btn-comment').click(function() {
-				  				 	
-				  fxlGlobalController.blockPage('html');
-				  	
-					var message = $("#comment-text").val();
-					var id = ${id};					
-					var data = 'issueID='+ id + '&comment='+ message;		
-				
-					$.ajax({
-        			    url: "./addComment.html",
-				 		type: "POST",	
-				 		data: data,
-				 		dataType: "json",									 
-				        success: function(data){
-				        	if(data.result){
-				        		fxlGlobalController.unBlockPage('html');
-				        		setTimeout(function(){
-				        			window.location.reload();
-				        		}, 1000); 
-						    }					    	   
-				    	    else{
-				    	    	fxlGlobalController.unBlockPage('html');
-				    	    	setTimeout(function(){
-				        			bootbox.alert(data.message);	
-				        		}, 1000);
-				    	    }
-	            		}
-        			});
-
-			  });
-			   
-				
-				
-				
-				$(function () {
-				    'use strict';				   
-				    
-				   
-				    	
-						var loggedUser = '${loggedUser}';
-				    	
-						
-				    	if(loggedUser != ""){
-				    		 $('#btnAddFiles').show();
-// 				    		$("#mdl-fileupload").modal('hide');
-// 				    		e.stopPropagation();
-// 				    		bootbox.alert("Debe estar logueado para agregar archivos.");
-				    	}	
-				    	
-				    
-				    
-				    
-				    $('#multiplefileupload').fileupload();
-				
-
-				    
-				    
-				    
-				    
-				});
-				
-				
-				$('#tbl-fileupload').on('click', '.btn-file-delete', function() {
-					
-					var issueID = ${id};
-					var contenidoID = $(this).closest('tr').attr('id');					
-					var data = 'issueID='+ issueID + '&fileID='+ contenidoID + '&userID='+ loggedUser;
-					
-					  bootbox.confirm("&iquest;Confirma que desea eliminar el archivo?", "Cancelar", "Eliminar", function(result){
-						  
-						  if(result){
-							  
-							  $.ajax({
-			        			    url: './' +issueID+ '/deleteFile',
-							 		type: "POST",	
-							 		data: data,							 
-							        success: function(data){	
-							        	
-							        	if(data.status){							        		
-							        		var deleteRow = $("#tbl-fileupload tr[id^='" + contenidoID +"']");												
-								        	deleteRow.fadeOut('slow',function() {								        		
-								        		deleteRow.remove();	
-								        	});										        	
-								        	updateFilesInfo(data.totalUploadedFiles);
-							        	}							        	
-							        	else{
-							        		bootbox.alert(data.message);	
-							        	}			        	
-							    	
-				            		}
-							  
-			        			});							  
-						  }				
-						   
-					  });//bootbox   
-				});
-				
-				
-				function getFormData(){
-					var fileInput = document.getElementById('multipleFileupload');
-					var files = fileInput.files;
-					var formData = new FormData();	
-					
-					for (var i = 0; i < files.length; i++) { 
-						formData.append("files", files[i]);
-					}
-					
-					var issueID = ${id};			
-					formData.append('issueID', issueID);
-
-					return formData;					
-				}
-			
-				    
-				    function getFilesArray(){
-				    	
-	 					var fileInput = document.getElementById('multipleFileupload');
-	 					var files = fileInput.files;
-	 					var formData = new FormData();	
-						
-	 					for (var i = 0; i < files.length; i++) { 
-	 						formData.append("files[]", files[i]);
-	 					}
-						
-	 					var issueID = ${id};			
-	 					formData.append('issueID', issueID);
-	 					
-	 					return formData;
-				    	
-				    }
-				    
-// 				    function getFilenameWithoutExtension(input){				    	
-// 				    	return input.substr(0, input.lastIndexOf('.'));				    	
-// 				    }
-				    
-// 				    function getFileSizeInMB(fileSize){
-// 				    	return Math.round(fileSize / 1024);				    	
-// 				    }
-				    
-				    
-				    /*** RECLAMOS CERCANOS ***/
-				    
-					var issueLocation = [];		
-					issueLocation.id = idIssue;
-					issueLocation.latitude = latitud;
-					issueLocation.longitude = longitud;		
-					
-					mapController.getClosestMarkersByIssue(issueLocation);			
-					
-				    
-				    
-				  //Add to Favorites
-					
-			        $('#bookmarkme').click(function() {
-			            if (window.sidebar && window.sidebar.addPanel) { // Mozilla Firefox Bookmark
-			                window.sidebar.addPanel(document.title,window.location.href,'');
-			            } else if(window.external && ('AddFavorite' in window.external)) { // IE Favorite
-			                window.external.AddFavorite(location.href,document.title); 
-			            } else if(window.opera && window.print) { // Opera Hotlist
-			                this.title=document.title;
-			                return true;
-			            } else { // webkit - safari/chrome
-			            	bootbox.alert('Esta funci&oacute;n no est&aacute; disponible para los navegadores Chrome y Safari.<br>' + 
-			            					'Presione las teclas <b>' + (navigator.userAgent.toLowerCase().indexOf('mac') != - 1 ? 'Command/Cmd' : 'CTRL') + ' + D</b> para agregar la p&aacute;gina a Favoritos.');
-			                
-			            }
-			        });
-			        
-			        
-			        ///*** WATCH ***/////
-			        
-			        var isWatching = '${isUserWatching}';
-		        	var $watcherList = $('#followers-list');	 	        	
-		        	var data = "issueID=" + idIssue;		        
-		        	var loader = '<button class="btn btn-default pull-right loader"><img src="${pageContext.request.contextPath}/resources/images/loader6.gif" alt="Loading" height=15 width=15 /></button>';	  
-
-					$watcherList.live('click', function(){
-						
-							$.ajax({
-					        	   url: './displayIssueFollowers.html',
-					               type: 'POST',
-					               dataType: 'json',
-					               data: data,
-					               success: function(response){		
-					            	   
-					            	   if(response.length == 0 ){
-					            		   $('#mdl-followers .modal-body').text('No hay usuarios siguiendo este reclamo.');
-					            	   }
-					            	   
-					            	   else{
-					            		   var followers = '';				             
-										    $.each(response, function(i, follower){	
-										    	followers += '<i class="icon-angle-right" style="margin-right: 5px;"></i>&nbsp;';
-										    	followers += mapController.getUserURL(follower);
-										    	followers += '<br>';
-										    });
-										    
-						                   $('#mdl-followers .modal-body').html(followers);
-						               
-					            	   }
-					            	   
-					            	    $('#mdl-followers').modal('show');	
-					               }
-					           });
-					
-					});
-						
-				 		
-			        $('#btn-watch-issue').live('click', function() {
-			        	
-			 			var reporter = '${usuario}';
-			 			
-			 			if(loggedUser == reporter){
-			 				bootbox.alert("S&oacute;lo puede seguir reclamos publicados por otros usuarios.");
-			 			}
-			 			
-			 			else{
-			 				
-			 				$(this).replaceWith(loader);
-			 				
-				 			$.ajax({
-		        			    url: './'+issueID+'/watch/',
-						 		type: "POST",	
-						 		data: data,							 
-						        success: function(data){
-						        	if(data.result){	
-						        		setTimeout(function(){		
-						        			$('.loader').replaceWith('<button id="btn-unwatch-issue" class="btn btn-info pull-right">Siguiendo</button>');
-						        		
-						        			$('#numFollowers').text(data.message);
-						 				}, 1000);
-						        	}
-						        	else{
-						        		bootbox.alert(data.message);	
-						        		$('.loader').replaceWith('<button id="btn-watch-issue" class="btn btn-default pull-right">@ Segu&iacute; el reclamo</button>');
-						        	}	
-			            		}						  
-		        			});	
-			 			}
-					});
-				
-				
-			        $('#btn-unwatch-issue')
-		        		.live('mouseover', function(){
-			        		$(this).removeClass('btn-info').addClass('btn-inverse').text('DEJAR DE SEGUIR');
-			        	})
-			        	.live('mouseleave', function(){
-			        		$(this).removeClass('btn-inverse').addClass('btn-info').text('@ SIGUIENDO');  
-			        	})
-			        	.live('click', function() {
-			        		
-			        		$(this).replaceWith(loader);
-			        	
-				 			$.ajax({
-		        			    url: './'+issueID+'/unwatch/',
-						 		type: "POST",	
-						 		data: data,							 
-						        success: function(data){							        	
-						        	if(data.result){
-						        		setTimeout(function(){
-						        			$('.loader').replaceWith('<button id="btn-watch-issue" class="btn btn-default pull-right">@ Segu&iacute; el reclamo</button>');
-						        			$watcherList.text(data.message);	
-						        		}, 1000);
-						        	}
-						        	else{
-						        		bootbox.alert(data.message);	
-						        		
-						        	}	
-			            		}						  
-		        			});				 				
-			        	});
-				
-				
-			    //*** VOTE ***//
-			    
-			    var isVoted = '${isCurrentlyVoted}';
-			    var isVoteUp = '${isVoteUp}';
-			    
-			    userActionsController.setCurrentVote(isVoted, isVoteUp);
-			    
-			    $('#votes button').live('click', function(e) {
-			    	
-			    	var thumb = $(this).attr('id');
-			    	var $voteUp = $('#vote-up');
-					var $voteDown = $('#vote-down');				  
-				    var voteUp = false;
-				    var voteValue;
-				    	
-				    	if(thumb == 'vote-up'){
-				    		voteValue = 1;
-					    	voteUp = true;
-				    	}			    		
-				    	else
-				    		voteValue =  -1;
-				    	
-				    	if(isVoted == 'true'){
-				    		bootbox.alert("Ya ha votado por este reclamo.");	
-				    	}
-				    	
-				    	else{ 					    	
-					    	
-					    	$.ajax({
-		        			    url: "./voteIssue.html",
-						 		type: "POST",	
-						 		data: "issueID=" + idIssue + "&vote=" + voteValue,							 
-						        success: function(data){						        	
-						        	if(data.result){
-						        		
-						        		if(voteUp){	
-									    	$voteDown.removeClass('btn-danger').addClass('btn-default');
-						        		}
-						        		
-						        		else{
-						        			$voteDown.removeClass('btn-success').addClass('btn-default');
-						        		}
-						        			
-						        		$voteUp.prop('disabled', true);
-							    		$voteDown.prop('disabled', true);
-						        		$('#voteCount').text(data.message); 
-						        				
-						        	}
-						        	
-						        	else{
-						        		bootbox.alert(data.message);	
-						        	}	
-			            		}						  
-		        			});
-				    	
-				    	}
-			    });
-			    
- 				//adds tab href to url + opens tab based on hash on page load:
- 				if (location.hash !== '') {
- 					$('a[href="' + location.hash + '"]').tab('show');
- 					
- 				}
- 				return $('a[data-toggle="tab"]').on('shown', function(e) {
- 			    	return location.hash = $(e.target).attr('href').substr(1);
- 			    });
- 				
- 				//Prevents Jump When Tabs Are Clicked
-//  				$('.nav-tabs li a').click( function(e) {
-//  					history.pushState( null, null, $(this).attr('href') );
-//  				});
- 				
- 				
-
-		});
-		
-		
-		
-	
-			
-		$(document).ready(function(){
-			
-			
-			//*** INFINITE SCROLL ***//
-			
-			/** Load first page of issues **/
-			
-			var $containerUpdates = $('#infinite-container-updates');
-			var $containerComments = $('#infinite-container-comments');
-		
-			var updatesJson = '${jsonUpdates}';
-			var commentsJson = '${jsonComments}';
-			var updatesArray = JSON.parse(updatesJson);
-			var commentsArray = JSON.parse(commentsJson);
-			
-			if(updatesJson.length > 0){
-				$('#btn-more-updates').show();
-			}
-			
-			if(commentsArray.length > 0){
-				$('#btn-more-comments').show();
-			}
-			
-			/* LOAD FIRST PAGE */
-			loadFirstPage(updatesArray, commentsArray);
-				
-			function renderToHtml(element, type){
-				
-				var html = '';
-				var userLink = mapController.getUserPlainURL(element.username);
-				
-				if(type == 'update'){
-					
-					var btnDisplay; 					
-					var obs = element.obs;
-					
-					if(obs == null || obs == ''){
-						btnDisplay =  'hide';
-					}
-					else{
-						btnDisplay = 'show';
-					}					
-					
-					html =  '<div class="brick-update">'
-						+		'<span class="index">'+element.id+'</span>'		
-						+		'<span class="date">'+element.date+'</span>'			    		
-						+		'<span class="user">'
-							+		'<a href="'+userLink+'">'+element.username+'</a>'
- 						+		'</span>'
-					    +		'<span class="motive">'+element.motive+'</span>'
-					    +		'<span class="obs">'					   
-						+			'<button class="btn '+btnDisplay+'" onclick="userActionsController.loadDetailModal(\''+obs+'\')" data-toggle="modal">Ver detalle &raquo;</button>'
-						+		'</span>'
-						+ 	'</div>';
-				}
-
-				else{
-					
-					html = '<div class="brick-comment"><div class="media">'
-						+		'<span class="pull-left">'
-						+	  		'<img class="media-object thumbnail" src="${pageContext.request.contextPath}/resources/images/nopic64.png">'
-						+	 	'</span>'
-						+	    '<div style="font-size:12px;margin-bottom:10px">'
-						+	  		'<a href="#"><strong>'+element.username+'</strong></a><span class="pull-right" style="margin-right: 30px">'+element.date+'</span></div>'
-	 					+	  '<div class="media-body" style="display:block">'		
-						+     		'<p style="font-size:13px">'+element.message+'</p>'	 
-	  					+	  '</div>'
-						+	'</div></div>';
-					
-				}
-		
-				return html;
-					
-			}
-			
-			function loadFirstPage(updatesArray, commentsArray){
-				
-				if(updatesArray.length > 0){
-					var html =  [];	
-					$.each( updatesArray, function( i, value ) {	            
-	            		var item = renderToHtml(value, "update");
-		        		html.push(item);
-		        	});
-	            	$containerUpdates.append(html);
-	            	
-				}
-				
-				if(commentsArray.length > 0){
-					var html =  [];
-					$.each( commentsArray, function( i, value ) {	            
-	            		var item = renderToHtml(value, "comment");
-		        		html.push(item);
-		        	});
-	            	$containerComments.append(html);
-				}
-            
-			}
-			
-			/* updates */
-			$containerUpdates.imagesLoaded( function(){                
-	            $containerUpdates.masonry({
-	                itemSelector : '.brick-update'
-	            });
-	        });
-			
-  			$containerUpdates.infinitescroll({
-				navSelector  	: "#page-nav-update",
-  				nextSelector 	: "#page-nav-update a",
-				itemSelector 	: ".brick-update",  
-				pixelsFromNavToBottom : "20",
-				debug: true,
-  				dataType: 'json',
-  				appendCallback: false,
-  				loading: {
-  		            finishedMsg: "<h4>No se encontraron m&aacute;s resultados.</h4>",
-  		            msgText: "<h4>Cargando actualizaciones...</h4>",
-  		            speed: 'slow'
-  		        }  		      
-			 }, function (newElements) {
-			 		var html = '';
- 			 		$.each( newElements, function( i, element ) {
- 			 			 html += renderToHtml(element, 'update');
- 			        });
- 			 		var $newElems = $( html ).css({ opacity: 0 });
- 			 		
-	 			    $newElems.imagesLoaded(function(){
-	 					$newElems.animate({ opacity: 1 });
-	 					$containerUpdates.append( $newElems ).masonry( 'appended', $newElems );
-		 			});
-			});
-	  			
-  			$containerUpdates.infinitescroll('pause');
-			
-  			/* comments */
-			$containerComments.imagesLoaded( function(){                
-	            $containerComments.masonry({
-	                itemSelector : '.brick-comment'
-	            });
-	        });
-			
-  			$containerComments.infinitescroll({
-				navSelector  	: "#page-nav-comment",
-  				nextSelector 	: "#page-nav-comment a",
-				itemSelector 	: ".brick-comment",  
-				pixelsFromNavToBottom : "20",
-				debug: true,
-  				dataType: 'json',
-  				appendCallback: false,
-  				loading: {
-  		            finishedMsg: "<h4>No se encontraron m&aacute;s resultados.</h4>",
-  		            msgText: "<h4>Cargando comentarios...</h4>",
-  		            speed: 'slow'
-  		        }  		      
-			 }, function (newElements) {
-			 		var html = '';
- 			 		$.each( newElements, function( i, element ) {
- 			 			 html += renderToHtml(element, 'comment');
- 			        });
-					 	
- 			 		var $newElems = $( html ).css({ opacity: 0 });
-
-	 			    $newElems.imagesLoaded(function(){
-	 					$newElems.animate({ opacity: 1 });
-	 					$containerComments.append( $newElems ).masonry( 'appended', $newElems );
-		 			});
-			});
-	  			
-  			$containerComments.infinitescroll('pause');
-  			
-  			
-  			$('.nav-tabs li').on('shown.bs.tab', function (e) {
-				var clickedTab = $(this).find('a').attr('href');
-			 	if(clickedTab == "#issueComments"){
-				  	$containerComments.masonry('layout');
-			 	}	
-			 	else{
-				  	$containerUpdates.masonry('layout');
-			 	}	
-			});
-  			
- 			
-  			$(' .btn-more ').click(function(e){
- 			     // call this whenever you want to retrieve the next page of content
- 			     // likely this would go in a click handler of some sort
- 			     e.preventDefault();
- 			    
- 			    if( $(this).hasClass( 'update' ) ){
- 			    	$containerUpdates.infinitescroll('retrieve');
- 				  	$('#page-nav-updates').hide(); 
- 			   	}  				
- 			    else{
- 			    	$containerComments.infinitescroll('retrieve');
- 			      	$('#page-nav-comments').hide(); 
- 			    }
- 			  
- 			    return false;
- 			  });
-			
-		});
-				
-	  			
-	  			
-		
-		
-	
-		</script>
-
-	
 	<div class="container-fluid">
 	  	<div class="row-fluid" >
 	   
@@ -1587,8 +417,6 @@
 				</sec:authorize>					
 			</div>
 			
-			
-			
 			<div id="userIssueActions">
 				<sec:authorize access="hasRole('ROLE_USER')">				
 					<c:if test="${estado ne 'CERRADO' && estado ne 'ARCHIVADO'}">
@@ -1604,34 +432,18 @@
 								<div id="btn-status" data-toggle="modal" class="pull-right">			
 									<button class="btn btn-warning" title="Reabrir"><i class="icon-rotate-right icon-large"></i> REABRIR</button>
 								</div>
-							</c:if>						
-							<script type="text/javascript">
-								userActionsController.enableUserActions();
-							</script>
+							</c:if>	
 						</div>							
 					</c:if>
-<%-- 					<c:if test="${estado eq 'CERRADO'}"> --%>
-<!-- 						<div class="stats-container" style="color: #fff; background: #333; font-weight: bold; border: none; text-align: center;"> -->
-<!-- 							Este reclamo ya no puede editarse. -->
-<!-- 						</div> -->
-<%-- 					</c:if> --%>
 				</sec:authorize>	
 			</div>
-<!--       			<a id="bookmarkme" href="#" rel="sidebar" title="Agregar a Favoritos"><i class="icon-star"></i></a> -->
-<!--       			<a href="#" onclick="javascript:window.print();" title="Imprimir"><i class="icon-print"></i></a> -->
-
 
 		   <div class="page-header">
     	   		<h4><i class="icon-globe icon-large"></i>&nbsp;&nbsp;Vista en el mapa</h4>    	 	
     	   </div>     	   
-		   		 
-		   	<script type="text/javascript">		
-			   $(document).ready(function(){
-			   		mapController.initMiniMap(${latitud}, ${longitud}, '${titulo}'); 
-			   });		   	
-		   	</script>
-		   	
-		   	<div id="mini_map"></div>
+		  
+		   <!-- MINI MAP -->	
+		   <div id="mini_map"></div>
 		   
 		   <div class="page-header">
     	   		<h4><i class="icon-map-marker icon-large"></i>&nbsp;&nbsp;Reclamos cercanos</h4>    	 	
@@ -1652,8 +464,7 @@
 		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>	
 			<h4>¿Cumple las siguientes condiciones?</h4>
 	  	</div>
-		<div class="modal-body">
-		
+		<div class="modal-body">		
 			<ul class="list">
 				<li>Es CORRECTO
 					<ul class="sublist">
@@ -1675,24 +486,13 @@
 					</ul>
 				</li>
 				<li>Es ACTUAL</li>
-			</ul>
-		
+			</ul>		
 		</div>
-<!-- 		<div class="modal-footer"> 	 -->
-<!-- 			¿Cumple las condiciones? -->
-<!-- 			<button id="btn-update-status" class="btn btn-info" aria-hidden="true"> -->
-<!-- 			    <i class="icon-ok icon-large"></i>&nbsp;&nbsp;S&iacute; -->
-<!-- 			</button>	  			 		  		 -->
-<!-- 	  		<button class="btn" data-dismiss="modal" aria-hidden="true"> -->
-<!-- 		    	<i class="icon-remove icon-large"></i>&nbsp;&nbsp;No -->
-<!-- 		    </button>	  -->
-<!-- 	  	</div> -->
-		<div class="modal-footer"> 	
-			
-			<button id="btn-verify" class="btn btn-info" aria-hidden="true" onclick="userActionsController.verifyOrRejectIssue('Verificar');">
+		<div class="modal-footer"> 			
+			<button id="btn-verify" class="btn btn-info" aria-hidden="true" onclick="fxlIssueController.verifyOrRejectIssue('Verificar');">
 			    <i class="icon-ok icon-large"></i>&nbsp;&nbsp;Verificar
 			</button>	  			 		  		
-	  		<button id="btn-reject" class="btn btn-danger" aria-hidden="true" onclick="userActionsController.verifyOrRejectIssue('Rechazar');">
+	  		<button id="btn-reject" class="btn btn-danger" aria-hidden="true" onclick="fxlIssueController.verifyOrRejectIssue('Rechazar');">
 		    	<i class="icon-minus-sign icon-large"></i>&nbsp;&nbsp;Rechazar
 		    </button>	 
 		    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">
@@ -1821,7 +621,7 @@
 			  		<span class="btn btn-danger fileinput-button">
 		                   <i class="icon-plus"></i>
 		                   <span>Seleccionar archivos</span>
-		                   <input type="file" id="files" name="files[]" accept="image/*" onchange="upload();">
+		                   <input type="file" id="files" name="files[]" accept="image/*" onchange="javascript:fxlIssueController.upload();">
 		            </span>
 		  		</c:if>			  	
 		  		<button class="btn" data-dismiss="modal" aria-hidden="true">
@@ -1906,21 +706,11 @@
 	    		</div>
 	    		<div class="span4">
 	    			<label>Fecha estimada de inicio</label>
-<!-- 		    	   	<div id="fecha-estimada-from" class="input-append">											    -->
-					    <input type="text" id="fechaEstimadaInicio" name="fechaEstimadaInicio" class="repairDate" placeholder="dd/mm/aaaa"/>
-<!-- 					    <span class="add-on"> -->
-<!-- 					      <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i> -->
-<!-- 					    </span> -->
-<!-- 					</div>  -->
+					<input type="text" id="fechaEstimadaInicio" name="fechaEstimadaInicio" class="repairDate" placeholder="dd/mm/aaaa"/>
 	 			</div>	  				
 	 			<div class="span4">	  
  					<label>Fecha estimada de finalizaci&oacute;n</label>			
-<!--   					<div id="fecha-estimada-to" class="input-append">											    -->
-					    <input type="text" id="fechaEstimadaFin" name="fechaEstimadaFin"  class="repairDate" placeholder="dd/mm/aaaa"/>
-<!-- 					    <span class="add-on"> -->
-<!-- 					      <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i> -->
-<!-- 					    </span> -->
-<!-- 					</div>  	 -->
+					<input type="text" id="fechaEstimadaFin" name="fechaEstimadaFin"  class="repairDate" placeholder="dd/mm/aaaa"/>
 	 			</div>
 	  		</div>	  		
 	  		<hr>	  		
@@ -1930,24 +720,12 @@
 	    	   		<input type="text" id="presupuestoFinal" name="presupuestoFinal" placeholder="en $ argentinos"/>	
 	  			</div>	  			 
 	  			<div class="span4">
-	  				<label>Fecha real de inicio</label>			
-<!-- 		    	   	<div id="fecha-real-from" class="input-append">											    -->
-					    <input type="text" id="fechaRealInicio" name="fechaRealInicio"  class="repairDate" placeholder="dd/mm/aaaa"/>
-<!-- 					    <span class="add-on"> -->
-<!-- 					      <i data-time-icon="icon-time" data-date-icon="icon-calendar"> -->
-<!-- 					      </i> -->
-<!-- 					    </span> -->
-<!-- 					</div> -->
+	  				<label>Fecha real de inicio</label>												
+					<input type="text" id="fechaRealInicio" name="fechaRealInicio"  class="repairDate" placeholder="dd/mm/aaaa"/>
 	  			</div>	  		
 	  			<div class="span4">	  
-	  				<label>Fecha real de finalizaci&oacute;n</label>						
-<!-- 	  				<div id="fecha-real-to" class="input-append">											    -->
-					    <input type="text" id="fechaRealFin" name="fechaRealFin" class="repairDate" placeholder="dd/mm/aaaa"/>
-<!-- 					    <span class="add-on"> -->
-<!-- 					      <i data-time-icon="icon-time" data-date-icon="icon-calendar"> -->
-<!-- 					      </i> -->
-<!-- 					    </span> -->
-<!-- 					</div>  	 -->
+	  				<label>Fecha real de finalizaci&oacute;n</label>	
+					<input type="text" id="fechaRealFin" name="fechaRealFin" class="repairDate" placeholder="dd/mm/aaaa"/>
 	  			</div>	  				
 	  		</div>	  		
 	  		<hr>	  		
@@ -1968,52 +746,39 @@
 		    </button>	
 	  	</div>
 	  	</form>
-	</div>
-	
-
+	</div>	
+<!-- fileupload templates -->
 <script id="template-upload" type="text/x-tmpl">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-upload fade">
 		
 		<td width="100">	 	  			  	   		
 				 <span class="preview thumbnail" style="max-height:60px; text-align: center"></span>
-		</td>
-		
+		</td>		
 			<td>
             	Procesando...
 				{%=file.name%} 
             	<div class="progress progress-success progress-striped"><div class="bar" style="width:0%;"></div></div>		
-				<strong class="error text-danger" style="color: red"></strong>
-            	
-				
+				<strong class="error text-danger" style="color: red"></strong> 
         	</td>
-
-
-
         	<td width="100" class="centered" colspan="2">				
             	{% if (!i && !o.options.autoUpload) { %}
                 	<button class="btn btn-primary start" disabled>
                     	<i class="icon-upload"></i>
                 	</button>
-            	{% } %}
-
-				
-            	{% if (!i) { %}
-				
+            	{% } %}				
+            	{% if (!i) { %}				
                 		<button class="btn btn-default cancel">
                     		<i class="icon-trash"></i>                    		
-                		</button>
-            	
+                		</button>            	
 				{% } %}   
         	</td>
     </tr>
 {% } %}
 </script>
-
 <script id="template-download" type="text/x-tmpl">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr id="{%=file.id%}" class="template-download fade">
-
         <td width="100"> 	   		
 				<span class="preview thumbnail" style="max-height:60px; text-align: center">
                 
@@ -2023,22 +788,17 @@
   				
             	</span>
 		</td>
-
-
-        <td>            
- 			
+        <td> 
             {% if (file.error) { %}
                 <div><span class="label label-danger">Error</span> No se pudo guardar el archivo.</div>
 			  {% } else { %}
 
 			<span> {%=file.name%}</span>
-{% } %}
+			{% } %}
         </td>
-
 		<td>
 			<span class="size">{%=o.formatFileSize(file.size)%}</span>
-		</td>
-       
+		</td>       
         <td width="100" class="centered">
 			 {% if (file.error) { %}
                 		<button class="btn btn-default cancel">
@@ -2055,12 +815,93 @@
     </tr>
 {% } %}
 </script>
+</div><!-- content -->
+
+<script src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.issue.js"></script>  
+<script src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.file.js"></script>	
+<script src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-datepicker.js"></script>	
+<script src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-datepicker.es.js"></script>	
+<script type="text/javascript">  
+	$(document).ready(function(){		
 	
-		<!-- Go to www.addthis.com/dashboard to customize your tools -->
-<!-- <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-53d8340b75bafe45"></script> -->
+		var issueID = '${id}';		
 		
-</div><!-- CONTENT -->
- <script src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.file.js"></script>	
- <script src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-datepicker.js"></script>	
-  <script src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-datepicker.es.js"></script>	
- <link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/2.3.2/bootstrap-datepicker.css" rel="stylesheet">
+		fxlIssueController.updatesJson = '${jsonUpdates}';
+		fxlIssueController.commentsJson = '${jsonComments}';	
+		fxlGlobalController.loggedUser = '${loggedUser}';
+		
+		fxlIssueController.updatedFields =  { "title": 0 , "desc": 0, "barrio": 0};			 
+		fxlIssueController.oldFields = $.parseJSON('${oldFields}');			
+		fxlIssueController.reporter = '${usuario}';
+		
+		if(fxlGlobalController.loggedUser != ""){
+			 $('#btnAddFiles').show();
+		}	
+		
+		var isVoted = '${isCurrentlyVoted}';
+		var isVoteUp = '${isVoteUp}';
+		
+			
+		fxlIssueController.initVote(isVoted, isVoteUp);
+		
+		var latitud = '${latitud}';
+   		var longitud = '${longitud}';
+   		fxlIssueController.displayClosesIssues(latitud, longitud);
+		
+		bindRepairBtns();		
+		
+		fxlIssueController.initIssue(issueID);	
+		
+		mapController.initMiniMap(${latitud}, ${longitud}, '${titulo}'); 
+		
+		//adds tab href to url + opens tab based on hash on page load:
+		if (location.hash !== '') {
+			$('a[href="' + location.hash + '"]').tab('show');
+			
+		}
+		return $('a[data-toggle="tab"]').on('shown', function(e) {
+	    	return location.hash = $(e.target).attr('href').substr(1);
+	    });
+    	
+	});
+	
+	function bindRepairBtns(){
+		
+		//add btn
+		$('#btn-add-repair').live('click', function() {
+			$('#btn-save-repair').prop('disabled',true);
+			$('#mdl-repair').modal('show');
+			$('#presupuestoAdjudicacion').val(0);
+			$('#presupuestoFinal').val(0);
+			$('#plazo').val(0);
+		
+		});
+		
+		//edit btn
+		$('#btn-edit-repair').live('click', function() {
+
+			$('#obra').val('${obra}');
+			$('#estadoObra').val('${estadoObra}');
+			$('#nroLicitacion').val('${nroLicitacion}');
+			$('#nroExpediente').val('${nroExpediente}');
+			$('#plazo').val('${plazo}');
+			$('#empresaNombre').val('${empresaNombre}');
+			$('#empresaCuit').val('${empresaCuit}');
+			$('#representanteNombre').val('${representanteNombre}');
+			$('#representanteMatricula').val('${representanteMatricula}');
+			$('#unidadEjecutora').val('${unidadEjecutora}');
+			$('#unidadFinanciamiento').val('${unidadFinanciamiento}');
+			$('#presupuestoAdjudicacion').val('${presupuestoAdjudicacion}');
+			$('#presupuestoFinal').val('${presupuestoFinal}');
+			$('#fechaEstimadaInicio').val('${fechaEstimadaInicio}');
+			$('#fechaEstimadaFin').val('${fechaEstimadaFin}');			
+			$('#fechaRealInicio').val('${fechaRealInicio}');
+			$('#fechaRealFin').val('${fechaRealFin}');
+			$('#observaciones').val('${observaciones}');
+
+	    	$('#mdl-repair').modal('show');
+	    	
+	    }); 
+		
+	}
+</script>

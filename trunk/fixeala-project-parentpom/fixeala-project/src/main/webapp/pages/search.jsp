@@ -22,12 +22,9 @@
 	  		</div>
 	    </div>	
     </div>
-</div>
-
-<script type="text/javascript">
-    	
-   	$( document ).ready(function() {
-   		
+</div><!-- content -->
+<script type="text/javascript">    	
+   	$(document).ready(function() {   		
    		var tag = '${tag}';	
    		var issues = $.parseJSON('${issuesByTag}');	
    		var allTags = $.parseJSON('${allTags}');	
@@ -35,8 +32,7 @@
    	
    		if(issues.length == 0){    		
    			$(".issueList").append( "<h1><small>No se encontraron resultados.</small></h1>" );
-   		}
-   		
+   		}   		
    		else{
    			for(var i = 0; i < issues.length ; i++){
    	    		$(".issueList").append( "<article>" +
@@ -51,16 +47,12 @@
    	        			"</article>"+
    	        		"</div>");
    	    	}   			
-   		}
-   		   	
+   		}   		   	
    		for(var i = 0; i < allStatus.length ; i++){
    			$(".statusCloud").append( "<a class=\"statusLinkCloud\" href=\"" +allStatus[i].url+ "\"><span style=\"padding: 10px; margin: 0 15px 10px 0;  font-size: 14px;\" class=\""+allStatus[i].css+"\">" +allStatus[i].text+ "</span></a>");
-   		}
-   		
+   		}   		
    		for(var i = 0; i < allTags.length ; i++){
    			$(".tagCloud").append( "<a class=\"tagLinkCloud\" href=\"" +allTags[i].url+ "\"><span style=\"padding: 10px; margin: 0 15px 10px 0;  font-size: 14px;\" class=\"label label-default\">" +allTags[i].label+ "</span></a>");
-   		}
-   		
-   	}); 
-    		
+   		}   		
+   	});     		
 </script>
