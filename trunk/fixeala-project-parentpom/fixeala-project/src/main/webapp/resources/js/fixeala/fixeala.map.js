@@ -1,6 +1,8 @@
 var mapController = {
-				
-//	map : null,		
+	
+	loadGoogleMap : function(){
+		google.maps.event.addDomListener(window, 'load', mapController.initMap);  	 
+	},
 		
 	initMap : function(){		
 	   
@@ -67,18 +69,18 @@ var mapController = {
 		        dataType: "json",  	        
 		        success: function(data){     
 		        	
-		        	markerArray = data;	  
+		        	var markerArray = data;
 		        	
 		        	var tempMarker;
 		        	var infowindow;
-		        	var textLimit = 500;	 
-
+		        	var textLimit = 500;	
+		        	
 		        	for (var i = 0; i < markerArray.length; i++) {         		
 		        			        		
 		        		var latlng = new google.maps.LatLng(markerArray[i].latitude, markerArray[i].longitude);
 		        		var description = markerArray[i].description;
 		        		var shortDescription = description.substr(0, textLimit);
-		        	
+		       
 		        		var markerInfo = '<table border="0" cellpadding="0" cellspacing="0" width="380px" height="90px" style="background-color:white;font-family:Arial;">'
 							 +'   <tr>'
 							 +'	 	<td style="text-align:left;"><b><div style="color:#000;display:inline">'+mapController.getIssueURL(markerArray[i].id, markerArray[i].title, 'link')+'</div>' 
@@ -86,7 +88,7 @@ var mapController = {
 							 +'										<span class="'+markerArray[i].statusCss+'">'+ markerArray[i].status +'</span></b></td>'				           
 							 +'	 </tr>'	
 							 +'  <tr style="font-size:11px">'
-							 +'	 	<td style="text-align:left;color:grey">'+markerArray[i].fullAddress+'</td>'				
+							 +'	 	<td style="text-align:left;color:grey">'+markerArray[i].address+'</td>'				
 							 +'	 </tr><tr><td>&nbsp;</td></tr>'	
 							 +'   <tr style="font-size:12px">'
 							 +'	 	<td style="text-align:justify;color:black">'+shortDescription+' ...</td>'				
@@ -95,7 +97,7 @@ var mapController = {
 							 +'	 	<td>&nbsp;</td>'				
 							 +'	 </tr>'			
 							 +'	 <tr style="font-size:11px;padding-top:1px">'
-							 +'		<td style="text-align:left;color:grey;border-top:1px solid grey">Reportado por: '+mapController.getUserURL(markerArray[i].username)+' &nbsp; <div style="margin:0;padding:0;float:right;clear:both;display:inline">'+ markerArray[i].fechaFormateada +'</div></td>'
+							 +'		<td style="text-align:left;color:grey;border-top:1px solid grey">Reportado por: '+mapController.getUserURL(markerArray[i].user)+' &nbsp; <div style="margin:0;padding:0;float:right;clear:both;display:inline">'+ markerArray[i].date +'</div></td>'
 							 +'	 </tr>'				
 							 +'	 </table>';					 
 		        	

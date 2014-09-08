@@ -178,6 +178,17 @@ var fxlGlobalController = {
 	  	    else if (tag == 'select')
 	  	      this.selectedIndex = -1;
   	  	});
-    }
+    },
+    
+    cropText : function(value, limit){
+		var cropped = '';
+		if(value.length > limit){
+			cropped = value.substr(0, limit) + '...';	
+		}
+        else {
+        	cropped = value;	
+        }	
+        return cropped;
+	}
 		
 }

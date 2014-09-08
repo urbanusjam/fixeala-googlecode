@@ -566,6 +566,14 @@ public class IssueServiceImpl implements IssueService {
 		}		
 		issueDTO.setTags(tagNames);
 		
+		List<MediaContent> imagenes = new ArrayList<MediaContent>();
+		for(MediaContent c : issue.getContenidos()){
+			//solo imagenes del reclamo
+			if(!c.isProfilePic())
+				imagenes.add(c);
+		}
+		issueDTO.setContenidos(imagenes);
+		
 		return issueDTO;
 	}
 	

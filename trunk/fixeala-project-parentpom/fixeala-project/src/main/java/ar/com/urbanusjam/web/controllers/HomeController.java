@@ -140,50 +140,29 @@ public class HomeController {
 		}	
 	}
 	
-	@RequestMapping(value = "/loadMapMarkers", method = RequestMethod.GET)
-	public @ResponseBody List<IssueDTO> loadMapMarkers(@ModelAttribute ("issues") ArrayList<IssueDTO> issues, HttpServletRequest request) throws JSONException {
+	@RequestMapping(value = "/loadMapMarkers", produces={"application/json; charset=UTF-8"}, method = RequestMethod.GET)
+	public @ResponseBody String loadMapMarkers(@ModelAttribute ("issues") ArrayList<IssueDTO> issues, HttpServletRequest request) throws JSONException {
 
-		JSONObject obj = new JSONObject();
 		JSONArray array = new JSONArray();
 
-		obj.put("type", "FeatureCollection");
-
 		for (IssueDTO s : issues) {
-			JSONObject feature = new JSONObject();
 
-			feature.put("type", "Feature");
+			JSONObject obj = new JSONObject();
+			obj.put("id", s.getId());
+			obj.put("address", s.getFullAddress());
+			obj.put("title", s.getTitle());
+			obj.put("status", s.getStatus());
+			obj.put("statusCss", s.getStatusCss());
+			obj.put("date", s.getFechaFormateada());
+			obj.put("description", s.getDescription());
+			obj.put("user", s.getUsername());
+			obj.put("latitude", s.getLatitude());
+			obj.put("longitude", s.getLongitude());
 
-			JSONObject geometry = new JSONObject();
-			geometry.put("type", "Point");
-			geometry.put(
-					"coordinates",
-					new float[] {
-							// Float.parseFloat(s.getLatitude()),
-							// Float.parseFloat(s.getLongitude()) });
-							Float.parseFloat(s.getLongitude()),
-							Float.parseFloat(s.getLatitude()) });
-
-			feature.put("geometry", geometry);
-
-			JSONObject properties = new JSONObject();
-			properties.put("id", s.getId());
-			properties.put("address", s.getFullAddress());
-			properties.put("title", s.getTitle());
-			properties.put("status", s.getStatus());
-			properties.put("statusCss", s.getStatusCss());
-			properties.put("date", s.getFechaFormateada());
-			properties.put("description", s.getDescription());
-			properties.put("user", s.getUsername());
-
-			feature.put("properties", properties);
-			array.put(feature);
+			array.put(obj);
 		}
 
-		obj.put("features", array);
-
-		System.out.println(obj.toString());
-
-		return issues;
+		return array.toString();
 	}
 	
 	@RequestMapping(value="/usuarios", method = RequestMethod.GET)
@@ -262,6 +241,7 @@ public class HomeController {
 					obj.put("totalFollowers", issue.getTotalFollowers());	
 					obj.put("totalViews", "0");	
 					obj.put("css", issue.getStatusCss());		
+					obj.put("url", issue.getContenidos().size() > 0 ? issue.getContenidos().get(0).getLink() : null);		
 					jsonArray.put(obj);
 				}		
 				
@@ -276,6 +256,7 @@ public class HomeController {
 				
 				for(UserDTO user : sub){
 					JSONObject obj = new JSONObject();
+					obj.put("profilePic", user.getProfilePic());
 					obj.put("username", user.getUsername());
 					obj.put("city", user.getCity());	
 					obj.put("province", user.getProvince());	
@@ -283,6 +264,7 @@ public class HomeController {
 					obj.put("reportedIssues", Math.floor(Math.random() * 50));
 					obj.put("postedComments", Math.floor(Math.random() * 99));
 					obj.put("fixedIssues", Math.floor(Math.random() * 15));
+					
 					jsonArray.put(obj);
 				}				
 			}	
