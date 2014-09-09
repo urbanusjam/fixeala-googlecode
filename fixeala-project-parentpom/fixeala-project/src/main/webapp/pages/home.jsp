@@ -1,5 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div id="content">
-
 	<!-- search bar -->
 	<div id="searchBar" class="row-fluid" >
 		<div class="span8">				
@@ -164,22 +164,27 @@
 		<!-- tabs content -->										
 		<div class="tab-content">			
 			<!-- tab 1 recent -->
-			<div class="tab-pane fade in active" id="latestIssues">				
-				<!-- sorting -->
-				<span>Ordenar por: </span>
-				<div id="sorts" class="btn-group">
-	  				<button data-sort-by="original-order" class="btn btn-default active">Fecha</button>
-	  				<button data-sort-by="status" class="btn btn-default">Estado</button>
-					<button data-sort-by="title" class="btn btn-default">Titulo</button>
-					<button data-sort-by="province" class="btn btn-default">Provincia</button>
-	    			<button data-sort-by="id" class="btn btn-default">ID</button>
-				</div>		
-				<!-- infinite scroll -->
-				<div id="infinite-container"></div>				
-				<nav id="page-nav" style="display: none;">
-  					<a href="loadmore/issue/2"></a>
-				</nav>				
-				<center><a href="#" class="btn btn-default btn-more issue">Mostrar m&aacute;s resultados</a></center>
+			<div class="tab-pane fade in active" id="latestIssues">	
+				<c:if test="${totalIssues eq 0}">
+					<h4 style="padding-bottom: 20px; margin-left: 15px;">No hay reclamos publicados.</h4>
+				</c:if>
+				<c:if test="${totalIssues gt 0}">			
+					<!-- sorting -->
+					<span>Ordenar por: </span>
+					<div id="sorts" class="btn-group">
+		  				<button data-sort-by="original-order" class="btn btn-default active">Fecha</button>
+		  				<button data-sort-by="status" class="btn btn-default">Estado</button>
+						<button data-sort-by="title" class="btn btn-default">Titulo</button>
+						<button data-sort-by="province" class="btn btn-default">Provincia</button>
+		    			<button data-sort-by="id" class="btn btn-default">ID</button>
+					</div>		
+					<!-- infinite scroll -->
+					<div id="infinite-container"></div>				
+					<nav id="page-nav" style="display: none;">
+	  					<a href="loadmore/issue/2"></a>
+					</nav>	
+					<center><a href="#" class="btn btn-default btn-more vote">Mostrar m&aacute;s resultados</a></center>
+				</c:if>
 			</div>
 			<!-- tab 2 popular -->
 			<div class="tab-pane fade" id="hottestIssues">	
@@ -187,24 +192,34 @@
 				<div id="infifxlIssueController.configIsotope();fxlIssueController.configIsotope();nite-container-votes"></div>				
 				<nav id="page-nav-votes" style="display: none;">
   					<a href="loadmore/issue/2"></a>
-				</nav>
-				<center><a href="#" class="btn btn-default btn-more vote">Mostrar m&aacute;s resultados</a></center>
+				</nav>	
+				<c:if test="${totalIssues eq 0}">
+					<h4 style="padding-bottom: 20px; margin-left: 15px;">No hay reclamos publicados.</h4>
+				</c:if>
+				<c:if test="${totalIssues gt 0}">
+					<center><a href="#" class="btn btn-default btn-more vote">Mostrar m&aacute;s resultados</a></center>
+				</c:if>				
 			</div>
 			<!-- tab 3 user -->
 			<div class="tab-pane fade" id="topUsers">
-				<!-- sorting -->
-				<span>Ordenar por: </span>
-				<div id="sorts-users" class="btn-group">
-	  				<button data-sort-by="original-order" class="btn btn-default active"><i class="icon icon-star"></i>Mejor reputaci&oacute;n</button>
-	  				<button data-sort-by="issues" class="btn btn-default"><i class="icon icon-map-marker"></i>Reclamos publicados</button>
-					<button data-sort-by="fixes" class="btn btn-default"><i class="icon icon-ok"></i>Reclamos resueltos</button>
-					<button data-sort-by="comments" class="btn btn-default"><i class="icon icon-comment-alt"></i>Comentarios</button>
-				</div>						
-				<div id="infinite-container-users"></div>					
-				<nav id="page-nav-user" style="display: none;">
-  					<a href="loadmore/user/2"></a>
-				</nav>					
-				<center><a href="#" class="btn btn-default btn-more user">Mostrar m&aacute;s resultados</a></center>				
+				<c:if test="${totalUsers eq 0}">
+					<h4 style="padding-bottom: 20px; margin-left: 15px;">No hay reclamos publicados.</h4>
+				</c:if>
+				<c:if test="${totalUsers gt 0}">
+					<!-- sorting -->
+					<span>Ordenar por: </span>
+					<div id="sorts-users" class="btn-group">
+		  				<button data-sort-by="original-order" class="btn btn-default active"><i class="icon icon-star"></i>Mejor reputaci&oacute;n</button>
+		  				<button data-sort-by="issues" class="btn btn-default"><i class="icon icon-map-marker"></i>Reclamos publicados</button>
+						<button data-sort-by="fixes" class="btn btn-default"><i class="icon icon-ok"></i>Reclamos resueltos</button>
+						<button data-sort-by="comments" class="btn btn-default"><i class="icon icon-comment-alt"></i>Comentarios</button>
+					</div>						
+					<div id="infinite-container-users"></div>					
+					<nav id="page-nav-user" style="display: none;">
+	  					<a href="loadmore/user/2"></a>
+					</nav>	
+					<center><a href="#" class="btn btn-default btn-more vote">Mostrar m&aacute;s resultados</a></center>
+				</c:if>					
 			</div>	
 		</div>
 	</div>	
@@ -220,13 +235,14 @@
 
 	$(document).ready(function(){
 
+		
 		//data
 		var issuesJson = '${jsonIssues}';
 		var usersJson = '${jsonUsers}';
-
-		//google maps
-		mapController.loadGoogleMap();
 		
+		//google maps
+		mapController.loadGoogleMap();			
+			
 		//init
 		fxlHomeController.initHome(issuesJson, usersJson);
 		
@@ -262,7 +278,6 @@
 	});
 	
 	function loadProgressBar(){
-		
 		//overall progress bar 
 		var totalIssues = '${totalIssues}'; 
 		var verifiedIssues = '${verified}'; 

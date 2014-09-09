@@ -1574,3 +1574,5 @@ div.feedback a:hover { text-decoration: none; }
 .forgotPassLink {
 	text-align: left;
 }
+
+#widget-script { background: none; }

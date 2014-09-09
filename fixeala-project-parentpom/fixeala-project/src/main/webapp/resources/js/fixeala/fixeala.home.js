@@ -565,7 +565,9 @@ var fxlHomeController = {
 		var $container = $('#infinite-container');
 		var $containerVotes = $('#infinite-container-votes');
 		var $containerUsers = $('#infinite-container-users');
-		
+		console.log('--- issues: ' + issuesArray.length);
+		console.log('--- votes: ' + votesArray.length);
+		console.log('--- users: ' + usersArray.length);
 		 if(issuesArray.length > 0){
         	var html =  [];	
         	$.each( issuesArray, function( i, value ) {
@@ -598,12 +600,12 @@ var fxlHomeController = {
 		
 		var html = '';
 		var imageUrl = '';
-		var issueUrl = "issues/" + element.id;
-		var userUrl = "users/" + element.username;
 		var titleLimit = 40;
 		var descLimit = 150;
 		
 		if(type == "issue"){
+			
+			var issueUrl = "issues/" + element.id;
 			
 			if(element.url != null){	
 				imageUrl = element.url;	
@@ -637,6 +639,8 @@ var fxlHomeController = {
 		}
 		
 		else if(type == "user"){
+			
+			var userUrl = "users/" + element.username;
 			
 			if(element.profilePic != null){	
 				imageUrl = element.profilePic;	

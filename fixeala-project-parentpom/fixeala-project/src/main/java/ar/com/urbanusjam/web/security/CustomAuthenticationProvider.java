@@ -1,5 +1,7 @@
 package ar.com.urbanusjam.web.security;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,12 +28,13 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		  User user = userService.loadUserByUsername((String) authentication.getPrincipal());
 		  String plainPass = (String) authentication.getCredentials();
 		  String encodedPass = passwordEncoder.encodePassword(plainPass, user.getUsername());
-		 
-		
+		 		
 		  if(user.isEnabled()){
-			  if (user.getPassword().equals(encodedPass))
+			  if (user.getPassword().equals(encodedPass)){				  
+				  userService.updateUserLastLogin(user.getUsername());
 				  return new UsernamePasswordAuthenticationToken(user, authentication.getCredentials(), user.getRoles());
-			   else
+			  }
+			  else
 				  return null;
 		  }
 		  else

@@ -95,18 +95,21 @@ public class HomeController {
 			allTags = array.toString();
 			model.addAttribute("allTags", allTags.length() == 0 ? "[{}]" : allTags);
 			
-			if(issues != null){
-				//page 1
-				JSONArray issuePagesArray = new JSONArray();
-				issuePagesArray = paginateToArray(issues, 1, "issue");
-				
-				JSONArray userPagesArray = new JSONArray();
-				userPagesArray = paginateToArray(userService.loadAllActiveUsers(), 1, "user");
-				
-				model.addAttribute("jsonIssues", issuePagesArray);
-				model.addAttribute("jsonUsers", userPagesArray);
-			}
+			List<UserDTO> users = userService.loadAllActiveUsers();
+						
+			//page 1
+			JSONArray issuePagesArray = new JSONArray();
+			JSONArray userPagesArray = new JSONArray();
 			
+			if(issues.size() > 0)
+				issuePagesArray = paginateToArray(issues, 1, "issue");
+			
+			if(users.size() > 0)			
+				userPagesArray = paginateToArray(users, 1, "user");
+			
+			model.addAttribute("jsonIssues", issuePagesArray.length() == 0 ? "[]" : issuePagesArray);
+			model.addAttribute("jsonUsers",  userPagesArray.length() == 0 ? "[]" : userPagesArray);
+						
 			int verified = 0;
 			int notVerified = 0; 
 			int resolved = 0; 
@@ -131,6 +134,7 @@ public class HomeController {
 			model.addAttribute("notVerified", notVerified);
 			model.addAttribute("resolved", resolved);
 			model.addAttribute("notResolved", notResolved);
+			model.addAttribute("totalUsers", users.size());
 			
 			return "home";
 		
@@ -789,7 +793,7 @@ public class HomeController {
 				}		
 				
 				allProvinces = provArray.toString();
-				model.addAttribute("provinceList", allProvinces.length() == 0 ? "[{}]" : allProvinces);
+				model.addAttribute("provinceList", allProvinces.length() == 0 ? "[]" : allProvinces);
 				model.addAttribute("loggedUser", loggedUser);
 				model.addAttribute("loggedMatchesProfile", isSameUser);			
 				model.addAttribute("isActiveUser", user.isEnabled());

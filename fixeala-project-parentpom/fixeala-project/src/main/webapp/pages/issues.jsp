@@ -184,7 +184,7 @@
 			</sec:authorize>
 			<c:if test="${cantidadComentarios eq 0}">
 					<h4 style="padding-bottom: 20px; margin-left: 15px;">No hay comentarios publicados.</h4>
-				</c:if>
+			</c:if>
 		    <c:if test="${cantidadComentarios gt 0}">
 		    	<div class="row-fluid" style="margin-bottom: 30px;">		
 			 		 <!-- infinite scroll -->
