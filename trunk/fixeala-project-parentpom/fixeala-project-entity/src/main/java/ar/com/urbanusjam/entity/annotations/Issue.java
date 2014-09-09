@@ -9,6 +9,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -28,6 +30,7 @@ public class Issue implements Serializable  {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id_issue")
 	private Long id;
 	
@@ -311,12 +314,20 @@ public class Issue implements Serializable  {
 	}
 
 	public void addTag(Tag tag) {	
-		if (!getTagsList().contains(tag)) {
-			getTagsList().add(tag);
-		}
-	    if (!tag.getIssueList().contains(this)) {
-	        tag.getIssueList().add(this);
-	    }				   
+		if (tag != null) {
+	        if (tagsList == null) {
+	        	tagsList = new HashSet<Tag>();          
+	        }
+	        tagsList.add(tag);
+//	        tag.setIssue(this);
+	     }	
+		
+//		if (!getTagsList().contains(tag)) {
+//			getTagsList().add(tag);
+//		}
+//	    if (!tag.getIssueList().contains(this)) {
+//	        tag.getIssueList().add(this);
+//	    }				   
 	}	
 	
 	public void removeTag(Tag tag) {	

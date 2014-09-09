@@ -74,7 +74,7 @@ CREATE TABLE media_content (
 
 
 CREATE TABLE issue (
-	   id_issue BIGINT(20) NOT NULL, 
+	   id_issue BIGINT(20) NOT NULL AUTO_INCREMENT, 
 	   id_reporter BIGINT(20) NOT NULL,
 	   creation_date DATETIME NOT NULL,    	  
 	   last_update_date DATETIME NOT NULL,    	  
@@ -150,18 +150,18 @@ CREATE TABLE issue_tag (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE issue_update_history ( 	  
-	   id_issue_update_history BIGINT(20) NOT NULL AUTO_INCREMENT, 	   
+CREATE TABLE issue_history ( 	  
+	   id_issue_history BIGINT(20) NOT NULL AUTO_INCREMENT, 	   
 	   id_issue BIGINT(20) NOT NULL, 	   
 	   id_user BIGINT(20) NOT NULL,	   
 	   update_date DATETIME NOT NULL,    	   
 	   status VARCHAR(30) NOT NULL, 	    
-	   operation_type VARCHAR(1) NOT NULL,
-	   user_action VARCHAR(255) NOT NULL, 	
+	   operation_type VARCHAR(1) NULL,	
+	   resolution_type VARCHAR(255) NULL, 	
+	   motive VARCHAR(255) NULL, 	   
 	   observations VARCHAR(500) NULL,  
-	   modified_fields VARCHAR(255) NULL, 
-	   
-	   PRIMARY KEY(id_issue_update_history),
+	  
+	   PRIMARY KEY(id_issue_history),
 	   KEY(id_issue)
 	   
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -303,13 +303,13 @@ ALTER TABLE media_content
     ADD CONSTRAINT FOREIGN KEY fk_media_content_1 (id_issue)
     REFERENCES issue (id_issue);
     
-ALTER TABLE issue_update_history
-    ADD CONSTRAINT FOREIGN KEY fk_issue_update_history_1 (id_issue)
+ALTER TABLE issue_history
+    ADD CONSTRAINT FOREIGN KEY fk_issue_history_1 (id_issue)
     REFERENCES issue (id_issue)
     ON DELETE CASCADE ON UPDATE CASCADE;
     
-ALTER TABLE issue_update_history
-    ADD CONSTRAINT FOREIGN KEY fk_issue_update_history_2 (id_user)
+ALTER TABLE issue_history
+    ADD CONSTRAINT FOREIGN KEY fk_issue_history_2 (id_user)
     REFERENCES user (id_user);
 
 ALTER TABLE comment

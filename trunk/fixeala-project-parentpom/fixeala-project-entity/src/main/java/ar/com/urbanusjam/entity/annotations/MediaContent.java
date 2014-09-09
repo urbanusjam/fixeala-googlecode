@@ -214,17 +214,22 @@ public class MediaContent implements Serializable {
 	
 	public String getFilenameShort() {
 		
-		String longname = this.filename;
-		String[] parts = longname.split("\\.");
-		String type = parts[1];
-		String shorten = parts[0];
-		
-		if(longname.length() > 25){
-			return shorten.subSequence(0, 15) + "..." + type;
+		if(!this.filename.isEmpty()){
+			
+			String longname = this.filename;
+			String[] parts = longname.split("\\.");
+			String type = parts[1];
+			String shorten = parts[0];
+			
+			if(longname.length() > 25){
+				return shorten.subSequence(0, 15) + "..." + type;
+			}
+			else
+				return this.filename;
+			
 		}
-		else
-			return this.filename;
 		
+		return "";
 	}
 
 	public void setFilenameShort(String filenameShort) {

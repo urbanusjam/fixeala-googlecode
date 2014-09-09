@@ -294,13 +294,13 @@ public class IssueController {
 			 
 			//page 1
 			JSONArray updatePagesArray = new JSONArray();
-			updatePagesArray = paginateToArray(issue.getHistorial(), 1, "update");
-			
 			JSONArray commentPagesArray = new JSONArray();
+			
+			updatePagesArray = paginateToArray(issue.getHistorial(), 1, "update");			
 			commentPagesArray = paginateToArray(issue.getComentarios(), 1, "comment");
 			
-			model.addAttribute("jsonUpdates", updatePagesArray);
-			model.addAttribute("jsonComments", commentPagesArray);
+			model.addAttribute("jsonUpdates", updatePagesArray.length() == 0 ? "[]" : updatePagesArray);
+			model.addAttribute("jsonComments", commentPagesArray.length() == 0 ? "[]" : commentPagesArray);
 
 		} catch (Exception e) {
 			model.addAttribute("messageTitle", "&iexcl;Atenci&oacute;n!");
@@ -475,7 +475,7 @@ public class IssueController {
 			
 			for(MediaContent c : files){				
 				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("name",shortenFilename(c.getFilename()));
+				jsonObject.put("name", shortenFilename(c.getFilename()));
 				jsonObject.put("format", c.getFileType());
 				jsonObject.put("url", c.getLink());
 				jsonObject.put("thumbnailUrl", c.getLink());
@@ -610,9 +610,6 @@ public class IssueController {
 				String capitalize = WordUtils.capitalizeFully(issue.getTitle(), new char[] { '.' });
 				issue.setTitle(capitalize);
 
-				Random generator = new Random();
-				int idIssue = generator.nextInt(100000) + 1000;
-
 				// issue data
 				UserDTO userDTO = new UserDTO();
 				userDTO.setUsername(userDB.getUsername());
@@ -621,7 +618,6 @@ public class IssueController {
 				issue.setLastUpdateDate(issue.getCreationDate());
 				issue.setStatus(IssueStatus.OPEN);
 				issue.setUser(userDTO);
-				issue.setId(String.valueOf(idIssue));
 
 				// history
 				IssueHistoryDTO revision = new IssueHistoryDTO();
@@ -638,6 +634,7 @@ public class IssueController {
 				//contenido (opcional)
 			
 				MediaContent file = this.deserializeFile(fileData);
+				file.setFilename(filename);
 				
 				if(file != null){
 					file.setFileOrder(1);
@@ -647,8 +644,6 @@ public class IssueController {
 					issue.setUploadedFile(null);
 				}
 				
-				
-					
 				issueService.reportIssue(issue);
 
 				return new AlertStatus(true, "Su reclamo ha sido registrado.");
@@ -790,8 +785,17 @@ public class IssueController {
 			}
 
 			else {
-				issueService.updateIssueStatus(userDB.getUsername(), issueID,
-						newStatus, resolution, obs);
+				
+				if(newStatus.equals(IssueStatus.VERIFIED)){
+					issueService.updateIssueStatus(userDB.getUsername(), issueID,
+							newStatus, null, null);
+				}
+				else{
+					issueService.updateIssueStatus(userDB.getUsername(), issueID,
+							newStatus, resolution, obs);
+				}
+				
+				
 				return new AlertStatus(true,
 						"El estado reclamo ha sido actualizado.");
 			}

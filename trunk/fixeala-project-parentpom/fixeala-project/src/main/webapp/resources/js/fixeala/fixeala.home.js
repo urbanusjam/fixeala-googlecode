@@ -565,9 +565,7 @@ var fxlHomeController = {
 		var $container = $('#infinite-container');
 		var $containerVotes = $('#infinite-container-votes');
 		var $containerUsers = $('#infinite-container-users');
-		console.log('--- issues: ' + issuesArray.length);
-		console.log('--- votes: ' + votesArray.length);
-		console.log('--- users: ' + usersArray.length);
+	
 		 if(issuesArray.length > 0){
         	var html =  [];	
         	$.each( issuesArray, function( i, value ) {
@@ -760,7 +758,7 @@ var fxlHomeController = {
 		$containerUsers.imagesLoaded( function(){   
 	    	$containerUsers.isotope({
 	        	itemSelector : '.brick',
-	            sortBy: 'original-order',
+	            sortBy: 'issues',
 	            sortAscending : false,
 	            getSortData : {
 	            	issues    : '.numIssues parseInt',

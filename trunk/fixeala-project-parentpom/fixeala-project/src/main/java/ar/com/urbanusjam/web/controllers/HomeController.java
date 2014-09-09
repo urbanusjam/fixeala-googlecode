@@ -37,6 +37,7 @@ import ar.com.urbanusjam.services.MailService;
 import ar.com.urbanusjam.services.UserService;
 import ar.com.urbanusjam.services.dto.CommentDTO;
 import ar.com.urbanusjam.services.dto.IssueDTO;
+import ar.com.urbanusjam.services.dto.IssueHistoryDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
 import ar.com.urbanusjam.services.utils.DateUtils;
 import ar.com.urbanusjam.services.utils.IssueStatus;
@@ -260,16 +261,50 @@ public class HomeController {
 				//user type
 				List<UserDTO> sub = (List<UserDTO>) elements.subList(from, to + 1); //sublist toma el item en la posicion anterior al toIndex que se le pasa
 				
+				
+				
 				for(UserDTO user : sub){
+					
+					List<IssueDTO> issuesByUser = issueService.loadIssuesByUser(user.getUsername());
+//					List<IssueDTO> allIssues =  issueService.loadAllIssues();
+					
+					int reportedIssues = issuesByUser.size();
+					int postedComments = 0;
+					int fixedIssues = 0;
+					
+//					for(IssueDTO issue : allIssues){
+//						List<CommentDTO> comentarios = issue.getComentarios();
+//						for(CommentDTO comment : comentarios){
+//							if( comment.getUsuario().equals(user.getUsername()) ){
+//								postedComments++;
+//							}								
+//						}	
+//						
+//					}
+					
+					for(IssueDTO issue : issuesByUser){
+						
+						List<IssueHistoryDTO> historial = issue.getHistorial();
+													
+						for(IssueHistoryDTO update : historial){
+							if( update.getUsername().equals(user.getUsername()) 
+									&& issue.getId().equals(update.getNroReclamo()) ){
+								fixedIssues++;
+							}
+								
+						}
+						
+					}
+										
 					JSONObject obj = new JSONObject();
 					obj.put("profilePic", user.getProfilePic());
 					obj.put("username", user.getUsername());
 					obj.put("city", user.getCity());	
 					obj.put("province", user.getProvince());	
 					obj.put("registration", DateUtils.getFechaFormateada(user.getRegistrationDate(), DateUtils.DATE_PATTERN_LONG));
-					obj.put("reportedIssues", Math.floor(Math.random() * 50));
-					obj.put("postedComments", Math.floor(Math.random() * 99));
-					obj.put("fixedIssues", Math.floor(Math.random() * 15));
+					obj.put("reportedIssues", reportedIssues);
+					obj.put("postedComments", postedComments);
+					obj.put("fixedIssues", fixedIssues);
 					
 					jsonArray.put(obj);
 				}				

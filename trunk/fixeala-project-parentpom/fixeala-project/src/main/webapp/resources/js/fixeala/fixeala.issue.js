@@ -8,7 +8,7 @@ var fxlIssueController = {
 	reporter : null,		
 		
 	initIssue : function(issueID){
-	
+		console.log('--- init ---');
 		fxlIssueController.issueID = issueID;
 		fxlIssueController.initXEditable();
 		fxlIssueController.initInfiniteScroll();
@@ -26,7 +26,7 @@ var fxlIssueController = {
 	/** ============================================================================================== **/
 	
 	initXEditable : function(){
-		
+		console.log('--- xeditable ---');
 		var updatedFields = fxlIssueController.updatedFields;
 		var oldFields = fxlIssueController.oldFields;
 		var allTags = fxlGlobalController.tagList;
@@ -187,7 +187,7 @@ var fxlIssueController = {
 			        type: 'put'
 			    }	  
 		}); 
-
+		console.log('--- END xeditable ---');
 	},
 	
 	
@@ -200,6 +200,9 @@ var fxlIssueController = {
 		
 		var updatesArray = JSON.parse(fxlIssueController.updatesJson);
 		var commentsArray = JSON.parse(fxlIssueController.commentsJson);
+		
+		console.log('--- updates: ' + updatesArray.length);
+		console.log('--- comments: ' + commentsArray.length);
 		
 		if(updatesArray.length > 0){
 			$('#btn-more-updates').show();
@@ -214,6 +217,32 @@ var fxlIssueController = {
 		
 	},
 		
+	loadFirstPage : function(updatesArray, commentsArray){
+		
+		var $containerUpdates = $('#infinite-container-updates');
+		var $containerComments = $('#infinite-container-comments');
+		
+		if(updatesArray.length > 0){
+			var html =  [];	
+			$.each( updatesArray, function( i, value ) {	            
+        		var item = fxlIssueController.renderToHtml(value, "update");
+        		html.push(item);
+        	});
+        	$containerUpdates.append(html);
+        	
+		}
+		
+		if(commentsArray.length > 0){
+			var html =  [];
+			$.each( commentsArray, function( i, value ) {	            
+        		var item = fxlIssueController.renderToHtml(value, "comment");
+        		html.push(item);
+        	});
+        	$containerComments.append(html);
+		}
+    
+	},
+	
 	renderToHtml : function(element, type){
 		
 		var html = '';
@@ -261,32 +290,6 @@ var fxlIssueController = {
 
 		return html;
 			
-	},
-		
-	loadFirstPage : function(updatesArray, commentsArray){
-		
-		var $containerUpdates = $('#infinite-container-updates');
-		var $containerComments = $('#infinite-container-comments');
-		
-		if(updatesArray.length > 0){
-			var html =  [];	
-			$.each( updatesArray, function( i, value ) {	            
-        		var item = fxlIssueController.renderToHtml(value, "update");
-        		html.push(item);
-        	});
-        	$containerUpdates.append(html);
-        	
-		}
-		
-		if(commentsArray.length > 0){
-			var html =  [];
-			$.each( commentsArray, function( i, value ) {	            
-        		var item = fxlIssueController.renderToHtml(value, "comment");
-        		html.push(item);
-        	});
-        	$containerComments.append(html);
-		}
-    
 	},
 	
 	configIsotope : function(){

@@ -14,14 +14,14 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="issue_update_history")
+@Table(name="issue_history")
 public class IssueHistory implements Serializable {
 
 	private static final long serialVersionUID = -3016074901901662598L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id_issue_update_history")
+	@Column(name = "id_issue_history")
 	private Long id;
 	
 	@ManyToOne
@@ -38,7 +38,7 @@ public class IssueHistory implements Serializable {
 	@Column(name = "status")
 	private String estado;
 		
-	@Column(name = "operation")
+	@Column(name = "operation_type")
 	private String operacion;
 
 	@Column(name = "motive")
@@ -47,7 +47,7 @@ public class IssueHistory implements Serializable {
 	@Column(name = "observations")
 	private String observaciones;
 	
-	@Column(name = "resolution") 
+	@Column(name = "resolution_type") 
 	private String resolucion;
 
 	

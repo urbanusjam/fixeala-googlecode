@@ -30,6 +30,8 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap/2.3.2/bootstrap-tags.js"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap/2.3.2/bootstrap-contextmenu.js"></script> 
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap/2.3.2/bootstrap-fileupload.js"></script>
+  	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap/2.3.2/bootstrap-datepicker.js"></script>	
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap/2.3.2/bootstrap-datepicker.es.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap/bootbox.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap/bootstrap-filestyle-1.0.6.js"></script>
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap/jquery.bootstrap.wizard.js"></script>
@@ -73,6 +75,8 @@
   	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/moment.min.js"></script>
  	<!-- JS fixeala -->	
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.global.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.map.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.account.js"></script> 
 	<!-- CSS -->
   	<link type="text/css" href="http://fonts.googleapis.com/css?family=Oxygen:400,300,700|Lato:400,900|Graduate:400,900" rel="stylesheet">
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/2.3.2/bootstrap.css" rel="stylesheet">   
@@ -85,6 +89,7 @@
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/2.3.2/bootstrap-lightbox.css" rel="stylesheet">   
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/2.3.2/bootstrap-datetimepicker.min.css" rel="stylesheet">  
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/2.3.2/bootstrap-tags.css" rel="stylesheet">  
+	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/2.3.2/bootstrap-datepicker.css" rel="stylesheet">
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/docs.css" rel="stylesheet">
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/highlight.css" rel="stylesheet">
 	<link type="text/css" href="${pageContext.request.contextPath}/resources/css/select2-3.5.1/select2.css" rel="stylesheet">   
@@ -103,7 +108,8 @@
 		$(document).ready(function(){			
 			fxlGlobalController.initNavTooltip();
 			fxlGlobalController.initFeedback();
-			window.localStorage.clear();			
+			fxlGlobalController.tagList = '${allTags}';
+// 			window.localStorage.clear();			
 		});	
 	</script>
 </head>

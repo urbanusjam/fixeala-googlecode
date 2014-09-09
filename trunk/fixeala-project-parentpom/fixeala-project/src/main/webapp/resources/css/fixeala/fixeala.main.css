@@ -1576,3 +1576,11 @@ div.feedback a:hover { text-decoration: none; }
 }
 
 #widget-script { background: none; }
+
+
+/**** verify issue ****/
+#repairForm input { text-align: right; }	
+#mdl-verify .modal-body { max-height: 450px; }	
+#mdl-verify ul.list > li { padding: 10px 0 10px 0; } 	
+#mdl-verify ul.sublist > li { padding: 5px 0 5px 0; }	
+#mdl-verify ul.sublist > li:FIRST-CHILD { padding-top: 10px; }

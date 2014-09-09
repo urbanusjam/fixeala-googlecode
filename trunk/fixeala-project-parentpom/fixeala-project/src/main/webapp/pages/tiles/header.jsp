@@ -107,10 +107,4 @@
 	    	</div>
 	  	</div>
 	</div>
-</header>
-<script src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.account.js"></script>  	
-<script type="text/javascript">  
-	$(document).ready(function(){
-		fxlGlobalController.tagList = '${allTags}';
-	});
-</script>
+</header> 	
