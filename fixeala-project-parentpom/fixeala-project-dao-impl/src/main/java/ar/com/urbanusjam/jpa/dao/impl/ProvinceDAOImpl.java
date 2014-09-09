@@ -1,7 +1,6 @@
 package ar.com.urbanusjam.jpa.dao.impl;
 
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -11,8 +10,6 @@ import javax.persistence.PersistenceException;
 import org.springframework.stereotype.Repository;
 
 import ar.com.urbanusjam.dao.ProvinceDAO;
-import ar.com.urbanusjam.entity.annotations.Locality;
-import ar.com.urbanusjam.entity.annotations.Province;
 
 @Repository
 public class ProvinceDAOImpl implements ProvinceDAO {
