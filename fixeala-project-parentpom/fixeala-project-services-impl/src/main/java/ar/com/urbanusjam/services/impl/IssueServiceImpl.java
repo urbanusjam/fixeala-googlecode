@@ -196,13 +196,6 @@ public class IssueServiceImpl implements IssueService {
 		revision.setOperacion(Operation.UPDATE);	
 		revision.setEstado(newStatus);		
 		
-		if(!resolution.isEmpty() || resolution != null)
-			revision.setResolucion(resolution);
-		
-		
-		if(!obs.isEmpty() || obs != null)
-			revision.setObservaciones(obs);
-		
 		if(newStatus.equals(IssueStatus.IN_PROGRESS))	
 			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_PROGRESS + " el reclamo");			
 		if(newStatus.equals(IssueStatus.SOLVED))
@@ -216,12 +209,15 @@ public class IssueServiceImpl implements IssueService {
 		if(newStatus.equals(IssueStatus.REJECTED))	
 			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_REJECT + " el reclamo");	
 		
+		if(obs != null)
+			revision.setObservaciones(obs);
+				
 		Issue issue = issueDAO.findIssueById(issueID);
 		User user = userDAO.loadUserByUsername(username);
 		
 		issue.setStatus(newStatus);
 		
-		if(!resolution.isEmpty() || resolution != null)
+		if(resolution != null)
 			issue.setResolution(resolution);
 		
 		issue.setLastUpdateDate(this.getCurrentCalendar(revision.getFecha()));
@@ -413,10 +409,10 @@ public class IssueServiceImpl implements IssueService {
 		historial.setFecha(this.getCurrentCalendar(historialDTO.getFecha()));	
 		historial.setUsuario(user);
 		historial.setOperacion(historialDTO.getOperacion());
-		historial.setMotivo(historialDTO.getMotivo());
-		historial.setResolucion(historialDTO.getResolucion());		
+		historial.setMotivo(historialDTO.getMotivo());		
 		historial.setEstado(historialDTO.getEstado());		
 		historial.setObservaciones(historialDTO.getObservaciones());		
+//		historial.setResolucion(historialDTO.getResolucion());		
 		
 		return historial;
 		
@@ -433,7 +429,7 @@ public class IssueServiceImpl implements IssueService {
 		historialDTO.setMotivo(historial.getMotivo());
 		historialDTO.setEstado(historial.getEstado());		
 		historialDTO.setObservaciones(historial.getObservaciones());	
-		historialDTO.setResolucion(historial.getResolucion());
+//		historialDTO.setResolucion(historial.getResolucion());
 		
 		if(historialDTO.getResolucion() != null && historial.getResolucion() != ""){
 			historialDTO.setDetalle(historialDTO.getMotivo() + " como &laquo;" + historialDTO.getResolucion() + "&raquo;" );	
@@ -453,8 +449,7 @@ public class IssueServiceImpl implements IssueService {
 		User user = new User();
 		user = userDAO.loadUserByUsername(issueDTO.getUsername());
 		
-		Issue issue = new Issue();
-		issue.setId(Long.valueOf(issueDTO.getId()));
+		Issue issue = new Issue();		
 		issue.setReporter(user);
 		issue.setAddress(issueDTO.getAddress());
 		issue.setNeighborhood(issueDTO.getNeighborhood());

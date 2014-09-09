@@ -234,7 +234,7 @@ var mapController = {
 		    
 	    var place = autocomplete.getPlace();	 
 	    
-	    if (!place || !place.geometry || !hasAddressTypes(place)) {    	
+	    if (!place || !place.geometry || !mapController.hasAddressTypes(place)) {    	
 	    	setTimeout(function(){    	
 	    		mapController.unBlockIssueForm();	    	
 	    		bootbox.alert("La direcci&oacute;n proporcionada no es v&aacute;lida o carece de precisi&oacute;n.", function() {    		

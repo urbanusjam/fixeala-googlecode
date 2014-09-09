@@ -1,23 +1,12 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<link type="text/css" href="${pageContext.request.contextPath}/resources/css/bootstrap/2.3.2/bootstrap-datepicker.css" rel="stylesheet">
-
 <!-- Boolean isCommonUser -->
 <!-- needed for creating the boolean: !isUser -->
 <c:set var="isCommonUser" value="false" />
 <sec:authorize access="hasRole('ROLE_USER')">
     <c:set var="isCommonUser" value="true" />
 </sec:authorize>
-
-<style>
-	#repairForm input { text-align: right; }	
-	#mdl-verify .modal-body { max-height: 450px; }	
- 	#mdl-verify ul.list > li { padding: 10px 0 10px 0; } 	
-	#mdl-verify ul.sublist > li { padding: 5px 0 5px 0; }	
-	#mdl-verify ul.sublist > li:FIRST-CHILD { padding-top: 10px; }
-</style>
-	
 <div id="content">	
 
 	<div class="container-fluid">
@@ -75,7 +64,7 @@
 							 </tr>
 							  <tr>
 							    <th>Informante:</th>
-							    <td><script type="text/javascript">document.write( mapController.getUserURL('${usuario}') );</script></td>						    		    
+							    <td class="reporter"></td>						    		    
 							 </tr>
 							 <tr>
 							    <th>Direcci&oacute;n:</th>
@@ -99,7 +88,7 @@
 							 </tr>
 							  <tr>
 							    <th>Descripci&oacute;n:</th>
-							    <td><a href="#" id="issue-desc">${descripcion}</a>&nbsp;<i class="icon-pencil editableField"></i></td>						   
+							    <td><a href="#">${descripcion}</a>&nbsp;<i class="icon-pencil editableField"></i></td>						   
 							 </tr>
 							 <tr>
 							    <th>Estado:</th>
@@ -816,17 +805,21 @@
 {% } %}
 </script>
 </div><!-- content -->
-
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.issue.js"></script>  
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.file.js"></script>	
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.map.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-datepicker.js"></script>	
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-datepicker.es.js"></script>	
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.file.js"></script>		
 <script type="text/javascript">  
+
 	$(document).ready(function(){		
-	
+
 		var issueID = '${id}';		
-		
+		var isVoted = '${isCurrentlyVoted}';
+		var isVoteUp = '${isVoteUp}';		
+		var latitud = '${latitud}';
+   		var longitud = '${longitud}';
+   		
+		var userUrl = mapController.getUserURL('${usuario}');
+		$('.reporter').html(userUrl);
+	
 		fxlIssueController.updatesJson = '${jsonUpdates}';
 		fxlIssueController.commentsJson = '${jsonComments}';	
 		fxlGlobalController.loggedUser = '${loggedUser}';
@@ -839,21 +832,13 @@
 			 $('#btnAddFiles').show();
 		}	
 		
-		var isVoted = '${isCurrentlyVoted}';
-		var isVoteUp = '${isVoteUp}';
-		
-			
-		fxlIssueController.initVote(isVoted, isVoteUp);
-		
-		var latitud = '${latitud}';
-   		var longitud = '${longitud}';
-   		fxlIssueController.displayClosesIssues(latitud, longitud);
-		
 		bindRepairBtns();		
 		
+   		fxlIssueController.initVote(isVoted, isVoteUp);
+   		fxlIssueController.displayClosesIssues(latitud, longitud);
 		fxlIssueController.initIssue(issueID);	
 		
-		mapController.initMiniMap(${latitud}, ${longitud}, '${titulo}'); 
+		mapController.initMiniMap(latitud, longitud, '${titulo}'); 
 		
 		//adds tab href to url + opens tab based on hash on page load:
 		if (location.hash !== '') {

@@ -183,7 +183,7 @@
 					<nav id="page-nav" style="display: none;">
 	  					<a href="loadmore/issue/2"></a>
 					</nav>	
-					<center><a href="#" class="btn btn-default btn-more vote">Mostrar m&aacute;s resultados</a></center>
+					<center><a href="#" class="btn btn-default btn-more issue">Mostrar m&aacute;s resultados</a></center>
 				</c:if>
 			</div>
 			<!-- tab 2 popular -->
@@ -209,8 +209,8 @@
 					<!-- sorting -->
 					<span>Ordenar por: </span>
 					<div id="sorts-users" class="btn-group">
-		  				<button data-sort-by="original-order" class="btn btn-default active"><i class="icon icon-star"></i>Mejor reputaci&oacute;n</button>
-		  				<button data-sort-by="issues" class="btn btn-default"><i class="icon icon-map-marker"></i>Reclamos publicados</button>
+<!-- 		  				<button data-sort-by="original-order" class="btn btn-default active"><i class="icon icon-star"></i>Mejor reputaci&oacute;n</button> -->
+		  				<button data-sort-by="issues" class="btn btn-default active"><i class="icon icon-map-marker"></i>Reclamos publicados</button>
 						<button data-sort-by="fixes" class="btn btn-default"><i class="icon icon-ok"></i>Reclamos resueltos</button>
 						<button data-sort-by="comments" class="btn btn-default"><i class="icon icon-comment-alt"></i>Comentarios</button>
 					</div>						
@@ -218,7 +218,7 @@
 					<nav id="page-nav-user" style="display: none;">
 	  					<a href="loadmore/user/2"></a>
 					</nav>	
-					<center><a href="#" class="btn btn-default btn-more vote">Mostrar m&aacute;s resultados</a></center>
+					<center><a href="#" class="btn btn-default btn-more user">Mostrar m&aacute;s resultados</a></center>
 				</c:if>					
 			</div>	
 		</div>
@@ -228,7 +228,6 @@
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.home.js"></script>  	
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.file.js"></script>	
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.map.js"></script>
 <script type="text/javascript">   
 	
 	var issueFileData = null; //holds the (optional) attached file
