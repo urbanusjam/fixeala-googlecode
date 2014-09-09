@@ -466,9 +466,9 @@
 	</div><!-- container fluid -->		
 </div>
 <!-- /content --> 	
-<script src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.account.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.file.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/DT_bootstrap.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.account.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.file.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.datatable.bootstrap.js"></script>
 <script type="text/javascript">	
 
 

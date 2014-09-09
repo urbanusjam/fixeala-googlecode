@@ -817,10 +817,11 @@
 </script>
 </div><!-- content -->
 
-<script src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.issue.js"></script>  
-<script src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.file.js"></script>	
-<script src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-datepicker.js"></script>	
-<script src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-datepicker.es.js"></script>	
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.issue.js"></script>  
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.file.js"></script>	
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.map.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-datepicker.js"></script>	
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/libs/bootstrap/2.3.2/bootstrap-datepicker.es.js"></script>	
 <script type="text/javascript">  
 	$(document).ready(function(){		
 	

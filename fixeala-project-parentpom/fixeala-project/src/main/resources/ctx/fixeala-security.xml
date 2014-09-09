@@ -27,7 +27,6 @@
      		     	
 			<security:intercept-url pattern="/account/signup" access="permitAll"/>			
 			<security:intercept-url pattern="/account/forgotPassword" access="permitAll"/>
-			<security:intercept-url pattern="/account/changePassword" access="isAuthenticated()"/>
 			<security:intercept-url pattern="/account/resetPassword/**" access="permitAll"/>			
 			<security:intercept-url pattern="/closedAccount" access="permitAll"/>		
 			<security:intercept-url pattern="/error" access="permitAll"/>

@@ -1536,3 +1536,41 @@ div.feedback-inner {
 
 div.feedback a { color: #FFF; }
 div.feedback a:hover { text-decoration: none; }
+
+
+/*** ===== MODAL LOGIN FORM ===== ***/
+#loginModal .modal-dialog { width: 550px; }
+#loginModal .modal-body {  height: 320px; padding: 0; margin: 0 auto; }
+.alert-error { padding: 10px; }
+.form-login { 
+	color: #000; 
+	width: 350px; 
+	margin: 0 auto;	 
+	border: 0px solid #000;  
+	padding-top: 20px;
+} 
+.form-login label { padding-bottom: 5px; }
+.form-login input[type="text"],.form-login input[type="password"] {
+	height: 35px;
+	margin: 0 auto;
+	margin-bottom: 10px;
+	padding: 7px 9px;
+	width: 350px;
+}
+.form-login label {
+	font-weight: normal;
+}
+.form-login .checkbox {
+	display: inline-block;
+	height: 20px;
+	border: 0px solid #000;
+	font-weight: normal;
+}
+.rememberme { text-align: right; border: 0px solid #000;  }
+.form-login.alert {
+	text-align: left;
+	margin: 0 auto;
+}
+.forgotPassLink {
+	text-align: left;
+}
