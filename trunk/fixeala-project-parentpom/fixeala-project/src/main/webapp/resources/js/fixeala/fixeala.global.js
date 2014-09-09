@@ -21,14 +21,14 @@ var fxlGlobalController = {
 	},	
 		
 	populateProvinceCombobox : function(provinces, pageType) {
-			  
+		
 		  var $cbxProvince = $("#provincia");
 		  var provinceList = $.parseJSON(provinces);
 		
 	      if(pageType != 'dataset'){
 	    	  $cbxProvince.append($("<option />").val("none").text("SELECCIONE PROVINCIA"));
 	      }
-		  
+	      
 		  $.each(provinceList, function(index, item) {
 			  $cbxProvince.append($("<option />").val(item.text).text(item.text));
 		  });

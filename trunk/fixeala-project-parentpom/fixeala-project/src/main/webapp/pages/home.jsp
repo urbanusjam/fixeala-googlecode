@@ -184,7 +184,7 @@
 			<!-- tab 2 popular -->
 			<div class="tab-pane fade" id="hottestIssues">	
 				<!-- infinite scroll -->
-				<div id="infinite-container-votes"></div>				
+				<div id="infifxlIssueController.configIsotope();fxlIssueController.configIsotope();nite-container-votes"></div>				
 				<nav id="page-nav-votes" style="display: none;">
   					<a href="loadmore/issue/2"></a>
 				</nav>

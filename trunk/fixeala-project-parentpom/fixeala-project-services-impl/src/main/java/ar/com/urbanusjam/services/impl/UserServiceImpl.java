@@ -166,6 +166,8 @@ public class UserServiceImpl implements UserService {
     	user.setEnabled(false);
 	    userDTO.setAuthorities(roles);
 	    userDTO.setRegistrationDate(currentDate.toDate());
+	    userDTO.setCity(null);
+	    userDTO.setProvince(null);
 		user = this.convertTo(userDTO);
 		
 		//token data			
