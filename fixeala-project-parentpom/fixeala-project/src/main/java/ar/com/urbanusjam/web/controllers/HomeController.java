@@ -266,22 +266,11 @@ public class HomeController {
 				for(UserDTO user : sub){
 					
 					List<IssueDTO> issuesByUser = issueService.loadIssuesByUser(user.getUsername());
-//					List<IssueDTO> allIssues =  issueService.loadAllIssues();
 					
 					int reportedIssues = issuesByUser.size();
 					int postedComments = 0;
 					int fixedIssues = 0;
-					
-//					for(IssueDTO issue : allIssues){
-//						List<CommentDTO> comentarios = issue.getComentarios();
-//						for(CommentDTO comment : comentarios){
-//							if( comment.getUsuario().equals(user.getUsername()) ){
-//								postedComments++;
-//							}								
-//						}	
-//						
-//					}
-					
+	
 					for(IssueDTO issue : issuesByUser){
 						
 						List<IssueHistoryDTO> historial = issue.getHistorial();

@@ -268,7 +268,7 @@ var fxlIssueController = {
 					+		'</span>'
 			    +		'<span class="motive">'+element.motive+'</span>'
 			    +		'<span class="obs">'					   
-				+			'<button class="btn '+btnDisplay+'" onclick="fxlIssueController.loadDetailModal(\''+obs+'\')" data-toggle="modal">Ver detalle &raquo;</button>'
+				+			'<button class="btn '+btnDisplay+'" onclick="fxlIssueController.loadDetailModal(\''+obs+'\')" data-toggle="modal">&raquo; Ver detalle</button>'
 				+		'</span>'
 				+ 	'</div>';
 		}
