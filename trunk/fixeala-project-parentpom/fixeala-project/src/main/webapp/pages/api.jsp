@@ -1,9 +1,6 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<link type="text/css" href="${pageContext.request.contextPath}/resources/css/docs.css" rel="stylesheet">
-<link type="text/css" href="${pageContext.request.contextPath}/resources/css/highlight.css" rel="stylesheet">
-
 <style>
 	section {  padding-top: 60px; }
 	.table td { font-weight: normal; }
@@ -13,7 +10,6 @@
 	.muted { color: #333; }	
 	code.lead { margin-right: 10px; }
 </style>
-
 <div id="content" style="border: 0px solid red">
 		
 		<!-- API REST -->

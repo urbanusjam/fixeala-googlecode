@@ -211,8 +211,9 @@
     <div class="clearfix"></div> 
 </div><!-- /CONTENT -->
 
-<script src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.home.js"></script>  	
-<script src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.file.js"></script>	
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.home.js"></script>  	
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.file.js"></script>	
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.map.js"></script>
 <script type="text/javascript">   
 	
 	var issueFileData = null; //holds the (optional) attached file

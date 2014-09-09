@@ -359,22 +359,18 @@ public class AccountController extends AbstractController {
 		if(encodedInputPass.equals(encodedDBPass)){				
 			try{
 				userService.closeAccount(loggedUser.getUsername());
-				SecurityContextHolder.getContext().setAuthentication(null);
-				
+				SecurityContextHolder.getContext().setAuthentication(null);				
 				return new AlertStatus(true, "La cuenta ha sido desactivada.", "closedAccount.html");
 			}
 			catch(Exception e){
 				return new AlertStatus(false, "Ha ocurrido un error al intentar desactivar su cuenta.");
 			}								
-		}
-		
+		}		
 		else{
 			return new AlertStatus(false, "La clave ingresada es incorrecta.");	
 		}		
 	}
 	
-	
-
 	public static UserDTO convertTo(User user){
 		UserDTO userDTO = new UserDTO();
 		userDTO.setUsername(user.getUsername());

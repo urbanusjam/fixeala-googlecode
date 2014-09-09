@@ -1,22 +1,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <parent>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+  	<groupId>ar.com.urbanusjam</groupId>
+  	<artifactId>fixeala-project</artifactId>
+  	<packaging>war</packaging>
+  	<version>1.0.0-SNAPSHOT</version>
+  	<name>Fixeala Web</name>
+  	<parent>
 		<artifactId>fixeala-project-parentpom</artifactId>
 		<groupId>ar.com.urbanusjam</groupId>
 		<version>1.0.0-SNAPSHOT</version>
-  </parent>
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>ar.com.urbanusjam</groupId>
-  <artifactId>fixeala-project</artifactId>
-  <packaging>war</packaging>
-  <version>1.0.0-SNAPSHOT</version>
-  <name>fixeala-project Maven Webapp</name>
-  <url>http://maven.apache.org</url>  
-  <build>
-    <finalName>fixeala-webapp-1.0.0-SNAPSHOT</finalName>
-  </build>
-  <dependencies>
-  		<!-- Fixeala Modules -->
+  	</parent>
+	<dependencies>
+		<!-- Fixeala Modules -->
   		<dependency>
 			<groupId>ar.com.urbanusjam</groupId>
 			<artifactId>fixeala-project-dao</artifactId>
@@ -42,8 +38,6 @@
 			<artifactId>fixeala-project-services-impl</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
 		</dependency> 
-		
-			
 		<!-- Servlet -->
 <!-- 		<dependency> -->
 <!-- 			<groupId>javax.servlet</groupId> -->
@@ -62,8 +56,6 @@
 <!-- 			<artifactId>jstl</artifactId> -->
 <!-- 			<version>1.2</version> -->
 <!-- 		</dependency> -->
-		
-				
 		<!-- Apache Commons -->
 		<dependency>
 			<artifactId>commons-logging</artifactId>
@@ -85,16 +77,12 @@
 			<artifactId>commons-httpclient</artifactId>
 			<version>3.1</version>
 		</dependency>
-		
-				
-		
 		<!-- JAXB -->
 		<dependency>
 			<groupId>javax.xml.bind</groupId>
 			<artifactId>jaxb-api</artifactId>
 			<version>2.1</version>
-		</dependency>
-		
+		</dependency>		
 		<!-- Jackson OLD -->
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
@@ -110,8 +98,7 @@
 <!-- 			<groupId>org.codehaus.jackson</groupId> -->
 <!-- 			<artifactId>jackson-jaxrs</artifactId> -->
 <!-- 			<version>1.9.13</version> -->
-<!-- 		</dependency> -->
-		
+<!-- 		</dependency> -->		
 		<!-- Jackson 2.0 NEW namespace change from codehaus -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
@@ -127,21 +114,18 @@
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 			<version>2.1.4</version>
-		</dependency>
-		
+		</dependency>		
 		<!-- Json -->
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
 			<version>20090211</version>
-		</dependency>
-            
+		</dependency>            
         <dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>2.2.4</version>
-		</dependency>
-		
+		</dependency>		
 		<!-- Tiles -->		
 <!-- 		<dependency> -->
 <!-- 		    <groupId>org.apache.tiles</groupId> -->
@@ -178,16 +162,24 @@
 			<groupId>org.apache.tiles</groupId>
 			<artifactId>tiles-template</artifactId>
 			<version>2.2.2</version>
-		</dependency>		
-		
+		</dependency>	
 		<!-- Simple CAPTCHA -->
 		<dependency>
 			<groupId>nl.captcha</groupId>
 			<artifactId>simplecaptcha</artifactId>
 			<version>1.2.1</version>
 		</dependency>
-	
 	</dependencies>
-	
-	
+	<build>
+		<finalName>fixeala-webapp-1.0.0-SNAPSHOT</finalName>
+		<plugins>		
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+<!-- 				<configuration>  -->
+<!--           			<outputDirectory>src/main/webapp/WEB-INF/classes</outputDirectory>  -->
+<!--           		</configuration> 	 -->
+			</plugin>
+		</plugins>
+	</build>
 </project>
