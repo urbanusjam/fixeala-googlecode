@@ -80,6 +80,7 @@ public class UserDAOImpl implements UserDAO, UserDetailsManager  {
 	public void changePassword(String username, String newPassword) {
 		User user = (User) this.loadUserByUsername(username);			
 		user.setPassword(newPassword);
+		user.setLastPasswordChangeDate(new Date());
 		entityManager.merge(user);
 	}
 
@@ -212,6 +213,11 @@ public class UserDAOImpl implements UserDAO, UserDetailsManager  {
 		
 	}
 
-	
+	@Override
+	public void saveUserLastLogin(String username) {
+		User user = (User) this.loadUserByUsername(username);			
+		user.setLastLoginDate(new Date());
+		entityManager.merge(user);
+	}
 
 }

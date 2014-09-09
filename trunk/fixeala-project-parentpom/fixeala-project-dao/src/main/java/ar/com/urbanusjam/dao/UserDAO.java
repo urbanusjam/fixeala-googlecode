@@ -4,7 +4,6 @@ package ar.com.urbanusjam.dao;
 
 import java.util.List;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.provisioning.UserDetailsManager;
@@ -14,7 +13,7 @@ import ar.com.urbanusjam.entity.annotations.User;
 
 
 
-public interface UserDAO extends /*JpaRepository<User, Long>,*/ UserDetailsManager {
+public interface UserDAO extends UserDetailsManager {
 	
 	public UserDetails loadUserByName(String name);
 	
@@ -47,5 +46,7 @@ public interface UserDAO extends /*JpaRepository<User, Long>,*/ UserDetailsManag
 	public void closeAccount(String username);
 	
 	public void deleteUnabledUserAndToken(String username);
+	
+	public void saveUserLastLogin(String username);
 	
 }

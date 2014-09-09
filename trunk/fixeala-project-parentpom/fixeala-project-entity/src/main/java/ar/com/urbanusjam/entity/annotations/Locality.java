@@ -10,7 +10,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="locality")
+@Table(name="localidades")
 public class Locality implements Serializable {
 
 	private static final long serialVersionUID = 1L;

@@ -231,11 +231,6 @@ public class UserServiceImpl implements UserService {
 	public boolean emailExists(String email) {
 		return userDAO.emailExists(email);
 	}
-		
-//	@Override
-//	public String findPassword(String username, String password) {
-//		return userDAO.findPassword(username, password);
-//	}
 
 	@Override
 	public String findUsernameByEmail(String email) {
@@ -358,8 +353,7 @@ public class UserServiceImpl implements UserService {
 		pwd.setExpiration(passwordDTO.getExpiration());		
 		return pwd;
 	}
-	
-	
+		
 	public ActivationToken convertTo(ActivationDTO activationDTO){
 		ActivationToken actv = new ActivationToken();
 		actv.setToken(activationDTO.getToken());
@@ -369,15 +363,6 @@ public class UserServiceImpl implements UserService {
 		return actv;
 	}
 
-	
-	private List<String> convertTo(List<Authority> roles){
-		List<String> authorities = new ArrayList<String>();
-		for(Authority role : roles){
-			authorities.add(role.getAuthority());
-		}
-		return authorities;
-	}
-	
 	private List<Authority> convertToAuthority(List<String> roles){
 		List<Authority> authorities = new ArrayList<Authority>();
 		for(String role : roles){
@@ -393,6 +378,9 @@ public class UserServiceImpl implements UserService {
 		return userDAO.findUserIDbyUsername(username);
 	}
 
+	@Override
+	public void updateUserLastLogin(String username) {
+		userDAO.saveUserLastLogin(username);
+	}
 
-	
 }

@@ -51,7 +51,7 @@ public class User implements UserDetails {
     @Column(name="email")
     private String email;
     
-    @Column(name="name")
+    @Column(name="first_name")
     private String nombre;
     
     @Column(name="last_name")
@@ -71,6 +71,9 @@ public class User implements UserDetails {
     
     @Column(name="last_login_date")
     private Date lastLoginDate;
+    
+    @Column(name="last_password_change_date")
+    private Date lastPasswordChangeDate;
     
     @Column(name="closed_account_date")
     private Date closedAccountDate;
@@ -217,6 +220,14 @@ public class User implements UserDetails {
 
 	public void setLastLoginDate(Date lastLoginDate) {
 		this.lastLoginDate = lastLoginDate;
+	}
+
+	public Date getLastPasswordChangeDate() {
+		return lastPasswordChangeDate;
+	}
+
+	public void setLastPasswordChangeDate(Date lastPasswordChangeDate) {
+		this.lastPasswordChangeDate = lastPasswordChangeDate;
 	}
 
 	public Date getClosedAccountDate() {

@@ -38,5 +38,7 @@ public interface UserService extends UserDetailsService {
 	public void activateAccount(String username) throws UsernameNotFoundException, Exception;
 	public void updateAccount(UserDTO userDTO);	
 	public void closeAccount(String username) throws Exception;	
+	
+	public void updateUserLastLogin(String username);	
 
 }
