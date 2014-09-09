@@ -470,17 +470,34 @@
 <script src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.file.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/DT_bootstrap.js"></script>
 <script type="text/javascript">	
+
+
+
 	$(document).ready(function(){	
+		
 		var profileUserID = '${profileUser}';	
+		var $cbxProvince = $("#provincia");
+		var $cbxLocality = $("#ciudad");
+		
 		fxlGlobalController.populateProvinceCombobox('${provinceList}', 'user');
 		fxlAccountController.init(profileUserID);	
+		
 		var prov = '${province}';
 		var cit = '${city}';
+	
 		if(prov.length == 0){
-			$("#provincia").val('none');
+			$cbxProvince.val('none');
 		}
+		else{
+			$cbxProvince.val(prov);
+		}
+		
 		if(cit.length == 0){
-			$("#ciudad").empty();
+			$cbxLocality.empty();
+		}
+		else{
+			$cbxLocality.append($("<option />").val(cit).text(cit));
+			$cbxLocality.val(cit);
 		}
 	});		
 </script>
