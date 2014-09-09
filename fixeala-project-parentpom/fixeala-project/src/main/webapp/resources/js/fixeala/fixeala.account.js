@@ -218,11 +218,11 @@ var fxlAccountController = {
 		$("#signupForm").validate({		
 			
 			rules: 
-			{	 onfocusin: false,								
+			{	 
+				onfocusin: false,								
 				 
 				 username: { 
 					 required : true, 
-					 // regex : /^[a-z0-9_-]{3,15}$/,
 					 minlength: 4,
     				 maxlength: 20,
     				 remote: {
@@ -246,13 +246,12 @@ var fxlAccountController = {
 		 	     },
     			 password: {  
     				 required : true, 
-    				 // regex : /^(?=.{8,16})(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$_-]).*$/
     				 minlength: 6,
     				 maxlength: 30
-    			 } ,
+    			 },
 	   	    	 confirmPassword: {		
 	   	    		 required : true, 
-	   	      		 equalTo: "#password"				   	      		 
+	   	      		 equalTo: "#passwordID"				   	      		 
 	   	    	 },
 	   	    	
 		 	}, 	 
@@ -285,9 +284,9 @@ var fxlAccountController = {
  	     			 		maxlength: "El m&aacute;ximo es de 30 caracteres."
  	     		 	},			     				
      				confirmPassword: 
-     				{			     				
-     						equalTo:  "La contrase&ntilde;a y la confirmaci&oacute;n no coinciden.",
-     						required: "Este campo es requerido."
+     				{	     					
+     						required: "Este campo es requerido.",
+     						equalTo:  "La contrase&ntilde;a y la confirmaci&oacute;n no coinciden."
      				}
      				
  	     	},
@@ -311,12 +310,6 @@ var fxlAccountController = {
 	 			$(element).closest('.input-prepend').tooltipster('show');				        
 	        }
  	    	
- 	    	/*
- 	    	success: function(element) {
- 	    		element
- 	    		.text('OK!').addClass('valid')
- 	    		.closest('.input-prepend').removeClass('error').addClass('success');
- 	    	}*/
 		});
 		
 	},
@@ -504,7 +497,8 @@ var fxlAccountController = {
     	 	     newPassword: { 
     	 	    	 required : true			 	    
     	 	     },			    			
-    	 	     newPasswordConfirmation: {					   	    		
+    	 	     newPasswordConfirmation: {	
+    	 	    	 required : true,		
     	      		 equalTo: "#newPassword"
     	    	 }
     	 	}, 	 		
@@ -516,24 +510,25 @@ var fxlAccountController = {
     	  			 		required: "Este campo es requerido."			  			 		
     	  		 	},	
     	  		 	newPasswordConfirmation: 
-    				{			     					
+    				{			     
+    	  		 			required: "Este campo es requerido.",	
     						equalTo:  "La nueva clave y la confirmaci&oacute;n no coinciden."
     				}
     	  	},
     	  	
     	  	highlight: function (element) { 
-    		        $(element).addClass("error"); 
+ 	    		$(element).closest('.input-prepend').removeClass('success').addClass('error');
 		    },
-	    	
+    	
 		    unhighlight: function (element) { 
-		        $(element).removeClass("error"); 
+		    	$(element).closest('.input-prepend').removeClass('error');
 		    },
 
 	 		errorPlacement: function (error, element) {
-	            $(element).tooltipster('update', $(error).text());
-	            $(element).tooltipster('show');				        
+	 			$(element).closest('.input-prepend').tooltipster('update', $(error).text());
+	 			$(element).closest('.input-prepend').tooltipster('show');				        
 	        },
-    	  	
+	        
     	  	submitHandler: function() {
     	  		fxlAccountController.resetPassword();    	  		
     	    }

@@ -135,7 +135,9 @@ public class HomeController {
 			return "home";
 		
 		}catch(Exception e){
-			return "redirect:/" + "error.html";
+			model.addAttribute("messageTitle", "&iexcl;Atenci&oacute;n!");
+			model.addAttribute("message", "La página solicitada no existe.");
+			return "error";	
 		}	
 	}
 	
@@ -274,9 +276,8 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value="/autocomplete", produces={"application/json; charset=UTF-8"}, method = RequestMethod.GET)
-	public @ResponseBody String getIssuesAutocomplete(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException { 
+	public @ResponseBody String getIssuesAutocomplete(@ModelAttribute ("issues") ArrayList<IssueDTO> issues, HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException { 
 		
-		List<IssueDTO> issues = issueService.loadAllIssues();
 		JSONArray array = new JSONArray();
 		
 		for(IssueDTO issue : issues){
@@ -795,8 +796,8 @@ public class HomeController {
 				model.addAttribute("profileUser", user.getUsername());
 				model.addAttribute("profileRole", user.getAuthorities().get(0));				
 				model.addAttribute("email", user.getEmail());
-				model.addAttribute("city", user.getCity().trim().toUpperCase());			
-				model.addAttribute("province", user.getProvince().trim().toUpperCase());			
+				model.addAttribute("city", user.getCity() == null ? null : user.getCity().toUpperCase());			
+				model.addAttribute("province", user.getProvince() == null ? null : user.getProvince().toUpperCase());			
 				
 				List<IssueDTO> userIssues = issueService.loadIssuesByUser(userID);
 				List<IssueDTO> allIssues = issueService.loadAllIssues();
@@ -826,7 +827,9 @@ public class HomeController {
 				model.addAttribute("total_widgets", "0");				
 						
 		}catch(Exception e){
-			return "redirect:/" + "error.html";
+			model.addAttribute("messageTitle", "&iexcl;Atenci&oacute;n!");
+			model.addAttribute("message", "La página solicitada no existe.");
+			return "error";	
 		}
 		
 		return "users";		

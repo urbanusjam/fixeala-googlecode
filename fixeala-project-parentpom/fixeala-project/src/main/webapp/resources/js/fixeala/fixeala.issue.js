@@ -209,8 +209,8 @@ var fxlIssueController = {
 			$('#btn-more-comments').show();
 		}
 		
-		fxlIssueController.configIsotope();
 		fxlIssueController.loadFirstPage(updatesArray, commentsArray);
+		fxlIssueController.configIsotope();
 		
 	},
 		

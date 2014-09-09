@@ -47,7 +47,7 @@ var fxlHomeController = {
 			             success: function (data) {
 
 							issueNames = [];
-								issueObjs = {};				
+							issueObjs = {};				
 			            	 
 			            	 $.each( data, function ( i, item ) {				            		 
 			            		issueNames.push(item.title);
@@ -543,14 +543,14 @@ var fxlHomeController = {
 		
 		votesArray.sort(fxlHomeController.sortByVotes);
 		
+		//first page
+		fxlHomeController.loadFirstPage(issuesArray, votesArray, usersArray);
+		
 		//config
 		fxlHomeController.configIsotopeContainers();
 		fxlHomeController.configIsotopeTabs();
 		fxlHomeController.configIsotopeMoreBtn();
 		fxlHomeController.configIsotopeSortBtn();
-
-		//first page
-		fxlHomeController.loadFirstPage(issuesArray, votesArray, usersArray);
 		
 	},
 	
@@ -702,7 +702,7 @@ var fxlHomeController = {
 		 }, function (newElements) {
 		 		var html = '';
 		 		$.each( newElements, function( i, value ) {
-		 			 html += renderToHtml(value, 'issue');
+		 			 html += fxlHomeController.renderToHtml(value, 'issue');
 		        });
 				 	
 			 	var $newElems = $( html );
@@ -738,7 +738,7 @@ var fxlHomeController = {
 		 }, function (newElements) {
 		 		var html = '';
 			 		$.each( newElements, function( i, value ) {
-			 			 html += renderToHtml(value, 'issue');
+			 			 html += fxlHomeController.renderToHtml(value, 'issue');
 			        });
 				 	
 			 		var $newElems = $( html );
@@ -782,7 +782,7 @@ var fxlHomeController = {
 		 }, function (newElements) {
 		 		var html = '';
 		 		$.each( newElements, function( i, value ) {
-		 			 html += renderToHtml(value, 'user');
+		 			 html += fxlHomeController.renderToHtml(value, 'user');
 		        });
 				 	
 		 		var $newElems = $( html );

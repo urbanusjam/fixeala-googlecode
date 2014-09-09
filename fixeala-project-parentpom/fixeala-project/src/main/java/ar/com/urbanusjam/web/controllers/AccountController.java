@@ -154,13 +154,13 @@ public class AccountController extends AbstractController {
     			model.addAttribute("message", "Su cuenta ha sido activada.");
         		model.addAttribute("messageTitle", "&iexcl;Felicitaciones!");
         		model.addAttribute("alertType", "success");
-        		return "result";
+        		return "error";
     		
     		} catch(Exception e){
     			model.addAttribute("messageTitle", "&iexcl;Atenci&oacute;n!");
     			model.addAttribute("message", "El link de activaci&oacute;n ya ha sido usado o ha expirado.");
     			model.addAttribute("alertType", "error");
-    			return "result";
+    			return "error";
     		}
 
     	
@@ -169,7 +169,7 @@ public class AccountController extends AbstractController {
 			model.addAttribute("messageTitle", "&iexcl;Atenci&oacute;n!");
 			model.addAttribute("message", "El link de activaci&oacute;n ya ha sido usado o ha expirado.");
 			model.addAttribute("alertType", "error");
-			return "result";			
+			return "error";			
 		}    	
 		    	
     }
@@ -229,8 +229,7 @@ public class AccountController extends AbstractController {
 		else{
 			model.addAttribute("messageTitle", "&iexcl;Atenci&oacute;n!");
 			model.addAttribute("message", "La página solicitada no existe.");
-			model.addAttribute("alertType", "error");
-			return "result";		
+			return "error";		
 		}
 		
 	}	

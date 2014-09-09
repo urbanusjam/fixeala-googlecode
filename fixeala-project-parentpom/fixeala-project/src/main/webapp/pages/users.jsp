@@ -107,7 +107,7 @@
 				    	
 				    	<div class="profilePic">
 				    		<c:if test="${empty profilePicUrl}">			     
-								<img width="200" height="200" class="thumbnail" src="${pageContext.request.contextPath}/resources/images/nopic_user.png" />
+								<img width="200" height="200" class="thumbnail" src="${pageContext.request.contextPath}/resources/images/nopic.png" />
 							</c:if>
 							<c:if test="${not empty profilePicUrl}">			     
 								<img width="200" height="200" class="thumbnail" src="${profilePicUrl}"/>
@@ -471,8 +471,16 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/DT_bootstrap.js"></script>
 <script type="text/javascript">	
 	$(document).ready(function(){	
-		var profileUserID = '${profileUser}';		
+		var profileUserID = '${profileUser}';	
 		fxlGlobalController.populateProvinceCombobox('${provinceList}', 'user');
-		fxlAccountController.init(profileUserID);		
+		fxlAccountController.init(profileUserID);	
+		var prov = '${province}';
+		var cit = '${city}';
+		if(prov.length == 0){
+			$("#provincia").val('none');
+		}
+		if(cit.length == 0){
+			$("#ciudad").empty();
+		}
 	});		
 </script>

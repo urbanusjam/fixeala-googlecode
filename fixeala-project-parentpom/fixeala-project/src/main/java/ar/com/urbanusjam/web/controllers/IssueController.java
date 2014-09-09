@@ -303,8 +303,9 @@ public class IssueController {
 			model.addAttribute("jsonComments", commentPagesArray);
 
 		} catch (Exception e) {
-
-			return "redirect:/" + "error.html";
+			model.addAttribute("messageTitle", "&iexcl;Atenci&oacute;n!");
+			model.addAttribute("message", "La página solicitada no existe.");
+			return "error";	
 		}
 
 		return "issues";

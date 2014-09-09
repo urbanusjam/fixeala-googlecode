@@ -15,11 +15,11 @@
 	  		</div>
   			<div class="input-prepend">
 				<label>Clave</label>
-	  			<input type="password" id="password" name="password">
+	  			<input type="password" id="passwordID" name="password">
 	  		</div>
   			<div class="input-prepend">
   				<label>Confirme clave</label>
-  				<input type="password" id="confirmPassword" name="confirmPassword">
+  				<input type="password" id="confirmPasswordID" name="confirmPassword">
   			</div>
   			<!-- captcha -->
 			<div id="captcha_register"> 
