@@ -69,24 +69,38 @@ public class WidgetController {
 		List<IssueDTO> totalIssues = new ArrayList<IssueDTO>();
 		
 		int totalOpen = 0;
+		int totalVerified = 0;	
+		int totalRejected = 0;	
 		int totalReopened = 0;
+		int totalInProgress = 0;
 		int totalResolved = 0;
 		int totalClosed = 0;	
-		int totalUsers = 0;
 		
 		try{
-			
-			issues = issueService.loadIssues(MAX_RESULTS);				
+						
 			totalIssues = issueService.loadAllIssues();
-			totalUsers = userService.loadAllActiveUsers().size();
-
+			
 			for(IssueDTO issue : totalIssues){
+				
+				if(totalIssues.indexOf(issue) < MAX_RESULTS){
+					issues.add(issue);
+				}
 				
 				if(issue.getStatus().equals(IssueStatus.OPEN)){
 					issue.setStatusCss(IssueStatusColorCode.CSS_OPEN);
 					totalOpen++;
 				}
+				
+				if(issue.getStatus().equals(IssueStatus.VERIFIED)){
+					issue.setStatusCss(IssueStatusColorCode.CSS_VERIFIED);
+					totalVerified++;
+				}
 									
+				if(issue.getStatus().equals(IssueStatus.REJECTED)){
+					issue.setStatusCss(IssueStatusColorCode.CSS_REJECTED);
+					totalRejected++;
+				}
+				
 				if(issue.getStatus().equals(IssueStatus.REOPENED)){
 					issue.setStatusCss(IssueStatusColorCode.CSS_REOPENED);
 					totalReopened++;					
@@ -94,6 +108,7 @@ public class WidgetController {
 
 				if(issue.getStatus().equals(IssueStatus.IN_PROGRESS)){
 					issue.setStatusCss(IssueStatusColorCode.CSS_IN_PROGRESS);
+					totalInProgress++;
 				}
 									
 				if(issue.getStatus().equals(IssueStatus.SOLVED)){
@@ -110,10 +125,12 @@ public class WidgetController {
 							
 			model.addAttribute("totalIssues", issues.size());	
 			model.addAttribute("totalOpen", totalOpen);	
+			model.addAttribute("totalVerified", totalVerified);	
+			model.addAttribute("totalRejected", totalRejected);	
 			model.addAttribute("totalReopened", totalReopened);	
 			model.addAttribute("totalResolved", totalResolved);	
+			model.addAttribute("totalInProgress", totalInProgress);	
 			model.addAttribute("totalClosed", totalClosed);	
-			model.addAttribute("totalUsers", totalUsers);	
 			
 			if(issues.size() > 0)			{
 				model.addAttribute("issueList", issues);	

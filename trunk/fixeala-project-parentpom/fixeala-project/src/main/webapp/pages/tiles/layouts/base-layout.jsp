@@ -4,10 +4,16 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
-<html>
-<head>	
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">	
+<html prefix="og: http://ogp.me/ns#">
+<head>		
 	<title><tiles:insertAttribute name="title" ignore="true" /></title>	
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">	
+	<meta property="og:url" content="http://www.fixeala.com.ar">
+	<meta property="og:title" content="Fixeala :: Tu Plataforma Colaborativa de Reporte Ciudadano">
+	<meta property="og:type" content="website">
+	<meta property="og:image" content="http://www.fixeala.com.ar/resources/images/fixeala_logo.png">
+	<meta property="og:description" content="Dales impulso y visibilidad a los reclamos de tu barrio y ayudá a resolverlos.">
+	<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/favicon.ico">
 	<!-- JS google maps -->
   	<script type="text/javascript" src="http://maps.google.com/maps/api/js?libraries=geometry,places&components=country:ar&language=ES&sensor=false"></script>
 	<!-- JS jquery main -->

@@ -6,7 +6,7 @@
 <tiles-definitions>
   
   <definition name="base.layout" template="/pages/tiles/layouts/base-layout.jsp">
-  	<put-attribute name="title" value="Fixeala - Tu plataforma colaborativa de reporte ciudadano" />
+  	<put-attribute name="title" value="Fixeala :: Tu Plataforma Colaborativa de Reporte Ciudadano" />
     <put-attribute name="header" value="/pages/tiles/header.jsp" />
     <put-attribute name="body" value="" />
     <put-attribute name="footer" value="/pages/tiles/footer.jsp" />

@@ -68,48 +68,41 @@
 						<div class="widget-stats">
 							<center>
 								<div class="top-stat">
-									<h1> ${totalIssues}
+									<h2> ${totalIssues}
 										<small><i class="icon icon-map-marker"></i>&nbsp; reclamos totales</small>
-									</h1>
+									</h2>
 								</div>
-							</center>
-							
-							<div class="middle-body">
-							
-							<div class="middle-stat left">
-								<h1>${totalOpen}</h1>
-								<span>Abiertos</span>
-							</div>
-							<div class="middle-stat right">
-								<h1>${totalReopened}</h1>
-								<span>Reabiertos</span>
-							</div>
-							<div class="middle-stat left">
-								<h1>${totalResolved}</h1>
-								<span>Resueltos</span>
-							</div>
-							<div class="middle-stat right">
-								<h1>${totalClosed}</h1>
-								<span>Cerrados</span>
-							</div>
-							
-							
-							</div>
-							
-							<center>
-								<div class="bottom-stat">
-<!-- 									<span class="left"> -->
-<%-- 										<h2> ${totalComments} --%>
-<!-- 											<small><i class="icon icon-comments"></i>&nbsp; comentarios</small> -->
-<!-- 										</h2> -->
-<!-- 									</span> -->
-									<span>
-										<h2> ${totalUsers}
-											<small><i class="icon icon-user"></i>&nbsp; usuarios</small>
-										</h2>
-									</span>
+							</center>							
+							<div class="middle-body">							
+								<div class="middle-stat left">
+									<h2>${totalOpen}</h2>
+									<span>Abiertos</span>
 								</div>
-							</center>
+								<div class="middle-stat right">
+									<h2>${totalVerified}</h2>
+									<span>Verificados</span>
+								</div>
+								<div class="middle-stat left">
+									<h2>${totalRejected}</h2>
+									<span>Rechazados</span>
+								</div>	
+								<div class="middle-stat right">
+									<h2>${totalInProgress}</h2>
+									<span>En progreso</span>
+								</div>						
+								<div class="middle-stat left">
+									<h2>${totalResolved}</h2>
+									<span>Resueltos</span>
+								</div>
+								<div class="middle-stat right">
+									<h2>${totalReopened}</h2>
+									<span>Reabiertos</span>
+								</div>
+								<div class="middle-stat left">
+									<h2>${totalClosed}</h2>
+									<span>Cerrados</span>
+								</div>
+							</div>
 						</div>
 					</c:if>
 					<c:if test="${totalIssues eq 0}">	

@@ -179,22 +179,25 @@
 }
 
 .widget-stats .middle-stat {
-	width: 120px; 
+	width: 85px; 
 	height: auto; 
 	display: inline-block; 
-	padding: 10px; 
-	margin-bottom: 10px;	
+	padding: 10px 5px 10px 5px; 
 	text-align: right; 
+	border-bottom: 1px solid #DDD;
 }
 
 .widget-stats .middle-body {
 	width: 300px; 
 	height: 220px;
+	margin: 0 auto;
+	border: 0px solid red;
 }
 
 .widget-stats .middle-stat span {
 	display: block; 
 	text-transform: uppercase; 
+	font-size: 11px;
 }
 
 .widget-stats .bottom-stat {
@@ -212,13 +215,13 @@
 	display: block; 
 }
 
-.left {
-	float: left;
-}
+/* .left { */
+/* 	float: left; */
+/* } */
 
-.right {
-	float: right;
-}
+/* .right { */
+/* 	float: right; */
+/* } */
 
 ul.nav.nav-tabs {  
 	margin: 0; 
