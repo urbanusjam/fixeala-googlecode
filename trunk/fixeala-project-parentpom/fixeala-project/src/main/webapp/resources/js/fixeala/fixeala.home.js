@@ -175,15 +175,9 @@ var fxlHomeController = {
 		if( $(".tab-pane#tab1").hasClass('active') ){
 			$(".pager li.next").addClass('disabled');
 		}
-		
-		
-		
+				
 		fxlHomeController.bindIssueToggleBtn();
-		
-		
-		
-		fxlHomeController.configWizard();
-		
+		fxlHomeController.configWizard();		
 		fxlHomeController.configWizardFinishBtn();
 		
 	},
@@ -193,7 +187,6 @@ var fxlHomeController = {
 		$("#tags").select2({				
 			placeholder: 'Seleccione una etiqueta...',
 			maximumSelectionSize: 5,
-//			tags: ${allTags},
 			tags : allTags,
 			multiple: true,			
 			tokenSeparators: [",", " "],
