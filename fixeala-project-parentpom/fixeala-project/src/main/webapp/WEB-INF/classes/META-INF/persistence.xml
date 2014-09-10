@@ -20,6 +20,7 @@
         <class>ar.com.urbanusjam.entity.annotations.IssueRepair</class>
         <class>ar.com.urbanusjam.entity.annotations.IssueHistory</class> 
         <class>ar.com.urbanusjam.entity.annotations.IssueVote</class> 
+        <class>ar.com.urbanusjam.entity.annotations.IssueVerification</class> 
         <class>ar.com.urbanusjam.entity.annotations.MediaContent</class>   
         <class>ar.com.urbanusjam.entity.annotations.PasswordResetToken</class>    
         <class>ar.com.urbanusjam.entity.annotations.Tag</class>   

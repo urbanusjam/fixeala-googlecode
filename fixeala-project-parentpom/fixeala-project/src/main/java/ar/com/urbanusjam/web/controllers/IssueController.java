@@ -665,9 +665,10 @@ public class IssueController {
 		return tags;
 	}
 
-	@RequestMapping(value = "/issues/updateIssue", produces={"application/json; charset=UTF-8"},  method = RequestMethod.POST)
+	@RequestMapping(value = "/issues/{issueID}/updateIssue", produces={"application/json; charset=UTF-8"},  method = RequestMethod.POST)
 	public @ResponseBody
-	AlertStatus doUpdatetIssue(@ModelAttribute("issue") IssueDTO issue,
+	AlertStatus doUpdatetIssue(@PathVariable("issueID") String issueID, 
+			@ModelAttribute("issue") IssueDTO issue,
 			@RequestParam("fields") String fieldChanges,
 			HttpServletRequest request) throws Exception {
 
@@ -765,9 +766,9 @@ public class IssueController {
 
 	}
 
-	@RequestMapping(value = "/issues/updateIssueStatus", produces={"application/json; charset=UTF-8"}, method = RequestMethod.POST)
+	@RequestMapping(value = "/issues/{issueID}/updateIssueStatus", produces={"application/json; charset=UTF-8"}, method = RequestMethod.POST)
 	public @ResponseBody
-	AlertStatus doUpdatetIssueStatus(@RequestParam("issueID") String issueID,
+	AlertStatus doUpdatetIssueStatus(@PathVariable("issueID") String issueID,
 			@RequestParam("newStatus") String newStatus,
 			@RequestParam("resolution") String resolution,
 			@RequestParam("obs") String obs, HttpServletRequest request)

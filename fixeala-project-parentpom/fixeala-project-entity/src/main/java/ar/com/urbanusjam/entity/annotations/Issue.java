@@ -108,6 +108,10 @@ public class Issue implements Serializable  {
 	
 	@OneToMany(mappedBy="issue", fetch = FetchType.LAZY) 
 	private Set<IssuePageView> pageviews;
+	
+	@OneToMany(mappedBy="issue", fetch = FetchType.LAZY) 
+	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.ALL})	
+	private Set<IssueVerification> verificationRequests;
 
 	
 	public Issue(){   
@@ -117,6 +121,7 @@ public class Issue implements Serializable  {
 		comentarios = new HashSet<Comment>();
 		votes = new HashSet<IssueVote>();
 		followers = new HashSet<IssueFollow>();
+		verificationRequests = new HashSet<IssueVerification>();
 	}	
 		
 	
@@ -312,6 +317,18 @@ public class Issue implements Serializable  {
 	public void setFollowers(Set<IssueFollow> followers) {
 		this.followers = followers;
 	}
+	
+	
+
+	public Set<IssueVerification> getVerificationRequests() {
+		return verificationRequests;
+	}
+
+
+	public void setVerificationRequests(Set<IssueVerification> verificationRequests) {
+		this.verificationRequests = verificationRequests;
+	}
+
 
 	public void addTag(Tag tag) {	
 		if (tag != null) {
@@ -319,15 +336,7 @@ public class Issue implements Serializable  {
 	        	tagsList = new HashSet<Tag>();          
 	        }
 	        tagsList.add(tag);
-//	        tag.setIssue(this);
-	     }	
-		
-//		if (!getTagsList().contains(tag)) {
-//			getTagsList().add(tag);
-//		}
-//	    if (!tag.getIssueList().contains(this)) {
-//	        tag.getIssueList().add(this);
-//	    }				   
+	     }			   
 	}	
 	
 	public void removeTag(Tag tag) {	
@@ -393,6 +402,15 @@ public class Issue implements Serializable  {
 		if (getFollowers().contains(follower)) {
 			getFollowers().remove(follower);
 		}	   		
+	}
+	
+	public void addVerificationRequest(IssueVerification verification) {	
+		if (verification != null) {
+	        if (verificationRequests == null) {
+	        	verificationRequests = new HashSet<IssueVerification>();          
+	        }
+	        verificationRequests.add(verification);
+	     }		
 	}
 	
 	@Override

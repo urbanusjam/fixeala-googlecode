@@ -517,7 +517,7 @@ var mapController = {
 
 		 $.ajax({
 		        type: "GET",
-		        url: "../loadMapMarkers",
+		        url: "./loadMapMarkers",
 		        dataType: "json",  	        
 		        success: function(data){  
 		        	
@@ -559,7 +559,7 @@ var mapController = {
 					    	if(marker.images.length > 0)
 					    		imageSrc = marker.images[0].link;	
 					    	else
-					    		imageSrc = '../resources/images/nopic64.png';				    
+					    		imageSrc = fxlGlobalController.getDomainUrl()+'resources/images/nopic64.png';				    
 					    
 					    	tr += '<tr><td style="border-top:none">';
 					    	tr += '<div class="media">';

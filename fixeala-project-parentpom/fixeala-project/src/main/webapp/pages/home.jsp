@@ -19,20 +19,20 @@
 
 		<div class="span6 pull-left" style="border-right: 1px solid #DDD; margin:0;">			
 			<center>
-				<h4>&iexcl;Ya se verificaron ${verified} de ${totalIssues} reclamos!</h4>
+				<h4>Se verificaron ${verified} de ${totalIssues} reclamos</h4>
 				<div class="progress progress-striped active" style="width: 400px;">					
 	  				<div class="bar" id="verifiedBar"></div>	  				
 				</div>
-				<p style="text-align: center;">Todav&iacute;a quedan ${notVerified} reclamos sin verificar</p>
+				<p style="text-align: center;">Restan ${notVerified} reclamos sin verificar</p>
 			</center>
 		</div>
 		<div class="span6 pull-right" style=" border-left: 1px solid #DDD; margin:0;">			
 			<center>
-				<h4>&iexcl;Y se resolvieron ${resolved} de ${totalIssues} reclamos!</h4>
+				<h4>Se resolvieron ${resolved} de ${totalIssues} reclamos</h4>
 				<div class="progress progress-striped active" style="width: 400px;">					
 	  				<div class="bar bar-success" id="resolvedBar"></div>	  				
 				</div>
-				<p style="text-align: center;">Todav&iacute;a quedan ${notResolved} reclamos sin resolver</p>
+				<p style="text-align: center;">Restan ${notResolved} reclamos sin resolver</p>
 			</center>
 		</div>
 	</div>	
@@ -282,8 +282,8 @@
 		var verifiedIssues = '${verified}'; 
 		var resolvedIssues = '${resolved}'; 
 		
-		var verifiedProgress = (100 * verifiedIssues) / totalIssues;
-		var resolvedProgress = (100 * resolvedIssues) / totalIssues;
+		var verifiedProgress = ( verifiedIssues / totalIssues ) * 100 + "%" ;
+		var resolvedProgress = ( resolvedIssues / totalIssues ) * 100 + "%" ;
 		
 		$('#verifiedBar').css('width', verifiedProgress);
 		$('#resolvedBar').css('width', resolvedProgress);

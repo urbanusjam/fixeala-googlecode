@@ -25,3 +25,5 @@ git push
 
 
 echo "Build finished."
+
+pause

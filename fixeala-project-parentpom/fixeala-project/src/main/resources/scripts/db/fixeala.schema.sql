@@ -190,6 +190,17 @@ CREATE TABLE issue_vote (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
+CREATE TABLE issue_verification_request ( 
+	id_issue BIGINT(20) NOT NULL,
+	id_user BIGINT(20) NOT NULL,	   
+	verification_date DATETIME NOT NULL,
+	is_verified TINYINT(1) NOT NULL,		
+	   
+	PRIMARY KEY (id_issue, id_user)
+	   
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 CREATE TABLE password_change_request ( 
 	   token VARCHAR(126) NOT NULL,
 	   username VARCHAR(50) NOT NULL,		  
@@ -344,6 +355,14 @@ ALTER TABLE issue_pageview
     ADD CONSTRAINT FOREIGN KEY fk_issue_pageview_2 (id_user)
     REFERENCES user (id_user);
 
+ALTER TABLE issue_verification_request
+    ADD CONSTRAINT FOREIGN KEY fk_issue_verification_request_1 (id_issue)
+    REFERENCES issue (id_issue); 
+    
+ALTER TABLE issue_verification_request
+    ADD CONSTRAINT FOREIGN KEY fk_issue_verification_request_2 (id_user)
+    REFERENCES user (id_user); 
+    
     
     
 /* ###################################################################################### */
