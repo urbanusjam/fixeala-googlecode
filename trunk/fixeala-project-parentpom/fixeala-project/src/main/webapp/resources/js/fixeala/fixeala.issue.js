@@ -1106,13 +1106,13 @@ var fxlIssueController = {
 		if(label == 'Reabrir')
 			status = "REABIERTO";
 		
-		var data = 'issueID='+ fxlIssueController.issueID + '&newStatus='+ status + '&resolution=' + resolution + '&obs=' + obs;
+		var data = 'newStatus='+ status + '&resolution=' + resolution + '&obs=' + obs;
 		
 		$("#mdl-status").modal('hide');
 		
 	
 		$.ajax({
-			url: "./updateIssueStatus.html",
+			url: 'issues/'+fxlIssueController.issueID+'/updateIssueStatus',
 	 		type: "POST",	
 	 		data: data,
 	 		dataType: "json",	
@@ -1157,12 +1157,12 @@ var fxlIssueController = {
 		if(label == 'Rechazar')
 			status = "RECHAZADO";
 		
-		var data = 'issueID='+ fxlIssueController.issueID + '&newStatus='+ status + '&resolution=' + null + '&obs=' + null;
+		var data = 'newStatus='+ status + '&resolution=' + null + '&obs=' + null;
 		
 		$("#mdl-verify").modal('hide');				
 	
 		$.ajax({
-			url: "./updateIssueStatus.html",
+			url: 'issues/'+fxlIssueController.issueID+'/updateIssueStatus',
 	 		type: "POST",	
 	 		data: data,
 	 		dataType: "json",	

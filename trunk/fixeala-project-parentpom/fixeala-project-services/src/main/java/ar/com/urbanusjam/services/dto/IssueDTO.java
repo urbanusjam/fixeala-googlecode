@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import ar.com.urbanusjam.entity.annotations.IssueRepair;
+import ar.com.urbanusjam.entity.annotations.IssueVerification;
 import ar.com.urbanusjam.entity.annotations.MediaContent;
 import ar.com.urbanusjam.services.utils.DateUtils;
 
@@ -62,6 +63,9 @@ public class IssueDTO implements Serializable {
 	
 	@XmlTransient
 	private List<IssueVoteDTO> votes = new ArrayList<IssueVoteDTO>();
+	
+	@XmlTransient
+	private List<IssueVerification> verificaciones = new ArrayList<IssueVerification>();
 	
 	
 	
@@ -244,6 +248,14 @@ public class IssueDTO implements Serializable {
 
 	public void setComentarios(List<CommentDTO> comentarios) {
 		this.comentarios = comentarios;
+	}
+		
+	public List<IssueVerification> getVerificaciones() {
+		return verificaciones;
+	}
+
+	public void setVerificaciones(List<IssueVerification> verificaciones) {
+		this.verificaciones = verificaciones;
 	}
 
 	public Date getCreationDate() {

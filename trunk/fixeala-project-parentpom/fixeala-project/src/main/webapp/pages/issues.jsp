@@ -88,7 +88,7 @@
 							 </tr>
 							  <tr>
 							    <th>Descripci&oacute;n:</th>
-							    <td><a href="#">${descripcion}</a>&nbsp;<i class="icon-pencil editableField"></i></td>						   
+							    <td><a href="#" id="issue-desc">${descripcion}</a>&nbsp;<i class="icon-pencil editableField"></i></td>						   
 							 </tr>
 							 <tr>
 							    <th>Estado:</th>
@@ -452,14 +452,14 @@
 				<li>Es CORRECTO
 					<ul class="sublist">
 						<li>Ubicaci&oacute;n geogr&aacute;fica exacta (direcci&oacute;n, altura, ciudad, provincia).</li>						
-						<li>Problema REAL descripta en el T&iacute;≠tulo y la Descripci&oacute;n.</li>
+						<li>Problema REAL descripta en el T&iacute;tulo y la Descripci&oacute;n.</li>
 						<li>Consistencia entre texto e im&aacute;genes adjuntadas (si las hay).</li>
 						<li>Buena redacci&oacute;n. Sin faltas de ortograf&iacute;a y gram&aacute;tica que impidan o dificulten la comprensi&oacute;n de la informaci&oacute;n publicada.</li>
 					</ul>
 				</li>
 				<li>Est√° COMPLETO
 					<ul class="sublist">
-						<li>Obligatorios: t&iacute;tulo, descripci&oacute;n, categor&iacute;≠as (tags).</li>
+						<li>Obligatorios: t&iacute;tulo, descripci&oacute;n, categor&iacute;as (tags).</li>
 						<li>Opcionales: barrio, im&aacute;genes.</li>
 					</ul>
 				</li>

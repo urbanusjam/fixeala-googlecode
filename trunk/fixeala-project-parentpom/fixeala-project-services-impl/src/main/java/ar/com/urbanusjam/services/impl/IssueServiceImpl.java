@@ -36,6 +36,8 @@ import ar.com.urbanusjam.entity.annotations.IssueFollowPK;
 import ar.com.urbanusjam.entity.annotations.IssueHistory;
 import ar.com.urbanusjam.entity.annotations.IssuePageView;
 import ar.com.urbanusjam.entity.annotations.IssueRepair;
+import ar.com.urbanusjam.entity.annotations.IssueVerification;
+import ar.com.urbanusjam.entity.annotations.IssueVerificationPK;
 import ar.com.urbanusjam.entity.annotations.IssueVote;
 import ar.com.urbanusjam.entity.annotations.IssueVotePK;
 import ar.com.urbanusjam.entity.annotations.MediaContent;
@@ -64,8 +66,11 @@ import ar.com.urbanusjam.services.utils.SortingDataUtils;
 @Transactional
 public class IssueServiceImpl implements IssueService {
 		
+	private final int MAX_VERIFICATION_REQUESTS = 5;
+	private final int MAX_REJECTION_REQUESTS = 10;
+	
 	private UserService userService;
-	private MailService mailService;
+	private MailService mailService;	
 	
 	private IssueDAO issueDAO;
 	private UserDAO userDAO;
@@ -190,32 +195,66 @@ public class IssueServiceImpl implements IssueService {
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor={MessagingException.class})
 	public void updateIssueStatus(String username, String issueID, String newStatus, String resolution, String obs) throws MessagingException {
 	
+		Issue issue = issueDAO.findIssueById(issueID);
+		User user = userDAO.loadUserByUsername(username);
+		
 		IssueHistoryDTO revision = new IssueHistoryDTO();
 		revision.setFecha(new Date());
 		revision.setUsername(username);
 		revision.setOperacion(Operation.UPDATE);	
-		revision.setEstado(newStatus);		
+		revision.setEstado(newStatus);				
+			
+		if(!newStatus.equals(IssueStatus.VERIFIED) || !newStatus.equals(IssueStatus.REJECTED)){
+			
+			if(newStatus.equals(IssueStatus.IN_PROGRESS))	
+				revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_PROGRESS + " el reclamo");			
+			if(newStatus.equals(IssueStatus.SOLVED))
+				revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_RESOLVE + " el reclamo como " + resolution.toUpperCase());			
+			if(newStatus.equals(IssueStatus.CLOSED))
+				revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_CLOSE + " el reclamo");	
+			if(newStatus.equals(IssueStatus.REOPENED))	
+				revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_REOPEN + " el reclamo porque " + resolution.toUpperCase());		
+			
+			issue.setStatus(newStatus);
+		}
 		
-		if(newStatus.equals(IssueStatus.IN_PROGRESS))	
-			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_PROGRESS + " el reclamo");			
-		if(newStatus.equals(IssueStatus.SOLVED))
-			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_RESOLVE + " el reclamo como " + resolution.toUpperCase());			
-		if(newStatus.equals(IssueStatus.CLOSED))
-			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_CLOSE + " el reclamo");	
-		if(newStatus.equals(IssueStatus.REOPENED))	
-			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_REOPEN + " el reclamo porque " + resolution.toUpperCase());		
-		if(newStatus.equals(IssueStatus.VERIFIED))	
-			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_VERIFY + " el reclamo");	
-		if(newStatus.equals(IssueStatus.REJECTED))	
-			revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_REJECT + " el reclamo");	
-		
+		//si es una solicitud de verificacion		
+		if(newStatus.equals(IssueStatus.VERIFIED) || newStatus.equals(IssueStatus.REJECTED)){
+			
+			IssueVerification request = new IssueVerification();
+			request.setId(new IssueVerificationPK(issue.getId(), user.getId()));
+			request.setIssue(issue);
+			request.setUser(user);
+			request.setDate(this.getCurrentCalendar(new Date()));
+			
+			if(newStatus.equals(IssueStatus.VERIFIED)){
+				request.setVerified(true);
+				revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_VERIFY + " el reclamo");
+				
+				//chequeo si resta solo 1 solicitud para cambiar el estado a VERIFICADO
+				if(issue.getVerificationRequests().size() < MAX_VERIFICATION_REQUESTS - 1){
+					issue.setStatus(newStatus);
+				}
+			}
+			
+			if(newStatus.equals(IssueStatus.REJECTED)){
+				request.setVerified(false);
+				revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_REJECT + " el reclamo");
+				
+				//chequeo si resta solo 1 solicitud para cambiar el estado a VERIFICADO
+				if(issue.getVerificationRequests().size() < MAX_REJECTION_REQUESTS - 1){
+					issue.setStatus(newStatus);
+				}
+			}	
+			
+			issue.addVerificationRequest(request);
+			
+		}	
+			
 		if(obs != null)
 			revision.setObservaciones(obs);
 				
-		Issue issue = issueDAO.findIssueById(issueID);
-		User user = userDAO.loadUserByUsername(username);
 		
-		issue.setStatus(newStatus);
 		
 		if(resolution != null)
 			issue.setResolution(resolution);
@@ -644,6 +683,9 @@ public class IssueServiceImpl implements IssueService {
 			issueDTO.setReparacion(issue.getReparacion());
 		else
 			issueDTO.setReparacion(null);
+		
+		//verificaciones		
+		issueDTO.setVerificaciones(new ArrayList<IssueVerification>(issue.getVerificationRequests()));
 		
 		return issueDTO;
 
