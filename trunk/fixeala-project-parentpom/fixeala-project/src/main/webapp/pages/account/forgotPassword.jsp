@@ -23,7 +23,7 @@
    		</form>   		    
    		<!-- /Reset password -->
 </div>
-<script src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.account.js"></script> 
+<script src="resources/js/fixeala/fixeala.account.js"></script> 
 <script type="text/javascript">      
 	$(document).ready(function(){	fxlAccountController.initReset();	});	
 </script> 	

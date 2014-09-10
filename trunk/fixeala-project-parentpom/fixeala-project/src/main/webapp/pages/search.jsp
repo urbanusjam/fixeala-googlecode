@@ -3,8 +3,7 @@
 	<!-- Search -->
     <div class="page-header">
    	 	<h3><i class="icon-angle-right"></i>&nbsp;&nbsp;B&uacute;squeda de reclamos: "${tag.toLowerCase()}"</h3>    	 	
-   	</div>     	
-   	
+   	</div>  
    	<div class="container-fluid">
 	  	<div class="row-fluid">
 	  		<div class="row span6">

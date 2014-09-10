@@ -189,7 +189,7 @@
 			<!-- tab 2 popular -->
 			<div class="tab-pane fade" id="hottestIssues">	
 				<!-- infinite scroll -->
-				<div id="infifxlIssueController.configIsotope();fxlIssueController.configIsotope();nite-container-votes"></div>				
+				<div id="infinite-container-votes"></div>				
 				<nav id="page-nav-votes" style="display: none;">
   					<a href="loadmore/issue/2"></a>
 				</nav>	
@@ -226,8 +226,8 @@
     <div class="clearfix"></div> 
 </div><!-- /CONTENT -->
 
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.home.js"></script>  	
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.file.js"></script>	
+<script type="text/javascript" src="resources/js/fixeala/fixeala.home.js"></script>  	
+<script type="text/javascript" src="resources/js/fixeala/fixeala.file.js"></script>	
 <script type="text/javascript">   
 	
 	var issueFileData = null; //holds the (optional) attached file

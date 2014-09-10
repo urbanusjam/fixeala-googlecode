@@ -5,6 +5,6 @@
 		   ${message}
 		</div>		
 		<br><br>		
-		<a href="${pageContext.request.contextPath}/index.html">Volver a la p&aacute;gina de Inicio</a>		
+		<a href="index">Volver a la p&aacute;gina de Inicio</a>		
 	</div>
 </div>

@@ -1,3 +1,5 @@
+USE fixeala;
+
 CREATE TABLE provincias (
 	id INT( 2 ) NOT NULL ,
 	nombre VARCHAR( 50 ) NOT NULL ,
