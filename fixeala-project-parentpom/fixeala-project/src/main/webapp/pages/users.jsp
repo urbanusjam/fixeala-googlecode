@@ -1,15 +1,11 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
 <style type="text/css">
 
 	th, td { font-size: 12px; }
 	.table-striped tbody tr.highlight td { background-color: #A8D3E6; }
 	
 </style>
-
-
-
 <div id="content">
 	<div class="container-fluid">
 	  <div class="row-fluid">
@@ -56,18 +52,9 @@
 			              				<i class="icon-caret-right"></i>PERFIL
 			              			</a>
 			              		</li>
-<!-- 					              		<li class="nav-header"> -->
-<!-- 					              			<a  href="#dashboardTab" data-toggle="tab"> -->
-<!-- 					              				<i class="icon-caret-right"></i>DASHBOARD -->
-<!-- 					              			</a> -->
-<!-- 					              		</li> -->
 			              		<li class="nav-header"><i class="icon-caret-right"></i>CONTENIDO</li>
-<!-- 						                <li><a href="#notificationsTab" data-toggle="tab"><i class="icon-bell"></i>Notificaciones</a></li> -->
-<!-- 						                <li><a href="#activityTab" data-toggle="tab"><i class="icon-check"></i>Actividad</a></li> -->
 				                <li><a href="#issuesTab" data-toggle="tab"><i class="icon-pushpin"></i>Reclamos</a></li>
 				                <li><a href="#commentsTab" data-toggle="tab"><i class="icon-comments-alt"></i>Comentarios</a></li>
-<!-- 						                <li><a href="#widgetsTab" data-toggle="tab"><i class="icon-cogs"></i>Widgets</a></li> -->
-
 				                <li class="nav-header"><i class="icon-caret-right"></i>CUENTA</li>
 				                <li><a href="#editAccountTab" data-toggle="tab"><i class="icon-edit-sign"></i>Datos personales</a></li>
 				                <li><a href="#changePasswordTab" data-toggle="tab"><i class="icon-unlock"></i>Cambio de clave</a></li>
@@ -107,7 +94,7 @@
 				    	
 				    	<div class="profilePic">
 				    		<c:if test="${empty profilePicUrl}">			     
-								<img width="200" height="200" class="thumbnail" src="${pageContext.request.contextPath}/resources/images/nopic.png" />
+								<img width="200" height="200" class="thumbnail" src="resources/images/nopic.png" />
 							</c:if>
 							<c:if test="${not empty profilePicUrl}">			     
 								<img width="200" height="200" class="thumbnail" src="${profilePicUrl}"/>
@@ -466,9 +453,9 @@
 	</div><!-- container fluid -->		
 </div>
 <!-- /content --> 	
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.account.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.file.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.datatable.bootstrap.js"></script>
+<script type="text/javascript" src="resources/js/fixeala/fixeala.account.js"></script>
+<script type="text/javascript" src="resources/js/fixeala/fixeala.file.js"></script>
+<script type="text/javascript" src="resources/js/fixeala/fixeala.datatable.bootstrap.js"></script>
 <script type="text/javascript">	
 
 

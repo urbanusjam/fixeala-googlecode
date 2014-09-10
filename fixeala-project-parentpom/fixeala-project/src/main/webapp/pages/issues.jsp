@@ -33,8 +33,8 @@
 											</a>		
 							    		</c:if>
 							    		<c:if test="${cantidadContenidos eq 0}">
-							    			<a data-lightbox="issue-lightbox2" class="thumbnail" href="${pageContext.request.contextPath}/resources/images/nopic.png" >							  	  			  	   		
-												<img src="${pageContext.request.contextPath}/resources/images/nopic.png" alt="">	
+							    			<a data-lightbox="issue-lightbox2" class="thumbnail" href="resources/images/nopic.png" >							  	  			  	   		
+												<img src="resources/images/nopic.png" alt="">	
 											</a>
 							    		</c:if>
 						    		</div>		
@@ -308,17 +308,11 @@
 	  		</div>	 		
 	</c:if>
 			
-			
-		
-			
 		</div>
 								
 		</div>
      
 		</div>
-		    
-		    
-		    
 		    
 		<!-- COLUMNA 2 -->    
 		<div class="span3">
@@ -457,21 +451,21 @@
 			<ul class="list">
 				<li>Es CORRECTO
 					<ul class="sublist">
-						<li>Ubicación geográfica exacta (dirección, altura, ciudad, provincia).</li>						
-						<li>Problemática REAL descripta en el Título y la Descripción.</li>
-						<li>Consistencia entre texto e imágenes adjuntadas (si las hay).</li>
-						<li>Buena redacción. Sin faltas de ortografía y gramática que impidan o dificulten la comprensión de la información publicada.</li>
+						<li>Ubicaci&oacute;n geogr&aacute;fica exacta (direcci&oacute;n, altura, ciudad, provincia).</li>						
+						<li>Problema REAL descripta en el T&iacute;�tulo y la Descripci&oacute;n.</li>
+						<li>Consistencia entre texto e im&aacute;genes adjuntadas (si las hay).</li>
+						<li>Buena redacci&oacute;n. Sin faltas de ortograf&iacute;a y gram&aacute;tica que impidan o dificulten la comprensi&oacute;n de la informaci&oacute;n publicada.</li>
 					</ul>
 				</li>
 				<li>Está COMPLETO
 					<ul class="sublist">
-						<li>Obligatorios: título, descripción, categorías (tags).</li>
-						<li>Opcionales: barrio, imágenes.</li>
+						<li>Obligatorios: t&iacute;tulo, descripci&oacute;n, categor&iacute;�as (tags).</li>
+						<li>Opcionales: barrio, im&aacute;genes.</li>
 					</ul>
 				</li>
 				<li>Es PERTINENTE
 					<ul class="sublist">
-						<li>La información suministrada constituye un reclamo barrial circunscripto a los límites de la República Argentina.</li>
+						<li>La informaci&oacute;n suministrada constituye un reclamo barrial circunscripto a los l&iacute;mites de la Rep&uacute;blica Argentina.</li>
 					</ul>
 				</li>
 				<li>Es ACTUAL</li>
@@ -805,8 +799,8 @@
 {% } %}
 </script>
 </div><!-- content -->
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.issue.js"></script>  
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.file.js"></script>		
+<script type="text/javascript" src="resources/js/fixeala/fixeala.issue.js"></script>  
+<script type="text/javascript" src="resources/js/fixeala/fixeala.file.js"></script>		
 <script type="text/javascript">  
 
 	$(document).ready(function(){		

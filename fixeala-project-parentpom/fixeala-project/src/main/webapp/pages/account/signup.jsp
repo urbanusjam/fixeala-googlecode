@@ -24,7 +24,7 @@
   			<!-- captcha -->
 			<div id="captcha_register"> 
 					<label>Ingrese el texto de la imagen</label>
-				<img src="../captchaImg" />
+				<img src="captchaImg" />
 			    <input name="captcha_answer" class="field" /> 
 			</div>
 			<span class="captcha_refresh"><a class="link" href="javascript:fxlAccountController.showRecaptcha('captcha_register');"><i class="icon-refresh"></i> Recargar</a></span>
@@ -35,7 +35,7 @@
 	    </div>
 	</form>		 
 </div>	
-<script src="${pageContext.request.contextPath}/resources/js/fixeala/fixeala.account.js"></script> 
+<script src="resources/js/fixeala/fixeala.account.js"></script> 
 <script type="text/javascript">      
 	$(document).ready(function(){	fxlAccountController.initSignup();	});	
 </script> 	

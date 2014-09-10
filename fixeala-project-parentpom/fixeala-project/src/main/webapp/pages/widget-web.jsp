@@ -4,11 +4,11 @@
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=UTF8">
 	<title>Fixeala Widget</title>	
-	<link type="text/css" href="${pageContext.request.contextPath}/widget/css/bootstrap.css" rel="stylesheet">  	
-	<link type="text/css" href="${pageContext.request.contextPath}/widget/css/bootstrap-combined.min.css" rel="stylesheet">  	
-	<link type="text/css" href="${pageContext.request.contextPath}/widget/css/bootstrap-responsive.css" rel="stylesheet">  	
-	<link type="text/css" href="${pageContext.request.contextPath}/widget/css/widget.css" rel="stylesheet"> 
-	<link type="text/css" href="${pageContext.request.contextPath}/widget/css/font-awesome.css" rel="stylesheet"> 	
+	<link type="text/css" href="widget/css/bootstrap.css" rel="stylesheet">  	
+	<link type="text/css" href="widget/css/bootstrap-combined.min.css" rel="stylesheet">  	
+	<link type="text/css" href="widget/css/bootstrap-responsive.css" rel="stylesheet">  	
+	<link type="text/css" href="widget/css/widget.css" rel="stylesheet"> 
+	<link type="text/css" href="widget/css/font-awesome.css" rel="stylesheet"> 	
 </head>
 <body class="widget">
 
@@ -23,7 +23,7 @@
 			<a href="#" id="refreshWidget" title="Actualizar listado">
 			Recargar
 				<img alt="Actualizar listado de reclamos" width="20" height="20"
-							src="${pageContext.request.contextPath}/widget/images/reload.png" />
+							src="widget/images/reload.png" />
 			</a>
 		</div>
 		
@@ -124,8 +124,8 @@
 		</div>
 	</div>
 	
-	<script type="text/javascript" src="${pageContext.request.contextPath}/widget/js/jquery-1.10.2.min.js"></script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/widget/js/widget.js"></script> 
-	<script type="text/javascript" src="${pageContext.request.contextPath}/widget/js/bootstrap.js"></script>
+	<script type="text/javascript" src="widget/js/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="widget/js/widget.js"></script> 
+	<script type="text/javascript" src="widget/js/bootstrap.js"></script>
 </body>
 </html>

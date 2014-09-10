@@ -8,16 +8,16 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>           
-          <a class="brand" href="${pageContext.request.contextPath}">fixeala&nbsp;<img src="${pageContext.request.contextPath}/resources/images/fixeala_logo.png" width=32 height=32 /></a>
+          <a class="brand" href="/fixeala;">fixeala&nbsp;<img src="resources/images/fixeala_logo.png" width=32 height=32 /></a>
           <div class="nav-collapse collapse">          
           	<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
           	<!-- MAIN NAV -->
             <ul id="menuNav" class="nav">
-				<li><a href="${pageContext.request.contextPath}/dataset" title="Datasets"><i class="icon-tasks icon-2x"></i></a></li>		
-				<li><a href="${pageContext.request.contextPath}/api" title="REST API"><i class="icon-bullseye icon-2x"></i></a></li>		
-				<li><a href="${pageContext.request.contextPath}/widget" title="Tu Gadget Web"><i class="icon-cogs icon-2x"></i></a></li>	
-				<li><a href="${pageContext.request.contextPath}/mobile" title="Aplicaci&oacute;n M&oacute;vil"><i class="icon-android icon-2x"></i></a></li>
-<%-- 			<li><a href="${pageContext.request.contextPath}/help" title="Ayuda"><i class="icon-question-sign icon-2x"></i></a></li>			 --%>
+				<li><a href="dataset" title="Datasets"><i class="icon-tasks icon-2x"></i></a></li>		
+				<li><a href="api" title="REST API"><i class="icon-bullseye icon-2x"></i></a></li>		
+				<li><a href="widget" title="Tu Gadget Web"><i class="icon-cogs icon-2x"></i></a></li>	
+				<li><a href="mobile" title="Aplicaci&oacute;n M&oacute;vil"><i class="icon-android icon-2x"></i></a></li>
+<%-- 			<li><a href="help" title="Ayuda"><i class="icon-question-sign icon-2x"></i></a></li>			 --%>
         	</ul>
         	<!-- /MAIN NAV -->        	
         	<!-- LOGIN NAV -->
@@ -25,22 +25,22 @@
          		<!-- user NOT logged in -->
                 <sec:authorize ifNotGranted="ROLE_USER">
                 	<li  class="dropdown"><a id="loginLink" href="#" data-toggle="modal" data-target="#loginModal"><i class="icon icon-caret-right"></i>LOGIN</a></li>  
-                 	<li class="signupLink"><a href="${pageContext.request.contextPath}/account/signup.html">REGISTRATE</a></li>		
+                 	<li class="signupLink"><a href="account/signup.html">REGISTRATE</a></li>		
               	 </sec:authorize>              	 
               	 <!-- user logged in -->
               	 <sec:authorize access="isAuthenticated()">              	 
               	 	<li class="dropdown" style="float:right">
-	                	<a id="loginLink" href="${pageContext.request.contextPath}/users/<sec:authentication property="principal.username"/>.html" 
+	                	<a id="loginLink" href="users/<sec:authentication property="principal.username"/>.html" 
 	                		class="dropdown-toggle" data-toggle="dropdown">   	
 	                	<b><sec:authentication property="principal.username" /></b>
 	                	&nbsp;<i class="icon-angle-down "></i>
 	                	</a>	               	 						 
 						<ul class="dropdown-menu user-menu dropdown-yellow dropdown-caret dropdown-close">
-							<li><a href="${pageContext.request.contextPath}/users/<sec:authentication property="principal.username"/>.html"><i class="icon-user"></i>Mi cuenta</a></li>
+							<li><a href="users/<sec:authentication property="principal.username"/>.html"><i class="icon-user"></i>Mi cuenta</a></li>
 						    <li class="divider"></li>
 						    <li> 
 		                  	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-		                  		<c:url value="${pageContext.request.contextPath}/logout.html" var="logoutUrl"/>
+		                  		<c:url value="logout.html" var="logoutUrl"/>
 		                  		<a class="last" href="${logoutUrl}"> 
 		                  			<span><i class="icon-off"></i></span>Salir
 		                  		</a>
@@ -79,7 +79,7 @@
 					        </div>    		
 							<div class="row-fluid" style="width: 350px;">
 								<div class="span5 pull-left forgotPassLink">
-									<a class="link" href="${pageContext.request.contextPath}/account/forgotPassword.html">
+									<a class="link" href="account/forgotPassword.html">
 										&iquest;Olvidaste tu clave?
 									</a>
 								</div>  					
@@ -98,7 +98,7 @@
 	      			<!-- modal footer -->
 	      			<div class="modal-footer">
 						<div class="ajax_loading" style="display:none" >
-							<img src="${pageContext.request.contextPath}/resources/images/loader.gif" alt="Loading"/>&nbsp;Procesando...
+							<img src="resources/images/loader.gif" alt="Loading"/>&nbsp;Procesando...
 						</div>	
 						<button id="btnLogin" class="btn btn-primary" aria-hidden="true" onclick="javascript:fxlAccountController.initLogin();"><i class="icon icon-ok"></i>Ingresar</button>      
 			       		<button class="btn" data-dismiss="modal" aria-hidden="true"><i class="icon icon-remove"></i>Cancelar</button>      

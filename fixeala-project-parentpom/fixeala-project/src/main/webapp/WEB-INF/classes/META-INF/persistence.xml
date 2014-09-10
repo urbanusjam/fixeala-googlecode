@@ -11,7 +11,6 @@
 <!--    <jta-data-source>java:comp/env/jdbc/FixealaDS</jta-data-source> -->
       	
       	<class>ar.com.urbanusjam.entity.annotations.ActivationToken</class>
-<!--       	<class>ar.com.urbanusjam.entity.annotations.Area</class>        -->
        	<class>ar.com.urbanusjam.entity.annotations.Authority</class> 
         <class>ar.com.urbanusjam.entity.annotations.Comment</class>      
         <class>ar.com.urbanusjam.entity.annotations.Issue</class>  
