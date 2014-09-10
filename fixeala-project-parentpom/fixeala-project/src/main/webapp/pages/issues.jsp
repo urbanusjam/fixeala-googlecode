@@ -317,16 +317,22 @@
 		<!-- COLUMNA 2 -->    
 		<div class="span3">
 		<!--Sidebar content-->
-			
+						
 			<sec:authorize access="hasRole('ROLE_USER')">	
-				<c:if test="${estado eq 'ABIERTO'}">
-					<button id="btnVerifyIssue" data-toggle="modal" href="#mdl-verify" class="btn btn-danger" style="width: 100%; margin-bottom: 20px; height: 46px; line-height: 46px;" title="Verificar"><h3>VERIFICAR</h3></button> 
+				<c:if test="${estado eq 'ABIERTO'}">				
+					<c:if test="${loggedUser ne usuario}">
+						<button id="btnVerifyIssue" data-toggle="modal" href="#mdl-verify" class="btn btn-danger" style="width: 100%; margin-bottom: 20px; height: 46px; line-height: 46px;" title="Verificar"><h3>VERIFICAR</h3></button> 
+					</c:if>
+					<h2>${positiveVerifications} / 5 solicitudes</h2>
+					<h2>${negativeVerifications} / 10 solicitudes</h2>
 				</c:if>
 			</sec:authorize>
 			
 			<sec:authorize access="isAnonymous()">	
 				<c:if test="${estado eq 'ABIERTO'}">
 					<div class="alert" style="background: #B94A48; color: #FFF; border: none"><h3>SIN VERIFICAR</h3></div> 
+					<h2>${positiveVerifications} / 5 solicitudes</h2>
+					<h2>${negativeVerifications} / 10 solicitudes</h2>
 				</c:if>
 			</sec:authorize>
 			
@@ -335,7 +341,7 @@
 				<div class="alert alert-danger" style="border: none"><i class="icon-exclamation-sign icon-2x"></i><h3>&nbsp;${estado}</h3></div>
 			</c:if>
 									
-			<c:if test="${estado eq 'VERIFICADO' }">
+			<c:if test="${estado eq 'ADMITIDO' }">
 				<div class="alert alert-info" style="border: none"><i class="icon-ok icon-2x"></i><h3>&nbsp;${estado}</h3></div> 
 			</c:if>
 			

@@ -3,6 +3,7 @@ package ar.com.urbanusjam.entity.annotations;
 import java.io.Serializable;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -412,6 +413,37 @@ public class Issue implements Serializable  {
 	        verificationRequests.add(verification);
 	     }		
 	}
+	
+	public Set<IssueVerification> getVerificacionesPositivas(Set<IssueVerification> solicitudes){
+		
+		Iterator it = solicitudes.iterator();
+		Set<IssueVerification> positivas = new HashSet<IssueVerification>();      
+		
+		while(it.hasNext()){
+			IssueVerification element = (IssueVerification) it.next();
+			if(element.isVerified())
+				positivas.add(element);
+		}
+		
+		return positivas;
+		
+	}
+	
+	public Set<IssueVerification> getVerificacionesNegativas(Set<IssueVerification> solicitudes){
+		
+		Iterator it = solicitudes.iterator();
+		Set<IssueVerification> negativas = new HashSet<IssueVerification>();      
+		
+		while(it.hasNext()){
+			IssueVerification element = (IssueVerification) it.next();
+			if(!element.isVerified())
+				negativas.add(element);
+		}
+		
+		return negativas;
+		
+	}
+	
 	
 	@Override
     public int hashCode() {

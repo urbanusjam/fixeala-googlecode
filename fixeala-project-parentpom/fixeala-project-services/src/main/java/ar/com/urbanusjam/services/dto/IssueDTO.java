@@ -39,7 +39,7 @@ public class IssueDTO implements Serializable {
 	public  Date creationDate;	
 	public  Date lastUpdateDate;	
 	public  String firstImageUrl;	
-	
+
 	@XmlTransient
 	private IssueRepair reparacion = new IssueRepair();
 	
@@ -73,6 +73,8 @@ public class IssueDTO implements Serializable {
 	public  int totalFollowers;
 	public  int totalViews;
 	public  int totalComments;
+	public  int positiveVerifications;	
+	public  int negativeVerifications;	
 	public  String status;
 	public  String statusCss;	
 	public  String resolution;
@@ -256,6 +258,23 @@ public class IssueDTO implements Serializable {
 
 	public void setVerificaciones(List<IssueVerification> verificaciones) {
 		this.verificaciones = verificaciones;
+	}
+
+
+	public int getPositiveVerifications() {
+		return positiveVerifications;
+	}
+
+	public void setPositiveVerifications(int positiveVerifications) {
+		this.positiveVerifications = positiveVerifications;
+	}
+
+	public int getNegativeVerifications() {
+		return negativeVerifications;
+	}
+
+	public void setNegativeVerifications(int negativeVerifications) {
+		this.negativeVerifications = negativeVerifications;
 	}
 
 	public Date getCreationDate() {

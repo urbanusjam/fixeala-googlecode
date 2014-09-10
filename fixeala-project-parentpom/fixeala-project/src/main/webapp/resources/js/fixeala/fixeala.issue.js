@@ -1152,7 +1152,7 @@ var fxlIssueController = {
 		var status = "";
 		
 		if(label == 'Verificar')
-			status = 'VERIFICADO';
+			status = 'ADMITIDO';
 		
 		if(label == 'Rechazar')
 			status = "RECHAZADO";
