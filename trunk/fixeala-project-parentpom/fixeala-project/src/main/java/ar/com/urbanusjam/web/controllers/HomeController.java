@@ -117,12 +117,12 @@ public class HomeController {
 			int notResolved = 0; 
 			
 			for(IssueDTO issue : issues){
-				if(issue.getStatus().equals(IssueStatus.VERIFIED))
+				if(issue.getStatus().equals(IssueStatus.ACKNOWLEDGED))
 					verified++;
 				if(issue.getStatus().equals(IssueStatus.SOLVED))
 					resolved++;
 				if(issue.getStatus().equals(IssueStatus.OPEN) 
-						|| issue.getStatus().equals(IssueStatus.VERIFIED)
+						|| issue.getStatus().equals(IssueStatus.ACKNOWLEDGED)
 						|| issue.getStatus().equals(IssueStatus.REOPENED)
 						|| issue.getStatus().equals(IssueStatus.IN_PROGRESS))
 					notResolved++;

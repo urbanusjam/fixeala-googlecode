@@ -66,7 +66,7 @@ import ar.com.urbanusjam.services.utils.SortingDataUtils;
 @Transactional
 public class IssueServiceImpl implements IssueService {
 		
-	private final int MAX_VERIFICATION_REQUESTS = 5;
+	private final int MAX_VERIFICATION_REQUESTS = 2;
 	private final int MAX_REJECTION_REQUESTS = 10;
 	
 	private UserService userService;
@@ -109,11 +109,7 @@ public class IssueServiceImpl implements IssueService {
 	public void setTagDAO(TagDAO tagDAO) {
 		this.tagDAO = tagDAO;
 	}
-	
-//	public void setCommentDAO(CommentDAO commentDAO) {
-//		this.commentDAO = commentDAO;
-//	}
-	
+
 	public void setIssueFollowDAO(IssueFollowDAO issueFollowDAO) {
 		this.issueFollowDAO = issueFollowDAO;
 	}
@@ -202,9 +198,17 @@ public class IssueServiceImpl implements IssueService {
 		revision.setFecha(new Date());
 		revision.setUsername(username);
 		revision.setOperacion(Operation.UPDATE);	
-		revision.setEstado(newStatus);				
+		revision.setEstado(newStatus);					
+
+		if(obs != null)
+			revision.setObservaciones(obs);
+		
+		if(resolution != null)
+			issue.setResolution(resolution);
+		
+		issue.setLastUpdateDate(this.getCurrentCalendar(revision.getFecha()));
 			
-		if(!newStatus.equals(IssueStatus.VERIFIED) || !newStatus.equals(IssueStatus.REJECTED)){
+		if(!newStatus.equals(IssueStatus.ACKNOWLEDGED) || !newStatus.equals(IssueStatus.REJECTED)){
 			
 			if(newStatus.equals(IssueStatus.IN_PROGRESS))	
 				revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_PROGRESS + " el reclamo");			
@@ -216,10 +220,14 @@ public class IssueServiceImpl implements IssueService {
 				revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_REOPEN + " el reclamo porque " + resolution.toUpperCase());		
 			
 			issue.setStatus(newStatus);
+			issue.addRevision(this.convertTo(revision, user));
 		}
+				
+		
+		
 		
 		//si es una solicitud de verificacion		
-		if(newStatus.equals(IssueStatus.VERIFIED) || newStatus.equals(IssueStatus.REJECTED)){
+		if(newStatus.equals(IssueStatus.ACKNOWLEDGED) || newStatus.equals(IssueStatus.REJECTED)){
 			
 			IssueVerification request = new IssueVerification();
 			request.setId(new IssueVerificationPK(issue.getId(), user.getId()));
@@ -227,40 +235,55 @@ public class IssueServiceImpl implements IssueService {
 			request.setUser(user);
 			request.setDate(this.getCurrentCalendar(new Date()));
 			
-			if(newStatus.equals(IssueStatus.VERIFIED)){
-				request.setVerified(true);
-				revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_VERIFY + " el reclamo");
+			//mantengo el reclamo ABIERTO
+			issue.setStatus(IssueStatus.OPEN);			
+			
+			//solicitud verificacion
+			if(newStatus.equalsIgnoreCase(IssueStatus.ACKNOWLEDGED)){
 				
-				//chequeo si resta solo 1 solicitud para cambiar el estado a VERIFICADO
-				if(issue.getVerificationRequests().size() < MAX_VERIFICATION_REQUESTS - 1){
-					issue.setStatus(newStatus);
+				request.setVerified(true);
+				revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_VERIFY_REQUEST + " del reclamo");
+				
+				//si se completan las 5 verificaciones, actualizo el estado a VERIFICADO
+				if( issue.getVerificacionesPositivas(issue.getVerificationRequests()).size() == (MAX_VERIFICATION_REQUESTS - 1) ){
+					
+					IssueHistoryDTO revisionAdicional = new IssueHistoryDTO();
+					revisionAdicional.setFecha(revision.getFecha());
+					revisionAdicional.setUsername(username);
+					revisionAdicional.setOperacion(Operation.UPDATE);	
+					revisionAdicional.setEstado(IssueStatus.ACKNOWLEDGED);						
+					revisionAdicional.setMotivo(Messages.ISSUE_UPDATE_STATUS_ACKNOWLEDGE);
+					
+					issue.setStatus(IssueStatus.ACKNOWLEDGED);
+					issue.addRevision(this.convertTo(revisionAdicional, user));
 				}
 			}
 			
-			if(newStatus.equals(IssueStatus.REJECTED)){
-				request.setVerified(false);
-				revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_REJECT + " el reclamo");
+			//solicitud rechazo
+			if(newStatus.equalsIgnoreCase(IssueStatus.REJECTED)){
 				
-				//chequeo si resta solo 1 solicitud para cambiar el estado a VERIFICADO
-				if(issue.getVerificationRequests().size() < MAX_REJECTION_REQUESTS - 1){
-					issue.setStatus(newStatus);
+				request.setVerified(false);
+				revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_REJECT_REQUEST + " del reclamo");
+				
+				//si se completan los 10 rechazos, actualizo el estado a RECHAZADO
+				if(issue.getVerificacionesNegativas(issue.getVerificationRequests()).size() == MAX_REJECTION_REQUESTS - 1){
+					
+					IssueHistoryDTO revisionAdicional = new IssueHistoryDTO();
+					revisionAdicional.setFecha(revision.getFecha());
+					revisionAdicional.setUsername(username);
+					revisionAdicional.setOperacion(Operation.UPDATE);	
+					revisionAdicional.setEstado(IssueStatus.REJECTED);						
+					revisionAdicional.setMotivo(Messages.ISSUE_UPDATE_STATUS_REJECTED);
+					
+					issue.setStatus(IssueStatus.REJECTED);
+					issue.addRevision(this.convertTo(revisionAdicional, user));
+					
 				}
 			}	
-			
+			issue.addRevision(this.convertTo(revision, user));
 			issue.addVerificationRequest(request);
 			
 		}	
-			
-		if(obs != null)
-			revision.setObservaciones(obs);
-				
-		
-		
-		if(resolution != null)
-			issue.setResolution(resolution);
-		
-		issue.setLastUpdateDate(this.getCurrentCalendar(revision.getFecha()));
-		issue.addRevision(this.convertTo(revision, user));
 		
 		issueDAO.updateIssue(issue);
 		
@@ -686,6 +709,8 @@ public class IssueServiceImpl implements IssueService {
 		
 		//verificaciones		
 		issueDTO.setVerificaciones(new ArrayList<IssueVerification>(issue.getVerificationRequests()));
+		issueDTO.setPositiveVerifications(issue.getVerificacionesPositivas(issue.getVerificationRequests()).size());
+		issueDTO.setNegativeVerifications(issue.getVerificacionesNegativas(issue.getVerificationRequests()).size());
 		
 		return issueDTO;
 
@@ -777,7 +802,7 @@ public class IssueServiceImpl implements IssueService {
 			css[1] = "#B94A48";
 		}
 		
-		if(status.equalsIgnoreCase(IssueStatus.VERIFIED)){
+		if(status.equalsIgnoreCase(IssueStatus.ACKNOWLEDGED)){
 			css[0] = "label label-info";
 			css[1] = "#3A87AD";
 		}
@@ -1041,7 +1066,7 @@ public class IssueServiceImpl implements IssueService {
 		revision.setNroReclamo(Long.valueOf(issueID));
 		revision.setOperacion(Operation.UPDATE);
 		revision.setMotivo(Messages.ISSUE_REPAIR_INFO_DELETE);
-		revision.setEstado(IssueStatus.VERIFIED);
+		revision.setEstado(IssueStatus.ACKNOWLEDGED);
 		revision.setObservaciones(null);
 
 		issue.setStatus(revision.getEstado());

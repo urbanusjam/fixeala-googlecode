@@ -91,7 +91,7 @@ public class WidgetController {
 					totalOpen++;
 				}
 				
-				if(issue.getStatus().equals(IssueStatus.VERIFIED)){
+				if(issue.getStatus().equals(IssueStatus.ACKNOWLEDGED)){
 					issue.setStatusCss(IssueStatusColorCode.CSS_VERIFIED);
 					totalVerified++;
 				}

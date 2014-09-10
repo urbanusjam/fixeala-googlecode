@@ -265,7 +265,10 @@ public class IssueController {
 					currentVote.isCurrentlyVoteByUser());
 			model.addAttribute("isVoteUp", currentVote.getVote() == 1 ? true
 					: false);
-
+			
+			//solicitudes de verificacion
+			model.addAttribute("positiveVerifications", issue.getPositiveVerifications());
+			model.addAttribute("negativeVerifications", issue.getNegativeVerifications());
 			
 			IssueRepair repair = issue.getReparacion();
 			 
@@ -787,7 +790,7 @@ public class IssueController {
 
 			else {
 				
-				if(newStatus.equals(IssueStatus.VERIFIED)){
+				if(newStatus.equals(IssueStatus.ACKNOWLEDGED)){
 					issueService.updateIssueStatus(userDB.getUsername(), issueID,
 							newStatus, null, null);
 				}
