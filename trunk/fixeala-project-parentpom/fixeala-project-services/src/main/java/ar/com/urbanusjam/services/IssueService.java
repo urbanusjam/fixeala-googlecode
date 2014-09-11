@@ -61,5 +61,7 @@ public interface IssueService {
 	//provinces
 	public List<String> loadProvinces();
 	public List<String> loadLocalityByProvince(String province);
+	
+	public boolean isIssueVerifiedByUser(String issueID, String username);
 		
 }

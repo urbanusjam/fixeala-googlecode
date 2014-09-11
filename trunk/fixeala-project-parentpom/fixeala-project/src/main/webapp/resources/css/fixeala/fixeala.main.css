@@ -1456,8 +1456,9 @@ ul.nav.nav-tabs li:not(.active):hover a {
 	cursor: pointer;
 }
 
-.stats-container { margin-bottom: 10px; }
-.stats-container { padding: 10px ; border: 1px dashed #999; border-radius: 5px; }
+.stats-container { margin-bottom: 0; }
+.stats-container { padding: 10px ; border-bottom: 0px solid #DDD;  border-top: 1px solid #DDD; border-radius: 0px; }
+
 
 #issue-stats .stats-box { padding: 5px 0; height: 25px;  }
 #issue-stats .stats-box span.text-big { font-size: 24px; font-weight: bold; margin-right: 5px; }
@@ -1581,6 +1582,6 @@ div.feedback a:hover { text-decoration: none; }
 /**** verify issue ****/
 #repairForm input { text-align: right; }	
 #mdl-verify .modal-body { max-height: 450px; }	
-#mdl-verify ul.list > li { padding: 10px 0 10px 0; } 	
-#mdl-verify ul.sublist > li { padding: 5px 0 5px 0; }	
+#mdl-verify ul.list > li { padding: 5px 0 5px 0; } 	
+#mdl-verify ul.sublist > li { padding: 2px 0 2px 0; }	
 #mdl-verify ul.sublist > li:FIRST-CHILD { padding-top: 10px; }

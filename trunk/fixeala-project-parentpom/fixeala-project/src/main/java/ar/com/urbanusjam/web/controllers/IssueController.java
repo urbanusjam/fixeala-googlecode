@@ -249,9 +249,19 @@ public class IssueController {
 					issueService.trackIssuePageView(pageviewDTO);
 					currentVote = issueService.getCurrentVote(issueID,
 							loggedUser);
+					
+					model.addAttribute("isVerifiedByUser", issueService.isIssueVerifiedByUser(issueID, userDB.getUsername()));
 				}
 
 			}
+			else{
+				model.addAttribute("isVerifiedByUser", false);
+			}
+			
+			//solicitudes de verificacion
+			
+			model.addAttribute("positiveVerifications", issue.getPositiveVerifications());
+			model.addAttribute("negativeVerifications", issue.getNegativeVerifications());
 
 			model.addAttribute("loggedUser", loggedUser);
 			model.addAttribute("cantidadVisitas",
@@ -266,9 +276,7 @@ public class IssueController {
 			model.addAttribute("isVoteUp", currentVote.getVote() == 1 ? true
 					: false);
 			
-			//solicitudes de verificacion
-			model.addAttribute("positiveVerifications", issue.getPositiveVerifications());
-			model.addAttribute("negativeVerifications", issue.getNegativeVerifications());
+			
 			
 			IssueRepair repair = issue.getReparacion();
 			 
@@ -637,10 +645,10 @@ public class IssueController {
 				//contenido (opcional)
 			
 				MediaContent file = this.deserializeFile(fileData);
-				file.setFilename(filename);
-				
+						
 				if(file != null){
 					file.setFileOrder(1);
+					file.setFilename(filename);
 					issue.setUploadedFile(file);
 				}
 				else{
@@ -814,9 +822,9 @@ public class IssueController {
 		}
 	}
 
-	@RequestMapping(value = "/issues/addRepairInfo", method = RequestMethod.POST)
+	@RequestMapping(value = "/issues/{issueID}/addRepairInfo", method = RequestMethod.POST)
 	public @ResponseBody
-	AlertStatus addRepairInfo(@ModelAttribute("repairForm") IssueRepair repair,
+	AlertStatus addRepairInfo(@PathVariable("issueID") String issueID, @ModelAttribute("repairForm") IssueRepair repair,
 			Model model, HttpServletRequest request) throws ParseException {
 
 		try {
@@ -832,9 +840,6 @@ public class IssueController {
 			}
 			
 			else{
-				String issueID = (String) request.getSession().getAttribute(
-						"issueID");
-
 				repair.setId(Long.valueOf(issueID));
 				issueService.addReparacion(repair, userDB.getUsername());
 			}
@@ -850,8 +855,9 @@ public class IssueController {
 		}
 	}
 
-	@RequestMapping(value = "/issues/deleteRepairInfo", method = RequestMethod.POST)
-	public @ResponseBody AlertStatus deleteRepairInfo(Model model, HttpServletRequest request) throws ParseException {
+	@RequestMapping(value = "/issues/{issueID}/deleteRepairInfo", method = RequestMethod.POST)
+	public @ResponseBody AlertStatus deleteRepairInfo(@PathVariable("issueID") String issueID, 
+			Model model, HttpServletRequest request) throws ParseException {
 
 		try {
 			
@@ -866,7 +872,6 @@ public class IssueController {
 			}
 			
 			else{
-				String issueID = (String) request.getSession().getAttribute("issueID");
 				issueService.deleteReparacion(issueID, userDB.getUsername());
 			}
 
@@ -904,9 +909,9 @@ public class IssueController {
 
 	}
 
-	@RequestMapping(value = "/issues/addComment", method = RequestMethod.POST)
+	@RequestMapping(value = "/issues/{issueID}/addComment", method = RequestMethod.POST)
 	public @ResponseBody
-	AlertStatus doAddComent(@RequestParam("issueID") String issueID,
+	AlertStatus doAddComent(@PathVariable("issueID") String issueID,
 			@RequestParam("comment") String mensaje,
 			HttpServletRequest request, Model model) throws Exception {
 
@@ -934,8 +939,6 @@ public class IssueController {
 
 				issueService.postComment(comentario);
 
-//				List<CommentDTO> comments = issueService
-//						.getCommentsByIssue(issueID);
 				List<CommentDTO> comments = issueService.getIssueById(issueID).getComentarios();
 				model.addAttribute("comentarios", comments);
 				model.addAttribute("cantidadComentarios", comments.size());
@@ -1009,15 +1012,15 @@ public class IssueController {
 
 	}
 
-	@RequestMapping(value = "/issues/displayIssueFollowers", method = RequestMethod.POST)
+	@RequestMapping(value = "/issues/{issueID}/displayIssueFollowers", method = RequestMethod.POST)
 	public @ResponseBody
-	List<String> displayIssueFollowers(@RequestParam("issueID") String issueID) {
+	List<String> displayIssueFollowers(@PathVariable("issueID") String issueID) {
 		return issueService.getIssueFollowers(issueID);
 	}
 
-	@RequestMapping(value = "/issues/voteIssue", method = RequestMethod.POST)
+	@RequestMapping(value = "/issues/{issueID}/voteIssue", method = RequestMethod.POST)
 	public @ResponseBody
-	AlertStatus voteIssue(@RequestParam("issueID") String issueID,
+	AlertStatus voteIssue(@PathVariable("issueID") String issueID,
 			@RequestParam("vote") int voteUpOrDown, Model model) {
 
 		IssueVoteDTO vote = new IssueVoteDTO();
