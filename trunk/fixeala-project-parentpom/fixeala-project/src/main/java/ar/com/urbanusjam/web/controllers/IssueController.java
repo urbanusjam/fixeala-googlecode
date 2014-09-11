@@ -7,8 +7,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -35,6 +37,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import ar.com.urbanusjam.entity.annotations.IssueRepair;
+import ar.com.urbanusjam.entity.annotations.IssueVerification;
 import ar.com.urbanusjam.entity.annotations.MediaContent;
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.ContenidoService;
@@ -51,10 +54,10 @@ import ar.com.urbanusjam.services.utils.DateUtils;
 import ar.com.urbanusjam.services.utils.IssueStatus;
 import ar.com.urbanusjam.services.utils.Messages;
 import ar.com.urbanusjam.services.utils.Operation;
+import ar.com.urbanusjam.services.utils.StatusList;
 
 import ar.com.urbanusjam.web.domain.AlertStatus;
 import ar.com.urbanusjam.web.domain.ContenidoResponse;
-import ar.com.urbanusjam.web.utils.StatusList;
 
 import com.google.gson.Gson;
 
@@ -63,6 +66,8 @@ import com.google.gson.Gson;
 public class IssueController {
 	
 	private static int ITEMS_PER_PAGE = 10;
+	private final int MAX_VERIFICATION_REQUESTS = 3;
+	private final int MAX_REJECTION_REQUESTS = 3;
 
 	@Autowired
 	private IssueService issueService;
@@ -109,7 +114,7 @@ public class IssueController {
 		List<String> allTags = issueService.getTagList();
 		JSONArray tagArray = new JSONArray();
 		for (String tag : allTags) {
-			String url = "./search.html?type=tag&value=" + tag.trim().trim().toLowerCase();
+			String url = "issues/search.html?type=tag&value=" + tag.trim().trim().toLowerCase();
 			JSONObject obj = new JSONObject();
 			obj.put("url", url);
 			obj.put("label", tag);
@@ -122,10 +127,9 @@ public class IssueController {
 		JSONArray statusArray = new JSONArray();
 		for (StatusList status : statusList) {
 			JSONObject obj = new JSONObject();
-			String url = "./search.html?type=status&value=" + status.getLabel().trim().toLowerCase();
+			String url = "issues/search.html?type=status&value=" + status.getLabel().trim().toLowerCase();
 			obj.put("url", url);
 			obj.put("text", status.getLabel().toUpperCase());
-			obj.put("css", status.getCssClass());
 			obj.put("color", status.getColorCode());
 			statusArray.put(obj);
 		}
@@ -136,16 +140,14 @@ public class IssueController {
 
 	}
 
-	@RequestMapping(value = "/issues/{issueToken}", method = RequestMethod.GET)
+	@RequestMapping(value = "/issues/{issueID}", method = RequestMethod.GET)
 	public String showIssuePage(Model model,
-			@PathVariable("issueToken") String issueToken,
+			@PathVariable("issueID") String issueID,
 			HttpServletRequest request) {
 
 		IssueDTO issue = new IssueDTO();
-		String issueID = issueToken;
-
+		
 		try {
-			request.getSession().setAttribute("issueID", issueID);
 			issue = issueService.getIssueById(issueID);
 
 			JSONObject oldFields = new JSONObject();
@@ -156,7 +158,6 @@ public class IssueController {
 			model.addAttribute("oldFields", oldFields.toString());
 
 			model.addAttribute("titulo", issue.getTitle());
-			model.addAttribute("tituloCss", issue.getTitleCss());
 			model.addAttribute("estado", issue.getStatus());
 			model.addAttribute("estadoCss", issue.getStatusCss());
 			model.addAttribute("resolucion", issue.getResolution());
@@ -250,7 +251,8 @@ public class IssueController {
 					currentVote = issueService.getCurrentVote(issueID,
 							loggedUser);
 					
-					model.addAttribute("isVerifiedByUser", issueService.isIssueVerifiedByUser(issueID, userDB.getUsername()));
+					IssueVerification solicitud = issueService.isIssueVerifiedByUser(issueID, userDB.getUsername());
+					model.addAttribute("isVerifiedByUser", solicitud != null ? solicitud.isVerified() : null);
 				}
 
 			}
@@ -258,10 +260,12 @@ public class IssueController {
 				model.addAttribute("isVerifiedByUser", false);
 			}
 			
-			//solicitudes de verificacion
+			//solicitudes de verificacion			
+			model.addAttribute("posVerifications", issue.getPositiveVerifications());
+			model.addAttribute("negVerifications", issue.getNegativeVerifications());
+			model.addAttribute("maxVerificationsAllowed", MAX_VERIFICATION_REQUESTS);
+			model.addAttribute("maxRejectionsAllowed", MAX_REJECTION_REQUESTS);
 			
-			model.addAttribute("positiveVerifications", issue.getPositiveVerifications());
-			model.addAttribute("negativeVerifications", issue.getNegativeVerifications());
 
 			model.addAttribute("loggedUser", loggedUser);
 			model.addAttribute("cantidadVisitas",
@@ -701,23 +705,31 @@ public class IssueController {
 				// tags
 				Object[] tagMapValues = (Object[]) issue.getTagsMap().values()
 						.toArray();
-				String[] tagsArray = new String[tagMapValues.length];
-
-				if (tagMapValues.length > 0) {
-					if (tagMapValues[0] instanceof String) {
-						for (int i = 0; i < tagMapValues.length; i++)
-							tagsArray[i] = (String) tagMapValues[i];
-					} else
-						tagsArray = (String[]) tagMapValues[0];
-				}
-
-				UpdatedFields updatedFields = new Gson().fromJson(fieldChanges,
-						UpdatedFields.class);
-				String fields = "";
-				String motive = "";
-				int fieldCounter = 0;
 				
-				if(fieldCounter > 0){
+				if(tagMapValues.length == 0){					
+					return new AlertStatus(false, "Debe especificar al menos una CATEGOR&Iacute;A.");					
+				}
+				
+				else{
+					
+					String[] tagsArray = new String[tagMapValues.length];
+
+					if (tagMapValues.length > 0) {
+						if (tagMapValues[0] instanceof String) {
+							for (int i = 0; i < tagMapValues.length; i++)
+								tagsArray[i] = (String) tagMapValues[i];
+						} else
+							tagsArray = (String[]) tagMapValues[0];
+					}
+
+					UpdatedFields updatedFields = new Gson().fromJson(fieldChanges,
+							UpdatedFields.class);
+					
+//					String fields = "";
+					String motive = "";
+					int fieldCounter = 0;
+	
+					/**
 					if (updatedFields.getTitle() == 1) {
 						fields += "Titulo, ";
 						fieldCounter++;
@@ -730,41 +742,70 @@ public class IssueController {
 						fields += "Descripcion, ";
 						fieldCounter++;
 					}
+					**/
 					
-					fields = fields.substring(0, fields.length() - 2 ).trim();
+					//taglist comparison					
+					Set<String> currentTags = new HashSet<String>();
+					currentTags.addAll(issueService.getIssueById(issueID).getTags());
+					
+					Set<String> updatedTags = new HashSet<String>();
+					updatedTags.addAll(Arrays.asList(tagsArray));
+					
+					//comparo contenido, sin importar el orden de los items
+					boolean areTagsEqual = currentTags.equals(updatedTags);
+					
+					if(updatedFields.getTitle() == 1
+							|| updatedFields.getBarrio() == 1
+							|| updatedFields.getDesc() == 1
+							|| currentTags.size() != updatedTags.size() 
+							|| !areTagsEqual){
+//						fields += "Categorias, ";
+						fieldCounter++;
+					}
+										
+					//no changes
+					if(fieldCounter == 0){
+						return new AlertStatus(false, "No hay cambios para guardar.");		
+					}
+						
+					else{
+						
+//						fields = fields.substring(0, fields.length() - 2 ).trim();
 
-					if (fieldCounter == 1) {
-						motive = Messages.ISSUE_UPDATE_FIELDS + " el campo "
-								+ fields;
+//							if (fieldCounter == 1) {
+//								motive = Messages.ISSUE_UPDATE_FIELDS + " el campo "
+//										+ fields;
+//							}
+//							if (fieldCounter > 1) {
+//								motive = Messages.ISSUE_UPDATE_FIELDS + " los campos "
+//										+ fields;
+//							}
+						
+						motive = "actualizo datos del reclamo.";
+						
 					}
-					if (fieldCounter > 1) {
-						motive = Messages.ISSUE_UPDATE_FIELDS + " los campos "
-								+ fields;
-					}
+		
+					// history
+					IssueHistoryDTO revision = new IssueHistoryDTO();
+					revision.setFecha(new Date());
+					revision.setUsername(userDB.getUsername());
+					revision.setOperacion(Operation.UPDATE);
+					revision.setMotivo(motive);
+					revision.setEstado(issue.getStatus());
+					revision.setObservaciones("");
+
+					issue.setId(issueID);
+					issue.setUsername(userDB.getUsername());
+					issue.setLastUpdateDate(revision.getFecha());
+					issue.setTags(Arrays.asList(tagsArray));
+					issue.getHistorial().add(revision);
+
+					issueService.updateIssue(issue);
+
+					return new AlertStatus(true, "El reclamo ha sido actualizado.");
+
 				}
 				
-				else{
-					motive = "actualizo las Categorias del reclamo.";
-				}
-
-				// history
-				IssueHistoryDTO revision = new IssueHistoryDTO();
-				revision.setFecha(new Date());
-				revision.setUsername(userDB.getUsername());
-				revision.setOperacion(Operation.UPDATE);
-				revision.setMotivo(motive);
-				revision.setEstado(issue.getStatus());
-				revision.setObservaciones("");
-
-				issue.setUsername(userDB.getUsername());
-				issue.setLastUpdateDate(revision.getFecha());
-				issue.setTags(Arrays.asList(tagsArray));
-				issue.getHistorial().add(revision);
-
-				issueService.updateIssue(issue);
-
-				return new AlertStatus(true, "El reclamo ha sido actualizado.");
-
 			}
 		} catch (Exception e) {
 			if (e instanceof AccessDeniedException)

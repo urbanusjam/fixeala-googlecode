@@ -61,6 +61,7 @@ import ar.com.urbanusjam.services.utils.IssueStatus;
 import ar.com.urbanusjam.services.utils.Messages;
 import ar.com.urbanusjam.services.utils.Operation;
 import ar.com.urbanusjam.services.utils.SortingDataUtils;
+import ar.com.urbanusjam.services.utils.StatusList;
 
 
 @Service
@@ -148,6 +149,8 @@ public class IssueServiceImpl implements IssueService {
 	public void updateIssue(IssueDTO issueDTO) throws MessagingException{
 		Issue issue = new Issue();
 		issue = this.convertTo(issueDTO);
+//		issue = this.convertForUpdate(issueDTO);
+		
 				
 		Collection<Tag> newTags = new ArrayList<Tag>(); 
 		Collection<Tag> currentTags = new ArrayList<Tag>();
@@ -512,7 +515,10 @@ public class IssueServiceImpl implements IssueService {
 		User user = new User();
 		user = userDAO.loadUserByUsername(issueDTO.getUsername());
 		
-		Issue issue = new Issue();		
+		Issue issue = new Issue();	
+		if(issueDTO.getId() != null){
+			issue.setId(Long.valueOf(issueDTO.getId()));	
+		}		
 		issue.setReporter(user);
 		issue.setAddress(issueDTO.getAddress());
 		issue.setNeighborhood(issueDTO.getNeighborhood());
@@ -603,11 +609,11 @@ public class IssueServiceImpl implements IssueService {
 		issueDTO.setCity(issue.getCity());	
 		issueDTO.setProvince(issue.getProvince());	
 		issueDTO.setTitle(issue.getTitle());
-		issueDTO.setTitleCss(cssStyle[1]);
+//		issueDTO.setTitleCss(cssStyle[1]);
 		issueDTO.setDescription(issue.getDescription());	
 		issueDTO.setCreationDate(issue.getCreationDate().getTime());		
 		issueDTO.setStatus(issue.getStatus());
-		issueDTO.setStatusCss(cssStyle[0]);	
+		issueDTO.setStatusCss(cssStyle[1]);	
 		issueDTO.setResolution(issue.getResolution());
 		issueDTO.setFechaFormateada(issue.getCreationDate().getTime());
 		issueDTO.setFechaFormateadaCompleta(issue.getCreationDate().getTime());		
@@ -650,12 +656,12 @@ public class IssueServiceImpl implements IssueService {
 		issueDTO.setCity(issue.getCity());	
 		issueDTO.setProvince(issue.getProvince());	
 		issueDTO.setTitle(issue.getTitle());
-		issueDTO.setTitleCss(cssStyle[1]);
+//		issueDTO.setTitleCss(cssStyle[1]);
 		issueDTO.setDescription(issue.getDescription());	
 		issueDTO.setCreationDate(issue.getCreationDate().getTime());		
 		issueDTO.setLastUpdateDate(issue.getLastUpdateDate().getTime());		
 		issueDTO.setStatus(issue.getStatus());
-		issueDTO.setStatusCss(cssStyle[0]);
+		issueDTO.setStatusCss(cssStyle[1]);
 		issueDTO.setResolution(issue.getResolution());
 		issueDTO.setFechaFormateada(issue.getCreationDate().getTime());
 		issueDTO.setFechaFormateadaCompleta(issue.getCreationDate().getTime());		
@@ -732,14 +738,14 @@ public class IssueServiceImpl implements IssueService {
 		issueDTO.setCity(issue.getCity());	
 		issueDTO.setProvince(issue.getProvince());	
 		issueDTO.setTitle(issue.getTitle());
-		issueDTO.setTitleCss(cssStyle[1]);
+//		issueDTO.setTitleCss(cssStyle[1]);
 		issueDTO.setDescription(issue.getDescription());	
 		issueDTO.setCreationDate(issue.getCreationDate().getTime());		
 		issueDTO.setLastUpdateDate(issue.getLastUpdateDate().getTime());		
 		issueDTO.setLatitude(String.valueOf(issue.getLatitude()));
 		issueDTO.setLongitude(String.valueOf(issue.getLongitude()));
 		issueDTO.setStatus(issue.getStatus());
-		issueDTO.setStatusCss(cssStyle[0]);
+		issueDTO.setStatusCss(cssStyle[1]);
 		issueDTO.setUsername(userDTO.getUsername());
 		issueDTO.setFechaFormateada(issue.getCreationDate().getTime());
 		issueDTO.setFechaFormateadaCompleta(issue.getCreationDate().getTime());		
@@ -789,48 +795,49 @@ public class IssueServiceImpl implements IssueService {
 		return (GregorianCalendar) calendar;	
 	} 
 	
+	//assign CSS
 	private String[] assignCSSbyStatus(String status){
 		
 		String[] css = new String[2];
 		
 		if(status.equalsIgnoreCase(IssueStatus.OPEN)){
 			css[0] = "label label-important";
-			css[1] = "#B94A48";
+			css[1] = StatusList.OPEN.getColorCode();
 		}
 		
 		if(status.equalsIgnoreCase(IssueStatus.REOPENED)){
 			css[0] = "label label-important";
-			css[1] = "#B94A48";
+			css[1] = StatusList.REOPENED.getColorCode();
 		}
 		
 		if(status.equalsIgnoreCase(IssueStatus.ACKNOWLEDGED)){
 			css[0] = "label label-info";
-			css[1] = "#3A87AD";
+			css[1] = StatusList.ACKNOWLEDGED.getColorCode();
 		}
 		
 		if(status.equalsIgnoreCase(IssueStatus.REJECTED)){
 			css[0] = "label label-inverse";
-			css[1] = "#333333";			
+			css[1] = StatusList.REJECTED.getColorCode();			
 		}
 		
 		if(status.equalsIgnoreCase(IssueStatus.IN_PROGRESS)){
 			css[0] = "label label-warning";
-			css[1] = "#F89406";		
+			css[1] = StatusList.IN_PROGRESS.getColorCode();		
 		}
 		
 		if(status.equalsIgnoreCase(IssueStatus.SOLVED)){
 			css[0] = "label label-success";
-			css[1] = "#468847";			
+			css[1] = StatusList.SOLVED.getColorCode();			
 		}
 		
 		if(status.equalsIgnoreCase(IssueStatus.CLOSED)){
 			css[0] = "label label-inverse";
-			css[1] = "#333333";			
+			css[1] = StatusList.CLOSED.getColorCode();			
 		}
 		
 		if(status.equalsIgnoreCase(IssueStatus.ARCHIVED)){
 			css[0] = "label label-default";
-			css[1] = "#EEEEEE";			
+			css[1] = StatusList.ARCHIVED.getColorCode();		
 		}
 		
 		return css;
@@ -1126,10 +1133,10 @@ public class IssueServiceImpl implements IssueService {
 	}
 
 	@Override
-	public boolean isIssueVerifiedByUser(String issueID, String username) {
+	public IssueVerification isIssueVerifiedByUser(String issueID, String username) {
 		return issueVerificationDAO.findVerificationByUser(
 				Long.valueOf(issueID), 
-				userService.loadUserByUsername(username).getId()) != null;
+				userService.loadUserByUsername(username).getId());
 	}
 	
 //	public void sendMailAfterCommit(final MailManager mail) { 	

@@ -98,14 +98,8 @@ i[class^="icon-"] { margin: 0;}
 	border-bottom: 1px solid #CFCFCF;
 }
 
-/* .input-prepend .add-on { */
-/* 	line-height: 30px; */
-/* 	height: 30px; */
-/* } */
 
 .navbar-inner {
-	/*background: #5095BE url("../images/header_bg.jpg") repeat-x;*/
-/* 	background: #1FBBA6; */
 	background: #0C86AF; 
 	border: none;
 	-webkit-border-radius: 0;
@@ -1456,18 +1450,15 @@ ul.nav.nav-tabs li:not(.active):hover a {
 	cursor: pointer;
 }
 
-.stats-container { margin-bottom: 0; }
-.stats-container { padding: 10px ; border-bottom: 0px solid #DDD;  border-top: 1px solid #DDD; border-radius: 0px; }
-
+.stats-container { margin-bottom: 0; padding: 10px ; border-bottom: 1px solid #DDD;  border-top: 0px solid #DDD; border-radius: 0px; }
 
 #issue-stats .stats-box { padding: 5px 0; height: 25px;  }
 #issue-stats .stats-box span.text-big { font-size: 24px; font-weight: bold; margin-right: 5px; }
 #issue-stats-actions  button { text-transform: uppercase; font-size: 11px; height: 25px;  line-height: 10px;}
 #issue-stats .stats-btn { border: 1px solid red;}
 
-#userIssueActions button { text-transform: uppercase; font-size: 11px; height: 25px;  line-height: 10px;}
-
-#btn-watch-issue, #btn-unwatch-issue, .loader  { width: 150px; }
+#userIssueActions button { text-transform: uppercase; font-size: 11px; height: 25px;  line-height: 10px; width: 100%;}
+#btn-watch-issue, #btn-unwatch-issue, .loader  { width: 125px; }
 
 #votes a { font-size: 30px; }
 
@@ -1585,3 +1576,13 @@ div.feedback a:hover { text-decoration: none; }
 #mdl-verify ul.list > li { padding: 5px 0 5px 0; } 	
 #mdl-verify ul.sublist > li { padding: 2px 0 2px 0; }	
 #mdl-verify ul.sublist > li:FIRST-CHILD { padding-top: 10px; }
+
+/**** search tags ****/
+span.tag { 
+	padding: 10px; 
+	margin: 0 15px 10px 0;  
+	font-size: 14px; 
+}
+.generic { background: #00AA88; }
+a.statusLinkCloud :hover, 
+a.tagLinkCloud :hover { color: #000; }

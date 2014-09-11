@@ -5,7 +5,8 @@ var fxlIssueController = {
 	commentsJson : null,
 	updatedFields : null,
 	oldFields : null,
-	reporter : null,		
+	reporter : null,
+	tagList : null,
 		
 	initIssue : function(issueID){
 		console.log('--- init ---');
@@ -29,8 +30,8 @@ var fxlIssueController = {
 		console.log('--- xeditable ---');
 		var updatedFields = fxlIssueController.updatedFields;
 		var oldFields = fxlIssueController.oldFields;
-		var allTags = fxlGlobalController.tagList;
-				
+		var allTags = JSON.parse(fxlIssueController.tagList);
+			
 		//default config
 		$.fn.editable.defaults.mode = 'popup';	
 		$.fn.editable.defaults.disabled = true;
@@ -150,6 +151,8 @@ var fxlIssueController = {
 	          }
 		});
 		
+
+		var results = [];
 		//tags		
 		$('#issue-tags').editable({
 			    pk: 22,
@@ -165,19 +168,21 @@ var fxlIssueController = {
 		                return item.text;
 		            },
 		            multiple: true,	
+		            minimumInputLength: 1,
 		            maximumSelectionSize: 5,
 		            formatSelectionTooBig: function (limit) {
 		                return 'S&oacute;lo se permiten 5 etiquetas.';
 		            },
-		            allowClear: true			           
+		            formatInputTooShort : function() {  return 'Tipee al menos 1 caracter.';},
+		            allowClear: true,		           
 		        },
 		        display: function(value) {
 		        	if(value != null){
 		        		var tags = new Array(value.length);
 			        	
 			            $.each(value,function(i){				            	
-			            	var url = "./search.html?type=tag&value=" + $('<p>' + value[i] + '</p>').text();
-			            	tags[i] = "<a class=\"taglink\" href=\"" + url + "\"><span class=\"label label-default\">" + $('<p>' + value[i] + '</p>').text() + "</span></a>";
+			            	var url = "issues/search.html?type=tag&value=" + $('<p>' + value[i] + '</p>').text();
+			            	tags[i] = "<a class=\"taglink\" href=\"" + url + "\"><span class=\"label generic\">" + $('<p>' + value[i] + '</p>').text() + "</span></a>";
 			            });
 			            
 			            $(this).html(tags.join(" "));
@@ -185,9 +190,15 @@ var fxlIssueController = {
 		        },						
 		        ajaxOptions: {
 			        type: 'put'
-			    }	  
-		}); 
-		console.log('--- END xeditable ---');
+			    },
+			    error: function(response, newValue) {
+			        if(response.status === 500) {
+			            return 'Error al cargar las etiquetas.';
+			        } else {
+			            return response.responseText;
+			        }
+			    }
+		});
 	},
 	
 	
@@ -198,11 +209,10 @@ var fxlIssueController = {
 		
 	initInfiniteScroll : function(){
 		
+		console.log('--- infinite scroll ---');
+		
 		var updatesArray = JSON.parse(fxlIssueController.updatesJson);
 		var commentsArray = JSON.parse(fxlIssueController.commentsJson);
-		
-		console.log('--- updates: ' + updatesArray.length);
-		console.log('--- comments: ' + commentsArray.length);
 		
 		if(updatesArray.length > 0){
 			$('#btn-more-updates').show();
@@ -407,6 +417,8 @@ var fxlIssueController = {
 	
 	initImageUpload : function(){
 		
+		console.log('--- upload ---');
+		
 		$('#multiplefileupload').fileupload();
 		
 		$('#tbl-fileupload').on('click', '.btn-file-delete', function() {
@@ -560,6 +572,8 @@ var fxlIssueController = {
 	
 	initComments : function(){
 		
+		console.log('--- comments ---');
+		
 		$('#comment-text').keyup(function(){
 		      if($(this).val().length > 0){
 		         $('#btn-comment').prop('disabled',false);
@@ -610,6 +624,8 @@ var fxlIssueController = {
 	
 	
 	initRepairForm : function(){
+		
+		console.log('--- repair ---');
 		
 		//bootstrap datepicker		
 		var startDate = new Date();
@@ -788,6 +804,8 @@ var fxlIssueController = {
 	
 	initVote : function(isVoted, isVoteUp){
 		
+		console.log('--- votes ---');
+		
 		fxlIssueController.setCurrentVote(isVoted, isVoteUp);
 	    
 	    $('#votes button').live('click', function(e) {
@@ -851,6 +869,8 @@ var fxlIssueController = {
 	
 	initWatch : function(){
 		
+		console.log('--- watchers ---');
+		
 		var $watcherList = $('#followers-list');   
 		var loader = '<button class="btn btn-default pull-right loader"><img src="'+fxlGlobalController.getDomainUrl()+'resources/images/loader6.gif" alt="Loading" height=15 width=15 /></button>';	  
 
@@ -874,7 +894,7 @@ var fxlIssueController = {
 		//unwatch
 	    $('#btn-unwatch-issue')
 			.live('mouseover', function(){
-	    		$(this).removeClass('btn-info').addClass('btn-inverse').text('DEJAR DE SEGUIR');
+	    		$(this).removeClass('btn-info').addClass('btn-inverse').text('NO SEGUIR MAS');
 	    	})
 	    	.live('mouseleave', function(){
 	    		$(this).removeClass('btn-inverse').addClass('btn-info').text('@ SIGUIENDO');  
@@ -890,8 +910,7 @@ var fxlIssueController = {
 		
 		$.ajax({
 		    url: 'issues/'+issueID+'/watch/',
-	 		type: "POST",	
-	 		data: "issueID=" + issueID,							 
+	 		type: "POST",						 
 	        success: function(data){
 	        	if(data.result){	
 	        		setTimeout(function(){		
@@ -901,7 +920,7 @@ var fxlIssueController = {
 	        	}
 	        	else{
 	        		bootbox.alert(data.message);	
-	        		$('.loader').replaceWith('<button id="btn-watch-issue" class="btn btn-default pull-right">@ Segu&iacute; el reclamo</button>');
+	        		$('.loader').replaceWith('<button id="btn-watch-issue" class="btn btn-default pull-right">@ Seguir</button>');
 	        	}	
     		}						  
 		});			
@@ -914,12 +933,11 @@ var fxlIssueController = {
 		
 		$.ajax({
 		    url: 'issues/'+issueID+'/unwatch/',
-	 		type: "POST",	
-	 		data: "issueID=" + issueID,							 				 
+	 		type: "POST",							 				 
 	        success: function(data){							        	
 	        	if(data.result){
 	        		setTimeout(function(){
-	        			$('.loader').replaceWith('<button id="btn-watch-issue" class="btn btn-default pull-right">@ Segu&iacute; el reclamo</button>');
+	        			$('.loader').replaceWith('<button id="btn-watch-issue" class="btn btn-default pull-right">@ Seguir</button>');
 	        			$watcherList.text(data.message);	
 	        		}, 1000);
 	        	}
@@ -964,6 +982,8 @@ var fxlIssueController = {
 	
 	initStatusUpdate : function(){
 		
+		console.log('--- status update ---');
+		
 		$("#btn-update-status").click(function(event){
 			var statusForm =  $("#modalStatusForm");
 			statusForm.validate();
@@ -1003,6 +1023,8 @@ var fxlIssueController = {
 	
 	displayClosesIssues : function(latitud, longitud){
 		
+		console.log('--- closest issues ---');
+		
 		var issueLocation = [];		
 		issueLocation.id = fxlIssueController.issueID;
 		issueLocation.latitude = latitud;
@@ -1011,12 +1033,14 @@ var fxlIssueController = {
 		mapController.getClosestMarkersByIssue(issueLocation);	
 	},
 	
-	enableUserActions :  function(){
+	enableUserActions : function(){
+		
+		console.log('--- user actions ---');
 			
 		$('#userIssueActions').show();
 		$('#issue-stats-actions').show();
-		$('#userIssueActions').find("#btn-edit").bind('click', fxlIssueController.enableDisableFields);
-		$('#userIssueActions').find("#btn-update").bind('click', fxlIssueController.editIssueFields);
+		$('#issue-stats-actions').find("#btn-edit").bind('click', fxlIssueController.enableDisableFields);
+		$('#issue-stats-actions').find("#btn-update").bind('click', fxlIssueController.editIssueFields);
 	  	$('#userIssueActions').find("#btn-status").bind('click', fxlIssueController.initStatusModal);
 	  	
 	},
@@ -1063,18 +1087,15 @@ var fxlIssueController = {
 				  
 				  $('#tbl-issue .editable, #issue-header .editable').editable('submit', {
 					  
-				       url: './updateIssue.html', 
-				       data:   { fields: JSON.stringify(updatedFields) }, //additional data
+				       url: 'issues/'+fxlIssueController.issueID+'/updateIssue.html', 
+				       data:   { fields: JSON.stringify(fxlIssueController.updatedFields) }, //additional data
 				       ajaxOptions: {
 				           dataType: 'json'
 				       },  				       
-				       success: function(data) {
-				    	   
-				    	   if(data.result){		
-				    		   bootbox.alert(data.message, function(){						    			 	
-				    				var url = mapController.getIssuePlainURL(issueID);		
+				       success: function(data) {				    	   
+				    	   if(data.result){						    			 	
+				    				var url = mapController.getIssuePlainURL(fxlIssueController.issueID);		
 					    			window.location.href= url;	
-				    		   }); 
 				    	   }						    	   
 				    	   else{
 				    		   bootbox.alert(data.message);		
@@ -1083,8 +1104,7 @@ var fxlIssueController = {
 				       error: function (response) {
 				           console.log(response);
 				       }
-
-				   });//editable 				  
+				   });				  
 			  }			   
 		  });//bootbox   
 	},				
@@ -1123,7 +1143,7 @@ var fxlIssueController = {
 	        	 
 	        	if(data.result){
 	        		setTimeout(function(){
-        				var url = mapController.getIssuePlainURL(issueID);
+        				var url = mapController.getIssuePlainURL(fxlIssueController.issueID);
 		    			window.location.href= url;	
 	        		}, 1000);
 

@@ -113,8 +113,6 @@
 		$(document).ready(function(){			
 			fxlGlobalController.initNavTooltip();
 			fxlGlobalController.initFeedback();
-			fxlGlobalController.tagList = '${allTags}';
-// 			window.localStorage.clear();			
 		});	
 	</script>
 </head>

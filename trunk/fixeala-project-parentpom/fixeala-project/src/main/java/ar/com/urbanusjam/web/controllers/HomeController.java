@@ -164,7 +164,16 @@ public class HomeController {
 			obj.put("user", s.getUsername());
 			obj.put("latitude", s.getLatitude());
 			obj.put("longitude", s.getLongitude());
-			obj.put("images", s.getContenidos());
+			
+			JSONArray imgArray = new JSONArray();
+			
+			for(MediaContent contenido : s.getContenidos()){
+				JSONObject img = new JSONObject();
+				img.put("url", contenido.getLink());
+				imgArray.put(img);
+			}
+			
+			obj.put("images", imgArray);
 			
 			array.put(obj);
 		}

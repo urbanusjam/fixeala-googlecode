@@ -22,35 +22,10 @@
     </div>
 </div><!-- content -->
 <script type="text/javascript">    	
-   	$(document).ready(function() {   		
-   		var tag = '${tag}';	
+	$(document).ready(function() {   		   		
    		var issues = $.parseJSON('${issuesByTag}');	
    		var allTags = $.parseJSON('${allTags}');	
-   		var allStatus = $.parseJSON('${allStatus}');	
-   	
-   		if(issues.length == 0){    		
-   			$(".issueList").append( "<h1><small>No se encontraron resultados.</small></h1>" );
-   		}   		
-   		else{
-   			for(var i = 0; i < issues.length ; i++){
-   	    		$(".issueList").append( "<article>" +
-   	    			"<div class=\"row\" style=\"margin-bottom:20px;border-bottom:1px dashed #ccc;\">" +	    		
-   			            "<header>" +
-   			                "<span class=\""+issues[i].statusCss+"\">" +issues[i].status+ "</span>&nbsp;&raquo;&nbsp;<small>"+issues[i].date+"</small><h1><small><a href=\"" +mapController.getIssuePlainURL(issues[i].id, issues[i].title)+ "\" title=\" "+issues[i].title+ "\">"+issues[i].title+"</a></small></h1>" +
-   			                "<p class=\"meta\"><small>" +
-   			                    issues[i].address + "&nbsp;|&nbsp; Publicado por: <a href=\"" +mapController.getUserPlainURL(issues[i].user)+ "\">"+issues[i].user+"</a>" +
-   			                "</small></p>"+
-   			            "</header>"+
-   	            		"<p>"+issues[i].description+"</p>" +
-   	        			"</article>"+
-   	        		"</div>");
-   	    	}   			
-   		}   		   	
-   		for(var i = 0; i < allStatus.length ; i++){
-   			$(".statusCloud").append( "<a class=\"statusLinkCloud\" href=\"" +allStatus[i].url+ "\"><span style=\"padding: 10px; margin: 0 15px 10px 0;  font-size: 14px;\" class=\""+allStatus[i].css+"\">" +allStatus[i].text+ "</span></a>");
-   		}   		
-   		for(var i = 0; i < allTags.length ; i++){
-   			$(".tagCloud").append( "<a class=\"tagLinkCloud\" href=\"" +allTags[i].url+ "\"><span style=\"padding: 10px; margin: 0 15px 10px 0;  font-size: 14px;\" class=\"label label-default\">" +allTags[i].label+ "</span></a>");
-   		}   		
-   	});     		
+   		var allStatus = $.parseJSON('${allStatus}');
+   		fxlGlobalController.loadSearchTags(issues, allTags, allStatus);   	
+	});     		
 </script>

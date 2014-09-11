@@ -5,8 +5,7 @@ public final class Messages {
 	public static final String ISSUE_CREATE_OBS = "Se registra el reclamo.";
 	public static final String ISSUE_UPDATE_OBS = "Se actualiza el reclamo.";
 	
-	public static final String ISSUE_CREATION = "publico";
-	
+	public static final String ISSUE_CREATION = "publico";	
 
 	public static final String ISSUE_UPDATE_STATUS_PROGRESS = "inicio progreso";
 	public static final String ISSUE_UPDATE_STATUS_RESOLVE = "resolvio";

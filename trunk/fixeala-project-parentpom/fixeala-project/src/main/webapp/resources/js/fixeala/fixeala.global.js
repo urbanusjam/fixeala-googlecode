@@ -2,8 +2,6 @@ var fxlGlobalController = {
 		
 	loggedUser : null,
 	
-	tagList : null,
-		
 	initNavTooltip : function(){
 		
 		$('.navbar .nav > li > a').tooltip({
@@ -69,13 +67,15 @@ var fxlGlobalController = {
 	
 	initFeedback : function(){
 		
-		$("#feedbackLink").click(function(){				
+		$("#feedbackLink").click(function(e){
+			e.preventDefault();
 			$('#cbxAsuntoFeedback option:first-child').attr("selected", "selected");
 			$('#msgFeedback').val('');				
-			$("#mdl-feedback").modal('show');					
+			$("#mdl-feedback").modal('show');	
 		});
 		
 		$("#btnSendFeedback").click(function(){
+			
 			fxlGlobalController.sendFeedback();
 		});
 		
@@ -193,6 +193,37 @@ var fxlGlobalController = {
         	cropped = value;	
         }	
         return cropped;
+	},
+	
+	loadSearchTags : function(issues, allTags, allStatus){
+		
+		if(issues.length == 0){    		
+   			$(".issueList").append( "<h1><small>No se encontraron resultados.</small></h1>" );
+   		}   		
+   		else{
+   			for(var i = 0; i < issues.length ; i++){
+   	    		$(".issueList").append( "<article>" +
+   	    			"<div class=\"row\" style=\"margin-bottom:20px;border-bottom:1px dashed #ccc;\">" +	    		
+   			            "<header>" +
+   			                "<span class=\"label\" style=\"background:"+issues[i].statusCss+"\">" +issues[i].status+ "</span>&nbsp;&raquo;&nbsp;<small>"+issues[i].date+"</small><h1><small><a href=\"" +mapController.getIssuePlainURL(issues[i].id, issues[i].title)+ "\" title=\" "+issues[i].title+ "\">"+issues[i].title+"</a></small></h1>" +
+   			                "<p class=\"meta\"><small>" +
+   			                    issues[i].address + "&nbsp;|&nbsp; Publicado por: <a href=\"" +mapController.getUserPlainURL(issues[i].user)+ "\">"+issues[i].user+"</a>" +
+   			                "</small></p>"+
+   			            "</header>"+
+   	            		"<p>"+issues[i].description+"</p>" +
+   	        			"</article>"+
+   	        		"</div>");
+   	    	}   			
+   		}   		   	
+   		for(var i = 0; i < allStatus.length ; i++){
+   			$(".statusCloud").append( "<a class=\"statusLinkCloud\" href=\"" +allStatus[i].url+ "\"><span class=\"label tag\" style=\"background:"+allStatus[i].color+"\">" +allStatus[i].text+ "</span></a>");
+   		}   
+   		for(var i = 0; i < allTags.length ; i++){
+   			$(".tagCloud").append( "<a class=\"tagLinkCloud\" href=\"" +allTags[i].url+ "\"><span class=\"label tag\" style=\"background:#00AA88\">" +allTags[i].label+ "</span></a>");
+   		}   	
+		
+		
+		
 	}
 		
 };
