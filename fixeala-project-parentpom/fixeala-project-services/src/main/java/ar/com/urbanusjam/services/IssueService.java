@@ -9,6 +9,7 @@ import org.springframework.mail.MailException;
 
 import ar.com.urbanusjam.entity.annotations.IssueFollow;
 import ar.com.urbanusjam.entity.annotations.IssueRepair;
+import ar.com.urbanusjam.entity.annotations.IssueVerification;
 import ar.com.urbanusjam.services.dto.CommentDTO;
 import ar.com.urbanusjam.services.dto.IssueCriteriaSearch;
 import ar.com.urbanusjam.services.dto.IssueDTO;
@@ -62,6 +63,6 @@ public interface IssueService {
 	public List<String> loadProvinces();
 	public List<String> loadLocalityByProvince(String province);
 	
-	public boolean isIssueVerifiedByUser(String issueID, String username);
+	public IssueVerification isIssueVerifiedByUser(String issueID, String username);
 		
 }

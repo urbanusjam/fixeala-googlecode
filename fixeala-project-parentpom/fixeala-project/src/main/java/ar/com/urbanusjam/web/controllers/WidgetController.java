@@ -16,7 +16,7 @@ import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.UserService;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.utils.IssueStatus;
-import ar.com.urbanusjam.services.utils.IssueStatusColorCode;
+import ar.com.urbanusjam.services.utils.StatusList;
 import ar.com.urbanusjam.web.domain.AlertStatus;
 
 @Controller
@@ -86,38 +86,38 @@ public class WidgetController {
 					issues.add(issue);
 				}
 				
-				if(issue.getStatus().equals(IssueStatus.OPEN)){
-					issue.setStatusCss(IssueStatusColorCode.CSS_OPEN);
+				if(issue.getStatus().equalsIgnoreCase(IssueStatus.OPEN)){
+					issue.setStatusCss(StatusList.OPEN.getColorCode());
 					totalOpen++;
 				}
 				
-				if(issue.getStatus().equals(IssueStatus.ACKNOWLEDGED)){
-					issue.setStatusCss(IssueStatusColorCode.CSS_VERIFIED);
+				if(issue.getStatus().equalsIgnoreCase(IssueStatus.ACKNOWLEDGED)){
+					issue.setStatusCss(StatusList.ACKNOWLEDGED.getColorCode());
 					totalVerified++;
 				}
 									
-				if(issue.getStatus().equals(IssueStatus.REJECTED)){
-					issue.setStatusCss(IssueStatusColorCode.CSS_REJECTED);
+				if(issue.getStatus().equalsIgnoreCase(IssueStatus.REJECTED)){
+					issue.setStatusCss(StatusList.REJECTED.getColorCode());
 					totalRejected++;
 				}
 				
-				if(issue.getStatus().equals(IssueStatus.REOPENED)){
-					issue.setStatusCss(IssueStatusColorCode.CSS_REOPENED);
+				if(issue.getStatus().equalsIgnoreCase(IssueStatus.REOPENED)){
+					issue.setStatusCss(StatusList.REOPENED.getColorCode());
 					totalReopened++;					
 				}
 
 				if(issue.getStatus().equals(IssueStatus.IN_PROGRESS)){
-					issue.setStatusCss(IssueStatusColorCode.CSS_IN_PROGRESS);
+					issue.setStatusCss(StatusList.IN_PROGRESS.getColorCode());
 					totalInProgress++;
 				}
 									
 				if(issue.getStatus().equals(IssueStatus.SOLVED)){
-					issue.setStatusCss(IssueStatusColorCode.CSS_SOLVED);
+					issue.setStatusCss(StatusList.SOLVED.getColorCode());
 					totalResolved++;
 				}					
 				
 				if(issue.getStatus().equals(IssueStatus.CLOSED)){
-					issue.setStatusCss(IssueStatusColorCode.CSS_CLOSED);
+					issue.setStatusCss(StatusList.CLOSED.getColorCode());
 					totalClosed++;
 				}
 				

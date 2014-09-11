@@ -337,7 +337,13 @@ public class Issue implements Serializable  {
 	        	tagsList = new HashSet<Tag>();          
 	        }
 	        tagsList.add(tag);
-	     }			   
+	     }
+//		if (!getTagsList().contains(tag)) {
+//			getTagsList().add(tag);
+//		}
+//	    if (!tag.getIssueList().contains(this)) {
+//	        tag.getIssueList().add(this);
+//	    }			
 	}	
 	
 	public void removeTag(Tag tag) {	

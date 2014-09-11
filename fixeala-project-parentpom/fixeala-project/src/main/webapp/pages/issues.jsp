@@ -92,7 +92,7 @@
 							 </tr>
 							 <tr>
 							    <th>Estado:</th>
-							    <td><a class="taglink" href="./search.html?type=status&value=${estado}" id="issue-status" data-type="text"><span class="${estadoCss}">${estado}</span></a>
+							    <td><a class="taglink" href="issues/search.html?type=status&value=${estado}" id="issue-status" data-type="text"><span class="label" style="background-color:${estadoCss}">${estado}</span></a>
 							    <c:if test="${not empty esolucion}">
 							   		<b>${resolucion}</b>
 							    </c:if>
@@ -318,26 +318,47 @@
 		<div class="span3">
 		<!--Sidebar content-->
 						
+			<!-- logged -->
 			<sec:authorize access="hasRole('ROLE_USER')">	
-				<c:if test="${estado eq 'ABIERTO'}">				
+				<c:if test="${estado eq 'ABIERTO'}">	
+					<!-- current logged user -->			
 					<c:if test="${loggedUser ne usuario}">
-						<c:if test="${isVerifiedByUser}">
-							<button disabled id="btnVerifyIssue" data-toggle="modal" href="#mdl-verify" class="btn btn-default" style="width: 100%; margin-bottom: 20px; height: 46px; line-height: 46px;" title="Verificar"><h4>verificacion enviada</h4></button> 
+						<!-- already sent verification request -->
+						<c:if test="${!empty isVerifiedByUser}">						
+							<c:if test="${isVerifiedByUser}">
+								<button disabled id="btnVerifyIssue" data-toggle="modal" href="#mdl-verify" class="btn btn-success" style="width: 100%; margin-bottom: 20px; height: 46px; line-height: 46px;" title="Verificar"><h4>VERIFICACION ENVIADA</h4></button> 
+							</c:if>
+							<c:if test="${!isVerifiedByUser}">
+								<button disabled id="btnVerifyIssue" data-toggle="modal" href="#mdl-verify" class="btn btn-danger" style="width: 100%; margin-bottom: 20px; height: 46px; line-height: 46px;" title="Verificar"><h4>RECHAZO ENVIADO</h4></button> 
+							</c:if>						
 						</c:if>
-						<c:if test="${!isVerifiedByUser}">
+						<!-- NOT sent yet -->
+						<c:if test="${empty isVerifiedByUser}">
 							<button id="btnVerifyIssue" data-toggle="modal" href="#mdl-verify" class="btn btn-danger" style="width: 100%; margin-bottom: 20px; height: 46px; line-height: 46px;" title="Verificar"><h3>VERIFICAR</h3></button> 
 						</c:if>
 					</c:if>
-					<h2>${positiveVerifications} / 5 solicitudes</h2>
-					<h2>${negativeVerifications} / 10 solicitudes</h2>
+					<div class="stats-container">
+						<span>
+							<i class="icon icon-ok-sign" style="color: #449D44;"></i>${posVerifications} / ${maxVerificationsAllowed} verificaciones
+						</span>
+						<span style="text-align: right; float: right">
+							<i class="icon icon-remove-sign" style="color: #C9302C;"></i>${negVerifications} / ${maxRejectionsAllowed} rechazos
+						</span>			
+					</div>				
 				</c:if>
 			</sec:authorize>
-			
+			<!-- NOT logged -->
 			<sec:authorize access="isAnonymous()">	
 				<c:if test="${estado eq 'ABIERTO'}">
 					<div class="alert" style="background: #B94A48; color: #FFF; border: none"><h3>SIN VERIFICAR</h3></div> 
-					<h2>${positiveVerifications} / 5 solicitudes</h2>
-					<h2>${negativeVerifications} / 10 solicitudes</h2>
+					<div class="stats-container">
+						<span>
+							<i class="icon icon-ok-sign" style="color: #449D44;"></i>${posVerifications} / ${maxVerificationsAllowed} verificaciones
+						</span>
+						<span style="text-align: right; float: right">
+							<i class="icon icon-remove-sign" style="color: #C9302C;"></i>${negVerifications} / ${maxRejectionsAllowed} rechazos
+						</span>			
+					</div>
 				</c:if>
 			</sec:authorize>
 			
@@ -395,15 +416,17 @@
 					<c:if test="${estado ne 'CERRADO' && estado ne 'ARCHIVADO'}">	
 						<div class="stats-container">
 							<span id="votes">
-								<button id="vote-up" class="btn btn-success" title="¡Vot&aacute; para que este reclamo se resuelva!"><i class="icon-thumbs-up "></i></button>
+								<button id="vote-up" class="btn btn-warning" title="¡Vot&aacute; para que este reclamo se resuelva!"><i class="icon-thumbs-up "></i></button>
 		<!-- 					<button id="vote-down" class="btn btn-danger" title="Voto negativo"><i class="icon-thumbs-down "></i></button> -->
-							</span>						
+							</span>	
+							<button id="btn-edit" class="btn btn-primary" title="Editar"><i class="icon-pencil icon-large"></i></button>	
+							<button id="btn-update" class="btn btn-inverse" title="Guardar cambios"><i class="icon-save icon-large"></i></button>						
 							<span class="pull-right">
 								<c:if test="${isUserWatching}">
 									<button id="btn-unwatch-issue" class="btn btn-info">@ Siguiendo</button>
 								</c:if>
 								<c:if test="${!isUserWatching}">
-									<button id="btn-watch-issue" class="btn pull-right">@ Segu&iacute; el reclamo</button>
+									<button id="btn-watch-issue" class="btn pull-right">@ Seguir</button>
 								</c:if>
 							</span>						
 						</div>	
@@ -414,32 +437,32 @@
 			<div id="userIssueActions">
 				<sec:authorize access="hasRole('ROLE_USER')">				
 					<c:if test="${estado ne 'CERRADO' && estado ne 'ARCHIVADO'}">
-						<div class="stats-container">
-							<button id="btn-edit" class="btn" title="Editar"><i class="icon-pencil icon-large"></i></button>	
-							<button id="btn-update" class="btn btn-primary" title="Guardar cambios"><i class="icon-save icon-large"></i></button>	
-							<c:if test="${estado eq 'VERIFICADO' || estado eq 'REABIERTO' || estado eq 'EN PROGRESO'}">
-								<div id="btn-status" data-toggle="modal" class="pull-right">			
+						<c:if test="${estado eq 'ADMITIDO' || estado eq 'REABIERTO' || estado eq 'EN PROGRESO'}">
+							<div class="stats-container">							
+								<div id="btn-status" data-toggle="modal">			
 									<button class="btn btn-success" title="Resolver"><i class="icon-ok icon-large"></i> RESOLVER</button>
 								</div>
-							</c:if>
-							<c:if test="${estado eq 'RESUELTO'}">
-								<div id="btn-status" data-toggle="modal" class="pull-right">			
-									<button class="btn btn-warning" title="Reabrir"><i class="icon-rotate-right icon-large"></i> REABRIR</button>
+							</div>		
+						</c:if>
+						<c:if test="${estado eq 'RESUELTO'}">
+							<div class="stats-container">	
+								<div id="btn-status" data-toggle="modal">			
+									<button class="btn btn-danger" title="Reabrir"><i class="icon-rotate-right icon-large"></i> REABRIR</button>
 								</div>
-							</c:if>	
-						</div>							
+							</div>
+						</c:if>												
 					</c:if>
 				</sec:authorize>	
 			</div>
 
-		   <div class="page-header">
+		   <div class="page-header issue">
     	   		<h4><i class="icon-globe icon-large"></i>&nbsp;&nbsp;Vista en el mapa</h4>    	 	
     	   </div>     	   
 		  
 		   <!-- MINI MAP -->	
 		   <div id="mini_map"></div>
 		   
-		   <div class="page-header">
+		   <div class="page-header issue">
     	   		<h4><i class="icon-map-marker icon-large"></i>&nbsp;&nbsp;Reclamos cercanos</h4>    	 	
     	   </div>    
 		      
@@ -476,14 +499,14 @@
 				</li>
 				<li>Es PERTINENTE
 					<ul class="sublist">
-						<li>La informaci&oacute;n suministrada constituye un reclamo barrial circunscripto a los l&iacute;mites de la Rep&uacute;blica Argentina.</li>
+						<li>Constituye un <u>RECLAMO BARRIAL</u> circunscripto a los l&iacute;mites de la Rep&uacute;blica Argentina.</li>
 					</ul>
 				</li>
 				<li>Es ACTUAL</li>
 			</ul>		
 		</div>
 		<div class="modal-footer"> 			
-			<button id="btn-verify" class="btn btn-info" aria-hidden="true" onclick="fxlIssueController.verifyOrRejectIssue('Verificar');">
+			<button id="btn-verify" class="btn btn-info pull-left" aria-hidden="true" onclick="fxlIssueController.verifyOrRejectIssue('Verificar');">
 			    <i class="icon-ok icon-large"></i>&nbsp;&nbsp;S&Iacute;
 			</button>	  			 		  		
 	  		<button id="btn-reject" class="btn btn-danger" aria-hidden="true" onclick="fxlIssueController.verifyOrRejectIssue('Rechazar');">
@@ -838,7 +861,7 @@
 		}	
 		
 		bindRepairBtns();		
-		
+		fxlIssueController.tagList = '${allTags}';
    		fxlIssueController.initVote(isVoted, isVoteUp);
    		fxlIssueController.displayClosesIssues(latitud, longitud);
 		fxlIssueController.initIssue(issueID);	
@@ -853,7 +876,7 @@
 		return $('a[data-toggle="tab"]').on('shown', function(e) {
 	    	return location.hash = $(e.target).attr('href').substr(1);
 	    });
-    	
+				
 	});
 	
 	function bindRepairBtns(){

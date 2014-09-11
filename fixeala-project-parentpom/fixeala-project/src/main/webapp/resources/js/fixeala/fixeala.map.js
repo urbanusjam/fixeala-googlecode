@@ -85,7 +85,7 @@ var mapController = {
 							 +'   <tr>'
 							 +'	 	<td style="text-align:left;"><b><div style="color:#000;display:inline">'+mapController.getIssueURL(markerArray[i].id, markerArray[i].title, 'link')+'</div>' 
 							 +'                                     <div style="color:#ccc;display:inline;"> &nbsp;&nbsp; <i class="icon-chevron-right"></i> &nbsp;&nbsp; </div>'  
-							 +'										<span class="'+markerArray[i].statusCss+'">'+ markerArray[i].status +'</span></b></td>'				           
+							 +'										<span style="background:'+markerArray[i].statusCss+'" class="label">'+ markerArray[i].status +'</span></b></td>'				           
 							 +'	 </tr>'	
 							 +'  <tr style="font-size:11px">'
 							 +'	 	<td style="text-align:left;color:grey">'+markerArray[i].address+'</td>'				
@@ -522,25 +522,26 @@ var mapController = {
 		        success: function(data){  
 		        	
 				    markers = data;
-				  
 				    var centerPosition = new google.maps.LatLng(location.latitude, location.longitude);
-					
-				    $.each(markers, function(i, marker) {
+
+					$.each(markers, function(i, marker) {
 				    	
 				       marker.position = new google.maps.LatLng(marker.latitude, marker.longitude);	
 				       marker.distance = mapController.calculateDistanceKM(marker.position, centerPosition); 
 				       
-		               if(marker.id != location.id && marker.distance <= maxDistance){
+				       //chequeo que no se incluya el reclamo que se esta comparando
+				       if(marker.position.lat() != centerPosition.lat()
+				    		   && marker.position.lng() != centerPosition.lng()
+				    		   && marker.distance <= maxDistance){
 		            	   closestMarkers.push(marker);
 		               }   
 				       
 				    });
-				 
+
 				    closestMarkers.sort(function(a,b){
 				    	return a.distance - b.distance
 				    }); //ordeno distancias de menor a mayor
-				    
-				 
+				    				 
 				    var $table = $("#tblNearbyIssues tbody");	
 				    
 				    if(closestMarkers.length == 0){
@@ -554,10 +555,10 @@ var mapController = {
 				    	
 				    	$.each(closestMarkers, function(i, marker){				    	
 					    	var tr = "";				    
-				    		var imageSrc = '';	
-				    		
+				    		var imageSrc = '';
+				    					    		
 					    	if(marker.images.length > 0)
-					    		imageSrc = marker.images[0].link;	
+					    		imageSrc = marker.images[0].url;	
 					    	else
 					    		imageSrc = fxlGlobalController.getDomainUrl()+'resources/images/nopic.png';				    
 					    
@@ -566,8 +567,8 @@ var mapController = {
 					    	tr += '<img class="media-object pull-left thumbnail" style="width:64px; height:64px" src="'+imageSrc+'">';
 					    	tr += '<div class="media-body">';
 					    	tr += '<a href="'+mapController.getIssuePlainURL(marker.id, marker.title)+'"><h5 class="media-heading">'+marker.title+'</h5></a>';
-					    	tr += '<p style="font-size:11px">Reportado por: '+mapController.getUserURL(marker.username)+'</p>';
-					    	tr += '<a class=\"taglink\" href=\"./search.html?type=status&value='+marker.status+'\"><span class="label '+marker.statusCss+'">'+marker.status+'</a></span>';
+					    	tr += '<p style="font-size:11px">Reportado por: '+mapController.getUserURL(marker.user)+'</p>';
+					    	tr += '<a class=\"taglink\" href=\"./search.html?type=status&value='+marker.status+'\"><span style="background:'+marker.statusCss+'" class="label">'+marker.status+'</a></span>';
 					    	tr += '</div>';	
 					    	tr += '</div>';
 					    	tr += '</td></tr>';					
