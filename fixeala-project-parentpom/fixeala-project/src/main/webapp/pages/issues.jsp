@@ -321,7 +321,12 @@
 			<sec:authorize access="hasRole('ROLE_USER')">	
 				<c:if test="${estado eq 'ABIERTO'}">				
 					<c:if test="${loggedUser ne usuario}">
-						<button id="btnVerifyIssue" data-toggle="modal" href="#mdl-verify" class="btn btn-danger" style="width: 100%; margin-bottom: 20px; height: 46px; line-height: 46px;" title="Verificar"><h3>VERIFICAR</h3></button> 
+						<c:if test="${isVerifiedByUser}">
+							<button disabled id="btnVerifyIssue" data-toggle="modal" href="#mdl-verify" class="btn btn-default" style="width: 100%; margin-bottom: 20px; height: 46px; line-height: 46px;" title="Verificar"><h4>verificacion enviada</h4></button> 
+						</c:if>
+						<c:if test="${!isVerifiedByUser}">
+							<button id="btnVerifyIssue" data-toggle="modal" href="#mdl-verify" class="btn btn-danger" style="width: 100%; margin-bottom: 20px; height: 46px; line-height: 46px;" title="Verificar"><h3>VERIFICAR</h3></button> 
+						</c:if>
 					</c:if>
 					<h2>${positiveVerifications} / 5 solicitudes</h2>
 					<h2>${negativeVerifications} / 10 solicitudes</h2>
@@ -346,7 +351,7 @@
 			</c:if>
 			
 			<c:if test="${estado eq 'RECHAZADO' }">
-				<div class="alert alert-danger" style="border: none"><i class="icon-minus-sign icon-2x"></i><h3>&nbsp;${estado}</h3></div> 
+				<div class="alert" style="background: #5E5E5E; color: #FFF; border: none;"><i class="icon-minus-sign icon-2x"></i><h3>&nbsp;${estado}</h3></div> 
 			</c:if>
 			
 			<c:if test="${estado eq 'EN PROGRESO' }">
@@ -451,7 +456,7 @@
 	<div id="mdl-verify" class="modal hide fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
 	  	<div class="modal-header">
 		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>	
-			<h4>¿Cumple las siguientes condiciones?</h4>
+			<h4>&iquest;El reclamo cumple con estas condiciones?</h4>
 	  	</div>
 		<div class="modal-body">		
 			<ul class="list">
@@ -479,14 +484,14 @@
 		</div>
 		<div class="modal-footer"> 			
 			<button id="btn-verify" class="btn btn-info" aria-hidden="true" onclick="fxlIssueController.verifyOrRejectIssue('Verificar');">
-			    <i class="icon-ok icon-large"></i>&nbsp;&nbsp;Verificar
+			    <i class="icon-ok icon-large"></i>&nbsp;&nbsp;S&Iacute;
 			</button>	  			 		  		
 	  		<button id="btn-reject" class="btn btn-danger" aria-hidden="true" onclick="fxlIssueController.verifyOrRejectIssue('Rechazar');">
-		    	<i class="icon-minus-sign icon-large"></i>&nbsp;&nbsp;Rechazar
+		    	<i class="icon-minus-sign icon-large"></i>&nbsp;&nbsp;NO
 		    </button>	 
-		    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">
-		    	<i class="icon-remove icon-large"></i>&nbsp;&nbsp;Cancelar
-		    </button>	 
+<!-- 		    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true"> -->
+<!-- 		    	<i class="icon-remove icon-large"></i>&nbsp;&nbsp;Cancelar -->
+<!-- 		    </button>	  -->
 	  	</div>
 	</div>
 	

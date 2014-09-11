@@ -24,6 +24,7 @@ import ar.com.urbanusjam.dao.IssueDAO;
 import ar.com.urbanusjam.dao.IssueFollowDAO;
 import ar.com.urbanusjam.dao.IssuePageViewDAO;
 import ar.com.urbanusjam.dao.IssueRepairDAO;
+import ar.com.urbanusjam.dao.IssueVerificationDAO;
 import ar.com.urbanusjam.dao.IssueVoteDAO;
 import ar.com.urbanusjam.dao.ProvinceDAO;
 import ar.com.urbanusjam.dao.TagDAO;
@@ -66,8 +67,8 @@ import ar.com.urbanusjam.services.utils.SortingDataUtils;
 @Transactional
 public class IssueServiceImpl implements IssueService {
 		
-	private final int MAX_VERIFICATION_REQUESTS = 2;
-	private final int MAX_REJECTION_REQUESTS = 10;
+	private final int MAX_VERIFICATION_REQUESTS = 3;
+	private final int MAX_REJECTION_REQUESTS = 3;
 	
 	private UserService userService;
 	private MailService mailService;	
@@ -80,7 +81,7 @@ public class IssueServiceImpl implements IssueService {
 	private IssuePageViewDAO issuePageViewDAO;
 	private IssueVoteDAO issueVoteDAO;
 	private IssueRepairDAO issueRepairDAO;
-		
+	private IssueVerificationDAO issueVerificationDAO;	
 	
 	public void setUserService(UserService userService) {
 		this.userService = userService;
@@ -122,7 +123,10 @@ public class IssueServiceImpl implements IssueService {
 		this.issuePageViewDAO = issuePageViewDAO;
 	}
 	
-	
+	public void setIssueVerificationDAO(IssueVerificationDAO issueVerificationDAO) {
+		this.issueVerificationDAO = issueVerificationDAO;
+	}
+
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public void reportIssue(IssueDTO issueDTO) {
@@ -208,7 +212,7 @@ public class IssueServiceImpl implements IssueService {
 		
 		issue.setLastUpdateDate(this.getCurrentCalendar(revision.getFecha()));
 			
-		if(!newStatus.equals(IssueStatus.ACKNOWLEDGED) || !newStatus.equals(IssueStatus.REJECTED)){
+		if(!newStatus.equals(IssueStatus.ACKNOWLEDGED) && !newStatus.equals(IssueStatus.REJECTED)){
 			
 			if(newStatus.equals(IssueStatus.IN_PROGRESS))	
 				revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_PROGRESS + " el reclamo");			
@@ -223,11 +227,8 @@ public class IssueServiceImpl implements IssueService {
 			issue.addRevision(this.convertTo(revision, user));
 		}
 				
-		
-		
-		
 		//si es una solicitud de verificacion		
-		if(newStatus.equals(IssueStatus.ACKNOWLEDGED) || newStatus.equals(IssueStatus.REJECTED)){
+		if(newStatus.equalsIgnoreCase(IssueStatus.ACKNOWLEDGED) || newStatus.equalsIgnoreCase(IssueStatus.REJECTED)){
 			
 			IssueVerification request = new IssueVerification();
 			request.setId(new IssueVerificationPK(issue.getId(), user.getId()));
@@ -1122,6 +1123,13 @@ public class IssueServiceImpl implements IssueService {
 	@Override
 	public List<String> loadLocalityByProvince(String province) {
 		return provinceDAO.findLocalitiesByProvince(province);
+	}
+
+	@Override
+	public boolean isIssueVerifiedByUser(String issueID, String username) {
+		return issueVerificationDAO.findVerificationByUser(
+				Long.valueOf(issueID), 
+				userService.loadUserByUsername(username).getId()) != null;
 	}
 	
 //	public void sendMailAfterCommit(final MailManager mail) { 	

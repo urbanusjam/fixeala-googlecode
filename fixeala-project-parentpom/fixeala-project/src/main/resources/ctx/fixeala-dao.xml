@@ -37,6 +37,6 @@
     
 	<bean id="provinceDAO" class="ar.com.urbanusjam.jpa.dao.impl.ProvinceDAOImpl"/>
 	
-	
+	<bean id="issueVerificationDAO" class="ar.com.urbanusjam.jpa.dao.impl.IssueVerificationDAOImpl"/>
               
 </beans>

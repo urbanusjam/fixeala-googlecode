@@ -277,7 +277,7 @@ var fxlIssueController = {
 			
 			html = '<div class="brick-comment"><div class="media">'
 				+		'<span class="pull-left">'
-				+	  		'<img class="media-object thumbnail" src="${pageContext.request.contextPath}/resources/images/nopic64.png">'
+				+	  		'<img class="media-object thumbnail" src="${pageContext.request.contextPath}/resources/images/nopic.png">'
 				+	 	'</span>'
 				+	    '<div style="font-size:12px;margin-bottom:10px">'
 				+	  		'<a href="#"><strong>'+element.username+'</strong></a><span class="pull-right" style="margin-right: 30px">'+element.date+'</span></div>'
@@ -533,7 +533,7 @@ var fxlIssueController = {
 	deleteImage : function(data, contenidoID){
 		
 		$.ajax({
-		    url: './' +fxlIssueController.issueID+ '/deleteFile',
+		    url: 'issues/'+fxlIssueController.issueID+'/deleteFile',
 	 		type: "POST",	
 	 		data: data,							 
 	        success: function(data){	        	
@@ -581,7 +581,7 @@ var fxlIssueController = {
 	saveComment : function(data){
 		
 		$.ajax({
-		    url: "./addComment.html",
+		    url: 'issues/'+fxlIssueController.issueID+'/addComment',
 	 		type: "POST",	
 	 		data: data,
 	 		dataType: "json",									 
@@ -730,7 +730,7 @@ var fxlIssueController = {
 	saveRepairInfo : function(){
 		
 		$.ajax({
-		       url: './addRepairInfo', 
+		       url: 'issues/'+fxlIssueController.issueID+'/addRepairInfo', 
 		       type: 'POST',
 		       data: $('#repairForm').serialize(),
 		       dataType: 'json',					       			       
@@ -758,7 +758,7 @@ var fxlIssueController = {
 	deleteRepairInfo : function(){
 		
 		$.ajax({
-		    url: './deleteRepairInfo',
+		    url: 'issues/'+fxlIssueController.issueID+'/deleteRepairInfo',
 	 		type: 'POST',			
 	 		dataType: 'json',		
 	        success: function(data){	
@@ -812,9 +812,9 @@ var fxlIssueController = {
 		    	else{ 					    	
 			    	
 			    	$.ajax({
-	    			    url: "./voteIssue.html",
+	    			    url: 'issues/'+fxlIssueController.issueID+'/voteIssue',
 				 		type: "POST",	
-				 		data: "issueID=" + fxlIssueController.issueID + "&vote=" + voteValue,							 
+				 		data: '&vote=' + voteValue,							 
 				        success: function(data){						        	
 				        	if(data.result){
 				        		
@@ -889,7 +889,7 @@ var fxlIssueController = {
 	watchIssue : function(issueID){
 		
 		$.ajax({
-		    url: './'+issueID+'/watch/',
+		    url: 'issues/'+issueID+'/watch/',
 	 		type: "POST",	
 	 		data: "issueID=" + issueID,							 
 	        success: function(data){
@@ -913,7 +913,7 @@ var fxlIssueController = {
 		var $watcherList = $('#followers-list');   
 		
 		$.ajax({
-		    url: './'+issueID+'/unwatch/',
+		    url: 'issues/'+issueID+'/unwatch/',
 	 		type: "POST",	
 	 		data: "issueID=" + issueID,							 				 
 	        success: function(data){							        	
@@ -935,10 +935,9 @@ var fxlIssueController = {
 	displayWatchers : function(issueID){
 		
 		$.ajax({
-     	   url: './displayIssueFollowers.html',
+     	   url: 'issues/'+issueID+'/displayIssueFollowers.html',
             type: 'POST',
             dataType: 'json',
-            data: "issueID=" + issueID,				
             success: function(response){		
          	   
          	   if(response.length == 0 ){
@@ -946,7 +945,7 @@ var fxlIssueController = {
          	   }
          	   
          	   else{
-         		   var followers = '';				             
+         		   		var followers = '';				             
 					    $.each(response, function(i, follower){	
 					    	followers += '<i class="icon-angle-right" style="margin-right: 5px;"></i>&nbsp;';
 					    	followers += mapController.getUserURL(follower);

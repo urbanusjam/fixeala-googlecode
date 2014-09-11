@@ -559,7 +559,7 @@ var mapController = {
 					    	if(marker.images.length > 0)
 					    		imageSrc = marker.images[0].link;	
 					    	else
-					    		imageSrc = fxlGlobalController.getDomainUrl()+'resources/images/nopic64.png';				    
+					    		imageSrc = fxlGlobalController.getDomainUrl()+'resources/images/nopic.png';				    
 					    
 					    	tr += '<tr><td style="border-top:none">';
 					    	tr += '<div class="media">';
