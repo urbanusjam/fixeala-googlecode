@@ -620,7 +620,7 @@ var fxlHomeController = {
 				+   		'<a class="title" title="'+element.title+'" href="' +issueUrl+ '">' +fxlGlobalController.cropText(element.title, titleLimit)+ '</a>'	
 				+			'<p class="address"><span class="city">' +element.city+ '</span>, <span class="province">' +element.province+ '</span></p>'
 				+           '<p class="desc">' +fxlGlobalController.cropText(element.description, descLimit)+ '</p>'
-				+ 			'<span class="status '+element.css+'">' +element.status+ '</span>'
+				+ 			'<span class="label status" style="background:'+element.css+'">' +element.status+ '</span>'
 				+ 			'<div class="inline-container">'
 				+ 					'<div class="left"><i class="icon icon-thumbs-up icon-small"></i>' +element.totalVotes+ '</div>'
 				+					'<div class="right"><i class="icon icon-eye-open icon-small"></i>' +element.totalViews+ '</div>'
