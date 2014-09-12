@@ -126,7 +126,7 @@
 				 <div id="infinite-container-updates"></div>
 				 
 				 <nav id="page-nav-update" style="display: none;">
-	 			 	<a href="${id}/loadmore/update/2"></a>
+	 			 	<a href="issues/${id}/loadmore/update/2"></a>
 				 </nav>
 			 
 			 	<center><a href="#" id="btn-more-updates" class="btn btn-default btn-more update" style="display: none;">Mostrar m&aacute;s resultados</a></center>
@@ -179,7 +179,7 @@
 			 		 <!-- infinite scroll -->
 					 <div id="infinite-container-comments"></div>
 					 <nav id="page-nav-comment" style="display: none;">
-		 			 	<a href="${id}/loadmore/comment/2"></a>
+		 			 	<a href="issues/${id}/loadmore/comment/2"></a>
 					 </nav>			 
 				 	<center><a href="#" id="btn-more-comments" class="btn btn-default btn-more comment" style="display: none;">Mostrar m&aacute;s resultados</a></center>
 		 		</div>
@@ -362,12 +362,7 @@
 				</c:if>
 			</sec:authorize>
 			
-			
 			<div class="tag" style="border-radius: 5px; text-align: center; color: #FFF; background: ${estadoCss}"><h3>&nbsp;${estado}</h3></div>
-			
-			
-			
-			
 			
 			<div id="issue-stats" class="stats-container">
 				<div class="stats-box">
