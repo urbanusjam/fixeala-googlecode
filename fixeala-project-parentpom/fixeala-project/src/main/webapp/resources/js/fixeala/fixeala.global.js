@@ -70,17 +70,18 @@ var fxlGlobalController = {
 		$("#feedbackLink").click(function(e){
 			e.preventDefault();
 			$('#cbxAsuntoFeedback option:first-child').attr("selected", "selected");
+			$("#emailFeedback").val(''); 
 			$('#msgFeedback').val('');				
 			$("#mdl-feedback").modal('show');	
 		});
 		
 		$("#btnSendFeedback").click(function(){
-			
 			fxlGlobalController.sendFeedback();
 		});
 		
-		$('#msgFeedback').keyup(function(){
-		      if($(this).val().length > 0){
+		$('#msgFeedback, #emailFeedback').keyup(function(){
+		      if($('#msgFeedback').val().length > 0 
+		    		  && $('#emailFeedback').val().length > 0){
 		         $('#btnSendFeedback').prop('disabled',false);
 		      }else{
 		         $('#btnSendFeedback').prop('disabled',true);

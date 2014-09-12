@@ -70,8 +70,6 @@ var fxlAccountController = {
 	
 	initLogin : function(){
 		
-//		$("#btnLogin").click(function(){
-			
 			$('#loginForm').validate({ 
 	        	
         	 	rules: {
@@ -97,10 +95,6 @@ var fxlAccountController = {
  			 	}//end submit	
         });
 			
-//		});
-
-        
-
 	},
 	
 	login : function(){
