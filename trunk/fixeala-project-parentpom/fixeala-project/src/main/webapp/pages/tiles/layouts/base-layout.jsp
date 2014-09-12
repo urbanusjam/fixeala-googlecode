@@ -149,13 +149,13 @@
        			</div>
    			</div>   
    			<div class="control-group">
-		        <label class="control-label" for="emailFeedback">Tu email (opcional)</label>
+		        <label class="control-label" for="emailFeedback">Tu email *</label>
 		        <div class="controls">
-		        	<input type="email" id="emailFeedback" name="emailFeedback" class="form-control" style="width:250px;" />
+		        	<input type="email" id="emailFeedback" name="emailFeedback" class="form-control" style="width:250px;" required />
 		        </div>
 		    </div> 			
 		    <div class="control-group">
-		        <label class="control-label" for="msgFeedback">Mensaje</label>
+		        <label class="control-label" for="msgFeedback">Mensaje *</label>
 		        <div class="controls">
 		        	<textarea id="msgFeedback" name="msgFeedback" class="form-control" style="width:520px; height: 100px; padding-right: 5px;" required ></textarea>
 		        </div>
