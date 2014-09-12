@@ -363,33 +363,9 @@
 			</sec:authorize>
 			
 			
-			<c:if test="${estado eq 'REABIERTO' }">
-				<div class="alert alert-danger" style="border: none"><i class="icon-exclamation-sign icon-2x"></i><h3>&nbsp;${estado}</h3></div>
-			</c:if>
-									
-			<c:if test="${estado eq 'ADMITIDO' }">
-				<div class="alert alert-info" style="border: none"><i class="icon-ok icon-2x"></i><h3>&nbsp;${estado}</h3></div> 
-			</c:if>
+			<div class="tag" style="border-radius: 5px; text-align: center; color: #FFF; background: ${estadoCss}"><h3>&nbsp;${estado}</h3></div>
 			
-			<c:if test="${estado eq 'RECHAZADO' }">
-				<div class="alert" style="background: #5E5E5E; color: #FFF; border: none;"><i class="icon-minus-sign icon-2x"></i><h3>&nbsp;${estado}</h3></div> 
-			</c:if>
 			
-			<c:if test="${estado eq 'EN PROGRESO' }">
-				<div class="alert alert-warning" style="border: none"><i class="icon-warning-sign icon-2x"></i><h3>&nbsp;${estado}</h3></div> 
-			</c:if>
-			
-			<c:if test="${estado eq 'RESUELTO' }">
-				<div class="alert alert-success" style="border: none"><i class="icon-ok icon-2x"></i><h3>&nbsp;${estado}</h3></div> 
-			</c:if>
-			
-			<c:if test="${estado eq 'CERRADO' }">
-				<div class="alert" style="background: #5E5E5E; color: #FFF; border: none;"><i class="icon-minus-sign icon-2x"></i><h3>&nbsp;${estado}</h3></div> 
-			</c:if>
-			
-			<c:if test="${estado eq 'ARCHIVADO' }">
-				<div class="alert alert-default" style="background: #DDDDDD; color: #999999; border: none"><i class="icon-folder-close icon-2x"></i><h3>&nbsp;${estado}</h3></div> 
-			</c:if>
 			
 			
 			
