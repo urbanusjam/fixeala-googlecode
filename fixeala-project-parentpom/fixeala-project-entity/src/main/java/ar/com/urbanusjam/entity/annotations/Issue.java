@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,6 +25,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
 
+@Cacheable
 @Entity
 @Table(name="issue")
 public class Issue implements Serializable  {

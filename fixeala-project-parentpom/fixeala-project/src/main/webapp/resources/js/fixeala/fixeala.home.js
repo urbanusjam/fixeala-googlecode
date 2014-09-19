@@ -95,7 +95,7 @@ var fxlHomeController = {
 				    	   return ''
 						       + "<div class='typeahead-container'>"
 			                   + "<div class='typeahead-status'>"
-			                   + 		"<p class='" +issue.css+ "'>" +issue.status+ "</p>"
+			                   + 		'<p class="label status" style="background-color:'+issue.css+'">' +issue.status+ '</p>'
 			                   + "</div>"
 			                   + "<div class='typeahead-content'>"
 			                   + "<span class='typeahead-id'>&#35;" +highlightQuery(issue.id, q)+  "&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;" +issue.date+ "</span>"				                   

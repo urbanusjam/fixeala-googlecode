@@ -1102,7 +1102,7 @@ a.editable-click.editable-disabled {
 }
 
 .loading {   
-	background: url(../../resources/images/loader.gif) no-repeat;
+	background: url(../../images/loader.gif) no-repeat;
   	background-position: 680px center;
 }
 
@@ -1112,7 +1112,7 @@ a.editable-click.editable-disabled {
 }
 
 .typeahead li { 
-	border-bottom: 1px solid #DDDDDD;
+	border-bottom: 1px solid #DDD !important;
 	background: #fff;
 	padding: none;
 }
@@ -1123,7 +1123,7 @@ a.editable-click.editable-disabled {
 .dropdown-menu > .active > a, 
 .dropdown-menu > .active > a:hover, 
 .dropdown-menu > .active > a:focus {
-    background: #31B0D5;
+    background: #5C6781;
     color: #fff;  
 	height: 100%; 
 	display: block;

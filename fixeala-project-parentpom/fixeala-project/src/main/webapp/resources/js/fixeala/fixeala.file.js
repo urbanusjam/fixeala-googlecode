@@ -4,9 +4,6 @@ var fileController = {
 			issueFileData = new Object();
 			issueFileData.response = fileData;
 			issueFileData.filename = filename;
-//			console.log(fileData);
-//			return fileData;
-			
 			console.log('--- finish imgur processing ---');
 		},
 		
