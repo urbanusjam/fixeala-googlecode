@@ -4,12 +4,12 @@ var fxlAccountController = {
 				
 	init : function(profileUserID){		
 		
-		fxlAccountController.initPasswordChange();
-		fxlAccountController.initAccountUpdate();	
-		fxlAccountController.initAccountClose();		
-		fxlAccountController.loadIssuesTable(profileUserID);
-		fxlAccountController.loadCommentsTable(profileUserID);
-		fxlAccountController.configContextMenu();
+		this.initPasswordChange();
+		this.initAccountUpdate();	
+		this.initAccountClose();		
+		this.loadIssuesTable(profileUserID);
+		this.loadCommentsTable(profileUserID);
+		this.configContextMenu();
 						
 		$(".fileinput-button").click(function() {
 		    $("#fileupload-profile").click();
@@ -43,7 +43,7 @@ var fxlAccountController = {
     		      top: e.pageY
    		    });		
 			
-   		  	fxlAccountController.rowID = $(this).find("td").eq(0).html().trim(); 							    		
+   		  	this.rowID = $(this).find("td").eq(0).html().trim(); 							    		
 			return false;							    			
 	    });
 		  
@@ -91,7 +91,7 @@ var fxlAccountController = {
  			    },
  						 			    
  			 	submitHandler: function() {
- 			 		fxlAccountController.login();        	
+ 			 		this.login();        	
  			 	}//end submit	
         });
 			
@@ -157,7 +157,7 @@ var fxlAccountController = {
 										
 									
 				                } else {							                
-				                	fxlAccountController.handleLoginFailure();							                    
+				                	this.handleLoginFailure();							                    
 				                }				            				
 	            		},2000);
 	            		
@@ -165,27 +165,20 @@ var fxlAccountController = {
 	            		
 	            },
 	            						           
-	           error: fxlAccountController.handleLoginFailure				           
+	           error: this.handleLoginFailure				           
    	});	    	
    	return false;		
 		
 	},
 	
 	handleLoginFailure : function() {
-		console.log('error');
-//		$('.alert-error').remove();
-//		$(".alert").remove();
-//        $('#username').before('<div class="alert alert-error"><a class="close" data-dismiss="alert" href="#">&times;</a>El usuario y/o la contrase&ntildea <br>son incorrectos.</div>');
-        
         $('.alert-error').text('El usuario y/o la clave son incorrectos.');
         $('.alert-error').show();
         $('.ajax_loading').hide();
         $('#btnLogin').attr('disabled', false);
-//        $('#btnLogin').show();	
         $('#loginForm').each(function(){
-            this.reset();   //Here form fields will be cleared.
-        });
-        
+            this.reset();   
+        });        
 	},
 	
 	
@@ -220,7 +213,7 @@ var fxlAccountController = {
 					 minlength: 4,
     				 maxlength: 20,
     				 remote: {
-			 	    		url: "./signup/checkUsernameAvailability.html", 
+			 	    		url: "account/signup/checkUsernameAvailability.html", 
 							type: "POST", 
 							data: {
 						        username: function(){ return $("#signupForm #username").val(); }
@@ -231,7 +224,7 @@ var fxlAccountController = {
 		 	    	 required : true,
 		 	    	 email : true,
 		 	    	 remote: {
-			 	    		url: "./signup/checkEmailAvailability.html", 
+			 	    		url: "account/signup/checkEmailAvailability.html", 
 							type: "POST", 
 							data: {
 						        email: function(){ return $("#signupForm #email").val(); }
@@ -287,7 +280,7 @@ var fxlAccountController = {
  	    
  	    	submitHandler: function() { 	    		
  	    		
- 	    		fxlAccountController.signup();
+ 	    		this.signup();
  	    		
  	    	},
  	    	
@@ -440,7 +433,7 @@ var fxlAccountController = {
 				},
 				
 				submitHandler: function()  {					
-					fxlAccountController.sendPwdEmailReset();					
+					this.sendPwdEmailReset();					
 				}			
 			
 		});
@@ -524,7 +517,7 @@ var fxlAccountController = {
 	        },
 	        
     	  	submitHandler: function() {
-    	  		fxlAccountController.resetPassword();    	  		
+    	  		this.resetPassword();    	  		
     	    }
     	});
     	
@@ -636,7 +629,7 @@ var fxlAccountController = {
             },
     	  	
     	  	submitHandler: function() {    	  		
-    	  		fxlAccountController.changePassword();
+    	  		this.changePassword();
     	    }
     	});
     },
@@ -720,7 +713,7 @@ var fxlAccountController = {
             },
     	  	
     	  	submitHandler: function() {
-    	  		fxlAccountController.updateAccount();
+    	  		this.updateAccount();
     	  	}
     	  		
     	});
@@ -796,7 +789,7 @@ var fxlAccountController = {
 	        },
 		  	
 		  	submitHandler: function() {		  		
-		  		fxlAccountController.closeAccount();	
+		  		this.closeAccount();	
 		    }
 		});
 		
@@ -815,7 +808,7 @@ var fxlAccountController = {
 				    
 			         $.ajax({
 			        	  type: "POST",
-			              url: "../account/closeAccount.html",
+			              url: "account/closeAccount.html",
 			              data: "password=" + currentPassword,      
 			              success: function(data){  
 			            	

@@ -202,11 +202,11 @@
 			    	<div id="contextmenu-issue" class="dropdown clearfix">
 					    <ul id="ctxMenu" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu" style="display:block;position:static;margin-bottom:5px;">
 					      <li><a tabindex="-1" href="javascript:fxlAccountController.goToIssuePage(fxlAccountController.rowID);"><i class="icon-paper-clip"></i>&nbsp;&nbsp;Ver detalles</a></li>
-					      <li><a tabindex="-1" href="#"><i class="icon-globe"></i>&nbsp;&nbsp;Ver en mapa</a></li>							    
-					      <li class="divider" id="actionsDivider"></li>						      	
-				      	  <li><a tabindex="-1" href="#" onclick="updateStatus('RESUELTO');"><i class="icon-ok"></i>&nbsp;&nbsp;Resolver</a></li>
-				      	  <li><a tabindex="-1" href="#" onclick="updateStatus('CERRADO');"><i class="icon-lock"></i>&nbsp;&nbsp;Cerrar</a></li>
-				      	  <li><a tabindex="-1" href="#" onclick="updateStatus('REABIERTO');"><i class="icon-folder-open-alt"></i>&nbsp;&nbsp;Reabrir</a></li>  
+<!-- 					      <li><a tabindex="-1" href="#"><i class="icon-globe"></i>&nbsp;&nbsp;Ver en mapa</a></li>							     -->
+<!-- 					      <li class="divider" id="actionsDivider"></li>						      	 -->
+<!-- 				      	  <li><a tabindex="-1" href="#" onclick="updateStatus('RESUELTO');"><i class="icon-ok"></i>&nbsp;&nbsp;Resolver</a></li> -->
+<!-- 				      	  <li><a tabindex="-1" href="#" onclick="updateStatus('CERRADO');"><i class="icon-lock"></i>&nbsp;&nbsp;Cerrar</a></li> -->
+<!-- 				      	  <li><a tabindex="-1" href="#" onclick="updateStatus('REABIERTO');"><i class="icon-folder-open-alt"></i>&nbsp;&nbsp;Reabrir</a></li>   -->
 					    </ul>
  						</div>					    	
 			    </div>
@@ -457,8 +457,6 @@
 <script type="text/javascript" src="resources/js/fixeala/fixeala.file.js"></script>
 <script type="text/javascript" src="resources/js/fixeala/fixeala.datatable.bootstrap.js"></script>
 <script type="text/javascript">	
-
-
 
 	$(document).ready(function(){	
 		

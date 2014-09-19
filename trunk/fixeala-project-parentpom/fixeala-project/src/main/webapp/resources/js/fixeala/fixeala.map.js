@@ -1,4 +1,6 @@
 var mapController = {
+		
+	mapMarkers: [],
 	
 	loadGoogleMap : function(){
 		google.maps.event.addDomListener(window, 'load', mapController.initMap);  	 
@@ -109,7 +111,8 @@ var mapController = {
 		    	        }); 	        		
 		        		
 		        		infowindow = new google.maps.InfoWindow();	        		
-		        		markers.push(tempMarker);	        		
+		        		markers.push(tempMarker);	 
+		        		this.mapMarkers = markers;
 		        	}	        
 		        	
 		    		for (var i = 0; i < markers.length; i++) {
@@ -216,8 +219,8 @@ var mapController = {
 	      
 	    google.maps.event.addListener(autocomplete, 'place_changed', function(e) {	
 	    	autocompleteCalls++;
-	   		var addressArray = [];
-	   		addressArray = ($('#address').val()).split(",");   
+	   		var addressArray = [];	   		
+	   		addressArray = ($('#address').val()).split(",");   	   	
 	   		setTimeout(function(){ 
 	   			$('#address').val(addressArray[0]); 
 	   		}, 0);
@@ -230,11 +233,12 @@ var mapController = {
 	
 	fillInAddress : function(){
 
-		mapController.blockIssueForm();
-		    
-	    var place = autocomplete.getPlace();	 
+		this.blockIssueForm();
+		
+	    var place = autocomplete.getPlace();
 	    
-	    if (!place || !place.geometry || !mapController.hasAddressTypes(place)) {    	
+	    if (!place || !place.geometry || !mapController.hasAddressTypes(place)) {  
+	    	alert("aca");
 	    	setTimeout(function(){    	
 	    		mapController.unBlockIssueForm();	    	
 	    		bootbox.alert("La direcci&oacute;n proporcionada no es v&aacute;lida o carece de precisi&oacute;n.", function() {    		
@@ -255,7 +259,7 @@ var mapController = {
 			} 
 			else{
 				map.setCenter(place.geometry.location);
-			    map.setZoom(17);  // Why 17? Because it looks good.
+			    map.setZoom(17);  
 			}
 			 
 			var infowindow = new google.maps.InfoWindow();
@@ -732,7 +736,6 @@ var mapController = {
 google.maps.visualRefresh = true; 
 
 var map;
-var markerArray;
 var initMarker;
 var init_coord = new google.maps.LatLng(-34.599722, -58.381944);
 
