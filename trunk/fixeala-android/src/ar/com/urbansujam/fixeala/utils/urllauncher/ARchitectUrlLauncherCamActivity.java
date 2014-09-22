@@ -28,14 +28,14 @@ public class ARchitectUrlLauncherCamActivity extends FragmentActivity {
 		this.getWindow().setFlags( WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN );
 		this.setVolumeControlStream( AudioManager.STREAM_MUSIC );
 
-		this.setContentView( R.layout.activity_camera );
+		this.setContentView( R.layout.sample_cam_fragment_main );
 
-		this.findViewById( R.id.frame_container ).setBackgroundColor( Color.BLACK );
+		this.findViewById( R.id.mainFragementParent ).setBackgroundColor( Color.BLACK );
 		
 //		if ( icicle == null ) {
 //			/* start transaction to set required fragments */
 //			final FragmentTransaction fragmentTransaction = this.getSupportFragmentManager().beginTransaction();
-//			fragmentTransaction.replace( R.id.mainFragment, new CameraFragment() );
+//			fragmentTransaction.replace( R.id.mainFragement, new CameraFragment() );
 //			/* commit transaction */
 //			fragmentTransaction.commit();
 //		}

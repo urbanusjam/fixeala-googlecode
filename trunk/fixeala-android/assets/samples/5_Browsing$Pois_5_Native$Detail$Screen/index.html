@@ -9,7 +9,7 @@
     <meta http-equiv="Content-Type" content="application/json; charset=utf-8">
     <meta content="width=device-width,initial-scale=1,maximum-scale=5,user-scalable=yes" name="viewport">
     
-    <title>My ARchitect World</title>
+    <title>Fixeala Mobile</title>
 
     <script src="architect://architect.js"></script>
 
@@ -46,8 +46,8 @@
 
             <!-- header of UI holding feature buttons -->
             <div id ="header-status" data-role="header" data-position="fixed" data-theme="c">
-                <a href="javascript: World.showRange();" data-icon="gear" data-inline="true" data-mini="true">Range</a>
-                <a href="javascript: World.reloadPlaces()" data-icon="refresh" >Reload</a>
+                <a href="javascript: World.showRange();" data-icon="gear" data-inline="true" data-mini="true">Rango</a>
+                <a href="javascript: World.reloadPlaces()" data-icon="refresh" >Recargar</a>
                 <h1></h1>
             </div>
 
@@ -62,7 +62,7 @@
 
                 <!-- popup displayed when button clicked -->
                 <div data-role="popup" id="popupInfo" class="ui-content" data-theme="e" style="max-width:350px;">
-                  <p style="text-align:right;" id="status-message">Trying to find out where you are</p>
+                  <p style="text-align:right;" id="status-message">Intentando calcular tu ubicación</p>
                 </div>
                 
             </div>
@@ -76,8 +76,8 @@
 
                 <!-- header with "close" button -->
                 <div data-role="header" data-theme="c">
-                    <h1>Details</h1>
-                    <a href="#header" data-rel="close">Close</a>
+                    <h1>Detalles</h1>
+                    <a href="#header" data-rel="close">Cerrar</a>
                 </div>
 
                 <!-- content of POI detail page, you may also add thumbnails etc. here if you like -->
@@ -90,10 +90,10 @@
                     <h4 id="poi-detail-description"></h4>
 
                     <!-- distance -->
-                    <h4>Distance: <a id="poi-detail-distance"></a></h4>
+                    <h4>Distancia: <a id="poi-detail-distance"></a></h4>
 
                     <!-- more button-->
-                    <a href="javascript: World.onPoiDetailMoreButtonClicked();" data-role="button" data-icon="arrow-r" data-iconpos="right" data-inline="true">More</a>
+                    <a href="javascript: World.onPoiDetailMoreButtonClicked();" data-role="button" data-icon="arrow-r" data-iconpos="right" data-inline="true">Más</a>
                 </div>
             </div>
 
@@ -104,15 +104,15 @@
 
                     <!-- header with close button -->
                     <div data-role="header" data-theme="c">
-                        <h1>Range</h1>
-                        <a href="#header" data-rel="close">Close</a>
+                        <h1>Rango</h1>
+                        <a href="#header" data-rel="close">Cerrar</a>
                     </div>
 
                     <!-- distance information, calculated/updated in code  -->
                     <div data-role="content">
 
                         <!-- Range in m/km-->
-                        <h4> Range: <a id="panel-distance-value"></a></h4>
+                        <h4> Rango: <a id="panel-distance-value"></a></h4>
 
                         <!-- Amount of visible places -->
                         <h4> Visible: <a id="panel-distance-places"></a></h4>

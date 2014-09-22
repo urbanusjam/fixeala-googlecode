@@ -15,3 +15,8 @@
 	width:100px;
 	height:100px;
 }
+
+.androidpaintfix {
+-webkit-transform: translate3d(0,0,0);
+transform: translate3d(0, 0, 0);
+}

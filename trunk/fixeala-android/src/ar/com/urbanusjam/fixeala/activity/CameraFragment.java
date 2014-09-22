@@ -5,10 +5,6 @@ import java.net.URLDecoder;
 
 import android.hardware.SensorManager;
 import android.location.LocationListener;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 import ar.com.urbansujam.fixeala.utils.urllauncher.ARchitectUrlLauncherCamActivity;
 import ar.com.urbanusjam.android.R;
@@ -18,18 +14,19 @@ import com.wikitude.architect.ArchitectView.SensorAccuracyChangeListener;
 
 public class CameraFragment extends AbstractArchitectCamFragmentV4 {
 	
-	 @Override
-	   public View onCreateView(LayoutInflater inflater, ViewGroup container,
-	           Bundle savedInstanceState) {
-	 
-	       View rootView = inflater.inflate(R.layout.activity_camera, container, false);
-	         
-	       return rootView;
-	   }
 	/**
 	 * last time the calibration toast was shown, this avoids too many toast shown when compass needs calibration
 	 */
 	private long lastCalibrationToastShownTimeMillis = System.currentTimeMillis();
+	
+//	@Override
+//	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//           Bundle savedInstanceState) {
+//	 
+//		View rootView = inflater.inflate(R.layout.activity_camera, container, false);
+//		
+//		return rootView;
+//	}
 	
 	@Override
 	public String getARchitectWorldPath() {
@@ -41,6 +38,7 @@ public class CameraFragment extends AbstractArchitectCamFragmentV4 {
 //			e.printStackTrace();
 //		return "samples/3_Point$Of$Interest_1_Poi$At$Location/index.html";
 //		return "samples/4_Obtain$Poi$Data_2_From$Local$Resource/index.html";
+//		return "samples/4_Obtain$Poi$Data_3_From$Webservice/index.html";
 		return "samples/5_Browsing$Pois_5_Native$Detail$Screen/index.html";
 //			return null;
 //		}
