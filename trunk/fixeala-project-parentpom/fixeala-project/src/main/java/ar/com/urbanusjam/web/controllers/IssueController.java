@@ -637,7 +637,7 @@ public class IssueController {
 				// history
 				IssueHistoryDTO revision = new IssueHistoryDTO();
 				revision.setFecha(new Date());
-				revision.setUsername(userDTO.getUsername());
+				revision.setUsername(userDB.getUsername());
 				revision.setOperacion(Operation.CREATE);
 				revision.setMotivo(Messages.ISSUE_CREATION + " el reclamo.");
 				revision.setObservaciones("");

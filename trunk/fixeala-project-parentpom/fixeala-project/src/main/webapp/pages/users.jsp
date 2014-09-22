@@ -58,7 +58,7 @@
 				                <li class="nav-header"><i class="icon-caret-right"></i>CUENTA</li>
 				                <li><a href="#editAccountTab" data-toggle="tab"><i class="icon-edit-sign"></i>Datos personales</a></li>
 				                <li><a href="#changePasswordTab" data-toggle="tab"><i class="icon-unlock"></i>Cambio de clave</a></li>
-				                <li><a href="#closeAccountTab" data-toggle="tab"><i class="icon-ban-circle"></i>Desactivaci&oacute;n</a></li>
+				                <li><a href="#closeAccountTab" data-toggle="tab"><i class="icon-ban-circle"></i>Cierre</a></li>
 		              		</c:if>
 		              		
 		              		<!-- MENU ANONYMOUS -->
@@ -404,11 +404,11 @@
 					<!-- fin TAB CAMBIO DE CLAVE --> 
 					
 					
-					<!-- TAB DESACTIVACION -->  
+					<!-- TAB CIERRE -->  
 					<div class="tab-pane fade in" id="closeAccountTab">
 					
 						<div class="page-header">
-				    		<h3>Desactivaci&oacute;n de cuenta</h3>
+				    		<h3>Cierre de cuenta</h3>
 				    	</div>	
 					
 						<div class="row-fluid">			
@@ -417,14 +417,13 @@
 								<form id="closeAccountForm" class="form-horizontal" method="POST">
 									
 									<p>
-									   Lorem ipsum dolor sit amet, id nec conceptam conclusionemque. Et eam tation option. 
-									   Utinam salutatus ex eum. Ne mea dicit tibique facilisi, ea mei omittam explicari conclusionemque, 
-									   ad nobis propriae quaerendum sea.
+									   Una vez cerrada la cuenta, no podr&aacute; volver a utilizarla. 
+									   Sin embargo, toda la informaci&oacute;n concerniente a los reclamos y comentarios que usted haya publicado, quedar&aacute; disponible en el sitio de FIXEALA.  
 									</p>
 									
 										<br>
 									
-									<label for="currentPassword"><strong>Ingrese su clave:</strong></label>
+									<label for="currentPassword"><strong>Ingrese su clave actual:</strong></label>
 									<input type="password" id="currentPassword" name="currentPassword" class="input-xlarge">		  			
 									
 									
