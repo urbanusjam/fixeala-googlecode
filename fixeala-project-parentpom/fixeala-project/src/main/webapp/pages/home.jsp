@@ -225,9 +225,9 @@
 	</div>	
     <div class="clearfix"></div> 
 </div><!-- /CONTENT -->
-
+	
 <script type="text/javascript" src="resources/js/fixeala/fixeala.home.js"></script>  	
-<script type="text/javascript" src="resources/js/fixeala/fixeala.file.js"></script>	
+<script type="text/javascript" src="resources/js/fixeala/fixeala.file.js"></script>
 <script type="text/javascript">   
 	
 	var issueFileData = null; //holds the (optional) attached file

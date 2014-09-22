@@ -4,19 +4,19 @@ var fxlAccountController = {
 				
 	init : function(profileUserID){		
 		
-		this.initPasswordChange();
-		this.initAccountUpdate();	
-		this.initAccountClose();		
-		this.loadIssuesTable(profileUserID);
-		this.loadCommentsTable(profileUserID);
-		this.configContextMenu();
-						
+		fxlAccountController.initPasswordChange();
+		fxlAccountController.initAccountUpdate();	
+		fxlAccountController.initAccountClose();		
+		fxlAccountController.loadIssuesTable(profileUserID);
+		fxlAccountController.loadCommentsTable(profileUserID);
+		fxlAccountController.configContextMenu();
+					
 		$(".fileinput-button").click(function() {
 		    $("#fileupload-profile").click();
 		});		
 		
 		$("#fileupload-profile").change(function(){
-			 fileController.handleUserPicUpload(this.files[0], profileUserID);
+			 fileController.handleUserPicUpload(fxlAccountController.files[0], profileUserID);
 		});	
 				
 		var prov = '${province}';
@@ -43,7 +43,7 @@ var fxlAccountController = {
     		      top: e.pageY
    		    });		
 			
-   		  	this.rowID = $(this).find("td").eq(0).html().trim(); 							    		
+   			fxlAccountController.rowID = $(this).find("td").eq(0).html().trim(); 							    		
 			return false;							    			
 	    });
 		  
@@ -91,7 +91,7 @@ var fxlAccountController = {
  			    },
  						 			    
  			 	submitHandler: function() {
- 			 		this.login();        	
+ 			 		fxlAccountController.login();        	
  			 	}//end submit	
         });
 			
@@ -99,27 +99,19 @@ var fxlAccountController = {
 	
 	login : function(){
 		
-		console.log('--- submit');		 		
- 		 // Hide 'Submit' Button
-//        $('#btnLogin').hide();
 		$('#btnLogin').attr('disabled', true);
 
-        // Show Gif Spinning Rotator
         $('.ajax_loading').show();
  		
  		 $.ajax({
-   			url: fxlGlobalController.getDomainUrl() + "login.html",
+   			url: fxlGlobalController.getDomainUrl() + "login",
        		type: "POST",		            	
 	            beforeSend: function(xhr) {
 	                xhr.withCredentials = true;
 	            },
 	            data: $("#loginForm").serialize(),				       
 	            success: function(data, status) { 
-	            	
-		           
-		            
-	            	console.log('paso login');
-	            	
+	          
 	            		setTimeout(function () {				                   
 			            		$('#btnLogin').show();
 			            		$('.ajax_loading').hide(); 
@@ -157,7 +149,7 @@ var fxlAccountController = {
 										
 									
 				                } else {							                
-				                	this.handleLoginFailure();							                    
+				                	fxlAccountController.handleLoginFailure();							                    
 				                }				            				
 	            		},2000);
 	            		
@@ -165,7 +157,7 @@ var fxlAccountController = {
 	            		
 	            },
 	            						           
-	           error: this.handleLoginFailure				           
+	           error: fxlAccountController.handleLoginFailure				           
    	});	    	
    	return false;		
 		
@@ -177,7 +169,7 @@ var fxlAccountController = {
         $('.ajax_loading').hide();
         $('#btnLogin').attr('disabled', false);
         $('#loginForm').each(function(){
-            this.reset();   
+        	this.reset();   
         });        
 	},
 	
@@ -280,7 +272,7 @@ var fxlAccountController = {
  	    
  	    	submitHandler: function() { 	    		
  	    		
- 	    		this.signup();
+ 	    		fxlAccountController.signup();
  	    		
  	    	},
  	    	
@@ -433,7 +425,7 @@ var fxlAccountController = {
 				},
 				
 				submitHandler: function()  {					
-					this.sendPwdEmailReset();					
+					fxlAccountController.sendPwdEmailReset();					
 				}			
 			
 		});
@@ -517,7 +509,7 @@ var fxlAccountController = {
 	        },
 	        
     	  	submitHandler: function() {
-    	  		this.resetPassword();    	  		
+    	  		fxlAccountController.resetPassword();    	  		
     	    }
     	});
     	
@@ -629,7 +621,7 @@ var fxlAccountController = {
             },
     	  	
     	  	submitHandler: function() {    	  		
-    	  		this.changePassword();
+    	  		fxlAccountController.changePassword();
     	    }
     	});
     },
@@ -713,7 +705,7 @@ var fxlAccountController = {
             },
     	  	
     	  	submitHandler: function() {
-    	  		this.updateAccount();
+    	  		fxlAccountController.updateAccount();
     	  	}
     	  		
     	});
@@ -789,7 +781,7 @@ var fxlAccountController = {
 	        },
 		  	
 		  	submitHandler: function() {		  		
-		  		this.closeAccount();	
+		  		fxlAccountController.closeAccount();	
 		    }
 		});
 		

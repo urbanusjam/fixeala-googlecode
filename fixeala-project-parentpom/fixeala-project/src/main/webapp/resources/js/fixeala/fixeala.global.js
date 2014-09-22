@@ -2,6 +2,15 @@ var fxlGlobalController = {
 		
 	loggedUser : null,
 	
+	init : function(){
+		
+		 $("input[type='password']").bind("cut copy paste", function(e) {
+             e.preventDefault();
+         });
+		 
+		 fxlGlobalController.initFeedback();
+	},
+	
 	initNavTooltip : function(){
 		
 		$('.navbar .nav > li > a').tooltip({

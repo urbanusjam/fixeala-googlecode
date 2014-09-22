@@ -112,7 +112,7 @@
 	<script type="text/javascript">      
 		$(document).ready(function(){			
 			fxlGlobalController.initNavTooltip();
-			fxlGlobalController.initFeedback();
+			fxlGlobalController.init();
 		});	
 	</script>
 </head>
