@@ -1,6 +1,7 @@
 // information about server communication. This sample webservice is provided by Wikitude and returns random dummy places near given location
 var ServerInformation = {
-	POIDATA_SERVER: "http://example.wikitude.com/GetSamplePois/",
+//	POIDATA_SERVER: "http://example.wikitude.com/GetSamplePois/",
+	POIDATA_SERVER: "http://ujam.ngrok.com/fixeala/api/reclamos/",
 	POIDATA_SERVER_ARG_LAT: "lat",
 	POIDATA_SERVER_ARG_LON: "lon",
 	POIDATA_SERVER_ARG_NR_POIS: "nrPois"
@@ -40,11 +41,11 @@ var World = {
 		for (var currentPlaceNr = 0; currentPlaceNr < poiData.length; currentPlaceNr++) {
 			var singlePoi = {
 				"id": poiData[currentPlaceNr].id,
-				"latitude": parseFloat(poiData[currentPlaceNr].latitude),
-				"longitude": parseFloat(poiData[currentPlaceNr].longitude),
+				"latitude": parseFloat(poiData[currentPlaceNr].latitud),
+				"longitude": parseFloat(poiData[currentPlaceNr].longitud),
 				"altitude": parseFloat(poiData[currentPlaceNr].altitude),
-				"title": poiData[currentPlaceNr].name,
-				"description": poiData[currentPlaceNr].description
+				"title": poiData[currentPlaceNr].titulo,
+				"description": poiData[currentPlaceNr].descripcion
 			};
 
 			World.markerList.push(new Marker(singlePoi));
@@ -112,8 +113,8 @@ var World = {
 		// server-url to JSON content provider
 		var serverUrl = ServerInformation.POIDATA_SERVER + "?" + ServerInformation.POIDATA_SERVER_ARG_LAT + "=" + lat + "&" + ServerInformation.POIDATA_SERVER_ARG_LON + "=" + lon + "&" + ServerInformation.POIDATA_SERVER_ARG_NR_POIS + "=20";
 
-		var jqxhr = $.getJSON(serverUrl, function(data) {
-			World.loadPoisFromJsonData(data);
+		var jqxhr = $.getJSON(serverUrl, function(result) {
+			World.loadPoisFromJsonData(result.data);
 		})
 			.error(function(err) {
 				World.updateStatusMessage("Invalid web-service response.", true);

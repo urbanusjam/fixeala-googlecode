@@ -1,6 +1,7 @@
 // information about server communication. This sample webservice is provided by Wikitude and returns random dummy places near given location
 var ServerInformation = {
-	POIDATA_SERVER: "http://example.wikitude.com/GetSamplePois/",
+//	POIDATA_SERVER: "http://example.wikitude.com/GetSamplePois/",
+	POIDATA_SERVER: "http://ujam.ngrok.com/fixeala/api/reclamos/",
 	POIDATA_SERVER_ARG_LAT: "lat",
 	POIDATA_SERVER_ARG_LON: "lon",
 	POIDATA_SERVER_ARG_NR_POIS: "nrPois"
@@ -55,11 +56,11 @@ var World = {
 		for (var currentPlaceNr = 0; currentPlaceNr < poiData.length; currentPlaceNr++) {
 			var singlePoi = {
 				"id": poiData[currentPlaceNr].id,
-				"latitude": parseFloat(poiData[currentPlaceNr].latitude),
-				"longitude": parseFloat(poiData[currentPlaceNr].longitude),
+				"latitude": parseFloat(poiData[currentPlaceNr].latitud),
+				"longitude": parseFloat(poiData[currentPlaceNr].longitud),
 				"altitude": parseFloat(poiData[currentPlaceNr].altitude),
-				"title": poiData[currentPlaceNr].name,
-				"description": poiData[currentPlaceNr].description
+				"title": poiData[currentPlaceNr].titulo,
+				"description": poiData[currentPlaceNr].estado
 			};
 
 			World.markerList.push(new Marker(singlePoi));
@@ -68,7 +69,7 @@ var World = {
 		// updates distance information of all placemarks
 		World.updateDistanceToUserValues();
 
-		World.updateStatusMessage(currentPlaceNr + ' places loaded');
+		World.updateStatusMessage(currentPlaceNr + ' reclamos encontrados');
 
 		// set distance slider to 100%
 		$("#panel-distance-range").val(100);
@@ -101,7 +102,9 @@ var World = {
 	onPoiDetailMoreButtonClicked: function onPoiDetailMoreButtonClickedFn() {
 		var currentMarker = World.currentMarker;
 		var architectSdkUrl = "architectsdk://markerselected?id=" + encodeURIComponent(currentMarker.poiData.id) + "&title=" + encodeURIComponent(currentMarker.poiData.title) + "&description=" + encodeURIComponent(currentMarker.poiData.description);
+		
 		document.location = architectSdkUrl;
+		
 	},
 
 	// location updates, fired every time you call architectView.setLocation() in native environment
@@ -186,7 +189,7 @@ var World = {
 
 		// update UI labels accordingly
 		$("#panel-distance-value").html(maxRangeValue);
-		$("#panel-distance-places").html((placesInRange != 1) ? (placesInRange + " Places") : (placesInRange + " Place"));
+		$("#panel-distance-places").html((placesInRange != 1) ? (placesInRange + " reclamos") : (placesInRange + " reclamo"));
 
 		// update culling distance, so only palces within given range are rendered
 		AR.context.scene.cullingDistance = Math.max(maxRangeMeters, 1);
@@ -245,7 +248,7 @@ var World = {
 		} else {
 
 			// no places are visible, because the are not loaded yet
-			World.updateStatusMessage('No places available yet', true);
+			World.updateStatusMessage('Reclamos no disponibles', true);
 		}
 	},
 
@@ -255,10 +258,10 @@ var World = {
 			if (World.userLocation) {
 				World.requestDataFromServer(World.userLocation.latitude, World.userLocation.longitude);
 			} else {
-				World.updateStatusMessage('Unknown user-location.', true);
+				World.updateStatusMessage('Ubicación del usuario desconocida', true);
 			}
 		} else {
-			World.updateStatusMessage('Already requesing places...', true);
+			World.updateStatusMessage('Solicitando reclamos...', true);
 		}
 	},
 
@@ -267,16 +270,16 @@ var World = {
 
 		// set helper var to avoid requesting places while loading
 		World.isRequestingData = true;
-		World.updateStatusMessage('Requesting places from web-service');
+		World.updateStatusMessage('Solicitando reclamos...');
 
 		// server-url to JSON content provider
 		var serverUrl = ServerInformation.POIDATA_SERVER + "?" + ServerInformation.POIDATA_SERVER_ARG_LAT + "=" + lat + "&" + ServerInformation.POIDATA_SERVER_ARG_LON + "=" + lon + "&" + ServerInformation.POIDATA_SERVER_ARG_NR_POIS + "=20";
 
-		var jqxhr = $.getJSON(serverUrl, function(data) {
-			World.loadPoisFromJsonData(data);
+		var jqxhr = $.getJSON(serverUrl, function(result) {
+			World.loadPoisFromJsonData(result.data);
 		})
 			.error(function(err) {
-				World.updateStatusMessage("Invalid web-service response.", true);
+				World.updateStatusMessage("Error del servicio", true);
 				World.isRequestingData = false;
 			})
 			.complete(function() {

@@ -4,38 +4,39 @@
     <string name="app_name">Fixeala</string>
     <string name="hello_world">Hello world!</string>  
 
-    <string name="action_map">Mapa</string>
-    <string name="action_settings">Opciones</string>
-    <string name="action_help">Ayuda</string>
+    <string name="action_settings">Configuración</string>
     <string name="action_about">Acerca de</string>
     <string name="action_quit">Salir</string>
     
     <string name="contact_email_one">coripel@gmail.com</string>
     <string name="contact_email_two">urbanusjam@gmail.com</string> 
     
-    <string name="drawer_open">Slider Menu Opened</string>
-    <string name="drawer_close">Slider Menu Closed</string>
+     <string name="settings_voice_title">Indicaciones de Voz</string>
+     <string name="settings_voice_desc">Activar indicaciones de voz.</string>
+    
+<!--     <string name="drawer_open">Slider Menu Opened</string> -->
+<!--     <string name="drawer_close">Slider Menu Closed</string> -->
      
     <!-- Nav Drawer Menu Items -->
-    <string-array name="nav_drawer_items">  
-        <item>Inicio</item>
-        <item>Cámara</item>
-        <item>Opciones</item>
-        <item>Ayuda</item>
-        <item>Acerca de</item>
-        <item>Salir</item>     
-    </string-array>
+<!--     <string-array name="nav_drawer_items">   -->
+<!--         <item>Inicio</item> -->
+<!--         <item>Cámara</item> -->
+<!--         <item>Opciones</item> -->
+<!--         <item>Ayuda</item> -->
+<!--         <item>Acerca de</item> -->
+<!--         <item>Salir</item>      -->
+<!--     </string-array> -->
      
     <!-- Nav Drawer List Item Icons -->
     <!-- Keep them in order as the titles are in -->
-    <array name="nav_drawer_icons">  
-        <item>@drawable/ic_menu_home</item>
-        <item>@drawable/ic_action_camera</item>
-        <item>@drawable/ic_action_settings</item>
-        <item>@drawable/ic_action_help</item>
-        <item>@drawable/ic_action_about</item>
-        <item>@drawable/ic_action_remove</item>      
-    </array>
+<!--     <array name="nav_drawer_icons">   -->
+<!--         <item>@drawable/ic_menu_home</item> -->
+<!--         <item>@drawable/ic_action_camera</item> -->
+<!--         <item>@drawable/ic_action_settings</item> -->
+<!--         <item>@drawable/ic_action_help</item> -->
+<!--         <item>@drawable/ic_action_about</item> -->
+<!--         <item>@drawable/ic_action_remove</item>       -->
+<!--     </array> -->
      
     <!-- Content Description -->
     <string name="desc_list_item_icon">Item Icon</string>

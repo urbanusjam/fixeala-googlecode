@@ -1,7 +1,9 @@
 package ar.com.urbanusjam.fixeala.activity;
 
+import android.content.Intent;
 import android.hardware.SensorManager;
 import android.location.LocationListener;
+import android.view.MenuItem;
 import android.widget.Toast;
 import ar.com.urbanusjam.android.R;
 
@@ -29,8 +31,9 @@ public class CameraActivity extends AbstractArchitectCamActivity {
 
 	@Override
 	public String getARchitectWorldPath() {
-		return getIntent().getExtras().getString(
-				EXTRAS_KEY_ACTIVITY_ARCHITECT_WORLD_URL);
+		return "samples/5_Browsing$Pois_5_Native$Detail$Screen/index.html";
+//		return getIntent().getExtras().getString(
+//				EXTRAS_KEY_ACTIVITY_ARCHITECT_WORLD_URL);
 	}
 
 	@Override
@@ -38,7 +41,7 @@ public class CameraActivity extends AbstractArchitectCamActivity {
 		return (getIntent().getExtras() != null && getIntent().getExtras().get(
 				EXTRAS_KEY_ACTIVITY_TITLE_STRING) != null) ? getIntent()
 				.getExtras().getString(EXTRAS_KEY_ACTIVITY_TITLE_STRING)
-				: "Test-World";
+				: "Fixeala";
 	}
 
 	@Override
