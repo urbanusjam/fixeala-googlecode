@@ -1,7 +1,7 @@
 // information about server communication. This sample webservice is provided by Wikitude and returns random dummy places near given location
 var ServerInformation = {
 //	POIDATA_SERVER: "http://example.wikitude.com/GetSamplePois/",
-	POIDATA_SERVER: "http://ujam.ngrok.com/fixeala/api/reclamos/",
+	POIDATA_SERVER: "http://ujam.ngrok.com/fixeala/api/reclamos.json",
 	POIDATA_SERVER_ARG_LAT: "lat",
 	POIDATA_SERVER_ARG_LON: "lon",
 	POIDATA_SERVER_ARG_NR_POIS: "nrPois"
@@ -101,9 +101,15 @@ var World = {
 	// user clicked "More" button in POI-detail panel -> fire event to open native screen
 	onPoiDetailMoreButtonClicked: function onPoiDetailMoreButtonClickedFn() {
 		var currentMarker = World.currentMarker;
-		var architectSdkUrl = "architectsdk://markerselected?id=" + encodeURIComponent(currentMarker.poiData.id) + "&title=" + encodeURIComponent(currentMarker.poiData.title) + "&description=" + encodeURIComponent(currentMarker.poiData.description);
-		
+		var architectSdkUrl = "architectsdk://markerselected?id=" +
+						        encodeURIComponent(currentMarker.poiData.id) + 
+						        "&title=" + 
+						        encodeURIComponent(currentMarker.poiData.title) + 
+						        "&description=" + 
+						        encodeURIComponent(currentMarker.poiData.description);
 		document.location = architectSdkUrl;
+		
+//		document.location = "architectsdk://mynice?callback=true";
 		
 	},
 

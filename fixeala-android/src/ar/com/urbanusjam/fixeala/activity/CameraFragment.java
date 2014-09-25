@@ -3,8 +3,10 @@ package ar.com.urbanusjam.fixeala.activity;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
+import android.content.Intent;
 import android.hardware.SensorManager;
 import android.location.LocationListener;
+import android.net.Uri;
 import android.widget.Toast;
 import ar.com.urbansujam.fixeala.utils.urllauncher.ARchitectUrlLauncherCamActivity;
 import ar.com.urbanusjam.android.R;
@@ -76,10 +78,19 @@ public class CameraFragment extends AbstractArchitectCamFragmentV4 {
 	@Override
 	public ArchitectUrlListener getUrlListener() {
 		return new ArchitectUrlListener() {
-
+			
 			@Override
+			// fetch e.g. document.location = "architectsdk://markerselected?id=1";
 			public boolean urlWasInvoked(String uriString) {
-				// by default: no action applied when url was invoked
+				Uri invokedUri = Uri.parse(uriString);
+				if ("markerselected".equalsIgnoreCase(invokedUri.getHost())) {
+						Intent poiDetailIntent = new Intent(getActivity(), IssueDetailActivity.class);
+						poiDetailIntent.putExtra(IssueDetailActivity.EXTRAS_KEY_POI_ID, String.valueOf(invokedUri.getQueryParameter("id")) );
+						poiDetailIntent.putExtra(IssueDetailActivity.EXTRAS_KEY_POI_TITILE, String.valueOf(invokedUri.getQueryParameter("title")) );
+						poiDetailIntent.putExtra(IssueDetailActivity.EXTRAS_KEY_POI_DESCR, String.valueOf(invokedUri.getQueryParameter("description")) );
+						startActivity(poiDetailIntent);
+						return true;
+				}
 				return false;
 			}
 		};
