@@ -10,7 +10,7 @@ var fxlAccountController = {
 		fxlAccountController.loadIssuesTable(profileUserID);
 		fxlAccountController.loadCommentsTable(profileUserID);
 		fxlAccountController.configContextMenu();
-					
+
 		$(".fileinput-button").click(function() {
 		    $("#fileupload-profile").click();
 		});		
@@ -104,59 +104,52 @@ var fxlAccountController = {
         $('.ajax_loading').show();
  		
  		 $.ajax({
-   			url: fxlGlobalController.getDomainUrl() + "login",
-       		type: "POST",		            	
+   				url: fxlGlobalController.getDomainUrl() + "login",
+   				type: "POST",	
+   				async: false,
 	            beforeSend: function(xhr) {
 	                xhr.withCredentials = true;
 	            },
 	            data: $("#loginForm").serialize(),				       
 	            success: function(data, status) { 
-	          
-	            		setTimeout(function () {				                   
-			            		$('#btnLogin').show();
-			            		$('.ajax_loading').hide(); 
-			            		
-			            		if(data.loggedIn) {	
-			            			 $('#loginModal').modal('hide');
-			            			 
-			            			window.location.reload();
-			            			/**
-			            			$('#loginNav').load(location.href + " #loginNav > *");	
-			            			
-			            			var pathArray = window.location.pathname.split( '/' );	
-			            											            			
-									if(pathArray.indexOf("issues") != -1){
-										
-										var target = $('#userIssueActions');
-										var url = location.href + " #userIssueActions > *";
-										var urlVote = location.href + " #issue-stats-actions > *";
-										
-										target.load(url, function(){
-											fxlIssueController.enableUserActions();							
-										});	
-										
-									    var isVoted = '${isCurrentlyVoted}';
-									    var isVoteUp = '${isVoteUp}';
-									    
-										$("#issue-stats-actions").load(urlVote, function(){
-											fxlIssueController.setCurrentVote(isVoted, isVoteUp);	
-											$("#numFollowers").text('${cantidadObservadores}'); 
-										});	
-										
-										$("#issueRepair").load(location.href + " #issueRepair > *");
 
-									}**/
-										
-									
-				                } else {							                
-				                	fxlAccountController.handleLoginFailure();							                    
-				                }				            				
-	            		},2000);
+            		setTimeout(function () {		
+            			
+	            		$('#btnLogin').show();
+	            		$('.ajax_loading').hide(); 			    
+	            		$('#loginModal').modal('hide');		   
+	            		window.location.reload();
 	            		
-	            		return false;				
 	            		
-	            },
-	            						           
+	            			/**
+	            			$('#loginNav').load(location.href + " #loginNav > *");	
+	            			
+	            			var pathArray = window.location.pathname.split( '/' );	
+	            											            			
+							if(pathArray.indexOf("issues") != -1){
+								
+								var target = $('#userIssueActions');
+								var url = location.href + " #userIssueActions > *";
+								var urlVote = location.href + " #issue-stats-actions > *";
+								
+								target.load(url, function(){
+									fxlIssueController.enableUserActions();							
+								});	
+								
+							    var isVoted = '${isCurrentlyVoted}';
+							    var isVoteUp = '${isVoteUp}';
+							    
+								$("#issue-stats-actions").load(urlVote, function(){
+									fxlIssueController.setCurrentVote(isVoted, isVoteUp);	
+									$("#numFollowers").text('${cantidadObservadores}'); 
+								});	
+								
+								$("#issueRepair").load(location.href + " #issueRepair > *");
+
+							}**/
+					            				
+            		},2000);	            	
+	            },	            						           
 	           error: fxlAccountController.handleLoginFailure				           
    	});	    	
    	return false;		
@@ -309,7 +302,7 @@ var fxlAccountController = {
  		 	    var captcha = $('[name="captcha_answer"]').val();
  		 	  
  				$.ajax({
- 					    url: '../account/signup/createAccount.html',
+ 					    url: 'account/signup/createAccount.html',
  				 		type: "POST",	
  				 		data: 'username=' + username + '&email=' + email + '&password=' + password + '&captcha_answer=' + captcha,
  				        success: function(data){	

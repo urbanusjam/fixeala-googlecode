@@ -8,7 +8,13 @@ var fxlGlobalController = {
              e.preventDefault();
          });
 		 
+		 //clear login form messages
+		 $("#loginModal").on('show', function(event){
+			 $("#loginModal .modal-body .alert").hide();
+		 });
+		 
 		 fxlGlobalController.initFeedback();
+			
 	},
 	
 	initNavTooltip : function(){

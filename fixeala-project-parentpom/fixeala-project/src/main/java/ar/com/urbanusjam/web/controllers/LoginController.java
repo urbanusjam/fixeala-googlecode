@@ -122,8 +122,6 @@ public class LoginController {
 	    UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);	   
 
 	    try {
-//	    	  User details = (User) userService.loadUserByUsername(username);
-//	 	      token.setDetails(details);
 		      Authentication auth = fixealaAuthenticationManager.authenticate(token);
 		      SecurityContextHolder.getContext().setAuthentication(auth);	
 		      loggedUser.setLoggedIn(auth.isAuthenticated());
