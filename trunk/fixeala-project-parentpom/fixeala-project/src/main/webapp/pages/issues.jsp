@@ -368,7 +368,7 @@
 				<div class="stats-box">
 					<span class="text-small">votos</span><span id="voteCount" class="text-big pull-right">${cantidadVotos}</span>
 				</div> 
-				<div class="stats-box"><span class="text-small">visitas</span><span class="text-big pull-right">${cantidadVisitas}</span></div>
+<%-- 				<div class="stats-box"><span class="text-small">visitas</span><span class="text-big pull-right">${cantidadVisitas}</span></div> --%>
 				<div class="stats-box"><span class="text-small">comentarios</span><span class="text-big pull-right">${cantidadComentarios}</span></div>
 				<div id="watchers" class="stats-box">					
 					<span class="text-small">seguidores</span>
