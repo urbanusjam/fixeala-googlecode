@@ -20,7 +20,7 @@
 	<meta property="og:description" content="Dales impulso y visibilidad a los reclamos de tu barrio y ayudá a resolverlos.">
 	<link rel="shortcut icon" href="resources/images/favicon.ico">
 	<!-- JS google maps -->
-  	<script type="text/javascript" src="http://maps.google.com/maps/api/js?libraries=geometry,places&components=country:ar&language=ES&sensor=false"></script>
+  	<script type="text/javascript" src="https://maps.google.com/maps/api/js?libraries=geometry,places&components=country:ar&language=ES&sensor=false"></script>
 	<!-- JS jquery main -->
   	<script type="text/javascript" src="resources/js/jquery/jquery-1.10.2.min.js"></script>
   	<script type="text/javascript" src="resources/js/jquery/jquery-ui-1.10.3.custom.js"></script>
@@ -83,7 +83,7 @@
 	<script type="text/javascript" src="resources/js/fixeala/fixeala.map.js"></script>
 	<script type="text/javascript" src="resources/js/fixeala/fixeala.account.js"></script> 
 	<!-- CSS -->
-  	<link type="text/css" href="http://fonts.googleapis.com/css?family=Oxygen:400,300,700|Lato:400,900|Graduate:400,900" rel="stylesheet">
+  	<link type="text/css" href="https://fonts.googleapis.com/css?family=Oxygen:400,300,700|Lato:400,900|Graduate:400,900" rel="stylesheet">
 	<link type="text/css" href="resources/css/bootstrap/2.3.2/bootstrap.css" rel="stylesheet">   
 	<link type="text/css" href="resources/css/bootstrap/2.3.2/bootstrap-combined.min.css" rel="stylesheet"> 
 	<link type="text/css" href="resources/css/bootstrap/2.3.2/bootstrap-editable.css" rel="stylesheet"> 
