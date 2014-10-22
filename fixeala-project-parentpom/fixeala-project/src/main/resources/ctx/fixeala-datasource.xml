@@ -22,9 +22,9 @@
     
 	<bean id="dataSourceFixeala" class="org.springframework.jndi.JndiObjectFactoryBean">
 	    <property name="jndiName">   
-	            <value>java:comp/env/jdbc/FixealaDS</value>
+	    	<value>java:comp/env/jdbc/MysqlDS</value>
 	    </property>
-	  </bean>
+	</bean>
 	
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactory" />
