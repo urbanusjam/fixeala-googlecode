@@ -490,7 +490,7 @@ var fxlIssueController = {
 		var fileList =  JSON.stringify(uploadsOK);
     	
 	    $('#multiplefileupload').fileupload({
-	    	url: './'+fxlIssueController.issueID+'/uploadFiles',
+	    	url: 'issues/'+fxlIssueController.issueID+'/uploadFiles',
 		    type: "POST",
 		    dataType: 'json',
 			formData: [{ name: 'fileList', value: fileList }],
