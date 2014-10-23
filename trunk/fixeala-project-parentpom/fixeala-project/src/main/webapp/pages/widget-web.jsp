@@ -117,7 +117,7 @@
 		<!-- Widget Footer -->
 		<div class="widget-footer">						
 			<div class="logo">
-				<a href="http://localhost:8080/fixeala" target="_blank" title="Fixeala - Tu plataforma colaborativa de reporte ciudadano">
+				<a href="http://desa.fixeala.com.ar:8081" target="_blank" title="Fixeala - Tu plataforma colaborativa de reporte ciudadano">
 					<i>&copy; <strong>FIXEALA</strong></i>
 				</a>
 			</div>

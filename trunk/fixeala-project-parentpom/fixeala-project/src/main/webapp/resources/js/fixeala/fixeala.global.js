@@ -172,8 +172,6 @@ var fxlGlobalController = {
 		
 		var protocol = window.location.protocol;
 		var host = window.location.host;
-//		var context = "fixeala";
-//		var domainUrl = protocol + "//" + host + "/" + context + "/";
 		var domainUrl = protocol + "//" + host + "/" ;
 	 	return domainUrl;
 	 	
