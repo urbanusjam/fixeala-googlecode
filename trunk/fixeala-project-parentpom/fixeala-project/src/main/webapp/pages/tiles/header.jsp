@@ -8,7 +8,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>           
-          <a class="brand" href="/fixeala;">fixeala&nbsp;<img src="resources/images/fixeala_logo.png" width=32 height=32 /></a>
+          <a class="brand" href="/">fixeala&nbsp;<img src="resources/images/fixeala_logo.png" width=32 height=32 /></a>
           <div class="nav-collapse collapse">          
           	<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
           	<!-- MAIN NAV -->
