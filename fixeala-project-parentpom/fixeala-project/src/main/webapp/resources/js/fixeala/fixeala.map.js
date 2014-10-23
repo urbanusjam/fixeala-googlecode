@@ -92,12 +92,12 @@ var mapController = {
 							 +'  <tr style="font-size:11px">'
 							 +'	 	<td style="text-align:left;color:grey">'+markerArray[i].address+'</td>'				
 							 +'	 </tr><tr><td>&nbsp;</td></tr>'	
-							 +'   <tr style="font-size:12px">'
-							 +'	 	<td style="text-align:justify;color:black">'+shortDescription+' ...</td>'				
-							 +'	 </tr>'	
-							 +'   <tr style="height:3px">'
-							 +'	 	<td>&nbsp;</td>'				
-							 +'	 </tr>'			
+//							 +'   <tr style="font-size:12px">'
+//							 +'	 	<td style="text-align:justify;color:black">'+shortDescription+' ...</td>'				
+//							 +'	 </tr>'	
+//							 +'   <tr style="height:3px">'
+//							 +'	 	<td>&nbsp;</td>'				
+//							 +'	 </tr>'			
 							 +'	 <tr style="font-size:11px;padding-top:1px">'
 							 +'		<td style="text-align:left;color:grey;border-top:1px solid grey">Reportado por: '+mapController.getUserURL(markerArray[i].user)+' &nbsp; <div style="margin:0;padding:0;float:right;clear:both;display:inline">'+ markerArray[i].date +'</div></td>'
 							 +'	 </tr>'				
@@ -571,7 +571,8 @@ var mapController = {
 					    	tr += '<img class="media-object pull-left thumbnail" style="width:64px; height:64px" src="'+imageSrc+'">';
 					    	tr += '<div class="media-body">';
 					    	tr += '<a href="'+mapController.getIssuePlainURL(marker.id, marker.title)+'"><h5 class="media-heading">'+marker.title+'</h5></a>';
-					    	tr += '<p style="font-size:11px">Reportado por: '+mapController.getUserURL(marker.user)+'</p>';
+//					    	tr += '<p style="font-size:11px">Reportado por: '+mapController.getUserURL(marker.user)+'</p>';
+					    	tr += '<p style="font-size:11px">Reportado por: <a id="issue-user" style="cursor:pointer" class="user-link" href="'+mapController.getUserPlainURL(marker.user)+'">'+userID+'</a></p>';
 					    	tr += '<a class=\"taglink\" href=\"./search.html?type=status&value='+marker.status+'\"><span style="background:'+marker.statusCss+'" class="label">'+marker.status+'</a></span>';
 					    	tr += '</div>';	
 					    	tr += '</div>';
@@ -648,32 +649,23 @@ var mapController = {
 	getIssuePlainURL : function (issueID){
 		var protocol = window.location.protocol;
 		var host = window.location.host;
-		var context = "fixeala";
-		var subcontext = "issues/" + issueID;		
-		var url = protocol + "//" + host + "/" + context + "/" + subcontext;			
+		var context = "issues/" + issueID;		
+		var url = protocol + "//" + host + "/" + context;			
 		return url;
 	},
 
 	getIssueURL : function(issueID, issueTitle, type){
-		var protocol = window.location.protocol;
-		var host = window.location.host;
-		var context = "fixeala";
-		var subcontext = "issues/" + issueID;		
-		var url = subcontext;	
+		var url = "issues/" + issueID;	
 		
 		if(type == 'link')
-			return '<a href="'+ url +'">#' + issueID + " " + issueTitle + '</a>';		
+			return '<a href="'+ url +'">'+issueTitle+'</a>';		
 		
 		if(type == 'plain')
 			return url;
 	},
 
 	getUserURL : function (userID){
-		var protocol = window.location.protocol;
-		var host = window.location.host;
-		var context = "fixeala";
-		var subcontext = "users/" + userID;	
-		var url = protocol + "//" + host + "/" + context + "/" + subcontext;	
+		var url = "users/" + userID;	
 		var urlLink = '<a id="issue-user" style="cursor:pointer" class="user-link" href="'+ url +'">' + userID + '</a>';	
 		return urlLink;
 	},
@@ -681,9 +673,8 @@ var mapController = {
 	getUserPlainURL : function (userID){
 		var protocol = window.location.protocol;
 		var host = window.location.host;
-		var context = "fixeala";
-		var subcontext = "users/" + userID;	
-		var url = protocol + "//" + host + "/" + context + "/" + subcontext;	
+		var context = "users/" + userID;	
+		var url = protocol + "//" + host + "/" + context;	
 		return url;
 	},
 	

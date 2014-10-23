@@ -1,12 +1,11 @@
-var loader = '<div class="widget-loader"><img src="http://localhost:8080/fixeala/widget/images/loader.gif"/></span>';	
+var loader = '<div class="widget-loader"><img src="http://desa.fixeala.com.ar:8081/widget/images/loader.gif"/></span>';	
 var $widgetBody =  $('.widget-body');
 
 function redirectIssueURL(issueID, issueTitle){
 	var protocol = window.location.protocol;
 	var host = window.location.host;
-	var context = "fixeala";
-	var subcontext = "issues/" + issueID;		
-	var url = protocol + "//" + host + "/" + context + "/" + subcontext + ".html";
+	var context = "issues/" + issueID;		
+	var url = protocol + "//" + host + "/" + context + ".html";
 	window.open (url, issueTitle);
 }
 	

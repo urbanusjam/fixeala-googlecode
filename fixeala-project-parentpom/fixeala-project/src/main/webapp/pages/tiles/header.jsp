@@ -13,10 +13,16 @@
           	<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
           	<!-- MAIN NAV -->
             <ul id="menuNav" class="nav">
-				<li><a href="dataset" title="Datasets"><i class="icon-tasks icon-2x"></i></a></li>		
-				<li><a href="api" title="REST API"><i class="icon-bullseye icon-2x"></i></a></li>		
-				<li><a href="widget" title="Tu Gadget Web"><i class="icon-cogs icon-2x"></i></a></li>	
-				<li><a href="mobile" title="Aplicaci&oacute;n M&oacute;vil"><i class="icon-android icon-2x"></i></a></li>
+<!-- 				<li><a href="dataset" title="Datasets"><i class="icon-tasks icon-2x"></i></a></li>					 -->
+<!-- 				<li><a href="widget" title="Tu Gadget Web"><i class="icon-cogs icon-2x"></i></a></li>	 -->
+<!-- 				<li><a href="mobile" title="Aplicaci&oacute;n M&oacute;vil"><i class="icon-android icon-2x"></i></a></li> -->
+<!-- 				<li><a href="api" title="API"><i class="icon-bullseye icon-2x"></i></a></li>		 -->
+
+				<li><a href="dataset">Cat&aacute;logos de Datos</a></li>
+				<li><a href="mobile">App</a></li>					
+				<li><a href="widget">Widget</a></li>					
+				<li><a href="api">Desarrolladores</a></li>		
+				
 <%-- 			<li><a href="help" title="Ayuda"><i class="icon-question-sign icon-2x"></i></a></li>			 --%>
         	</ul>
         	<!-- /MAIN NAV -->        	

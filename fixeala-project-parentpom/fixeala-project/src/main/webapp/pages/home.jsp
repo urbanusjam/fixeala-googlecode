@@ -233,7 +233,6 @@
 	var issueFileData = null; //holds the (optional) attached file
 
 	$(document).ready(function(){
-
 		
 		//data
 		var issuesJson = '${jsonIssues}';
