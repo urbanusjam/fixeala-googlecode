@@ -38,8 +38,7 @@ public class MailServiceImpl implements MailService {
 		  MimeMessageHelper helper = new MimeMessageHelper(message, true);
 		  
 		  helper.setFrom(from);
-	      //helper.setTo(email);
-		  helper.setTo(to);
+	      helper.setTo(email);
 		  helper.setSubject("Fixeala - Activacion de cuenta");
 		
 	      String link = "<a target='_blank' href='http://localhost:8080/fixeala/account/activation/" + token + ".html' > link </a>";
@@ -70,8 +69,7 @@ public class MailServiceImpl implements MailService {
 		  MimeMessageHelper helper = new MimeMessageHelper(message, true);
 		  
 		  helper.setFrom(from);
-	      //helper.setTo(email);
-		  helper.setTo(to);
+	      helper.setTo(email);
 		  helper.setSubject("Bienvenid@ a Fixeala - Tu plataforma colaborativa de reclamos barriales");
 		
 	      String text = "Hola, <b>" + username + "</b>";      
@@ -95,8 +93,7 @@ public class MailServiceImpl implements MailService {
 		  MimeMessageHelper helper = new MimeMessageHelper(message, true);
 		  
 		  helper.setFrom(from);
-	      //helper.setTo(email);
-		  helper.setTo(to);
+	      helper.setTo(email);
 		  helper.setSubject("Recuperación de clave");
 	      
 	      String link = "<a target='_blank' href='http://localhost:8080/fixeala/account/resetPassword/" + token + ".html'> link" + "</a>";
@@ -128,8 +125,7 @@ public class MailServiceImpl implements MailService {
 		  MimeMessageHelper helper = new MimeMessageHelper(message, true);
 		  
 		  helper.setFrom(from);
-	      //helper.setTo(email);
-		  helper.setTo(to);
+	      helper.setTo(email);
 		  helper.setSubject("Modificaste tu clave de Fixeala");
 		
 	      String text = "Hola, <b>" + username + "</b>";      
@@ -155,8 +151,7 @@ public class MailServiceImpl implements MailService {
 		  MimeMessageHelper helper = new MimeMessageHelper(message, true);
 		  
 		  helper.setFrom(from);
-	      //helper.setTo(email);
-		  helper.setTo(to);
+		  helper.setTo(email);
 		  helper.setSubject("Cierre de cuenta");
 			
 	      String text = "Hola, <b>" + username + "</b>";      
@@ -219,8 +214,7 @@ public class MailServiceImpl implements MailService {
 		  MimeMessageHelper helper = new MimeMessageHelper(message, true);
 		  
 		  helper.setFrom(from);
-	      //helper.setTo(email);
-		  helper.setTo(to);
+		  helper.setTo(email.getTo());
 		  helper.setSubject(email.getSubject());
 			
 	      String text = email.getMessage();
