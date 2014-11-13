@@ -438,7 +438,7 @@ public class IssueServiceImpl implements IssueService {
 			String reporterEmail = null;
 			
 			if(!commentDTO.getUsuario().equals(issue.getReporter().getUsername()))
-				reporterEmail = comment.getUsuario().getEmail();
+				reporterEmail = issue.getReporter().getEmail();
 			
 			mailService.sendIssueUpdateEmail(this.getFollowersEmails(followers, reporterEmail), email);
 		
