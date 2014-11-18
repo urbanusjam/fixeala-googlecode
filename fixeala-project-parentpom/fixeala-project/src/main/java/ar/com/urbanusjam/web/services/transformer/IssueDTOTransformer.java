@@ -23,13 +23,13 @@ public class IssueDTOTransformer implements Transformer {
 	         dto.setBarrio(issue.getNeighborhood() != null ? issue.getNeighborhood() : null);
 	         dto.setCiudad(issue.getCity());
 	         dto.setProvincia(issue.getProvince());
-	         dto.setLatitud(Float.parseFloat(issue.getLatitude()));
-	         dto.setLongitud(Float.parseFloat(issue.getLongitude()));
+	         dto.setLatitud(issue.getLatitude());
+	         dto.setLongitud(issue.getLongitude());
 	         dto.setEstado(issue.getStatus());
 	         dto.setComentarios(issue.getTotalComments());
 	         dto.setVotos(issue.getTotalVotes());
 	         dto.setSeguidores(issue.getTotalFollowers());
-	         dto.setLink("http://localhost:8081/fixeala/issues/" + issue.getId());
+	         dto.setLink("http://localhost:8081/fixeala/issues/" + issue.getId()); //CAMBIAR!
 	         	            
 	         return dto;
 	         

@@ -8,8 +8,6 @@
     	
     	<provider>org.hibernate.ejb.HibernatePersistence</provider>
     	
-<!--    <jta-data-source>java:comp/env/jdbc/FixealaDS</jta-data-source> -->
-      	
       	<class>ar.com.urbanusjam.entity.annotations.ActivationToken</class>
        	<class>ar.com.urbanusjam.entity.annotations.Authority</class> 
         <class>ar.com.urbanusjam.entity.annotations.Comment</class>      
@@ -33,7 +31,7 @@
         
         <properties>
       		<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
-      		<property name="hibernate.show_sql" value="true"/>      		
+      		<property name="hibernate.show_sql" value="false"/>      		
     	</properties>
         
 	</persistence-unit>
