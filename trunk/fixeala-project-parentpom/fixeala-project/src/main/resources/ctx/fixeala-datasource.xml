@@ -10,12 +10,21 @@
     				    http://www.springframework.org/schema/tx
 						http://www.springframework.org/schema/tx/spring-tx-3.1.xsd ">
   
-	<context:annotation-config base-package="ar.com.urbanusjam"/>
+<!-- 	<context:annotation-config base-package="ar.com.urbanusjam"/> -->
 		
 	<tx:annotation-driven />
+		
+	<context:component-scan base-package="ar.com.urbanusjam.dao.impl" />
+	<context:component-scan base-package="ar.com.urbanusjam.services.impl" />
+<!-- 	 	<context:include-filter type="regex"  -->
+<!-- 	                       expression="ar.com.urbanusjam.jpa.dao.*DAOImpl.*" />  -->
+<!-- 		<context:include-filter type="regex"  -->
+<!--                        expression="ar.com.urbanusjam.services.*ServiceImpl.*" /> -->
+ 	
+ 	
+	
 	
 	 <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-<!-- 	<property name="persistenceXmlLocation" value="classpath:META-INF/persistence.xml" /> -->
         <property name="persistenceUnitName" value="fixealaPU" />
         <property name="dataSource" ref="dataSourceFixeala"/>
     </bean>
@@ -34,11 +43,6 @@
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
  
- 	<context:component-scan base-package="ar.com.urbanusjam.services" >
-	 	<context:include-filter type="regex" 
-	                       expression="ar.com.urbanusjam.jpa.dao.*DAOImpl.*" /> 
-		<context:include-filter type="regex" 
-                       expression="ar.com.urbanusjam.services.*ServiceImpl.*" />
- 	</context:component-scan>
+ 	
     
 </beans>    

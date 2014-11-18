@@ -40,10 +40,10 @@ public class DataResponse {
 	private String provincia;	
 	
 	@XmlElement(name="latitud")	
-	private float latitud;	
+	private String latitud;	
 	
 	@XmlElement(name="longitud")	
-	private float longitud;
+	private String longitud;
 	
 	@XmlElement(name="estado")	
 	private String estado;	
@@ -133,19 +133,19 @@ public class DataResponse {
 		this.provincia = provincia;
 	}
 
-	public float getLatitud() {
+	public String getLatitud() {
 		return latitud;
 	}
 
-	public void setLatitud(float latitud) {
+	public void setLatitud(String latitud) {
 		this.latitud = latitud;
 	}
 
-	public float getLongitud() {
+	public String getLongitud() {
 		return longitud;
 	}
 
-	public void setLongitud(float longitud) {
+	public void setLongitud(String longitud) {
 		this.longitud = longitud;
 	}
 
