@@ -19,9 +19,9 @@
 <!-- 				<li><a href="api" title="API"><i class="icon-bullseye icon-2x"></i></a></li>		 -->
 
 				<li><a href="dataset">Cat&aacute;logos de Datos</a></li>
-				<li><a href="mobile">App</a></li>					
+				<li><a href="mobile">Aplicaci&oacute;n M&oacute;vil</a></li>					
 				<li><a href="widget">Widget</a></li>					
-				<li><a href="api">Desarrolladores</a></li>		
+				<li><a href="api">API</a></li>		
 				
 <%-- 			<li><a href="help" title="Ayuda"><i class="icon-question-sign icon-2x"></i></a></li>			 --%>
         	</ul>
