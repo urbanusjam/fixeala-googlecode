@@ -3,48 +3,19 @@
     xmlns:context="http://www.springframework.org/schema/context"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
     					http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
- 
-  
-  	<!-- Common Services -->
-	<bean name="userService" class="ar.com.urbanusjam.services.impl.UserServiceImpl" >
-		<property name="userDAO" ref="userDAO" />
-		<property name="authorityDAO" ref="authorityDAO" />
-		<property name="passwordResetDAO" ref="passwordResetDAO" />
-		<property name="activationDAO" ref="activationDAO" />
-		<property name="mailService" ref="mailService" />
-		<property name="contenidoService" ref="contenidoService" />	
-	</bean>
+  	
+  	
+	<bean id="userService" class="ar.com.urbanusjam.services.impl.UserServiceImpl" />
 		
-	<bean name="issueService" class="ar.com.urbanusjam.services.impl.IssueServiceImpl" >
-		<property name="userService" ref="userService" />	
-		<property name="mailService" ref="mailService" />
-		<property name="issueDAO" ref="issueDAO" />
-		<property name="userDAO" ref="userDAO" />
-		<property name="provinceDAO" ref="provinceDAO" />
-		<property name="tagDAO" ref="tagDAO" />
-		<property name="issueRepairDAO" ref="issueRepairDAO" />
-		<property name="issueFollowDAO" ref="issueFollowDAO" />		
-		<property name="issueVoteDAO" ref="issueVoteDAO" />
-		<property name="issuePageViewDAO" ref="issuePageViewDAO" />
-		<property name="issueVerificationDAO" ref="issueVerificationDAO" />
-	</bean>
+	<bean id="issueService" class="ar.com.urbanusjam.services.impl.IssueServiceImpl" />
 	
-	<bean name="exportService" class="ar.com.urbanusjam.web.services.impl.ExportServiceImpl" >
+	<bean id="contenidoService" class="ar.com.urbanusjam.services.impl.ContenidoServiceImpl" />
+	
+	<bean id="mailService" class="ar.com.urbanusjam.services.impl.MailServiceImpl" />
+	
+	<bean id="exportService" class="ar.com.urbanusjam.web.services.impl.ExportServiceImpl" >
 		<property name="pathJasperTemplatePdf" value="${path.jasper.template.pdf}${file.separator}" />
 		<property name="pathJasperTemplateCsv" value="${path.jasper.template.csv}${file.separator}" />
-	</bean>
-	
-	<bean name="contenidoService" class="ar.com.urbanusjam.services.impl.ContenidoServiceImpl" >
-		<property name="issueService" ref="issueService" />	
-		<property name="mailService" ref="mailService" />
-		<property name="contenidoDAO" ref="contenidoDAO" />		
-		<property name="issueDAO" ref="issueDAO" />		
-		<property name="userDAO" ref="userDAO" />
-<!-- 		<property name="pathImagenes" value="${path.imagenes}${file.separator}" />     -->
-	</bean>	
-	
-	<bean id="mailService" class="ar.com.urbanusjam.services.impl.MailServiceImpl">
-		<property name="mailSender" ref="mailSender" />
 	</bean>
 	
 	<!-- Remember Me Service -->		
@@ -58,7 +29,6 @@
 	<!-- Remember Me Token Repository -->	
 	<bean id="fixealaTokenRepository" class="org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl" >
 		 <property name="dataSource" ref="dataSourceFixeala" />
-	</bean>
-	
+	</bean>	
 	
 </beans>

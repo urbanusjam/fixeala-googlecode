@@ -4,11 +4,14 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:mvc="http://www.springframework.org/schema/mvc" 
 	xmlns:p="http://www.springframework.org/schema/p" 
+	xmlns:util="http://www.springframework.org/schema/util" 
 	xsi:schemaLocation="
         http://www.springframework.org/schema/beans     
         http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
         http://www.springframework.org/schema/context 
         http://www.springframework.org/schema/context/spring-context-3.1.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util-3.1.xsd
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd ">
         
@@ -23,6 +26,9 @@
 	<!-- Context -->	
 	<import resource="classpath:ctx/fixeala-context.xml" />
 
+	<util:properties id="propertyConfigurer" location="classpath:/properties/fixeala.build.properties"/>
+	<context:property-placeholder properties-ref="propertyConfigurer" />
+	
 	<!-- Content Negotiation Views -->
 	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
 		<property name="order" value="1" />		
@@ -55,19 +61,21 @@
 					class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 				    <property name="prefix" value="/pages/" />
 				    <property name="suffix" value=".jsp" />	
-				    <property name="order"  value="2"/>
+				    <property name="exposedContextBeanNames">
+				        <list><value>properties</value></list>
+				    </property>			
+				    <property name="order"  value="2"/>					  				       
 				</bean>
 		 	</list>
-	  	</property>	 
+	  	</property>	 	  
 	</bean>
-	
+		
 	<!-- Jackson Mapper -->
 	<bean id="jacksonMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
 		 <property name="objectMapper" ref="jacksonObjectMapper" />
 	</bean>
 	
 	<bean id="jacksonObjectMapper" class="org.codehaus.jackson.map.ObjectMapper" />
-
 
 	<bean id="marshallingHttpMessageConverter" class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
         <property name="marshaller" ref="jaxb2Marshaller"></property>
@@ -112,10 +120,6 @@
    		</property>
  	</bean>
  	
- 	
-
-	
-
 	<!-- Application Message Bundle -->
 	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
 		<property name="basename" value="/messages/fixeala.messages" />		

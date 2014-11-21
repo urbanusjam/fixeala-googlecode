@@ -1,16 +1,14 @@
 package ar.com.urbanusjam.services.dto;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class IssueHistoryDTO implements Serializable {
+import ar.com.urbanusjam.services.utils.DateUtils;
+
+public class IssueHistoryDTO extends CommonDataDTO implements Serializable {
 	
 	private static final long serialVersionUID = 3825783987489912575L;
 	
-	private Long nroReclamo;
-	private String username;
-	private Date fecha;	
 	private String fechaFormateada;		
 	private String observaciones;
 	private String operacion;
@@ -18,32 +16,7 @@ public class IssueHistoryDTO implements Serializable {
 	private String estado;
 	private String resolucion;
 	private String detalle;
-	
-	
-	public Date getFecha() {
-		return fecha;
-	}
-	
-	public void setFecha(Date fecha) {
-		this.fecha = fecha;
-	}
-	
-	public String getUsername() {
-		return username;
-	}
-	
-	public void setUsername(String username) {
-		this.username = username;
-	}		
-	
-	public Long getNroReclamo() {
-		return nroReclamo;
-	}
-
-	public void setNroReclamo(Long nroReclamo) {
-		this.nroReclamo = nroReclamo;
-	}
-
+		
 	public String getEstado() {
 		return estado;
 	}
@@ -91,17 +64,13 @@ public class IssueHistoryDTO implements Serializable {
 	public void setDetalle(String detalle) {
 		this.detalle = detalle;
 	}
-
-	public String getFechaFormateada(){	
-		
-		String formattedDate = "";	
-		Date d = this.getFecha();		
-        SimpleDateFormat df = new SimpleDateFormat();
-//      df.applyPattern("dd/MM/yyyy hh:mm a");
-        df.applyPattern("dd/MM/yyyy HH:mm");        
-        formattedDate = df.format(d.getTime());
-        return formattedDate;	
+	
+	public void setFechaFormateada(Date date) {
+		this.fechaFormateada = DateUtils.getFechaFormateada(date, DateUtils.DATE_TIME_PATTERN_SHORT);
 	}
 	
-
+	public String getFechaFormateada() {
+		return fechaFormateada;
+	}
+	
 }

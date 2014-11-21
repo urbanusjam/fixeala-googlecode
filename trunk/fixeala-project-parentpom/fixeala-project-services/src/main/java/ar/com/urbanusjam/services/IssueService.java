@@ -7,6 +7,7 @@ import javax.mail.MessagingException;
 
 import org.springframework.mail.MailException;
 
+import ar.com.urbanusjam.entity.annotations.Comment;
 import ar.com.urbanusjam.entity.annotations.IssueFollow;
 import ar.com.urbanusjam.entity.annotations.IssueRepair;
 import ar.com.urbanusjam.entity.annotations.IssueVerification;
@@ -14,7 +15,6 @@ import ar.com.urbanusjam.services.dto.CommentDTO;
 import ar.com.urbanusjam.services.dto.IssueCriteriaSearch;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.IssueFollowDTO;
-import ar.com.urbanusjam.services.dto.IssuePageViewDTO;
 import ar.com.urbanusjam.services.dto.IssueVoteDTO;
 
 public interface IssueService {
@@ -33,7 +33,7 @@ public interface IssueService {
 	public List<IssueDTO> searchByTagOrStatus(String searchType, String value);
 		
 	//comments
-	public void postComment(CommentDTO comment) throws MessagingException, MailException;		
+	public void postComment(CommentDTO commentDTO) throws MessagingException, MailException;		
 	
 	//repair
 	public void addReparacion(IssueRepair repair, String username);
@@ -51,12 +51,12 @@ public interface IssueService {
 	public String[] getFollowersEmails(Set<IssueFollow> followers, String reporterEmail);
 	
 	//votes
-	public void voteIssue(IssueVoteDTO voteDTO);
+	public void submitVote(IssueVoteDTO voteDTO);
 	public IssueVoteDTO getCurrentVote(String issueID, String username);
 	public Long countIssueVotes(String issueID);	
 	
 	//pageviews
-	public boolean trackIssuePageView(IssuePageViewDTO pageviewDTO);
+//	public boolean trackIssuePageView(IssuePageView pageview);
 	public int getIssuePageViews(String issueID);
 	
 	//provinces

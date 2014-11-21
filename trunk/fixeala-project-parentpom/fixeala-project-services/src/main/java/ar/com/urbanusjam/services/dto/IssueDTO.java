@@ -346,7 +346,7 @@ public class IssueDTO implements Serializable {
 	}
 
 	public void setFechaFormateada(Date date) {
-		this.fechaFormateada = this.getFormattedDate(date, DateUtils.DATE_TIME_PATTERN_SHORT);
+		this.fechaFormateada = DateUtils.getFechaFormateada(date, DateUtils.DATE_TIME_PATTERN_SHORT);
 	}
 	
 	public String getFechaFormateadaCompleta() {
@@ -354,9 +354,9 @@ public class IssueDTO implements Serializable {
 	}
 	
 	public void setFechaFormateadaCompleta(Date date) {
-		this.fechaFormateadaCompleta = this.getFormattedDate(date, DateUtils.DATE_TIME_PATTERN_LONG);
+		this.fechaFormateadaCompleta = DateUtils.getFechaFormateada(date, DateUtils.DATE_TIME_PATTERN_LONG);
 	}
-	
+		
 	public String getFullAddress(){		
 		return address + ", " + city + ", " + province;	
 	}
@@ -373,14 +373,6 @@ public class IssueDTO implements Serializable {
 		this.followers = followers;
 	}
 
-	public String getFormattedDate(Date date, String pattern){				
-		String formattedDate = "";	
-		Locale.setDefault(new Locale("es", "AR"));
-        SimpleDateFormat formatter = new SimpleDateFormat(pattern, Locale.getDefault());
-        formattedDate = formatter.format(date).toUpperCase();    
-        return formattedDate;	
-	}
-		
 	public String getParsedTitle() {	
 		return 	title.replaceAll("\\s", "-").toLowerCase();	
 	}

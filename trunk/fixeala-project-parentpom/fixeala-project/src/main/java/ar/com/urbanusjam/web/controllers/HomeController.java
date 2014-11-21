@@ -77,8 +77,18 @@ public class HomeController {
 	
 	} 
 	
+	@ModelAttribute("loggedUser")
+	public @ResponseBody String getLoggedUser() {   
+		try{
+			return ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();	
+		}catch(Exception e){
+			return null;
+		}	
+	
+	} 
+	
 	@RequestMapping(value="/home", method = RequestMethod.GET)
-	public String home(@ModelAttribute ("issues") ArrayList<IssueDTO> issues, Model model ) throws JSONException{		
+	public String home(@ModelAttribute ("issues") ArrayList<IssueDTO> issues, @ModelAttribute ("loggedUser") String loggedUser, Model model ) throws JSONException{		
 		
 		try{
 			
@@ -136,6 +146,7 @@ public class HomeController {
 			model.addAttribute("resolved", resolved);
 			model.addAttribute("notResolved", notResolved);
 			model.addAttribute("totalUsers", users.size());
+			model.addAttribute("loggedUser", loggedUser);
 			
 			return "home";
 		
@@ -151,23 +162,23 @@ public class HomeController {
 
 		JSONArray array = new JSONArray();
 
-		for (IssueDTO s : issues) {
+		for (IssueDTO issue : issues) {
 
 			JSONObject obj = new JSONObject();
-			obj.put("id", s.getId());
-			obj.put("address", s.getFullAddress());
-			obj.put("title", s.getTitle());
-			obj.put("status", s.getStatus());
-			obj.put("statusCss", s.getStatusCss());
-			obj.put("date", s.getFechaFormateada());
-			obj.put("description", s.getDescription());
-			obj.put("user", s.getUsername());
-			obj.put("latitude", s.getLatitude());
-			obj.put("longitude", s.getLongitude());
+			obj.put("id", issue.getId());
+			obj.put("address", issue.getFullAddress());
+			obj.put("title", issue.getTitle());
+			obj.put("status", issue.getStatus());
+			obj.put("statusCss", issue.getStatusCss());
+			obj.put("date", issue.getFechaFormateada());
+			obj.put("description", issue.getDescription());
+			obj.put("user", issue.getUsername());
+			obj.put("latitude", issue.getLatitude());
+			obj.put("longitude", issue.getLongitude());
 			
 			JSONArray imgArray = new JSONArray();
 			
-			for(MediaContent contenido : s.getContenidos()){
+			for(MediaContent contenido : issue.getContenidos()){
 				JSONObject img = new JSONObject();
 				img.put("url", contenido.getLink());
 				imgArray.put(img);
@@ -601,7 +612,7 @@ public class HomeController {
 		
 		for(IssueDTO issue : userIssues){
 			for(CommentDTO c : issue.getComentarios())
-				if(c.getUsuario().equals(userID))
+				if(c.getUsername().equals(userID))
 					dbComments.add(c);
 		}
 			
@@ -616,7 +627,7 @@ public class HomeController {
         for(CommentDTO c : dbComments){
         	if(c.getMensaje().toLowerCase().contains(param.sSearch.toLowerCase())    
 	           ||
-	           c.getNroReclamo().toLowerCase().contains(param.sSearch.toLowerCase()))   	          
+	           c.getNroReclamo().toString().toLowerCase().contains(param.sSearch.toLowerCase()))   	          
               {
         		comments.add(c); 
               }
@@ -848,7 +859,7 @@ public class HomeController {
 				
 				for(IssueDTO issue : allIssues){
 					for(CommentDTO c : issue.getComentarios())
-						if(c.getUsuario().equals(userID))
+						if(c.getUsername().equals(userID))
 							commentsCounter++;
 				}
 				

@@ -131,7 +131,7 @@ var fxlIssueController = {
 			  name: 'neighborhood', 	
 			  mode: 'popup',	
 			  placement: 'right',
-			  emptytext: 'A definir',
+			  emptytext: 'Ingresar barrio',
 			  ajaxOptions: {
 				  dataType: 'json'
 			  },			
@@ -154,12 +154,12 @@ var fxlIssueController = {
 
 		var results = [];
 		//tags		
-		$('#issue-tags').editable({
+		$('#issue-tags').editable({				
 			    pk: 22,
 			 	name: 'tagsMap',				 
 			    placement: 'top',      
-			    mode: 'popup',					 
-  				emptytext: 'No hay etiquetas definidas',
+			    emptytext: 'Ingresar categor&iacute;a',
+			    mode: 'popup',	 
   				inputclass: 'input-large',
 		        select2: {				
 		        	tags: allTags,		        	

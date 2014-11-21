@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <div id="content">
 	<!-- search bar -->
 	<div id="searchBar" class="row-fluid" >
@@ -8,9 +9,18 @@
 			</div>			
 		</div>			
 		<div class="span3 pull-right" style="width:336px;">
-			<button id="btnIssue" class="btn btn-success" data-toggle="button"> 
-				<i class="icon-map-marker icon-large"></i>&nbsp;&nbsp;&nbsp;PUBLICAR RECLAMO
-			</button>		
+			 <!-- user NOT logged in -->
+             <sec:authorize access="isAnonymous()">  
+             	<button class="btn btn-success btn-issue" data-toggle="modal" data-target="#loginModal"> 
+					<i class="icon-map-marker icon-large"></i>&nbsp;&nbsp;&nbsp;PUBLICAR RECLAMO
+				</button>		
+             </sec:authorize>
+             <!-- user logged in -->
+             <sec:authorize access="isAuthenticated()">  
+				<button id="btnIssue" class="btn btn-success btn-issue" data-toggle="button"> 
+					<i class="icon-map-marker icon-large"></i>&nbsp;&nbsp;&nbsp;PUBLICAR RECLAMO
+				</button>		
+			</sec:authorize>		
 		</div>		
 	</div>
 	
@@ -242,6 +252,7 @@
 		mapController.loadGoogleMap();			
 			
 		//init
+		fxlHomeController.loggedUser = '${loggedUser}';
 		fxlHomeController.initHome(issuesJson, usersJson);
 		
 		//progress bar

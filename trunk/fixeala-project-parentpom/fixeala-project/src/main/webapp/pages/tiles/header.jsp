@@ -1,3 +1,4 @@
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <header>
 	<!-- NAVBAR -->
 	<div class="navbar navbar-fixed-top">
@@ -8,7 +9,11 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>           
-          <a class="brand" href="/">fixeala&nbsp;<img src="resources/images/fixeala_logo.png" width=32 height=32 /></a>
+          <a class="brand" href="/">
+          	fixeala&nbsp;
+          	<img src="resources/images/fixeala_logo.png" width=32 height=32 /> 
+          	<small style="font-size: 11px">v<spring:eval expression="@propertyConfigurer.getProperty('build.version')" /></small>
+          </a>
           <div class="nav-collapse collapse">          
           	<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
           	<!-- MAIN NAV -->

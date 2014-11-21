@@ -43,7 +43,6 @@ public class RestAPIController {
 		try{
 			
 			List<IssueDTO> issues = issueService.loadAllIssues();
-//			issues =  new ArrayList<IssueDTO>();
 			
 			if(issues.size() > 0 && issues != null){
 				for(IssueDTO issue : issues){
@@ -313,7 +312,7 @@ public class RestAPIController {
 		obj.addProperty("comentarios", reclamo.getComentarios().size());
 		obj.addProperty("votos", reclamo.getTotalVotes());
 		obj.addProperty("seguidores", reclamo.getTotalFollowers());
-		obj.addProperty("link", "http://localhost:8081/fixeala/issues/" + reclamo.getId());
+		obj.addProperty("link", "https://fixeala-urbanusjam.rhcloud.com/issues/" + reclamo.getId());
 
 		return (JsonElement) obj;
 		
