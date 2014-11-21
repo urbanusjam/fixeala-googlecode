@@ -46,7 +46,6 @@ import ar.com.urbanusjam.services.UserService;
 import ar.com.urbanusjam.services.dto.CommentDTO;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.IssueFollowDTO;
-import ar.com.urbanusjam.services.dto.IssuePageViewDTO;
 import ar.com.urbanusjam.services.dto.IssueHistoryDTO;
 import ar.com.urbanusjam.services.dto.IssueVoteDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
@@ -55,7 +54,6 @@ import ar.com.urbanusjam.services.utils.IssueStatus;
 import ar.com.urbanusjam.services.utils.Messages;
 import ar.com.urbanusjam.services.utils.Operation;
 import ar.com.urbanusjam.services.utils.StatusList;
-
 import ar.com.urbanusjam.web.domain.AlertStatus;
 import ar.com.urbanusjam.web.domain.ContenidoResponse;
 
@@ -98,7 +96,7 @@ public class IssueController {
 			JSONObject obj = new JSONObject();
 			obj.put("id", issue.getId());
 			obj.put("title", issue.getTitle());
-			obj.put("date", issue.getFormattedDate(issue.getCreationDate(),
+			obj.put("date", DateUtils.getFechaFormateada(issue.getCreationDate(),
 					DateUtils.DATE_TIME_PATTERN_SHORT));
 			obj.put("user", issue.getUsername());
 			obj.put("address", issue.getFullAddress());
@@ -163,10 +161,9 @@ public class IssueController {
 			model.addAttribute("resolucion", issue.getResolution());
 			model.addAttribute("direccion", issue.getFullAddress());
 			model.addAttribute("id", issue.getId());
-			model.addAttribute("fechaCreacion", issue.getFormattedDate(
+			model.addAttribute("fechaCreacion", DateUtils.getFechaFormateada(
 					issue.getCreationDate(), DateUtils.DATE_TIME_PATTERN_SHORT));
-			model.addAttribute("fechaUltimaActualizacion", issue
-					.getFormattedDate(issue.getLastUpdateDate(),
+			model.addAttribute("fechaUltimaActualizacion", DateUtils.getFechaFormateada(issue.getLastUpdateDate(),
 							DateUtils.DATE_TIME_PATTERN_SHORT));
 			model.addAttribute("calle", issue.getAddress());
 			model.addAttribute("barrio", issue.getNeighborhood());
@@ -239,17 +236,17 @@ public class IssueController {
 								.getUsername());
 				if (userDB != null) {
 					follow.setUsername(userDB.getUsername());
-					follow.setIdIssue(issueID);
+					follow.setNroReclamo(Long.valueOf(issueID));
 					isUserWatching = issueService.isUserFollowingIssue(follow);
 					loggedUser = userDB.getUsername();
 
-					IssuePageViewDTO pageviewDTO = new IssuePageViewDTO();
-					pageviewDTO.setIssueID(issueID);
-					pageviewDTO.setUsername(loggedUser);
-					pageviewDTO.setDate(new Date());
-					issueService.trackIssuePageView(pageviewDTO);
-					currentVote = issueService.getCurrentVote(issueID,
-							loggedUser);
+//					IssuePageViewDTO pageviewDTO = new IssuePageViewDTO();
+//					pageviewDTO.setIssueID(issueID);
+//					pageviewDTO.setUsername(loggedUser);
+//					pageviewDTO.setDate(new Date());
+//					issueService.trackIssuePageView(pageviewDTO);
+					
+					currentVote = issueService.getCurrentVote(issueID, loggedUser);
 					
 					IssueVerification solicitud = issueService.isIssueVerifiedByUser(issueID, userDB.getUsername());
 					model.addAttribute("isVerifiedByUser", solicitud != null ? solicitud.isVerified() : null);
@@ -268,8 +265,8 @@ public class IssueController {
 			
 
 			model.addAttribute("loggedUser", loggedUser);
-			model.addAttribute("cantidadVisitas",
-					issueService.getIssuePageViews(issueID));
+//			model.addAttribute("cantidadVisitas",
+//					issueService.getIssuePageViews(issueID));
 			model.addAttribute("cantidadObservadores", issueService
 					.getIssueFollowers(issueID).size());
 			model.addAttribute("isUserWatching", isUserWatching);
@@ -409,7 +406,7 @@ public class IssueController {
 				
 				for(CommentDTO comment : sub){
 					JSONObject obj = new JSONObject();
-					obj.put("username", comment.getUsuario());
+					obj.put("username", comment.getUsername());
 					obj.put("date", comment.getFechaFormateada());	
 					obj.put("message", comment.getMensaje());	
 					jsonArray.put(obj);
@@ -974,8 +971,8 @@ public class IssueController {
 			else {
 				CommentDTO comentario = new CommentDTO();
 				comentario.setFecha(new Date());
-				comentario.setNroReclamo(issueID);
-				comentario.setUsuario(userDB.getUsername());
+				comentario.setNroReclamo(Long.valueOf(issueID));
+				comentario.setUsername(userDB.getUsername());
 				comentario.setMensaje(mensaje);
 
 				issueService.postComment(comentario);
@@ -1022,11 +1019,11 @@ public class IssueController {
 
 			else {
 
-				follow.setIdIssue(issueID);
+				follow.setNroReclamo(Long.valueOf(issueID));
 				follow.setUsername(loggedUser.getUsername());
 
 				if (watchOrUnwatch.equals("watch")) {
-					follow.setDate(new Date());
+					follow.setFecha(new Date());
 					issueService.followIssue(follow);
 				}
 
@@ -1097,12 +1094,13 @@ public class IssueController {
 
 			}
 
-			vote.setIdIssue(issueID);
+			vote.setNroReclamo(Long.valueOf(issueID));
 			vote.setUsername(loggedUser.getUsername());
 			vote.setVote(voteUpOrDown);
-			vote.setDate(new Date());
+			vote.setFecha(new Date());
 
-			issueService.voteIssue(vote);
+			issueService.submitVote(vote);
+			
 			return new AlertStatus(true, String.valueOf(issueService
 					.countIssueVotes(issueID)));
 

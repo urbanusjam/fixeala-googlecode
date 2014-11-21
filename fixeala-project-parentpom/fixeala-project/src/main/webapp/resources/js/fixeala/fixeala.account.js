@@ -112,12 +112,13 @@ var fxlAccountController = {
 	            },
 	            data: $("#loginForm").serialize(),				       
 	            success: function(data, status) { 
-
+	            	
             		setTimeout(function () {		
             			
 	            		$('#btnLogin').show();
 	            		$('.ajax_loading').hide(); 			    
 	            		$('#loginModal').modal('hide');		   
+	            		
 	            		window.location.reload();
 	            		
 	            		
@@ -432,7 +433,7 @@ var fxlAccountController = {
 		 
 	     $.ajax({
 	    	  type: "POST",
-	          url: "./forgotPassword/sendPasswordResetMail.html",
+	          url: "account/forgotPassword/sendPasswordResetMail.html",
 	          data: "email=" + email,              
 	          success: function(data){   
 	        	  

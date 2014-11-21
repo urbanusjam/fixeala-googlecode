@@ -14,13 +14,13 @@
         <class>ar.com.urbanusjam.entity.annotations.Issue</class>  
         <class>ar.com.urbanusjam.entity.annotations.IssueFollow</class>        
         <class>ar.com.urbanusjam.entity.annotations.IssueLink</class>  
-        <class>ar.com.urbanusjam.entity.annotations.IssuePageView</class>
+<!--         <class>ar.com.urbanusjam.entity.annotations.IssuePageView</class> -->
         <class>ar.com.urbanusjam.entity.annotations.IssueRepair</class>
         <class>ar.com.urbanusjam.entity.annotations.IssueHistory</class> 
         <class>ar.com.urbanusjam.entity.annotations.IssueVote</class> 
         <class>ar.com.urbanusjam.entity.annotations.IssueVerification</class> 
         <class>ar.com.urbanusjam.entity.annotations.MediaContent</class>   
-        <class>ar.com.urbanusjam.entity.annotations.PasswordResetToken</class>    
+        <class>ar.com.urbanusjam.entity.annotations.PasswordToken</class>    
         <class>ar.com.urbanusjam.entity.annotations.Tag</class>   
         <class>ar.com.urbanusjam.entity.annotations.User</class>
         <class>ar.com.urbanusjam.entity.annotations.Province</class>

@@ -109,8 +109,8 @@ public class Issue implements Serializable  {
 	@OneToMany(mappedBy="issue", fetch = FetchType.LAZY) 
 	private Set<IssueFollow> followers;
 	
-	@OneToMany(mappedBy="issue", fetch = FetchType.LAZY) 
-	private Set<IssuePageView> pageviews;
+//	@OneToMany(mappedBy="issue", fetch = FetchType.LAZY) 
+//	private Set<IssuePageView> pageviews;
 	
 	@OneToMany(mappedBy="issue", fetch = FetchType.LAZY) 
 	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.ALL})	

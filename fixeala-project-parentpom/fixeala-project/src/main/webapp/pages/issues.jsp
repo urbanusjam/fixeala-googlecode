@@ -99,7 +99,7 @@
 							    </td>						   
 							 </tr>
 							 <tr>
-							    <th>Categor&iacute;as:</th>
+							    <th>Categor&iacute;a:</th>
 							    <td>
 		      						<a id="issue-tags" href="#" data-type="select2">${tagsByIssue}</a>&nbsp;<i class="icon-pencil editableField"></i>
 							    </td>						   
@@ -136,10 +136,7 @@
 		
 		<!-- 2 Archivos -->							
 		<div class="tab-pane fade" id="issueFiles">				
-			<div class="row-fluid">			
-				<c:if test="${fn:length(contenidos) eq 0}">
-					<h4 style="padding-bottom: 20px; margin-left: 15px;">No hay archivos subidos.</h4>
-				</c:if>
+			<div class="row-fluid">	
 			    <c:if test="${fn:length(contenidos) gt 0}">
 			        <ul id="lst-file-thumnails" class="thumbnails" style="margin-top:30px;">
 			        	<c:forEach items="${contenidos}" var="contenido">	
@@ -170,10 +167,7 @@
 				 		</span>
 					</div>
 				</c:if>
-			</sec:authorize>
-			<c:if test="${cantidadComentarios eq 0}">
-					<h4 style="padding-bottom: 20px; margin-left: 15px;">No hay comentarios publicados.</h4>
-			</c:if>
+			</sec:authorize>			
 		    <c:if test="${cantidadComentarios gt 0}">
 		    	<div class="row-fluid" style="margin-bottom: 30px;">		
 			 		 <!-- infinite scroll -->
@@ -189,13 +183,7 @@
 		
 		<!-- 4 Reparacion -->							
 		<div class="tab-pane fade" id="issueRepair">	
-				
-			<sec:authorize access="isAnonymous()">
-				<c:if test="${infoReparacion eq 'Sin datos'}">			
-					<h4 style="padding-bottom: 20px; margin-left: 15px;">No hay informaci&oacute;n cargada.</h4>
-				</c:if>
-			</sec:authorize>			
-					
+			
 			<sec:authorize access="hasRole('ROLE_USER')">
 				<c:if test="${estado ne 'CERRADO' && estado ne 'ARCHIVADO' && infoReparacion eq 'Sin datos'}">				
 					<center>
@@ -205,15 +193,13 @@
 					 	</button> 				
 					</center>
 				</c:if>
-				
 				<c:if test="${infoReparacion ne 'Sin datos'}">	
 					<div style="width: 100%; text-align: right; padding: 10px 0 10px 0; margin-bottom: 20px; background: #F5F5F5; border-top: 1px dashed #CCC;border-bottom: 1px dashed #CCC; display: block; ">
 						<button id="btn-delete-repair" class="btn" title="Eliminar"><i class="icon-trash icon-large"></i></button>	
 						<button id="btn-edit-repair" class="btn" title="Editar"><i class="icon-pencil icon-large"></i></button>	
 					</div>
 					</c:if>					
-			</sec:authorize>			
-				
+			</sec:authorize>	
 				
 			<c:if test="${infoReparacion ne 'Sin datos'}">	
 			<div class="row-fluid">
@@ -321,7 +307,7 @@
 			<!-- logged -->
 			<sec:authorize access="hasRole('ROLE_USER')">	
 				<c:if test="${estado eq 'ABIERTO'}">	
-					<!-- current logged user -->			
+					<!-- logged user NOT reporter -->			
 					<c:if test="${loggedUser ne usuario}">
 						<!-- already sent verification request -->
 						<c:if test="${!empty isVerifiedByUser}">						
@@ -386,20 +372,26 @@
 				<sec:authorize access="hasRole('ROLE_USER')">	
 					<c:if test="${estado ne 'CERRADO' && estado ne 'ARCHIVADO'}">	
 						<div class="stats-container">
-							<span id="votes">
-								<button id="vote-up" class="btn btn-warning" title="¡Vot&aacute; para que este reclamo se resuelva!"><i class="icon-thumbs-up "></i></button>
-		<!-- 					<button id="vote-down" class="btn btn-danger" title="Voto negativo"><i class="icon-thumbs-down "></i></button> -->
-							</span>	
-							<button id="btn-edit" class="btn btn-primary" title="Editar"><i class="icon-pencil icon-large"></i></button>	
-							<button id="btn-update" class="btn btn-inverse" title="Guardar cambios"><i class="icon-save icon-large"></i></button>						
-							<span class="pull-right">
-								<c:if test="${isUserWatching}">
-									<button id="btn-unwatch-issue" class="btn btn-info">@ Siguiendo</button>
-								</c:if>
-								<c:if test="${!isUserWatching}">
-									<button id="btn-watch-issue" class="btn pull-right">@ Seguir</button>
-								</c:if>
-							</span>						
+							<!-- logged user IS NOT reporter -->			
+							<c:if test="${loggedUser ne usuario}">
+								<span id="votes">
+									<button id="vote-up" class="btn btn-warning" title="¡Vot&aacute; para que este reclamo se resuelva!"><i class="icon-thumbs-up "></i></button>
+			<!-- 					<button id="vote-down" class="btn btn-danger" title="Voto negativo"><i class="icon-thumbs-down "></i></button> -->
+								</span>	
+								<span class="pull-right">
+									<c:if test="${isUserWatching}">
+										<button id="btn-unwatch-issue" class="btn btn-info">@ Siguiendo</button>
+									</c:if>
+									<c:if test="${!isUserWatching}">
+										<button id="btn-watch-issue" class="btn pull-right">@ Seguir</button>
+									</c:if>
+								</span>	
+							</c:if>		
+							<!-- logged user IS reporter -->			
+							<c:if test="${loggedUser eq usuario}">						
+								<button id="btn-edit" class="btn btn-primary" title="Editar"><i class="icon-pencil icon-large"></i></button>	
+								<button id="btn-update" class="btn btn-inverse" title="Guardar cambios"><i class="icon-save icon-large"></i></button>						
+							</c:if>											
 						</div>	
 					</c:if>	
 				</sec:authorize>					
@@ -583,13 +575,15 @@
 									${contenido.filenameShort}
 							 	</td>								
 								<td>
-								${contenido.displaySize}
-									
+									${contenido.displaySize}									
 							 	</td>
 							 	<td width="100" class="centered">
-								 	<a href="#" class="btn btn-default btn-small btn-file-delete">
-								 		<i class="icon-trash icon-large" title="Eliminar archivo"></i>
-								 	</a>							 		
+								 	<!-- logged user IS reporter -->			
+									<c:if test="${loggedUser eq usuario}">
+									 	<a href="#" class="btn btn-default btn-small btn-file-delete">
+									 		<i class="icon-trash icon-large" title="Eliminar archivo"></i>
+									 	</a>	
+								 	</c:if>						 		
 							 	</td>						
 		    	   			</tr>
 						</c:forEach>
@@ -821,7 +815,7 @@
 	
 		fxlIssueController.updatesJson = '${jsonUpdates}';
 		fxlIssueController.commentsJson = '${jsonComments}';	
-		fxlGlobalController.loggedUser = '${loggedUser}';
+// 		fxlGlobalController.loggedUser = '${loggedUser}';
 		
 		fxlIssueController.updatedFields =  { "title": 0 , "desc": 0, "barrio": 0};			 
 		fxlIssueController.oldFields = $.parseJSON('${oldFields}');			

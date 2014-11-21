@@ -8,6 +8,7 @@ import javax.mail.MessagingException;
 
 import org.jfree.util.Log;
 import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,15 +24,13 @@ import ar.com.urbanusjam.dao.UserDAO;
 import ar.com.urbanusjam.entity.annotations.ActivationToken;
 import ar.com.urbanusjam.entity.annotations.Authority;
 import ar.com.urbanusjam.entity.annotations.MediaContent;
-import ar.com.urbanusjam.entity.annotations.PasswordResetToken;
+import ar.com.urbanusjam.entity.annotations.PasswordToken;
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.ContenidoService;
 import ar.com.urbanusjam.services.MailService;
 import ar.com.urbanusjam.services.UserService;
-import ar.com.urbanusjam.services.dto.ActivationDTO;
 import ar.com.urbanusjam.services.dto.EmailDTO;
 import ar.com.urbanusjam.services.dto.PasswordChangeDTO;
-import ar.com.urbanusjam.services.dto.PasswordResetTokenDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
 
 
@@ -41,37 +40,24 @@ public class UserServiceImpl implements UserService {
 	private static final String PASSWORD_FORGOT = "forgot";
 	private static final String PASSWORD_CHANGE = "change";
 	
+	@Autowired
 	private UserDAO userDAO;
+	
+	@Autowired
 	private AuthorityDAO authorityDAO;
+	
+	@Autowired
 	private PasswordResetDAO passwordResetDAO;
+	
+	@Autowired
 	private ActivationDAO activationDAO;
+	
+	@Autowired
 	private ContenidoService contenidoService; 
+	
+	@Autowired
 	private MailService mailService;
 	
-	
-	public void setUserDAO(UserDAO userDAO) {
-		this.userDAO = userDAO;
-	}
-	
-	public void setAuthorityDAO(AuthorityDAO authorityDAO) {
-		this.authorityDAO = authorityDAO;
-	}		
-
-	public void setPasswordResetDAO(PasswordResetDAO passwordResetDAO) {
-		this.passwordResetDAO = passwordResetDAO;
-	}
-	
-	public void setActivationDAO(ActivationDAO activationDAO) {
-		this.activationDAO = activationDAO;
-	}
-		
-	public void setMailService(MailService mailService) {
-		this.mailService = mailService;
-	}
-	
-	public void setContenidoService(ContenidoService contenidoService) {
-		this.contenidoService = contenidoService;
-	}
 
 	@Override
 	public User loadUserByUsername(String username) throws UsernameNotFoundException, DisabledException{	
@@ -108,8 +94,7 @@ public class UserServiceImpl implements UserService {
 			catch (UsernameNotFoundException e) {
 	            throw new UsernameNotFoundException("User not found.");
 	        }	
-	}
-	
+	}	
 	
 	@Override
 	public List<UserDTO> loadAllActiveUsers() {
@@ -157,7 +142,7 @@ public class UserServiceImpl implements UserService {
 	public void createAccount(UserDTO userDTO) throws Exception {
 		
 		User user = new User();
-		ActivationDTO tokenDTO = new ActivationDTO();		
+		ActivationToken token = new ActivationToken();		
 		DateTime currentDate = new DateTime();
 		
 		//user data
@@ -173,12 +158,11 @@ public class UserServiceImpl implements UserService {
 		//token data			
 		DateTime expiration = currentDate.plusDays(3); 	
 		String tokenUUID = UUID.randomUUID().toString(); //random token	
-		tokenDTO.setToken(tokenUUID);
-		tokenDTO.setUsername(user.getUsername());
-		tokenDTO.setCreation(currentDate.toDate());
-		tokenDTO.setExpiration(expiration.toDate());			
-		ActivationToken token = convertTo(tokenDTO); 			
-		
+		token.setToken(tokenUUID);
+		token.setUsername(user.getUsername());
+		token.setCreation(currentDate.toDate());
+		token.setExpiration(expiration.toDate());			
+
 		try {
 			//create user
 			userDAO.createUser(user);		
@@ -239,42 +223,17 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = MessagingException.class)
-	public void savePasswordResetToken(PasswordResetTokenDTO passwordDTO) throws Exception {
-		PasswordResetToken token = new PasswordResetToken();
-		token = convertTo(passwordDTO);
-		passwordResetDAO.saveToken(token);		
-		String email = userDAO.findEmailbyUsername(token.getUsername());
-		mailService.sendPasswordResetEmail(token.getUsername(), token.getToken(), email);
+	public void savePasswordResetToken(PasswordToken pwdToken) throws Exception {
+		passwordResetDAO.saveToken(pwdToken);		
+		String email = userDAO.findEmailbyUsername(pwdToken.getUsername());
+		mailService.sendPasswordResetEmail(pwdToken.getUsername(), pwdToken.getToken(), email);
 	}
 
 	@Override
 	public String findUsernameByPasswordToken(String token) {
 		return passwordResetDAO.findUsernameByPasswordToken(token);
-	}
-	
+	}	
 
-//	@Override
-//	public void deletePasswordToken(String token) {
-//		passwordResetDAO.deleteToken(token);		
-//	}
-	
-	@Override
-	public void saveActivationToken(ActivationDTO activationDTO) {
-		ActivationToken token = new ActivationToken();
-		token = convertTo(activationDTO);
-		activationDAO.saveToken(token);		
-	}
-
-	@Override
-	public void deleteActivationToken(String token) {
-		activationDAO.deleteToken(token);		
-	}
-	
-	@Override
-	public void deleteAccountAndToken(String username) {
-		userDAO.deleteUnabledUserAndToken(username);		
-	}
-	
 	@Override
 	public String findUsernameByActivationToken(String token) {
 		return activationDAO.findUsernameByActivationToken(token);
@@ -290,7 +249,18 @@ public class UserServiceImpl implements UserService {
 			Log.debug("Error en el envio del email por cambio de clave.");			
 		}
 	}
+	
+	@Override
+	public Long getUserId(String username) throws UsernameNotFoundException {
+		return userDAO.findUserIDbyUsername(username);
+	}
+
+	@Override
+	public void updateUserLastLogin(String username) {
+		userDAO.saveUserLastLogin(username);
+	}
 		
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public User convertTo(UserDTO userDTO){
 		User user = new User();
@@ -342,27 +312,8 @@ public class UserServiceImpl implements UserService {
 		user.setCity(userDTO.getCity());
 		user.setProvince(userDTO.getProvince());
 		return user;
-	}
+	}	
 	
-	
-	public PasswordResetToken convertTo(PasswordResetTokenDTO passwordDTO){
-		PasswordResetToken pwd = new PasswordResetToken();
-		pwd.setToken(passwordDTO.getToken());
-		pwd.setUsername(passwordDTO.getUsername());
-		pwd.setCreation(passwordDTO.getCreation());
-		pwd.setExpiration(passwordDTO.getExpiration());		
-		return pwd;
-	}
-		
-	public ActivationToken convertTo(ActivationDTO activationDTO){
-		ActivationToken actv = new ActivationToken();
-		actv.setToken(activationDTO.getToken());
-		actv.setUsername(activationDTO.getUsername());
-		actv.setCreation(activationDTO.getCreation());
-		actv.setExpiration(activationDTO.getExpiration());		
-		return actv;
-	}
-
 	private List<Authority> convertToAuthority(List<String> roles){
 		List<Authority> authorities = new ArrayList<Authority>();
 		for(String role : roles){
@@ -371,16 +322,6 @@ public class UserServiceImpl implements UserService {
 			authorities.add(authority);
 		}
 		return authorities;
-	}
-
-	@Override
-	public Long getUserId(String username) throws UsernameNotFoundException {
-		return userDAO.findUserIDbyUsername(username);
-	}
-
-	@Override
-	public void updateUserLastLogin(String username) {
-		userDAO.saveUserLastLogin(username);
 	}
 
 }

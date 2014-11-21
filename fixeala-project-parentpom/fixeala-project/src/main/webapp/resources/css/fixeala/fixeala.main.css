@@ -348,7 +348,7 @@ ul#loginNav li.signupLink a:hover {
 	line-height: 30px;
 }
 
-#btnIssue {
+.btn-issue {
 	width: 336px;
 	height: 40px;
 	font-size: 14px !important;

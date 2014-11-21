@@ -10,6 +10,7 @@ import java.util.Set;
 import javax.mail.MessagingException;
 
 import org.jfree.util.Log;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -27,7 +28,6 @@ import ar.com.urbanusjam.services.ContenidoService;
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.MailService;
 import ar.com.urbanusjam.services.dto.EmailDTO;
-import ar.com.urbanusjam.services.dto.IssueHistoryDTO;
 import ar.com.urbanusjam.services.utils.Messages;
 import ar.com.urbanusjam.services.utils.Operation;
 
@@ -35,32 +35,22 @@ import ar.com.urbanusjam.services.utils.Operation;
 @Transactional
 public class ContenidoServiceImpl implements ContenidoService {
 
+	@Autowired
 	private IssueService issueService;
+	
+	@Autowired
 	private MailService mailService;
+	
+	@Autowired
  	private ContenidoDAO contenidoDAO;
+	
+	@Autowired
  	private IssueDAO issueDAO;
+	
+	@Autowired
  	private UserDAO userDAO; 
-	
-	public void setContenidoDAO(ContenidoDAO contenidoDAO) {
-		this.contenidoDAO = contenidoDAO;
-	}
-	
-	public void setIssueDAO(IssueDAO issueDAO) {
-		this.issueDAO = issueDAO;
-	}
 
-	public void setUserDAO(UserDAO userDAO) {
-		this.userDAO = userDAO;
-	}
 	
-	public void setMailService(MailService mailService) {
-		this.mailService = mailService;
-	}
-	
-	public void setIssueService(IssueService issueService) {
-		this.issueService = issueService;
-	}
-
 	@Override
 	public List<MediaContent> getIssueFiles(String issueID) {
 		return contenidoDAO.findContenidosByIssue(Long.valueOf(issueID));

@@ -15,6 +15,7 @@ import java.util.Set;
 import javax.mail.MessagingException;
 
 import org.jfree.util.Log;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -35,7 +36,6 @@ import ar.com.urbanusjam.entity.annotations.Issue;
 import ar.com.urbanusjam.entity.annotations.IssueFollow;
 import ar.com.urbanusjam.entity.annotations.IssueFollowPK;
 import ar.com.urbanusjam.entity.annotations.IssueHistory;
-import ar.com.urbanusjam.entity.annotations.IssuePageView;
 import ar.com.urbanusjam.entity.annotations.IssueRepair;
 import ar.com.urbanusjam.entity.annotations.IssueVerification;
 import ar.com.urbanusjam.entity.annotations.IssueVerificationPK;
@@ -53,7 +53,6 @@ import ar.com.urbanusjam.services.dto.IssueCriteriaSearch;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.IssueFollowDTO;
 import ar.com.urbanusjam.services.dto.IssueHistoryDTO;
-import ar.com.urbanusjam.services.dto.IssuePageViewDTO;
 import ar.com.urbanusjam.services.dto.IssueVoteDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
 import ar.com.urbanusjam.services.utils.DateUtils;
@@ -71,63 +70,40 @@ public class IssueServiceImpl implements IssueService {
 	private final int MAX_VERIFICATION_REQUESTS = 3;
 	private final int MAX_REJECTION_REQUESTS = 3;
 	
+	@Autowired
 	private UserService userService;
+	
+	@Autowired
 	private MailService mailService;	
 	
+	@Autowired
 	private IssueDAO issueDAO;
+	
+	@Autowired
 	private UserDAO userDAO;
+	
+	@Autowired
 	private ProvinceDAO provinceDAO;
+	
+	@Autowired
 	private TagDAO tagDAO;
+	
+	@Autowired
 	private IssueFollowDAO issueFollowDAO;
+	
+	@Autowired
 	private IssuePageViewDAO issuePageViewDAO;
+	
+	@Autowired
 	private IssueVoteDAO issueVoteDAO;
+	
+	@Autowired
 	private IssueRepairDAO issueRepairDAO;
+	
+	@Autowired
 	private IssueVerificationDAO issueVerificationDAO;	
+
 	
-	public void setUserService(UserService userService) {
-		this.userService = userService;
-	}
-	
-	public void setMailService(MailService mailService) {
-		this.mailService = mailService;
-	}
-
-	public void setIssueRepairDAO(IssueRepairDAO issueRepairDAO) {
-		this.issueRepairDAO = issueRepairDAO;
-	}
-
-	public void setIssueDAO(IssueDAO issueDAO) {
-		this.issueDAO = issueDAO;
-	}
-
-	public void setUserDAO(UserDAO userDAO) {
-		this.userDAO = userDAO;
-	}
-		
-	public void setProvinceDAO(ProvinceDAO provinceDAO) {
-		this.provinceDAO = provinceDAO;
-	}
-
-	public void setTagDAO(TagDAO tagDAO) {
-		this.tagDAO = tagDAO;
-	}
-
-	public void setIssueFollowDAO(IssueFollowDAO issueFollowDAO) {
-		this.issueFollowDAO = issueFollowDAO;
-	}
-
-	public void setIssueVoteDAO(IssueVoteDAO issueVoteDAO) {
-		this.issueVoteDAO = issueVoteDAO;
-	}
-
-	public void setIssuePageViewDAO(IssuePageViewDAO issuePageViewDAO) {
-		this.issuePageViewDAO = issuePageViewDAO;
-	}
-	
-	public void setIssueVerificationDAO(IssueVerificationDAO issueVerificationDAO) {
-		this.issueVerificationDAO = issueVerificationDAO;
-	}
-
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public void reportIssue(IssueDTO issueDTO) {
@@ -143,15 +119,12 @@ public class IssueServiceImpl implements IssueService {
 		issueDAO.saveIssue(issue);	
 	}
 	
-
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor={MessagingException.class})
 	public void updateIssue(IssueDTO issueDTO) throws MessagingException{
 		Issue issue = new Issue();
 		issue = this.convertTo(issueDTO);
-//		issue = this.convertForUpdate(issueDTO);
-		
-				
+
 		Collection<Tag> newTags = new ArrayList<Tag>(); 
 		Collection<Tag> currentTags = new ArrayList<Tag>();
 		Collection<Tag> removeTags = new ArrayList<Tag>();
@@ -400,8 +373,8 @@ public class IssueServiceImpl implements IssueService {
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor={MessagingException.class, MailException.class})
 	public void postComment(CommentDTO commentDTO) throws MessagingException {
 		
-		Issue issue = issueDAO.findIssueById(commentDTO.getNroReclamo());
-		User user = userDAO.loadUserByUsername(commentDTO.getUsuario());
+		Issue issue = issueDAO.findIssueById(String.valueOf(commentDTO.getNroReclamo()));
+		User user = userDAO.loadUserByUsername(commentDTO.getUsername());
 		
 		//comment
 		Comment comment = new Comment(issue, user, getCurrentCalendar(commentDTO.getFecha()), commentDTO.getMensaje(), false);
@@ -424,7 +397,7 @@ public class IssueServiceImpl implements IssueService {
 		try{				
 			//email notification
 			String link = "<a target='_blank' href='http://localhost:8080/fixeala/issues/" + issue.getId().toString() + ".html' >LINK</a>.";
-			String text = "El usuario <i>" + commentDTO.getUsuario() + "</i> ha dejado un comentario en el reclamo <i>#" +issue.getId()+ " \"" + issue.getTitle() + "\"</i>.";
+			String text = "El usuario <i>" + commentDTO.getUsername() + "</i> ha dejado un comentario en el reclamo <i>#" +issue.getId()+ " \"" + issue.getTitle() + "\"</i>.";
 			text += "<br><br>";
 			text += "Para acceder al comentario publicado, hac&eacute; clic en el siguiente " + link;
 			
@@ -437,7 +410,7 @@ public class IssueServiceImpl implements IssueService {
 			Set<IssueFollow> followers = issue.getFollowers();
 			String reporterEmail = null;
 			
-			if(!commentDTO.getUsuario().equals(issue.getReporter().getUsername()))
+			if(!commentDTO.getUsername().equals(issue.getReporter().getUsername()))
 				reporterEmail = issue.getReporter().getEmail();
 			
 			mailService.sendIssueUpdateEmail(this.getFollowersEmails(followers, reporterEmail), email);
@@ -447,7 +420,6 @@ public class IssueServiceImpl implements IssueService {
 		}
 		
 	}
-
 	
 	@Override
 	public List<IssueDTO> searchByTagOrStatus(String searchType, String value) {
@@ -466,135 +438,6 @@ public class IssueServiceImpl implements IssueService {
 		
 		return issuesDTO;
 	}
-	
-	/********************************************************************************/
-	
-	public IssueHistory convertTo(IssueHistoryDTO historialDTO, User user){
-		
-		IssueHistory historial = new IssueHistory();	
-		historial.setFecha(this.getCurrentCalendar(historialDTO.getFecha()));	
-		historial.setUsuario(user);
-		historial.setOperacion(historialDTO.getOperacion());
-		historial.setMotivo(historialDTO.getMotivo());		
-		historial.setEstado(historialDTO.getEstado());		
-		historial.setObservaciones(historialDTO.getObservaciones());		
-//		historial.setResolucion(historialDTO.getResolucion());		
-		
-		return historial;
-		
-	}
-	
-	public IssueHistoryDTO convertTo(IssueHistory historial){
-		
-		IssueHistoryDTO historialDTO = new IssueHistoryDTO();
-		
-		historialDTO.setFecha(historial.getFecha().getTime());	
-		historialDTO.setUsername(historial.getUsuario().getUsername());
-		historialDTO.setNroReclamo(Long.valueOf(historial.getIssue().getId()));
-		historialDTO.setOperacion(Operation.UPDATE);
-		historialDTO.setMotivo(historial.getMotivo());
-		historialDTO.setEstado(historial.getEstado());		
-		historialDTO.setObservaciones(historial.getObservaciones());	
-//		historialDTO.setResolucion(historial.getResolucion());
-		
-		if(historialDTO.getResolucion() != null && historial.getResolucion() != ""){
-			historialDTO.setDetalle(historialDTO.getMotivo() + " como &laquo;" + historialDTO.getResolucion() + "&raquo;" );	
-		}
-		else{
-			historialDTO.setDetalle(historialDTO.getMotivo());
-		}
-		
-		
-		return historialDTO;
-		
-	}
-	
-	
-	public Issue convertTo(IssueDTO issueDTO){
-				
-		User user = new User();
-		user = userDAO.loadUserByUsername(issueDTO.getUsername());
-		
-		Issue issue = new Issue();	
-		if(issueDTO.getId() != null){
-			issue.setId(Long.valueOf(issueDTO.getId()));	
-		}		
-		issue.setReporter(user);
-		issue.setAddress(issueDTO.getAddress());
-		issue.setNeighborhood(issueDTO.getNeighborhood());
-		issue.setCity(issueDTO.getCity());	
-		issue.setProvince(issueDTO.getProvince());	
-		issue.setTitle(issueDTO.getTitle());
-		issue.setDescription(issueDTO.getDescription());
-		
-		//history
-		for(IssueHistoryDTO historial : issueDTO.getHistorial()){
-			issue.addRevision(convertTo(historial, user));
-		}
-		
-		//votes
-		for(IssueVoteDTO vote : issueDTO.getVotes()){
-			issue.addVote(convertTo(vote));
-		}
-		
-		//followers
-		for(IssueFollowDTO follower : issueDTO.getFollowers()){
-			issue.addFollower(convertTo(follower));
-		}
-				
-		//licitacion
-		/*if(issueDTO.getLicitacion() != null)
-			issue.setLicitacion(convertTo(issueDTO.getLicitacion()));
-		else
-			issue.setLicitacion(null);*/
-	
-		
-		//contenidos
-		/*for(MediaContentDTO contenido : issueDTO.getContenidos()){			
-			issue.getContenidos().add(contenidoService.convertirAContenido(contenido));
-		}*/
-		
-		//tags
-		List<String> tagList = issueDTO.getTags();
-		
-		if(tagList.size() > 0){
-			for(String t : tagList){				
-				Tag tag = new Tag();				
-				if(tagDAO.tagExists(t))
-					tag = tagDAO.findTagByName(t);
-				else				
-					tag.setTagname(t);	
-				issue.addTag(tag);	
-			}
-		}
-		
-		issue.setCreationDate(this.getCurrentCalendar(issueDTO.getCreationDate()));		
-		issue.setLastUpdateDate(this.getCurrentCalendar(issueDTO.getLastUpdateDate()));		
-		issue.setLatitude(Float.parseFloat(issueDTO.getLatitude()));
-		issue.setLongitude(Float.parseFloat(issueDTO.getLongitude()));
-		issue.setStatus(issueDTO.getStatus());
-		
-		return issue;
-	}
-	
-	public Issue convertForUpdate(IssueDTO issueDTO){
-		
-		Issue issue = new Issue();	
-		issue.setId(Long.valueOf(issueDTO.getId()));	
-		issue.setTitle(issueDTO.getTitle());
-		issue.setDescription(issueDTO.getDescription());
-
-		List<String> tagList = issueDTO.getTags();
-	
-		for(String t : tagList){
-			Tag newTag = new Tag();
-			newTag.setTagname(t);				
-			issue.addTag(newTag);	
-		}						
-				
-		return issue;
-	}
-	
 	
 	private IssueDTO preloadIssues(Issue issue){
 			
@@ -641,208 +484,6 @@ public class IssueServiceImpl implements IssueService {
 		return issueDTO;
 	}
 	
-	
-	private IssueDTO loadCompleteIssue(Issue issue){
-		
-		String[] cssStyle = this.assignCSSbyStatus(issue.getStatus());
-		
-		IssueDTO issueDTO = new IssueDTO();
-		issueDTO.setId(String.valueOf(issue.getId()));
-		issueDTO.setUsername(issue.getReporter().getUsername());
-		issueDTO.setAddress(issue.getAddress());
-		issueDTO.setLatitude(String.valueOf(issue.getLatitude()));
-		issueDTO.setLongitude(String.valueOf(issue.getLongitude()));
-		issueDTO.setNeighborhood(issue.getNeighborhood());
-		issueDTO.setCity(issue.getCity());	
-		issueDTO.setProvince(issue.getProvince());	
-		issueDTO.setTitle(issue.getTitle());
-//		issueDTO.setTitleCss(cssStyle[1]);
-		issueDTO.setDescription(issue.getDescription());	
-		issueDTO.setCreationDate(issue.getCreationDate().getTime());		
-		issueDTO.setLastUpdateDate(issue.getLastUpdateDate().getTime());		
-		issueDTO.setStatus(issue.getStatus());
-		issueDTO.setStatusCss(cssStyle[1]);
-		issueDTO.setResolution(issue.getResolution());
-		issueDTO.setFechaFormateada(issue.getCreationDate().getTime());
-		issueDTO.setFechaFormateadaCompleta(issue.getCreationDate().getTime());		
-		issueDTO.setTotalVotes(this.countIssueVotes(String.valueOf(issue.getId()))); // llamada al DAO
-		issueDTO.setTotalFollowers(issue.getFollowers().size());
-		
-		//tags		
-		Set<Tag> tagList = issue.getTagsList();
-		List<String> tagNames = new ArrayList<String>();		
-		if(tagList.size() > 0){
-			for(Tag t :  issue.getTagsList()){				
-				tagNames.add(t.getTagname().trim());
-			}
-		}		
-		issueDTO.setTags(tagNames);
-	
-		//historial
-		List<IssueHistoryDTO> historialDTO = new ArrayList<IssueHistoryDTO>();		
-		for(IssueHistory revision : issue.getRevisiones()){
-			historialDTO.add(convertTo(revision));
-		}		
-		issueDTO.setHistorial(historialDTO);
-		
-		//comentarios
-		List<CommentDTO> comentariosDTO = new ArrayList<CommentDTO>();		
-		for(Comment comentario : issue.getComentarios()){
-			comentariosDTO.add(convertToDTO(comentario));
-		}		
-		
-		//order comments by date DESC
-		Collections.sort(comentariosDTO, new Comparator<CommentDTO>() {
-			  public int compare(CommentDTO o1, CommentDTO o2) {
-			      return o2.getFecha().compareTo(o1.getFecha());
-			  }
-		});		
-		issueDTO.setComentarios(comentariosDTO);
-						
-		//contenidos
-		List<MediaContent> imagenes = new ArrayList<MediaContent>();
-		for(MediaContent c : issue.getContenidos()){
-			//solo imagenes del reclamo
-			if(!c.isProfilePic())
-				imagenes.add(c);
-		}
-		issueDTO.setContenidos(imagenes);
-		
-		//reparacion
-		if(issue.getReparacion() != null)
-			issueDTO.setReparacion(issue.getReparacion());
-		else
-			issueDTO.setReparacion(null);
-		
-		//verificaciones		
-		issueDTO.setVerificaciones(new ArrayList<IssueVerification>(issue.getVerificationRequests()));
-		issueDTO.setPositiveVerifications(issue.getVerificacionesPositivas(issue.getVerificationRequests()).size());
-		issueDTO.setNegativeVerifications(issue.getVerificacionesNegativas(issue.getVerificationRequests()).size());
-		
-		return issueDTO;
-
-	}
-	
-	public IssueDTO convertToDTO(Issue issue){
-		
-		UserDTO userDTO = new UserDTO();
-		userDTO.setUsername(issue.getReporter().getUsername());
-		
-		String[] cssStyle = this.assignCSSbyStatus(issue.getStatus());
-		
-		IssueDTO issueDTO = new IssueDTO();
-		issueDTO.setId(String.valueOf(issue.getId()));
-		issueDTO.setUser(userDTO);
-		issueDTO.setAddress(issue.getAddress());
-		issueDTO.setNeighborhood(issue.getNeighborhood());
-		issueDTO.setCity(issue.getCity());	
-		issueDTO.setProvince(issue.getProvince());	
-		issueDTO.setTitle(issue.getTitle());
-//		issueDTO.setTitleCss(cssStyle[1]);
-		issueDTO.setDescription(issue.getDescription());	
-		issueDTO.setCreationDate(issue.getCreationDate().getTime());		
-		issueDTO.setLastUpdateDate(issue.getLastUpdateDate().getTime());		
-		issueDTO.setLatitude(String.valueOf(issue.getLatitude()));
-		issueDTO.setLongitude(String.valueOf(issue.getLongitude()));
-		issueDTO.setStatus(issue.getStatus());
-		issueDTO.setStatusCss(cssStyle[1]);
-		issueDTO.setUsername(userDTO.getUsername());
-		issueDTO.setFechaFormateada(issue.getCreationDate().getTime());
-		issueDTO.setFechaFormateadaCompleta(issue.getCreationDate().getTime());		
-		issueDTO.setTotalVotes(this.countIssueVotes(String.valueOf(issue.getId()))); // llamada al DAO
-		issueDTO.setTotalFollowers(issue.getFollowers().size());
-		issueDTO.setTotalComments(issue.getComentarios().size());	
-	
-		return issueDTO;
-	}
-	
-	public CommentDTO convertToDTO(Comment comment){
-		CommentDTO commentDTO = new CommentDTO();
-		commentDTO.setUsuario(comment.getUsuario().getUsername());
-		commentDTO.setNroReclamo(String.valueOf(comment.getIssue().getId()));
-		commentDTO.setFecha(comment.getFecha().getTime());
-		commentDTO.setFechaFormateada(comment.getFecha().getTime());
-		commentDTO.setMensaje(comment.getMensaje());
-		return commentDTO;
-	}
-	
-	public IssueFollow convertTo(IssueFollowDTO followingDTO){
-		IssueFollow following = new IssueFollow();
-		IssueFollowPK followingId = new IssueFollowPK();		
-		followingId.setIssueID(Long.valueOf(followingDTO.getIdIssue()));
-		User u = userDAO.loadUserByUsername(followingDTO.getUsername());
-		followingId.setFollowerID(u.getId());
-		following.setId(followingId);
-		following.setDate(followingDTO.getDate() != null ? this.getCurrentCalendar(followingDTO.getDate()) : null);
-		return following;
-	}
-	
-	public IssueVote convertTo(IssueVoteDTO voteDTO){
-		IssueVote vote = new IssueVote();		
-		IssueVotePK voteId = new IssueVotePK();		
-		voteId.setIssueID(Long.valueOf(voteDTO.getIdIssue()));	
-		voteId.setVoterID(userService.getUserId(voteDTO.getUsername()));
-		vote.setId(voteId);
-		vote.setVote(voteDTO.getVote());
-		vote.setDate(voteDTO.getDate() != null ? this.getCurrentCalendar(voteDTO.getDate()) : null);
-		return vote;
-	}
-	
-	
-	public GregorianCalendar getCurrentCalendar(Date date){		
-		Calendar calendar = new GregorianCalendar();
-		calendar.setTime(date);
-		return (GregorianCalendar) calendar;	
-	} 
-	
-	//assign CSS
-	private String[] assignCSSbyStatus(String status){
-		
-		String[] css = new String[2];
-		
-		if(status.equalsIgnoreCase(IssueStatus.OPEN)){
-			css[0] = "label label-important";
-			css[1] = StatusList.OPEN.getColorCode();
-		}
-		
-		if(status.equalsIgnoreCase(IssueStatus.REOPENED)){
-			css[0] = "label label-important";
-			css[1] = StatusList.REOPENED.getColorCode();
-		}
-		
-		if(status.equalsIgnoreCase(IssueStatus.ACKNOWLEDGED)){
-			css[0] = "label label-info";
-			css[1] = StatusList.ACKNOWLEDGED.getColorCode();
-		}
-		
-		if(status.equalsIgnoreCase(IssueStatus.REJECTED)){
-			css[0] = "label label-inverse";
-			css[1] = StatusList.REJECTED.getColorCode();			
-		}
-		
-		if(status.equalsIgnoreCase(IssueStatus.IN_PROGRESS)){
-			css[0] = "label label-warning";
-			css[1] = StatusList.IN_PROGRESS.getColorCode();		
-		}
-		
-		if(status.equalsIgnoreCase(IssueStatus.SOLVED)){
-			css[0] = "label label-success";
-			css[1] = StatusList.SOLVED.getColorCode();			
-		}
-		
-		if(status.equalsIgnoreCase(IssueStatus.CLOSED)){
-			css[0] = "label label-inverse";
-			css[1] = StatusList.CLOSED.getColorCode();			
-		}
-		
-		if(status.equalsIgnoreCase(IssueStatus.ARCHIVED)){
-			css[0] = "label label-default";
-			css[1] = StatusList.ARCHIVED.getColorCode();		
-		}
-		
-		return css;
-	}
-
 	@Override
 	public void followIssue(IssueFollowDTO followingDTO) {	
 		issueFollowDAO.saveFollowing(convertTo(followingDTO));
@@ -886,27 +527,26 @@ public class IssueServiceImpl implements IssueService {
 		return issuesFollowed;
 	}
 
-	@Override
-	public boolean trackIssuePageView(IssuePageViewDTO pageviewDTO) {
-		
-		boolean pageviewExists = false;
-		pageviewExists = issuePageViewDAO.existsIssuePageView(Long.valueOf(pageviewDTO.getIssueID()), pageviewDTO.getUsername());
-		
-		if(!pageviewExists){
-			IssuePageView pageview = new IssuePageView();
-			Issue issue = new Issue();
-			issue.setId(Long.valueOf(pageviewDTO.getIssueID()));
-			pageview.setIssue(issue);
-			User user = userDAO.loadUserByUsername(pageviewDTO.getUsername());
-			pageview.setUser(user);
-			pageview.setDate(this.getCurrentCalendar(pageviewDTO.getDate()));
-			issuePageViewDAO.saveIssuePageView(pageview);
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
+//	@Override
+//	public boolean trackIssuePageView(IssuePageView pageview) {
+//		
+//		boolean pageviewExists = false;
+//		pageviewExists = issuePageViewDAO.existsIssuePageView(pageview.getIssue().getId(), pageview.getUser().getUsername());
+//		
+//		if(!pageviewExists){
+//	
+//			Issue issue = new Issue();
+//			issue.setId(pageview.getIssue().getId());
+//			pageview.setIssue(issue);			
+//			pageview.setUser(pageview.getUser());
+//			pageview.setDate(pageview.getDate());
+//			issuePageViewDAO.saveIssuePageView(pageview);
+//			return true;
+//		}
+//		else{
+//			return false;
+//		}
+//	}
 
 	@Override
 	public int getIssuePageViews(String issueID) {
@@ -915,26 +555,23 @@ public class IssueServiceImpl implements IssueService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public void voteIssue(IssueVoteDTO voteDTO) {
-			
-		
-		IssueDTO issue = this.getIssueById(voteDTO.getIdIssue());
-		
-		/*
-		IssueUpdateHistoryDTO revision = new IssueUpdateHistoryDTO();
-		revision.setFecha(new Date());
-		revision.setUsername(voteDTO.getUsername());	
-		revision.setOperacion(Operation.UPDATE);			
-		revision.setMotivo("vot� por el reclamo." );			
-		revision.setEstado(issue.getStatus());
-		revision.setObservaciones("");
-		
-		issue.getHistorial().add(revision); */ 			//--  votos anonimos ?
-		issue.getVotes().add(voteDTO);
-		
-//		issueVoteDAO.saveIssueVote(vote);
-		
-		issueDAO.updateIssue(convertTo(issue));
+	public void submitVote(IssueVoteDTO voteDTO) { //-- cambiar por submitVote()
+					
+		Issue issue =  issueDAO.findIssueById(String.valueOf(voteDTO.getNroReclamo()));
+//		User user = userDAO.loadUserByUsername(voteDTO.getUsername());
+//
+//		IssueHistoryDTO revision = new IssueHistoryDTO();
+//		revision.setFecha(new Date());
+//		revision.setUsername(voteDTO.getUsername());	
+//		revision.setOperacion(Operation.UPDATE);			
+//		revision.setMotivo("voto por el reclamo." );			
+//		revision.setEstado(issue.getStatus());
+//		revision.setObservaciones("");
+//		
+//		issue.addRevision(this.convertTo(revision, user)); 	
+		issue.addVote(this.convertTo(voteDTO));
+
+		issueDAO.updateIssue(issue);
 	}
 
 	@Override
@@ -945,10 +582,10 @@ public class IssueServiceImpl implements IssueService {
 		IssueVote vote = issueVoteDAO.getVoteByUser(Long.valueOf(issueID), user.getId());
 		
 		if(vote != null){
-			voteDTO.setIdIssue(String.valueOf(vote.getId().getIssueID()));
+			voteDTO.setNroReclamo(vote.getId().getIssueID());
 			voteDTO.setUsername(user.getUsername());
 			voteDTO.setVote(vote.getVote());
-			voteDTO.setDate(vote.getDate().getTime());
+			voteDTO.setFecha(vote.getDate().getTime());
 			voteDTO.setCurrentlyVoteByUser(true);
 		}
 		else
@@ -1139,6 +776,143 @@ public class IssueServiceImpl implements IssueService {
 				userService.loadUserByUsername(username).getId());
 	}
 	
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public GregorianCalendar getCurrentCalendar(Date date){		
+		Calendar calendar = new GregorianCalendar();
+		calendar.setTime(date);
+		return (GregorianCalendar) calendar;	
+	} 
+	
+	private IssueDTO loadCompleteIssue(Issue issue){
+		
+		String[] cssStyle = this.assignCSSbyStatus(issue.getStatus());
+		
+		IssueDTO issueDTO = new IssueDTO();
+		issueDTO.setId(String.valueOf(issue.getId()));
+		issueDTO.setUsername(issue.getReporter().getUsername());
+		issueDTO.setAddress(issue.getAddress());
+		issueDTO.setLatitude(String.valueOf(issue.getLatitude()));
+		issueDTO.setLongitude(String.valueOf(issue.getLongitude()));
+		issueDTO.setNeighborhood(issue.getNeighborhood());
+		issueDTO.setCity(issue.getCity());	
+		issueDTO.setProvince(issue.getProvince());	
+		issueDTO.setTitle(issue.getTitle());
+//		issueDTO.setTitleCss(cssStyle[1]);
+		issueDTO.setDescription(issue.getDescription());	
+		issueDTO.setCreationDate(issue.getCreationDate().getTime());		
+		issueDTO.setLastUpdateDate(issue.getLastUpdateDate().getTime());		
+		issueDTO.setStatus(issue.getStatus());
+		issueDTO.setStatusCss(cssStyle[1]);
+		issueDTO.setResolution(issue.getResolution());
+		issueDTO.setFechaFormateada(issue.getCreationDate().getTime());
+		issueDTO.setFechaFormateadaCompleta(issue.getCreationDate().getTime());		
+		issueDTO.setTotalVotes(this.countIssueVotes(String.valueOf(issue.getId()))); // llamada al DAO
+		issueDTO.setTotalFollowers(issue.getFollowers().size());
+		
+		//tags		
+		Set<Tag> tagList = issue.getTagsList();
+		List<String> tagNames = new ArrayList<String>();		
+		if(tagList.size() > 0){
+			for(Tag t :  issue.getTagsList()){				
+				tagNames.add(t.getTagname().trim());
+			}
+		}		
+		issueDTO.setTags(tagNames);
+	
+		//historial
+		List<IssueHistoryDTO> historialDTO = new ArrayList<IssueHistoryDTO>();		
+		for(IssueHistory revision : issue.getRevisiones()){
+			historialDTO.add(convertTo(revision));
+		}		
+		issueDTO.setHistorial(historialDTO);
+		
+		//comentarios
+		List<CommentDTO> comentariosDTO = new ArrayList<CommentDTO>();		
+		for(Comment comentario : issue.getComentarios()){
+			comentariosDTO.add(convertToDTO(comentario));
+		}		
+		
+		//order comments by date DESC
+		Collections.sort(comentariosDTO, new Comparator<CommentDTO>() {
+			  public int compare(CommentDTO o1, CommentDTO o2) {
+			      return o2.getFecha().compareTo(o1.getFecha());
+			  }
+		});		
+		issueDTO.setComentarios(comentariosDTO);
+						
+		//contenidos
+		List<MediaContent> imagenes = new ArrayList<MediaContent>();
+		for(MediaContent c : issue.getContenidos()){
+			//solo imagenes del reclamo
+			if(!c.isProfilePic())
+				imagenes.add(c);
+		}
+		issueDTO.setContenidos(imagenes);
+		
+		//reparacion
+		if(issue.getReparacion() != null)
+			issueDTO.setReparacion(issue.getReparacion());
+		else
+			issueDTO.setReparacion(null);
+		
+		//verificaciones		
+		issueDTO.setVerificaciones(new ArrayList<IssueVerification>(issue.getVerificationRequests()));
+		issueDTO.setPositiveVerifications(issue.getVerificacionesPositivas(issue.getVerificationRequests()).size());
+		issueDTO.setNegativeVerifications(issue.getVerificacionesNegativas(issue.getVerificationRequests()).size());
+		
+		return issueDTO;
+
+	}
+	
+	//assign CSS
+	private String[] assignCSSbyStatus(String status){
+		
+		String[] css = new String[2];
+		
+		if(status.equalsIgnoreCase(IssueStatus.OPEN)){
+			css[0] = "label label-important";
+			css[1] = StatusList.OPEN.getColorCode();
+		}
+		
+		if(status.equalsIgnoreCase(IssueStatus.REOPENED)){
+			css[0] = "label label-important";
+			css[1] = StatusList.REOPENED.getColorCode();
+		}
+		
+		if(status.equalsIgnoreCase(IssueStatus.ACKNOWLEDGED)){
+			css[0] = "label label-info";
+			css[1] = StatusList.ACKNOWLEDGED.getColorCode();
+		}
+		
+		if(status.equalsIgnoreCase(IssueStatus.REJECTED)){
+			css[0] = "label label-inverse";
+			css[1] = StatusList.REJECTED.getColorCode();			
+		}
+		
+		if(status.equalsIgnoreCase(IssueStatus.IN_PROGRESS)){
+			css[0] = "label label-warning";
+			css[1] = StatusList.IN_PROGRESS.getColorCode();		
+		}
+		
+		if(status.equalsIgnoreCase(IssueStatus.SOLVED)){
+			css[0] = "label label-success";
+			css[1] = StatusList.SOLVED.getColorCode();			
+		}
+		
+		if(status.equalsIgnoreCase(IssueStatus.CLOSED)){
+			css[0] = "label label-inverse";
+			css[1] = StatusList.CLOSED.getColorCode();			
+		}
+		
+		if(status.equalsIgnoreCase(IssueStatus.ARCHIVED)){
+			css[0] = "label label-default";
+			css[1] = StatusList.ARCHIVED.getColorCode();		
+		}
+		
+		return css;
+	}
+	
 //	public void sendMailAfterCommit(final MailManager mail) { 	
 //		TransactionSynchronizationManager.registerSynchronization( 			
 //				new TransactionSynchronizationAdapter() { 		
@@ -1150,5 +924,193 @@ public class IssueServiceImpl implements IssueService {
 //	}
 	
 	
+	/////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public IssueDTO convertToDTO(Issue issue){
+		
+		UserDTO userDTO = new UserDTO();
+		userDTO.setUsername(issue.getReporter().getUsername());
+		
+		String[] cssStyle = this.assignCSSbyStatus(issue.getStatus());
+		
+		IssueDTO issueDTO = new IssueDTO();
+		issueDTO.setId(String.valueOf(issue.getId()));
+		issueDTO.setUser(userDTO);
+		issueDTO.setAddress(issue.getAddress());
+		issueDTO.setNeighborhood(issue.getNeighborhood());
+		issueDTO.setCity(issue.getCity());	
+		issueDTO.setProvince(issue.getProvince());	
+		issueDTO.setTitle(issue.getTitle());
+		issueDTO.setDescription(issue.getDescription());	
+		issueDTO.setCreationDate(issue.getCreationDate().getTime());		
+		issueDTO.setLastUpdateDate(issue.getLastUpdateDate().getTime());		
+		issueDTO.setLatitude(String.valueOf(issue.getLatitude()));
+		issueDTO.setLongitude(String.valueOf(issue.getLongitude()));
+		issueDTO.setStatus(issue.getStatus());
+		issueDTO.setStatusCss(cssStyle[1]);
+		issueDTO.setUsername(userDTO.getUsername());
+		issueDTO.setFechaFormateada(issue.getCreationDate().getTime());
+		issueDTO.setFechaFormateadaCompleta(issue.getCreationDate().getTime());		
+		issueDTO.setTotalVotes(this.countIssueVotes(String.valueOf(issue.getId()))); // llamada al DAO
+		issueDTO.setTotalFollowers(issue.getFollowers().size());
+		issueDTO.setTotalComments(issue.getComentarios().size());	
+	
+		return issueDTO;
+	}
+	
+	//--revisar
+	public CommentDTO convertToDTO(Comment comment){
+		CommentDTO commentDTO = new CommentDTO();
+		commentDTO.setUsername(comment.getUsuario().getUsername());
+		commentDTO.setNroReclamo(comment.getIssue().getId());
+		commentDTO.setFecha(comment.getFecha().getTime());
+		commentDTO.setFechaFormateada(comment.getFecha().getTime());
+		commentDTO.setMensaje(comment.getMensaje());
+		return commentDTO;
+	}
+	
+	//--revisar
+	public IssueFollow convertTo(IssueFollowDTO followingDTO){
+		IssueFollow following = new IssueFollow();
+		IssueFollowPK followingId = new IssueFollowPK();		
+		followingId.setIssueID(Long.valueOf(followingDTO.getNroReclamo()));
+		User u = userDAO.loadUserByUsername(followingDTO.getUsername());
+		followingId.setFollowerID(u.getId());
+		following.setId(followingId);
+		following.setDate(followingDTO.getFecha() != null ? this.getCurrentCalendar(followingDTO.getFecha()) : null);
+		return following;
+	}
+	
+	//--revisar
+	public IssueVote convertTo(IssueVoteDTO voteDTO){
+		IssueVote vote = new IssueVote();		
+		IssueVotePK voteId = new IssueVotePK();		
+		voteId.setIssueID(Long.valueOf(voteDTO.getNroReclamo()));	
+		voteId.setVoterID(userService.getUserId(voteDTO.getUsername()));
+		vote.setId(voteId);
+		vote.setVote(voteDTO.getVote());
+		vote.setDate(voteDTO.getFecha() != null ? this.getCurrentCalendar(voteDTO.getFecha()) : null);
+		return vote;
+	}
+	
+	public IssueHistory convertTo(IssueHistoryDTO historialDTO, User user){
+		
+		IssueHistory historial = new IssueHistory();	
+		historial.setFecha(this.getCurrentCalendar(historialDTO.getFecha()));	
+		historial.setUsuario(user);
+		historial.setOperacion(historialDTO.getOperacion());
+		historial.setMotivo(historialDTO.getMotivo());		
+		historial.setEstado(historialDTO.getEstado());		
+		historial.setObservaciones(historialDTO.getObservaciones());		
+//		historial.setResolucion(historialDTO.getResolucion());				
+		return historial;		
+	}
+	
+	public IssueHistoryDTO convertTo(IssueHistory historial){
+		
+		IssueHistoryDTO historialDTO = new IssueHistoryDTO();
+		
+		historialDTO.setFecha(historial.getFecha().getTime());	
+		historialDTO.setUsername(historial.getUsuario().getUsername());
+		historialDTO.setNroReclamo(Long.valueOf(historial.getIssue().getId()));
+		historialDTO.setOperacion(Operation.UPDATE);
+		historialDTO.setMotivo(historial.getMotivo());
+		historialDTO.setEstado(historial.getEstado());		
+		historialDTO.setObservaciones(historial.getObservaciones());	
+//		historialDTO.setResolucion(historial.getResolucion());
+		
+		if(historialDTO.getResolucion() != null && historial.getResolucion() != ""){
+			historialDTO.setDetalle(historialDTO.getMotivo() + " como &laquo;" + historialDTO.getResolucion() + "&raquo;" );	
+		}
+		else{
+			historialDTO.setDetalle(historialDTO.getMotivo());
+		}		
+		
+		return historialDTO;		
+	}	
+	
+	public Issue convertTo(IssueDTO issueDTO){
+				
+		User user = new User();
+		user = userDAO.loadUserByUsername(issueDTO.getUsername());
+		
+		Issue issue = new Issue();	
+		if(issueDTO.getId() != null){
+			issue.setId(Long.valueOf(issueDTO.getId()));	
+		}		
+		issue.setReporter(user);
+		issue.setAddress(issueDTO.getAddress());
+		issue.setNeighborhood(issueDTO.getNeighborhood());
+		issue.setCity(issueDTO.getCity());	
+		issue.setProvince(issueDTO.getProvince());	
+		issue.setTitle(issueDTO.getTitle());
+		issue.setDescription(issueDTO.getDescription());
+		
+		//history
+		for(IssueHistoryDTO historial : issueDTO.getHistorial()){
+			issue.addRevision(convertTo(historial, user));
+		}
+		
+		//votes
+		for(IssueVoteDTO vote : issueDTO.getVotes()){
+			issue.addVote(convertTo(vote));
+		}
+		
+		//followers
+		for(IssueFollowDTO follower : issueDTO.getFollowers()){
+			issue.addFollower(convertTo(follower));
+		}
+				
+		//licitacion
+		/*if(issueDTO.getLicitacion() != null)
+			issue.setLicitacion(convertTo(issueDTO.getLicitacion()));
+		else
+			issue.setLicitacion(null);*/
+			
+		//contenidos
+		/*for(MediaContentDTO contenido : issueDTO.getContenidos()){			
+			issue.getContenidos().add(contenidoService.convertirAContenido(contenido));
+		}*/
+		
+		//tags
+		List<String> tagList = issueDTO.getTags();
+		
+		if(tagList.size() > 0){
+			for(String t : tagList){				
+				Tag tag = new Tag();				
+				if(tagDAO.tagExists(t))
+					tag = tagDAO.findTagByName(t);
+				else				
+					tag.setTagname(t);	
+				issue.addTag(tag);	
+			}
+		}
+		
+		issue.setCreationDate(this.getCurrentCalendar(issueDTO.getCreationDate()));		
+		issue.setLastUpdateDate(this.getCurrentCalendar(issueDTO.getLastUpdateDate()));		
+		issue.setLatitude(Float.parseFloat(issueDTO.getLatitude()));
+		issue.setLongitude(Float.parseFloat(issueDTO.getLongitude()));
+		issue.setStatus(issueDTO.getStatus());
+		
+		return issue;
+	}
+	
+	public Issue convertForUpdate(IssueDTO issueDTO){
+		
+		Issue issue = new Issue();	
+		issue.setId(Long.valueOf(issueDTO.getId()));	
+		issue.setTitle(issueDTO.getTitle());
+		issue.setDescription(issueDTO.getDescription());
+
+		List<String> tagList = issueDTO.getTags();
+	
+		for(String t : tagList){
+			Tag newTag = new Tag();
+			newTag.setTagname(t);				
+			issue.addTag(newTag);	
+		}						
+				
+		return issue;
+	}
 	
 }

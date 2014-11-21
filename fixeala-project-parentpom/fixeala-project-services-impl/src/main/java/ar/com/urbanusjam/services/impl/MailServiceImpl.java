@@ -1,18 +1,14 @@
 package ar.com.urbanusjam.services.impl;
 
-import java.util.Properties;
-
 import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import ar.com.urbanusjam.services.MailService;
 import ar.com.urbanusjam.services.dto.EmailDTO;
@@ -23,12 +19,9 @@ public class MailServiceImpl implements MailService {
 	final String from = "fixeala@gmail.com";
 	final String to = "coripel@gmail.com";
 	
+	@Autowired
 	private JavaMailSender mailSender;
-	
-	public void setMailSender(JavaMailSender mailSender) {
-		this.mailSender = mailSender;
-	}
-	
+		
 	public MailServiceImpl(){}
 	
 	@Override

@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import ar.com.urbanusjam.dao.PasswordResetDAO;
-import ar.com.urbanusjam.entity.annotations.PasswordResetToken;
+import ar.com.urbanusjam.entity.annotations.PasswordToken;
 
 @Repository
 @Transactional(propagation= Propagation.REQUIRED, readOnly=false)
@@ -21,14 +21,14 @@ public class PasswordResetDAOImpl implements PasswordResetDAO {
 	public PasswordResetDAOImpl() {}
 
 	@Override
-	public void saveToken(PasswordResetToken token) {		
+	public void saveToken(PasswordToken token) {		
 		entityManager.persist(token);		
 	}
 
 	@Override
 	public String findUsernameByPasswordToken(String token) throws NoResultException {		
 		try{
-			PasswordResetToken pwdToken = (PasswordResetToken) entityManager.createQuery(		
+			PasswordToken pwdToken = (PasswordToken) entityManager.createQuery(		
 				" SELECT t1 FROM PasswordResetToken t1 " +
 				" WHERE t1.token = :token AND CURRENT_DATE < t1.expiration " +
 				" AND t1.creation = (SELECT MAX(t2.creation) FROM PasswordResetToken t2) ")
@@ -52,7 +52,7 @@ public class PasswordResetDAOImpl implements PasswordResetDAO {
 	@Override
 	public void deleteToken(String token) throws NoResultException {
 		try{
-			PasswordResetToken pwdToken = (PasswordResetToken) entityManager.createQuery(
+			PasswordToken pwdToken = (PasswordToken) entityManager.createQuery(
 				"SELECT t FROM PasswordResetToken t WHERE t.token = :token")
 				.setParameter("token", token)	
 				.getSingleResult();		

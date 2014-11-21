@@ -33,12 +33,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
 
+import ar.com.urbanusjam.entity.annotations.PasswordToken;
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.ContenidoService;
 import ar.com.urbanusjam.services.MailService;
 import ar.com.urbanusjam.services.UserService;
 import ar.com.urbanusjam.services.dto.PasswordChangeDTO;
-import ar.com.urbanusjam.services.dto.PasswordResetTokenDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
 import ar.com.urbanusjam.web.domain.AlertStatus;
 import ar.com.urbanusjam.web.domain.ContenidoResponse;
@@ -195,15 +195,14 @@ public class AccountController extends AbstractController {
 			
 			try {
 				
-				PasswordResetTokenDTO pwdTokenDTO = new PasswordResetTokenDTO();
-				pwdTokenDTO.setToken(token);
-				pwdTokenDTO.setUsername(username);
-				pwdTokenDTO.setCreation(creation.toDate());
-				pwdTokenDTO.setExpiration(expiration.toDate());
+				PasswordToken pwdToken = new PasswordToken();
+				pwdToken.setToken(token);
+				pwdToken.setUsername(username);
+				pwdToken.setCreation(creation.toDate());
+				pwdToken.setExpiration(expiration.toDate());
 				
-				userService.savePasswordResetToken(pwdTokenDTO);
-				//mailService.sendPasswordResetEmail(username, token, email);
-				
+				userService.savePasswordResetToken(pwdToken);
+
 			} catch (Exception e) {
 				
 				return new AlertStatus(false, "Ha ocurrido un error. Intente m&aacute;s tarde.");

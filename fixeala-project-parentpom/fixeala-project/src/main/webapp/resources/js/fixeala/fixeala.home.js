@@ -222,40 +222,40 @@ var fxlHomeController = {
 	
     bindIssueToggleBtn : function(){
     	
-    	$('#btnIssue').bind('click', function(event) {
-
-    		isAnimating = true;
-       
-        	//open form
-        	if( isFormOpen ){
-        	
-        		if(!fxlHomeController.emptyFields()){
-        			
-        			bootbox.confirm("Si cierra el formulario, se descartar&aacute; la informaci&oacute;n ingresada. &iquest;Desde continuar?", function(result){
-            			if(result){
-            				window.parent.location.reload();
-            			}
-            		});
-        			
-        		}
-        		//empty form
-        		else{             		
-        		 	if( $(this).hasClass('btn-danger') ){  	            		 	
-             			$(this).removeClass('btn-danger').addClass('btn-success').html("<i class=\"icon-map-marker icon-large\"></i>&nbsp;&nbsp;&nbsp;PUBLICAR RECLAMO");
-             			fxlHomeController.toggleIssueForm();       
-             		}        		
-        		}
-        		
-        	}
-        	//closed form
-        	else{
-        		
-        		if( $(this).hasClass('btn-success') ){
-            		$(this).removeClass('btn-success').addClass('btn-danger').html("<i class=\"icon-remove-sign icon-large\"></i>&nbsp;&nbsp;&nbsp;CANCELAR RECLAMO");
-            		fxlHomeController.toggleIssueForm();   
-            	} 
-        	
-        	}
+    	$('#btnIssue').bind('click', function(event) {    		
+    	
+    			isAnimating = true;
+    		       
+            	//open form
+            	if( isFormOpen ){
+            	
+            		if(!fxlHomeController.emptyFields()){
+            			
+            			bootbox.confirm("Si cierra el formulario, se descartar&aacute; la informaci&oacute;n ingresada. &iquest;Desde continuar?", function(result){
+                			if(result){
+                				window.parent.location.reload();
+                			}
+                		});
+            			
+            		}
+            		//empty form
+            		else{             		
+            		 	if( $(this).hasClass('btn-danger') ){  	            		 	
+                 			$(this).removeClass('btn-danger').addClass('btn-success').html("<i class=\"icon-map-marker icon-large\"></i>&nbsp;&nbsp;&nbsp;PUBLICAR RECLAMO");
+                 			fxlHomeController.toggleIssueForm();       
+                 		}        		
+            		}
+            		
+            	}
+            	//closed form
+            	else{
+            		
+            		if( $(this).hasClass('btn-success') ){
+                		$(this).removeClass('btn-success').addClass('btn-danger').html("<i class=\"icon-remove-sign icon-large\"></i>&nbsp;&nbsp;&nbsp;CANCELAR RECLAMO");
+                		fxlHomeController.toggleIssueForm();   
+                	} 
+            	
+            	}
        
         });//btnIssue
     	
