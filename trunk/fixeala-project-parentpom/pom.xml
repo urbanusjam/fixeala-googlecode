@@ -464,18 +464,38 @@
                 <plugin>
                 	<groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-<!--                     <version>2.3.2</version> -->
+					<inherited>true</inherited>
                     <configuration>
                         <source>1.6</source>
                         <target>1.6</target>
+                        <encoding>UTF-8</encoding>
+						<showDeprecation>true</showDeprecation>
+						<showWarnings>true</showWarnings>
                     </configuration>
                 </plugin>
-<!--                 <plugin> -->
-<!--                     <groupId>org.apache.maven.plugins</groupId> -->
-<!--                     <artifactId>maven-resources-plugin</artifactId> -->
-<!--                     <version>2.5</version> -->
-<!--                 </plugin> -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<inherited>true</inherited>
+					<configuration>
+						<encoding>UTF-8</encoding>
+					</configuration>
+				</plugin>
+				<plugin>
+					<artifactId>maven-release-plugin</artifactId>
+			        <version>2.5</version>
+			        <configuration>			        
+			        	<tagBase>
+			            	http://fixeala.googlecode.com/svn/tags
+			          	</tagBase>
+			        </configuration>
+			    </plugin>
             </plugins>
         </pluginManagement>
     </build>
+    <scm>
+	  <connection>scm:svn:http://fixeala.googlecode.com/svn/trunk/</connection>
+	  <developerConnection>scm:svn:http://fixeala.googlecode.com/svn/trunk/</developerConnection>
+	  <url>http://fixeala.googlecode.com/svn/trunk/</url>
+	</scm>
 </project>
