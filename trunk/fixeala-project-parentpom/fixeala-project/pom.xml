@@ -1,42 +1,41 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
   	<groupId>ar.com.urbanusjam</groupId>
   	<artifactId>fixeala-project</artifactId>
   	<packaging>war</packaging>
-  	<version>1.0.0-SNAPSHOT</version>
+  	<version>1.0.1</version>
   	<name>Fixeala Web</name>
   	<parent>
 		<artifactId>fixeala-project-parentpom</artifactId>
 		<groupId>ar.com.urbanusjam</groupId>
-		<version>1.0.0-SNAPSHOT</version>
+		<version>1.0.1</version>
   	</parent>
 	<dependencies>
 		<!-- Fixeala Modules -->
   		<dependency>
 			<groupId>ar.com.urbanusjam</groupId>
 			<artifactId>fixeala-project-dao</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>1.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>ar.com.urbanusjam</groupId>
 			<artifactId>fixeala-project-dao-impl</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>1.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>ar.com.urbanusjam</groupId>
 			<artifactId>fixeala-project-entity</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>1.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>ar.com.urbanusjam</groupId>
 			<artifactId>fixeala-project-services</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>1.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>ar.com.urbanusjam</groupId>
 			<artifactId>fixeala-project-services-impl</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>1.0.1</version>
 		</dependency> 
 		<!-- Servlet -->
 <!-- 		<dependency> -->
