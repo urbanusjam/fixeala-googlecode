@@ -5,7 +5,7 @@ import java.util.Date;
 
 import ar.com.urbanusjam.services.utils.DateUtils;
 
-public class CommentDTO extends CommonDataDTO implements Serializable {
+public class CommentDTO extends IssueMainActionDTO implements Serializable {
 
 	private static final long serialVersionUID = 1573529409509170425L;
 

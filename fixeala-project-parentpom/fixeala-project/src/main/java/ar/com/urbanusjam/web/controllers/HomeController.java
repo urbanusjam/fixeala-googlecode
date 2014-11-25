@@ -17,9 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -40,7 +38,7 @@ import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.IssueHistoryDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
 import ar.com.urbanusjam.services.utils.DateUtils;
-import ar.com.urbanusjam.services.utils.IssueStatus;
+import ar.com.urbanusjam.services.utils.StatusList;
 import ar.com.urbanusjam.web.domain.DataTablesParamUtility;
 import ar.com.urbanusjam.web.domain.JQueryDataTableParamModel;
 import ar.com.urbanusjam.web.utils.DataTableResultSet;
@@ -51,7 +49,7 @@ import com.google.gson.JsonObject;
 
 
 @Controller
-public class HomeController {
+public class HomeController extends MainController {
 	
 	private static int ITEMS_PER_PAGE = 10;
 	
@@ -67,28 +65,18 @@ public class HomeController {
 	@Autowired
 	private ContenidoService contenidoService;
 	
+	
 	@ModelAttribute("issues")
 	public @ResponseBody ArrayList<IssueDTO> getIssuesArray() {   
 		try{
 			return (ArrayList<IssueDTO>) issueService.loadAllIssues();
 		}catch(Exception e){
 			return null;
-		}	
-	
+		}		
 	} 
-	
-	@ModelAttribute("loggedUser")
-	public @ResponseBody String getLoggedUser() {   
-		try{
-			return ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();	
-		}catch(Exception e){
-			return null;
-		}	
-	
-	} 
-	
+		
 	@RequestMapping(value="/home", method = RequestMethod.GET)
-	public String home(@ModelAttribute ("issues") ArrayList<IssueDTO> issues, @ModelAttribute ("loggedUser") String loggedUser, Model model ) throws JSONException{		
+	public String home(@ModelAttribute ("issues") ArrayList<IssueDTO> issues, Model model ) throws JSONException{		
 		
 		try{
 			
@@ -127,14 +115,14 @@ public class HomeController {
 			int notResolved = 0; 
 			
 			for(IssueDTO issue : issues){
-				if(issue.getStatus().equals(IssueStatus.ACKNOWLEDGED))
+				if(issue.getStatus().equals(StatusList.VERIFIED))
 					verified++;
-				if(issue.getStatus().equals(IssueStatus.SOLVED))
+				if(issue.getStatus().equals(StatusList.SOLVED))
 					resolved++;
-				if(issue.getStatus().equals(IssueStatus.OPEN) 
-						|| issue.getStatus().equals(IssueStatus.ACKNOWLEDGED)
-						|| issue.getStatus().equals(IssueStatus.REOPENED)
-						|| issue.getStatus().equals(IssueStatus.IN_PROGRESS))
+				if(issue.getStatus().equals(StatusList.OPEN) 
+						|| issue.getStatus().equals(StatusList.VERIFIED)
+						|| issue.getStatus().equals(StatusList.REOPENED)
+						|| issue.getStatus().equals(StatusList.IN_PROGRESS))
 					notResolved++;
 			}
 			
@@ -146,8 +134,7 @@ public class HomeController {
 			model.addAttribute("resolved", resolved);
 			model.addAttribute("notResolved", notResolved);
 			model.addAttribute("totalUsers", users.size());
-			model.addAttribute("loggedUser", loggedUser);
-			
+						
 			return "home";
 		
 		}catch(Exception e){
@@ -219,7 +206,7 @@ public class HomeController {
 	}  
 	
 	@SuppressWarnings("unchecked")
-	public <T> JSONArray paginateToArray(List<T> elements, int currentPage, String type) throws JSONException{
+	private <T> JSONArray paginateToArray(List<T> elements, int currentPage, String type) throws JSONException{
 		
 		int itemsPerPage = ITEMS_PER_PAGE;
 		int totalItems = elements.size();
@@ -280,9 +267,7 @@ public class HomeController {
 				
 				//user type
 				List<UserDTO> sub = (List<UserDTO>) elements.subList(from, to + 1); //sublist toma el item en la posicion anterior al toIndex que se le pasa
-				
-				
-				
+								
 				for(UserDTO user : sub){
 					
 					List<IssueDTO> issuesByUser = issueService.loadIssuesByUser(user.getUsername());
@@ -779,29 +764,29 @@ public class HomeController {
 			
 			List<String> statusList = new ArrayList<String>();
 			
-			if(currentStatus.equals(IssueStatus.OPEN)){
+			if(currentStatus.equals(StatusList.OPEN)){
 				statusList.add("Admitir");
 				statusList.add("Resolver");
 				statusList.add("Cerrar");
 			}
 			
-//			if(currentStatus.equals(IssueStatus.ACKNOWLEDGED)){
+//			if(currentStatus.equals(StatusList.ACKNOWLEDGED)){
 //				statusList.add("Resolver");
 //				statusList.add("Cerrar");
 //			}
 			
-			if(currentStatus.equals(IssueStatus.SOLVED)){
+			if(currentStatus.equals(StatusList.SOLVED)){
 				statusList.add("Reabrir");
 				statusList.add("Resolver");
 				statusList.add("Cerrar");
 			}
 			
-			if(currentStatus.equals(IssueStatus.REOPENED)){
+			if(currentStatus.equals(StatusList.REOPENED)){
 				statusList.add("Resolver");
 				statusList.add("Cerrar");
 			}
 			
-			if(currentStatus.equals(IssueStatus.CLOSED)){
+			if(currentStatus.equals(StatusList.CLOSED)){
 				statusList.add("Reabrir");
 			}			
 			
@@ -853,7 +838,7 @@ public class HomeController {
 				int commentsCounter = 0;
 				
 				for(IssueDTO issue : userIssues){
-					if(issue.getStatus().equals(IssueStatus.SOLVED))
+					if(issue.getStatus().equals(StatusList.SOLVED))
 						solvedIssues++;
 				}
 				
@@ -952,17 +937,5 @@ public class HomeController {
 		  }
 	}
 	
-	
-	private User getCurrentUser(Authentication auth) {
-        User currentUser;
-        if (auth.getPrincipal() instanceof UserDetails) {
-            currentUser = (User) auth.getPrincipal();
-        } else if (auth.getDetails() instanceof UserDetails) {
-            currentUser = (User) auth.getDetails();
-        } else {
-        	currentUser = null;
-        }
-        return currentUser;
-    }
 	
 }

@@ -1461,7 +1461,7 @@ ul.nav.nav-tabs li:not(.active):hover a {
 #issue-stats .stats-btn { border: 1px solid red;}
 
 #userIssueActions button { text-transform: uppercase; font-size: 11px; height: 25px;  line-height: 10px; width: 100%;}
-#btn-watch-issue, #btn-unwatch-issue, .loader  { width: 125px; }
+#btn-watch-issue, #btn-unwatch-issue, .loader  { width: 170px; }
 
 #votes a { font-size: 30px; }
 
@@ -1575,7 +1575,8 @@ div.feedback a:hover { text-decoration: none; }
 
 /**** verify issue ****/
 #repairForm input { text-align: right; }	
-#mdl-verify .modal-body { max-height: 450px; }	
+#mdl-verify .modal-body { max-height: 450px; }
+#mdl-verify ul.list { list-style-type: none; }
 #mdl-verify ul.list > li { padding: 5px 0 5px 0; } 	
 #mdl-verify ul.sublist > li { padding: 2px 0 2px 0; }	
 #mdl-verify ul.sublist > li:FIRST-CHILD { padding-top: 10px; }

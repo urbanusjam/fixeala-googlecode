@@ -2,7 +2,7 @@ package ar.com.urbanusjam.services.dto;
 
 import java.io.Serializable;
 
-public class IssueVoteDTO extends CommonDataDTO implements Serializable {
+public class IssueVoteDTO extends IssueMainActionDTO implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 

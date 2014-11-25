@@ -97,10 +97,10 @@ CREATE TABLE issue (
 
 CREATE TABLE issue_follow (	 	
 	   id_issue BIGINT(20) NOT NULL,
-	   id_follower BIGINT(20) NOT NULL,	 
-	   follow_date DATETIME NOT NULL,
+	   id_user BIGINT(20) NOT NULL,	 
+	   date DATETIME NOT NULL,
 	   	  
-	   PRIMARY KEY (id_issue, id_follower)
+	   PRIMARY KEY (id_issue, id_user)
 	   
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -181,11 +181,11 @@ CREATE TABLE issue_pageview (
 
 CREATE TABLE issue_vote (	
        id_issue BIGINT(20) NOT NULL,
-	   id_voter BIGINT(20) NOT NULL,	 
+	   id_user BIGINT(20) NOT NULL,	 
 	   vote SMALLINT NOT NULL CHECK ("VOTE" = 1 OR "VOTE" = -1),
-	   vote_date DATETIME NOT NULL,
+	   date DATETIME NOT NULL,
 	   	   
-	   PRIMARY KEY (id_issue, id_voter) 
+	   PRIMARY KEY (id_issue, id_user) 
 	   
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -336,7 +336,7 @@ ALTER TABLE issue_vote
     REFERENCES issue (id_issue);
     
 ALTER TABLE issue_vote
-    ADD CONSTRAINT FOREIGN KEY fk_issue_vote_2 (id_voter)
+    ADD CONSTRAINT FOREIGN KEY fk_issue_vote_2 (id_user)
     REFERENCES user (id_user);
 
 ALTER TABLE issue_follow
@@ -344,7 +344,7 @@ ALTER TABLE issue_follow
     REFERENCES issue (id_issue);
     
 ALTER TABLE issue_follow
-    ADD CONSTRAINT FOREIGN KEY fk_issue_follow_2 (id_follower)
+    ADD CONSTRAINT FOREIGN KEY fk_issue_follow_2 (id_user)
     REFERENCES user (id_user);
     
 ALTER TABLE issue_pageview

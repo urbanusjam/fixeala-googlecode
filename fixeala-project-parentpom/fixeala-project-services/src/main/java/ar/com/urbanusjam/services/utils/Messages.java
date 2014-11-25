@@ -11,7 +11,7 @@ public final class Messages {
 	public static final String ISSUE_UPDATE_STATUS_RESOLVE = "resolvio";
 	public static final String ISSUE_UPDATE_STATUS_REOPEN = "reabrio";
 	public static final String ISSUE_UPDATE_STATUS_CLOSE = "cerro";
-	public static final String ISSUE_UPDATE_STATUS_ACKNOWLEDGE = "el reclamo ha sido ADMITIDO";
+	public static final String ISSUE_UPDATE_STATUS_VERIFIED = "el reclamo ha sido VERIFICADO";
 	public static final String ISSUE_UPDATE_STATUS_VERIFY_REQUEST = "agrego una Solicitud de Verificacion";
 	public static final String ISSUE_UPDATE_STATUS_REJECTED = "el reclamo ha sido RECHAZADO";
 	public static final String ISSUE_UPDATE_STATUS_REJECT_REQUEST = "agrego una Solicitud de Rechazo";

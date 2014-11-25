@@ -1,9 +1,7 @@
 package ar.com.urbanusjam.web.controllers;
 
 import java.io.Serializable;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -21,7 +19,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -36,8 +33,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import ar.com.urbanusjam.entity.annotations.IssueFollow;
+import ar.com.urbanusjam.entity.annotations.IssueMainActionPK;
 import ar.com.urbanusjam.entity.annotations.IssueRepair;
 import ar.com.urbanusjam.entity.annotations.IssueVerification;
+import ar.com.urbanusjam.entity.annotations.IssueVote;
 import ar.com.urbanusjam.entity.annotations.MediaContent;
 import ar.com.urbanusjam.entity.annotations.User;
 import ar.com.urbanusjam.services.ContenidoService;
@@ -45,12 +45,9 @@ import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.UserService;
 import ar.com.urbanusjam.services.dto.CommentDTO;
 import ar.com.urbanusjam.services.dto.IssueDTO;
-import ar.com.urbanusjam.services.dto.IssueFollowDTO;
 import ar.com.urbanusjam.services.dto.IssueHistoryDTO;
-import ar.com.urbanusjam.services.dto.IssueVoteDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
 import ar.com.urbanusjam.services.utils.DateUtils;
-import ar.com.urbanusjam.services.utils.IssueStatus;
 import ar.com.urbanusjam.services.utils.Messages;
 import ar.com.urbanusjam.services.utils.Operation;
 import ar.com.urbanusjam.services.utils.StatusList;
@@ -61,7 +58,7 @@ import com.google.gson.Gson;
 
 @Controller
 // @RequestMapping(value="/issue")
-public class IssueController {
+public class IssueController extends MainController {
 	
 	private static int ITEMS_PER_PAGE = 10;
 	private final int MAX_VERIFICATION_REQUESTS = 3;
@@ -222,8 +219,8 @@ public class IssueController {
 			model.addAttribute("cantidadComentarios", issue.getComentarios()
 					.size());
 
-			IssueFollowDTO follow = new IssueFollowDTO();
-			IssueVoteDTO currentVote = new IssueVoteDTO();			
+			IssueFollow follow = new IssueFollow();
+			IssueVote currentVote = new IssueVote();			
 			String loggedUser = "";
 			boolean isUserWatching = false;
 			
@@ -235,8 +232,10 @@ public class IssueController {
 						.loadUserByUsername(((User) auth.getPrincipal())
 								.getUsername());
 				if (userDB != null) {
-					follow.setUsername(userDB.getUsername());
-					follow.setNroReclamo(Long.valueOf(issueID));
+					follow.setId(new IssueMainActionPK(Long.valueOf(issueID), 
+							userService.getUserId(userDB.getUsername())));
+//					follow.setUsername(userDB.getUsername());
+//					follow.setNroReclamo(Long.valueOf(issueID));
 					isUserWatching = issueService.isUserFollowingIssue(follow);
 					loggedUser = userDB.getUsername();
 
@@ -272,10 +271,14 @@ public class IssueController {
 			model.addAttribute("isUserWatching", isUserWatching);
 			model.addAttribute("cantidadVotos",
 					issueService.countIssueVotes(issueID));
-			model.addAttribute("isCurrentlyVoted",
-					currentVote.isCurrentlyVoteByUser());
-			model.addAttribute("isVoteUp", currentVote.getVote() == 1 ? true
-					: false);
+			
+			if(currentVote != null){
+				model.addAttribute("isCurrentlyVoted",
+						currentVote.isCurrentlyVoteByUser());
+				model.addAttribute("isVoteUp", currentVote.getVote() == 1 ? true
+						: false);
+			}
+			
 			
 			
 			
@@ -296,10 +299,10 @@ public class IssueController {
 			     model.addAttribute("plazo", repair.getPlazo());
 			     model.addAttribute("presupuestoAdjudicacion", repair.getPresupuestoAdjudicacion());	
 			     model.addAttribute("presupuestoFinal", repair.getPresupuestoFinal());
-			     model.addAttribute("fechaEstimadaInicio", parseDate(repair.getFechaEstimadaInicio()));
-			     model.addAttribute("fechaEstimadaFin", parseDate(repair.getFechaEstimadaFin()));			     
-			     model.addAttribute("fechaRealInicio", parseDate(repair.getFechaRealInicio()));
-			     model.addAttribute("fechaRealFin", parseDate(repair.getFechaRealFin()));			     
+			     model.addAttribute("fechaEstimadaInicio", DateUtils.getFechaFormateada(repair.getFechaEstimadaInicio(), DateUtils.FORMAT_DATE_DEFAULT));
+			     model.addAttribute("fechaEstimadaFin", DateUtils.getFechaFormateada(repair.getFechaEstimadaFin(), DateUtils.FORMAT_DATE_DEFAULT));			     
+			     model.addAttribute("fechaRealInicio", DateUtils.getFechaFormateada(repair.getFechaRealInicio(), DateUtils.FORMAT_DATE_DEFAULT));
+			     model.addAttribute("fechaRealFin", DateUtils.getFechaFormateada(repair.getFechaRealFin(), DateUtils.FORMAT_DATE_DEFAULT));			     
 			     model.addAttribute("observaciones", repair.getObservaciones());
 			  
 			  }
@@ -425,17 +428,16 @@ public class IssueController {
 			@RequestParam ("filename") String filename) throws JSONException{
 		
 		try{
-			User user = getCurrentUser(SecurityContextHolder.getContext()
-					.getAuthentication());
-			UserDetails loggedUser = userService.loadUserByUsername(user
-					.getUsername());
+			
+			String userID = getCurrentUser(SecurityContextHolder.getContext()
+					.getAuthentication()).getUsername();
 
-			if (userPage.equals(loggedUser.getUsername())) {
+			if (userPage.equals(userID)) {
 			
 				MediaContent file = new MediaContent();
 				file = this.deserializeFile(fileData);
 				file.setFilename(filename);
-				file.setUsername(loggedUser.getUsername());
+				file.setUsername(userID);
 				file.setProfilePic(true);
 				file.setFileOrder(0);
 				
@@ -448,7 +450,6 @@ public class IssueController {
 			}
 			
 			return new ContenidoResponse(true, 1);
-			
 			
 			
 		}catch(Exception e){
@@ -467,17 +468,11 @@ public class IssueController {
 		
 		try{	
 			
-			User user = getCurrentUser(SecurityContextHolder.getContext()
-					.getAuthentication());
-			UserDetails userDB = userService.loadUserByUsername(user
-					.getUsername());
-
-			if (userDB == null) {
-				return new ContenidoResponse(false, 0);
-			}
+			String userID = getCurrentUser(SecurityContextHolder.getContext()
+					.getAuthentication()).getUsername();
 			
 			files = (List<MediaContent>) this.deserializeMultipleFiles(fileList);
-			contenidoService.uploadFiles(files, issueID, userDB.getUsername());
+			contenidoService.uploadFiles(files, issueID, userID);
 			
 			List<MediaContent> contenidos = contenidoService.getIssueFiles(issueID);
 			model.addAttribute("contenidos", contenidos);
@@ -606,68 +601,55 @@ public class IssueController {
 			HttpServletRequest request) {
 
 		try {
-			User user = getCurrentUser(SecurityContextHolder.getContext()
-					.getAuthentication());
-			UserDetails userDB = userService.loadUserByUsername(user
-					.getUsername());
-
-			if (userDB == null) {
-				return new AlertStatus(false,
-						"Debe estar logueado para ingresar un nuevo reclamo.");
-			}
-
-			// user is logged-in
-			else {
-
-				String capitalize = WordUtils.capitalizeFully(issue.getTitle(), new char[] { '.' });
-				issue.setTitle(capitalize);
-
-				// issue data
-				UserDTO userDTO = new UserDTO();
-				userDTO.setUsername(userDB.getUsername());
-				issue.setUsername(userDB.getUsername());
-				issue.setCreationDate(new Date());
-				issue.setLastUpdateDate(issue.getCreationDate());
-				issue.setStatus(IssueStatus.OPEN);
-				issue.setUser(userDTO);
-
-				// history
-				IssueHistoryDTO revision = new IssueHistoryDTO();
-				revision.setFecha(new Date());
-				revision.setUsername(userDB.getUsername());
-				revision.setOperacion(Operation.CREATE);
-				revision.setMotivo(Messages.ISSUE_CREATION + " el reclamo.");
-				revision.setObservaciones("");
-				revision.setEstado(issue.getStatus());
-
-				issue.getHistorial().add(revision);
-				issue.setReparacion(null);
-
-				//contenido (opcional)
 			
-				MediaContent file = this.deserializeFile(fileData);
-						
-				if(file != null){
-					file.setFileOrder(1);
-					file.setFilename(filename);
-					issue.setUploadedFile(file);
-				}
-				else{
-					issue.setUploadedFile(null);
-				}
-				
-				issueService.reportIssue(issue);
+			String userID = getCurrentUser(SecurityContextHolder.getContext()
+					.getAuthentication()).getUsername();			
 
-				return new AlertStatus(true, "Su reclamo ha sido registrado.");
+			String capitalize = WordUtils.capitalizeFully(issue.getTitle(), new char[] { '.' });
+			issue.setTitle(capitalize);
+
+			// issue data
+			UserDTO userDTO = new UserDTO();
+			userDTO.setUsername(userID);
+			issue.setUsername(userID);
+			issue.setCreationDate(new Date());
+			issue.setLastUpdateDate(issue.getCreationDate());
+			issue.setStatus(StatusList.OPEN.getLabel());
+			issue.setUser(userDTO);
+
+			// history
+			IssueHistoryDTO revision = new IssueHistoryDTO();
+			revision.setFecha(new Date());
+			revision.setUsername(userID);
+			revision.setOperacion(Operation.CREATE);
+			revision.setMotivo(Messages.ISSUE_CREATION + " el reclamo.");
+			revision.setObservaciones("");
+			revision.setEstado(issue.getStatus());
+
+			issue.getHistorial().add(revision);
+			issue.setReparacion(null);
+
+			//contenido (opcional)
+		
+			MediaContent file = this.deserializeFile(fileData);
+					
+			if(file != null){
+				file.setFileOrder(1);
+				file.setFilename(filename);
+				issue.setUploadedFile(file);
 			}
+			else{
+				issue.setUploadedFile(null);
+			}
+			
+			issueService.reportIssue(issue);
 
-		} catch (Exception e) {
-			if (e instanceof AccessDeniedException)
-				return new AlertStatus(false,
-						"Debe estar logueado para ingresar un nuevo reclamo.");
-			else
-				return new AlertStatus(false,
-						"No se pudo publicar el reclamo. Intente m&aacute;s tarde.");
+			return new AlertStatus(true, "El reclamo ha sido registrado.");
+			
+
+		} catch (Exception e) {		
+			return new AlertStatus(false,
+					"No se pudo publicar el reclamo. Intente m&aacute;s tarde.");
 		}
 	}
 
@@ -686,87 +668,77 @@ public class IssueController {
 
 		try {
 
-			User user = getCurrentUser(SecurityContextHolder.getContext()
-					.getAuthentication());
-			UserDetails userDB = userService.loadUserByUsername(user
-					.getUsername());
-
-			if (userDB == null) {
-				return new AlertStatus(false,
-						"Debe estar logueado para ingresar un nuevo reclamo.");
+			String userID = getCurrentUser(SecurityContextHolder.getContext()
+					.getAuthentication()).getUsername();
+			
+			// tags
+			Object[] tagMapValues = (Object[]) issue.getTagsMap().values()
+					.toArray();
+			
+			if(tagMapValues.length == 0){					
+				return new AlertStatus(false, "Debe especificar al menos una CATEGOR&Iacute;A.");					
 			}
-
-			// user is logged-in
-			else {
-
-				// tags
-				Object[] tagMapValues = (Object[]) issue.getTagsMap().values()
-						.toArray();
+			
+			else{
 				
-				if(tagMapValues.length == 0){					
-					return new AlertStatus(false, "Debe especificar al menos una CATEGOR&Iacute;A.");					
+				String[] tagsArray = new String[tagMapValues.length];
+
+				if (tagMapValues.length > 0) {
+					if (tagMapValues[0] instanceof String) {
+						for (int i = 0; i < tagMapValues.length; i++)
+							tagsArray[i] = (String) tagMapValues[i];
+					} else
+						tagsArray = (String[]) tagMapValues[0];
 				}
+
+				UpdatedFields updatedFields = new Gson().fromJson(fieldChanges,
+						UpdatedFields.class);
 				
+//					String fields = "";
+				String motive = "";
+				int fieldCounter = 0;
+
+				/**
+				if (updatedFields.getTitle() == 1) {
+					fields += "Titulo, ";
+					fieldCounter++;
+				}
+				if (updatedFields.getBarrio() == 1) {
+					fields += "Barrio, ";
+					fieldCounter++;
+				}
+				if (updatedFields.getDesc() == 1) {
+					fields += "Descripcion, ";
+					fieldCounter++;
+				}
+				**/
+				
+				//taglist comparison					
+				Set<String> currentTags = new HashSet<String>();
+				currentTags.addAll(issueService.getIssueById(issueID).getTags());
+				
+				Set<String> updatedTags = new HashSet<String>();
+				updatedTags.addAll(Arrays.asList(tagsArray));
+				
+				//comparo contenido, sin importar el orden de los items
+				boolean areTagsEqual = currentTags.equals(updatedTags);
+				
+				if(updatedFields.getTitle() == 1
+						|| updatedFields.getBarrio() == 1
+						|| updatedFields.getDesc() == 1
+						|| currentTags.size() != updatedTags.size() 
+						|| !areTagsEqual){
+//						fields += "Categorias, ";
+					fieldCounter++;
+				}
+									
+				//no changes
+				if(fieldCounter == 0){
+					return new AlertStatus(false, "No hay cambios para guardar.");		
+				}
+					
 				else{
 					
-					String[] tagsArray = new String[tagMapValues.length];
-
-					if (tagMapValues.length > 0) {
-						if (tagMapValues[0] instanceof String) {
-							for (int i = 0; i < tagMapValues.length; i++)
-								tagsArray[i] = (String) tagMapValues[i];
-						} else
-							tagsArray = (String[]) tagMapValues[0];
-					}
-
-					UpdatedFields updatedFields = new Gson().fromJson(fieldChanges,
-							UpdatedFields.class);
-					
-//					String fields = "";
-					String motive = "";
-					int fieldCounter = 0;
-	
-					/**
-					if (updatedFields.getTitle() == 1) {
-						fields += "Titulo, ";
-						fieldCounter++;
-					}
-					if (updatedFields.getBarrio() == 1) {
-						fields += "Barrio, ";
-						fieldCounter++;
-					}
-					if (updatedFields.getDesc() == 1) {
-						fields += "Descripcion, ";
-						fieldCounter++;
-					}
-					**/
-					
-					//taglist comparison					
-					Set<String> currentTags = new HashSet<String>();
-					currentTags.addAll(issueService.getIssueById(issueID).getTags());
-					
-					Set<String> updatedTags = new HashSet<String>();
-					updatedTags.addAll(Arrays.asList(tagsArray));
-					
-					//comparo contenido, sin importar el orden de los items
-					boolean areTagsEqual = currentTags.equals(updatedTags);
-					
-					if(updatedFields.getTitle() == 1
-							|| updatedFields.getBarrio() == 1
-							|| updatedFields.getDesc() == 1
-							|| currentTags.size() != updatedTags.size() 
-							|| !areTagsEqual){
-//						fields += "Categorias, ";
-						fieldCounter++;
-					}
-										
-					//no changes
-					if(fieldCounter == 0){
-						return new AlertStatus(false, "No hay cambios para guardar.");		
-					}
-						
-					else{
-						
 //						fields = fields.substring(0, fields.length() - 2 ).trim();
 
 //							if (fieldCounter == 1) {
@@ -777,40 +749,34 @@ public class IssueController {
 //								motive = Messages.ISSUE_UPDATE_FIELDS + " los campos "
 //										+ fields;
 //							}
-						
-						motive = "actualizo datos del reclamo.";
-						
-					}
-		
-					// history
-					IssueHistoryDTO revision = new IssueHistoryDTO();
-					revision.setFecha(new Date());
-					revision.setUsername(userDB.getUsername());
-					revision.setOperacion(Operation.UPDATE);
-					revision.setMotivo(motive);
-					revision.setEstado(issue.getStatus());
-					revision.setObservaciones("");
-
-					issue.setId(issueID);
-					issue.setUsername(userDB.getUsername());
-					issue.setLastUpdateDate(revision.getFecha());
-					issue.setTags(Arrays.asList(tagsArray));
-					issue.getHistorial().add(revision);
-
-					issueService.updateIssue(issue);
-
-					return new AlertStatus(true, "El reclamo ha sido actualizado.");
-
+					
+					motive = "actualizo datos del reclamo.";
+					
 				}
-				
+	
+				// history
+				IssueHistoryDTO revision = new IssueHistoryDTO();
+				revision.setFecha(new Date());
+				revision.setUsername(userID);
+				revision.setOperacion(Operation.UPDATE);
+				revision.setMotivo(motive);
+				revision.setEstado(issue.getStatus());
+				revision.setObservaciones("");
+
+				issue.setId(issueID);
+				issue.setUsername(userID);
+				issue.setLastUpdateDate(revision.getFecha());
+				issue.setTags(Arrays.asList(tagsArray));
+				issue.getHistorial().add(revision);
+
+				issueService.updateIssue(issue);
+
+				return new AlertStatus(true, "El reclamo ha sido actualizado.");
+
 			}
-		} catch (Exception e) {
-			if (e instanceof AccessDeniedException)
-				return new AlertStatus(false,
-						"Debe estar logueado para ingresar un nuevo reclamo.");
-			else
-				return new AlertStatus(false,
-						"No ha sido posible actualizar el reclamo. Intente de nuevo.");
+		} catch (Exception e) {			
+			return new AlertStatus(false,
+					"No ha sido posible actualizar el reclamo. Intente de nuevo.");
 		}
 
 	}
@@ -823,40 +789,27 @@ public class IssueController {
 			@RequestParam("obs") String obs, HttpServletRequest request)
 			throws Exception {
 
-		try {
-			User user = getCurrentUser(SecurityContextHolder.getContext()
-					.getAuthentication());
-			UserDetails userDB = userService.loadUserByUsername(user
-					.getUsername());
-
-			if (userDB == null) {
-				return new AlertStatus(false,
-						"Debe estar logueado para ingresar un nuevo reclamo.");
+		try {		
+			
+			String userID = getCurrentUser(SecurityContextHolder.getContext()
+					.getAuthentication()).getUsername();
+				
+			if(newStatus.equals(StatusList.VERIFIED)){
+				issueService.updateIssueStatus(userID, issueID,
+						newStatus, null, null);
 			}
-
-			else {
-				
-				if(newStatus.equals(IssueStatus.ACKNOWLEDGED)){
-					issueService.updateIssueStatus(userDB.getUsername(), issueID,
-							newStatus, null, null);
-				}
-				else{
-					issueService.updateIssueStatus(userDB.getUsername(), issueID,
-							newStatus, resolution, obs);
-				}
-				
-				
-				return new AlertStatus(true,
-						"El estado reclamo ha sido actualizado.");
+			else{
+				issueService.updateIssueStatus(userID, issueID,
+						newStatus, resolution, obs);
 			}
+							
+			return new AlertStatus(true,
+					"El estado reclamo ha sido actualizado.");
+		
 
-		} catch (Exception e) {
-			if (e instanceof AccessDeniedException)
-				return new AlertStatus(false,
-						"Debe estar logueado para ingresar un nuevo reclamo.");
-			else
-				return new AlertStatus(false,
-						"No ha sido posible actualizar el reclamo. Intente de nuevo.");
+		} catch (Exception e) {		
+			return new AlertStatus(false,
+					"No ha sido posible actualizar el reclamo. Intente de nuevo.");
 		}
 	}
 
@@ -867,27 +820,15 @@ public class IssueController {
 
 		try {
 			
-			User user = getCurrentUser(SecurityContextHolder.getContext()
-					.getAuthentication());
-			UserDetails userDB = userService.loadUserByUsername(user
-					.getUsername());
-
-			if (userDB == null) {
-				return new AlertStatus(false,
-						"Debe estar logueado para agregar informaci&oacute;n al reclamo.");
-			}
-			
-			else{
-				repair.setId(Long.valueOf(issueID));
-				issueService.addReparacion(repair, userDB.getUsername());
-			}
+			String userID = getCurrentUser(SecurityContextHolder.getContext()
+				.getAuthentication()).getUsername();		
+		
+			repair.setId(Long.valueOf(issueID));
+			issueService.addReparacion(repair, userID);			
 		
 			return new AlertStatus(true, "La informacion ha sido actualizada.");
-
-		} catch (AccessDeniedException e) {
-			return new AlertStatus(false,
-					"Debe estar logueado para actualizar el reclamo.");
-		} catch (Exception e) {
+		
+		}catch (Exception e) {
 			return new AlertStatus(false,
 					"No se pudo guardar la informaci&oacute;n. Intente de nuevo.");
 		}
@@ -899,26 +840,14 @@ public class IssueController {
 
 		try {
 			
-			User user = getCurrentUser(SecurityContextHolder.getContext()
-					.getAuthentication());
-			UserDetails userDB = userService.loadUserByUsername(user
-					.getUsername());
-
-			if (userDB == null) {
-				return new AlertStatus(false,
-						"Debe estar logueado para actualizar el reclamo.");
-			}
+			String userID = getCurrentUser(SecurityContextHolder.getContext()
+					.getAuthentication()).getUsername();
 			
-			else{
-				issueService.deleteReparacion(issueID, userDB.getUsername());
-			}
+			issueService.deleteReparacion(issueID, userID);			
 
 			return new AlertStatus(true, "La informacion ha sido eliminada.");
 
-		} catch (AccessDeniedException e) {
-			return new AlertStatus(false,
-					"Debe estar logueado para actualizar el reclamo.");
-		} catch (Exception e) {
+		}catch (Exception e) {
 			return new AlertStatus(false,
 					"No se pudo eliminar la informaci&oacute;n. Intente de nuevo.");
 		}
@@ -954,15 +883,9 @@ public class IssueController {
 			HttpServletRequest request, Model model) throws Exception {
 
 		try {
-			User user = getCurrentUser(SecurityContextHolder.getContext()
-					.getAuthentication());
-			UserDetails userDB = userService.loadUserByUsername(user
-					.getUsername());
-
-			if (userDB == null) {
-				return new AlertStatus(false,
-						"Debe estar logueado para publicar un comentario.");
-			}
+			
+			String userID = getCurrentUser(SecurityContextHolder.getContext()
+					.getAuthentication()).getUsername();
 
 			if (mensaje.isEmpty()) {
 				return new AlertStatus(false, "Agregue un mensaje.");
@@ -972,7 +895,7 @@ public class IssueController {
 				CommentDTO comentario = new CommentDTO();
 				comentario.setFecha(new Date());
 				comentario.setNroReclamo(Long.valueOf(issueID));
-				comentario.setUsername(userDB.getUsername());
+				comentario.setUsername(userID);
 				comentario.setMensaje(mensaje);
 
 				issueService.postComment(comentario);
@@ -983,16 +906,9 @@ public class IssueController {
 				
 			}
 
-		}catch (Exception e) {
-			if(e instanceof AccessDeniedException){
-				return new AlertStatus(false,
-						"Debe estar logueado para publicar un nuevo comentario.");	
-			}
-			else{
-				return new AlertStatus(false,
-						"No ha sido posible publicar el comentario. Intente de nuevo.");
-			} 
-			
+		}catch (Exception e){
+			return new AlertStatus(false,
+					"No ha sido posible publicar el comentario. Intente de nuevo.");			
 		}	
 	
 		return new AlertStatus(true, "El comentario ha sido publicado.");
@@ -1003,47 +919,33 @@ public class IssueController {
 	AlertStatus wIssue(@PathVariable String watchOrUnwatch,
 			@PathVariable("issueID") String issueID, Model model) {
 
-		IssueFollowDTO follow = new IssueFollowDTO();
+		IssueFollow follow = new IssueFollow();
 
 		try {
 
-			User user = getCurrentUser(SecurityContextHolder.getContext()
-					.getAuthentication());
-			UserDetails loggedUser = userService.loadUserByUsername(user
-					.getUsername());
+			String userID = getCurrentUser(SecurityContextHolder.getContext()
+					.getAuthentication()).getUsername();
 
-			if (loggedUser == null) {
-				return new AlertStatus(false,
-						"Debe estar logueado para seguir el reclamo.");
+			follow.setId(new IssueMainActionPK(Long.valueOf(issueID), userService.getUserId(userID)));
+//			follow.setUsername(userID);
+
+			if (watchOrUnwatch.equals("watch")) {
+				follow.setDate(DateUtils.toCalendar(new Date()));
+				issueService.followIssue(follow);
 			}
 
 			else {
-
-				follow.setNroReclamo(Long.valueOf(issueID));
-				follow.setUsername(loggedUser.getUsername());
-
-				if (watchOrUnwatch.equals("watch")) {
-					follow.setFecha(new Date());
-					issueService.followIssue(follow);
-				}
-
-				else {
-					issueService.unFollowIssue(follow);
-				}
-
-				List<String> observadores = issueService
-						.getIssueFollowers(issueID);
-				model.addAttribute("cantidadObservadores", observadores.size());
-
-				return new AlertStatus(true,
-						String.valueOf(observadores.size()));
+				issueService.unFollowIssue(follow);
 			}
 
-		} catch (AccessDeniedException e) {
-			return new AlertStatus(false,
-					"Debe estar logueado para seguir el reclamo.");
+			List<String> observadores = issueService
+					.getIssueFollowers(issueID);
+			model.addAttribute("cantidadObservadores", observadores.size());
 
-		} catch (Exception e) {
+			return new AlertStatus(true,
+					String.valueOf(observadores.size()));		
+
+		}catch (Exception e) {
 			return new AlertStatus(false,
 					"Ha ocurrido un error al intentar seguir el reclamo.");
 		}
@@ -1061,80 +963,26 @@ public class IssueController {
 	AlertStatus voteIssue(@PathVariable("issueID") String issueID,
 			@RequestParam("vote") int voteUpOrDown, Model model) {
 
-		IssueVoteDTO vote = new IssueVoteDTO();
+		IssueVote vote = new IssueVote();
 
 		try {
-			User user = getCurrentUser(SecurityContextHolder.getContext()
-					.getAuthentication());
-			UserDetails loggedUser = userService.loadUserByUsername(user
-					.getUsername());
-
-			if (loggedUser == null) {
-				return new AlertStatus(false,
-						"Debe estar logueado para votar el reclamo.");
-			}
-
-			else {
-
-				IssueDTO issueDTO = issueService.getIssueById(issueID);
-				IssueVoteDTO currentVote = issueService.getCurrentVote(issueID,
-						loggedUser.getUsername());
-
-				if (issueDTO.getUsername().equals(loggedUser.getUsername())
-						&& currentVote != null) {
-					return new AlertStatus(false,
-							"No puede votar su propio reclamo.");
-				}
-
-				else {
-					if ((currentVote.isCurrentlyVoteByUser()))
-						return new AlertStatus(false,
-								"Ya ha votado por este reclamo.");
-				}
-
-			}
-
-			vote.setNroReclamo(Long.valueOf(issueID));
-			vote.setUsername(loggedUser.getUsername());
+			
+			String userID = getCurrentUser(SecurityContextHolder.getContext()
+					.getAuthentication()).getUsername();
+		
+			vote.setId(new IssueMainActionPK(Long.valueOf(issueID), userService.getUserId(userID)));
 			vote.setVote(voteUpOrDown);
-			vote.setFecha(new Date());
-
+			vote.setDate(DateUtils.toCalendar(new Date()));
 			issueService.submitVote(vote);
 			
 			return new AlertStatus(true, String.valueOf(issueService
 					.countIssueVotes(issueID)));
-
-		} catch (AccessDeniedException e) {
-			return new AlertStatus(false,
-					"Debe estar logueado para votar el reclamo.");
 
 		} catch (Exception e) {
 			return new AlertStatus(false,
 					"Ha ocurrido un error al intentar votar el reclamo.");
 		}
 
-	}
-
-	private User getCurrentUser(Authentication auth) {
-		User currentUser;
-		if (auth.getPrincipal() instanceof UserDetails) {
-			currentUser = (User) auth.getPrincipal();
-		} else if (auth.getDetails() instanceof UserDetails) {
-			currentUser = (User) auth.getDetails();
-		} else {
-			throw new AccessDeniedException("User not properly authenticated.");
-		}
-		return currentUser;
-	}
-
-	private String parseDate(Date date) {
-		if (date != null) {
-			DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-			String parsedDate = df.format(date);
-			return parsedDate;
-		}
-
-		return "";
 	}
 
 	public static int randomNumber(int min, int max) {

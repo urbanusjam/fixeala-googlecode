@@ -572,7 +572,7 @@ var mapController = {
 					    	tr += '<div class="media-body">';
 					    	tr += '<a href="'+mapController.getIssuePlainURL(marker.id, marker.title)+'"><h5 class="media-heading">'+marker.title+'</h5></a>';
 //					    	tr += '<p style="font-size:11px">Reportado por: '+mapController.getUserURL(marker.user)+'</p>';
-					    	tr += '<p style="font-size:11px">Reportado por: <a id="issue-user" style="cursor:pointer" class="user-link" href="'+mapController.getUserPlainURL(marker.user)+'">'+userID+'</a></p>';
+					    	tr += '<p style="font-size:11px">Reportado por: <a id="issue-user" style="cursor:pointer" class="user-link" href="'+mapController.getUserPlainURL(marker.user)+'">'+marker.user+'</a></p>';
 					    	tr += '<a class=\"taglink\" href=\"./search.html?type=status&value='+marker.status+'\"><span style="background:'+marker.statusCss+'" class="label">'+marker.status+'</a></span>';
 					    	tr += '</div>';	
 					    	tr += '</div>';

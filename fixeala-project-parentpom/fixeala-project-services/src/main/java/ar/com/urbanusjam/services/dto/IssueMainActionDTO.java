@@ -3,7 +3,7 @@ package ar.com.urbanusjam.services.dto;
 import java.io.Serializable;
 import java.util.Date;
 
-public abstract class CommonDataDTO implements Serializable {
+public abstract class IssueMainActionDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -11,7 +11,7 @@ public abstract class CommonDataDTO implements Serializable {
 	private String username;
 	private Date fecha;
 	
-	public CommonDataDTO(){}
+	public IssueMainActionDTO(){}
 
 	public Long getNroReclamo() {
 		return nroReclamo;
