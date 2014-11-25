@@ -20,12 +20,11 @@
 		<module>fixeala-project-entity</module>
 		<module>fixeala-project-services</module>
 		<module>fixeala-project-services-impl</module>
-		<module>?</module>
 	</modules>
 	<repositories>
 		<repository>
 			<id>Java.Net</id>
-	  		<url>http://download.java.net/maven/2/</url>
+	  		<url>http://download.java.net/maven/3/</url>
 	  	</repository>
   	</repositories>
 	<dependencies>
@@ -482,8 +481,8 @@
 					</configuration>
 				</plugin>
 				<plugin>
-					<artifactId>maven-release-plugin</artifactId>
-			        <version>2.5</version>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>			       
 			        <configuration>			        
 			        	<tagBase>
 			            	http://fixeala.googlecode.com/svn/tags
