@@ -18,7 +18,7 @@ var fxlIssueController = {
 		fxlIssueController.initImageUpload();
 		fxlIssueController.initWatch();		
 		fxlIssueController.initStatusUpdate();	
-		fxlIssueController.enableUserActions();
+		fxlIssueController.enableUserActions();		
 	},	
 	
 	
@@ -894,10 +894,10 @@ var fxlIssueController = {
 		//unwatch
 	    $('#btn-unwatch-issue')
 			.live('mouseover', function(){
-	    		$(this).removeClass('btn-info').addClass('btn-inverse').text('NO SEGUIR MAS');
+	    		$(this).addClass('btn-inverse').text('CANCELAR SUSCRIPCIÓN');
 	    	})
 	    	.live('mouseleave', function(){
-	    		$(this).removeClass('btn-inverse').addClass('btn-info').text('@ SIGUIENDO');  
+	    		$(this).removeClass('btn-inverse').text('SUSCRIPTO');  
 	    	})
 	    	.live('click', function() {	    		
 	    		$(this).replaceWith(loader);
@@ -914,13 +914,13 @@ var fxlIssueController = {
 	        success: function(data){
 	        	if(data.result){	
 	        		setTimeout(function(){		
-	        			$('.loader').replaceWith('<button id="btn-unwatch-issue" class="btn btn-info pull-right">Siguiendo</button>');	        		
+	        			$('.loader').replaceWith('<button id="btn-unwatch-issue" class="btn pull-right">Suscripto</button>');	        		
 	        			$('#numFollowers').text(data.message);
 	 				}, 1000);
 	        	}
 	        	else{
 	        		bootbox.alert(data.message);	
-	        		$('.loader').replaceWith('<button id="btn-watch-issue" class="btn btn-default pull-right">@ Seguir</button>');
+	        		$('.loader').replaceWith('<button id="btn-watch-issue" class="btn pull-right">@ Suscribirse</button>');
 	        	}	
     		}						  
 		});			
@@ -1164,6 +1164,35 @@ var fxlIssueController = {
 		
 	},
 	
+	/** ============================================================================================== **/
+	/**                               V E R I F Y					                                   **/
+	/** ============================================================================================== **/
+	
+	initVerifcation : function(){
+		
+		$("input[name='verify_ops']").change(function(){
+		     		      
+			var options = [];
+			
+			$.each($("input[name='verify_ops']:checked"), function(){            
+				options.push($(this).val());
+			});
+		    
+				
+			if(options.length == 4){
+				$('#btn-verify').prop('disabled', false);
+				$('#btn-reject').prop('disabled', true);
+			}
+		  
+			else{
+				$('#btn-verify').prop('disabled', true);
+				$('#btn-reject').prop('disabled', false);
+			}			        	
+		        
+		 });	
+	
+	},	
+	
 	verifyOrRejectIssue : function(label){
 		
 		event.preventDefault();
@@ -1171,7 +1200,7 @@ var fxlIssueController = {
 		var status = "";
 		
 		if(label == 'Verificar')
-			status = 'ADMITIDO';
+			status = 'VERIFICADO';
 		
 		if(label == 'Rechazar')
 			status = "RECHAZADO";

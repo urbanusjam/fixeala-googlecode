@@ -11,6 +11,7 @@ import ar.com.urbanusjam.entity.annotations.Comment;
 import ar.com.urbanusjam.entity.annotations.IssueFollow;
 import ar.com.urbanusjam.entity.annotations.IssueRepair;
 import ar.com.urbanusjam.entity.annotations.IssueVerification;
+import ar.com.urbanusjam.entity.annotations.IssueVote;
 import ar.com.urbanusjam.services.dto.CommentDTO;
 import ar.com.urbanusjam.services.dto.IssueCriteriaSearch;
 import ar.com.urbanusjam.services.dto.IssueDTO;
@@ -43,16 +44,16 @@ public interface IssueService {
 	public List<String> getTagList();
 		
 	//followers
-	public void followIssue(IssueFollowDTO followDTO);
-	public void unFollowIssue(IssueFollowDTO followDTO);
-	public boolean isUserFollowingIssue(IssueFollowDTO followDTO);
+	public void followIssue(IssueFollow follow);
+	public void unFollowIssue(IssueFollow follow);
+	public boolean isUserFollowingIssue(IssueFollow follow);
 	public List<String> getIssueFollowers(String issueID);
 	public List<String> getUserFollowings(String username);
 	public String[] getFollowersEmails(Set<IssueFollow> followers, String reporterEmail);
 	
 	//votes
-	public void submitVote(IssueVoteDTO voteDTO);
-	public IssueVoteDTO getCurrentVote(String issueID, String username);
+	public void submitVote(IssueVote vote);
+	public IssueVote getCurrentVote(String issueID, String username);
 	public Long countIssueVotes(String issueID);	
 	
 	//pageviews

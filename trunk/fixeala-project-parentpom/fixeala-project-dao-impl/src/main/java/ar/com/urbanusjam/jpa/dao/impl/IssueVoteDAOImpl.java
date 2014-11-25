@@ -30,9 +30,9 @@ public class IssueVoteDAOImpl implements IssueVoteDAO {
 	@Override
 	public IssueVote getVoteByUser(Long issueID, Long userID) {
 		try{
-			IssueVote vote = entityManager.createQuery("SELECT i FROM IssueVote i WHERE id.issueID = :issueID AND i.id.voterID = :voterID", IssueVote.class)
+			IssueVote vote = entityManager.createQuery("SELECT i FROM IssueVote i WHERE id.issueID = :issueID AND i.id.userID = :userID", IssueVote.class)
 				   .setParameter("issueID", issueID)
-				   .setParameter("voterID", userID)
+				   .setParameter("userID", userID)
 			       .getSingleResult();		
 			return vote;	
 		}catch(NoResultException e){

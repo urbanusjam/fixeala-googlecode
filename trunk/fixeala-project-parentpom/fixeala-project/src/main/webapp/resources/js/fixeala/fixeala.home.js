@@ -494,13 +494,13 @@ var fxlHomeController = {
 		 				
 		 				mapController.blockIssueForm();	 	
 		 				
-		 				bootbox.alert(alertStatus.message, function() {	
+//		 				bootbox.alert(alertStatus.message, function() {	
 		 					mapController.displayMarkers(map);
 	 						initMarker.setMap(null);
 	 						map.setCenter(location);
 	 						$('#btnIssue').removeClass('btn-danger').addClass('btn-success').html("<i class=\"icon-map-marker icon-large\"></i>&nbsp;&nbsp;&nbsp;PUBLICAR RECLAMO");
 	 						fxlHomeController.toggleIssueForm();
-		 				});		
+//		 				});		
 		 				
 		 				setTimeout(function(){   	
 		 					mapController.unBlockIssueForm();	   

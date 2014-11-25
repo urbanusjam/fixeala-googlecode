@@ -1,69 +1,64 @@
 package ar.com.urbanusjam.entity.annotations;
 
 import java.io.Serializable;
-import java.util.GregorianCalendar;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="issue_follow")
-public class IssueFollow implements Serializable {
+public class IssueFollow extends IssueMainAction implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	@EmbeddedId
-    private IssueFollowPK id;
+//	@EmbeddedId
+//    private IssueFollowPK id;
 	
-	@ManyToOne
-	@JoinColumn(name="id_issue", insertable=false, updatable=false)
-	private Issue issue;
+//	@ManyToOne
+//	@JoinColumn(name="id_issue", insertable=false, updatable=false)
+//	private Issue issue;
+//	
+//	@ManyToOne
+//	@JoinColumn(name="id_follower", insertable=false, updatable=false)
+//	private User follower;
 	
-	@ManyToOne
-	@JoinColumn(name="id_follower", insertable=false, updatable=false)
-	private User follower;
-	
-	@Column(name = "follow_date")
-	private GregorianCalendar date;
+//	@Column(name = "follow_date")
+//	private GregorianCalendar date;
 	
 	
-	public IssueFollow(){}
+//	public IssueFollow(){}
 
 
-	public IssueFollowPK getId() {
-		return id;
-	}
+//	public IssueFollowPK getId() {
+//		return id;
+//	}
 
-	public void setId(IssueFollowPK id) {
-		this.id = id;
-	}
+//	public void setId(IssueFollowPK id) {
+//		this.id = id;
+//	}
 
-	public Issue getIssue() {
-		return issue;
-	}
+//	public Issue getIssue() {
+//		return issue;
+//	}
+//
+//	public void setIssue(Issue issue) {
+//		this.issue = issue;
+//	}
+//
+//	public User getFollower() {
+//		return follower;
+//	}
+//
+//	public void setFollower(User follower) {
+//		this.follower = follower;
+//	}
 
-	public void setIssue(Issue issue) {
-		this.issue = issue;
-	}
-
-	public User getFollower() {
-		return follower;
-	}
-
-	public void setFollower(User follower) {
-		this.follower = follower;
-	}
-
-	public GregorianCalendar getDate() {
-		return date;
-	}
-
-	public void setDate(GregorianCalendar date) {
-		this.date = date;
-	}	
+//	public GregorianCalendar getDate() {
+//		return date;
+//	}
+//
+//	public void setDate(GregorianCalendar date) {
+//		this.date = date;
+//	}	
 	
 }

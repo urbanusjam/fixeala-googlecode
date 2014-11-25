@@ -312,43 +312,62 @@
 						<!-- already sent verification request -->
 						<c:if test="${!empty isVerifiedByUser}">						
 							<c:if test="${isVerifiedByUser}">
-								<button disabled id="btnVerifyIssue" data-toggle="modal" href="#mdl-verify" class="btn btn-success" style="width: 100%; margin-bottom: 20px; height: 46px; line-height: 46px;" title="Verificar"><h4>VERIFICACION ENVIADA</h4></button> 
+								<button id="btnVerifyIssue" 
+										data-toggle="modal" 
+										href="#mdl-verify" 
+										disabled 
+										class="btn btn-success" 
+										style="width: 100%; height: 46px; line-height: 40px;" title="Verificar"><h4>VERIFICACION ENVIADA</h4></button> 
 							</c:if>
 							<c:if test="${!isVerifiedByUser}">
-								<button disabled id="btnVerifyIssue" data-toggle="modal" href="#mdl-verify" class="btn btn-danger" style="width: 100%; margin-bottom: 20px; height: 46px; line-height: 46px;" title="Verificar"><h4>RECHAZO ENVIADO</h4></button> 
+								<button id="btnVerifyIssue" 
+										data-toggle="modal" 
+										href="#mdl-verify" 
+										disabled
+										class="btn btn-danger" 
+										style="width: 100%; height: 46px; line-height: 40px;" title="Verificar"><h4>RECHAZO ENVIADO</h4></button> 
 							</c:if>						
 						</c:if>
 						<!-- NOT sent yet -->
 						<c:if test="${empty isVerifiedByUser}">
-							<button id="btnVerifyIssue" data-toggle="modal" href="#mdl-verify" class="btn btn-danger" style="width: 100%; margin-bottom: 20px; height: 46px; line-height: 46px;" title="Verificar"><h3>VERIFICAR</h3></button> 
+							<button id="btnVerifyIssue" 
+									data-toggle="modal" 
+									href="#mdl-verify" 
+									onclick="fxlIssueController.initVerifcation();" 
+									class="btn btn-success" 
+									style="width: 100%;  height: 46px; line-height: 40px;" title="Verificar"><h3>VERIFICAR</h3></button> 
 						</c:if>
 					</c:if>
-					<div class="stats-container">
-						<span>
-							<i class="icon icon-ok-sign" style="color: #449D44;"></i>${posVerifications} / ${maxVerificationsAllowed} verificaciones
-						</span>
-						<span style="text-align: right; float: right">
-							<i class="icon icon-remove-sign" style="color: #C9302C;"></i>${negVerifications} / ${maxRejectionsAllowed} rechazos
-						</span>			
-					</div>				
+<!-- 					<div class="stats-container"> -->
+<!-- 						<span> -->
+<%-- 							<i class="icon icon-ok-sign" style="color: #449D44;"></i>${posVerifications} / ${maxVerificationsAllowed} verificaciones --%>
+<!-- 						</span> -->
+<!-- 						<span style="text-align: right; float: right"> -->
+<%-- 							<i class="icon icon-remove-sign" style="color: #C9302C;"></i>${negVerifications} / ${maxRejectionsAllowed} rechazos --%>
+<!-- 						</span>			 -->
+<!-- 					</div>				 -->
 				</c:if>
 			</sec:authorize>
 			<!-- NOT logged -->
 			<sec:authorize access="isAnonymous()">	
 				<c:if test="${estado eq 'ABIERTO'}">
 					<div class="alert" style="background: #B94A48; color: #FFF; border: none"><h3>SIN VERIFICAR</h3></div> 
-					<div class="stats-container">
+					
+				</c:if>
+			</sec:authorize>
+			
+			<div class="stats-container">
 						<span>
 							<i class="icon icon-ok-sign" style="color: #449D44;"></i>${posVerifications} / ${maxVerificationsAllowed} verificaciones
 						</span>
 						<span style="text-align: right; float: right">
-							<i class="icon icon-remove-sign" style="color: #C9302C;"></i>${negVerifications} / ${maxRejectionsAllowed} rechazos
+							<i class="icon icon-minus-sign" style="color: #C9302C;"></i>${negVerifications} / ${maxRejectionsAllowed} rechazos
 						</span>			
 					</div>
-				</c:if>
-			</sec:authorize>
-			
-			<div class="tag" style="border-radius: 5px; text-align: center; color: #FFF; background: ${estadoCss}"><h3>&nbsp;${estado}</h3></div>
+						
+			<c:if test="${estado ne 'ABIERTO'}">
+				<div class="tag" style="border-radius: 5px; text-align: center; color: #FFF; background: ${estadoCss}"><h3>&nbsp;${estado}</h3></div>
+			</c:if>
 			
 			<div id="issue-stats" class="stats-container">
 				<div class="stats-box">
@@ -357,7 +376,7 @@
 <%-- 				<div class="stats-box"><span class="text-small">visitas</span><span class="text-big pull-right">${cantidadVisitas}</span></div> --%>
 				<div class="stats-box"><span class="text-small">comentarios</span><span class="text-big pull-right">${cantidadComentarios}</span></div>
 				<div id="watchers" class="stats-box">					
-					<span class="text-small">seguidores</span>
+					<span class="text-small">suscriptores</span>
 					<span class="text-big pull-right">
 						<a href="#mdl-followers" id="followers-list" data-toggle="modal"><span id="numFollowers">${cantidadObservadores}</span></a>
 					</span> 
@@ -380,10 +399,10 @@
 								</span>	
 								<span class="pull-right">
 									<c:if test="${isUserWatching}">
-										<button id="btn-unwatch-issue" class="btn btn-info">@ Siguiendo</button>
+										<button id="btn-unwatch-issue" class="btn">Suscripto</button>
 									</c:if>
 									<c:if test="${!isUserWatching}">
-										<button id="btn-watch-issue" class="btn pull-right">@ Seguir</button>
+										<button id="btn-watch-issue" class="btn pull-right">@ Suscribirse</button>
 									</c:if>
 								</span>	
 							</c:if>		
@@ -400,17 +419,17 @@
 			<div id="userIssueActions">
 				<sec:authorize access="hasRole('ROLE_USER')">				
 					<c:if test="${estado ne 'CERRADO' && estado ne 'ARCHIVADO'}">
-						<c:if test="${estado eq 'ADMITIDO' || estado eq 'REABIERTO' || estado eq 'EN PROGRESO'}">
+						<c:if test="${estado eq 'VERIFICADO' || estado eq 'REABIERTO' || estado eq 'EN PROGRESO'}">
 							<div class="stats-container">							
 								<div id="btn-status" data-toggle="modal">			
-									<button class="btn btn-success" title="Resolver"><i class="icon-ok icon-large"></i> RESOLVER</button>
+									<button class="btn btn-primary" title="Resolver"><i class="icon-ok icon-large"></i> RESOLVER</button>
 								</div>
 							</div>		
 						</c:if>
 						<c:if test="${estado eq 'RESUELTO'}">
 							<div class="stats-container">	
 								<div id="btn-status" data-toggle="modal">			
-									<button class="btn btn-danger" title="Reabrir"><i class="icon-rotate-right icon-large"></i> REABRIR</button>
+									<button class="btn btn-info" title="Reabrir"><i class="icon-rotate-right icon-large"></i> REABRIR</button>
 								</div>
 							</div>
 						</c:if>												
@@ -446,7 +465,18 @@
 	  	</div>
 		<div class="modal-body">		
 			<ul class="list">
-				<li>Es CORRECTO
+				<li>
+					<label class="checkbox">
+      					<input type="checkbox" name="verify_ops"> Es PERTINENTE
+    				</label>
+					<ul class="sublist">
+						<li>Constituye un <u>RECLAMO BARRIAL</u> circunscripto a los l&iacute;mites de la Rep&uacute;blica Argentina.</li>
+					</ul>
+				</li>
+				<li> 
+					<label class="checkbox">
+      					<input type="checkbox" name="verify_ops"> Es CORRECTO
+    				</label>
 					<ul class="sublist">
 						<li>Ubicaci&oacute;n geogr&aacute;fica exacta (direcci&oacute;n, altura, ciudad, provincia).</li>						
 						<li>Problema REAL descripta en el T&iacute;tulo y la Descripci&oacute;n.</li>
@@ -454,30 +484,32 @@
 						<li>Buena redacci&oacute;n. Sin faltas de ortograf&iacute;a y gram&aacute;tica que impidan o dificulten la comprensi&oacute;n de la informaci&oacute;n publicada.</li>
 					</ul>
 				</li>
-				<li>Está COMPLETO
+				<li>
+					<label class="checkbox">
+      					<input type="checkbox" name="verify_ops"> Est&aacute; COMPLETO
+    				</label>
 					<ul class="sublist">
 						<li>Obligatorios: t&iacute;tulo, descripci&oacute;n, categor&iacute;as (tags).</li>
 						<li>Opcionales: barrio, im&aacute;genes.</li>
 					</ul>
-				</li>
-				<li>Es PERTINENTE
-					<ul class="sublist">
-						<li>Constituye un <u>RECLAMO BARRIAL</u> circunscripto a los l&iacute;mites de la Rep&uacute;blica Argentina.</li>
-					</ul>
-				</li>
-				<li>Es ACTUAL</li>
+				</li>				
+				<li>
+					<label class="checkbox">
+      					<input type="checkbox" name="verify_ops"> Es ACTUAL
+    				</label>
+    			</li>
 			</ul>		
 		</div>
 		<div class="modal-footer"> 			
-			<button id="btn-verify" class="btn btn-info pull-left" aria-hidden="true" onclick="fxlIssueController.verifyOrRejectIssue('Verificar');">
-			    <i class="icon-ok icon-large"></i>&nbsp;&nbsp;S&Iacute;
-			</button>	  			 		  		
-	  		<button id="btn-reject" class="btn btn-danger" aria-hidden="true" onclick="fxlIssueController.verifyOrRejectIssue('Rechazar');">
-		    	<i class="icon-minus-sign icon-large"></i>&nbsp;&nbsp;NO
+			<button id="btn-verify" class="btn btn-success pull-left" aria-hidden="true" onclick="fxlIssueController.verifyOrRejectIssue('Verificar');" disabled>
+			    <i class="icon-ok icon-large"></i>&nbsp;&nbsp;VERIFICAR
+			</button>			
+			<button class="btn" data-dismiss="modal" aria-hidden="true">
+		    		<i class="icon-remove icon-large"></i>&nbsp;&nbsp;&nbsp;CANCELAR
+		    </button>	  
+	  		<button id="btn-reject" class="btn btn-danger pull-left" aria-hidden="true" onclick="fxlIssueController.verifyOrRejectIssue('Rechazar');">
+		    	<i class="icon-minus-sign icon-large"></i>&nbsp;&nbsp;RECHAZAR
 		    </button>	 
-<!-- 		    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true"> -->
-<!-- 		    	<i class="icon-remove icon-large"></i>&nbsp;&nbsp;Cancelar -->
-<!-- 		    </button>	  -->
 	  	</div>
 	</div>
 	

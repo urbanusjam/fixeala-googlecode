@@ -29,9 +29,9 @@ public class IssueFollowDAOImpl implements IssueFollowDAO {
 
 	@Override
 	public void deleteFollowing(IssueFollow following) {
-		IssueFollow activeFollowing = entityManager.createQuery("SELECT f FROM IssueFollow f WHERE f.id.issueID = :issueID and f.id.followerID = :followerID", IssueFollow.class)
+		IssueFollow activeFollowing = entityManager.createQuery("SELECT f FROM IssueFollow f WHERE f.id.issueID = :issueID and f.id.userID = :userID", IssueFollow.class)
 			     .setParameter("issueID", following.getId().getIssueID())
-			     .setParameter("followerID", following.getId().getFollowerID())
+			     .setParameter("userID", following.getId().getUserID())
 			     .getSingleResult();
 		entityManager.remove(activeFollowing);		
 	}
@@ -39,9 +39,9 @@ public class IssueFollowDAOImpl implements IssueFollowDAO {
 	@Override
 	public IssueFollow findFollowing(IssueFollow following) {
 		try{
-			IssueFollow activeFollowing = entityManager.createQuery("SELECT f FROM IssueFollow f WHERE f.id.issueID = :issueID and f.id.followerID = :followerID", IssueFollow.class)
+			IssueFollow activeFollowing = entityManager.createQuery("SELECT f FROM IssueFollow f WHERE f.id.issueID = :issueID and f.id.userID = :userID", IssueFollow.class)
 				     .setParameter("issueID", following.getId().getIssueID())
-				     .setParameter("followerID", following.getId().getFollowerID())
+				     .setParameter("userID", following.getId().getUserID())
 				     .getSingleResult();
 		return activeFollowing; 		
 		}catch(NoResultException e){
@@ -64,7 +64,7 @@ public class IssueFollowDAOImpl implements IssueFollowDAO {
 	@Override
 	public List<IssueFollow> findFollowingsByUser(Long userID) throws NoResultException {
 		try{
-			List<IssueFollow> followings = entityManager.createQuery("SELECT i FROM IssueFollow i WHERE i.id.followerID = :userID", IssueFollow.class)
+			List<IssueFollow> followings = entityManager.createQuery("SELECT i FROM IssueFollow i WHERE i.id.userID = :userID", IssueFollow.class)
 			     .setParameter("userID", userID)
 			     .getResultList();
 			return followings;

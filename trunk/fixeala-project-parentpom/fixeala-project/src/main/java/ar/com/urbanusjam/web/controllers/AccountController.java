@@ -72,8 +72,7 @@ public class AccountController extends AbstractController {
 	@Autowired
 	@Qualifier(value = "customAuthenticationProvider")
 	protected CustomAuthenticationProvider customAuthenticationProvider;
-		
-	
+			
 
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)	
 	public String showSignUpPage(HttpServletResponse response){

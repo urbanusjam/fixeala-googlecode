@@ -34,13 +34,12 @@ import ar.com.urbanusjam.dao.utils.IssueCriteriaSearchRaw;
 import ar.com.urbanusjam.entity.annotations.Comment;
 import ar.com.urbanusjam.entity.annotations.Issue;
 import ar.com.urbanusjam.entity.annotations.IssueFollow;
-import ar.com.urbanusjam.entity.annotations.IssueFollowPK;
 import ar.com.urbanusjam.entity.annotations.IssueHistory;
+import ar.com.urbanusjam.entity.annotations.IssueMainActionPK;
 import ar.com.urbanusjam.entity.annotations.IssueRepair;
 import ar.com.urbanusjam.entity.annotations.IssueVerification;
 import ar.com.urbanusjam.entity.annotations.IssueVerificationPK;
 import ar.com.urbanusjam.entity.annotations.IssueVote;
-import ar.com.urbanusjam.entity.annotations.IssueVotePK;
 import ar.com.urbanusjam.entity.annotations.MediaContent;
 import ar.com.urbanusjam.entity.annotations.Tag;
 import ar.com.urbanusjam.entity.annotations.User;
@@ -56,7 +55,6 @@ import ar.com.urbanusjam.services.dto.IssueHistoryDTO;
 import ar.com.urbanusjam.services.dto.IssueVoteDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
 import ar.com.urbanusjam.services.utils.DateUtils;
-import ar.com.urbanusjam.services.utils.IssueStatus;
 import ar.com.urbanusjam.services.utils.Messages;
 import ar.com.urbanusjam.services.utils.Operation;
 import ar.com.urbanusjam.services.utils.SortingDataUtils;
@@ -188,15 +186,15 @@ public class IssueServiceImpl implements IssueService {
 		
 		issue.setLastUpdateDate(this.getCurrentCalendar(revision.getFecha()));
 			
-		if(!newStatus.equals(IssueStatus.ACKNOWLEDGED) && !newStatus.equals(IssueStatus.REJECTED)){
+		if(!newStatus.equals(StatusList.VERIFIED) && !newStatus.equals(StatusList.REJECTED)){
 			
-			if(newStatus.equals(IssueStatus.IN_PROGRESS))	
+			if(newStatus.equals(StatusList.IN_PROGRESS))	
 				revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_PROGRESS + " el reclamo");			
-			if(newStatus.equals(IssueStatus.SOLVED))
+			if(newStatus.equals(StatusList.SOLVED))
 				revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_RESOLVE + " el reclamo como " + resolution.toUpperCase());			
-			if(newStatus.equals(IssueStatus.CLOSED))
+			if(newStatus.equals(StatusList.CLOSED))
 				revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_CLOSE + " el reclamo");	
-			if(newStatus.equals(IssueStatus.REOPENED))	
+			if(newStatus.equals(StatusList.REOPENED))	
 				revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_REOPEN + " el reclamo porque " + resolution.toUpperCase());		
 			
 			issue.setStatus(newStatus);
@@ -204,7 +202,7 @@ public class IssueServiceImpl implements IssueService {
 		}
 				
 		//si es una solicitud de verificacion		
-		if(newStatus.equalsIgnoreCase(IssueStatus.ACKNOWLEDGED) || newStatus.equalsIgnoreCase(IssueStatus.REJECTED)){
+		if(newStatus.equals(StatusList.VERIFIED) || newStatus.equals(StatusList.REJECTED)){
 			
 			IssueVerification request = new IssueVerification();
 			request.setId(new IssueVerificationPK(issue.getId(), user.getId()));
@@ -213,10 +211,10 @@ public class IssueServiceImpl implements IssueService {
 			request.setDate(this.getCurrentCalendar(new Date()));
 			
 			//mantengo el reclamo ABIERTO
-			issue.setStatus(IssueStatus.OPEN);			
+			issue.setStatus(StatusList.OPEN.getLabel());			
 			
 			//solicitud verificacion
-			if(newStatus.equalsIgnoreCase(IssueStatus.ACKNOWLEDGED)){
+			if(newStatus.equalsIgnoreCase(StatusList.VERIFIED.getLabel())){
 				
 				request.setVerified(true);
 				revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_VERIFY_REQUEST + " del reclamo");
@@ -228,16 +226,16 @@ public class IssueServiceImpl implements IssueService {
 					revisionAdicional.setFecha(revision.getFecha());
 					revisionAdicional.setUsername(username);
 					revisionAdicional.setOperacion(Operation.UPDATE);	
-					revisionAdicional.setEstado(IssueStatus.ACKNOWLEDGED);						
-					revisionAdicional.setMotivo(Messages.ISSUE_UPDATE_STATUS_ACKNOWLEDGE);
+					revisionAdicional.setEstado(StatusList.VERIFIED.getLabel());						
+					revisionAdicional.setMotivo(Messages.ISSUE_UPDATE_STATUS_VERIFIED);
 					
-					issue.setStatus(IssueStatus.ACKNOWLEDGED);
+					issue.setStatus(StatusList.VERIFIED.getLabel());
 					issue.addRevision(this.convertTo(revisionAdicional, user));
 				}
 			}
 			
 			//solicitud rechazo
-			if(newStatus.equalsIgnoreCase(IssueStatus.REJECTED)){
+			if(newStatus.equals(StatusList.REJECTED)){
 				
 				request.setVerified(false);
 				revision.setMotivo(Messages.ISSUE_UPDATE_STATUS_REJECT_REQUEST + " del reclamo");
@@ -249,10 +247,10 @@ public class IssueServiceImpl implements IssueService {
 					revisionAdicional.setFecha(revision.getFecha());
 					revisionAdicional.setUsername(username);
 					revisionAdicional.setOperacion(Operation.UPDATE);	
-					revisionAdicional.setEstado(IssueStatus.REJECTED);						
+					revisionAdicional.setEstado(StatusList.REJECTED.getLabel());						
 					revisionAdicional.setMotivo(Messages.ISSUE_UPDATE_STATUS_REJECTED);
 					
-					issue.setStatus(IssueStatus.REJECTED);
+					issue.setStatus(StatusList.REJECTED.getLabel());
 					issue.addRevision(this.convertTo(revisionAdicional, user));
 					
 				}
@@ -485,19 +483,18 @@ public class IssueServiceImpl implements IssueService {
 	}
 	
 	@Override
-	public void followIssue(IssueFollowDTO followingDTO) {	
-		issueFollowDAO.saveFollowing(convertTo(followingDTO));
+	public void followIssue(IssueFollow following) {	
+		issueFollowDAO.saveFollowing(following);
 	}
 
 	@Override
-	public void unFollowIssue(IssueFollowDTO followingDTO) {
-		issueFollowDAO.deleteFollowing(convertTo(followingDTO));		
+	public void unFollowIssue(IssueFollow following) {
+		issueFollowDAO.deleteFollowing(following);		
 	}
 
 	@Override
-	public boolean isUserFollowingIssue(IssueFollowDTO followingDTO) {
-		IssueFollow following = issueFollowDAO.findFollowing(convertTo(followingDTO));
-		return following != null;
+	public boolean isUserFollowingIssue(IssueFollow following) {
+		return issueFollowDAO.findFollowing(following) != null;
 	}
 
 	@Override
@@ -507,7 +504,7 @@ public class IssueServiceImpl implements IssueService {
 		followings = issueFollowDAO.findFollowingsByIssue(Long.valueOf(issueID));
 		
 		for(IssueFollow f : followings){
-			followers.add(f.getFollower().getUsername());
+			followers.add(f.getUser().getUsername());
 		}
 		
 		return followers;			
@@ -555,9 +552,9 @@ public class IssueServiceImpl implements IssueService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public void submitVote(IssueVoteDTO voteDTO) { //-- cambiar por submitVote()
+	public void submitVote(IssueVote vote) { //-- cambiar por submitVote()
 					
-		Issue issue =  issueDAO.findIssueById(String.valueOf(voteDTO.getNroReclamo()));
+		Issue issue =  issueDAO.findIssueById(String.valueOf(vote.getId().getIssueID()));
 //		User user = userDAO.loadUserByUsername(voteDTO.getUsername());
 //
 //		IssueHistoryDTO revision = new IssueHistoryDTO();
@@ -569,29 +566,24 @@ public class IssueServiceImpl implements IssueService {
 //		revision.setObservaciones("");
 //		
 //		issue.addRevision(this.convertTo(revision, user)); 	
-		issue.addVote(this.convertTo(voteDTO));
+		issue.addVote(vote);
 
 		issueDAO.updateIssue(issue);
 	}
 
 	@Override
-	public IssueVoteDTO getCurrentVote(String issueID, String username) {
-		IssueVoteDTO voteDTO = new IssueVoteDTO();
-		User user = new User();		
-		user.setId(userService.getUserId(username));
-		IssueVote vote = issueVoteDAO.getVoteByUser(Long.valueOf(issueID), user.getId());
+	public IssueVote getCurrentVote(String issueID, String username) {
+	
+		IssueVote vote = new IssueVote();		
+		vote = issueVoteDAO.getVoteByUser(Long.valueOf(issueID), userService.getUserId(username));
 		
-		if(vote != null){
-			voteDTO.setNroReclamo(vote.getId().getIssueID());
-			voteDTO.setUsername(user.getUsername());
-			voteDTO.setVote(vote.getVote());
-			voteDTO.setFecha(vote.getDate().getTime());
-			voteDTO.setCurrentlyVoteByUser(true);
+		if(vote != null){			
+			vote.setCurrentlyVoteByUser(true);
+			return vote;
 		}
 		else
-			voteDTO.setCurrentlyVoteByUser(false);
-			
-		return voteDTO;				
+			return null;	
+		
 	}
 
 	@Override
@@ -688,7 +680,7 @@ public class IssueServiceImpl implements IssueService {
 		revision.setOperacion(Operation.UPDATE);
 		revision.setMotivo(Messages.ISSUE_REPAIR_INFO_ADD);		
 		revision.setObservaciones(null);	
-		revision.setEstado(IssueStatus.IN_PROGRESS);
+		revision.setEstado(StatusList.IN_PROGRESS.getLabel());
 		
 		issue.setStatus(revision.getEstado());
 		issue.setLastUpdateDate(this.getCurrentCalendar(revision.getFecha()));
@@ -711,7 +703,7 @@ public class IssueServiceImpl implements IssueService {
 		revision.setNroReclamo(Long.valueOf(issueID));
 		revision.setOperacion(Operation.UPDATE);
 		revision.setMotivo(Messages.ISSUE_REPAIR_INFO_DELETE);
-		revision.setEstado(IssueStatus.ACKNOWLEDGED);
+		revision.setEstado(StatusList.VERIFIED.getLabel());
 		revision.setObservaciones(null);
 
 		issue.setStatus(revision.getEstado());
@@ -729,7 +721,7 @@ public class IssueServiceImpl implements IssueService {
 			emails = new String[followers.size()+1];
 			int index = 0;
 			for(IssueFollow follower :  followers){
-				emails[index] = follower.getFollower().getEmail();
+				emails[index] = follower.getUser().getEmail();
 				index++;
 			}
 			if(reporterEmail != null)
@@ -870,42 +862,42 @@ public class IssueServiceImpl implements IssueService {
 		
 		String[] css = new String[2];
 		
-		if(status.equalsIgnoreCase(IssueStatus.OPEN)){
+		if(status.equals(StatusList.OPEN)){
 			css[0] = "label label-important";
 			css[1] = StatusList.OPEN.getColorCode();
 		}
 		
-		if(status.equalsIgnoreCase(IssueStatus.REOPENED)){
+		if(status.equals(StatusList.REOPENED)){
 			css[0] = "label label-important";
 			css[1] = StatusList.REOPENED.getColorCode();
 		}
 		
-		if(status.equalsIgnoreCase(IssueStatus.ACKNOWLEDGED)){
+		if(status.equals(StatusList.VERIFIED)){
 			css[0] = "label label-info";
-			css[1] = StatusList.ACKNOWLEDGED.getColorCode();
+			css[1] = StatusList.VERIFIED.getColorCode();
 		}
 		
-		if(status.equalsIgnoreCase(IssueStatus.REJECTED)){
+		if(status.equals(StatusList.REJECTED)){
 			css[0] = "label label-inverse";
 			css[1] = StatusList.REJECTED.getColorCode();			
 		}
 		
-		if(status.equalsIgnoreCase(IssueStatus.IN_PROGRESS)){
+		if(status.equals(StatusList.IN_PROGRESS)){
 			css[0] = "label label-warning";
 			css[1] = StatusList.IN_PROGRESS.getColorCode();		
 		}
 		
-		if(status.equalsIgnoreCase(IssueStatus.SOLVED)){
+		if(status.equals(StatusList.SOLVED)){
 			css[0] = "label label-success";
 			css[1] = StatusList.SOLVED.getColorCode();			
 		}
 		
-		if(status.equalsIgnoreCase(IssueStatus.CLOSED)){
+		if(status.equals(StatusList.CLOSED)){
 			css[0] = "label label-inverse";
 			css[1] = StatusList.CLOSED.getColorCode();			
 		}
 		
-		if(status.equalsIgnoreCase(IssueStatus.ARCHIVED)){
+		if(status.equals(StatusList.ARCHIVED)){
 			css[0] = "label label-default";
 			css[1] = StatusList.ARCHIVED.getColorCode();		
 		}
@@ -972,10 +964,10 @@ public class IssueServiceImpl implements IssueService {
 	//--revisar
 	public IssueFollow convertTo(IssueFollowDTO followingDTO){
 		IssueFollow following = new IssueFollow();
-		IssueFollowPK followingId = new IssueFollowPK();		
+		IssueMainActionPK followingId = new IssueMainActionPK();		
 		followingId.setIssueID(Long.valueOf(followingDTO.getNroReclamo()));
 		User u = userDAO.loadUserByUsername(followingDTO.getUsername());
-		followingId.setFollowerID(u.getId());
+		followingId.setUserID(u.getId());
 		following.setId(followingId);
 		following.setDate(followingDTO.getFecha() != null ? this.getCurrentCalendar(followingDTO.getFecha()) : null);
 		return following;
@@ -983,11 +975,8 @@ public class IssueServiceImpl implements IssueService {
 	
 	//--revisar
 	public IssueVote convertTo(IssueVoteDTO voteDTO){
-		IssueVote vote = new IssueVote();		
-		IssueVotePK voteId = new IssueVotePK();		
-		voteId.setIssueID(Long.valueOf(voteDTO.getNroReclamo()));	
-		voteId.setVoterID(userService.getUserId(voteDTO.getUsername()));
-		vote.setId(voteId);
+		IssueVote vote = new IssueVote();			
+		vote.setId(new IssueMainActionPK(voteDTO.getNroReclamo(), userService.getUserId(voteDTO.getUsername())));
 		vote.setVote(voteDTO.getVote());
 		vote.setDate(voteDTO.getFecha() != null ? this.getCurrentCalendar(voteDTO.getFecha()) : null);
 		return vote;
