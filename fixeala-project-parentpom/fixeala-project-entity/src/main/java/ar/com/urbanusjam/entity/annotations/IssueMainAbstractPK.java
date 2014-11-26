@@ -4,25 +4,23 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 
-public class IssueVerificationPK implements Serializable {
+public class IssueMainAbstractPK implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	
 	@Column(name="id_issue")
 	private Long issueID;
 	
 	@Column(name="id_user")
 	private Long userID;
-
+		
+	public IssueMainAbstractPK(){}
 	
-	public IssueVerificationPK(){}
-	
-	public IssueVerificationPK(Long issueID, Long userID){
+	public IssueMainAbstractPK(Long issueID, Long userID){
 		this.issueID = issueID;
 		this.userID = userID;
 	}
 	
-
 	public Long getIssueID() {
 		return issueID;
 	}
@@ -30,7 +28,7 @@ public class IssueVerificationPK implements Serializable {
 	public void setIssueID(Long issueID) {
 		this.issueID = issueID;
 	}
-	
+
 	public Long getUserID() {
 		return userID;
 	}
@@ -38,7 +36,6 @@ public class IssueVerificationPK implements Serializable {
 	public void setUserID(Long userID) {
 		this.userID = userID;
 	}
-
 
 	@Override
     public int hashCode() {
@@ -59,7 +56,7 @@ public class IssueVerificationPK implements Serializable {
 	 if (getClass() != obj.getClass())
 	      return false;
 	 
-	 IssueVerificationPK other = (IssueVerificationPK) obj;
+	 IssueMainAbstractPK other = (IssueMainAbstractPK) obj;
 	 
 	 if (issueID == null) {
 		 if (other.issueID != null)

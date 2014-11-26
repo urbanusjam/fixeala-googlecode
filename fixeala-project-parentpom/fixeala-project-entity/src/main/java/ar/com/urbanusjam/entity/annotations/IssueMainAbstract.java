@@ -10,12 +10,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
-public abstract class IssueMainAction implements Serializable {
+public abstract class IssueMainAbstract implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
 	@EmbeddedId
-    private IssueMainActionPK id;
+    private IssueMainAbstractPK id;
 	
 	@ManyToOne
 	@JoinColumn(name="id_issue", insertable=false, updatable=false)
@@ -28,13 +28,13 @@ public abstract class IssueMainAction implements Serializable {
 	@Column(name = "date")
 	private GregorianCalendar date;
 	
-	public IssueMainAction(){}
+	public IssueMainAbstract(){}
 
-	public IssueMainActionPK getId() {
+	public IssueMainAbstractPK getId() {
 		return id;
 	}
 
-	public void setId(IssueMainActionPK id) {
+	public void setId(IssueMainAbstractPK id) {
 		this.id = id;
 	}
 

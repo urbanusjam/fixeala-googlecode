@@ -24,11 +24,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import ar.com.urbanusjam.entity.utils.FileFormat;
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.dto.IssueCriteriaSearch;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.ReportDTO;
-import ar.com.urbanusjam.services.utils.FileFormat;
 import ar.com.urbanusjam.web.domain.api.ReclamoResponse;
 import ar.com.urbanusjam.web.services.ExportService;
 

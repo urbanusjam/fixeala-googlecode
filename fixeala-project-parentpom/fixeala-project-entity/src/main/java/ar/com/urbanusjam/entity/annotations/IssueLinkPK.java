@@ -6,18 +6,21 @@ import javax.persistence.Column;
 
 public class IssueLinkPK implements Serializable {
 
-	private static final long serialVersionUID = 7480411529540823812L;
+	private static final long serialVersionUID = 1L;
 	
 	@Column(name="id_issue")
 	private Long issueID;
 	
-	@Column(name="id_follower")
-	private Long relatedIssueID;
-
-	
+	@Column(name="id_user")
+	private Long userID;
+		
 	public IssueLinkPK(){}
 	
-
+	public IssueLinkPK(Long issueID, Long userID){
+		this.issueID = issueID;
+		this.userID = userID;
+	}
+	
 	public Long getIssueID() {
 		return issueID;
 	}
@@ -26,21 +29,20 @@ public class IssueLinkPK implements Serializable {
 		this.issueID = issueID;
 	}
 
-	public Long getRelatedIssueID() {
-		return relatedIssueID;
+	public Long getUserID() {
+		return userID;
 	}
 
-	public void setRelatedIssueID(Long relatedIssueID) {
-		this.relatedIssueID = relatedIssueID;
+	public void setUserID(Long userID) {
+		this.userID = userID;
 	}
-
 
 	@Override
     public int hashCode() {
 		final int prime = 31;		
 		int result = 1;		
 		result = prime * result + ((issueID == null) ? 0 : issueID.hashCode());		
-		result = prime * result + ((relatedIssueID == null) ? 0 : relatedIssueID.hashCode());
+		result = prime * result + ((userID == null) ? 0 : userID.hashCode());
         return result;
     }
 	
@@ -61,10 +63,10 @@ public class IssueLinkPK implements Serializable {
 	         return false;
 	 } else if (!issueID.equals(other.issueID))
 	         return false;
-	 if (relatedIssueID == null) {
-		 if (other.relatedIssueID != null)
+	 if (userID == null) {
+		 if (other.userID != null)
 	         return false;
-	 } else if (!relatedIssueID.equals(other.relatedIssueID))
+	 } else if (!userID.equals(other.userID))
 	         return false;
 
 	 return true;
