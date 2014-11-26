@@ -23,5 +23,5 @@ git push
 
 echo “Final commit...”
 
-#chmod u+x fixeala-deploy.sh
-#sh fixeala-deploy.sh
+#chmod u+x deploy.sh
+#sh deploy.sh
