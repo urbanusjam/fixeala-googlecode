@@ -3,7 +3,7 @@ package ar.com.urbanusjam.services.dto;
 import java.io.Serializable;
 import java.util.Date;
 
-import ar.com.urbanusjam.services.utils.DateUtils;
+import ar.com.urbanusjam.entity.utils.DateUtils;
 
 public class IssueHistoryDTO extends IssueMainActionDTO implements Serializable {
 	

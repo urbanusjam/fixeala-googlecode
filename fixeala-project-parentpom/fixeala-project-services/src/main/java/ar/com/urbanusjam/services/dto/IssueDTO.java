@@ -12,10 +12,11 @@ import java.util.Map;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import ar.com.urbanusjam.entity.annotations.Comment;
 import ar.com.urbanusjam.entity.annotations.IssueRepair;
 import ar.com.urbanusjam.entity.annotations.IssueVerification;
 import ar.com.urbanusjam.entity.annotations.MediaContent;
-import ar.com.urbanusjam.services.utils.DateUtils;
+import ar.com.urbanusjam.entity.utils.DateUtils;
 
 
 @XmlRootElement(name = "reclamo")
@@ -56,7 +57,7 @@ public class IssueDTO implements Serializable {
 	private List<MediaContent> contenidos = new ArrayList<MediaContent>();
 	
 	@XmlTransient
-	private List<CommentDTO> comentarios = new ArrayList<CommentDTO>();	
+	private List<Comment> comentarios = new ArrayList<Comment>();	
 	
 	@XmlTransient
 	private List<IssueFollowDTO> followers = new ArrayList<IssueFollowDTO>();
@@ -244,11 +245,11 @@ public class IssueDTO implements Serializable {
 		this.contenidos = contenidos;
 	}
 
-	public List<CommentDTO> getComentarios() {
+	public List<Comment> getComentarios() {
 		return comentarios;
 	}
 
-	public void setComentarios(List<CommentDTO> comentarios) {
+	public void setComentarios(List<Comment> comentarios) {
 		this.comentarios = comentarios;
 	}
 		
