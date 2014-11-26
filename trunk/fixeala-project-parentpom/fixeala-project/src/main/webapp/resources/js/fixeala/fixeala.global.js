@@ -185,8 +185,8 @@ var fxlGlobalController = {
 	  	    var type = this.type;
 	  	    var tag = this.tagName.toLowerCase(); // normalize case
 	  	    // it's ok to reset the value attr of text inputs,
-	  	    // password inputs, and textareas
-	  	    if (type == 'text' || type == 'password' || tag == 'textarea')
+	  	    // password and textareas 
+	  	    if (type == 'password' || tag == 'textarea')
 	  	      this.value = "";
 	  	    // checkboxes and radios need to have their checked state cleared
 	  	    // but should *not* have their 'value' changed
