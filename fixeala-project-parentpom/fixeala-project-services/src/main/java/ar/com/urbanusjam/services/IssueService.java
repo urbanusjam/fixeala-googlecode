@@ -12,11 +12,8 @@ import ar.com.urbanusjam.entity.annotations.IssueFollow;
 import ar.com.urbanusjam.entity.annotations.IssueRepair;
 import ar.com.urbanusjam.entity.annotations.IssueVerification;
 import ar.com.urbanusjam.entity.annotations.IssueVote;
-import ar.com.urbanusjam.services.dto.CommentDTO;
 import ar.com.urbanusjam.services.dto.IssueCriteriaSearch;
 import ar.com.urbanusjam.services.dto.IssueDTO;
-import ar.com.urbanusjam.services.dto.IssueFollowDTO;
-import ar.com.urbanusjam.services.dto.IssueVoteDTO;
 
 public interface IssueService {
 	
@@ -34,7 +31,7 @@ public interface IssueService {
 	public List<IssueDTO> searchByTagOrStatus(String searchType, String value);
 		
 	//comments
-	public void postComment(CommentDTO commentDTO) throws MessagingException, MailException;		
+	public void postComment(Comment comment) throws MessagingException, MailException;		
 	
 	//repair
 	public void addReparacion(IssueRepair repair, String username);
