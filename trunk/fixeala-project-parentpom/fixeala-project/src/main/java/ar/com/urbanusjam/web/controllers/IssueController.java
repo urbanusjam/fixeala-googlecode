@@ -33,24 +33,24 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import ar.com.urbanusjam.entity.annotations.Comment;
 import ar.com.urbanusjam.entity.annotations.IssueFollow;
-import ar.com.urbanusjam.entity.annotations.IssueMainActionPK;
+import ar.com.urbanusjam.entity.annotations.IssueMainAbstractPK;
 import ar.com.urbanusjam.entity.annotations.IssueRepair;
 import ar.com.urbanusjam.entity.annotations.IssueVerification;
 import ar.com.urbanusjam.entity.annotations.IssueVote;
 import ar.com.urbanusjam.entity.annotations.MediaContent;
 import ar.com.urbanusjam.entity.annotations.User;
+import ar.com.urbanusjam.entity.utils.DateUtils;
+import ar.com.urbanusjam.entity.utils.Messages;
+import ar.com.urbanusjam.entity.utils.Operation;
+import ar.com.urbanusjam.entity.utils.StatusList;
 import ar.com.urbanusjam.services.ContenidoService;
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.UserService;
-import ar.com.urbanusjam.services.dto.CommentDTO;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.IssueHistoryDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
-import ar.com.urbanusjam.services.utils.DateUtils;
-import ar.com.urbanusjam.services.utils.Messages;
-import ar.com.urbanusjam.services.utils.Operation;
-import ar.com.urbanusjam.services.utils.StatusList;
 import ar.com.urbanusjam.web.domain.AlertStatus;
 import ar.com.urbanusjam.web.domain.ContenidoResponse;
 
@@ -232,7 +232,7 @@ public class IssueController extends MainController {
 						.loadUserByUsername(((User) auth.getPrincipal())
 								.getUsername());
 				if (userDB != null) {
-					follow.setId(new IssueMainActionPK(Long.valueOf(issueID), 
+					follow.setId(new IssueMainAbstractPK(Long.valueOf(issueID), 
 							userService.getUserId(userDB.getUsername())));
 //					follow.setUsername(userDB.getUsername());
 //					follow.setNroReclamo(Long.valueOf(issueID));
@@ -405,12 +405,12 @@ public class IssueController extends MainController {
 				jsonArray = new JSONArray();
 				
 				//user type
-				List<CommentDTO> sub = (List<CommentDTO>) elements.subList(from, to + 1); //sublist toma el item en la posicion anterior al toIndex que se le pasa
+				List<Comment> sub = (List<Comment>) elements.subList(from, to + 1); //sublist toma el item en la posicion anterior al toIndex que se le pasa
 				
-				for(CommentDTO comment : sub){
+				for(Comment comment : sub){
 					JSONObject obj = new JSONObject();
-					obj.put("username", comment.getUsername());
-					obj.put("date", comment.getFechaFormateada());	
+					obj.put("username", comment.getUsuario().getUsername());
+					obj.put("date", DateUtils.getFechaFormateada(comment.getFecha().getTime(), DateUtils.DATE_TIME_PATTERN_SHORT));	
 					obj.put("message", comment.getMensaje());	
 					jsonArray.put(obj);
 				}			
@@ -892,15 +892,16 @@ public class IssueController extends MainController {
 			}
 
 			else {
-				CommentDTO comentario = new CommentDTO();
-				comentario.setFecha(new Date());
-				comentario.setNroReclamo(Long.valueOf(issueID));
+				
+				Comment comentario = new Comment();
+				comentario.setFecha(DateUtils.toCalendar(new Date()));
+				comentario.setIssueID(issueID);
 				comentario.setUsername(userID);
 				comentario.setMensaje(mensaje);
 
 				issueService.postComment(comentario);
 
-				List<CommentDTO> comments = issueService.getIssueById(issueID).getComentarios();
+				List<Comment> comments = issueService.getIssueById(issueID).getComentarios();
 				model.addAttribute("comentarios", comments);
 				model.addAttribute("cantidadComentarios", comments.size());
 				
@@ -926,7 +927,7 @@ public class IssueController extends MainController {
 			String userID = getCurrentUser(SecurityContextHolder.getContext()
 					.getAuthentication()).getUsername();
 
-			follow.setId(new IssueMainActionPK(Long.valueOf(issueID), userService.getUserId(userID)));
+			follow.setId(new IssueMainAbstractPK(Long.valueOf(issueID), userService.getUserId(userID)));
 //			follow.setUsername(userID);
 
 			if (watchOrUnwatch.equals("watch")) {
@@ -970,7 +971,7 @@ public class IssueController extends MainController {
 			String userID = getCurrentUser(SecurityContextHolder.getContext()
 					.getAuthentication()).getUsername();
 		
-			vote.setId(new IssueMainActionPK(Long.valueOf(issueID), userService.getUserId(userID)));
+			vote.setId(new IssueMainAbstractPK(Long.valueOf(issueID), userService.getUserId(userID)));
 			vote.setVote(voteUpOrDown);
 			vote.setDate(DateUtils.toCalendar(new Date()));
 			issueService.submitVote(vote);

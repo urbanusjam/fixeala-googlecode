@@ -1,6 +1,7 @@
 package ar.com.urbanusjam.entity.annotations;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.persistence.Column;
@@ -12,6 +13,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import ar.com.urbanusjam.entity.utils.DateUtils;
+
 
 @Entity
 @Table(name="comment")
@@ -40,7 +45,13 @@ public class Comment implements Serializable {
 	
 	@Column(name = "flag")
 	private boolean denunciado;
+	
+	@Transient
+	private String issueID;
 		
+	@Transient
+	private String username;
+	
 	public Comment() { } 
 
 	public Comment(Issue issue, User usuario, GregorianCalendar fecha,
@@ -101,9 +112,20 @@ public class Comment implements Serializable {
 		this.denunciado = denunciado;
 	}
 	
+	public String getIssueID() {
+		return issueID;
+	}
+
+	public void setIssueID(String issueID) {
+		this.issueID = issueID;
+	}
 	
-	
-		
-	
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
 }

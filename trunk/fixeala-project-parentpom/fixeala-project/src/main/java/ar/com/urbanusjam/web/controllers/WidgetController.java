@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import ar.com.urbanusjam.entity.utils.StatusList;
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.UserService;
 import ar.com.urbanusjam.services.dto.IssueDTO;
-import ar.com.urbanusjam.services.utils.StatusList;
 import ar.com.urbanusjam.web.domain.AlertStatus;
 
 @Controller

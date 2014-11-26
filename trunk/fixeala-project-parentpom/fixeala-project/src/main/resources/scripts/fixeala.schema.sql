@@ -135,7 +135,8 @@ CREATE TABLE issue_link (
 	   id_issue BIGINT(20) NOT NULL, 
 	   id_related_issue BIGINT(20) NOT NULL, 
 	   link_type VARCHAR(64) NOT NULL, 
-	   
+	   date DATETIME NOT NULL,
+	    
 	   PRIMARY KEY (id_issue, id_related_issue)
 	    
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -172,7 +173,7 @@ CREATE TABLE issue_pageview (
 	   id_issue BIGINT(20) NOT NULL,
 	   id_user BIGINT(20) NOT NULL,	 
 	   ip_address INT(11) UNSIGNED NULL,
-	   pageview_date DATETIME NOT NULL,
+	   date DATETIME NOT NULL,
 	   
 	   PRIMARY KEY (id_issue_pageview)
 	   
@@ -193,7 +194,7 @@ CREATE TABLE issue_vote (
 CREATE TABLE issue_verification_request ( 
 	id_issue BIGINT(20) NOT NULL,
 	id_user BIGINT(20) NOT NULL,	   
-	verification_date DATETIME NOT NULL,
+	date DATETIME NOT NULL,
 	is_verified TINYINT(1) NOT NULL,		
 	   
 	PRIMARY KEY (id_issue, id_user)

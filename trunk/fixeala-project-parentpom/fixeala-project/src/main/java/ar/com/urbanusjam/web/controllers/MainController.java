@@ -6,7 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import ar.com.urbanusjam.entity.annotations.User;
-import ar.com.urbanusjam.services.utils.DateUtils;
+import ar.com.urbanusjam.entity.utils.DateUtils;
 
 public class MainController {
 	

@@ -35,18 +35,21 @@ import ar.com.urbanusjam.entity.annotations.Comment;
 import ar.com.urbanusjam.entity.annotations.Issue;
 import ar.com.urbanusjam.entity.annotations.IssueFollow;
 import ar.com.urbanusjam.entity.annotations.IssueHistory;
-import ar.com.urbanusjam.entity.annotations.IssueMainActionPK;
+import ar.com.urbanusjam.entity.annotations.IssueMainAbstractPK;
 import ar.com.urbanusjam.entity.annotations.IssueRepair;
 import ar.com.urbanusjam.entity.annotations.IssueVerification;
-import ar.com.urbanusjam.entity.annotations.IssueVerificationPK;
 import ar.com.urbanusjam.entity.annotations.IssueVote;
 import ar.com.urbanusjam.entity.annotations.MediaContent;
 import ar.com.urbanusjam.entity.annotations.Tag;
 import ar.com.urbanusjam.entity.annotations.User;
+import ar.com.urbanusjam.entity.utils.DateUtils;
+import ar.com.urbanusjam.entity.utils.Messages;
+import ar.com.urbanusjam.entity.utils.Operation;
+import ar.com.urbanusjam.entity.utils.SortingDataUtils;
+import ar.com.urbanusjam.entity.utils.StatusList;
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.MailService;
 import ar.com.urbanusjam.services.UserService;
-import ar.com.urbanusjam.services.dto.CommentDTO;
 import ar.com.urbanusjam.services.dto.EmailDTO;
 import ar.com.urbanusjam.services.dto.IssueCriteriaSearch;
 import ar.com.urbanusjam.services.dto.IssueDTO;
@@ -54,11 +57,6 @@ import ar.com.urbanusjam.services.dto.IssueFollowDTO;
 import ar.com.urbanusjam.services.dto.IssueHistoryDTO;
 import ar.com.urbanusjam.services.dto.IssueVoteDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
-import ar.com.urbanusjam.services.utils.DateUtils;
-import ar.com.urbanusjam.services.utils.Messages;
-import ar.com.urbanusjam.services.utils.Operation;
-import ar.com.urbanusjam.services.utils.SortingDataUtils;
-import ar.com.urbanusjam.services.utils.StatusList;
 
 
 @Service
@@ -205,7 +203,7 @@ public class IssueServiceImpl implements IssueService {
 		if(newStatus.equals(StatusList.VERIFIED) || newStatus.equals(StatusList.REJECTED)){
 			
 			IssueVerification request = new IssueVerification();
-			request.setId(new IssueVerificationPK(issue.getId(), user.getId()));
+			request.setId(new IssueMainAbstractPK(issue.getId(), user.getId()));
 			request.setIssue(issue);
 			request.setUser(user);
 			request.setDate(this.getCurrentCalendar(new Date()));
@@ -369,13 +367,15 @@ public class IssueServiceImpl implements IssueService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor={MessagingException.class, MailException.class})
-	public void postComment(CommentDTO commentDTO) throws MessagingException {
+	public void postComment(Comment comment) throws MessagingException {
 		
-		Issue issue = issueDAO.findIssueById(String.valueOf(commentDTO.getNroReclamo()));
-		User user = userDAO.loadUserByUsername(commentDTO.getUsername());
+		Issue issue = issueDAO.findIssueById(String.valueOf(comment.getIssueID()));
+		User user = userDAO.loadUserByUsername(comment.getUsername());
 		
 		//comment
-		Comment comment = new Comment(issue, user, getCurrentCalendar(commentDTO.getFecha()), commentDTO.getMensaje(), false);
+		comment.setIssue(issue);
+		comment.setUsuario(user);
+		comment.setDenunciado(false);
 				
 		//revision
 		IssueHistoryDTO revision = new IssueHistoryDTO();
@@ -384,7 +384,7 @@ public class IssueServiceImpl implements IssueService {
 		revision.setOperacion(Operation.UPDATE);			
 		revision.setMotivo(Messages.ISSUE_UPDATE_COMMENT);			
 		revision.setEstado(issue.getStatus());
-		revision.setObservaciones(commentDTO.getMensaje());	
+		revision.setObservaciones(comment.getMensaje());	
 			
 		issue.setLastUpdateDate(this.getCurrentCalendar(revision.getFecha()));		
 		issue.addComment(comment);
@@ -395,7 +395,7 @@ public class IssueServiceImpl implements IssueService {
 		try{				
 			//email notification
 			String link = "<a target='_blank' href='http://localhost:8080/fixeala/issues/" + issue.getId().toString() + ".html' >LINK</a>.";
-			String text = "El usuario <i>" + commentDTO.getUsername() + "</i> ha dejado un comentario en el reclamo <i>#" +issue.getId()+ " \"" + issue.getTitle() + "\"</i>.";
+			String text = "El usuario <i>" + comment.getUsername() + "</i> ha dejado un comentario en el reclamo <i>#" +issue.getId()+ " \"" + issue.getTitle() + "\"</i>.";
 			text += "<br><br>";
 			text += "Para acceder al comentario publicado, hac&eacute; clic en el siguiente " + link;
 			
@@ -408,7 +408,7 @@ public class IssueServiceImpl implements IssueService {
 			Set<IssueFollow> followers = issue.getFollowers();
 			String reporterEmail = null;
 			
-			if(!commentDTO.getUsername().equals(issue.getReporter().getUsername()))
+			if(!comment.getUsername().equals(issue.getReporter().getUsername()))
 				reporterEmail = issue.getReporter().getEmail();
 			
 			mailService.sendIssueUpdateEmail(this.getFollowersEmails(followers, reporterEmail), email);
@@ -820,18 +820,14 @@ public class IssueServiceImpl implements IssueService {
 		issueDTO.setHistorial(historialDTO);
 		
 		//comentarios
-		List<CommentDTO> comentariosDTO = new ArrayList<CommentDTO>();		
-		for(Comment comentario : issue.getComentarios()){
-			comentariosDTO.add(convertToDTO(comentario));
-		}		
-		
-		//order comments by date DESC
-		Collections.sort(comentariosDTO, new Comparator<CommentDTO>() {
-			  public int compare(CommentDTO o1, CommentDTO o2) {
+		List<Comment> comentarios = new ArrayList<Comment>(issue.getComentarios());
+		//order by date DESC
+		Collections.sort(comentarios, new Comparator<Comment>() {
+			  public int compare(Comment o1, Comment o2) {
 			      return o2.getFecha().compareTo(o1.getFecha());
 			  }
-		});		
-		issueDTO.setComentarios(comentariosDTO);
+		});			
+		issueDTO.setComentarios(comentarios);
 						
 		//contenidos
 		List<MediaContent> imagenes = new ArrayList<MediaContent>();
@@ -951,20 +947,20 @@ public class IssueServiceImpl implements IssueService {
 	}
 	
 	//--revisar
-	public CommentDTO convertToDTO(Comment comment){
-		CommentDTO commentDTO = new CommentDTO();
-		commentDTO.setUsername(comment.getUsuario().getUsername());
-		commentDTO.setNroReclamo(comment.getIssue().getId());
-		commentDTO.setFecha(comment.getFecha().getTime());
-		commentDTO.setFechaFormateada(comment.getFecha().getTime());
-		commentDTO.setMensaje(comment.getMensaje());
-		return commentDTO;
-	}
+//	public CommentDTO convertToDTO(Comment comment){
+//		CommentDTO commentDTO = new CommentDTO();
+//		commentDTO.setUsername(comment.getUsuario().getUsername());
+//		commentDTO.setNroReclamo(comment.getIssue().getId());
+//		commentDTO.setFecha(comment.getFecha().getTime());
+//		commentDTO.setFechaFormateada(comment.getFecha().getTime());
+//		commentDTO.setMensaje(comment.getMensaje());
+//		return commentDTO;
+//	}
 	
 	//--revisar
 	public IssueFollow convertTo(IssueFollowDTO followingDTO){
 		IssueFollow following = new IssueFollow();
-		IssueMainActionPK followingId = new IssueMainActionPK();		
+		IssueMainAbstractPK followingId = new IssueMainAbstractPK();		
 		followingId.setIssueID(Long.valueOf(followingDTO.getNroReclamo()));
 		User u = userDAO.loadUserByUsername(followingDTO.getUsername());
 		followingId.setUserID(u.getId());
@@ -976,7 +972,7 @@ public class IssueServiceImpl implements IssueService {
 	//--revisar
 	public IssueVote convertTo(IssueVoteDTO voteDTO){
 		IssueVote vote = new IssueVote();			
-		vote.setId(new IssueMainActionPK(voteDTO.getNroReclamo(), userService.getUserId(voteDTO.getUsername())));
+		vote.setId(new IssueMainAbstractPK(voteDTO.getNroReclamo(), userService.getUserId(voteDTO.getUsername())));
 		vote.setVote(voteDTO.getVote());
 		vote.setDate(voteDTO.getFecha() != null ? this.getCurrentCalendar(voteDTO.getFecha()) : null);
 		return vote;

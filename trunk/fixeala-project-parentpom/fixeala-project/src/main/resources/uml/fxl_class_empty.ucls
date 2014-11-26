@@ -136,18 +136,7 @@
       <operations public="false" package="false" protected="false" private="false" static="false"/>    
     </display>  
   </class>  
-  <class id="14" language="java" name="ar.com.urbanusjam.entity.annotations.PasswordResetToken" 
-    project="fixeala-project-entity" 
-    file="/fixeala-project-entity/src/main/java/ar/com/urbanusjam/entity/annotations/PasswordResetToken.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
-    <position height="147" width="184" x="749" y="59"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="false" protected="false" private="false" static="false"/>    
-    </display>  
-  </class>  
-  <class id="15" language="java" name="ar.com.urbanusjam.entity.annotations.Province" project="fixeala-project-entity" 
+  <class id="14" language="java" name="ar.com.urbanusjam.entity.annotations.Province" project="fixeala-project-entity" 
     file="/fixeala-project-entity/src/main/java/ar/com/urbanusjam/entity/annotations/Province.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="111" width="184" x="301" y="667"/>    
@@ -157,7 +146,7 @@
       <operations public="false" package="false" protected="false" private="false" static="false"/>    
     </display>  
   </class>  
-  <class id="16" language="java" name="ar.com.urbanusjam.entity.annotations.User" project="fixeala-project-entity" 
+  <class id="15" language="java" name="ar.com.urbanusjam.entity.annotations.User" project="fixeala-project-entity" 
     file="/fixeala-project-entity/src/main/java/ar/com/urbanusjam/entity/annotations/User.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="363" width="202" x="1647" y="1124"/>    
@@ -167,7 +156,7 @@
       <operations public="false" package="false" protected="false" private="false" static="false"/>    
     </display>  
   </class>  
-  <class id="17" language="java" name="ar.com.urbanusjam.entity.annotations.IssueHistory" 
+  <class id="16" language="java" name="ar.com.urbanusjam.entity.annotations.IssueHistory" 
     project="fixeala-project-entity" 
     file="/fixeala-project-entity/src/main/java/ar/com/urbanusjam/entity/annotations/IssueHistory.java" binary="false" 
     corner="BOTTOM_RIGHT">    
@@ -178,7 +167,7 @@
       <operations public="false" package="false" protected="false" private="false" static="false"/>    
     </display>  
   </class>  
-  <class id="18" language="java" name="ar.com.urbanusjam.entity.annotations.Tag" project="fixeala-project-entity" 
+  <class id="17" language="java" name="ar.com.urbanusjam.entity.annotations.Tag" project="fixeala-project-entity" 
     file="/fixeala-project-entity/src/main/java/ar/com/urbanusjam/entity/annotations/Tag.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="111" width="184" x="1911" y="667"/>    
@@ -188,7 +177,7 @@
       <operations public="false" package="false" protected="false" private="false" static="false"/>    
     </display>  
   </class>  
-  <class id="19" language="java" name="ar.com.urbanusjam.entity.annotations.MediaContent" 
+  <class id="18" language="java" name="ar.com.urbanusjam.entity.annotations.MediaContent" 
     project="fixeala-project-entity" 
     file="/fixeala-project-entity/src/main/java/ar/com/urbanusjam/entity/annotations/MediaContent.java" binary="false" 
     corner="BOTTOM_RIGHT">    
@@ -199,7 +188,7 @@
       <operations public="false" package="false" protected="false" private="false" static="false"/>    
     </display>  
   </class>  
-  <class id="20" language="java" name="ar.com.urbanusjam.entity.annotations.IssueVote" project="fixeala-project-entity" 
+  <class id="19" language="java" name="ar.com.urbanusjam.entity.annotations.IssueVote" project="fixeala-project-entity" 
     file="/fixeala-project-entity/src/main/java/ar/com/urbanusjam/entity/annotations/IssueVote.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="111" width="184" x="2429" y="59"/>    
@@ -209,7 +198,7 @@
       <operations public="false" package="false" protected="false" private="false" static="false"/>    
     </display>  
   </class>  
-  <class id="21" language="java" name="ar.com.urbanusjam.entity.annotations.IssuePageView" 
+  <class id="20" language="java" name="ar.com.urbanusjam.entity.annotations.IssuePageView" 
     project="fixeala-project-entity" 
     file="/fixeala-project-entity/src/main/java/ar/com/urbanusjam/entity/annotations/IssuePageView.java" binary="false" 
     corner="BOTTOM_RIGHT">    
@@ -220,7 +209,7 @@
       <operations public="false" package="false" protected="false" private="false" static="false"/>    
     </display>  
   </class>  
-  <class id="22" language="java" name="ar.com.urbanusjam.entity.annotations.Authority" project="fixeala-project-entity" 
+  <class id="21" language="java" name="ar.com.urbanusjam.entity.annotations.Authority" project="fixeala-project-entity" 
     file="/fixeala-project-entity/src/main/java/ar/com/urbanusjam/entity/annotations/Authority.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="111" width="184" x="1687" y="667"/>    
@@ -230,7 +219,7 @@
       <operations public="false" package="false" protected="false" private="false" static="false"/>    
     </display>  
   </class>  
-  <class id="23" language="java" name="ar.com.urbanusjam.entity.annotations.IssueRepair" 
+  <class id="22" language="java" name="ar.com.urbanusjam.entity.annotations.IssueRepair" 
     project="fixeala-project-entity" 
     file="/fixeala-project-entity/src/main/java/ar/com/urbanusjam/entity/annotations/IssueRepair.java" binary="false" 
     corner="BOTTOM_RIGHT">    
@@ -241,283 +230,177 @@
       <operations public="false" package="false" protected="false" private="false" static="false"/>    
     </display>  
   </class>  
-  <association id="24">    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="25" name="id"/>      
-      <multiplicity id="26" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="7" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="27">    
-    <bendpoint x="2643" y="300"/>    
-    <bendpoint x="2643" y="667"/>    
-    <end type="SOURCE" refId="20" navigable="false">      
-      <attribute id="28" name="voter"/>      
-      <multiplicity id="29" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="16" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="30">    
-    <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="31" name="comentarios"/>      
-      <multiplicity id="32" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="6" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="33">    
-    <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="34" name="verificationRequests"/>      
-      <multiplicity id="35" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="8" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="36">    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="37" name="relatedIssue"/>      
-      <multiplicity id="38" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="11" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="39">    
-    <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="40" name="issue"/>      
-      <multiplicity id="41" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="11" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="42">    
-    <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="43" name="votes"/>      
-      <multiplicity id="44" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="20" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="45">    
-    <bendpoint x="2398" y="300"/>    
-    <bendpoint x="2398" y="667"/>    
-    <end type="SOURCE" refId="21" navigable="false">      
-      <attribute id="46" name="user"/>      
-      <multiplicity id="47" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="16" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="48">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="49" name="issue"/>      
-      <multiplicity id="50" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="11" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="51">    
-    <end type="SOURCE" refId="21" navigable="false">      
-      <attribute id="52" name="issue"/>      
-      <multiplicity id="53" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="11" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="54">    
-    <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="55" name="usuario"/>      
-      <multiplicity id="56" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="16" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="57">    
-    <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="58" name="reparacion"/>      
-      <multiplicity id="59" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="23" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="60">    
-    <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="61" name="follower"/>      
-      <multiplicity id="62" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="16" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="63">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="64" name="user"/>      
-      <multiplicity id="65" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="16" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="66">    
-    <end type="SOURCE" refId="18" navigable="false">      
-      <attribute id="67" name="issueList"/>      
-      <multiplicity id="68" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="11" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="69">    
-    <end type="SOURCE" refId="20" navigable="false">      
-      <attribute id="70" name="id"/>      
-      <multiplicity id="71" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="1" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="72">    
-    <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="73" name="contenidos"/>      
-      <multiplicity id="74" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="19" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="75">    
-    <end type="SOURCE" refId="17" navigable="false">      
-      <attribute id="76" name="issue"/>      
-      <multiplicity id="77" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="11" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="78">    
-    <end type="SOURCE" refId="22" navigable="false">      
-      <attribute id="79" name="users"/>      
-      <multiplicity id="80" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="16" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="81">    
+  <association id="23">    
     <bendpoint x="1656" y="667"/>    
     <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="82" name="reporter"/>      
-      <multiplicity id="83" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="16" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="84">    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="85" name="issue"/>      
-      <multiplicity id="86" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="11" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="87">    
-    <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="88" name="revisiones"/>      
-      <multiplicity id="89" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="17" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="90">    
-    <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="91" name="followers"/>      
-      <multiplicity id="92" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="93">    
-    <bendpoint x="739" y="300"/>    
-    <bendpoint x="739" y="667"/>    
-    <end type="SOURCE" refId="17" navigable="false">      
-      <attribute id="94" name="usuario"/>      
-      <multiplicity id="95" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="16" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="96">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="97" name="id"/>      
-      <multiplicity id="98" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="13" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="99">    
-    <end type="SOURCE" refId="20" navigable="false">      
-      <attribute id="100" name="issue"/>      
-      <multiplicity id="101" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="11" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="102">    
-    <end type="SOURCE" refId="9" navigable="false">      
-      <attribute id="103" name="provincia"/>      
-      <multiplicity id="104" minimum="0" maximum="1"/>    
+      <attribute id="24" name="reporter"/>      
+      <multiplicity id="25" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="15" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="105">    
+  <association id="26">    
+    <end type="SOURCE" refId="17" navigable="false">      
+      <attribute id="27" name="issueList"/>      
+      <multiplicity id="28" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="29">    
     <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="106" name="tagsList"/>      
-      <multiplicity id="107" minimum="0" maximum="2147483647"/>    
+      <attribute id="30" name="revisiones"/>      
+      <multiplicity id="31" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="16" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="32">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="33" name="comentarios"/>      
+      <multiplicity id="34" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="35">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="36" name="tagsList"/>      
+      <multiplicity id="37" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="17" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="38">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="39" name="contenidos"/>      
+      <multiplicity id="40" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="18" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="108">    
-    <end type="SOURCE" refId="19" navigable="false">      
-      <attribute id="109" name="issue"/>      
-      <multiplicity id="110" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="11" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="111">    
-    <end type="SOURCE" refId="16" navigable="false">      
-      <attribute id="112" name="roles"/>      
-      <multiplicity id="113" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="22" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="114">    
-    <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="115" name="issue"/>      
-      <multiplicity id="116" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="11" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="117">    
+  <association id="41">    
     <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="118" name="departamento"/>      
-      <multiplicity id="119" minimum="0" maximum="1"/>    
+      <attribute id="42" name="departamento"/>      
+      <multiplicity id="43" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="9" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="120">    
-    <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="121" name="id"/>      
-      <multiplicity id="122" minimum="0" maximum="1"/>    
+  <association id="44">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="45" name="verificationRequests"/>      
+      <multiplicity id="46" minimum="0" maximum="2147483647"/>    
     </end>    
-    <end type="TARGET" refId="12" navigable="true"/>    
+    <end type="TARGET" refId="8" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="123">    
+  <association id="47">    
     <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="124" name="pageviews"/>      
-      <multiplicity id="125" minimum="0" maximum="2147483647"/>    
+      <attribute id="48" name="followers"/>      
+      <multiplicity id="49" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="50">    
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="51" name="provincia"/>      
+      <multiplicity id="52" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="53">    
+    <end type="SOURCE" refId="21" navigable="false">      
+      <attribute id="54" name="users"/>      
+      <multiplicity id="55" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="56">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="57" name="votes"/>      
+      <multiplicity id="58" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="19" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="59">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="60" name="reparacion"/>      
+      <multiplicity id="61" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="22" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="62">    
+    <end type="SOURCE" refId="16" navigable="false">      
+      <attribute id="63" name="issue"/>      
+      <multiplicity id="64" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="65">    
+    <end type="SOURCE" refId="15" navigable="false">      
+      <attribute id="66" name="roles"/>      
+      <multiplicity id="67" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="21" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="68">    
+    <bendpoint x="2398" y="300"/>    
+    <bendpoint x="2398" y="667"/>    
+    <end type="SOURCE" refId="20" navigable="false">      
+      <attribute id="69" name="user"/>      
+      <multiplicity id="70" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="71">    
+    <end type="SOURCE" refId="20" navigable="false">      
+      <attribute id="72" name="issue"/>      
+      <multiplicity id="73" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="74">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="75" name="usuario"/>      
+      <multiplicity id="76" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="77">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="78" name="issue"/>      
+      <multiplicity id="79" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="80">    
+    <end type="SOURCE" refId="18" navigable="false">      
+      <attribute id="81" name="issue"/>      
+      <multiplicity id="82" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="83">    
+    <bendpoint x="739" y="300"/>    
+    <bendpoint x="739" y="667"/>    
+    <end type="SOURCE" refId="16" navigable="false">      
+      <attribute id="84" name="usuario"/>      
+      <multiplicity id="85" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 

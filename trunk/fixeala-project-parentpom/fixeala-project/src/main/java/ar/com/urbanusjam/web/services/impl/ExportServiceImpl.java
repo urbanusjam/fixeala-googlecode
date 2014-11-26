@@ -47,8 +47,8 @@ import org.springframework.ui.jasperreports.JasperReportsUtils;
 
 import com.google.gson.Gson;
 
+import ar.com.urbanusjam.entity.utils.FileFormat;
 import ar.com.urbanusjam.services.dto.ReportDTO;
-import ar.com.urbanusjam.services.utils.FileFormat;
 import ar.com.urbanusjam.web.domain.api.ReclamoListaResponse;
 import ar.com.urbanusjam.web.domain.api.ReclamoResponse;
 import ar.com.urbanusjam.web.services.ExportService;

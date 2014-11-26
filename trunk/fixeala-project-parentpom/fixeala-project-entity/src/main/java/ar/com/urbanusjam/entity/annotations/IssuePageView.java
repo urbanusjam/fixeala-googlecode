@@ -35,7 +35,7 @@ public class IssuePageView implements Serializable {
 	@Column(name = "ip_address")
 	private int ipAddress;
 	
-	@Column(name = "pageview_date")
+	@Column(name = "date")
 	private GregorianCalendar date;
 
 	public Long getId() {

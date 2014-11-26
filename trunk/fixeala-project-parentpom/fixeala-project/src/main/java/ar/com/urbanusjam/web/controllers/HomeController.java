@@ -27,18 +27,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import ar.com.urbanusjam.entity.annotations.Comment;
 import ar.com.urbanusjam.entity.annotations.MediaContent;
 import ar.com.urbanusjam.entity.annotations.User;
+import ar.com.urbanusjam.entity.utils.DateUtils;
+import ar.com.urbanusjam.entity.utils.StatusList;
 import ar.com.urbanusjam.services.ContenidoService;
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.MailService;
 import ar.com.urbanusjam.services.UserService;
-import ar.com.urbanusjam.services.dto.CommentDTO;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.IssueHistoryDTO;
 import ar.com.urbanusjam.services.dto.UserDTO;
-import ar.com.urbanusjam.services.utils.DateUtils;
-import ar.com.urbanusjam.services.utils.StatusList;
 import ar.com.urbanusjam.web.domain.DataTablesParamUtility;
 import ar.com.urbanusjam.web.domain.JQueryDataTableParamModel;
 import ar.com.urbanusjam.web.utils.DataTableResultSet;
@@ -590,13 +590,13 @@ public class HomeController extends MainController {
 			HttpServletRequest request, HttpServletResponse response) throws IOException {
 		
 		List<IssueDTO> userIssues = new ArrayList<IssueDTO>();
-		List<CommentDTO> dbComments = new ArrayList<CommentDTO>();
-		List<CommentDTO> comments = new ArrayList<CommentDTO>();
+		List<Comment> dbComments = new ArrayList<Comment>();
+		List<Comment> comments = new ArrayList<Comment>();
 		
 		userIssues = issueService.loadAllIssues();
 		
 		for(IssueDTO issue : userIssues){
-			for(CommentDTO c : issue.getComentarios())
+			for(Comment c : issue.getComentarios())
 				if(c.getUsername().equals(userID))
 					dbComments.add(c);
 		}
@@ -609,10 +609,10 @@ public class HomeController extends MainController {
                
         iTotalRecords = dbComments.size();        
         
-        for(CommentDTO c : dbComments){
+        for(Comment c : dbComments){
         	if(c.getMensaje().toLowerCase().contains(param.sSearch.toLowerCase())    
 	           ||
-	           c.getNroReclamo().toString().toLowerCase().contains(param.sSearch.toLowerCase()))   	          
+	           c.getIssue().getId().toString().toLowerCase().contains(param.sSearch.toLowerCase()))   	          
               {
         		comments.add(c); 
               }
@@ -623,14 +623,14 @@ public class HomeController extends MainController {
         final int sortColumnIndex = param.iSortColumnIndex;
         final int sortDirection = param.sSortDirection.equals("asc") ? -1 : 1;
        
-        Collections.sort(comments, new Comparator<CommentDTO>(){
+        Collections.sort(comments, new Comparator<Comment>(){
         	@Override
-            public int compare(CommentDTO c1, CommentDTO c2) {    
+            public int compare(Comment c1, Comment c2) {    
         		switch(sortColumnIndex){
                 case 0:                	
                 	return c1.getMensaje().compareTo(c2.getMensaje()) * sortDirection;   
                 case 1:
-                	return c1.getNroReclamo().compareTo(c2.getNroReclamo()) * sortDirection;   
+                	return c1.getIssue().getId().compareTo(c2.getIssue().getId()) * sortDirection;   
               
         		}
                 return 0;
@@ -843,7 +843,7 @@ public class HomeController extends MainController {
 				}
 				
 				for(IssueDTO issue : allIssues){
-					for(CommentDTO c : issue.getComentarios())
+					for(Comment c : issue.getComentarios())
 						if(c.getUsername().equals(userID))
 							commentsCounter++;
 				}

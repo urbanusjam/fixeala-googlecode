@@ -5,19 +5,12 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.LazyToOne;
-import org.hibernate.annotations.LazyToOneOption;
+import org.springframework.format.annotation.DateTimeFormat;
 //import org.hibernate.bytecode.javassist.FieldHandled;
 //import org.hibernate.bytecode.javassist.FieldHandler;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name="issue_repair")

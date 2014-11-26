@@ -24,12 +24,12 @@ import ar.com.urbanusjam.entity.annotations.IssueFollow;
 import ar.com.urbanusjam.entity.annotations.IssueHistory;
 import ar.com.urbanusjam.entity.annotations.MediaContent;
 import ar.com.urbanusjam.entity.annotations.User;
+import ar.com.urbanusjam.entity.utils.Messages;
+import ar.com.urbanusjam.entity.utils.Operation;
 import ar.com.urbanusjam.services.ContenidoService;
 import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.MailService;
 import ar.com.urbanusjam.services.dto.EmailDTO;
-import ar.com.urbanusjam.services.utils.Messages;
-import ar.com.urbanusjam.services.utils.Operation;
 
 @Service
 @Transactional
