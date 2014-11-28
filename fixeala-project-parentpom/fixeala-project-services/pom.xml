@@ -2,18 +2,18 @@
 	<modelVersion>4.0.0</modelVersion>
   	<groupId>ar.com.urbanusjam</groupId>
   	<artifactId>fixeala-project-services</artifactId>
-  	<version>1.0.0</version>
+  	<version>1.0.1-SNAPSHOT</version>
   	<name>Fixeala Service Layer Interface</name>
 	<parent>
 		<artifactId>fixeala-project-parentpom</artifactId>
 		<groupId>ar.com.urbanusjam</groupId>
-		<version>1.0.0</version>
+		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 	<dependencies>    
 	    <dependency>
 			<groupId>ar.com.urbanusjam</groupId>
 			<artifactId>fixeala-project-entity</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
   </dependencies>
   <build>

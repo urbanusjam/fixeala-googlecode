@@ -3,39 +3,39 @@
   	<groupId>ar.com.urbanusjam</groupId>
   	<artifactId>fixeala-project</artifactId>
   	<packaging>war</packaging>
-  	<version>1.0.0</version>
+  	<version>1.0.1-SNAPSHOT</version>
   	<name>Fixeala Web</name>
   	<parent>
 		<artifactId>fixeala-project-parentpom</artifactId>
 		<groupId>ar.com.urbanusjam</groupId>
-		<version>1.0.0</version>
+		<version>1.0.1-SNAPSHOT</version>
   	</parent>
 	<dependencies>
 		<!-- Fixeala Modules -->
   		<dependency>
 			<groupId>ar.com.urbanusjam</groupId>
 			<artifactId>fixeala-project-dao</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>ar.com.urbanusjam</groupId>
 			<artifactId>fixeala-project-dao-impl</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>ar.com.urbanusjam</groupId>
 			<artifactId>fixeala-project-entity</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>ar.com.urbanusjam</groupId>
 			<artifactId>fixeala-project-services</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>ar.com.urbanusjam</groupId>
 			<artifactId>fixeala-project-services-impl</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1-SNAPSHOT</version>
 		</dependency> 
 		<!-- Servlet -->
 <!-- 		<dependency> -->

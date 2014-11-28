@@ -3,7 +3,7 @@
   	<groupId>ar.com.urbanusjam</groupId>
   	<artifactId>fixeala-project-parentpom</artifactId>
   	<packaging>pom</packaging>
-  	<version>1.0.0</version>
+  	<version>1.0.1-SNAPSHOT</version>
   	<name>Fixeala Parent POM</name>
 	<properties>
 		<junit.version>4.8.2</junit.version>
@@ -491,8 +491,8 @@
         </pluginManagement>
     </build>
     <scm>
-	  <connection>scm:svn:https://fixeala.googlecode.com/svn/tags/fixeala-project-parentpom-1.0.0</connection>
-	  <developerConnection>scm:svn:https://fixeala.googlecode.com/svn/tags/fixeala-project-parentpom-1.0.0</developerConnection>
-	  <url>svn://fixeala.googlecode.com/svn/tags/fixeala-project-parentpom-1.0.0</url>
+	  <connection>scm:svn:https://fixeala.googlecode.com/svn/trunk/</connection>
+	  <developerConnection>scm:svn:https://fixeala.googlecode.com/svn/trunk/</developerConnection>
+	  <url>svn://fixeala.googlecode.com/svn/trunk/</url>
 	</scm>
 </project>
