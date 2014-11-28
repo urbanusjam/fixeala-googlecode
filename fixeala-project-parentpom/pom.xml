@@ -494,8 +494,8 @@
         </pluginManagement>
     </build>
     <scm>
-	  <connection>scm:svn:http://fixeala.googlecode.com/svn/trunk/</connection>
-	  <developerConnection>scm:svn:http://fixeala.googlecode.com/svn/trunk/</developerConnection>
+	  <connection>scm:svn:https://fixeala.googlecode.com/svn/trunk/</connection>
+	  <developerConnection>scm:svn:https://fixeala.googlecode.com/svn/trunk/</developerConnection>
 	  <url>svn://fixeala.googlecode.com/svn/trunk/</url>
 	</scm>
 </project>
