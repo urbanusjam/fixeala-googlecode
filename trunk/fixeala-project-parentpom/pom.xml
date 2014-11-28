@@ -485,9 +485,7 @@
 					<artifactId>maven-release-plugin</artifactId>	
 					<inherited>true</inherited>		       
 			        <configuration>			        
-			        	<tagBase>
-			            	http://fixeala.googlecode.com/svn/tags
-			          	</tagBase>
+			        	<tagBase>https://fixeala.googlecode.com/svn/tags</tagBase>
 			        </configuration>
 			    </plugin>
             </plugins>
