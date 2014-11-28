@@ -1,0 +1,34 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    					http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+  	
+  	
+	<bean id="userService" class="ar.com.urbanusjam.services.impl.UserServiceImpl" />
+		
+	<bean id="issueService" class="ar.com.urbanusjam.services.impl.IssueServiceImpl" />
+	
+	<bean id="contenidoService" class="ar.com.urbanusjam.services.impl.ContenidoServiceImpl" />
+	
+	<bean id="mailService" class="ar.com.urbanusjam.services.impl.MailServiceImpl" />
+	
+	<bean id="exportService" class="ar.com.urbanusjam.web.services.impl.ExportServiceImpl" >
+		<property name="pathJasperTemplatePdf" value="${path.jasper.template.pdf}${file.separator}" />
+		<property name="pathJasperTemplateCsv" value="${path.jasper.template.csv}${file.separator}" />
+	</bean>
+	
+	<!-- Remember Me Service -->		
+	<bean id="rememberMeServices" class="org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices" >
+		 <property name="key" value="fixealaRememberMeKey" />
+		 <property name="userDetailsService" ref="userService" />
+		 <property name="tokenRepository" ref="fixealaTokenRepository" />
+		 <property name="parameter" value="_spring_security_remember_me"/>
+	</bean>
+ 
+	<!-- Remember Me Token Repository -->	
+	<bean id="fixealaTokenRepository" class="org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl" >
+		 <property name="dataSource" ref="dataSourceFixeala" />
+	</bean>	
+	
+</beans>

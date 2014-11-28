@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+ 			 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+ 								http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd" version="2.0">
+                                 
+    <persistence-unit name="fixealaPU" transaction-type="RESOURCE_LOCAL" >  
+    	
+    	<provider>org.hibernate.ejb.HibernatePersistence</provider>
+    	
+      	<class>ar.com.urbanusjam.entity.annotations.ActivationToken</class>
+       	<class>ar.com.urbanusjam.entity.annotations.Authority</class> 
+        <class>ar.com.urbanusjam.entity.annotations.Comment</class>      
+        <class>ar.com.urbanusjam.entity.annotations.Issue</class>  
+        <class>ar.com.urbanusjam.entity.annotations.IssueFollow</class>        
+        <class>ar.com.urbanusjam.entity.annotations.IssueLink</class>  
+<!--         <class>ar.com.urbanusjam.entity.annotations.IssuePageView</class> -->
+        <class>ar.com.urbanusjam.entity.annotations.IssueRepair</class>
+        <class>ar.com.urbanusjam.entity.annotations.IssueHistory</class> 
+        <class>ar.com.urbanusjam.entity.annotations.IssueVote</class> 
+        <class>ar.com.urbanusjam.entity.annotations.IssueVerification</class> 
+        <class>ar.com.urbanusjam.entity.annotations.MediaContent</class>   
+        <class>ar.com.urbanusjam.entity.annotations.PasswordToken</class>    
+        <class>ar.com.urbanusjam.entity.annotations.Tag</class>   
+        <class>ar.com.urbanusjam.entity.annotations.User</class>
+        <class>ar.com.urbanusjam.entity.annotations.Province</class>
+        <class>ar.com.urbanusjam.entity.annotations.Department</class>
+        <class>ar.com.urbanusjam.entity.annotations.Locality</class>
+                
+        <exclude-unlisted-classes/>    
+        
+        <properties>
+      		<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+      		<property name="hibernate.show_sql" value="false"/>      		
+    	</properties>
+        
+	</persistence-unit>
+	
+</persistence>     

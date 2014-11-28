@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="issue_ireport" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0000000000000007"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/> 
+   
+	<field name="nroReclamo" class="java.lang.String"/>	
+	<field name="titulo" class="java.lang.String"/>
+	<field name="direccion" class="java.lang.String"/>	
+	<field name="fecha" class="java.lang.String"/>
+	<field name="estado" class="java.lang.String"/>
+	
+	<title>
+		<band height="78" splitType="Stretch">
+			<staticText>
+				<reportElement x="650" y="13" width="152" height="43" />
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="36"/>
+				</textElement>
+				<text><![CDATA[FIXEALA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="26" width="514" height="30" />
+				<textElement>
+					<font fontName="Arial" size="20" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Listado de incidencias barriales de la República Argentina]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="62" width="802" height="1" />
+				<graphicElement>
+					<pen lineWidth="2.0"/>
+				</graphicElement>
+			</line>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	
+	<columnHeader>
+		<band height="35" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="50" height="20"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["ID"]]></textFieldExpression>
+			</textField>
+            <textField>
+                <reportElement x="50" y="0" width="200" height="20"/>
+                <textFieldExpression class="java.lang.String"><![CDATA["Titulo"]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="250" y="0" width="300" height="20"/>
+                <textFieldExpression class="java.lang.String"><![CDATA["Direccion"]]></textFieldExpression>
+            </textField>          
+            <textField>
+                <reportElement x="650" y="0" width="100" height="20"/>
+                <textFieldExpression class="java.lang.String"><![CDATA["Fecha y Hora"]]></textFieldExpression>
+            </textField>   
+            <textField>
+                <reportElement x="750" y="0" width="100" height="20"/>
+                <textFieldExpression class="java.lang.String"><![CDATA["Estado"]]></textFieldExpression>
+            </textField>                                    			
+		</band>
+	</columnHeader>
+
+	<detail>
+		<band height="20">
+			<textField>
+				<reportElement x="0" y="0" width="50" height="20"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nroReclamo}]]></textFieldExpression>
+			</textField>		
+            <textField>
+                <reportElement x="50" y="0" width="200" height="20"/>
+                <textFieldExpression class="java.lang.String"><![CDATA[$F{titulo}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="250" y="0" width="300" height="20"/>
+                <textFieldExpression class="java.lang.String"><![CDATA[$F{direccion}]]></textFieldExpression>
+            </textField>          
+            <textField>
+                <reportElement x="650" y="0" width="100" height="20"/>
+                <textFieldExpression class="java.lang.String"><![CDATA[$F{fecha}]]></textFieldExpression>
+            </textField> 
+            <textField>
+                <reportElement x="750" y="0" width="100" height="20"/>
+                <textFieldExpression class="java.lang.String"><![CDATA[$F{estado}]]></textFieldExpression>
+            </textField>            			
+		</band>
+	</detail>
+
+</jasperReport>

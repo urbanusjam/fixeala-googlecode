@@ -1,0 +1,41 @@
+<beans xmlns="http://www.springframework.org/schema/beans"     
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    			           http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+
+<!-- 	<bean id="hibernateParent" abstract="true"> -->
+<!--         <property name="sessionFactory" ref="sessionFactoryFixeala" /> -->
+<!--         <property name="hibernateTemplate" ref="hibernateTemplateFixeala" />     -->
+<!-- 	</bean> -->
+
+	<bean id="userDAO" class="ar.com.urbanusjam.jpa.dao.impl.UserDAOImpl"/>
+
+    <bean id="authorityDAO" class="ar.com.urbanusjam.jpa.dao.impl.AuthorityDAOImpl"/>
+    
+    <bean id="passwordResetDAO" class="ar.com.urbanusjam.jpa.dao.impl.PasswordResetDAOImpl"/>
+    
+    <bean id="activationDAO" class="ar.com.urbanusjam.jpa.dao.impl.ActivationDAOImpl"/>
+    
+    <bean id="issueDAO" class="ar.com.urbanusjam.jpa.dao.impl.IssueDAOImpl"/>
+    
+    <bean id="issueUpdateDAO" class="ar.com.urbanusjam.jpa.dao.impl.IssueHistoryDAOImpl"/>
+    
+    <bean id="issueRepairDAO" class="ar.com.urbanusjam.jpa.dao.impl.IssueRepairDAOImpl"/>
+    
+    <bean id="tagDAO" class="ar.com.urbanusjam.jpa.dao.impl.TagDAOImpl"/>
+    
+    <bean id="contenidoDAO" class="ar.com.urbanusjam.jpa.dao.impl.ContenidoDAOImpl"/>
+    
+    <bean id="commentDAO" class="ar.com.urbanusjam.jpa.dao.impl.CommentDAOImpl"/>
+    
+    <bean id="issueFollowDAO" class="ar.com.urbanusjam.jpa.dao.impl.IssueFollowDAOImpl"/>
+    
+    <bean id="issuePageViewDAO" class="ar.com.urbanusjam.jpa.dao.impl.IssuePageViewDAOImpl"/>
+    
+    <bean id="issueVoteDAO" class="ar.com.urbanusjam.jpa.dao.impl.IssueVoteDAOImpl"/>
+    
+	<bean id="provinceDAO" class="ar.com.urbanusjam.jpa.dao.impl.ProvinceDAOImpl"/>
+	
+	<bean id="issueVerificationDAO" class="ar.com.urbanusjam.jpa.dao.impl.IssueVerificationDAOImpl"/>
+              
+</beans>
