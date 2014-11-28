@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <CheckBoxPreference
-        android:key="settings"
-        android:title="@string/settings_voice_title"
-        android:summary="@string/settings_voice_desc"
-        android:defaultValue="false" />
-</PreferenceScreen>
