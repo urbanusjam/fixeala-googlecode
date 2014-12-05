@@ -237,34 +237,41 @@ $(document).ready(function(){
 		  createSearchChoice: function() { return null; }
 	  }); 
 	    	  
-	  $('#btnExportDataset').click(function(){		  
-	  	  var $form = $('#datasetForm');	
-	  	  
-	  	  $form.submit(function(e){	
-	  		e.stopPropagation() ;
-	  		  $.ajax({			
-		            data: $form.serialize(),       
-		            success: function(result) { 
-		            
-			        	if(!result)
-			        		boobox.alert("No se encontraron resultados.");
-			        }
-		  	  });
-	  	  });		  
+	  $('#btnExportDataset').click(function(e){			  	  
+  		  $.ajax({			
+  			    url : "dataset/export",
+	            data: $('#datasetForm').serialize(),  	
+	            async: false,
+	            success: function(data) { 		            
+		        	if(data.result){		        		
+		        		if(data.records == 0){	
+		        			e.preventDefault();
+		        			bootbox.alert(data.message);				        			
+		        		}			        		
+		        	}
+		        	else{
+		        		e.preventDefault();
+		        		bootbox.alert(data.message);	
+		        	}
+		        },
+		        error: function(jqXHR, exception) {
+		        	alert("Hubo un error al intentar exportar el dataset.");
+	 	        }
+	  	  });	  
 	  });
 	  	 
   });
   
-  function downloadDataset(fileFormat){	
-	  $.ajax({			
-            url : "./exportDataset",
-            data: "fileFormat=" + fileFormat,
-            success: function() { 
-            	return null;
-	        },
-	        error: function (){
-	        	return null;
-	        }
-  	  });	  
-  }  
+//   function downloadDataset(fileFormat){	
+// 	  $.ajax({			
+//             url : "./download",
+//             data: "format=" + fileFormat,
+//             success: function() { 
+//             	return null;
+// 	        },
+// 	        error: function (){
+// 	        	return null;
+// 	        }
+//   	  });	  
+//   }  
 </script>

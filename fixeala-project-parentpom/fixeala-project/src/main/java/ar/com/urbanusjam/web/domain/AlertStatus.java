@@ -5,6 +5,7 @@ public class AlertStatus {
 	private boolean result;
 	private String message;
 	private String pageRedirect;
+	private int records;
 	
 	public AlertStatus(boolean result, String message) {
 		super();
@@ -17,6 +18,13 @@ public class AlertStatus {
 		this.result = result;
 		this.message = message;
 		this.pageRedirect = pageRedirect;
+	}
+	
+	public AlertStatus(boolean result, String message, int records) {
+		super();
+		this.result = result;
+		this.message = message;	
+		this.records = records;
 	}
 			
 	public boolean isResult() {
@@ -43,6 +51,12 @@ public class AlertStatus {
 		this.pageRedirect = pageRedirect;
 	}
 
-	
+	public int getRecords() {
+		return records;
+	}
+
+	public void setRecords(int records) {
+		this.records = records;
+	}
 
 }
