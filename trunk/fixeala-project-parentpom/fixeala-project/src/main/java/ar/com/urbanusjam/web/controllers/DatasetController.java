@@ -29,6 +29,7 @@ import ar.com.urbanusjam.services.IssueService;
 import ar.com.urbanusjam.services.dto.IssueCriteriaSearch;
 import ar.com.urbanusjam.services.dto.IssueDTO;
 import ar.com.urbanusjam.services.dto.ReportDTO;
+import ar.com.urbanusjam.web.domain.AlertStatus;
 import ar.com.urbanusjam.web.domain.api.ReclamoResponse;
 import ar.com.urbanusjam.web.services.ExportService;
 
@@ -104,18 +105,28 @@ public class DatasetController extends MainController {
 	}
 	
 	@RequestMapping(value="/export", method = RequestMethod.GET)
-	public @ResponseBody void exportCustomDataset(@ModelAttribute("datasetForm") IssueCriteriaSearch search, 
+	public @ResponseBody AlertStatus exportCustomDataset(@ModelAttribute("datasetForm") IssueCriteriaSearch search, 
 			HttpServletRequest request, HttpServletResponse response) throws IOException, JRException { 
 		
 		List<IssueDTO> issues = new ArrayList<IssueDTO>();	
 		
 		try{			
 			issues = issueService.findIssuesByCriteria(search);		
-			buildReport(issues, search.getFormatoArchivo(), response, request);		
+			
+			if(issues.size() > 0){
+				buildReport(issues, search.getFormatoArchivo(), response, request);						
+			}
+			else{
+				return new AlertStatus(true, "No hay reclamos para exportar.", 0);
+			}
+			
 		
 		}catch(Exception e){
 			Log.error(e.getMessage());	    
+			return new AlertStatus(false, "Error al exportar el dataset.");
 		}
+		
+		return new AlertStatus(true, null, issues.size());
 		
 	}
 	

@@ -98,8 +98,12 @@
 				<exclusion>
 					<groupId>org.springframework</groupId>
 					<artifactId>spring-orm</artifactId>					
-				</exclusion>
-			</exclusions>
+				</exclusion>							
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>jcl-over-slf4j</artifactId>
+				 </exclusion>
+			</exclusions>			
 		</dependency>	
     	<!-- Spring Framework  -->	
 		<dependency>
